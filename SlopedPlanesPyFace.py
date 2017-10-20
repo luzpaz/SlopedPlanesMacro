@@ -1060,6 +1060,45 @@ class _Face(SlopedPlanesPy._Py):
                 for pyReflex in pyWire.reflexs:
                     pyReflex.solveReflex(self, pyWire, tolerance)
 
+                for pyReflex in pyWire.reflexs:
+
+                    [pyR, pyOppR] = pyReflex.planes
+
+                    print (pyR.numGeom, pyOppR.numGeom)
+
+                    aa = pyR.shape.copy()
+                    bb = pyOppR.shape.copy()
+
+                    print pyOppR.oppCutter
+
+                    bb = bb.cut(pyOppR.oppCutter, tolerance)
+                    gS = pyOppR.geom.toShape()
+                    bb = selectFace(bb.Faces, gS, tolerance)
+
+                    print pyR.cutter
+
+                    aa = aa.cut(pyR.cutter+[bb], tolerance)
+                    gS = pyR.geom.toShape()
+                    aa = selectFace(aa.Faces, gS, tolerance)
+
+                    cc = pyR.shape.copy()
+                    bb = pyOppR.shape.copy()
+
+                    print pyR.oppCutter
+
+                    cc = cc.cut(pyR.oppCutter, tolerance)
+                    gS = pyR.geom.toShape()
+                    cc = selectFace(cc.Faces, gS, tolerance)
+
+                    print pyOppR.cutter
+
+                    bb = bb.cut(pyOppR.cutter + [cc], tolerance)
+                    gS = pyOppR.geom.toShape()
+                    bb = selectFace(bb.Faces, gS, tolerance)
+
+                    pyR.shape = aa
+                    pyOppR.shape = bb
+
     def reviewing(self, face, tolerance):
 
         ''''''
@@ -1091,9 +1130,9 @@ class _Face(SlopedPlanesPy._Py):
 
                         if "backward" in pyPlane.problem:
                             print 'a ', pyPlane.numGeom
-                            rango = pyPlane.rango
-                            oppRango = pyOppReflex.rango
-                            rangoInter = pyReflex.rangoInter
+                            rango = list(pyPlane.rango)
+                            oppRango = list(pyOppReflex.rango)
+                            rangoInter = list(pyReflex.rangoInter)
                             rango.extend(oppRango)
                             rango.append(rangoInter)
                             print rango
@@ -1128,9 +1167,9 @@ class _Face(SlopedPlanesPy._Py):
 
                         if "forward" in pyPlane.problem:
                             print 'b ', pyPlane.numGeom
-                            rango = pyPlane.rango
-                            oppRango = pyOppReflex.rango
-                            rangoInter = pyReflex.rangoInter
+                            rango = list(pyPlane.rango)
+                            oppRango = list(pyOppReflex.rango)
+                            rangoInter = list(pyReflex.rangoInter)
                             rango.extend(oppRango)
                             rango.append(rangoInter)
                             print rango
@@ -1204,7 +1243,8 @@ class _Face(SlopedPlanesPy._Py):
 
         for pyWire in self.wires:
             for pyPlane in pyWire.planes:
-                if not (pyPlane.choped and not pyPlane.aligned):
+                #if not (pyPlane.choped and not pyPlane.aligned):
+                if not (pyPlane.reflexed and not pyPlane.aligned):
                     if pyPlane.shape:
                         # print '###### (numWire, numGeom) ',\
                             # (pyPlane.numWire, pyPlane.numGeom)
