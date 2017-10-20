@@ -1,0 +1,47 @@
+import SlopedPlanes
+
+selection = FreeCADGui.Selection.getSelectionEx()
+
+for select in selection:
+
+    obj = select.Object
+
+    if obj.TypeId == "Sketcher::SketchObject":
+        SlopedPlanes.makeSlopedPlanes(obj)
+
+    elif hasattr(obj, 'Proxy'):
+        if obj.Proxy.Type == "SlopedPlanes":
+            print '############ ', obj.Name
+            if select.HasSubObjects:
+                print select.SubElementNames
+                subElems = select.SubObjects
+            else:
+                for pyFace in obj.Proxy.Pyth:
+                    print '######### numFace ', pyFace._numFace
+                    print pyFace.__dict__
+                    for pyWire in pyFace.wires:
+                        print '###### numWire ', pyWire._numWire
+                        print pyWire.__dict__
+                        for pyReflex in pyWire.reflexs:
+                            print '### reflex'
+                            print pyReflex.__dict__
+                        for pyPlane in pyWire.planes:
+                            print '### numGeom ', pyPlane._numGeom
+                            
+                            '''print 'angle ', pyPlane.angle
+                            print 'height ', pyPlane.height
+                            print 'width ', pyPlane.width
+                            print 'run ', pyPlane.run
+                            print 'rear ', pyPlane.rear
+                            print 'forward ', pyPlane.forward
+                            print 'backward ', pyPlane.backward
+                            print 'rango ', pyPlane.rango
+                            print 'arrow ', pyPlane.arrow
+                            print 'shape ', pyPlane.shape'''
+                            print pyPlane.__dict__
+                    for pyAlign in pyFace.alignaments:
+                        print '### alignament'
+                        print pyAlign.__dict__
+
+    else:
+        pass
