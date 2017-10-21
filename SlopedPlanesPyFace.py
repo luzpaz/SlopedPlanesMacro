@@ -1063,8 +1063,10 @@ class _Face(SlopedPlanesPy._Py):
                 for pyReflex in pyWire.reflexs:
 
                     [pyR, pyOppR] = pyReflex.planes
-
                     print (pyR.numGeom, pyOppR.numGeom)
+
+                    rDiv = False
+                    oppRDiv = False
 
                     aa = pyR.shape.copy()
                     bb = pyOppR.shape.copy()
@@ -1078,12 +1080,13 @@ class _Face(SlopedPlanesPy._Py):
                     print aa.Faces
                     gB = pyR.backward
 
-                    fList = []
+                    aList = []
                     AA = selectFace(aa.Faces, gS, tolerance)
-                    fList.append(AA)
+                    aList.append(AA)
 
                     if len(aa.Faces) == 4:
 
+                        rDiv = True
                         for ff in aa.Faces:
                             section = ff.section(gB, tolerance)
                             if section.Edges:
@@ -1091,15 +1094,12 @@ class _Face(SlopedPlanesPy._Py):
                                 for FF in ff.Faces:
                                     sect = FF.section([gB], tolerance)
                                     if not sect.Edges:
-                                        fList.append(FF)
+                                        aList.append(FF)
 
-                    print fList
+                    print aList
 
                     cc = pyR.shape.copy()
                     bb = pyOppR.shape.copy()
-
-                    compound = Part.makeCompound(fList)
-                    pyR.shape = compound
 
                     cc = cc.cut(pyR.oppCutter, tolerance)
                     gS = pyR.geom.toShape()
@@ -1110,12 +1110,13 @@ class _Face(SlopedPlanesPy._Py):
                     print bb.Faces
                     gB = pyOppR.backward
 
-                    fList = []
+                    bList = []
                     BB = selectFace(bb.Faces, gS, tolerance)
-                    fList.append(BB)
+                    bList.append(BB)
 
                     if len(bb.Faces) == 4:
 
+                        oppRDiv = True
                         for ff in bb.Faces:
                             section = ff.section(gB, tolerance)
                             if section.Edges:
@@ -1123,12 +1124,43 @@ class _Face(SlopedPlanesPy._Py):
                                 for FF in ff.Faces:
                                     sect = FF.section([gB], tolerance)
                                     if not sect.Edges:
-                                        fList.append(FF)
+                                        bList.append(FF)
 
-                    print fList
+                    print bList
 
-                    compound = Part.makeCompound(fList)
-                    pyOppR.shape = compound
+                    if oppRDiv and not rDiv:
+
+                        AA = AA.cut(bList, tolerance)
+                        gS = pyR.geom.toShape()
+                        AA = selectFace(AA.Faces, gS, tolerance)
+                        aList = [AA]
+
+                        compound = Part.makeCompound(aList)
+                        pyR.shape = compound
+
+                        compound = Part.makeCompound(bList)
+                        pyOppR.shape = compound
+
+                    elif rDiv and not oppRDiv:
+
+                        BB = BB.cut(aList, tolerance)
+                        gS = pyOppR.geom.toShape()
+                        BB = selectFace(BB.Faces, gS, tolerance)
+                        bList = [BB]
+
+                        compound = Part.makeCompound(aList)
+                        pyR.shape = compound
+
+                        compound = Part.makeCompound(bList)
+                        pyOppR.shape = compound
+
+                    else:
+
+                        compound = Part.makeCompound(aList)
+                        pyR.shape = compound
+
+                        compound = Part.makeCompound(bList)
+                        pyOppR.shape = compound
 
     def reviewing(self, face, tolerance):
 
