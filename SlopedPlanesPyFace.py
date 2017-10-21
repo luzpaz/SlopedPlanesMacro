@@ -1064,91 +1064,71 @@ class _Face(SlopedPlanesPy._Py):
 
                     [pyR, pyOppR] = pyReflex.planes
 
-                    #print (pyR.numGeom, pyOppR.numGeom)
+                    print (pyR.numGeom, pyOppR.numGeom)
 
                     aa = pyR.shape.copy()
                     bb = pyOppR.shape.copy()
-
-                    #print pyOppR.oppCutter
 
                     bb = bb.cut(pyOppR.oppCutter, tolerance)
                     gS = pyOppR.geom.toShape()
                     bb = selectFace(bb.Faces, gS, tolerance)
 
-                    #print pyR.cutter
-
                     aa = aa.cut(pyR.cutter+[bb], tolerance)
                     gS = pyR.geom.toShape()
                     print aa.Faces
-
-                    #gF = pyR.forward
                     gB = pyR.backward
-                    #gL = [gF, gB]
 
                     fList = []
-
                     AA = selectFace(aa.Faces, gS, tolerance)
                     fList.append(AA)
-                    print fList
-                    #aa = Part.makeCompound(fList)
 
-                    for ff in aa.Faces:
-                        section = ff.section(gB, tolerance)
-                        if section.Edges:
-                            ff = ff.cut([pyOppR.enormousShape], tolerance)
-                            for FF in ff.Faces:
-                                sect = FF.section([gB], tolerance)
-                                if not sect.Edges:
-                                    fList.append(FF)
+                    if len(aa.Faces) == 4:
+
+                        for ff in aa.Faces:
+                            section = ff.section(gB, tolerance)
+                            if section.Edges:
+                                ff = ff.cut([pyOppR.enormousShape], tolerance)
+                                for FF in ff.Faces:
+                                    sect = FF.section([gB], tolerance)
+                                    if not sect.Edges:
+                                        fList.append(FF)
+
+                    print fList
 
                     cc = pyR.shape.copy()
                     bb = pyOppR.shape.copy()
 
-                    #pyR.shape = fList
                     compound = Part.makeCompound(fList)
                     pyR.shape = compound
-
-                    #print pyR.oppCutter
 
                     cc = cc.cut(pyR.oppCutter, tolerance)
                     gS = pyR.geom.toShape()
                     cc = selectFace(cc.Faces, gS, tolerance)
 
-                    #print pyOppR.cutter
-
                     bb = bb.cut(pyOppR.cutter + [cc], tolerance)
                     gS = pyOppR.geom.toShape()
                     print bb.Faces
-
-                    #gF = pyOppR.forward
                     gB = pyOppR.backward
-                    #gL = [gF, gB]
 
                     fList = []
-
                     BB = selectFace(bb.Faces, gS, tolerance)
                     fList.append(BB)
+
+                    if len(bb.Faces) == 4:
+
+                        for ff in bb.Faces:
+                            section = ff.section(gB, tolerance)
+                            if section.Edges:
+                                ff = ff.cut([pyR.enormousShape], tolerance)
+                                for FF in ff.Faces:
+                                    sect = FF.section([gB], tolerance)
+                                    if not sect.Edges:
+                                        fList.append(FF)
+
                     print fList
 
-                    for ff in bb.Faces:
-                        section = ff.section(gB, tolerance)
-                        if section.Edges:
-                            ff = ff.cut([pyR.enormousShape], tolerance)
-                            for FF in ff.Faces:
-                                sect = FF.section([gB], tolerance)
-                                if not sect.Edges:
-                                    fList.append(FF)
-
-                    #pyOppR.shape = fList
                     compound = Part.makeCompound(fList)
                     pyOppR.shape = compound
-
-                    #bb = Part.makeCompound(fList)
-
-                    #pyR.shape = aa.Faces
-                    #pyOppR.shape = bb.Faces
-
-
 
     def reviewing(self, face, tolerance):
 
