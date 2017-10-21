@@ -1063,7 +1063,7 @@ class _Face(SlopedPlanesPy._Py):
                 for pyReflex in pyWire.reflexs:
 
                     [pyR, pyOppR] = pyReflex.planes
-                    print (pyR.numGeom, pyOppR.numGeom)
+                    # print (pyR.numGeom, pyOppR.numGeom)
 
                     rDiv = False
                     oppRDiv = False
@@ -1077,7 +1077,7 @@ class _Face(SlopedPlanesPy._Py):
 
                     aa = aa.cut(pyR.cutter+[bb], tolerance)
                     gS = pyR.geom.toShape()
-                    print aa.Faces
+                    # print aa.Faces
                     gB = pyR.backward
 
                     aList = []
@@ -1096,7 +1096,7 @@ class _Face(SlopedPlanesPy._Py):
                                     if not sect.Edges:
                                         aList.append(FF)
 
-                    print aList
+                    # print aList
 
                     cc = pyR.shape.copy()
                     bb = pyOppR.shape.copy()
@@ -1107,7 +1107,7 @@ class _Face(SlopedPlanesPy._Py):
 
                     bb = bb.cut(pyOppR.cutter + [cc], tolerance)
                     gS = pyOppR.geom.toShape()
-                    print bb.Faces
+                    # print bb.Faces
                     gB = pyOppR.backward
 
                     bList = []
@@ -1126,7 +1126,7 @@ class _Face(SlopedPlanesPy._Py):
                                     if not sect.Edges:
                                         bList.append(FF)
 
-                    print bList
+                    # print bList
 
                     if oppRDiv and not rDiv:
 
@@ -1135,12 +1135,6 @@ class _Face(SlopedPlanesPy._Py):
                         AA = selectFace(AA.Faces, gS, tolerance)
                         aList = [AA]
 
-                        compound = Part.makeCompound(aList)
-                        pyR.shape = compound
-
-                        compound = Part.makeCompound(bList)
-                        pyOppR.shape = compound
-
                     elif rDiv and not oppRDiv:
 
                         BB = BB.cut(aList, tolerance)
@@ -1148,19 +1142,11 @@ class _Face(SlopedPlanesPy._Py):
                         BB = selectFace(BB.Faces, gS, tolerance)
                         bList = [BB]
 
-                        compound = Part.makeCompound(aList)
-                        pyR.shape = compound
+                    compound = Part.makeCompound(aList)
+                    pyR.shape = compound
 
-                        compound = Part.makeCompound(bList)
-                        pyOppR.shape = compound
-
-                    else:
-
-                        compound = Part.makeCompound(aList)
-                        pyR.shape = compound
-
-                        compound = Part.makeCompound(bList)
-                        pyOppR.shape = compound
+                    compound = Part.makeCompound(bList)
+                    pyOppR.shape = compound
 
     def reviewing(self, face, tolerance):
 
