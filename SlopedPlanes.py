@@ -307,10 +307,10 @@ class _SlopedPlanes():
                             slopeList.append(angle)
 
                             plane = pyPlane.shape
-                            if isinstance(plane, list):
+                            if isinstance(plane, Part.Compound):
                                 print 'aa'
-                                planeList.append(plane[0])
-                                secondaries.extend(plane[1:])
+                                planeList.append(plane.Faces[0])
+                                secondaries.extend(plane.Faces[1:])
                             else:
                                 print 'bb'
                                 planeList.append(plane)

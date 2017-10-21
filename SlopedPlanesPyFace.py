@@ -1086,6 +1086,12 @@ class _Face(SlopedPlanesPy._Py):
                     #gL = [gF, gB]
 
                     fList = []
+
+                    AA = selectFace(aa.Faces, gS, tolerance)
+                    fList.append(AA)
+                    print fList
+                    #aa = Part.makeCompound(fList)
+
                     for ff in aa.Faces:
                         section = ff.section(gB, tolerance)
                         if section.Edges:
@@ -1095,15 +1101,12 @@ class _Face(SlopedPlanesPy._Py):
                                 if not sect.Edges:
                                     fList.append(FF)
 
-                    AA = selectFace(aa.Faces, gS, tolerance)
-                    fList.append(AA)
-                    print fList
-                    #aa = Part.makeCompound(fList)
-
                     cc = pyR.shape.copy()
                     bb = pyOppR.shape.copy()
 
-                    pyR.shape = fList
+                    #pyR.shape = fList
+                    compound = Part.makeCompound(fList)
+                    pyR.shape = compound
 
                     #print pyR.oppCutter
 
@@ -1122,6 +1125,11 @@ class _Face(SlopedPlanesPy._Py):
                     #gL = [gF, gB]
 
                     fList = []
+
+                    BB = selectFace(bb.Faces, gS, tolerance)
+                    fList.append(BB)
+                    print fList
+
                     for ff in bb.Faces:
                         section = ff.section(gB, tolerance)
                         if section.Edges:
@@ -1131,11 +1139,9 @@ class _Face(SlopedPlanesPy._Py):
                                 if not sect.Edges:
                                     fList.append(FF)
 
-                    BB = selectFace(bb.Faces, gS, tolerance)
-                    fList.append(BB)
-                    print fList
-
-                    pyOppR.shape = fList
+                    #pyOppR.shape = fList
+                    compound = Part.makeCompound(fList)
+                    pyOppR.shape = compound
 
                     #bb = Part.makeCompound(fList)
 
