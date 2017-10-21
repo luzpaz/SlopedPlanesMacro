@@ -137,7 +137,7 @@ class _Reflex(SlopedPlanesPy._Py):
         reflexEnormous = pyReflex.enormousShape.copy()
         pyOppReflex.addLink('oppCutter', reflexEnormous)
 
-        #oppReflexEnormous = pyOppReflex.enormousShape.copy()
+        oppReflexEnormous = pyOppReflex.enormousShape.copy()
         #pyReflex.addLink('oppCutter', oppReflexEnormous)
 
         pyWireList = pyFace.wires
@@ -205,18 +205,20 @@ class _Reflex(SlopedPlanesPy._Py):
                 print 'included oppRear rectified ', (nWire, nGeom)
 
             pyReflex.addLink('cutter', oppRearPl)
+            # ojo
+            pyOppReflex.addLink('oppCutter', oppRearPl)
 
         elif len(oppRear) == 2:
 
             if direction == 'forward':
 
                 self.processOppRear(oppRear, direction, pyFace, pyWire, pyReflex,
-                                    oppReflexEnormous, tolerance)
+                                    pyOppReflex, oppReflexEnormous, tolerance)
 
             else:
 
                 self.processOppRear(oppRear, direction, pyFace, pyWire, pyReflex,
-                                    oppReflexEnormous, tolerance)
+                                    pyOppReflex, oppReflexEnormous, tolerance)
 
         rangoNext = pyOppReflex.rango
         print '# rangoNext ', rangoNext
@@ -248,7 +250,7 @@ class _Reflex(SlopedPlanesPy._Py):
                 self.processRango(pyFace, pyWire, pyReflex, pyOppReflex, nn,
                                   'rangoInter', tolerance)
 
-    def processOppRear(self, oppRear, direction, pyFace, pyWire, pyReflex,
+    def processOppRear(self, oppRear, direction, pyFace, pyWire, pyReflex, pyOppReflex,
                        oppReflexEnormous, tolerance):
 
         ''''''
@@ -270,6 +272,8 @@ class _Reflex(SlopedPlanesPy._Py):
             pyOppRear = pyFace.selectPlane(nWire, nGeom)
             oppRearPl = pyOppRear.shape.copy()
         pyReflex.addLink('cutter', oppRearPl)
+        # ojo
+        pyOppReflex.addLink('oppCutter', oppRearPl)
         print 'included oppRear ', (nWire, nGeom)
 
         nWire = pyWire.numWire
@@ -305,6 +309,8 @@ class _Reflex(SlopedPlanesPy._Py):
             section = vertex.section([ff], tolerance)
             if section.Vertexes:
                 pyReflex.addLink('cutter', ff)
+                # ojo
+                pyOppReflex.addLink('oppCutter', ff)
                 print 'included oppRear rectified ',\
                     (nWire, nGeom)
                 break
