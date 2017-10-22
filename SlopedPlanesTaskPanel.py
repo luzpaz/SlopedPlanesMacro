@@ -57,6 +57,7 @@ class _TaskPanel_SlopedPlanes():
 
         self.tree = QtGui.QTreeWidget(self.form)
         self.grid.addWidget(self.tree, 1, 0, 1, 2)
+
         self.tree.setColumnCount(5)
         self.tree.header().resizeSection(0, 30)
         self.tree.header().resizeSection(1, 50)
@@ -87,7 +88,22 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        return int(QtGui.QDialogButtonBox.Close)
+        return int(QtGui.QDialogButtonBox.Apply |
+                   QtGui.QDialogButtonBox.Close |
+                   QtGui.QDialogButtonBox.Ok)
+
+    def clicked(self, button):
+
+        ''''''
+
+        if button == QtGui.QDialogButtonBox.Apply:
+
+            self.resetObject()
+            self.obj.Proxy.execute(self.obj)
+
+        if button == QtGui.QDialogButtonBox.Ok:
+
+            self.resetObject()
 
     def update(self):
 
@@ -146,7 +162,11 @@ class _TaskPanel_SlopedPlanes():
                                           QtCore.Qt.ItemIsEditable)
                             item.setTextAlignment(0, QtCore.Qt.AlignLeft)
                             item.setText(0, str(numSlope))
-                            item.setText(1, str(angle))
+
+                            doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                            doubleSpinBox.setValue(angle)
+                            self.tree.setItemWidget(item, 1, doubleSpinBox)
+
                             item.setText(2, str(pyPlane.length))
                             width = pyPlane.width
                             item.setText(3, str(width[0]))
@@ -195,7 +215,11 @@ class _TaskPanel_SlopedPlanes():
                             it = self.tree.findItems(str(numSlope),
                                                      QtCore.Qt.MatchExactly,
                                                      0)[0]
-                            pyPlane.angle = float(it.text(1))
+
+                            doubleSpinBox = self.tree.itemWidget(it, 1)
+                            value = doubleSpinBox.value()
+                            pyPlane.angle = value
+
                             pyPlane.length = float(it.text(2))
                             left = float(it.text(3))
                             right = float(it.text(4))
@@ -217,7 +241,11 @@ class _TaskPanel_SlopedPlanes():
                                         it = self.tree.findItems(str(numSlope),
                                                                  QtCore.Qt.MatchExactly,
                                                                  0)[0]
-                                        pyPl.angle = float(it.text(1))
+
+                                        doubleSpinBox = self.tree.itemWidget(it, 1)
+                                        value = doubleSpinBox.value()
+                                        pyPl.angle = value
+
                                         pyPl.length = float(it.text(2))
                                         left = float(it.text(3))
                                         right = float(it.text(4))
@@ -230,7 +258,11 @@ class _TaskPanel_SlopedPlanes():
                                     it = self.tree.findItems(str(numSlope),
                                                              QtCore.Qt.MatchExactly,
                                                              0)[0]
-                                    pyPl.angle = float(it.text(1))
+
+                                    doubleSpinBox = self.tree.itemWidget(it, 1)
+                                    value = doubleSpinBox.value()
+                                    pyPl.angle = value
+
                                     pyPl.length = float(it.text(2))
                                     left = float(it.text(3))
                                     right = float(it.text(4))
