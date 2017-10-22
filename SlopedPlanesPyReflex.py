@@ -352,3 +352,9 @@ class _Reflex(SlopedPlanesPy._Py):
                 print 'c'
                 #pyReflex.addLink('oppCutter', pl)
                 pyOppReflex.addLink('oppCutter', pl)
+
+                forward = pyReflex.forward
+                forw = pyPl.forward
+                section = forward.section([forw], tolerance)
+                if not section.Vertexes:
+                    pyReflex.addLink('cutter', pl)

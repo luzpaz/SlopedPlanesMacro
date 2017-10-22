@@ -1274,12 +1274,13 @@ class _Face(SlopedPlanesPy._Py):
                             pyLaterReflex = pyReflexList[later]
                             cutterList.append(pyLaterReflex)
 
-                        number = -1
+                        #number = -1
                         for pyPlane in pyReflex.planes:
-                            number += 1
+                            #number += 1
                             cutList = []
                             for pyR in cutterList:
-                                cutList.append(pyR.planes[number].shape)
+                                [pyA,pyB] = pyR.planes
+                                cutList.extend([pyA.shape, pyB.shape])
                             plane = pyPlane.shape
                             gS = pyPlane.geom.toShape()
                             plane = plane.cut(cutList, tolerance)
