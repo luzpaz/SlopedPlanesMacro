@@ -1274,18 +1274,21 @@ class _Face(SlopedPlanesPy._Py):
                             pyLaterReflex = pyReflexList[later]
                             cutterList.append(pyLaterReflex)
 
-                        #number = -1
                         for pyPlane in pyReflex.planes:
-                            #number += 1
-                            cutList = []
-                            for pyR in cutterList:
-                                [pyA,pyB] = pyR.planes
-                                cutList.extend([pyA.shape, pyB.shape])
+
                             plane = pyPlane.shape
-                            gS = pyPlane.geom.toShape()
-                            plane = plane.cut(cutList, tolerance)
-                            plane = selectFace(plane.Faces, gS, tolerance)
-                            pyPlane.shape = plane
+
+                            if len(plane.Faces) == 1:
+
+                                cutList = []
+                                for pyR in cutterList:
+                                    for pyPl in pyR.planes:
+                                        cutList.append(pyPl.shape)
+
+                                gS = pyPlane.geom.toShape()
+                                plane = plane.cut(cutList, tolerance)
+                                plane = selectFace(plane.Faces, gS, tolerance)
+                                pyPlane.shape = plane
 
     def rearing(self, tolerance):
 
