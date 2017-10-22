@@ -207,9 +207,25 @@ class _TaskPanel_SlopedPlanes():
                             if [alfa, beta] not in originList:
                                 # print 'c'
                                 originList.append([alfa, beta])
-                                if beta > numAngle:     # TODO y sin son distintos wires
+
+                                if alfa == numWire:
+
+                                    if beta > numAngle:
+                                        # print 'd'
+                                        numSlope += 1
+                                        pyPl = pyWireList[alfa].planes[beta]
+                                        it = self.tree.findItems(str(numSlope),
+                                                                 QtCore.Qt.MatchExactly,
+                                                                 0)[0]
+                                        pyPl.angle = float(it.text(1))
+                                        pyPl.length = float(it.text(2))
+                                        left = float(it.text(3))
+                                        right = float(it.text(4))
+                                        pyPl.width = [left, right]
+
+                                elif alfa > numWire:
+                                    # print 'e'
                                     numSlope += 1
-                                    # print 'd'
                                     pyPl = pyWireList[alfa].planes[beta]
                                     it = self.tree.findItems(str(numSlope),
                                                              QtCore.Qt.MatchExactly,
@@ -219,6 +235,10 @@ class _TaskPanel_SlopedPlanes():
                                     left = float(it.text(3))
                                     right = float(it.text(4))
                                     pyPl.width = [left, right]
+
+                                elif alfa < numWire:
+                                    # print 'f'
+                                    pass
 
         slopedPlanes.touch()
         FreeCAD.ActiveDocument.recompute()
