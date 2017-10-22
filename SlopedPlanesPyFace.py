@@ -856,10 +856,20 @@ class _Face(SlopedPlanesPy._Py):
                     pyPlaneList = pyWire.planes
                     for ran in rango:
                         for nG in ran:
-                            pyP = pyPlaneList[nG]
-                            #if not pyP.reflexed:
+                            pyPl = pyPlaneList[nG]
 
-                            self.doTrim(enormousShape, pyP, tolerance)
+                            if not pyPl.reflexed:
+
+                                self.doTrim(enormousShape, pyPl, tolerance)
+
+                            else:
+
+                                forward = pyPlane.forward
+                                forw = pyPl.forward
+                                section = forward.section(forw)
+                                if not section.Vertexes:
+
+                                    self.doTrim(enormousShape, pyPl, tolerance)
 
         pyAlignList = self.alignaments
 
@@ -874,10 +884,10 @@ class _Face(SlopedPlanesPy._Py):
 
             for ran in rangoChop:
                 for nG in ran:
-                    pyP = pyPlaneList[nG]
-                    #if not pyP.reflexed:
+                    pyPl = pyPlaneList[nG]
+                    #if not pyPl.reflexed:
 
-                    self.doTrim(enormousShape, pyP, tolerance)
+                    self.doTrim(enormousShape, pyPl, tolerance)
 
             for chop in pyAlign.chops:
 
@@ -891,28 +901,28 @@ class _Face(SlopedPlanesPy._Py):
 
                         for rango in pyPlane.rango:
                             for nG in rango:
-                                pyP = pyPlaneList[nG]
-                                #if not pyP.reflexed:
+                                pyPl = pyPlaneList[nG]
+                                #if not pyPl.reflexed:
 
-                                self.doTrim(enormousShape, pyP, tolerance)
+                                self.doTrim(enormousShape, pyPl, tolerance)
 
-    def doTrim(self, enormousShape, pyP, tolerance):
+    def doTrim(self, enormousShape, pyPl, tolerance):
 
         ''''''
 
-        shape = pyP.shape
-        bigShape = pyP.bigShape
-        geomShape = pyP.geomAligned.toShape()
+        shape = pyPl.shape
+        bigShape = pyPl.bigShape
+        geomShape = pyPl.geom.toShape()
 
         shape = shape.cut([enormousShape], tolerance)
         shape = selectFace(shape.Faces, geomShape, tolerance)
-        pyP.shape = shape
+        pyPl.shape = shape
 
         bigShape =\
             bigShape.cut([enormousShape], tolerance)
         bigShape =\
             selectFace(bigShape.Faces, geomShape, tolerance)
-        pyP.bigShape = bigShape
+        pyPl.bigShape = bigShape
 
     def priorLater(self, tolerance):
 
@@ -1206,6 +1216,9 @@ class _Face(SlopedPlanesPy._Py):
                                                            gS, tolerance)
                                             pyOppReflex.shape = oppPlane
 
+                        pyPlane.problem = []
+                        pyPlane.isSolved(face, self, pyOppReflex, tolerance)
+
                 for pyReflex in pyReflexList:
                     number = -1
                     for pyPlane in pyReflex.planes:
@@ -1242,6 +1255,9 @@ class _Face(SlopedPlanesPy._Py):
                                                 selectFace(oppPlane.Faces,
                                                            gS, tolerance)
                                             pyOppReflex.shape = oppPlane
+
+                        pyPlane.problem = []
+                        pyPlane.isSolved(face, self, pyOppReflex, tolerance)
 
                 lenR = len(pyReflexList)
                 if lenR > 1:
