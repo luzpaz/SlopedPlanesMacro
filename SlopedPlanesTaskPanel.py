@@ -167,10 +167,19 @@ class _TaskPanel_SlopedPlanes():
                             doubleSpinBox.setValue(angle)
                             self.tree.setItemWidget(item, 1, doubleSpinBox)
 
-                            item.setText(2, str(pyPlane.length))
+                            doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                            doubleSpinBox.setValue(pyPlane.length)
+                            self.tree.setItemWidget(item, 2, doubleSpinBox)
+
                             width = pyPlane.width
-                            item.setText(3, str(width[0]))
-                            item.setText(4, str(width[1]))
+
+                            doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                            doubleSpinBox.setValue(width[0])
+                            self.tree.setItemWidget(item, 3, doubleSpinBox)
+
+                            doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                            doubleSpinBox.setValue(width[1])
+                            self.tree.setItemWidget(item, 4, doubleSpinBox)
 
         # self.retranslateUi(self.form)
         self.updating = False
@@ -201,29 +210,19 @@ class _TaskPanel_SlopedPlanes():
 
                 numAngle = -1
                 pyPlaneList = pyWire.planes
-                # print[pyPlane.angle for pyPlane in pyPlaneList]
+
                 for pyPlane in pyPlaneList:
                     numAngle += 1
                     # print '### numAngle ', numAngle
                     angle = pyPlane.angle
+                    charge = False
 
                     if [numWire, numAngle] not in originList:
 
                         if isinstance(angle, float):
-                            numSlope += 1
                             # print 'a'
-                            it = self.tree.findItems(str(numSlope),
-                                                     QtCore.Qt.MatchExactly,
-                                                     0)[0]
-
-                            doubleSpinBox = self.tree.itemWidget(it, 1)
-                            value = doubleSpinBox.value()
-                            pyPlane.angle = value
-
-                            pyPlane.length = float(it.text(2))
-                            left = float(it.text(3))
-                            right = float(it.text(4))
-                            pyPlane.width = [left, right]
+                            charge = True
+                            numSlope += 1
 
                         else:
                             # print 'b'
@@ -236,41 +235,41 @@ class _TaskPanel_SlopedPlanes():
 
                                     if beta > numAngle:
                                         # print 'd'
+                                        charge = True
                                         numSlope += 1
-                                        pyPl = pyWireList[alfa].planes[beta]
-                                        it = self.tree.findItems(str(numSlope),
-                                                                 QtCore.Qt.MatchExactly,
-                                                                 0)[0]
-
-                                        doubleSpinBox = self.tree.itemWidget(it, 1)
-                                        value = doubleSpinBox.value()
-                                        pyPl.angle = value
-
-                                        pyPl.length = float(it.text(2))
-                                        left = float(it.text(3))
-                                        right = float(it.text(4))
-                                        pyPl.width = [left, right]
+                                        pyPlane = pyWireList[alfa].planes[beta]
+                                        
 
                                 elif alfa > numWire:
                                     # print 'e'
+                                    charge = True
                                     numSlope += 1
-                                    pyPl = pyWireList[alfa].planes[beta]
-                                    it = self.tree.findItems(str(numSlope),
-                                                             QtCore.Qt.MatchExactly,
-                                                             0)[0]
-
-                                    doubleSpinBox = self.tree.itemWidget(it, 1)
-                                    value = doubleSpinBox.value()
-                                    pyPl.angle = value
-
-                                    pyPl.length = float(it.text(2))
-                                    left = float(it.text(3))
-                                    right = float(it.text(4))
-                                    pyPl.width = [left, right]
+                                    pyPlane = pyWireList[alfa].planes[beta]
 
                                 elif alfa < numWire:
                                     # print 'f'
                                     pass
+
+                    if charge:
+
+                        it = self.tree.findItems(str(numSlope),
+                         QtCore.Qt.MatchExactly, 0)[0]
+
+                        doubleSpinBox = self.tree.itemWidget(it, 1)
+                        value = doubleSpinBox.value()
+                        pyPlane.angle = value
+
+                        doubleSpinBox = self.tree.itemWidget(it, 2)
+                        length = doubleSpinBox.value()
+                        pyPlane.length = length
+
+                        doubleSpinBox = self.tree.itemWidget(it, 3)
+                        left = doubleSpinBox.value()
+
+                        doubleSpinBox = self.tree.itemWidget(it, 4)
+                        right = doubleSpinBox.value()
+
+                        pyPlane.width = [left, right]
 
         slopedPlanes.touch()
         FreeCAD.ActiveDocument.recompute()
