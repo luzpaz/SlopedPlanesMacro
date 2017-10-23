@@ -22,16 +22,42 @@
 #***************************************************************************
 
 
+import FreeCAD
+
+if FreeCAD.GuiUp:
+    import FreeCADGui
+    from PySide import QtGui, QtCore
+    from PySide.QtCore import QT_TRANSLATE_NOOP
+
+
 __title__ = "Commands needed for preprocess a FreeCAD document"
 __author__ = "Damian Caceres"
 __url__ = "http://www.freecadweb.org"
-
-
-###############################################################################
 
 
 class _Command_SlopedPlanes():
 
     ''''''
 
-    pass
+    def GetResources(self):
+
+        ''''''
+
+        return {'Pixmap' : 'SlopedPlanes.svg',
+                'MenuText' : QtCore.QT_TRANSLATE_NOOP("SlopedPlanes",
+                                                      "SlopedPlanes"),
+                'Accel' : "R, S",
+                'ToolTip': QtCore.QT_TRANSLATE_NOOP("SlopedPlanes",
+                                                    "SlopedPlanes")}
+
+    def IsActive(self):
+
+        ''''''
+
+        return not FreeCAD.ActiveDocument is None
+
+    def Activated(self):
+
+        ''''''
+
+        slopedPlanes = FreeCADGui.Selection.getSelection()[0]
