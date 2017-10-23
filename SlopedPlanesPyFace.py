@@ -883,9 +883,9 @@ class _Face(SlopedPlanesPy._Py):
             for ran in rangoChop:
                 for nG in ran:
                     pyPl = pyPlaneList[nG]
-                    # if not pyPl.reflexed:
+                    if not pyPl.aligned:
 
-                    self.doTrim(enormousShape, pyPl, tolerance)
+                        self.doTrim(enormousShape, pyPl, tolerance)
 
             for chop in pyAlign.chops:
 
@@ -900,9 +900,9 @@ class _Face(SlopedPlanesPy._Py):
                         for rango in pyPlane.rango:
                             for nG in rango:
                                 pyPl = pyPlaneList[nG]
-                                # if not pyPl.reflexed:
+                                if not pyPl.aligned:
 
-                                self.doTrim(enormousShape, pyPl, tolerance)
+                                    self.doTrim(enormousShape, pyPl, tolerance)
 
     def doTrim(self, enormousShape, pyPl, tolerance):
 
