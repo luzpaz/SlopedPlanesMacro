@@ -22,6 +22,9 @@
 # *****************************************************************************
 
 
+import SlopedPlanes
+
+
 __title__ = "SlopedPlanesMacro"
 __author__ = "Damian Caceres"
 __url__ = "http://www.freecadweb.org"
