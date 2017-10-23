@@ -23,6 +23,7 @@
 
 
 import math
+import os
 import FreeCAD
 import FreeCADGui
 import Part
@@ -190,13 +191,13 @@ class _SlopedPlanes():
                 # print oldCoordinates
                 # print coordinates
                 if oldCoordinates != coordinates:
-                    # print 'a'
+                    # print '1'
                     pyFace.reset = True
                     if len(oldCoordinates) != len(coordinates):
-                        # print 'b'
+                        # print '11'
                         pyWire.reset = True
                     elif oldCoordinates[0] != coordinates[0]:
-                        # print 'c'
+                        # print '12'
                         pyWire.reset = True
 
                 pyWire.coordinates = coordinates
@@ -224,14 +225,17 @@ class _SlopedPlanes():
                             pyPlane = SlopedPlanesPyPlane._Plane(numWire,
                                                                  numGeom)
                             pyPlaneList[numGeom] = pyPlane
+                            # print 'aaa ', numGeom
                         elif pyWire.reset:
                             pyPlane.angle = slope
                             pyPlane.width = [width, width]
                             pyPlane.length = length
+                            # print 'bbb ', numGeom
                     except IndexError:
                         pyPlane = SlopedPlanesPyPlane._Plane(numWire,
                                                              numGeom)
                         pyPlaneList.append(pyPlane)
+                        # print 'ccc ', numGeom
 
                     pyPlane.geom = geom
                     pyPlane.geomAligned = geom
@@ -308,11 +312,11 @@ class _SlopedPlanes():
 
                             plane = pyPlane.shape
                             if isinstance(plane, Part.Compound):
-                                # print 'aa'
+                                # print 'a1'
                                 planeList.append(plane.Faces[0])
                                 secondaries.extend(plane.Faces[1:])
                             else:
-                                # print 'bb'
+                                # print 'a2'
                                 planeList.append(plane)
 
                         else:
@@ -324,10 +328,10 @@ class _SlopedPlanes():
                                 originList.append([alfa, beta])
 
                                 if alfa == numWire:
-                                    # print 'bb0'
+                                    # print 'bb1'
 
                                     if beta > numAngle:
-                                        # print 'bb1'
+                                        # print 'bb11'
                                         angle =\
                                             pyWireList[alfa].planes[beta].angle
                                         slopeList.append(angle)
@@ -352,7 +356,6 @@ class _SlopedPlanes():
 
         planeList.extend(secondaries)
         slopedPlanes.Slopes = slopeList
-
         # print planeList
         # print slopeList
 
@@ -409,7 +412,7 @@ class _SlopedPlanes():
                     # print[pyPlane.angle for pyPlane in pyPlaneList]
                     for pyPlane in pyPlaneList:
                         numAngle += 1
-                        # print '### numAngle ', numAngle
+                        # print '# numAngle ', numAngle
                         angle = pyPlane.angle
 
                         if [numWire, numAngle] not in originList:
@@ -423,31 +426,29 @@ class _SlopedPlanes():
                                 # print 'b'
                                 alfa, beta = angle[0], angle[1]
                                 if [alfa, beta] not in originList:
-                                    # print 'c'
+                                    # print 'bb'
                                     originList.append([alfa, beta])
 
                                     if alfa == numWire:
-                                        # print 'd'
+                                        # print 'bb1'
 
                                         if beta > numAngle:
                                             numSlope += 1
-                                            # print 'd1'
+                                            # print 'bb11'
                                             pyPl =\
                                                 pyWireList[alfa].planes[beta]
                                             pyPl.angle = slopeList[numSlope]
 
                                     elif alfa > numWire:
-                                        # print 'e'
+                                        # print 'bb2'
                                         numSlope += 1
                                         pyPl =\
                                             pyWireList[alfa].planes[beta]
                                         pyPl.angle = slopeList[numSlope]
 
                                     elif alfa < numWire:
-                                        # print 'f'
+                                        # print 'bb3'
                                         pass
-
-                    # print[pyPlane.angle for pyPlane in pyWire.planes]
 
         elif prop == "SlopeGlobal":
 
@@ -542,6 +543,13 @@ class _ViewProvider_SlopedPlanes():
         ''''''
 
         vobj.Proxy = self
+
+    def getIcon(self):
+
+        ''''''
+
+        path = os.path.dirname(__file__)
+        return  path + "/Tree_SlopedPlanes.svg"
 
     def getDefaultDisplayMode(self):
 
