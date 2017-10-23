@@ -1284,7 +1284,8 @@ class _Face(SlopedPlanesPy._Py):
                                 cutList = []
                                 for pyR in cutterList:
                                     for pyPl in pyR.planes:
-                                        cutList.append(pyPl.shape)
+                                        if pyPl != pyPlane:
+                                            cutList.append(pyPl.shape)
 
                                 gS = pyPlane.geom.toShape()
                                 plane = plane.cut(cutList, tolerance)
