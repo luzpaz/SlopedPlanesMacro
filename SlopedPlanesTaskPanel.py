@@ -73,7 +73,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        return False
+        return True
 
     def isAllowedAlterView(self):
 
@@ -98,8 +98,28 @@ class _TaskPanel_SlopedPlanes():
             self.resetObject()
             self.obj.Proxy.execute(self.obj)
 
-        if button == QtGui.QDialogButtonBox.Ok:
+    def reject(self):
 
+        ''''''
+
+        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+        return True
+
+    def accept(self):
+
+        ''''''
+
+        self.resetObject()
+        FreeCAD.ActiveDocument.recompute()
+        FreeCADGui.ActiveDocument.resetEdit()
+        return True
+
+    def edit(self, item, column):
+
+        ''''''
+
+        if not self.updating:
             self.resetObject()
 
     def update(self):
@@ -183,13 +203,6 @@ class _TaskPanel_SlopedPlanes():
         # self.retranslateUi(self.form)
         self.updating = False
 
-    def edit(self, item, column):
-
-        ''''''
-
-        if not self.updating:
-            self.resetObject()
-
     def resetObject(self, remove=None):
 
         ''''''
@@ -272,11 +285,3 @@ class _TaskPanel_SlopedPlanes():
         slopedPlanes.touch()
         FreeCAD.ActiveDocument.recompute()
         self.update()
-
-    def reject(self):
-
-        ''''''
-
-        FreeCAD.ActiveDocument.recompute()
-        FreeCADGui.ActiveDocument.resetEdit()
-        return True

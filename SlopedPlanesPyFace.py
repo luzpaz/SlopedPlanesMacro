@@ -24,7 +24,7 @@
 
 import FreeCAD
 import Part
-from SlopedPlanesUtils import *
+import SlopedPlanesUtils as utils
 import SlopedPlanesPy
 import SlopedPlanesPyWire
 import SlopedPlanesPyReflex
@@ -248,27 +248,29 @@ class _Face(SlopedPlanesPy._Py):
 
                 if ref:
                     print 'ref'
-                    
+
                     # OJO
                     if pyPlane.geomAligned:
                         line = pyPlane.geom
-    
+
                         lineStartParam = line.FirstParameter
                         lineEndParam = lineStartParam - size
-    
+
                         forwardLine =\
-                            Part.LineSegment(line, lineStartParam, lineEndParam)
+                            Part.LineSegment(line, lineStartParam,
+                                             lineEndParam)
                         # print 'forwardLine ', forwardLine
                         forwardLineShape = forwardLine.toShape()
-    
+
                         lineStartParam = line.LastParameter
                         lineEndParam = lineStartParam + size
-    
+
                         backwardLine =\
-                            Part.LineSegment(line, lineStartParam, lineEndParam)
+                            Part.LineSegment(line, lineStartParam,
+                                             lineEndParam)
                         # print 'backwardLine ', backwardLine
                         backwardLineShape = backwardLine.toShape()
-    
+
                         pyPlane.backward = backwardLineShape
                         pyPlane.forward = forwardLineShape
 
@@ -284,7 +286,7 @@ class _Face(SlopedPlanesPy._Py):
                     print 'rear ', pyPlane.rear
 
                 nextEje = coord[numGeom+2].sub(coord[numGeom+1])
-                corner = convexReflex(eje, nextEje, normal, numWire)
+                corner = utils.convexReflex(eje, nextEje, normal, numWire)
                 print 'corner ', corner
                 eje = nextEje
 
@@ -321,7 +323,7 @@ class _Face(SlopedPlanesPy._Py):
                             numEdge += 1
                             print '111'
                             edgeStart = edge.firstVertex(True).Point
-                            point = roundVector(edgeStart, tolerance)
+                            point = utils.roundVector(edgeStart, tolerance)
                             (nWire, nGeom) =\
                                 self.findAlignament(point, tolerance)
 
@@ -404,9 +406,9 @@ class _Face(SlopedPlanesPy._Py):
                                     line = pyPl.geom
                                     lineLastParam = line.LastParameter
                                     lineEndParam = lineLastParam + size
-                                    forwardLine = Part.LineSegment(line,
-                                                                   lineLastParam,
-                                                                   lineEndParam)
+                                    forwardLine =\
+                                        Part.LineSegment(line, lineLastParam,
+                                                         lineEndParam)
                                     # print 'forwardLine ', forwardLine
                                     forwardLineShape = forwardLine.toShape()
                                     pyPlane.forward = forwardLineShape
@@ -434,7 +436,7 @@ class _Face(SlopedPlanesPy._Py):
                     print '2'
                     if corner == 'reflex':
                         if not pyPlane.choped:
-                            num = sliceIndex(numGeom+1, lenWire)
+                            num = utils.sliceIndex(numGeom+1, lenWire)
                             pyNextPlane = pyPlaneList[num]
                             if not pyNextPlane.choped:
 
@@ -511,7 +513,7 @@ class _Face(SlopedPlanesPy._Py):
         pyPl.aligned = True
         pyPl.shape = None
         # OJO
-        #if not pyPl.choped:
+        # if not pyPl.choped:
         pyPl.rear = []
 
         if pyPl.reflexed:
@@ -522,10 +524,10 @@ class _Face(SlopedPlanesPy._Py):
         lenWire = len(pyWire.planes)
         if aL:
             num = aL[-1].numGeom
-            chopOne = sliceIndex(num+1, lenWire)
+            chopOne = utils.sliceIndex(num+1, lenWire)
             numC = aL[-1].numWire
         else:
-            chopOne = sliceIndex(numGeom+1, lenWire)
+            chopOne = utils.sliceIndex(numGeom+1, lenWire)
             numC = numWire
 
         aL.append(pyPl)
@@ -537,19 +539,15 @@ class _Face(SlopedPlanesPy._Py):
             for b in bL:
                 b.angle = [numWire, numGeom]
 
-        #lenWire = len(pyWire.planes)
-
-        #chopOne = sliceIndex(numGeom+1, lenWire)
-
         pyWireList = self.wires
 
         if numWire == nWire:
             print 'a'
-            chopTwo = sliceIndex(nGeom-1, lenWire)
+            chopTwo = utils.sliceIndex(nGeom-1, lenWire)
         else:
             print 'b'
             lenW = len(pyWireList[nWire].planes)
-            chopTwo = sliceIndex(nGeom-1, lenW)
+            chopTwo = utils.sliceIndex(nGeom-1, lenW)
 
         print 'chopOne ', (numC, chopOne)
         print 'chopTwo ', (nWire, chopTwo)
@@ -627,15 +625,15 @@ class _Face(SlopedPlanesPy._Py):
 
         print vertex.Point
 
-        #if not pyPlane.aligned:
+        # if not pyPlane.aligned:
 
         nGeom =\
             self.findRear(pyWire, pyPlane, vertex, direction, tolerance)
 
         if direction == 'forward':
-            endNum = sliceIndex(numGeom+2, lenWire)
+            endNum = utils.sliceIndex(numGeom+2, lenWire)
         else:
-            endNum = sliceIndex(numGeom-2, lenWire)
+            endNum = utils.sliceIndex(numGeom-2, lenWire)
 
         print 'direction, endNum ', direction, endNum
 
@@ -674,7 +672,7 @@ class _Face(SlopedPlanesPy._Py):
             coord = pyWire.coordinates
             nGeom = coord.index(vertex.Point)
             if direction == 'forward':
-                nGeom = sliceIndex(nGeom-1, lenWire)
+                nGeom = utils.sliceIndex(nGeom-1, lenWire)
 
         pyPlane.addValue('rear', nGeom, direction)
 
@@ -705,7 +703,7 @@ class _Face(SlopedPlanesPy._Py):
                 pl = pyPl.shape
                 pl = pl.cut([plane, oppPlane], tolerance)
                 gS = pyPl.geom.toShape()
-                pl = selectFace(pl.Faces, gS, tolerance)
+                pl = utils.selectFace(pl.Faces, gS, tolerance)
                 pyPl.shape = pl
 
     def findAngle(self, nW, nG):
@@ -885,7 +883,7 @@ class _Face(SlopedPlanesPy._Py):
             for ran in rangoChop:
                 for nG in ran:
                     pyPl = pyPlaneList[nG]
-                    #if not pyPl.reflexed:
+                    # if not pyPl.reflexed:
 
                     self.doTrim(enormousShape, pyPl, tolerance)
 
@@ -902,7 +900,7 @@ class _Face(SlopedPlanesPy._Py):
                         for rango in pyPlane.rango:
                             for nG in rango:
                                 pyPl = pyPlaneList[nG]
-                                #if not pyPl.reflexed:
+                                # if not pyPl.reflexed:
 
                                 self.doTrim(enormousShape, pyPl, tolerance)
 
@@ -915,13 +913,13 @@ class _Face(SlopedPlanesPy._Py):
         geomShape = pyPl.geom.toShape()
 
         shape = shape.cut([enormousShape], tolerance)
-        shape = selectFace(shape.Faces, geomShape, tolerance)
+        shape = utils.selectFace(shape.Faces, geomShape, tolerance)
         pyPl.shape = shape
 
         bigShape =\
             bigShape.cut([enormousShape], tolerance)
         bigShape =\
-            selectFace(bigShape.Faces, geomShape, tolerance)
+            utils.selectFace(bigShape.Faces, geomShape, tolerance)
         pyPl.bigShape = bigShape
 
     def priorLater(self, tolerance):
@@ -944,7 +942,7 @@ class _Face(SlopedPlanesPy._Py):
                     print 'reflexed ', pyPlane.reflexed
                     print 'arrow ', pyPlane.arrow
 
-                    prior = sliceIndex(numGeom-1, lenWire)
+                    prior = utils.sliceIndex(numGeom-1, lenWire)
                     pyPrior = pyPlaneList[prior]
                     bigPrior = pyPrior.bigShape
                     if not bigPrior:
@@ -959,11 +957,11 @@ class _Face(SlopedPlanesPy._Py):
                         [nW, nG] = [pyPl.numWire, pyPl.numGeom]
                         pyW = pyWireList[nW]
                         lenW = len(pyW.planes)
-                        later = sliceIndex(nG+1, lenW)
+                        later = utils.sliceIndex(nG+1, lenW)
                         pyLater = self.selectPlane(nW, later)
                         bigLater = pyLater.bigShape
                     else:
-                        later = sliceIndex(numGeom+1, lenWire)
+                        later = utils.sliceIndex(numGeom+1, lenWire)
                         pyLater = pyPlaneList[later]
                         bigLater = pyLater.bigShape
                     if not bigLater:
@@ -1036,14 +1034,16 @@ class _Face(SlopedPlanesPy._Py):
                         if cutterList:
                             print '3'
                             shape = shape.cut(cutterList, tolerance)
-                            shape = selectFace(shape.Faces, geomShape, tolerance)
+                            shape = utils.selectFace(shape.Faces, geomShape,
+                                                     tolerance)
                             pyPlane.shape = shape
 
                     else:
                         print 'B'
 
                         shape = shape.cut([bigPrior, bigLater], tolerance)
-                        shape = selectFace(shape.Faces, geomShape, tolerance)
+                        shape = utils.selectFace(shape.Faces, geomShape,
+                                                 tolerance)
                         pyPlane.shape = shape
 
     def simulating(self, tolerance):
@@ -1083,7 +1083,7 @@ class _Face(SlopedPlanesPy._Py):
 
                     bb = bb.cut(pyOppR.oppCutter, tolerance)
                     gS = pyOppR.geom.toShape()
-                    bb = selectFace(bb.Faces, gS, tolerance)
+                    bb = utils.selectFace(bb.Faces, gS, tolerance)
 
                     aa = aa.cut(pyR.cutter+[bb], tolerance)
                     gS = pyR.geom.toShape()
@@ -1091,7 +1091,7 @@ class _Face(SlopedPlanesPy._Py):
                     gB = pyR.backward
 
                     aList = []
-                    AA = selectFace(aa.Faces, gS, tolerance)
+                    AA = utils.selectFace(aa.Faces, gS, tolerance)
                     aList.append(AA)
 
                     if len(aa.Faces) == 4:
@@ -1113,7 +1113,7 @@ class _Face(SlopedPlanesPy._Py):
 
                     cc = cc.cut(pyR.oppCutter, tolerance)
                     gS = pyR.geom.toShape()
-                    cc = selectFace(cc.Faces, gS, tolerance)
+                    cc = utils.selectFace(cc.Faces, gS, tolerance)
 
                     bb = bb.cut(pyOppR.cutter + [cc], tolerance)
                     gS = pyOppR.geom.toShape()
@@ -1121,7 +1121,7 @@ class _Face(SlopedPlanesPy._Py):
                     gB = pyOppR.backward
 
                     bList = []
-                    BB = selectFace(bb.Faces, gS, tolerance)
+                    BB = utils.selectFace(bb.Faces, gS, tolerance)
                     bList.append(BB)
 
                     if len(bb.Faces) == 4:
@@ -1142,14 +1142,14 @@ class _Face(SlopedPlanesPy._Py):
 
                         AA = AA.cut(bList, tolerance)
                         gS = pyR.geom.toShape()
-                        AA = selectFace(AA.Faces, gS, tolerance)
+                        AA = utils.selectFace(AA.Faces, gS, tolerance)
                         aList = [AA]
 
                     elif rDiv and not oppRDiv:
 
                         BB = BB.cut(aList, tolerance)
                         gS = pyOppR.geom.toShape()
-                        BB = selectFace(BB.Faces, gS, tolerance)
+                        BB = utils.selectFace(BB.Faces, gS, tolerance)
                         bList = [BB]
 
                     compound = Part.makeCompound(aList)
@@ -1204,7 +1204,7 @@ class _Face(SlopedPlanesPy._Py):
                                             pl = pyPl.shape
                                             plane = plane.cut([pl], tolerance)
                                             gS = pyPlane.geom.toShape()
-                                            plane = selectFace(plane.Faces,
+                                            plane = utils.selectFace(plane.Faces,
                                                                gS, tolerance)
                                             pyPlane.shape = plane
 
@@ -1212,7 +1212,7 @@ class _Face(SlopedPlanesPy._Py):
                                                                     tolerance)
                                             gS = pyOppReflex.geom.toShape()
                                             oppPlane =\
-                                                selectFace(oppPlane.Faces,
+                                                utils.selectFace(oppPlane.Faces,
                                                            gS, tolerance)
                                             pyOppReflex.shape = oppPlane
 
@@ -1244,7 +1244,8 @@ class _Face(SlopedPlanesPy._Py):
                                             pl = pyPl.shape
                                             plane = plane.cut([pl], tolerance)
                                             gS = pyPlane.geom.toShape()
-                                            plane = selectFace(plane.Faces,
+                                            plane =\
+                                                utils.selectFace(plane.Faces,
                                                                gS, tolerance)
                                             pyPlane.shape = plane
 
@@ -1252,7 +1253,7 @@ class _Face(SlopedPlanesPy._Py):
                                                                     tolerance)
                                             gS = pyOppReflex.geom.toShape()
                                             oppPlane =\
-                                                selectFace(oppPlane.Faces,
+                                                utils.selectFace(oppPlane.Faces,
                                                            gS, tolerance)
                                             pyOppReflex.shape = oppPlane
 
@@ -1265,8 +1266,8 @@ class _Face(SlopedPlanesPy._Py):
                     for pyReflex in pyReflexList:
                         num += 1
                         cutterList = []
-                        prior = sliceIndex(num-1, lenR)
-                        later = sliceIndex(num+1, lenR)
+                        prior = utils.sliceIndex(num-1, lenR)
+                        later = utils.sliceIndex(num+1, lenR)
                         if prior != num:
                             pyPriorReflex = pyReflexList[prior]
                             cutterList.append(pyPriorReflex)
@@ -1287,7 +1288,8 @@ class _Face(SlopedPlanesPy._Py):
 
                                 gS = pyPlane.geom.toShape()
                                 plane = plane.cut(cutList, tolerance)
-                                plane = selectFace(plane.Faces, gS, tolerance)
+                                plane = utils.selectFace(plane.Faces, gS,
+                                                         tolerance)
                                 pyPlane.shape = plane
 
     def rearing(self, tolerance):
@@ -1302,7 +1304,7 @@ class _Face(SlopedPlanesPy._Py):
 
                 for pyReflex in pyWire.reflexs:
                     for pyPlane in pyReflex.planes:
-                        self.solveRear(pyWire,pyReflex, pyPlane, tolerance)
+                        self.solveRear(pyWire, pyReflex, pyPlane, tolerance)
 
     def ordinaries(self, tolerance):
 
@@ -1312,7 +1314,7 @@ class _Face(SlopedPlanesPy._Py):
 
         for pyWire in self.wires:
             for pyPlane in pyWire.planes:
-                #if not (pyPlane.choped and not pyPlane.aligned):
+                # if not (pyPlane.choped and not pyPlane.aligned):
                 if not (pyPlane.reflexed and not pyPlane.aligned):
                     if pyPlane.shape:
                         # print '###### (numWire, numGeom) ',\
@@ -1351,7 +1353,8 @@ class _Face(SlopedPlanesPy._Py):
                         if cutterList:
                             gS = pyPlane.geomAligned.toShape()
                             plane = plane.cut(cutterList, tolerance)
-                            plane = selectFace(plane.Faces, gS, tolerance)
+                            plane = utils.selectFace(plane.Faces, gS,
+                                                     tolerance)
                             pyPlane.shape = plane
 
     def aligning(self, face, tolerance):
@@ -1423,7 +1426,7 @@ class _Face(SlopedPlanesPy._Py):
 
                         plane = plane.cut(cutterList, tolerance)
                         gS = pyPlane.geom.toShape()
-                        plane = selectFace(plane.Faces, gS, tolerance)
+                        plane = utils.selectFace(plane.Faces, gS, tolerance)
                         pyPlane.shape = plane
 
                         if pyPlane.choped or pyPlane.aligned:
@@ -1455,7 +1458,7 @@ class _Face(SlopedPlanesPy._Py):
 
                 if direction == "forward":
                     print '111'
-                    num = sliceIndex(numGeom+2, lenWire)
+                    num = utils.sliceIndex(numGeom+2, lenWire)
                     ran = range(num, nGeom)
 
                 else:
