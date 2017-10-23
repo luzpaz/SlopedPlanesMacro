@@ -29,7 +29,6 @@ import FreeCADGui
 import Part
 import SlopedPlanesUtils as utils
 import SlopedPlanesTaskPanel
-import SlopedPlanesCommand
 import SlopedPlanesPyFace
 import SlopedPlanesPyWire
 import SlopedPlanesPyPlane

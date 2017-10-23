@@ -1,40 +1,37 @@
 # -*- coding: utf8 -*-
-#***************************************************************************
-#*                                                                         *
-#*   Copyright (c) 2016                                                    *
-#*                                                                         *
-#*   This program is free software; you can redistribute it and/or modify  *
-#*   it under the terms of the GNU Lesser General Public License (LGPL)    *
-#*   as published by the Free Software Foundation; either version 2 of     *
-#*   the License, or (at your option) any later version.                   *
-#*   for detail see the LICENSE text file.                                 *
-#*                                                                         *
-#*   This program is distributed in the hope that it will be useful,       *
-#*   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
-#*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
-#*   GNU Library General Public License for more details.                  *
-#*                                                                         *
-#*   You should have received a copy of the GNU Library General Public     *
-#*   License along with this program; if not, write to the Free Software   *
-#*   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  *
-#*   USA                                                                   *
-#*                                                                         *
-#***************************************************************************
+# *****************************************************************************
+# *                                                                           *
+# *    Copyright (c) 2017                                                     *
+# *                                                                           *
+# *    This program is free software; you can redistribute it and/or modify   *
+# *    it under the terms of the GNU Lesser General Public License (LGPL)     *
+# *    as published by the Free Software Foundation; either version 2 of      *
+# *    the License, or (at your option) any later version.                    *
+# *    For detail see the LICENSE text file.                                  *
+# *                                                                           *
+# *    This program is distributed in the hope that it will be useful,        *
+# *    but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+# *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   *
+# *    See the  GNU Library General Public License for more details.          *
+# *                                                                           *
+# *    You should have received a copy of the GNU Library General Public      *
+# *    License along with this program; if not, write to the Free Software    *
+# *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307   *
+# *    USA                                                                    *
+# *                                                                           *
+# *****************************************************************************
+
 
 import FreeCAD
 
 if FreeCAD.GuiUp:
     import FreeCADGui
     from PySide import QtGui, QtCore
-    from PySide.QtCore import QT_TRANSLATE_NOOP
 
 
-__title__ = "Commands needed for preprocess a FreeCAD document"
+__title__ = "SlopedPlanesMacro"
 __author__ = "Damian Caceres"
 __url__ = "http://www.freecadweb.org"
-
-
-###############################################################################
 
 
 class _TaskPanel_SlopedPlanes():
@@ -66,9 +63,9 @@ class _TaskPanel_SlopedPlanes():
         self.tree.header().resizeSection(3, 30)
 
         QtCore.QObject.connect(self.tree,
-                               QtCore.SIGNAL(
-                                   "itemChanged(QTreeWidgetItem *, int)"
-                               ), self.edit)
+                               QtCore.SIGNAL("itemChanged(QTreeWidgetItem *,\
+                                             int)"),
+                               self.edit)
 
         self.update()
 
@@ -141,14 +138,16 @@ class _TaskPanel_SlopedPlanes():
                                     if alfa == numWire:
 
                                         if beta > numAngle:
+                                            pyW = pyWireList[alfa]
                                             angle =\
-                                                pyWireList[alfa].planes[beta].angle
+                                                pyW.planes[beta].angle
                                             numSlope += 1
                                             charge = True
 
                                     elif alfa > numWire:
+                                        pyW = pyWireList[alfa]
                                         angle =\
-                                            pyWireList[alfa].planes[beta].angle
+                                            pyW.planes[beta].angle
                                         numSlope += 1
                                         charge = True
 
@@ -238,7 +237,6 @@ class _TaskPanel_SlopedPlanes():
                                         charge = True
                                         numSlope += 1
                                         pyPlane = pyWireList[alfa].planes[beta]
-                                        
 
                                 elif alfa > numWire:
                                     # print 'e'
@@ -253,7 +251,7 @@ class _TaskPanel_SlopedPlanes():
                     if charge:
 
                         it = self.tree.findItems(str(numSlope),
-                         QtCore.Qt.MatchExactly, 0)[0]
+                                                 QtCore.Qt.MatchExactly, 0)[0]
 
                         doubleSpinBox = self.tree.itemWidget(it, 1)
                         value = doubleSpinBox.value()
