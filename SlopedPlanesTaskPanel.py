@@ -56,11 +56,11 @@ class _TaskPanel_SlopedPlanes():
         self.grid.addWidget(self.tree, 1, 0, 1, 2)
 
         self.tree.setColumnCount(5)
-        self.tree.header().resizeSection(0, 30)
-        self.tree.header().resizeSection(1, 50)
-        self.tree.header().resizeSection(2, 60)
-        self.tree.header().resizeSection(3, 30)
-        self.tree.header().resizeSection(3, 30)
+        self.tree.header().resizeSection(0, 60)
+        self.tree.header().resizeSection(1, 90)
+        self.tree.header().resizeSection(2, 90)
+        self.tree.header().resizeSection(3, 90)
+        self.tree.header().resizeSection(4, 90)
 
         QtCore.QObject.connect(self.tree,
                                QtCore.SIGNAL("itemChanged(QTreeWidgetItem *,\
@@ -68,6 +68,18 @@ class _TaskPanel_SlopedPlanes():
                                self.edit)
 
         self.update()
+
+    def retranslateUi(self, taskPanel):
+
+        ''''''
+
+        taskPanel.setWindowTitle("SlopedPlanes")
+        self.title.setText("SlopedPlanes parameters")
+        self.tree.setHeaderLabels([("Face"),
+                                   ("Angle"),
+                                   ("Length"),
+                                   ("Left Width"),
+                                   ("Right Width")])
 
     def isAllowedAlterSelection(self):
 
@@ -200,7 +212,7 @@ class _TaskPanel_SlopedPlanes():
                             doubleSpinBox.setValue(width[1])
                             self.tree.setItemWidget(item, 4, doubleSpinBox)
 
-        # self.retranslateUi(self.form)
+        self.retranslateUi(self.form)
         self.updating = False
 
     def resetObject(self, remove=None):
