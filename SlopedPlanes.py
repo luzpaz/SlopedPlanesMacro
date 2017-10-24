@@ -299,38 +299,41 @@ class _SlopedPlanes():
             pyWireList = pyFace.wires
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
+                print 'numWire ', numWire
                 for pyPlane in pyWire.planes:
                     numAngle = pyPlane.numGeom
                     angle = pyPlane.angle
-                    # print '(numAngle, angle) ', (numAngle, angle)
+                    print '(numAngle, angle) ', (numAngle, angle)
+                    print pyPlane.shape
                     if [numWire, numAngle] not in originList:
 
                         if isinstance(angle, float):
-                            # print 'a'
+                            print 'a'
                             slopeList.append(angle)
 
                             plane = pyPlane.shape
                             if isinstance(plane, Part.Compound):
-                                # print 'a1'
+                                print 'a1'
                                 planeList.append(plane.Faces[0])
                                 secondaries.extend(plane.Faces[1:])
                             else:
-                                # print 'a2'
+                                print 'a2'
                                 planeList.append(plane)
 
                         else:
-                            # print 'b'
+                            print 'b'
                             alfa, beta = angle[0], angle[1]
 
                             if [alfa, beta] not in originList:
-                                # print 'bb'
+                                print 'bb'
                                 originList.append([alfa, beta])
+                                print [alfa, beta]
 
                                 if alfa == numWire:
-                                    # print 'bb1'
+                                    print 'bb1'
 
                                     if beta > numAngle:
-                                        # print 'bb11'
+                                        print 'bb11'
                                         angle =\
                                             pyWireList[alfa].planes[beta].angle
                                         slopeList.append(angle)
@@ -340,7 +343,7 @@ class _SlopedPlanes():
                                         planeList.append(pl)
 
                                 elif alfa > numWire:
-                                    # print 'bb2'
+                                    print 'bb2'
                                     angle =\
                                         pyWireList[alfa].planes[beta].angle
                                     slopeList.append(angle)
@@ -350,13 +353,13 @@ class _SlopedPlanes():
                                     planeList.append(pl)
 
                                 elif alfa < numWire:
-                                    # print 'bb3'
+                                    print 'bb3'
                                     pass
 
         planeList.extend(secondaries)
         slopedPlanes.Slopes = slopeList
-        # print planeList
-        # print slopeList
+        print planeList
+        print slopeList
 
         for plane in planeList:
             plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,

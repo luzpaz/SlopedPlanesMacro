@@ -332,6 +332,8 @@ class _Alignament(SlopedPlanesPy._Py):
 
         ''''''
 
+        print '###### solveAlignament'
+
         print(self.base.numWire, self.base.numGeom)
         print[(x.numWire, x.numGeom) for x in self.aligns]
         print[[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
@@ -525,6 +527,13 @@ class _Alignament(SlopedPlanesPy._Py):
                 gS = pyPl.geom.toShape()
                 ff = selectFace(plane.Faces, gS, tolerance)
                 pyPl.shape = ff
+
+                try:
+                    for pyP in aligns[numChop+1:]:
+                        pyP.angle = [pyPl.numWire, pyPl.numGeom]
+                except IndexError:
+                    pass
+
                 pyPl.angle = pyPlane.angle
 
                 gS = pyChopOne.geom.toShape()
