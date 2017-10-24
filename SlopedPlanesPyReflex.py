@@ -23,7 +23,7 @@
 
 
 import Part
-from SlopedPlanesUtils import *
+import SlopedPlanesUtils as utils
 import SlopedPlanesPy
 
 
@@ -139,7 +139,6 @@ class _Reflex(SlopedPlanesPy._Py):
 
         oppReflexEnormous = pyOppR.enormousShape.copy()
 
-        pyWireList = pyFace.wires
         nWire = pyWire.numWire
 
         rear = pyR.rear
@@ -189,7 +188,8 @@ class _Reflex(SlopedPlanesPy._Py):
 
                 oppRearPl = oppRearPl.cut(cutList, tolerance)
                 geomShape = pyOppRear.geom.toShape()
-                oppRearPl = selectFace(oppRearPl.Faces, geomShape, tolerance)
+                oppRearPl = utils.selectFace(oppRearPl.Faces, geomShape,
+                                             tolerance)
                 print 'included oppRear rectified ', (nWire, nGeom)
 
             pyR.addLink('cutter', oppRearPl)
@@ -315,25 +315,27 @@ class _Reflex(SlopedPlanesPy._Py):
             pl = pyPl.shape.copy()
 
         if not pyPl.reflexed:
-            print 'included ', kind, ' ', (nWire, nn)
 
             if kind == "rangoCorner":
                 print 'a'
+                print 'included oppCutter ', kind, ' rectified ', (nWire, nn)
                 pyOppR.addLink('oppCutter', pl)
                 oppReflexEnormous = pyOppR.enormousShape
                 pl = pl.cut([oppReflexEnormous], tolerance)
                 gS = pyPl.geom.toShape()
-                pl = selectFace(pl.Faces, gS, tolerance)
+                pl = utils.selectFace(pl.Faces, gS, tolerance)
+                print 'included cutter ', kind, ' rectified ', (nWire, nn)
                 pyR.addLink('cutter', pl)
 
             else:
                 print 'b'
+                print 'included cutter ', kind, ' ', (nWire, nn)
                 pyR.addLink('cutter', pl)
 
         else:
             if kind == "rangoCorner":
-                print 'included ', kind, ' ', (nWire, nn)
                 print 'c'
+                print 'included oppCutter ', kind, ' ', (nWire, nn)
                 pyOppR.addLink('oppCutter', pl)
 
             nG = nn
@@ -350,10 +352,12 @@ class _Reflex(SlopedPlanesPy._Py):
             section = forward.section([forw], tolerance)
             if section.Vertexes:
                 cutList.append(pyR.enormousShape)
+            else:
+                cutList.append(pyOppR.enormousShape)
 
             pl = pl.cut(cutList, tolerance)
             gS = pyPl.geom.toShape()
-            pl = selectFace(pl.Faces, gS, tolerance)
-            print 'included ', kind, ' ', (nWire, nn)
+            pl = utils.selectFace(pl.Faces, gS, tolerance)
             print 'd'
+            print 'included cutter ', kind, ' rectified ', (nWire, nn)
             pyR.addLink('cutter', pl)
