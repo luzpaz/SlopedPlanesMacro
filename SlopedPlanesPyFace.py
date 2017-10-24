@@ -879,9 +879,28 @@ class _Face(SlopedPlanesPy._Py):
                                 forward = pyPlane.forward
                                 forw = pyPl.forward
                                 section = forward.section(forw)
+
                                 if not section.Vertexes:
 
-                                    self.doTrim(enormousShape, pyPl, tolerance)
+                                    procc = True
+                                    nWire = pyPl.numWire
+                                    pyRList = self.selectAllReflex(nWire, nG)
+                                    for pyR in pyRList:
+                                        if not procc:
+                                            break
+                                        for pyP in pyR.planes:
+                                            if pyP != pyPl:
+                                                forw = pyP.forward
+                                                section =\
+                                                    forward.section([forw],
+                                                                    tolerance)
+                                                if section.Vertexes:
+                                                    procc = False
+                                                    break
+
+                                    if procc:
+                                        self.doTrim(enormousShape, pyPl,
+                                                    tolerance)
 
         pyAlignList = self.alignaments
 
