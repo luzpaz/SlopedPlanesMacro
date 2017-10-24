@@ -112,38 +112,40 @@ class _Reflex(SlopedPlanesPy._Py):
 
         pyPlaneList = self.planes
 
-        pyReflex = pyPlaneList[0]
-        pyOppReflex = pyPlaneList[1]
+        pyR = pyPlaneList[0]
+        pyOppR = pyPlaneList[1]
 
-        pyReflex.oppCutter, pyReflex.cutter = [], []
-        pyOppReflex.oppCutter, pyOppReflex.cutter = [], []
+        pyR.oppCutter, pyR.cutter = [], []
+        pyOppR.oppCutter, pyOppR.cutter = [], []
 
         direction = "forward"
         print '### direction ', direction
-        print(pyReflex.numGeom, pyOppReflex.numGeom)
+        print(pyR.numGeom, pyOppR.numGeom)
 
-        self.twin(pyFace, pyWire, pyReflex, pyOppReflex, direction, tolerance)
+        self.twin(pyFace, pyWire, pyR, pyOppR, direction, tolerance)
 
         direction = "backward"
         print '### direction ', direction
-        print(pyOppReflex.numGeom, pyReflex.numGeom)
+        print(pyOppR.numGeom, pyR.numGeom)
 
-        self.twin(pyFace, pyWire, pyOppReflex, pyReflex, direction, tolerance)
+        self.twin(pyFace, pyWire, pyOppR, pyR, direction, tolerance)
 
-    def twin(self, pyFace, pyWire, pyReflex, pyOppReflex, direction, tolerance):
+    def twin(self, pyFace, pyWire, pyR, pyOppR, direction, tolerance):
 
         ''''''
 
-        reflexEnormous = pyReflex.enormousShape.copy()
-        pyOppReflex.addLink('oppCutter', reflexEnormous)
+        # los planos no pueden ser pyReflex. debe ser pyPlane y pyOppPlane
 
-        oppReflexEnormous = pyOppReflex.enormousShape.copy()
-        #pyReflex.addLink('oppCutter', oppReflexEnormous)
+        reflexEnormous = pyR.enormousShape.copy()
+        pyOppR.addLink('oppCutter', reflexEnormous)
+
+        oppReflexEnormous = pyOppR.enormousShape.copy()
+        #pyR.addLink('oppCutter', oppReflexEnormous)
 
         pyWireList = pyFace.wires
         nWire = pyWire.numWire
 
-        rear = pyReflex.rear
+        rear = pyR.rear
         print '# rear ', rear
 
         for nGeom in rear:
@@ -154,14 +156,14 @@ class _Reflex(SlopedPlanesPy._Py):
                 [nWire, nGeom] = rearPyPl.angle
                 rearPyPl = pyFace.selectPlane(nWire, nGeom)
                 rearPl = rearPyPl.shape.copy()
-            pyReflex.addLink('cutter', rearPl)
-            #pyReflex.addLink('oppCutter', rearPl)
-            pyOppReflex.addLink('oppCutter', rearPl)
+            pyR.addLink('cutter', rearPl)
+            #pyR.addLink('oppCutter', rearPl)
+            pyOppR.addLink('oppCutter', rearPl)
             print 'included rear ', (nWire, nGeom)
 
         nWire = pyWire.numWire
 
-        oppRear = pyOppReflex.rear
+        oppRear = pyOppR.rear
         print '# oppRear ', oppRear
 
         if len(oppRear) == 1:
@@ -181,63 +183,53 @@ class _Reflex(SlopedPlanesPy._Py):
             else:
 
                 nG = pyOppRear.numGeom
-                pyW = pyWireList[nWire]
-                lenWire = len(pyW.planes)
-                if direction == 'forward':
-                    if nWire == 0:
-                        num = sliceIndex(nG+1, lenWire)
-                    else:
-                        num = sliceIndex(nG-1, lenWire)
-                else:
-                    if nWire == 0:
-                        num = sliceIndex(nG-1, lenWire)
-                    else:
-                        num = sliceIndex(nG+1, lenWire)
+                pyReflexList = pyFace.selectAllReflex(nWire, nG)
 
-                print 'num ', num
+                cutList = []
+                for pyReflex in pyReflexList:
+                    for pyPl in pyReflex.planes:
+                        if pyPl != pyOppRear:
+                            cutList.append(pyPl.enormousShape)
 
-                nPyPlane = pyW.planes[num]
-                nPl = nPyPlane.enormousShape
-
-                oppRearPl = oppRearPl.cut([nPl], tolerance)
+                oppRearPl = oppRearPl.cut(cutList, tolerance)
                 geomShape = pyOppRear.geom.toShape()
                 oppRearPl = selectFace(oppRearPl.Faces, geomShape, tolerance)
                 print 'included oppRear rectified ', (nWire, nGeom)
 
-            pyReflex.addLink('cutter', oppRearPl)
+            pyR.addLink('cutter', oppRearPl)
             # ojo
-            pyOppReflex.addLink('oppCutter', oppRearPl)
+            pyOppR.addLink('oppCutter', oppRearPl)
 
         elif len(oppRear) == 2:
 
             if direction == 'forward':
 
-                self.processOppRear(oppRear, direction, pyFace, pyWire, pyReflex,
-                                    pyOppReflex, oppReflexEnormous, tolerance)
+                self.processOppRear(oppRear, direction, pyFace, pyWire, pyR,
+                                    pyOppR, oppReflexEnormous, tolerance)
 
             else:
 
-                self.processOppRear(oppRear, direction, pyFace, pyWire, pyReflex,
-                                    pyOppReflex, oppReflexEnormous, tolerance)
+                self.processOppRear(oppRear, direction, pyFace, pyWire, pyR,
+                                    pyOppR, oppReflexEnormous, tolerance)
 
-        rangoNext = pyOppReflex.rango
+        rangoNext = pyOppR.rango
         print '# rangoNext ', rangoNext
 
         if len(rear) == 1:
             for ran in rangoNext:
                 for nn in ran:
 
-                    self.processRango(pyFace, pyWire, pyReflex, pyOppReflex,
+                    self.processRango(pyFace, pyWire, pyR, pyOppR,
                                       nn, 'rangoNext', tolerance)
 
-        rangoCorner = pyReflex.rango
+        rangoCorner = pyR.rango
         print '# rangoCorner ', rangoCorner
 
         for ran in rangoCorner:
             for nn in ran:
                 if nn not in oppRear:
 
-                    self.processRango(pyFace, pyWire, pyReflex, pyOppReflex,
+                    self.processRango(pyFace, pyWire, pyR, pyOppR,
                                       nn, 'rangoCorner', tolerance)
 
         rangoInter = self.rangoInter
@@ -247,10 +239,10 @@ class _Reflex(SlopedPlanesPy._Py):
 
             for nn in ran:
 
-                self.processRango(pyFace, pyWire, pyReflex, pyOppReflex, nn,
+                self.processRango(pyFace, pyWire, pyR, pyOppR, nn,
                                   'rangoInter', tolerance)
 
-    def processOppRear(self, oppRear, direction, pyFace, pyWire, pyReflex, pyOppReflex,
+    def processOppRear(self, oppRear, direction, pyFace, pyWire, pyR, pyOppR,
                        oppReflexEnormous, tolerance):
 
         ''''''
@@ -271,9 +263,9 @@ class _Reflex(SlopedPlanesPy._Py):
             [nWire, nGeom] = pyOppRear.angle
             pyOppRear = pyFace.selectPlane(nWire, nGeom)
             oppRearPl = pyOppRear.shape.copy()
-        pyReflex.addLink('cutter', oppRearPl)
+        pyR.addLink('cutter', oppRearPl)
         # ojo
-        pyOppReflex.addLink('oppCutter', oppRearPl)
+        pyOppR.addLink('oppCutter', oppRearPl)
         print 'included oppRear ', (nWire, nGeom)
 
         nWire = pyWire.numWire
@@ -308,14 +300,14 @@ class _Reflex(SlopedPlanesPy._Py):
         for ff in oppRearPl.Faces:
             section = vertex.section([ff], tolerance)
             if section.Vertexes:
-                pyReflex.addLink('cutter', ff)
+                pyR.addLink('cutter', ff)
                 # ojo
-                pyOppReflex.addLink('oppCutter', ff)
+                pyOppR.addLink('oppCutter', ff)
                 print 'included oppRear rectified ',\
                     (nWire, nGeom)
                 break
 
-    def processRango(self, pyFace, pyWire, pyReflex, pyOppReflex, nn, kind, tolerance):
+    def processRango(self, pyFace, pyWire, pyR, pyOppR, nn, kind, tolerance):
 
         ''''''
 
@@ -334,27 +326,27 @@ class _Reflex(SlopedPlanesPy._Py):
 
             if kind == "rangoCorner":
                 print 'a'
-                #pyReflex.addLink('oppCutter', pl)
-                pyOppReflex.addLink('oppCutter', pl)
-                oppReflexEnormous = pyOppReflex.enormousShape
+                #pyR.addLink('oppCutter', pl)
+                pyOppR.addLink('oppCutter', pl)
+                oppReflexEnormous = pyOppR.enormousShape
                 pl = pl.cut([oppReflexEnormous], tolerance)
                 gS = pyPl.geom.toShape()
                 pl = selectFace(pl.Faces, gS, tolerance)
-                pyReflex.addLink('cutter', pl)
+                pyR.addLink('cutter', pl)
 
             else:
                 print 'b'
-                pyReflex.addLink('cutter', pl)
+                pyR.addLink('cutter', pl)
 
         else:
             if kind == "rangoCorner":
                 print 'included ', kind, ' ', (nWire, nn)
                 print 'c'
-                #pyReflex.addLink('oppCutter', pl)
-                pyOppReflex.addLink('oppCutter', pl)
+                #pyR.addLink('oppCutter', pl)
+                pyOppR.addLink('oppCutter', pl)
 
-                forward = pyReflex.forward
+                forward = pyR.forward
                 forw = pyPl.forward
                 section = forward.section([forw], tolerance)
                 if not section.Vertexes:
-                    pyReflex.addLink('cutter', pl)
+                    pyR.addLink('cutter', pl)

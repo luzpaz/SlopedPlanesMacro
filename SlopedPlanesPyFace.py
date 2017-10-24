@@ -761,6 +761,20 @@ class _Face(SlopedPlanesPy._Py):
 
         return None
 
+    def selectAllReflex(self, numWire, numGeom):
+
+        ''''''
+
+        pyRList = []
+        pyReflexList = self.wires[numWire].reflexs
+        for pyReflex in pyReflexList:
+            [pyPlane, pyPl] = pyReflex.planes
+            [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
+            if numGeom in [nn, mm]:
+                pyRList.append(pyReflex)
+
+        return pyRList
+
     def selectPlane(self, nWire, nGeom):
 
         ''''''
