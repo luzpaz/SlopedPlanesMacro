@@ -1220,6 +1220,50 @@ class _Face(SlopedPlanesPy._Py):
                         plane = pyPlane.shape
                         oppPlane = pyOppReflex.shape
 
+                        if "forward" in pyPlane.problem:
+                            print 'b ', pyPlane.numGeom
+                            rango = list(pyPlane.rango)
+                            oppRango = list(pyOppReflex.rango)
+                            rangoInter = list(pyReflex.rangoInter)
+                            rango.extend(oppRango)
+                            rango.append(rangoInter)
+                            print rango
+                            for ran in rango:
+                                for nn in ran:
+                                    pyPl = self.selectPlane(numWire, nn)
+                                    if pyPl.reflexed:
+                                        if "forward" not in pyPl.problem:
+                                            print 'bb'
+                                            # añadir oppPlane y plane aqui es una basura
+                                            # hay que refinar oppCutter en solveReflex
+                                            pl = pyPl.shape
+                                            plane = plane.cut([pl, oppPlane], tolerance)
+                                           # plane = plane.cut([pl], tolerance)
+                                            gS = pyPlane.geom.toShape()
+                                            plane =\
+                                                utils.selectFace(plane.Faces,
+                                                               gS, tolerance)
+                                            pyPlane.shape = plane
+
+                                            oppPlane = oppPlane.cut([pl, plane], tolerance)
+                                            #oppPlane = oppPlane.cut([pl], tolerance)
+                                            gS = pyOppReflex.geom.toShape()
+                                            oppPlane =\
+                                                utils.selectFace(oppPlane.Faces,
+                                                           gS, tolerance)
+                                            pyOppReflex.shape = oppPlane
+
+                        pyPlane.problem = []
+                        pyPlane.isSolved(face, self, pyOppReflex, tolerance)
+
+                for pyReflex in pyReflexList:
+                    number = -1
+                    for pyPlane in pyReflex.planes:
+                        number += 1
+                        pyOppReflex = pyReflex.planes[number-1]
+                        plane = pyPlane.shape
+                        oppPlane = pyOppReflex.shape
+
                         if "backward" in pyPlane.problem:
                             print 'a ', pyPlane.numGeom
                             rango = list(pyPlane.rango)
@@ -1242,47 +1286,6 @@ class _Face(SlopedPlanesPy._Py):
                                             pyPlane.shape = plane
 
                                             oppPlane = oppPlane.cut([pl],
-                                                                    tolerance)
-                                            gS = pyOppReflex.geom.toShape()
-                                            oppPlane =\
-                                                utils.selectFace(oppPlane.Faces,
-                                                           gS, tolerance)
-                                            pyOppReflex.shape = oppPlane
-
-                        pyPlane.problem = []
-                        pyPlane.isSolved(face, self, pyOppReflex, tolerance)
-
-                for pyReflex in pyReflexList:
-                    number = -1
-                    for pyPlane in pyReflex.planes:
-                        number += 1
-                        pyOppReflex = pyReflex.planes[number-1]
-                        plane = pyPlane.shape
-                        oppPlane = pyOppReflex.shape
-
-                        if "forward" in pyPlane.problem:
-                            print 'b ', pyPlane.numGeom
-                            rango = list(pyPlane.rango)
-                            oppRango = list(pyOppReflex.rango)
-                            rangoInter = list(pyReflex.rangoInter)
-                            rango.extend(oppRango)
-                            rango.append(rangoInter)
-                            print rango
-                            for ran in rango:
-                                for nn in ran:
-                                    pyPl = self.selectPlane(numWire, nn)
-                                    if pyPl.reflexed:
-                                        if "forward" not in pyPl.problem:
-                                            print 'bb'
-                                            pl = pyPl.shape
-                                            plane = plane.cut([pl, oppPlane], tolerance)
-                                            gS = pyPlane.geom.toShape()
-                                            plane =\
-                                                utils.selectFace(plane.Faces,
-                                                               gS, tolerance)
-                                            pyPlane.shape = plane
-
-                                            oppPlane = oppPlane.cut([pl, plane],
                                                                     tolerance)
                                             gS = pyOppReflex.geom.toShape()
                                             oppPlane =\
