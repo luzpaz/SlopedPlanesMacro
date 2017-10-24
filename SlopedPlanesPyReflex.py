@@ -353,7 +353,10 @@ class _Reflex(SlopedPlanesPy._Py):
             if section.Vertexes:
                 cutList.append(pyR.enormousShape)
             else:
-                cutList.append(pyOppR.enormousShape)
+                forward = pyOppR.forward
+                section = forward.section([forw], tolerance)
+                if not section.Vertexes:
+                    cutList.append(pyOppR.enormousShape)
 
             pl = pl.cut(cutList, tolerance)
             gS = pyPl.geom.toShape()
