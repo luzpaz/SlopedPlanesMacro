@@ -1256,14 +1256,14 @@ class _Face(SlopedPlanesPy._Py):
                                         if "forward" not in pyPl.problem:
                                             print 'bb'
                                             pl = pyPl.shape
-                                            plane = plane.cut([pl], tolerance)
+                                            plane = plane.cut([pl, oppPlane], tolerance)
                                             gS = pyPlane.geom.toShape()
                                             plane =\
                                                 utils.selectFace(plane.Faces,
                                                                gS, tolerance)
                                             pyPlane.shape = plane
 
-                                            oppPlane = oppPlane.cut([pl],
+                                            oppPlane = oppPlane.cut([pl, plane],
                                                                     tolerance)
                                             gS = pyOppReflex.geom.toShape()
                                             oppPlane =\

@@ -345,8 +345,26 @@ class _Reflex(SlopedPlanesPy._Py):
                 #pyR.addLink('oppCutter', pl)
                 pyOppR.addLink('oppCutter', pl)
 
-                forward = pyR.forward
-                forw = pyPl.forward
-                section = forward.section([forw], tolerance)
-                if not section.Vertexes:
-                    pyR.addLink('cutter', pl)
+            forward = pyR.forward
+            forw = pyPl.forward
+            section = forward.section([forw], tolerance)
+            if not section.Vertexes:
+
+                nG = nn
+                pyReflexList = pyFace.selectAllReflex(nWire, nG)
+
+                cutList = []
+                for pyReflex in pyReflexList:
+                    for pyP in pyReflex.planes:
+                        if pyP != pyPl:
+                            cutList.append(pyP.enormousShape)
+
+                oppReflexEnormous = pyOppR.enormousShape
+                cutList.append(oppReflexEnormous)
+
+                pl = pl.cut(cutList, tolerance)
+                gS = pyPl.geom.toShape()
+                pl = selectFace(pl.Faces, gS, tolerance)
+                print 'included ', kind, ' ', (nWire, nn)
+                print 'd'
+                pyR.addLink('cutter', pl)
