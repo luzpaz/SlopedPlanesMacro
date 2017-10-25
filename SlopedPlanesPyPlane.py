@@ -24,7 +24,7 @@
 
 import Part
 import SlopedPlanesUtils as utils
-import SlopedPlanesPy
+from SlopedPlanesPy import _Py
 
 
 __title__ = "SlopedPlanes Macro"
@@ -32,7 +32,7 @@ __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
 
 
-class _Plane(SlopedPlanesPy._Py):
+class _PyPlane(_Py):
 
     ''''''
 

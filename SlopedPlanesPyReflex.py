@@ -24,7 +24,7 @@
 
 import Part
 import SlopedPlanesUtils as utils
-import SlopedPlanesPy
+from SlopedPlanesPy import _Py
 
 
 __title__ = "SlopedPlanes Macro"
@@ -32,7 +32,7 @@ __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
 
 
-class _Reflex(SlopedPlanesPy._Py):
+class _PyReflex(_Py):
 
     ''''''
 
@@ -463,3 +463,10 @@ class _Reflex(SlopedPlanesPy._Py):
 
         for pyPlane in self.planes:
             pyPlane.isSolved(tolerance)
+
+    def rearingReflex(self, pyWire, tolerance):
+
+        ''''''
+
+        for pyPlane in self.planes:
+            pyPlane.solveRear(pyWire, self, tolerance)

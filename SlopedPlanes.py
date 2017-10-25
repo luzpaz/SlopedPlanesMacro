@@ -22,17 +22,16 @@
 # *****************************************************************************
 
 
-import math
 import os
+import math
 import FreeCAD
 import FreeCADGui
 import Part
 import SlopedPlanesUtils as utils
-import SlopedPlanesPyFace
-import SlopedPlanesPyWire
-import SlopedPlanesPyPlane
-import SlopedPlanesTaskPanel
-
+from SlopedPlanesPyFace import _PyFace
+from SlopedPlanesPyWire import _PyWire
+from SlopedPlanesPyPlane import _PyPlane
+from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
@@ -155,7 +154,7 @@ class _SlopedPlanes():
                 pyFace = pyFaceList[numFace]
                 # print 'a ', numFace
             except IndexError:
-                pyFace = SlopedPlanesPyFace._Face(numFace)
+                pyFace = _PyFace(numFace)
                 pyFaceList.append(pyFace)
                 # print 'b ', numFace
 
@@ -180,7 +179,7 @@ class _SlopedPlanes():
                     pyWire = pyWireList[numWire]
                     # print 'aa ', numWire
                 except IndexError:
-                    pyWire = SlopedPlanesPyWire._Wire(numWire)
+                    pyWire = _PyWire(numWire)
                     pyWireList.append(pyWire)
                     # print 'bb ', numWire
 
@@ -225,8 +224,7 @@ class _SlopedPlanes():
                     try:
                         pyPlane = pyPlaneList[numGeom]
                         if pyFace.reset:
-                            pyPlane = SlopedPlanesPyPlane._Plane(numWire,
-                                                                 numGeom)
+                            pyPlane = _PyPlane(numWire, numGeom)
                             pyPlaneList[numGeom] = pyPlane
                             # print 'aaa ', numGeom
                         elif pyWire.reset:
@@ -235,8 +233,7 @@ class _SlopedPlanes():
                             pyPlane.length = length
                             # print 'bbb ', numGeom
                     except IndexError:
-                        pyPlane = SlopedPlanesPyPlane._Plane(numWire,
-                                                             numGeom)
+                        pyPlane = _PyPlane(numWire, numGeom)
                         pyPlaneList.append(pyPlane)
                         # print 'ccc ', numGeom
 
@@ -303,41 +300,41 @@ class _SlopedPlanes():
             pyWireList = pyFace.wires
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
-                print 'numWire ', numWire
+                # print 'numWire ', numWire
                 for pyPlane in pyWire.planes:
                     numAngle = pyPlane.numGeom
                     angle = pyPlane.angle
-                    print '(numAngle, angle) ', (numAngle, angle)
-                    print pyPlane.shape
+                    # print '(numAngle, angle) ', (numAngle, angle)
+                    # print pyPlane.shape
                     if [numWire, numAngle] not in originList:
 
                         if isinstance(angle, float):
-                            print 'a'
+                            # print 'a'
                             slopeList.append(angle)
 
                             plane = pyPlane.shape
                             if isinstance(plane, Part.Compound):
-                                print 'a1'
+                                # print 'a1'
                                 planeList.append(plane.Faces[0])
                                 secondaries.extend(plane.Faces[1:])
                             else:
-                                print 'a2'
+                                # print 'a2'
                                 planeList.append(plane)
 
                         else:
-                            print 'b'
+                            # print 'b'
                             alfa, beta = angle[0], angle[1]
 
                             if [alfa, beta] not in originList:
-                                print 'bb'
+                                # print 'bb'
                                 originList.append([alfa, beta])
-                                print [alfa, beta]
+                                # print [alfa, beta]
 
                                 if alfa == numWire:
-                                    print 'bb1'
+                                    # print 'bb1'
 
                                     if beta > numAngle:
-                                        print 'bb11'
+                                        # print 'bb11'
                                         angle =\
                                             pyWireList[alfa].planes[beta].angle
                                         slopeList.append(angle)
@@ -347,7 +344,7 @@ class _SlopedPlanes():
                                         planeList.append(pl)
 
                                 elif alfa > numWire:
-                                    print 'bb2'
+                                    # print 'bb2'
                                     angle =\
                                         pyWireList[alfa].planes[beta].angle
                                     slopeList.append(angle)
@@ -357,13 +354,13 @@ class _SlopedPlanes():
                                     planeList.append(pl)
 
                                 elif alfa < numWire:
-                                    print 'bb3'
+                                    # print 'bb3'
                                     pass
 
         planeList.extend(secondaries)
         slopedPlanes.Slopes = slopeList
-        print planeList
-        print slopeList
+        # print planeList
+        # print slopeList
 
         for plane in planeList:
             plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
@@ -529,7 +526,7 @@ class _SlopedPlanes():
         numFace = -1
         for dct in state['Pyth']:
             numFace += 1
-            pyFace = SlopedPlanesPyFace._Face(numFace)
+            pyFace = _PyFace(numFace)
             wires, alignaments = dct['_wires'], dct['_alignaments']
             wires, alignaments = pyFace.__setstate__(wires, alignaments)
             dct['_wires'], dct['_alignaments'] = wires, alignaments
@@ -603,7 +600,7 @@ class _ViewProvider_SlopedPlanes():
 
         ''''''
 
-        taskd = SlopedPlanesTaskPanel._TaskPanel_SlopedPlanes()
+        taskd = _TaskPanel_SlopedPlanes()
         taskd.obj = self.Object
         taskd.update()
         FreeCADGui.Control.showDialog(taskd)

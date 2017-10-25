@@ -22,9 +22,9 @@
 # *****************************************************************************
 
 
-from SlopedPlanesUtils import *
-import SlopedPlanesPy
-import SlopedPlanesPyPlane
+import SlopedPlanesUtils as utils
+from SlopedPlanesPy import _Py
+from SlopedPlanesPyPlane import _PyPlane
 
 
 __title__ = "SlopedPlanes Macro"
@@ -32,7 +32,7 @@ __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
 
 
-class _Alignament(SlopedPlanesPy._Py):
+class _PyAlignament(_Py):
 
     ''''''
 
@@ -225,14 +225,14 @@ class _Alignament(SlopedPlanesPy._Py):
             enormousChopTwoCopy = enormousChopTwo.copy()
 
             chopOneCopy = chopOneCopy.cut([enormousChopTwoCopy, enormousBase] +
-                                           cList, tolerance)
+                                          cList, tolerance)
             gS = pyChopOne.geom.toShape()
-            chopOneCopy = selectFace(chopOneCopy.Faces, gS, tolerance)
+            chopOneCopy = utils.selectFace(chopOneCopy.Faces, gS, tolerance)
 
             chopTwoCopy = chopTwoCopy.cut([enormousChopOneCopy, enormousBase] +
-                                           cList, tolerance)
+                                          cList, tolerance)
             gS = pyChopTwo.geom.toShape()
-            chopTwoCopy = selectFace(chopTwoCopy.Faces, gS, tolerance)
+            chopTwoCopy = utils.selectFace(chopTwoCopy.Faces, gS, tolerance)
 
             chopList.extend([chopOneCopy, chopTwoCopy])
 
@@ -288,10 +288,12 @@ class _Alignament(SlopedPlanesPy._Py):
         limitList = []
         if pyBase.rear:
             nWire = pyBase.numWire
-            prior = sliceIndex(pyBase.numGeom-1, len(pyWireList[nWire].planes))
+            prior = utils.sliceIndex(pyBase.numGeom-1,
+                                     len(pyWireList[nWire].planes))
             last = self.aligns[-1]
             nW = last.numWire
-            later = sliceIndex(last.numGeom+1, len(pyWireList[nW].planes))
+            later = utils.sliceIndex(last.numGeom+1,
+                                     len(pyWireList[nW].planes))
             print 'prior ', prior
             print 'later ', later
             pyPrior = pyFace.selectPlane(nWire, prior)
@@ -360,7 +362,7 @@ class _Alignament(SlopedPlanesPy._Py):
                     [nWire, nGeom] = pyChopOne.angle
                     pyPlane = pyFace.selectPlane(nWire, nGeom)
                     chopOne = pyPlane.shape
-                pyOne = SlopedPlanesPyPlane._Plane(nWire, nGeom)
+                pyOne = _PyPlane(nWire, nGeom)
                 pyOne.shape = chopOne.copy()
             else:
                 pyOne = pyChopOne
@@ -372,7 +374,7 @@ class _Alignament(SlopedPlanesPy._Py):
                     [nWire, nGeom] = pyChopTwo.angle
                     pyPlane = pyFace.selectPlane(nWire, nGeom)
                     chopTwo = pyPlane.shape
-                pyTwo = SlopedPlanesPyPlane._Plane(nWire, nGeom)
+                pyTwo = _PyPlane(nWire, nGeom)
                 pyTwo.shape = chopTwo.copy()
             else:
                 pyTwo = pyChopTwo
@@ -427,7 +429,7 @@ class _Alignament(SlopedPlanesPy._Py):
                     plane = pyPlane.shape
                     gS = [pyChopOne, pyChopTwo][num].geom.toShape()
                     plane = plane.cut(cutterList, tolerance)
-                    plane = selectFace(plane.Faces, gS, tolerance)
+                    plane = utils.selectFace(plane.Faces, gS, tolerance)
                     pyPlane.shape = plane
 
             print '### chop with copyChop'
@@ -448,7 +450,7 @@ class _Alignament(SlopedPlanesPy._Py):
                         if sect.Edges:
                             planeCopy = ff
                             plane = plane.cut([planeCopy], tolerance)
-                            plane = selectFace(plane.Faces, gS, tolerance)
+                            plane = utils.selectFace(plane.Faces, gS, tolerance)
                             pyPlane.shape = plane
                             break
 
@@ -460,13 +462,13 @@ class _Alignament(SlopedPlanesPy._Py):
             cutterList = [shapeTwo]
             shapeOne = shapeOne.cut(cutterList, tolerance)
             geomShape = pyChopOne.geom.toShape()
-            ff = selectFace(shapeOne.Faces, geomShape, tolerance)
+            ff = utils.selectFace(shapeOne.Faces, geomShape, tolerance)
             pyOne.shape = ff
 
             cutterList = [shapeOne]
             shapeTwo = shapeTwo.cut(cutterList, tolerance)
             geomShape = pyChopTwo.geom.toShape()
-            ff = selectFace(shapeTwo.Faces, geomShape, tolerance)
+            ff = utils.selectFace(shapeTwo.Faces, geomShape, tolerance)
             pyTwo.shape = ff
 
             chopList.append([pyOne, pyTwo])
@@ -509,23 +511,23 @@ class _Alignament(SlopedPlanesPy._Py):
                 print 'a'
 
                 gS = pyPlane.geom.toShape()
-                plane = selectFace(plane.Faces, gS, tolerance)
+                plane = utils.selectFace(plane.Faces, gS, tolerance)
                 pyPlane.shape = plane
 
             else:
                 print 'b'
 
                 gS = pyPlane.geom.toShape()
-                ff = selectFace(plane.Faces, gS, tolerance)
+                ff = utils.selectFace(plane.Faces, gS, tolerance)
                 pyPlane.shape = ff
 
                 gS = pyChopTwo.geom.toShape()
                 shapeTwo = shapeTwo.cut([ff], tolerance)
-                shapeTwo = selectFace(shapeTwo.Faces, gS, tolerance)
+                shapeTwo = utils.selectFace(shapeTwo.Faces, gS, tolerance)
                 pyTwo.shape = shapeTwo
 
                 gS = pyPl.geom.toShape()
-                ff = selectFace(plane.Faces, gS, tolerance)
+                ff = utils.selectFace(plane.Faces, gS, tolerance)
                 pyPl.shape = ff
 
                 try:
@@ -538,7 +540,7 @@ class _Alignament(SlopedPlanesPy._Py):
 
                 gS = pyChopOne.geom.toShape()
                 shapeOne = shapeOne.cut([ff], tolerance)
-                shapeOne = selectFace(shapeOne.Faces, gS, tolerance)
+                shapeOne = utils.selectFace(shapeOne.Faces, gS, tolerance)
                 pyOne.shape = shapeOne
 
                 pyPlane = aligns[numChop]

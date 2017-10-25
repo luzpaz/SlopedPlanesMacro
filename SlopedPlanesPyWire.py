@@ -23,7 +23,7 @@
 
 
 import SlopedPlanesUtils as utils
-import SlopedPlanesPy
+from SlopedPlanesPy import _Py
 
 
 __title__ = "SlopedPlanes Macro"
@@ -31,7 +31,7 @@ __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
 
 
-class _Wire(SlopedPlanesPy._Py):
+class _PyWire(_Py):
 
     ''''''
 
@@ -411,3 +411,29 @@ class _Wire(SlopedPlanesPy._Py):
                     shape = utils.selectFace(shape.Faces, geomShape,
                                              tolerance)
                     pyPlane.shape = shape
+
+    def reflexingWire(self, pyFace, tolerance):
+
+        ''''''
+
+        for pyReflex in self.reflexs:
+            pyReflex.processReflex(pyFace, self, tolerance)
+
+        for pyReflex in self.reflexs:
+            pyReflex.solveReflex(tolerance)
+
+    def rearingWire(self, tolerance):
+
+        ''''''
+
+        for pyReflex in self.reflexs:
+            pyReflex.rearingReflex(self, tolerance)
+
+    def ordinariesWire(self, pyFace, tolerance):
+
+        ''''''
+
+        for pyPlane in self.planes:
+            if not (pyPlane.reflexed and not pyPlane.aligned):
+                if pyPlane.shape:
+                    pyPlane.solvePlane(pyFace, self, tolerance)

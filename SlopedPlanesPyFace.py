@@ -25,11 +25,11 @@
 import FreeCAD
 import Part
 import SlopedPlanesUtils as utils
-import SlopedPlanesPy
-import SlopedPlanesPyWire
-import SlopedPlanesPyReflex
-import SlopedPlanesPyAlignament
-import SlopedPlanesPyPlane
+from SlopedPlanesPy import _Py
+from SlopedPlanesPyWire import _PyWire
+from SlopedPlanesPyReflex import _PyReflex
+from SlopedPlanesPyAlignament import _PyAlignament
+from SlopedPlanesPyPlane import _PyPlane
 
 
 __title__ = "SlopedPlanes Macro"
@@ -37,7 +37,7 @@ __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
 
 
-class _Face(SlopedPlanesPy._Py):
+class _PyFace(_Py):
 
     ''''''
 
@@ -161,20 +161,20 @@ class _Face(SlopedPlanesPy._Py):
         numWire = -1
         for dct in wires:
             numWire += 1
-            wire = SlopedPlanesPyWire._Wire(numWire)
+            wire = _PyWire(numWire)
 
             planeList = []
             numGeom = -1
             for dd in dct['_planes']:
                 numGeom += 1
-                plane = SlopedPlanesPyPlane._Plane(numWire, numGeom)
+                plane = _PyPlane(numWire, numGeom)
                 plane.__dict__ = dd
                 planeList.append(plane)
             dct['_planes'] = planeList
 
             reflexList = []
             for dd in dct['_reflexs']:
-                reflex = SlopedPlanesPyReflex._Reflex()
+                reflex = _PyReflex()
                 for [numWire, numGeom] in dd['_planes']:
                     plane = planeList[numGeom]
                     reflex.addLink('planes', plane)
@@ -192,7 +192,7 @@ class _Face(SlopedPlanesPy._Py):
 
         alignList = []
         for dct in alignaments:
-            alignament = SlopedPlanesPyAlignament._Alignament()
+            alignament = _PyAlignament()
             for [numWire, numGeom] in dct['_aligns']:
                 plane = wireList[numWire].planes[numGeom]
                 alignament.addLink('aligns', plane)
@@ -341,8 +341,7 @@ class _Face(SlopedPlanesPy._Py):
                                     print '1111'
 
                                     if numEdge == 0:
-                                        pyAlign =\
-                                            SlopedPlanesPyAlignament._Alignament()
+                                        pyAlign = _PyAlignament()
                                         self.addLink('alignaments', pyAlign)
                                         pyAlign.base = pyPlane
 
@@ -376,8 +375,7 @@ class _Face(SlopedPlanesPy._Py):
                                         if pyPl.numWire == pyPlane.numWire:
                                             ref = True
 
-                                        pyReflex =\
-                                            SlopedPlanesPyReflex._Reflex()
+                                        pyReflex = _PyReflex()
 
                                     else:
                                         print '11112'
@@ -396,7 +394,7 @@ class _Face(SlopedPlanesPy._Py):
                                 if pyPl.numWire == pyPlane.numWire:
                                     ref = True
                                 # OJO
-                                pyReflex = SlopedPlanesPyReflex._Reflex()
+                                pyReflex = _PyReflex()
 
                         else:
                             # OJO
@@ -427,7 +425,7 @@ class _Face(SlopedPlanesPy._Py):
 
                             if resetFace:
                                 print '121'
-                                pyReflex = SlopedPlanesPyReflex._Reflex()
+                                pyReflex = _PyReflex()
                                 pyWire.addLink('reflexs', pyReflex)
                                 self.seatReflex(pyWire, pyReflex, pyPlane,
                                                 'forward', tolerance)
@@ -446,7 +444,7 @@ class _Face(SlopedPlanesPy._Py):
 
                                 if resetFace:
                                     print '21'
-                                    pyReflex = SlopedPlanesPyReflex._Reflex()
+                                    pyReflex = _PyReflex()
                                     pyWire.addLink('reflexs', pyReflex)
                                     self.seatReflex(pyWire, pyReflex, pyPlane,
                                                     'forward', tolerance)
@@ -833,9 +831,7 @@ class _Face(SlopedPlanesPy._Py):
 
         print '######### simulating'
 
-        pyAlignList = self.alignaments
-
-        for pyAlign in pyAlignList:
+        for pyAlign in self.alignaments:
             pyAlign.simulateAlignament(self, tolerance)
 
     def reflexing(self, tolerance):
@@ -845,14 +841,8 @@ class _Face(SlopedPlanesPy._Py):
         print '######### reflexing'
 
         for pyWire in self.wires:
-
             if pyWire.reflexs:
-
-                for pyReflex in pyWire.reflexs:
-                    pyReflex.processReflex(self, pyWire, tolerance)
-
-                for pyReflex in pyWire.reflexs:
-                    pyReflex.solveReflex(tolerance)
+                pyWire.reflexingWire(self, tolerance)
 
     def reviewing(self, face, tolerance):
 
@@ -880,12 +870,8 @@ class _Face(SlopedPlanesPy._Py):
         print '######### rearing'
 
         for pyWire in self.wires:
-
             if pyWire.reflexs:
-
-                for pyReflex in pyWire.reflexs:
-                    for pyPlane in pyReflex.planes:
-                        pyPlane.solveRear(pyWire, pyReflex, tolerance)
+                pyWire.rearingWire(tolerance)
 
     def ordinaries(self, tolerance):
 
@@ -894,13 +880,7 @@ class _Face(SlopedPlanesPy._Py):
         print '######### ordinaries'
 
         for pyWire in self.wires:
-            for pyPlane in pyWire.planes:
-                # if not (pyPlane.choped and not pyPlane.aligned):
-                if not (pyPlane.reflexed and not pyPlane.aligned):
-                    if pyPlane.shape:
-                        # print '###### (numWire, numGeom) ',\
-                            # (pyPlane.numWire, pyPlane.numGeom)
-                        pyPlane.solvePlane(self, pyWire, tolerance)
+            pyWire.ordinariesWire(self, tolerance)
 
     def between(self, tolerance):
 
@@ -993,13 +973,9 @@ class _Face(SlopedPlanesPy._Py):
 
             for pyWire in self.wires:
                 for pyPlane in pyWire.planes:
-                    # if not (pyPlane.aligned or pyPlane.choped):
-                    # if not pyPlane.aligned:
                     plane = pyPlane.shape
                     if plane:
-
-                        # print '~~~~~~~~~ (numWire, numGeom) ',\
-                            # (pyPlane.numWire, pyPlane.numGeom)
+                        # print 'a'
 
                         if pyPlane.choped or pyPlane.aligned:
                             # print 'aa'
