@@ -333,10 +333,6 @@ class _PyReflex(_Py):
                 pyR.addLink('cutter', pl)
 
         else:
-            if kind == "rangoCorner":
-                print 'c'
-                print 'included oppCutter ', kind, ' ', (nWire, nn)
-                pyOppR.addLink('oppCutter', pl)
 
             nG = nn
             pyReflexList = pyFace.selectAllReflex(nWire, nG)
@@ -361,14 +357,19 @@ class _PyReflex(_Py):
             pl = pl.cut(cutList, tolerance)
             gS = pyPl.geom.toShape()
             pl = utils.selectFace(pl.Faces, gS, tolerance)
-            print 'd'
+            print 'c'
             print 'included cutter ', kind, ' rectified ', (nWire, nn)
             pyR.addLink('cutter', pl)
+
+            if kind == "rangoCorner":
+                print 'd'
+                print 'included oppCutter ', kind, ' ', (nWire, nn)
+                pyOppR.addLink('oppCutter', pl)
 
     def solveReflex(self, tolerance):
 
         ''''''
-
+        # TODO REFACTOR
         [pyR, pyOppR] = self.planes
         # print (pyR.numGeom, pyOppR.numGeom)
 
@@ -380,7 +381,14 @@ class _PyReflex(_Py):
 
         bb = bb.cut(pyOppR.oppCutter, tolerance)
         gS = pyOppR.geom.toShape()
-        bb = utils.selectFace(bb.Faces, gS, tolerance)
+        vertex = pyOppR.forward.firstVertex(True)
+        for ff in bb.Faces:
+            section = ff.section([gS], tolerance)
+            if section.Edges:
+                section = ff.section([vertex], tolerance)
+                if section.Vertexes:
+                    bb = ff
+                    break
 
         aa = aa.cut(pyR.cutter+[bb], tolerance)
         gS = pyR.geom.toShape()
@@ -410,7 +418,13 @@ class _PyReflex(_Py):
 
         cc = cc.cut(pyR.oppCutter, tolerance)
         gS = pyR.geom.toShape()
-        cc = utils.selectFace(cc.Faces, gS, tolerance)
+        for ff in cc.Faces:
+            section = ff.section([gS], tolerance)
+            if section.Edges:
+                section = ff.section([vertex], tolerance)
+                if section.Vertexes:
+                    cc = ff
+                    break
 
         bb = bb.cut(pyOppR.cutter + [cc], tolerance)
         gS = pyOppR.geom.toShape()
