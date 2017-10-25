@@ -455,7 +455,7 @@ class _PyReflex(_Py):
         compound = Part.makeCompound(bList)
         pyOppR.shape = compound
 
-    def reviewReflex(self, tolerance):
+    def reviewing(self, tolerance):
 
         ''''''
 
@@ -464,9 +464,9 @@ class _PyReflex(_Py):
         for pyPlane in self.planes:
             pyPlane.isSolved(tolerance)
 
-    def rearingReflex(self, pyWire, tolerance):
+    def rearing(self, pyWire, tolerance):
 
         ''''''
 
         for pyPlane in self.planes:
-            pyPlane.solveRear(pyWire, self, tolerance)
+            pyPlane.rearing(pyWire, self, tolerance)

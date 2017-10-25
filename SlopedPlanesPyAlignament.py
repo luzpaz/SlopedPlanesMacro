@@ -167,7 +167,7 @@ class _PyAlignament(_Py):
 
         print 'rangoChop ', self.rangoChop
 
-    def simulateAlignament(self, pyFace, tolerance):
+    def simulating(self, pyFace, tolerance):
 
         ''''''
 
@@ -545,7 +545,7 @@ class _PyAlignament(_Py):
 
                 pyPlane = aligns[numChop]
 
-    def ranggingAlign(self, pyFace):
+    def rangging(self, pyFace):
 
         ''''''
 
@@ -559,7 +559,7 @@ class _PyAlignament(_Py):
             pyPlane.rangging(pyWire, 'backward')
             pyPl.rangging(pyW, 'forward')
 
-    def trimmingAlign(self, pyFace, tolerance):
+    def trimming(self, pyFace, tolerance):
 
         ''''''
 

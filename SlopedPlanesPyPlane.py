@@ -604,7 +604,7 @@ class _PyPlane(_Py):
             utils.selectFace(bigShape.Faces, geomShape, tolerance)
         self.bigShape = bigShape
 
-    def solveRear(self, pyWire, pyReflex, tolerance):
+    def rearing(self, pyWire, pyReflex, tolerance):
 
         ''''''
 

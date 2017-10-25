@@ -249,7 +249,6 @@ class _PyFace(_Py):
                 if ref:
                     print 'ref'
 
-                    # OJO
                     if pyPlane.geomAligned:
                         line = pyPlane.geom
 
@@ -277,13 +276,12 @@ class _PyFace(_Py):
                     ref = False
 
                     if resetFace:
-                        # OJO
                         if pyPlane.geomAligned:
                             print 'ref 1'
                             self.seatReflex(pyWire, pyReflex, pyPlane,
                                             'backward', tolerance)
 
-                    print 'rear ', pyPlane.rear
+                    # print 'rear ', pyPlane.rear
 
                 nextEje = coord[numGeom+2].sub(coord[numGeom+1])
                 corner = utils.convexReflex(eje, nextEje, normal, numWire)
@@ -393,7 +391,7 @@ class _PyFace(_Py):
                                 print '111b'
                                 if pyPl.numWire == pyPlane.numWire:
                                     ref = True
-                                # OJO
+
                                 pyReflex = _PyReflex()
 
                         else:
@@ -449,11 +447,11 @@ class _PyFace(_Py):
                                     self.seatReflex(pyWire, pyReflex, pyPlane,
                                                     'forward', tolerance)
 
-                print 'rear ', pyPlane.rear
+                # print 'rear ', pyPlane.rear
 
             pyWire.reset = False
 
-        print '********* wires ', self.wires
+        '''print '********* wires ', self.wires
         for pyWire in self.wires:
             print '****** numWire ', pyWire.numWire
             print '*** print reflexs ', pyWire.reflexs
@@ -487,7 +485,7 @@ class _PyFace(_Py):
             for align in pyAlignament.aligns:
                 print(align.numWire, align.numGeom),\
                     align.rear,\
-                    align.rango
+                    align.rango'''
 
     def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl,
                        shapeGeomFace, size, tolerance):
@@ -788,7 +786,7 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
 
-            pyWire.planningWire(reset, normal, size, reverse)
+            pyWire.planning(reset, normal, size, reverse)
 
         print '###### alignament rangos'
 
@@ -797,7 +795,7 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             if reset:
 
-                pyAlign.ranggingAlign(self)
+                pyAlign.rangging(self)
 
             pyAlign.ranggingChop(self)
 
@@ -810,10 +808,10 @@ class _PyFace(_Py):
         print '######### trimming'
 
         for pyWire in self.wires:
-            pyWire.trimmingWire(self, tolerance)
+            pyWire.trimming(self, tolerance)
 
         for pyAlign in self.alignaments:
-            pyAlign.trimmingAlign(self, tolerance)
+            pyAlign.trimming(self, tolerance)
 
     def priorLater(self, tolerance):
 
@@ -823,7 +821,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
 
-            pyWire.priorLaterWire(self, tolerance)
+            pyWire.priorLater(self, tolerance)
 
     def simulating(self, tolerance):
 
@@ -832,7 +830,7 @@ class _PyFace(_Py):
         print '######### simulating'
 
         for pyAlign in self.alignaments:
-            pyAlign.simulateAlignament(self, tolerance)
+            pyAlign.simulating(self, tolerance)
 
     def reflexing(self, tolerance):
 
@@ -842,7 +840,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             if pyWire.reflexs:
-                pyWire.reflexingWire(self, tolerance)
+                pyWire.reflexing(self, tolerance)
 
     def reviewing(self, face, tolerance):
 
@@ -853,13 +851,13 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             if len(pyWire.reflexs) > 1:
 
-                pyWire.reviewWire(tolerance)
+                pyWire.reviewing(tolerance)
 
                 solved, unsolved = pyWire.clasifyReflexPlanes(tolerance)
                 print[p.numGeom for p in solved]
                 print[p.numGeom for p in unsolved]
 
-                pyWire.reProcessReflexs(tolerance, solved, unsolved)
+                pyWire.reSolveReflexs(tolerance, solved, unsolved)
 
                 pyWire.betweenReflexs(tolerance)
 
@@ -871,7 +869,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             if pyWire.reflexs:
-                pyWire.rearingWire(tolerance)
+                pyWire.rearing(tolerance)
 
     def ordinaries(self, tolerance):
 
@@ -880,7 +878,7 @@ class _PyFace(_Py):
         print '######### ordinaries'
 
         for pyWire in self.wires:
-            pyWire.ordinariesWire(self, tolerance)
+            pyWire.ordinaries(self, tolerance)
 
     def between(self, tolerance):
 

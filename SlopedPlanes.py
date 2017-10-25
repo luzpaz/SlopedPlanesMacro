@@ -33,6 +33,7 @@ from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyPlane import _PyPlane
 from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 
+
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
@@ -483,21 +484,6 @@ class _SlopedPlanes():
                 for pyPlane in pyWire.planes:
                     setattr(pyPlane, prop, value)
 
-    def showSimulation(self, slopedPlanes):
-
-        '''firstly recompute'''
-
-        pyFaceList = self.Pyth
-
-        for pyFace in pyFaceList:
-
-            pyAlignList = pyFace.alignaments
-
-            for pyAlign in pyAlignList:
-                simul = pyAlign.simulatedShape
-                sim = Part.makeCompound(simul)
-                Part.show(sim)
-
     def __getstate__(self):
 
         ''''''
@@ -552,7 +538,7 @@ class _ViewProvider_SlopedPlanes():
         ''''''
 
         path = os.path.dirname(__file__)
-        return  path + "/Tree_SlopedPlanes.svg"
+        return  path + "/SlopedPlanes_Tree.svg"
 
     def getDefaultDisplayMode(self):
 

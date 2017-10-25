@@ -130,104 +130,7 @@ class _PyWire(_Py):
 
         self._reset = reset
 
-    def reviewWire(self, tolerance):
-
-        ''''''
-
-        print '###### reviewWire'
-
-        for pyReflex in self.reflexs:
-            pyReflex.reviewReflex(tolerance)
-
-    def reProcessReflexs(self, tolerance, solved=[], unsolved=[],
-                         impossible=[]):
-
-        ''''''
-
-        print '###### reProcessReflexs'
-
-        for pyPlane in unsolved:
-            print 'a'
-            plane = pyPlane.shape
-            gS = pyPlane.geom.toShape()
-            cutterList = [pyPl.shape for pyPl in solved]
-            plane = plane.cut(cutterList, tolerance)
-            plane = utils.selectFace(plane.Faces, gS, tolerance)
-            pyPlane.shape = plane
-
-            if pyPlane.isSolved(tolerance):
-                print 'aa'
-                unsolved.remove(pyPlane)
-                solved.append(pyPlane)
-                unsolved.extend(impossible)
-                impossible = []
-
-            else:
-                print 'ab'
-                impossible.append(pyPlane)
-
-            if not unsolved:
-                return
-
-            self.reProcessReflexs(tolerance)
-
-    def betweenReflexs(self, tolerance):
-
-        ''''''
-
-        print '###### betweenReflexs'
-
-        pyReflexList = self.reflexs
-        lenR = len(pyReflexList)
-        num = -1
-        for pyReflex in pyReflexList:
-            num += 1
-            cutterList = []
-            prior = utils.sliceIndex(num-1, lenR)
-            later = utils.sliceIndex(num+1, lenR)
-            if prior != num:
-                pyPriorReflex = pyReflexList[prior]
-                cutterList.append(pyPriorReflex)
-            if later != num and later != prior:
-                pyLaterReflex = pyReflexList[later]
-                cutterList.append(pyLaterReflex)
-
-            for pyPlane in pyReflex.planes:
-
-                plane = pyPlane.shape
-
-                if len(plane.Faces) == 1:
-
-                    cutList = []
-                    for pyR in cutterList:
-                        for pyPl in pyR.planes:
-                            if pyPl != pyPlane:
-                                cutList.append(pyPl.shape)
-
-                    gS = pyPlane.geom.toShape()
-                    plane = plane.cut(cutList, tolerance)
-                    plane = utils.selectFace(plane.Faces, gS,
-                                             tolerance)
-                    pyPlane.shape = plane
-
-    def clasifyReflexPlanes(self, tolerance):
-
-        ''''''
-
-        print '###### clasifyReflexPlanes'
-
-        solved, unsolved = [], []
-
-        for pyReflex in self.reflexs:
-            for pyPlane in pyReflex.planes:
-                if pyPlane.solved:
-                    solved.append(pyPlane)
-                else:
-                    unsolved.append(pyPlane)
-
-        return solved, unsolved
-
-    def planningWire(self, reset, normal, size, reverse):
+    def planning(self, reset, normal, size, reverse):
 
         ''''''
 
@@ -247,7 +150,7 @@ class _PyWire(_Py):
                     pyPlane.rangging(self, direction)
                     direction = "backward"
 
-    def trimmingWire(self, pyFace, tolerance):
+    def trimming(self, pyFace, tolerance):
 
         ''''''
 
@@ -291,7 +194,7 @@ class _PyWire(_Py):
                                 if procc:
                                     pyPl.doTrim(enormousShape, tolerance)
 
-    def priorLaterWire(self, pyFace, tolerance):
+    def priorLater(self, pyFace, tolerance):
 
         ''''''
 
@@ -412,7 +315,7 @@ class _PyWire(_Py):
                                              tolerance)
                     pyPlane.shape = shape
 
-    def reflexingWire(self, pyFace, tolerance):
+    def reflexing(self, pyFace, tolerance):
 
         ''''''
 
@@ -422,14 +325,111 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(tolerance)
 
-    def rearingWire(self, tolerance):
+    def reviewing(self, tolerance):
+
+        ''''''
+
+        print '###### reviewWire'
+
+        for pyReflex in self.reflexs:
+            pyReflex.reviewing(tolerance)
+
+    def clasifyReflexPlanes(self, tolerance):
+
+        ''''''
+
+        print '###### clasifyReflexPlanes'
+
+        solved, unsolved = [], []
+
+        for pyReflex in self.reflexs:
+            for pyPlane in pyReflex.planes:
+                if pyPlane.solved:
+                    solved.append(pyPlane)
+                else:
+                    unsolved.append(pyPlane)
+
+        return solved, unsolved
+
+    def reSolveReflexs(self, tolerance, solved=[], unsolved=[],
+                         impossible=[]):
+
+        ''''''
+
+        print '###### reProcessReflexs'
+
+        for pyPlane in unsolved:
+            print 'a'
+            plane = pyPlane.shape
+            gS = pyPlane.geom.toShape()
+            cutterList = [pyPl.shape for pyPl in solved]
+            plane = plane.cut(cutterList, tolerance)
+            plane = utils.selectFace(plane.Faces, gS, tolerance)
+            pyPlane.shape = plane
+
+            if pyPlane.isSolved(tolerance):
+                print 'aa'
+                unsolved.remove(pyPlane)
+                solved.append(pyPlane)
+                unsolved.extend(impossible)
+                impossible = []
+
+            else:
+                print 'ab'
+                impossible.append(pyPlane)
+
+            if not unsolved:
+                return
+
+            self.reProcessReflexs(tolerance)
+
+    def betweenReflexs(self, tolerance):
+
+        ''''''
+
+        print '###### betweenReflexs'
+
+        pyReflexList = self.reflexs
+        lenR = len(pyReflexList)
+        num = -1
+        for pyReflex in pyReflexList:
+            num += 1
+            cutterList = []
+            prior = utils.sliceIndex(num-1, lenR)
+            later = utils.sliceIndex(num+1, lenR)
+            if prior != num:
+                pyPriorReflex = pyReflexList[prior]
+                cutterList.append(pyPriorReflex)
+            if later != num and later != prior:
+                pyLaterReflex = pyReflexList[later]
+                cutterList.append(pyLaterReflex)
+
+            for pyPlane in pyReflex.planes:
+
+                plane = pyPlane.shape
+
+                if len(plane.Faces) == 1:
+
+                    cutList = []
+                    for pyR in cutterList:
+                        for pyPl in pyR.planes:
+                            if pyPl != pyPlane:
+                                cutList.append(pyPl.shape)
+
+                    gS = pyPlane.geom.toShape()
+                    plane = plane.cut(cutList, tolerance)
+                    plane = utils.selectFace(plane.Faces, gS,
+                                             tolerance)
+                    pyPlane.shape = plane
+
+    def rearing(self, tolerance):
 
         ''''''
 
         for pyReflex in self.reflexs:
-            pyReflex.rearingReflex(self, tolerance)
+            pyReflex.rearing(self, tolerance)
 
-    def ordinariesWire(self, pyFace, tolerance):
+    def ordinaries(self, pyFace, tolerance):
 
         ''''''
 
