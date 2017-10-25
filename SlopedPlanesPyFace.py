@@ -678,34 +678,6 @@ class _Face(SlopedPlanesPy._Py):
 
         return nGeom
 
-    def solveRear(self, pyWire, pyReflex, pyPlane, tolerance):
-
-        ''''''
-
-        rear = pyPlane.rear
-
-        print '###### solveRear', rear
-
-        plane = pyPlane.shape
-        pyPlaneList = pyWire.planes
-
-        twinReflex = pyReflex.planes
-        ind = twinReflex.index(pyPlane)
-        if ind == 0:
-            pyOppPlane = twinReflex[1]
-        else:
-            pyOppPlane = twinReflex[0]
-        oppPlane = pyOppPlane.shape
-
-        for numG in rear:
-            pyPl = pyPlaneList[numG]
-            if not (pyPl.aligned or pyPl.choped):
-                pl = pyPl.shape
-                pl = pl.cut([plane, oppPlane], tolerance)
-                gS = pyPl.geom.toShape()
-                pl = utils.selectFace(pl.Faces, gS, tolerance)
-                pyPl.shape = pl
-
     def findAngle(self, nW, nG):
 
         ''''''
@@ -814,39 +786,20 @@ class _Face(SlopedPlanesPy._Py):
         print '######### planning'
 
         pyWireList = self.wires
+        reset = self.reset
 
         for pyWire in pyWireList:
-            for pyPlane in pyWire.planes:
-                if pyPlane.geomAligned:
-                    pyPlane.trackShape(pyWire, normal, size, reverse)
 
-            print '###### reflex rangos'
-
-            pyReflexList = pyWire.reflexs
-
-            if self.reset:
-                for pyReflex in pyReflexList:
-
-                    pyReflex.ranggingInter(pyWire)
-
-                    direction = "forward"
-                    for pyPlane in pyReflex.planes:
-                        self.rangging(pyWire, pyPlane, direction)
-                        direction = "backward"
+            pyWire.planningWire(reset, normal, size, reverse)
 
         print '###### alignament rangos'
 
         pyAlignList = self.alignaments
 
         for pyAlign in pyAlignList:
-            if self.reset:
-                for [pyPlane, pyPl] in pyAlign.chops:
+            if reset:
 
-                    pyWire = pyWireList[pyPlane.numWire]
-                    pyW = pyWireList[pyPl.numWire]
-
-                    self.rangging(pyWire, pyPlane, 'backward')
-                    self.rangging(pyW, pyPl, 'forward')
+                pyAlign.ranggingAlign(self)
 
             pyAlign.ranggingChop(self)
 
@@ -858,102 +811,11 @@ class _Face(SlopedPlanesPy._Py):
 
         print '######### trimming'
 
-        pyWireList = self.wires
+        for pyWire in self.wires:
+            pyWire.trimmingWire(self, tolerance)
 
-        for pyWire in pyWireList:
-            for pyReflex in pyWire.reflexs:
-                for pyPlane in pyReflex.planes:
-                    rango = pyPlane.rango
-                    enormousShape = pyPlane.enormousShape
-                    pyPlaneList = pyWire.planes
-                    for ran in rango:
-                        for nG in ran:
-                            pyPl = pyPlaneList[nG]
-
-                            if not pyPl.reflexed:
-
-                                self.doTrim(enormousShape, pyPl, tolerance)
-
-                            else:
-
-                                forward = pyPlane.forward
-                                forw = pyPl.forward
-                                section = forward.section(forw)
-
-                                if not section.Vertexes:
-
-                                    procc = True
-                                    nWire = pyPl.numWire
-                                    pyRList = self.selectAllReflex(nWire, nG)
-                                    for pyR in pyRList:
-                                        if not procc:
-                                            break
-                                        for pyP in pyR.planes:
-                                            if pyP != pyPl:
-                                                forw = pyP.forward
-                                                section =\
-                                                    forward.section([forw],
-                                                                    tolerance)
-                                                if section.Vertexes:
-                                                    procc = False
-                                                    break
-
-                                    if procc:
-                                        self.doTrim(enormousShape, pyPl,
-                                                    tolerance)
-
-        pyAlignList = self.alignaments
-
-        for pyAlign in pyAlignList:
-
-            enormousShape = pyAlign.base.enormousShape
-            numWire = pyAlign.base.numWire
-            pyWire = pyWireList[numWire]
-
-            rangoChop = pyAlign.rangoChop
-            pyPlaneList = pyWire.planes
-
-            for ran in rangoChop:
-                for nG in ran:
-                    pyPl = pyPlaneList[nG]
-                    if not pyPl.aligned:
-
-                        self.doTrim(enormousShape, pyPl, tolerance)
-
-            for chop in pyAlign.chops:
-
-                for pyPlane in chop:
-
-                    enormousShape = pyPlane.enormousShape
-                    if enormousShape:
-                        numWire = pyPlane.numWire
-                        pyWire = pyWireList[numWire]
-                        pyPlaneList = pyWire.planes
-
-                        for rango in pyPlane.rango:
-                            for nG in rango:
-                                pyPl = pyPlaneList[nG]
-                                if not pyPl.aligned:
-
-                                    self.doTrim(enormousShape, pyPl, tolerance)
-
-    def doTrim(self, enormousShape, pyPl, tolerance):
-
-        ''''''
-
-        shape = pyPl.shape
-        bigShape = pyPl.bigShape
-        geomShape = pyPl.geom.toShape()
-
-        shape = shape.cut([enormousShape], tolerance)
-        shape = utils.selectFace(shape.Faces, geomShape, tolerance)
-        pyPl.shape = shape
-
-        bigShape =\
-            bigShape.cut([enormousShape], tolerance)
-        bigShape =\
-            utils.selectFace(bigShape.Faces, geomShape, tolerance)
-        pyPl.bigShape = bigShape
+        for pyAlign in self.alignaments:
+            pyAlign.trimmingAlign(self, tolerance)
 
     def priorLater(self, tolerance):
 
@@ -961,123 +823,9 @@ class _Face(SlopedPlanesPy._Py):
 
         print '######### priorLater'
 
-        pyWireList = self.wires
-        for pyWire in pyWireList:
-            numWire = pyWire.numWire
-            pyPlaneList = pyWire.planes
-            lenWire = len(pyPlaneList)
-            for pyPlane in pyPlaneList:
-                shape = pyPlane.shape
-                if shape:
+        for pyWire in self.wires:
 
-                    numGeom = pyPlane.numGeom
-                    print 'numGeom ', numGeom
-                    print 'reflexed ', pyPlane.reflexed
-                    print 'arrow ', pyPlane.arrow
-
-                    prior = utils.sliceIndex(numGeom-1, lenWire)
-                    pyPrior = pyPlaneList[prior]
-                    bigPrior = pyPrior.bigShape
-                    if not bigPrior:
-                        [nW, nG] = pyPrior.angle
-                        prior = nG
-                        pyPrior = self.selectPlane(nW, nG)
-                        bigPrior = pyPrior.bigShape
-
-                    if pyPlane.aligned:
-                        pyAlign = self.selectAlignament(numWire, numGeom)
-                        pyPl = pyAlign.aligns[-1]
-                        [nW, nG] = [pyPl.numWire, pyPl.numGeom]
-                        pyW = pyWireList[nW]
-                        lenW = len(pyW.planes)
-                        later = utils.sliceIndex(nG+1, lenW)
-                        pyLater = self.selectPlane(nW, later)
-                        bigLater = pyLater.bigShape
-                    else:
-                        later = utils.sliceIndex(numGeom+1, lenWire)
-                        pyLater = pyPlaneList[later]
-                        bigLater = pyLater.bigShape
-                    if not bigLater:
-                        [nW, nG] = pyLater.angle
-                        later = nG
-                        pyLater = self.selectPlane(nW, nG)
-                        bigLater = pyLater.bigShape
-
-                    print 'prior ', prior
-                    print 'later ', later
-
-                    geomShape = pyPlane.geom.toShape()
-
-                    cutterList = []
-                    if pyPlane.reflexed or pyPlane.arrow:
-                        print 'A'
-
-                        if not pyPrior.reflexed:
-                            print '1'
-                            cutterList.append(bigPrior)
-
-                        elif not pyPlane.arrow:
-                            print '11'
-                            if not pyPrior.aligned:
-                                print '111'
-                                pyReflex =\
-                                    self.selectReflex(numWire, numGeom, prior)
-                                if not pyReflex:
-                                    print '1111'
-                                    cutterList.append(bigPrior)
-
-                            else:
-                                numWire = pyPrior.numWire
-                                numGeom = pyPrior.numGeom
-                                pyAlign = self.selectAlignament(numWire,
-                                                                numGeom)
-                                chops = []
-                                for chop in pyAlign.chops:
-                                    chops.extend(chop)
-                                if pyPlane not in chops:
-                                    print '112'
-                                    cutterList.append(bigPrior)
-
-                        if not pyLater.reflexed:
-                            print '2'
-                            cutterList.append(bigLater)
-
-                        elif not pyPlane.arrow:
-                            print '22'
-                            if not pyLater.aligned:
-                                print '221'
-                                pyReflex =\
-                                    self.selectReflex(numWire, numGeom, later)
-                                if not pyReflex:
-                                    print '2211'
-                                    cutterList.append(bigLater)
-
-                            else:
-                                numWire = pyLater.numWire
-                                numGeom = pyLater.numGeom
-                                pyAlign = self.selectAlignament(numWire,
-                                                                numGeom)
-                                chops = []
-                                for chop in pyAlign.chops:
-                                    chops.extend(chop)
-                                if pyPlane not in chops:
-                                    print '222'
-                                    cutterList.append(bigLater)
-
-                        if cutterList:
-                            print '3'
-                            shape = shape.cut(cutterList, tolerance)
-                            shape = utils.selectFace(shape.Faces, geomShape,
-                                                     tolerance)
-                            pyPlane.shape = shape
-
-                    else:
-                        print 'B'
-
-                        shape = shape.cut([bigPrior, bigLater], tolerance)
-                        shape = utils.selectFace(shape.Faces, geomShape,
-                                                 tolerance)
-                        pyPlane.shape = shape
+            pyWire.priorLaterWire(self, tolerance)
 
     def simulating(self, tolerance):
 
@@ -1101,95 +849,10 @@ class _Face(SlopedPlanesPy._Py):
             if pyWire.reflexs:
 
                 for pyReflex in pyWire.reflexs:
-                    pyReflex.solveReflex(self, pyWire, tolerance)
+                    pyReflex.processReflex(self, pyWire, tolerance)
 
                 for pyReflex in pyWire.reflexs:
-
-                    [pyR, pyOppR] = pyReflex.planes
-                    # print (pyR.numGeom, pyOppR.numGeom)
-
-                    rDiv = False
-                    oppRDiv = False
-
-                    aa = pyR.shape.copy()
-                    bb = pyOppR.shape.copy()
-
-                    bb = bb.cut(pyOppR.oppCutter, tolerance)
-                    gS = pyOppR.geom.toShape()
-                    bb = utils.selectFace(bb.Faces, gS, tolerance)
-
-                    aa = aa.cut(pyR.cutter+[bb], tolerance)
-                    gS = pyR.geom.toShape()
-                    # print aa.Faces
-                    gB = pyR.backward
-
-                    aList = []
-                    AA = utils.selectFace(aa.Faces, gS, tolerance)
-                    aList.append(AA)
-
-                    if len(aa.Faces) == 4:
-
-                        rDiv = True
-                        for ff in aa.Faces:
-                            section = ff.section(gB, tolerance)
-                            if section.Edges:
-                                ff = ff.cut([pyOppR.enormousShape], tolerance)
-                                for FF in ff.Faces:
-                                    sect = FF.section([gB], tolerance)
-                                    if not sect.Edges:
-                                        aList.append(FF)
-
-                    # print aList
-
-                    cc = pyR.shape.copy()
-                    bb = pyOppR.shape.copy()
-
-                    cc = cc.cut(pyR.oppCutter, tolerance)
-                    gS = pyR.geom.toShape()
-                    cc = utils.selectFace(cc.Faces, gS, tolerance)
-
-                    bb = bb.cut(pyOppR.cutter + [cc], tolerance)
-                    gS = pyOppR.geom.toShape()
-                    # print bb.Faces
-                    gB = pyOppR.backward
-
-                    bList = []
-                    BB = utils.selectFace(bb.Faces, gS, tolerance)
-                    bList.append(BB)
-
-                    if len(bb.Faces) == 4:
-
-                        oppRDiv = True
-                        for ff in bb.Faces:
-                            section = ff.section(gB, tolerance)
-                            if section.Edges:
-                                ff = ff.cut([pyR.enormousShape], tolerance)
-                                for FF in ff.Faces:
-                                    sect = FF.section([gB], tolerance)
-                                    if not sect.Edges:
-                                        bList.append(FF)
-
-                    # print bList
-
-                    if oppRDiv and not rDiv:
-
-                        AA = AA.cut(bList, tolerance)
-                        gS = pyR.geom.toShape()
-                        AA = utils.selectFace(AA.Faces, gS, tolerance)
-                        aList = [AA]
-
-                    elif rDiv and not oppRDiv:
-
-                        BB = BB.cut(aList, tolerance)
-                        gS = pyOppR.geom.toShape()
-                        BB = utils.selectFace(BB.Faces, gS, tolerance)
-                        bList = [BB]
-
-                    compound = Part.makeCompound(aList)
-                    pyR.shape = compound
-
-                    compound = Part.makeCompound(bList)
-                    pyOppR.shape = compound
+                    pyReflex.solveReflex(tolerance)
 
     def reviewing(self, face, tolerance):
 
@@ -1198,136 +861,17 @@ class _Face(SlopedPlanesPy._Py):
         print '######### reviewing'
 
         for pyWire in self.wires:
+            if len(pyWire.reflexs) > 1:
 
-            if pyWire.reflexs:
+                pyWire.reviewWire(tolerance)
 
-                numWire = pyWire.numWire
-                pyReflexList = pyWire.reflexs
+                solved, unsolved = pyWire.clasifyReflexPlanes(tolerance)
+                print[p.numGeom for p in solved]
+                print[p.numGeom for p in unsolved]
 
-                for pyReflex in pyReflexList:
-                    number = -1
-                    for pyPlane in pyReflex.planes:
-                        number += 1
-                        pyOppReflex = pyReflex.planes[number-1]
-                        pyPlane.problem = []
-                        pyPlane.isSolved(face, self, pyOppReflex, tolerance)
+                pyWire.reProcessReflexs(tolerance, solved, unsolved)
 
-                for pyReflex in pyReflexList:
-                    number = -1
-                    for pyPlane in pyReflex.planes:
-                        number += 1
-                        pyOppReflex = pyReflex.planes[number-1]
-                        plane = pyPlane.shape
-                        oppPlane = pyOppReflex.shape
-
-                        if "forward" in pyPlane.problem:
-                            print 'b ', pyPlane.numGeom
-                            rango = list(pyPlane.rango)
-                            oppRango = list(pyOppReflex.rango)
-                            rangoInter = list(pyReflex.rangoInter)
-                            rango.extend(oppRango)
-                            rango.append(rangoInter)
-                            print rango
-                            for ran in rango:
-                                for nn in ran:
-                                    pyPl = self.selectPlane(numWire, nn)
-                                    if pyPl.reflexed:
-                                        if "forward" not in pyPl.problem:
-                                            print 'bb'
-                                            # añadir oppPlane y plane aqui es una basura
-                                            # hay que refinar oppCutter en solveReflex
-                                            pl = pyPl.shape
-                                            plane = plane.cut([pl, oppPlane], tolerance)
-                                           # plane = plane.cut([pl], tolerance)
-                                            gS = pyPlane.geom.toShape()
-                                            plane =\
-                                                utils.selectFace(plane.Faces,
-                                                               gS, tolerance)
-                                            pyPlane.shape = plane
-
-                                            oppPlane = oppPlane.cut([pl, plane], tolerance)
-                                            #oppPlane = oppPlane.cut([pl], tolerance)
-                                            gS = pyOppReflex.geom.toShape()
-                                            oppPlane =\
-                                                utils.selectFace(oppPlane.Faces,
-                                                           gS, tolerance)
-                                            pyOppReflex.shape = oppPlane
-
-                        pyPlane.problem = []
-                        pyPlane.isSolved(face, self, pyOppReflex, tolerance)
-
-                for pyReflex in pyReflexList:
-                    number = -1
-                    for pyPlane in pyReflex.planes:
-                        number += 1
-                        pyOppReflex = pyReflex.planes[number-1]
-                        plane = pyPlane.shape
-                        oppPlane = pyOppReflex.shape
-
-                        if "backward" in pyPlane.problem:
-                            print 'a ', pyPlane.numGeom
-                            rango = list(pyPlane.rango)
-                            oppRango = list(pyOppReflex.rango)
-                            rangoInter = list(pyReflex.rangoInter)
-                            rango.extend(oppRango)
-                            rango.append(rangoInter)
-                            print rango
-                            for ran in rango:
-                                for nn in ran:
-                                    pyPl = self.selectPlane(numWire, nn)
-                                    if pyPl.reflexed:
-                                        if "backward" not in pyPl.problem:
-                                            print 'aa'
-                                            pl = pyPl.shape
-                                            plane = plane.cut([pl], tolerance)
-                                            gS = pyPlane.geom.toShape()
-                                            plane = utils.selectFace(plane.Faces,
-                                                               gS, tolerance)
-                                            pyPlane.shape = plane
-
-                                            oppPlane = oppPlane.cut([pl],
-                                                                    tolerance)
-                                            gS = pyOppReflex.geom.toShape()
-                                            oppPlane =\
-                                                utils.selectFace(oppPlane.Faces,
-                                                           gS, tolerance)
-                                            pyOppReflex.shape = oppPlane
-
-                        pyPlane.problem = []
-                        pyPlane.isSolved(face, self, pyOppReflex, tolerance)
-
-                lenR = len(pyReflexList)
-                if lenR > 1:
-                    num = -1
-                    for pyReflex in pyReflexList:
-                        num += 1
-                        cutterList = []
-                        prior = utils.sliceIndex(num-1, lenR)
-                        later = utils.sliceIndex(num+1, lenR)
-                        if prior != num:
-                            pyPriorReflex = pyReflexList[prior]
-                            cutterList.append(pyPriorReflex)
-                        if later != num and later != prior:
-                            pyLaterReflex = pyReflexList[later]
-                            cutterList.append(pyLaterReflex)
-
-                        for pyPlane in pyReflex.planes:
-
-                            plane = pyPlane.shape
-
-                            if len(plane.Faces) == 1:
-
-                                cutList = []
-                                for pyR in cutterList:
-                                    for pyPl in pyR.planes:
-                                        if pyPl != pyPlane:
-                                            cutList.append(pyPl.shape)
-
-                                gS = pyPlane.geom.toShape()
-                                plane = plane.cut(cutList, tolerance)
-                                plane = utils.selectFace(plane.Faces, gS,
-                                                         tolerance)
-                                pyPlane.shape = plane
+                pyWire.betweenReflexs(tolerance)
 
     def rearing(self, tolerance):
 
@@ -1341,7 +885,7 @@ class _Face(SlopedPlanesPy._Py):
 
                 for pyReflex in pyWire.reflexs:
                     for pyPlane in pyReflex.planes:
-                        self.solveRear(pyWire, pyReflex, pyPlane, tolerance)
+                        pyPlane.solveRear(pyWire, pyReflex, tolerance)
 
     def ordinaries(self, tolerance):
 
@@ -1469,92 +1013,3 @@ class _Face(SlopedPlanesPy._Py):
                         if pyPlane.choped or pyPlane.aligned:
                             # print 'bb'
                             cutterList.append(plane)
-
-    def rangging(self, pyWire, pyPlane, direction):
-
-        ''''''
-
-        print '### rangging'
-
-        numGeom = pyPlane.numGeom
-        print '# numGeom ', numGeom
-
-        rear = pyPlane.rear
-        lenWire = len(pyWire.planes)
-        lenRear = len(rear)
-        print '# rear ', rear
-
-        rango = []
-
-        if lenRear == 1:
-            print '1'
-            [nGeom] = rear
-
-            if nGeom > numGeom:
-                print '11'
-
-                if direction == "forward":
-                    print '111'
-                    num = utils.sliceIndex(numGeom+2, lenWire)
-                    ran = range(num, nGeom)
-
-                else:
-                    print '112'
-                    ranA = range(nGeom+1, lenWire)
-                    ranA.reverse()
-                    ranB = range(0, numGeom-1)
-                    ranB.reverse()
-                    ran = ranB + ranA
-
-            else:
-                print '12'
-
-                if direction == "forward":
-                    print '121'
-                    ran = range(numGeom+2, lenWire) +\
-                        range(0, nGeom)
-
-                else:
-                    print '122'
-                    ran = range(nGeom+1, numGeom-1)
-
-            rango.append(ran)
-
-        elif lenRear == 2:
-            print '2'
-            [nGeom1, nGeom2] = rear
-
-            number = -1
-            for nG in rear:
-                number += 1
-
-                if number == 0:
-                    print '21'
-
-                    if numGeom < nG:
-                        print '211'
-                        ran = range(numGeom+2, nG)
-
-                    else:
-                        print '212'
-                        ranA = range(numGeom+2, lenWire)
-                        ranB = range(0, nG)
-                        ran = ranA + ranB
-
-                else:
-                    print '22'
-
-                    if numGeom < nG:
-                        print '221'
-                        ranA = range(nG+1, lenWire)
-                        ranB = range(0, numGeom-1)
-                        ran = ranA + ranB
-
-                    else:
-                        print '222'
-                        ran = range(nG+1, numGeom-1)
-
-                rango.append(ran)
-
-        print 'rango ', rango
-        pyPlane.rango = rango

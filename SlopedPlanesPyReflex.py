@@ -102,7 +102,7 @@ class _Reflex(SlopedPlanesPy._Py):
 
         self.rangoInter = ran
 
-    def solveReflex(self, pyFace, pyWire, tolerance):
+    def processReflex(self, pyFace, pyWire, tolerance):
 
         ''''''
 
@@ -364,3 +364,102 @@ class _Reflex(SlopedPlanesPy._Py):
             print 'd'
             print 'included cutter ', kind, ' rectified ', (nWire, nn)
             pyR.addLink('cutter', pl)
+
+    def solveReflex(self, tolerance):
+
+        ''''''
+
+        [pyR, pyOppR] = self.planes
+        # print (pyR.numGeom, pyOppR.numGeom)
+
+        rDiv = False
+        oppRDiv = False
+
+        aa = pyR.shape.copy()
+        bb = pyOppR.shape.copy()
+
+        bb = bb.cut(pyOppR.oppCutter, tolerance)
+        gS = pyOppR.geom.toShape()
+        bb = utils.selectFace(bb.Faces, gS, tolerance)
+
+        aa = aa.cut(pyR.cutter+[bb], tolerance)
+        gS = pyR.geom.toShape()
+        # print aa.Faces
+        gB = pyR.backward
+
+        aList = []
+        AA = utils.selectFace(aa.Faces, gS, tolerance)
+        aList.append(AA)
+
+        if len(aa.Faces) == 4:
+
+            rDiv = True
+            for ff in aa.Faces:
+                section = ff.section(gB, tolerance)
+                if section.Edges:
+                    ff = ff.cut([pyOppR.enormousShape], tolerance)
+                    for FF in ff.Faces:
+                        sect = FF.section([gB], tolerance)
+                        if not sect.Edges:
+                            aList.append(FF)
+
+        # print aList
+
+        cc = pyR.shape.copy()
+        bb = pyOppR.shape.copy()
+
+        cc = cc.cut(pyR.oppCutter, tolerance)
+        gS = pyR.geom.toShape()
+        cc = utils.selectFace(cc.Faces, gS, tolerance)
+
+        bb = bb.cut(pyOppR.cutter + [cc], tolerance)
+        gS = pyOppR.geom.toShape()
+        # print bb.Faces
+        gB = pyOppR.backward
+
+        bList = []
+        BB = utils.selectFace(bb.Faces, gS, tolerance)
+        bList.append(BB)
+
+        if len(bb.Faces) == 4:
+
+            oppRDiv = True
+            for ff in bb.Faces:
+                section = ff.section(gB, tolerance)
+                if section.Edges:
+                    ff = ff.cut([pyR.enormousShape], tolerance)
+                    for FF in ff.Faces:
+                        sect = FF.section([gB], tolerance)
+                        if not sect.Edges:
+                            bList.append(FF)
+
+        # print bList
+
+        if oppRDiv and not rDiv:
+
+            AA = AA.cut(bList, tolerance)
+            gS = pyR.geom.toShape()
+            AA = utils.selectFace(AA.Faces, gS, tolerance)
+            aList = [AA]
+
+        elif rDiv and not oppRDiv:
+
+            BB = BB.cut(aList, tolerance)
+            gS = pyOppR.geom.toShape()
+            BB = utils.selectFace(BB.Faces, gS, tolerance)
+            bList = [BB]
+
+        compound = Part.makeCompound(aList)
+        pyR.shape = compound
+
+        compound = Part.makeCompound(bList)
+        pyOppR.shape = compound
+
+    def reviewReflex(self, tolerance):
+
+        ''''''
+
+        print '### reviewReflex'
+
+        for pyPlane in self.planes:
+            pyPlane.isSolved(tolerance)

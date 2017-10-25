@@ -28,10 +28,10 @@ import FreeCAD
 import FreeCADGui
 import Part
 import SlopedPlanesUtils as utils
-import SlopedPlanesTaskPanel
 import SlopedPlanesPyFace
 import SlopedPlanesPyWire
 import SlopedPlanesPyPlane
+import SlopedPlanesTaskPanel
 
 
 __title__ = "SlopedPlanes Macro"
@@ -91,12 +91,16 @@ class _SlopedPlanes():
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyString", "Tag",
                                  "SlopedPlanes")
+        # slopedPlanes.addProperty("App::PropertyStringList", "FaceMaker",
+        # "SlopedPlanes")
+
 
         slopedPlanes.Slopes = []
         slopedPlanes.SlopeGlobal = 45.0
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
         # slopedPlanes.Cap = 0
+        # slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye", ]
         slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
         slopedPlanes.Test = False
         slopedPlanes.Step = 15

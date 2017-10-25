@@ -542,3 +542,53 @@ class _Alignament(SlopedPlanesPy._Py):
                 pyOne.shape = shapeOne
 
                 pyPlane = aligns[numChop]
+
+    def ranggingAlign(self, pyFace):
+
+        ''''''
+
+        pyWireList = pyFace.wires
+
+        for [pyPlane, pyPl] in self.chops:
+
+            pyWire = pyWireList[pyPlane.numWire]
+            pyW = pyWireList[pyPl.numWire]
+
+            pyPlane.rangging(pyWire, 'backward')
+            pyPl.rangging(pyW, 'forward')
+
+    def trimmingAlign(self, pyFace, tolerance):
+
+        ''''''
+
+        pyWireList = pyFace.wires
+        enormousShape = self.base.enormousShape
+        numWire = self.base.numWire
+        pyWire = pyWireList[numWire]
+
+        rangoChop = self.rangoChop
+        pyPlaneList = pyWire.planes
+
+        for ran in rangoChop:
+            for nG in ran:
+                pyPl = pyPlaneList[nG]
+                if not pyPl.aligned:
+
+                    pyPl.doTrim(enormousShape, tolerance)
+
+        for chop in self.chops:
+
+            for pyPlane in chop:
+
+                enormousShape = pyPlane.enormousShape
+                if enormousShape:
+                    numWire = pyPlane.numWire
+                    pyWire = pyWireList[numWire]
+                    pyPlaneList = pyWire.planes
+
+                    for rango in pyPlane.rango:
+                        for nG in rango:
+                            pyPl = pyPlaneList[nG]
+                            if not pyPl.aligned:
+
+                                pyPl.doTrim(enormousShape, tolerance)

@@ -23,7 +23,7 @@
 
 
 import Part
-from SlopedPlanesUtils import *
+import SlopedPlanesUtils as utils
 import SlopedPlanesPy
 
 
@@ -60,7 +60,7 @@ class _Plane(SlopedPlanesPy._Py):
         self.oppCutter = []
         self.forward = None
         self.backward = None
-        self.problem = []
+        self.solved = False
 
     @property
     def numWire(self):
@@ -343,18 +343,18 @@ class _Plane(SlopedPlanesPy._Py):
         self._backward = backward
 
     @property
-    def problem(self):
+    def solved(self):
 
         ''''''
 
-        return self._problem
+        return self._solved
 
-    @problem.setter
-    def problem(self, problem):
+    @solved.setter
+    def solved(self, solved):
 
         ''''''
 
-        self._problem = problem
+        self._solved = solved
 
     def trackShape(self, pyWire, normal, size, reverse):
 
@@ -364,11 +364,11 @@ class _Plane(SlopedPlanesPy._Py):
         numGeom = self.numGeom
         geom = self.geomAligned
         eje = coordinates[numGeom+1].sub(coordinates[numGeom])
-        direction = rotateVector(eje, normal, 90)
+        direction = utils.rotateVector(eje, normal, 90)
         angle = self.angle
         if reverse:
             angle = angle * -1
-        direction = rotateVector(direction, eje, angle)
+        direction = utils.rotateVector(direction, eje, angle)
         direction.normalize()
 
         firstParam = geom.FirstParameter
@@ -475,26 +475,159 @@ class _Plane(SlopedPlanesPy._Py):
             plane = self.shape
             plane = plane.cut(cutterList, tolerance)
             gS = self.geom.toShape()
-            plane = selectFace(plane.Faces, gS, tolerance)
+            plane = utils.selectFace(plane.Faces, gS, tolerance)
             self.shape = plane
 
-    def isSolved(self, face, pyFace, pyOppReflex, tolerance):
+    def isSolved(self, tolerance):
 
         ''''''
 
-        numWire = self.numWire
-
-        print '###### isSolved ', (numWire, self.numGeom)
+        print '# isSolved'
 
         forward = self.forward
-        backward = self.backward
-
         plane = self.shape
 
-        section = plane.section([backward], tolerance)
-        if section.Edges:
-            self.addValue('problem', 'backward', 'forward')
-
         section = plane.section([forward], tolerance)
-        if section.Edges:
-            self.addValue('problem', 'forward', 'backward')
+        if not section.Edges:
+            print 'True'
+            self.solved = True
+            return True
+        else:
+            print 'False'
+            self.solved = False
+            return False
+
+    def rangging(self, pyWire, direction):
+
+        ''''''
+
+        print '### rangging'
+
+        numGeom = self.numGeom
+        print '# numGeom ', numGeom
+
+        rear = self.rear
+        lenWire = len(pyWire.planes)
+        lenRear = len(rear)
+        print '# rear ', rear
+
+        rango = []
+
+        if lenRear == 1:
+            print '1'
+            [nGeom] = rear
+
+            if nGeom > numGeom:
+                print '11'
+
+                if direction == "forward":
+                    print '111'
+                    num = utils.sliceIndex(numGeom+2, lenWire)
+                    ran = range(num, nGeom)
+
+                else:
+                    print '112'
+                    ranA = range(nGeom+1, lenWire)
+                    ranA.reverse()
+                    ranB = range(0, numGeom-1)
+                    ranB.reverse()
+                    ran = ranB + ranA
+
+            else:
+                print '12'
+
+                if direction == "forward":
+                    print '121'
+                    ran = range(numGeom+2, lenWire) +\
+                        range(0, nGeom)
+
+                else:
+                    print '122'
+                    ran = range(nGeom+1, numGeom-1)
+
+            rango.append(ran)
+
+        elif lenRear == 2:
+            print '2'
+            [nGeom1, nGeom2] = rear
+
+            number = -1
+            for nG in rear:
+                number += 1
+
+                if number == 0:
+                    print '21'
+
+                    if numGeom < nG:
+                        print '211'
+                        ran = range(numGeom+2, nG)
+
+                    else:
+                        print '212'
+                        ranA = range(numGeom+2, lenWire)
+                        ranB = range(0, nG)
+                        ran = ranA + ranB
+
+                else:
+                    print '22'
+
+                    if numGeom < nG:
+                        print '221'
+                        ranA = range(nG+1, lenWire)
+                        ranB = range(0, numGeom-1)
+                        ran = ranA + ranB
+
+                    else:
+                        print '222'
+                        ran = range(nG+1, numGeom-1)
+
+                rango.append(ran)
+
+        print 'rango ', rango
+        self.rango = rango
+
+    def doTrim(self, enormousShape, tolerance):
+
+        ''''''
+
+        shape = self.shape
+        bigShape = self.bigShape
+        geomShape = self.geom.toShape()
+
+        shape = shape.cut([enormousShape], tolerance)
+        shape = utils.selectFace(shape.Faces, geomShape, tolerance)
+        self.shape = shape
+
+        bigShape =\
+            bigShape.cut([enormousShape], tolerance)
+        bigShape =\
+            utils.selectFace(bigShape.Faces, geomShape, tolerance)
+        self.bigShape = bigShape
+
+    def solveRear(self, pyWire, pyReflex, tolerance):
+
+        ''''''
+
+        rear = self.rear
+
+        print '###### solveRear', rear
+
+        plane = self.shape
+        pyPlaneList = pyWire.planes
+
+        twinReflex = pyReflex.planes
+        ind = twinReflex.index(self)
+        if ind == 0:
+            pyOppPlane = twinReflex[1]
+        else:
+            pyOppPlane = twinReflex[0]
+        oppPlane = pyOppPlane.shape
+
+        for numG in rear:
+            pyPl = pyPlaneList[numG]
+            if not (pyPl.aligned or pyPl.choped):
+                pl = pyPl.shape
+                pl = pl.cut([plane, oppPlane], tolerance)
+                gS = pyPl.geom.toShape()
+                pl = utils.selectFace(pl.Faces, gS, tolerance)
+                pyPl.shape = pl
