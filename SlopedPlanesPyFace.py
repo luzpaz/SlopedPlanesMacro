@@ -244,34 +244,13 @@ class _PyFace(_Py):
             for pyPlane in pyPlaneList:
                 numGeom = pyPlane.numGeom
                 print '### numGeom ', numGeom
-                geom = pyPlane.geom
 
                 if ref:
                     print 'ref'
 
                     if pyPlane.geomAligned:
-                        line = pyPlane.geom
 
-                        lineStartParam = line.FirstParameter
-                        lineEndParam = lineStartParam - size
-
-                        forwardLine =\
-                            Part.LineSegment(line, lineStartParam,
-                                             lineEndParam)
-                        # print 'forwardLine ', forwardLine
-                        forwardLineShape = forwardLine.toShape()
-
-                        lineStartParam = line.LastParameter
-                        lineEndParam = lineStartParam + size
-
-                        backwardLine =\
-                            Part.LineSegment(line, lineStartParam,
-                                             lineEndParam)
-                        # print 'backwardLine ', backwardLine
-                        backwardLineShape = backwardLine.toShape()
-
-                        pyPlane.backward = backwardLineShape
-                        pyPlane.forward = forwardLineShape
+                        forwardLine = self.forBack(pyPlane, size, 'backward')
 
                     ref = False
 
@@ -288,30 +267,17 @@ class _PyFace(_Py):
                 print 'corner ', corner
                 eje = nextEje
 
-                line = geom
+                forwardLine = self.forBack(pyPlane, size, 'forward')
 
-                lineLastParam = line.LastParameter
-                lineEndParam = lineLastParam + size
-                forwardLine = Part.LineSegment(line, lineLastParam,
-                                               lineEndParam)
-                # print 'forwardLine ', forwardLine
                 lineEnd = coord[numGeom+1]
-                forwardLineShape = forwardLine.toShape()
-
-                lineStartParam = line.FirstParameter
-                lineEndParam = lineStartParam - size
-
-                backwardLine =\
-                    Part.LineSegment(line, lineStartParam, lineEndParam)
-                # print 'backwardLine ', backwardLine
-                backwardLineShape = backwardLine.toShape()
 
                 if ((numWire == 0 and corner == 'reflex') or
                    (numWire > 0 and corner == 'convex')):
                     print '1'
 
-                    section = forwardLineShape.section(shapeGeomFace,
-                                                       tolerance)
+                    forward = pyPlane.forward
+
+                    section = forward.section(shapeGeomFace, tolerance)
 
                     if section.Edges:
                         print '11'
@@ -395,20 +361,10 @@ class _PyFace(_Py):
                                 pyReflex = _PyReflex()
 
                         else:
-                            # OJO
+
                             if corner == 'reflex':
                                 if resetFace:
                                     print 'end'
-                                    line = pyPl.geom
-                                    lineLastParam = line.LastParameter
-                                    lineEndParam = lineLastParam + size
-                                    forwardLine =\
-                                        Part.LineSegment(line, lineLastParam,
-                                                         lineEndParam)
-                                    # print 'forwardLine ', forwardLine
-                                    forwardLineShape = forwardLine.toShape()
-                                    pyPlane.forward = forwardLineShape
-
                                     self.seatReflex(pyWire, pyReflex, pyPlane,
                                                     'forward', tolerance)
 
@@ -417,8 +373,6 @@ class _PyFace(_Py):
 
                         if corner == 'reflex':
 
-                            pyPlane.forward = forwardLineShape
-                            pyPlane.backward = backwardLineShape
                             ref = True
 
                             if resetFace:
@@ -436,8 +390,6 @@ class _PyFace(_Py):
                             pyNextPlane = pyPlaneList[num]
                             if not pyNextPlane.choped:
 
-                                pyPlane.forward = forwardLineShape
-                                pyPlane.backward = backwardLineShape
                                 ref = True
 
                                 if resetFace:
@@ -583,11 +535,11 @@ class _PyFace(_Py):
         lineShape = pyPlane.forward
         section = lineShape.section(shapeGeomWire, tolerance)
 
-        print[v.Point for v in section.Vertexes]
+        '''print[v.Point for v in section.Vertexes]
         print section.Edges
         print lenWire
         print len(section.Vertexes)
-        print direction
+        print direction'''
 
         if section.Edges:
             print 'a'
@@ -774,6 +726,38 @@ class _PyFace(_Py):
         pyAlignList = self.alignaments
         pyAlignList.remove(pyAlign)
         self.alignaments = pyAlignList
+
+    def forBack(self, pyPlane, size, direction):
+
+        ''''''
+
+        line = pyPlane.geom
+
+        lineLastParam = line.LastParameter
+        lineEndParam = lineLastParam + size
+        forwardLine = Part.LineSegment(line, lineLastParam,
+                                       lineEndParam)
+        # print 'forwardLine ', forwardLine
+        forwardLineShape = forwardLine.toShape()
+
+        lineStartParam = line.FirstParameter
+        lineEndParam = lineStartParam - size
+        backwardLine =\
+            Part.LineSegment(line, lineStartParam, lineEndParam)
+        # print 'backwardLine ', backwardLine
+        backwardLineShape = backwardLine.toShape()
+
+        if direction == "forward":
+
+            pyPlane.backward = backwardLineShape
+            pyPlane.forward = forwardLineShape
+            return forwardLine
+
+        else:
+
+            pyPlane.backward = forwardLineShape
+            pyPlane.forward = backwardLineShape
+            return backwardLine
 
     def planning(self, normal, size, reverse):
 
