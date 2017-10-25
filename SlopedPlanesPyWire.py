@@ -352,11 +352,11 @@ class _PyWire(_Py):
         return solved, unsolved
 
     def reSolveReflexs(self, tolerance, solved=[], unsolved=[],
-                         impossible=[]):
+                       impossible=[]):
 
         ''''''
 
-        print '###### reProcessReflexs'
+        print '###### reSolveReflexs'
 
         for pyPlane in unsolved:
             print 'a'
@@ -379,9 +379,10 @@ class _PyWire(_Py):
                 impossible.append(pyPlane)
 
             if not unsolved:
+                print 'return'
                 return
 
-            self.reProcessReflexs(tolerance)
+            self.reSolveReflexs(tolerance, solved, unsolved, impossible)
 
     def betweenReflexs(self, tolerance):
 
