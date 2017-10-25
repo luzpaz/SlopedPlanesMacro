@@ -247,12 +247,8 @@ class _PyFace(_Py):
 
                 if ref:
                     print 'ref'
-
                     if pyPlane.geomAligned:
-
                         forwardLine = self.forBack(pyPlane, size, 'backward')
-
-                    ref = False
 
                     if resetFace:
                         if pyPlane.geomAligned:
@@ -266,17 +262,18 @@ class _PyFace(_Py):
                 corner = utils.convexReflex(eje, nextEje, normal, numWire)
                 print 'corner ', corner
                 eje = nextEje
-
-                forwardLine = self.forBack(pyPlane, size, 'forward')
-
                 lineEnd = coord[numGeom+1]
+
+                if ref:
+                    ref = False
+                else:
+                    forwardLine = self.forBack(pyPlane, size, 'forward')
 
                 if ((numWire == 0 and corner == 'reflex') or
                    (numWire > 0 and corner == 'convex')):
                     print '1'
 
                     forward = pyPlane.forward
-
                     section = forward.section(shapeGeomFace, tolerance)
 
                     if section.Edges:
@@ -403,7 +400,7 @@ class _PyFace(_Py):
 
             pyWire.reset = False
 
-        '''print '********* wires ', self.wires
+        print '********* wires ', self.wires
         for pyWire in self.wires:
             print '****** numWire ', pyWire.numWire
             print '*** print reflexs ', pyWire.reflexs
@@ -413,7 +410,9 @@ class _PyFace(_Py):
                 for pyPlane in pyReflex.planes:
                     print pyPlane.numGeom,\
                         pyPlane.rear,\
-                        pyPlane.rango
+                        pyPlane.rango, \
+                        (pyPlane.forward.firstVertex(True).Point,
+                         pyPlane.forward.lastVertex(True).Point)
 
         print '********* alignaments ', self.alignaments
         for pyAlignament in self.alignaments:
@@ -437,7 +436,7 @@ class _PyFace(_Py):
             for align in pyAlignament.aligns:
                 print(align.numWire, align.numGeom),\
                     align.rear,\
-                    align.rango'''
+                    align.rango
 
     def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl,
                        shapeGeomFace, size, tolerance):
@@ -737,23 +736,25 @@ class _PyFace(_Py):
         lineEndParam = lineLastParam + size
         forwardLine = Part.LineSegment(line, lineLastParam,
                                        lineEndParam)
-        # print 'forwardLine ', forwardLine
+        print 'forwardLine ', forwardLine
         forwardLineShape = forwardLine.toShape()
 
         lineStartParam = line.FirstParameter
         lineEndParam = lineStartParam - size
         backwardLine =\
             Part.LineSegment(line, lineStartParam, lineEndParam)
-        # print 'backwardLine ', backwardLine
+        print 'backwardLine ', backwardLine
         backwardLineShape = backwardLine.toShape()
 
         if direction == "forward":
+            print 'a'
 
             pyPlane.backward = backwardLineShape
             pyPlane.forward = forwardLineShape
             return forwardLine
 
         else:
+            print 'b'
 
             pyPlane.backward = forwardLineShape
             pyPlane.forward = backwardLineShape
