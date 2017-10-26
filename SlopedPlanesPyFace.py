@@ -273,13 +273,14 @@ class _PyFace(_Py):
                     eje = nextEje
                     lineEnd = coord[numGeom+1]
 
-                    if corner == 'reflex':
-                        forwardLine = self.forBack(pyPlane, size, 'forward')
+                    #if corner == 'reflex':
+                        #forwardLine = self.forBack(pyPlane, size, 'forward')
 
                     if ((numWire == 0 and corner == 'reflex') or
                        (numWire > 0 and corner == 'convex')):
                         print '1'
 
+                        forwardLine = self.forBack(pyPlane, size, 'forward')
                         forward = pyPlane.forward
                         print(forward.firstVertex(True).Point,
                               forward.lastVertex(True).Point)
@@ -423,9 +424,11 @@ class _PyFace(_Py):
 
         print '********* wires ', self.wires
         for pyWire in self.wires:
+
             print '****** numWire ', pyWire.numWire
             print '*** print reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
+
                 print 'rangoInter ', pyReflex.rangoInter
                 print 'planes ', pyReflex.planes
                 for pyPlane in pyReflex.planes:
@@ -437,11 +440,14 @@ class _PyFace(_Py):
 
         print '********* alignaments ', self.alignaments
         for pyAlignament in self.alignaments:
+
             print '****** base'
             print 'numWire ', pyAlignament.base.numWire
             print 'numGeom ', pyAlignament.base.numGeom
             print 'rear ', pyAlignament.base.rear
             print 'rango ',  pyAlignament.base.rango
+            print 'geom ', pyAlignament.base.geom
+            print 'geomAligned ', pyAlignament.base.geomAligned
             print 'rangoChop ', pyAlignament.rangoChop
 
             print '*** chops ', [[(x.numWire, x.numGeom),
@@ -457,7 +463,9 @@ class _PyFace(_Py):
             for align in pyAlignament.aligns:
                 print(align.numWire, align.numGeom),\
                     align.rear,\
-                    align.rango
+                    align.rango,\
+                    align.geom,\
+                    align.geomAligned
 
     def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl,
                        shapeGeomFace, size, tolerance):
@@ -480,8 +488,7 @@ class _PyFace(_Py):
         pyPl.reflexed = True
         pyPl.aligned = True
         pyPl.shape = None
-        # OJO
-        # if not pyPl.choped:
+
         pyPl.rear = []
 
         if pyPl.reflexed:
