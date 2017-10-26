@@ -311,9 +311,8 @@ class _PyFace(_Py):
                                         print '1111'
 
                                         if numEdge == 0:
-                                            pyAlign = _PyAlignament()
-                                            self.addLink('alignaments', pyAlign)
-                                            pyAlign.base = pyPlane
+                                            pyAlign =\
+                                                self.doAlignament(pyPlane)
 
                                         fAng = self.findAngle(numWire, numGeom)
                                         sAng = self.findAngle(nWire, nGeom)
@@ -326,30 +325,35 @@ class _PyFace(_Py):
                                             pyPl.geomAligned = None
                                             pyPl.angle = [numWire, numGeom]
 
-                                            eStartParam = fGeom.FirstParameter
-                                            eEndPoint = sGeom.EndPoint
-                                            eEndParam =\
-                                                forwardLine.parameter(eEndPoint)
-                                            eGeom =\
-                                                Part.LineSegment(fGeom,
-                                                                 eStartParam,
-                                                                 eEndParam)
-                                            pyPlane.geomAligned = eGeom
-
-                                            self.seatAlignament(pyAlign,
-                                                                pyWire, pyPlane,
-                                                                pyW, pyPl,
-                                                                shapeGeomFace,
-                                                                size, tolerance)
-
-                                            if pyPl.numWire == pyPlane.numWire:
-                                                ref = True
-
-                                            pyReflex = _PyReflex()
-
                                         else:
                                             print '11112'
-                                            # falseAlignament
+                                            if numEdge > 0:
+                                                pyAlign =\
+                                                    self.doAlignament(pyPlane)
+
+                                            pyAlign.falsify = True
+                                            break
+
+                                        eStartParam = fGeom.FirstParameter
+                                        eEndPoint = sGeom.EndPoint
+                                        eEndParam =\
+                                            forwardLine.parameter(eEndPoint)
+                                        eGeom =\
+                                            Part.LineSegment(fGeom,
+                                                             eStartParam,
+                                                             eEndParam)
+                                        pyPlane.geomAligned = eGeom
+
+                                        self.seatAlignament(pyAlign,
+                                                            pyWire, pyPlane,
+                                                            pyW, pyPl,
+                                                            shapeGeomFace,
+                                                            size, tolerance)
+
+                                        if pyPl.numWire == pyPlane.numWire:
+                                            ref = True
+
+                                        pyReflex = _PyReflex()
 
                                     else:
                                         print '1112'
@@ -359,7 +363,10 @@ class _PyFace(_Py):
 
                                             if resetFace:
                                                 print '11121'
-                                                self.doReflex(pyWire, pyPlane, tolerance)
+                                                pyReflex =\
+                                                    self.doReflex(pyWire,
+                                                                  pyPlane,
+                                                                  tolerance)
 
                                             break
 
@@ -388,7 +395,9 @@ class _PyFace(_Py):
 
                                 if resetFace:
                                     print '121'
-                                    self.doReflex(pyWire, pyPlane, tolerance)
+                                    pyReflex =\
+                                        self.doReflex(pyWire, pyPlane,
+                                                      tolerance)
 
                     else:
                         print '2'
@@ -402,7 +411,9 @@ class _PyFace(_Py):
 
                                     if resetFace:
                                         print '21'
-                                        self.doReflex(pyWire, pyPlane, tolerance)
+                                        pyReflex =\
+                                            self.doReflex(pyWire, pyPlane,
+                                                          tolerance)
 
                     print 'rear ', pyPlane.rear
                     try:
@@ -443,6 +454,7 @@ class _PyFace(_Py):
             print 'rango ',  pyAlignament.base.rango
             print 'geom ', pyAlignament.base.geom
             print 'geomAligned ', pyAlignament.base.geomAligned
+            print 'falsify ', pyAlignament.falsify
             print 'rangoChop ', pyAlignament.rangoChop
 
             print '*** chops ', [[(x.numWire, x.numGeom),
@@ -791,6 +803,18 @@ class _PyFace(_Py):
         pyWire.addLink('reflexs', pyReflex)
         self.seatReflex(pyWire, pyReflex, pyPlane,
                         'forward', tolerance)
+
+        return pyReflex
+
+    def doAlignament(self, pyPlane):
+
+        ''''''
+
+        pyAlign = _PyAlignament()
+        self.addLink('alignaments', pyAlign)
+        pyAlign.base = pyPlane
+
+        return pyAlign
 
     def planning(self, normal, size, reverse):
 
