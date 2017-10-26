@@ -353,11 +353,15 @@ class _PyFace(_Py):
 
                                     else:
                                         print '1112'
-                                        # no alignament
-                                        # pyReflex
-                                        # rear
-                                        # ref = True
-                                        # break
+                                        if corner == 'reflex':
+
+                                            ref = True
+
+                                            if resetFace:
+                                                print '11121'
+                                                self.doReflex(pyWire, pyPlane, tolerance)
+
+                                            break
 
                                 else:
                                     print '111b'
@@ -384,10 +388,7 @@ class _PyFace(_Py):
 
                                 if resetFace:
                                     print '121'
-                                    pyReflex = _PyReflex()
-                                    pyWire.addLink('reflexs', pyReflex)
-                                    self.seatReflex(pyWire, pyReflex, pyPlane,
-                                                    'forward', tolerance)
+                                    self.doReflex(pyWire, pyPlane, tolerance)
 
                     else:
                         print '2'
@@ -401,11 +402,7 @@ class _PyFace(_Py):
 
                                     if resetFace:
                                         print '21'
-                                        pyReflex = _PyReflex()
-                                        pyWire.addLink('reflexs', pyReflex)
-                                        self.seatReflex(pyWire, pyReflex,
-                                                        pyPlane,
-                                                        'forward', tolerance)
+                                        self.doReflex(pyWire, pyPlane, tolerance)
 
                     print 'rear ', pyPlane.rear
                     try:
@@ -785,6 +782,15 @@ class _PyFace(_Py):
             pyPlane.backward = forwardLineShape
             pyPlane.forward = backwardLineShape
             return backwardLine
+
+    def doReflex(self, pyWire, pyPlane, tolerance):
+
+        ''''''
+
+        pyReflex = _PyReflex()
+        pyWire.addLink('reflexs', pyReflex)
+        self.seatReflex(pyWire, pyReflex, pyPlane,
+                        'forward', tolerance)
 
     def planning(self, normal, size, reverse):
 
