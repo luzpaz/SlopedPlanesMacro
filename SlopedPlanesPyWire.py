@@ -143,7 +143,7 @@ class _PyWire(_Py):
         if reset:
             for pyReflex in self.reflexs:
 
-                pyReflex.ranggingInter(self)
+                pyReflex.rangging(self)
 
                 direction = "forward"
                 for pyPlane in pyReflex.planes:

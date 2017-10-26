@@ -71,7 +71,7 @@ class _PyReflex(_Py):
 
         self._rangoInter = rangoInter
 
-    def ranggingInter(self, pyWire):
+    def rangging(self, pyWire):
 
         ''''''
 
@@ -106,7 +106,7 @@ class _PyReflex(_Py):
 
         ''''''
 
-        print '###### solveReflex '
+        print '###### processReflex '
         numWire = pyWire.numWire
         print '###### numWire', numWire
 
@@ -318,7 +318,7 @@ class _PyReflex(_Py):
 
             if kind == "rangoCorner":
                 print 'a'
-                print 'included oppCutter ', kind, ' rectified ', (nWire, nn)
+                print 'included oppCutter ', kind, ' ', (nWire, nn)
                 pyOppR.addLink('oppCutter', pl)
                 oppReflexEnormous = pyOppR.enormousShape
                 pl = pl.cut([oppReflexEnormous], tolerance)
@@ -363,15 +363,18 @@ class _PyReflex(_Py):
 
             if kind == "rangoCorner":
                 print 'd'
-                print 'included oppCutter ', kind, ' ', (nWire, nn)
+                print 'included oppCutter ', kind, ' rectified ', (nWire, nn)
                 pyOppR.addLink('oppCutter', pl)
 
     def solveReflex(self, tolerance):
 
         ''''''
+
+        print '###### solveReflex'
+
         # TODO REFACTOR
         [pyR, pyOppR] = self.planes
-        # print (pyR.numGeom, pyOppR.numGeom)
+        print (pyR.numGeom, pyOppR.numGeom)
 
         rDiv = False
         oppRDiv = False
@@ -388,11 +391,12 @@ class _PyReflex(_Py):
                 section = ff.section([vertex], tolerance)
                 if section.Vertexes:
                     bb = ff
+                    print 'a'
                     break
 
         aa = aa.cut(pyR.cutter+[bb], tolerance)
         gS = pyR.geom.toShape()
-        # print aa.Faces
+        print aa.Faces
         gB = pyR.backward
 
         aList = []
@@ -409,26 +413,29 @@ class _PyReflex(_Py):
                     for FF in ff.Faces:
                         sect = FF.section([gB], tolerance)
                         if not sect.Edges:
+                            print 'aa'
                             aList.append(FF)
 
-        # print aList
+        print aList
 
         cc = pyR.shape.copy()
         bb = pyOppR.shape.copy()
 
         cc = cc.cut(pyR.oppCutter, tolerance)
         gS = pyR.geom.toShape()
+        vertex = pyR.forward.firstVertex(True)
         for ff in cc.Faces:
             section = ff.section([gS], tolerance)
             if section.Edges:
                 section = ff.section([vertex], tolerance)
                 if section.Vertexes:
+                    print 'b'
                     cc = ff
                     break
 
         bb = bb.cut(pyOppR.cutter + [cc], tolerance)
         gS = pyOppR.geom.toShape()
-        # print bb.Faces
+        print bb.Faces
         gB = pyOppR.backward
 
         bList = []
@@ -445,11 +452,13 @@ class _PyReflex(_Py):
                     for FF in ff.Faces:
                         sect = FF.section([gB], tolerance)
                         if not sect.Edges:
+                            print 'bb'
                             bList.append(FF)
 
-        # print bList
+        print bList
 
         if oppRDiv and not rDiv:
+            print '1'
 
             AA = AA.cut(bList, tolerance)
             gS = pyR.geom.toShape()
@@ -457,6 +466,7 @@ class _PyReflex(_Py):
             aList = [AA]
 
         elif rDiv and not oppRDiv:
+            print '2'
 
             BB = BB.cut(aList, tolerance)
             gS = pyOppR.geom.toShape()
