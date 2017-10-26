@@ -139,6 +139,12 @@ class _PyReflex(_Py):
 
         oppReflexEnormous = pyOppR.enormousShape.copy()
 
+        angle = pyR.angle
+        numWire = pyR.numWire
+        if ((numWire == 0 and angle > 90) or
+           (numWire > 0 and angle < 90)):
+            pyR.addLink('cutter', oppReflexEnormous)
+
         nWire = pyWire.numWire
 
         rear = pyR.rear
@@ -344,27 +350,34 @@ class _PyReflex(_Py):
                         cutList.append(pyP.enormousShape)
 
             forward = pyR.forward
+            print(pyR.forward.firstVertex(True).Point,
+                  pyR.forward.lastVertex(True).Point)
             forw = pyPl.forward
+            print(pyPl.forward.firstVertex(True).Point,
+                  pyPl.forward.lastVertex(True).Point)
             section = forward.section([forw], tolerance)
-            if section.Vertexes:
-                cutList.append(pyR.enormousShape)
-            else:
-                forward = pyOppR.forward
-                section = forward.section([forw], tolerance)
-                if not section.Vertexes:
-                    cutList.append(pyOppR.enormousShape)
 
-            pl = pl.cut(cutList, tolerance)
-            gS = pyPl.geom.toShape()
-            pl = utils.selectFace(pl.Faces, gS, tolerance)
-            print 'c'
-            print 'included cutter ', kind, ' rectified ', (nWire, nn)
-            pyR.addLink('cutter', pl)
+            if not section.Edges:
 
-            if kind == "rangoCorner":
-                print 'd'
-                print 'included oppCutter ', kind, ' rectified ', (nWire, nn)
-                pyOppR.addLink('oppCutter', pl)
+                if section.Vertexes:
+                    cutList.append(pyR.enormousShape)
+                else:
+                    forward = pyOppR.forward
+                    section = forward.section([forw], tolerance)
+                    if not section.Vertexes:
+                        cutList.append(pyOppR.enormousShape)
+
+                pl = pl.cut(cutList, tolerance)
+                gS = pyPl.geom.toShape()
+                pl = utils.selectFace(pl.Faces, gS, tolerance)
+                print 'c'
+                print 'included cutter ', kind, ' rectified ', (nWire, nn)
+                pyR.addLink('cutter', pl)
+
+                if kind == "rangoCorner":
+                    print 'd'
+                    print 'included oppCutter ', kind, ' rectified ', (nWire, nn)
+                    pyOppR.addLink('oppCutter', pl)
 
     def solveReflex(self, tolerance):
 

@@ -156,6 +156,13 @@ class _PyWire(_Py):
 
         for pyReflex in self.reflexs:
             for pyPlane in pyReflex.planes:
+
+                angle = pyPlane.angle
+                numWire = pyPlane.numWire
+                if ((numWire == 0 and angle > 90) or
+                   (numWire > 0 and angle < 90)):
+                    return
+
                 rango = pyPlane.rango
                 enormousShape = pyPlane.enormousShape
                 pyPlaneList = self.planes

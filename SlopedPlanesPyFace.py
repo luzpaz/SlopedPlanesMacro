@@ -249,7 +249,6 @@ class _PyFace(_Py):
 
                     if ref:
                         print 'ref'
-                        #if pyPlane.geomAligned:
                         forwardLine = self.forBack(pyPlane, size, 'backward')
                         ref = False
 
@@ -273,14 +272,13 @@ class _PyFace(_Py):
                     eje = nextEje
                     lineEnd = coord[numGeom+1]
 
-                    #if corner == 'reflex':
-                        #forwardLine = self.forBack(pyPlane, size, 'forward')
+                    if corner == 'reflex' or numWire > 0:
+                        forwardLine = self.forBack(pyPlane, size, 'forward')
 
                     if ((numWire == 0 and corner == 'reflex') or
                        (numWire > 0 and corner == 'convex')):
                         print '1'
 
-                        forwardLine = self.forBack(pyPlane, size, 'forward')
                         forward = pyPlane.forward
                         print(forward.firstVertex(True).Point,
                               forward.lastVertex(True).Point)
