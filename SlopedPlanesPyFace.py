@@ -300,7 +300,6 @@ class _PyFace(_Py):
                         if section.Edges:
                             print '11'
 
-                            falseAlign = False
                             numEdge = -1
                             for edge in section.Edges:
                                 numEdge += 1
@@ -356,7 +355,6 @@ class _PyFace(_Py):
                                                     self.doAlignament(pyPlane)
 
                                             pyAlign.falsify = True
-                                            falseAlign = True
 
                                         self.seatAlignament(pyAlign,
                                                             pyWire, pyPlane,
@@ -369,7 +367,7 @@ class _PyFace(_Py):
 
                                         pyReflex = _PyReflex()
 
-                                        if falseAlign:
+                                        if pyAlign.falsify:
                                             break
 
                                     else:
@@ -515,7 +513,8 @@ class _PyFace(_Py):
         print 'pyPl.numGeom ', pyPl.numGeom
         pyPl.reflexed = True
         pyPl.aligned = True
-        pyPl.shape = None
+        if not pyAlign.falsify:
+            pyPl.shape = None
 
         pyPl.rear = []
 

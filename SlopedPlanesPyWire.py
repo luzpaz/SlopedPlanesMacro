@@ -248,75 +248,23 @@ class _PyWire(_Py):
                 print 'later ', later
 
                 geomShape = pyPlane.geom.toShape()
-
                 cutterList = []
+
                 if pyPlane.reflexed or pyPlane.arrow:
                     print 'A'
-
                     if not pyPrior.reflexed:
                         print '1'
                         cutterList.append(bigPrior)
-
-                    elif not pyPlane.arrow:
-                        print '11'
-                        if not pyPrior.aligned:
-                            print '111'
-                            pyReflex =\
-                                pyFace.selectReflex(numWire, numGeom, prior)
-                            if not pyReflex:
-                                print '1111'
-                                cutterList.append(bigPrior)
-
-                        else:
-                            numWire = pyPrior.numWire
-                            numGeom = pyPrior.numGeom
-                            pyAlign = pyFace.selectAlignament(numWire,
-                                                            numGeom)
-                            chops = []
-                            for chop in pyAlign.chops:
-                                chops.extend(chop)
-                            if pyPlane not in chops:
-                                print '112'
-                                cutterList.append(bigPrior)
-
                     if not pyLater.reflexed:
                         print '2'
                         cutterList.append(bigLater)
 
-                    elif not pyPlane.arrow:
-                        print '22'
-                        if not pyLater.aligned:
-                            print '221'
-                            pyReflex =\
-                                pyFace.selectReflex(numWire, numGeom, later)
-                            if not pyReflex:
-                                print '2211'
-                                cutterList.append(bigLater)
-
-                        else:
-                            
-                            numWire = pyLater.numWire
-                            numGeom = pyLater.numGeom
-                            pyAlign = pyFace.selectAlignament(numWire,
-                                                            numGeom)
-                            chops = []
-                            for chop in pyAlign.chops:
-                                chops.extend(chop)
-                            if pyPlane not in chops:
-                                print '222'
-                                cutterList.append(bigLater)
-
-                    if cutterList:
-                        print '3'
-                        shape = shape.cut(cutterList, tolerance)
-                        shape = utils.selectFace(shape.Faces, geomShape,
-                                                 tolerance)
-                        pyPlane.shape = shape
-
                 else:
                     print 'B'
+                    cutterList = [bigPrior, bigLater]
 
-                    shape = shape.cut([bigPrior, bigLater], tolerance)
+                if cutterList:
+                    shape = shape.cut(cutterList, tolerance)
                     shape = utils.selectFace(shape.Faces, geomShape,
                                              tolerance)
                     pyPlane.shape = shape
