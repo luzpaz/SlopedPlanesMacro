@@ -45,6 +45,8 @@ class _PyAlignament(_Py):
         self.rangoChop = []
         self.falsify = False
         self.simulatedShape = None
+        self.prior = None
+        self.later = None
 
     @property
     def base(self):
@@ -129,6 +131,34 @@ class _PyAlignament(_Py):
         ''''''
 
         self._simulatedShape = simulatedShape
+
+    @property
+    def prior(self):
+
+        ''''''
+
+        return self._prior
+
+    @prior.setter
+    def prior(self, prior):
+
+        ''''''
+
+        self._prior = prior
+
+    @property
+    def later(self):
+
+        ''''''
+
+        return self._later
+
+    @later.setter
+    def later(self, later):
+
+        ''''''
+
+        self._later = later
 
     def ranggingChop(self, pyFace):
 
@@ -283,34 +313,12 @@ class _PyAlignament(_Py):
 
         cutterList = chopList + cutList
 
-        # estoy repitiendo la busqueda con priorLater. Aumentar propiedades
-
         limitList = []
         if pyBase.rear:
-            nWire = pyBase.numWire
-            prior = utils.sliceIndex(pyBase.numGeom-1,
-                                     len(pyWireList[nWire].planes))
-            last = self.aligns[-1]
-            nW = last.numWire
-            later = utils.sliceIndex(last.numGeom+1,
-                                     len(pyWireList[nW].planes))
-            print 'prior ', prior
-            print 'later ', later
-            pyPrior = pyFace.selectPlane(nWire, prior)
-            pyLater = pyFace.selectPlane(nW, later)
+            pyPrior = self.prior
+            pyLater = self.later
             bigPrior = pyPrior.bigShape
             bigLater = pyLater.bigShape
-            # en la cruz mal que el 7 tiene de trasera el 0 (y no debería)
-            if not bigPrior:
-                [nW, nG] = pyPrior.angle
-                prior = nG
-                pyPrior = pyFace.selectPlane(nW, nG)
-                bigPrior = pyPrior.bigShape
-            if not bigLater:
-                [nW, nG] = pyLater.angle
-                later = nG
-                pyLater = pyFace.selectPlane(nW, nG)
-                bigLater = pyLater.bigShape
             limitList.extend([bigPrior, bigLater])
 
         cutterList.extend(limitList)

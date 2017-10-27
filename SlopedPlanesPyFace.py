@@ -138,6 +138,7 @@ class _PyFace(_Py):
 
             wireList.append(dct)
 
+        # para que si se va a recalcular todo?
         alignList = []
         for align in self.alignaments:
             dct = align.__dict__.copy()
@@ -148,6 +149,10 @@ class _PyFace(_Py):
                              in align.chops]
             base = align.base
             dct['_base'] = [base.numWire, base.numGeom]
+            prior = align.prior
+            dct['_prior'] = [prior.numWire, prior.numGeom]
+            later = align.later
+            dct['_later'] = [later.numWire, later.numGeom]
             dct['_simulatedShape'] = None
             alignList.append(dct)
 
@@ -207,6 +212,14 @@ class _PyFace(_Py):
             [numWire, numGeom] = dct['_base']
             base = wireList[numWire].planes[numGeom]
             dct['_base'] = base
+
+            [numWire, numGeom] = dct['_prior']
+            prior = wireList[numWire].planes[numGeom]
+            dct['_prior'] = prior
+
+            [numWire, numGeom] = dct['_later']
+            later = wireList[numWire].planes[numGeom]
+            dct['_later'] = later
 
             alignament.__dict__ = dct
             alignList.append(alignament)
@@ -287,6 +300,7 @@ class _PyFace(_Py):
                         if section.Edges:
                             print '11'
 
+                            falseAlign = False
                             numEdge = -1
                             for edge in section.Edges:
                                 numEdge += 1
@@ -317,13 +331,23 @@ class _PyFace(_Py):
                                         fAng = self.findAngle(numWire, numGeom)
                                         sAng = self.findAngle(nWire, nGeom)
 
+                                        fGeom = pyPlane.geomAligned
+                                        sGeom = pyPl.geomAligned
+
                                         if fAng == sAng:
                                             print '11111'
-
-                                            fGeom = pyPlane.geomAligned
-                                            sGeom = pyPl.geomAligned
                                             pyPl.geomAligned = None
                                             pyPl.angle = [numWire, numGeom]
+
+                                            eStartParam = fGeom.FirstParameter
+                                            eEndPoint = sGeom.EndPoint
+                                            eEndParam =\
+                                                forwardLine.parameter(eEndPoint)
+                                            eGeom =\
+                                                Part.LineSegment(fGeom,
+                                                                 eStartParam,
+                                                                 eEndParam)
+                                            pyPlane.geomAligned = eGeom
 
                                         else:
                                             print '11112'
@@ -332,17 +356,7 @@ class _PyFace(_Py):
                                                     self.doAlignament(pyPlane)
 
                                             pyAlign.falsify = True
-                                            break
-
-                                        eStartParam = fGeom.FirstParameter
-                                        eEndPoint = sGeom.EndPoint
-                                        eEndParam =\
-                                            forwardLine.parameter(eEndPoint)
-                                        eGeom =\
-                                            Part.LineSegment(fGeom,
-                                                             eStartParam,
-                                                             eEndParam)
-                                        pyPlane.geomAligned = eGeom
+                                            falseAlign = True
 
                                         self.seatAlignament(pyAlign,
                                                             pyWire, pyPlane,
@@ -354,6 +368,9 @@ class _PyFace(_Py):
                                             ref = True
 
                                         pyReflex = _PyReflex()
+
+                                        if falseAlign:
+                                            break
 
                                     else:
                                         print '1112'
@@ -428,6 +445,8 @@ class _PyFace(_Py):
 
             pyWire.reset = False
 
+        self.priorLaterAlignaments()
+
         print '********* wires ', self.wires
         for pyWire in self.wires:
 
@@ -456,6 +475,8 @@ class _PyFace(_Py):
             print 'geomAligned ', pyAlignament.base.geomAligned
             print 'falsify ', pyAlignament.falsify
             print 'rangoChop ', pyAlignament.rangoChop
+            # print 'prior ', pyAlignament.prior
+            # print 'later ', pyAlignament.later
 
             print '*** chops ', [[(x.numWire, x.numGeom),
                                   (y.numWire, y.numGeom)]
@@ -815,6 +836,44 @@ class _PyFace(_Py):
         pyAlign.base = pyPlane
 
         return pyAlign
+
+    def priorLaterAlignaments(self):
+
+        ''''''
+
+        pyWireList = self.wires
+
+        for pyAlign in self.alignaments:
+
+            numWire = pyAlign.base.numWire
+            numGeom = pyAlign.base.numGeom
+            pyWire = pyWireList[numWire]
+            pyPlaneList = pyWire.planes
+            lenWire = len(pyPlaneList)
+
+            prior = utils.sliceIndex(numGeom-1, lenWire)
+            pyPrior = pyPlaneList[prior]
+
+            prior = pyPrior.geomAligned
+            if not prior:
+                [nW, nG] = pyPrior.angle
+                pyPrior = self.selectPlane(nW, nG)
+
+            pyPl = pyAlign.aligns[-1]
+            [nW, nG] = [pyPl.numWire, pyPl.numGeom]
+            pyW = pyWireList[nW]
+            lenW = len(pyW.planes)
+
+            later = utils.sliceIndex(nG+1, lenW)
+            pyLater = self.selectPlane(nW, later)
+
+            later = pyLater.geomAligned
+            if not later:
+                [nW, nG] = pyLater.angle
+                pyLater = self.selectPlane(nW, nG)
+
+            pyAlign.prior = pyPrior
+            pyAlign.later = pyLater
 
     def planning(self, normal, size, reverse):
 

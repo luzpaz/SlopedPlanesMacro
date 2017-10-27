@@ -205,7 +205,6 @@ class _PyWire(_Py):
 
         ''''''
 
-        pyWireList = pyFace.wires
         numWire = self.numWire
         pyPlaneList = self.planes
         lenWire = len(pyPlaneList)
@@ -218,8 +217,19 @@ class _PyWire(_Py):
                 print 'reflexed ', pyPlane.reflexed
                 print 'arrow ', pyPlane.arrow
 
-                prior = utils.sliceIndex(numGeom-1, lenWire)
-                pyPrior = pyPlaneList[prior]
+                if pyPlane.aligned:
+                    pyAlign = pyFace.selectAlignament(numWire, numGeom)
+                    pyPrior = pyAlign.prior
+                    prior = pyPrior.numGeom
+                    pyLater = pyAlign.later
+                    later = pyLater.numGeom
+
+                else:
+                    prior = utils.sliceIndex(numGeom-1, lenWire)
+                    pyPrior = pyPlaneList[prior]
+                    later = utils.sliceIndex(numGeom+1, lenWire)
+                    pyLater = pyPlaneList[later]
+
                 bigPrior = pyPrior.bigShape
                 if not bigPrior:
                     [nW, nG] = pyPrior.angle
@@ -227,19 +237,7 @@ class _PyWire(_Py):
                     pyPrior = pyFace.selectPlane(nW, nG)
                     bigPrior = pyPrior.bigShape
 
-                if pyPlane.aligned:
-                    pyAlign = pyFace.selectAlignament(numWire, numGeom)
-                    pyPl = pyAlign.aligns[-1]
-                    [nW, nG] = [pyPl.numWire, pyPl.numGeom]
-                    pyW = pyWireList[nW]
-                    lenW = len(pyW.planes)
-                    later = utils.sliceIndex(nG+1, lenW)
-                    pyLater = pyFace.selectPlane(nW, later)
-                    bigLater = pyLater.bigShape
-                else:
-                    later = utils.sliceIndex(numGeom+1, lenWire)
-                    pyLater = pyPlaneList[later]
-                    bigLater = pyLater.bigShape
+                bigLater = pyLater.bigShape
                 if not bigLater:
                     [nW, nG] = pyLater.angle
                     later = nG
@@ -296,6 +294,7 @@ class _PyWire(_Py):
                                 cutterList.append(bigLater)
 
                         else:
+                            
                             numWire = pyLater.numWire
                             numGeom = pyLater.numGeom
                             pyAlign = pyFace.selectAlignament(numWire,
