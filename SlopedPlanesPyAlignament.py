@@ -211,87 +211,68 @@ class _PyAlignament(_Py):
         # en ordinaries y between y si el falso (esto falta)
 
         pyBase = self.base
-        base = [pyBase.shape.copy()]
+        base = pyBase.shape.copy()
         enormousBase = pyBase.enormousShape
         print(pyBase.numWire, pyBase.numGeom)
 
-        if self.falsify:
-            pyCont = self.aligns[0]
-            cont = pyCont.shape.copy()
-            base.append(cont)
-            enormousCont = pyCont.enormousShape
-
-        print base
-        base = Part.makeCompound(base)
-
         chops = self.chops
         rangoChop = self.rangoChop
-
         pyWireList = pyFace.wires
 
-        chopList = []
-        numChop = -1
-        for [pyChopOne, pyChopTwo] in chops:
-            numChop += 1
-
-            numWire = pyChopOne.numWire
-            pyWire = pyWireList[numWire]
-            pyPlaneList = pyWire.planes
-
-            rChop = rangoChop[numChop]
-            print 'rChop ', rChop
-            cList = []
-            for nn in rChop:
-                pyPl = pyPlaneList[nn]
-                if not pyPl.choped:
-                    pl = pyPl.shape
-                    if pl:
-                        cList.append(pl)
-
-            [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
-            chopOne = pyChopOne.shape
-            enormousChopOne = pyChopOne.enormousShape
-            if not chopOne:
-                [nWire, nGeom] = pyChopOne.angle
-                pyPlane = pyFace.selectPlane(nWire, nGeom)
-                chopOne = pyPlane.shape
-                enormousChopOne = pyPlane.enormousShape
-            chopOneCopy = chopOne.copy()
-
-            [nWire, nGeom] = [pyChopTwo.numWire, pyChopTwo.numGeom]
-            chopTwo = pyChopTwo.shape
-            enormousChopTwo = pyChopTwo.enormousShape
-            if not chopTwo:
-                [nWire, nGeom] = pyChopTwo.angle
-                pyPlane = pyFace.selectPlane(nWire, nGeom)
-                chopTwo = pyPlane.shape
-                enormousChopTwo = pyPlane.enormousShape
-            chopTwoCopy = chopTwo.copy()
-
-            cutList = [enormousBase] + cList
-            if not self.falsify:
-                cutList.append(enormousChopTwo)
-
-            chopOneCopy = chopOneCopy.cut(cutList, tolerance)
-            gS = pyChopOne.geom.toShape()
-            chopOneCopy = utils.selectFace(chopOneCopy.Faces, gS, tolerance)
-
-            cutList = cList
-            if self.falsify:
-                cutList.append(enormousCont)
-            else:
-                cutList.append(enormousBase)
-                cutList.append(enormousChopOne)
-
-            chopTwoCopy = chopTwoCopy.cut(cutList, tolerance)
-            gS = pyChopTwo.geom.toShape()
-            chopTwoCopy = utils.selectFace(chopTwoCopy.Faces, gS, tolerance)
-
-            chopList.extend([chopOneCopy, chopTwoCopy])
-
-        print 'chopList ', chopList
-
         if not self.falsify:
+
+            chopList = []
+            numChop = -1
+            for [pyChopOne, pyChopTwo] in chops:
+                numChop += 1
+
+                numWire = pyChopOne.numWire
+                pyWire = pyWireList[numWire]
+                pyPlaneList = pyWire.planes
+
+                rChop = rangoChop[numChop]
+                print 'rChop ', rChop
+                cList = []
+                for nn in rChop:
+                    pyPl = pyPlaneList[nn]
+                    if not pyPl.choped:
+                        pl = pyPl.shape
+                        if pl:
+                            cList.append(pl)
+
+                [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
+                chopOne = pyChopOne.shape
+                enormousChopOne = pyChopOne.enormousShape
+                if not chopOne:
+                    [nWire, nGeom] = pyChopOne.angle
+                    pyPlane = pyFace.selectPlane(nWire, nGeom)
+                    chopOne = pyPlane.shape
+                    enormousChopOne = pyPlane.enormousShape
+                chopOneCopy = chopOne.copy()
+
+                [nWire, nGeom] = [pyChopTwo.numWire, pyChopTwo.numGeom]
+                chopTwo = pyChopTwo.shape
+                enormousChopTwo = pyChopTwo.enormousShape
+                if not chopTwo:
+                    [nWire, nGeom] = pyChopTwo.angle
+                    pyPlane = pyFace.selectPlane(nWire, nGeom)
+                    chopTwo = pyPlane.shape
+                    enormousChopTwo = pyPlane.enormousShape
+                chopTwoCopy = chopTwo.copy()
+
+                cutList = [enormousBase, enormousChopTwo] + cList
+
+                chopOneCopy = chopOneCopy.cut(cutList, tolerance)
+                gS = pyChopOne.geom.toShape()
+                chopOneCopy = utils.selectFace(chopOneCopy.Faces, gS, tolerance)
+
+                cutList = [enormousBase, enormousChopOne] + cList
+
+                chopTwoCopy = chopTwoCopy.cut(cutList, tolerance)
+                gS = pyChopTwo.geom.toShape()
+                chopTwoCopy = utils.selectFace(chopTwoCopy.Faces, gS, tolerance)
+
+                chopList.extend([chopOneCopy, chopTwoCopy])
 
             lenChops = len(chops)
             num = lenChops / 2
@@ -305,66 +286,88 @@ class _PyAlignament(_Py):
                 numLeft = num
                 numRight = num
 
-        else:
+            pyLeft = chops[numLeft][0]
+            pyRight = chops[numRight][-1]
 
-            numLeft = 0
-            numRight = 0
+            rangoLeft = pyLeft.rango
+            rangoRight = pyRight.rango
+            rango = rangoLeft + rangoRight
 
-        pyLeft = chops[numLeft][0]
-        pyRight = chops[numRight][-1]
+            cutList = []
+            for ran in rango:
+                for nn in ran:
+                    pyPl = pyPlaneList[nn]
+                    if not pyPl.choped:
+                        if pyPl != pyBase:
+                            pl = pyPl.shape
+                            if pl:
+                                cutList.append(pl)
+                                print 'rango nn ', nn
 
-        rangoLeft = pyLeft.rango
-        rangoRight = pyRight.rango
-        rango = rangoLeft + rangoRight
+            rearLeft = pyLeft.rear
+            rearRight = pyRight.rear
+            rear = rearLeft + rearRight
 
-        cutList = []
-        for ran in rango:
-            for nn in ran:
+            for nn in rear:
                 pyPl = pyPlaneList[nn]
                 if not pyPl.choped:
-                    if pyPl != pyBase:
-                        pl = pyPl.shape
-                        if pl:
-                            cutList.append(pl)
-                            print 'rango nn ', nn
+                    pl = pyPl.shape
+                    if pl:
+                        cutList.append(pl)
+                        print 'rear nn ', nn
 
-        rearLeft = pyLeft.rear
-        rearRight = pyRight.rear
-        rear = rearLeft + rearRight
+            print 'cutList ', cutList
 
-        for nn in rear:
-            pyPl = pyPlaneList[nn]
-            if not pyPl.choped:
-                pl = pyPl.shape
-                if pl:
-                    cutList.append(pl)
-                    print 'rear nn ', nn
+            cutterList = chopList + cutList
 
-        print 'cutList ', cutList
+            limitList = []
+            # if pyBase.rear:
+            pyPrior = self.prior
+            pyLater = self.later
+            bigPrior = pyPrior.bigShape
+            bigLater = pyLater.bigShape
+            limitList.extend([bigPrior, bigLater])
+            cutterList.extend(limitList)
 
-        cutterList = chopList + cutList
+            geomList = [py.geom.toShape() for py in self.aligns]
+            geomList.insert(0, pyBase.geom.toShape())
 
-        limitList = []
-        #if pyBase.rear:
-        pyPrior = self.prior
-        pyLater = self.later
-        bigPrior = pyPrior.bigShape
-        bigLater = pyLater.bigShape
-        limitList.extend([bigPrior, bigLater])
-        cutterList.extend(limitList)
+            base = base.cut(cutterList, tolerance)
+            shapeList = []
+            for ff in base.Faces:
+                section = ff.section(geomList, tolerance)
+                if section.Edges:
+                    # print 'a'
+                    shapeList.append(ff)
 
-        geomList = [py.geom.toShape() for py in self.aligns]
-        geomList.insert(0, pyBase.geom.toShape())
+            # print 'shapeList ', shapeList
 
-        base = base.cut(cutterList, tolerance)
-        shapeList = []
-        for ff in base.Faces:
-            section = ff.section(geomList, tolerance)
-            if section.Edges:
-                # print 'a'
-                shapeList.append(ff)
+        else:
 
-        # print 'shapeList ', shapeList
+            pyCont = self.aligns[0]
+            cont = pyCont.shape.copy()
+
+            shapeList = []
+
+            [pyChopOne, pyChopTwo] = chops[0]
+
+            cutterList = [pyChopOne.enormousShape, pyChopTwo.enormousShape]
+
+            gS = pyBase.geom.toShape()
+            base = base.cut(cutterList, tolerance)
+            for ff in base.Faces:
+                section = ff.section(gS, tolerance)
+                if section.Edges:
+                    # print 'a'
+                    shapeList.append(ff)
+
+            gS = pyCont.geom.toShape()
+            cont = cont.cut(cutterList, tolerance)
+            for ff in cont.Faces:
+                section = ff.section(gS, tolerance)
+                if section.Edges:
+                    # print 'a'
+                    shapeList.append(ff)
 
         self.simulatedShape = shapeList
 
