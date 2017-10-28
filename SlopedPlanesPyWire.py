@@ -219,10 +219,22 @@ class _PyWire(_Py):
 
                 if pyPlane.aligned:
                     pyAlign = pyFace.selectAlignament(numWire, numGeom)
-                    pyPrior = pyAlign.prior
-                    prior = pyPrior.numGeom
-                    pyLater = pyAlign.later
-                    later = pyLater.numGeom
+                    if not pyAlign.falsify:
+                        pyPrior = pyAlign.prior
+                        prior = pyPrior.numGeom
+                        pyLater = pyAlign.later
+                        later = pyLater.numGeom
+                    else:
+                        if pyPlane == pyAlign.base:
+                            pyPrior = pyAlign.prior
+                            prior = pyPrior.numGeom
+                            later = utils.sliceIndex(numGeom+1, lenWire)
+                            pyLater = pyPlaneList[later]
+                        else:
+                            pyLater = pyAlign.later
+                            later = pyLater.numGeom
+                            prior = utils.sliceIndex(numGeom-1, lenWire)
+                            pyPrior = pyPlaneList[prior]
 
                 else:
                     prior = utils.sliceIndex(numGeom-1, lenWire)
@@ -264,6 +276,7 @@ class _PyWire(_Py):
                     cutterList = [bigPrior, bigLater]
 
                 if cutterList:
+                    print 'C'
                     shape = shape.cut(cutterList, tolerance)
                     shape = utils.selectFace(shape.Faces, geomShape,
                                              tolerance)

@@ -56,6 +56,7 @@ class _PyPlane(_Py):
         self.shape = None
         self.bigShape = None
         self.enormousShape = None
+        self.simulatedShape = None
         self.cutter = []
         self.oppCutter = []
         self.forward = None
@@ -285,6 +286,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._enormousShape = enormousShape
+
+    @property
+    def simulatedShape(self):
+
+        ''''''
+
+        return self._simulatedShape
+
+    @simulatedShape.setter
+    def simulatedShape(self, simulatedShape):
+
+        ''''''
+
+        self._simulatedShape = simulatedShape
 
     @property
     def cutter(self):

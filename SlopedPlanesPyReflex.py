@@ -158,6 +158,18 @@ class _PyReflex(_Py):
                 [nWire, nGeom] = rearPyPl.angle
                 rearPyPl = pyFace.selectPlane(nWire, nGeom)
                 rearPl = rearPyPl.shape.copy()
+
+            if rearPyPl.reflexed:
+                pyReflexList = pyFace.selectAllReflex(nWire, nGeom)
+                gS = rearPyPl.geom.toShape()
+                for pyReflex in pyReflexList:
+                    for pyPlane in pyReflex.planes:
+                        if pyPlane != rearPyPl:
+                            enormous = pyPlane.enormousShape
+                            rearPl = rearPl.cut([enormous], tolerance)
+                            rearPl = utils.selectFace(rearPl.Faces, gS,
+                                                      tolerance)
+
             pyR.addLink('cutter', rearPl)
             pyOppR.addLink('oppCutter', rearPl)
             print 'included rear ', (nWire, nGeom)

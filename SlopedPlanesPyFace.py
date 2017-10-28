@@ -271,14 +271,6 @@ class _PyFace(_Py):
                                 self.seatReflex(pyWire, pyReflex, pyPlane,
                                                 'backward', tolerance)
 
-                        print 'rear ', pyPlane.rear
-                        print 'forward ',\
-                            (pyPlane.forward.firstVertex(True).Point,
-                             pyPlane.forward.lastVertex(True).Point)
-                        print 'backward ',\
-                            (pyPlane.backward.firstVertex(True).Point,
-                             pyPlane.backward.lastVertex(True).Point)
-
                     nextEje = coord[numGeom+2].sub(coord[numGeom+1])
                     corner = utils.convexReflex(eje, nextEje, normal, numWire)
                     print 'corner ', corner
@@ -293,8 +285,6 @@ class _PyFace(_Py):
                         print '1'
 
                         forward = pyPlane.forward
-                        print(forward.firstVertex(True).Point,
-                              forward.lastVertex(True).Point)
                         section = forward.section(shapeGeomFace, tolerance)
 
                         if section.Edges:
@@ -305,7 +295,6 @@ class _PyFace(_Py):
                                 numEdge += 1
                                 print '111'
                                 edgeStart = edge.firstVertex(True).Point
-                                print 'edgeStart ', edgeStart
                                 point = utils.roundVector(edgeStart, tolerance)
                                 (nWire, nGeom) =\
                                     self.findAlignament(point, tolerance)
@@ -324,6 +313,7 @@ class _PyFace(_Py):
                                         print '1111'
 
                                         if numEdge == 0:
+                                            print '1111a'
                                             pyAlign =\
                                                 self.doAlignament(pyPlane)
 
@@ -351,6 +341,7 @@ class _PyFace(_Py):
                                         else:
                                             print '11112'
                                             if numEdge > 0:
+                                                print '11112a'
                                                 pyAlign =\
                                                     self.doAlignament(pyPlane)
 
@@ -359,7 +350,6 @@ class _PyFace(_Py):
                                         self.seatAlignament(pyAlign,
                                                             pyWire, pyPlane,
                                                             pyW, pyPl,
-                                                            shapeGeomFace,
                                                             size, tolerance)
 
                                         if pyPl.numWire == pyPlane.numWire:
@@ -368,6 +358,7 @@ class _PyFace(_Py):
                                         pyReflex = _PyReflex()
 
                                         if pyAlign.falsify:
+                                            print 'break'
                                             break
 
                                     else:
@@ -430,17 +421,6 @@ class _PyFace(_Py):
                                             self.doReflex(pyWire, pyPlane,
                                                           tolerance)
 
-                    print 'rear ', pyPlane.rear
-                    try:
-                        print 'forward ',\
-                            (pyPlane.forward.firstVertex(True).Point,
-                             pyPlane.forward.lastVertex(True).Point)
-                        print 'backward ',\
-                            (pyPlane.backward.firstVertex(True).Point,
-                             pyPlane.backward.lastVertex(True).Point)
-                    except AttributeError:
-                        print ''
-
             pyWire.reset = False
 
         self.priorLaterAlignaments()
@@ -473,8 +453,8 @@ class _PyFace(_Py):
             print 'geomAligned ', pyAlignament.base.geomAligned
             print 'falsify ', pyAlignament.falsify
             print 'rangoChop ', pyAlignament.rangoChop
-            # print 'prior ', pyAlignament.prior
-            # print 'later ', pyAlignament.later
+            print 'prior ', pyAlignament.prior.numGeom
+            print 'later ', pyAlignament.later.numGeom
 
             print '*** chops ', [[(x.numWire, x.numGeom),
                                   (y.numWire, y.numGeom)]
@@ -494,7 +474,7 @@ class _PyFace(_Py):
                     align.geomAligned
 
     def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl,
-                       shapeGeomFace, size, tolerance):
+                       size, tolerance):
 
         ''''''
 
@@ -534,12 +514,15 @@ class _PyFace(_Py):
 
         aL.append(pyPl)
 
-        pyAli = self.selectAlignament(nWire, nGeom)
-        if pyAli:
-            bL = pyAli.aligns
-            aL.extend(bL)
-            for b in bL:
-                b.angle = [numWire, numGeom]
+        if pyAlign.falsify:
+            pyAli = None
+        else:
+            pyAli = self.selectAlignament(nWire, nGeom)
+            if pyAli:
+                bL = pyAli.aligns
+                aL.extend(bL)
+                for b in bL:
+                    b.angle = [numWire, numGeom]
 
         pyWireList = self.wires
 
@@ -714,11 +697,19 @@ class _PyFace(_Py):
 
         ''''''
 
+        pyWireList = self.wires
+        pyWire = pyWireList[nWire]
+        pyPlaneList = pyWire.planes
+        pyPlane = pyPlaneList[nGeom]
+
         pyAlignList = self.alignaments
-        for align in pyAlignList:
-            if align.base.numWire == nWire:
-                if align.base.numGeom == nGeom:
-                    return align
+        for pyAlign in pyAlignList:
+            if pyAlign.base == pyPlane:
+                return pyAlign
+            else:
+                if pyAlign.falsify:
+                    if pyPlane in pyAlign.aligns:
+                        return pyAlign
 
         return None
 
@@ -929,7 +920,12 @@ class _PyFace(_Py):
         print '######### simulating'
 
         for pyAlign in self.alignaments:
-            pyAlign.simulating(self, tolerance)
+            if not pyAlign.falsify:
+                pyAlign.simulating(self, tolerance)
+
+        for pyAlign in self.alignaments:
+            if pyAlign.falsify:
+                pyAlign.simulating(self, tolerance)
 
     def reflexing(self, tolerance):
 
@@ -1024,7 +1020,12 @@ class _PyFace(_Py):
         pyAlignList = self.alignaments
 
         for pyAlign in pyAlignList:
-            pyAlign.solveAlignament(face, self, tolerance)
+            if not pyAlign.falsify:
+                pyAlign.solveAlignament(face, self, tolerance)
+
+        for pyAlign in pyAlignList:
+            if pyAlign.falsify:
+                pyAlign.solveAlignament(face, self, tolerance)
 
     def ending(self, tolerance):
 
