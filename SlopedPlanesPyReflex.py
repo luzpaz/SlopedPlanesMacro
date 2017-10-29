@@ -134,7 +134,7 @@ class _PyReflex(_Py):
         numWire = pyR.numWire
         if ((numWire == 0 and angle > 90) or
            (numWire > 0 and angle < 90)):
-            pyR.addLink('cutter', oppReflexEnormous)
+            pyR.shape = pyR.simulatedShape
 
         nWire = pyWire.numWire
 
@@ -208,7 +208,6 @@ class _PyReflex(_Py):
                                     pyOppR, oppReflexEnormous, tolerance)
 
         rangoNext = pyOppR.rango
-        # print '# rangoNext ', rangoNext
 
         if len(rear) == 1:
             for ran in rangoNext:
@@ -218,7 +217,6 @@ class _PyReflex(_Py):
                                       nn, 'rangoNext', tolerance)
 
         rangoCorner = pyR.rango
-        # print '# rangoCorner ', rangoCorner
 
         for ran in rangoCorner:
             for nn in ran:
@@ -230,7 +228,6 @@ class _PyReflex(_Py):
         rangoInter = self.rangoInter
         if rangoInter:
             ran = rangoInter
-            # print '# rangoInter ', ran
 
             for nn in ran:
 
@@ -311,9 +308,10 @@ class _PyReflex(_Py):
         except AttributeError:
             [nWire, nGeom] = pyPl.angle
             pyPl = pyFace.selectPlane(nWire, nGeom)
-            pl = pyPl.shape.copy()
 
         if not pyPl.reflexed:
+
+            pl = pyPl.shape.copy()
 
             if kind == "rangoCorner":
                 # print 'a'
@@ -333,20 +331,13 @@ class _PyReflex(_Py):
 
         else:
 
-            nG = nn
-            pyReflexList = pyFace.selectAllReflex(nWire, nG)
-
-            cutList = []
-            for pyReflex in pyReflexList:
-                for pyP in pyReflex.planes:
-                    if pyP != pyPl:
-                        cutList.append(pyP.enormousShape)
-
             forward = pyR.forward
             forw = pyPl.forward
             section = forward.section([forw], tolerance)
 
             if not section.Edges:
+
+                cutList = []
 
                 if section.Vertexes:
                     cutList.append(pyR.enormousShape)
@@ -356,9 +347,13 @@ class _PyReflex(_Py):
                     if not section.Vertexes:
                         cutList.append(pyOppR.enormousShape)
 
-                pl = pl.cut(cutList, tolerance)
-                gS = pyPl.geom.toShape()
-                pl = utils.selectFace(pl.Faces, gS, tolerance)
+                pl = pyPl.simulatedShape.copy()
+
+                if cutList :
+                    pl = pl.cut(cutList, tolerance)
+                    gS = pyPl.geom.toShape()
+                    pl = utils.selectFace(pl.Faces, gS, tolerance)
+
                 # print 'c'
                 # print 'included cutter ', kind, ' rectified ', (nWire, nn)
                 pyR.addLink('cutter', pl)
