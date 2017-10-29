@@ -75,7 +75,27 @@ class _PyReflex(_Py):
 
         ''''''
 
-        pass
+        [pyR, pyOppR] = self.planes
+        enormousR = pyR.enormousShape
+        enormousOppR = pyOppR.enormousShape
+        try:
+            rCopy = pyR.simulatedShape.copy()
+        except AttributeError:
+            rCopy = pyR.shape.copy()
+        try:
+            oppRCopy = pyOppR.simulatedShape.copy()
+        except AttributeError:
+            oppRCopy = pyOppR.shape.copy()
+
+        rCopy = rCopy.cut([enormousOppR], tolerance)
+        gS = pyR.geom.toShape()
+        rCopy = utils.selectFace(rCopy.Faces, gS, tolerance)
+        pyR.simulatedShape = rCopy
+
+        oppRCopy = oppRCopy.cut([enormousR], tolerance)
+        gS = pyOppR.geom.toShape()
+        oppRCopy = utils.selectFace(oppRCopy.Faces, gS, tolerance)
+        pyOppR.simulatedShape = oppRCopy
 
     def reflexing(self, pyFace, pyWire, tolerance):
 
@@ -119,7 +139,6 @@ class _PyReflex(_Py):
         nWire = pyWire.numWire
 
         rear = pyR.rear
-        # print '# rear ', rear
 
         for nGeom in rear:
             rearPyPl = pyWire.planes[nGeom]
@@ -131,15 +150,7 @@ class _PyReflex(_Py):
                 rearPl = rearPyPl.shape.copy()
 
             if rearPyPl.reflexed:
-                pyReflexList = pyFace.selectAllReflex(nWire, nGeom)
-                gS = rearPyPl.geom.toShape()
-                for pyReflex in pyReflexList:
-                    for pyPlane in pyReflex.planes:
-                        if pyPlane != rearPyPl:
-                            enormous = pyPlane.enormousShape
-                            rearPl = rearPl.cut([enormous], tolerance)
-                            rearPl = utils.selectFace(rearPl.Faces, gS,
-                                                      tolerance)
+                rearPl = rearPyPl.simulatedShape
 
             pyR.addLink('cutter', rearPl)
             pyOppR.addLink('oppCutter', rearPl)
@@ -148,7 +159,6 @@ class _PyReflex(_Py):
         nWire = pyWire.numWire
 
         oppRear = pyOppR.rear
-        # print '# oppRear ', oppRear
 
         if len(oppRear) == 1:
 

@@ -262,6 +262,7 @@ class _PyAlignament(_Py):
             chops = self.chops
             [pyChopOne, pyChopTwo] = chops[0]
 
+            # esto se repite en aligning y simulating
             if pyChopOne.aligned:
                 chopOne = pyChopOne.shape
                 if not chopOne:
@@ -306,7 +307,7 @@ class _PyAlignament(_Py):
         # falsos, ya que uno falso podría tener uno o dos alineamientos
         # verdaderos... (esto ya está hecho)
         # En este caso los verdaderos (uno o dos) no se incluirian
-        # en ordinaries y between y si el falso (esto falta)
+        # en ordinaries y between, y si el falso (esto falta)
 
         pyBase = self.base
         base = pyBase.shape.copy()
@@ -338,6 +339,7 @@ class _PyAlignament(_Py):
                         if pl:
                             cList.append(pl)
 
+                # esto se repite en priorLater y aligning
                 [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
                 chopOne = pyChopOne.shape
                 enormousChopOne = pyChopOne.enormousShape
@@ -480,6 +482,7 @@ class _PyAlignament(_Py):
 
             rangoChop = rangoChopList[numChop]
 
+            # esto se repite en priorLater y somulating. Unificar y propiedad
             if pyChopOne.aligned:
                 [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
                 chopOne = pyChopOne.shape

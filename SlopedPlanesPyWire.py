@@ -276,6 +276,13 @@ class _PyWire(_Py):
                                              tolerance)
                     pyPlane.shape = shape
 
+    def simulating(self, tolerance):
+
+        ''''''
+
+        for pyReflex in self.reflexs:
+            pyReflex.simulating(tolerance)
+
     def reflexing(self, pyFace, tolerance):
 
         ''''''

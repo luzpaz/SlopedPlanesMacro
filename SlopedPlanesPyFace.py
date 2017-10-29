@@ -877,6 +877,9 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.simulating(self, tolerance)
 
+        for pyWire in self.wires:
+            pyWire.simulating(tolerance)
+
     def reflexing(self, tolerance):
 
         ''''''
