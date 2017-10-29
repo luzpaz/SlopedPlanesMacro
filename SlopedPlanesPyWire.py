@@ -248,12 +248,26 @@ class _PyWire(_Py):
 
                 if pyPlane.reflexed or pyPlane.arrow:
                     print 'A'
+
                     if not pyPrior.reflexed:
                         print '1'
                         cutterList.append(bigPrior)
+                    elif not (pyPrior.choped or pyPrior.aligned):
+                        pyR = pyFace.selectReflex(self.numWire,
+                                                  pyPlane.numGeom,
+                                                  pyPrior.numGeom)
+                        if not pyR:
+                            cutterList.append(bigPrior)
+
                     if not pyLater.reflexed:
                         print '2'
                         cutterList.append(bigLater)
+                    elif not (pyLater.choped or pyLater.aligned):
+                        pyR = pyFace.selectReflex(self.numWire,
+                                                  pyPlane.numGeom,
+                                                  pyLater.numGeom)
+                        if not pyR:
+                            cutterList.append(bigLater)
 
                 else:
                     print 'B'
