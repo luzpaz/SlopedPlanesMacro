@@ -138,8 +138,6 @@ class _PyWire(_Py):
             if pyPlane.geomAligned:
                 pyPlane.planning(self, normal, size, reverse)
 
-        print '###### reflex rangos'
-
         if reset:
             for pyReflex in self.reflexs:
 
@@ -205,8 +203,6 @@ class _PyWire(_Py):
 
         ''''''
 
-        numWire = self.numWire
-        print 'numWire ', numWire
         pyPlaneList = self.planes
         lenWire = len(pyPlaneList)
         for pyPlane in pyPlaneList:
@@ -215,11 +211,11 @@ class _PyWire(_Py):
                 shape = pyPlane.shape
 
                 numGeom = pyPlane.numGeom
-                print 'numGeom ', numGeom
-                print 'reflexed ', pyPlane.reflexed
-                print 'choped ', pyPlane.choped
-                print 'aligned ', pyPlane.aligned
-                print 'arrow ', pyPlane.arrow
+                # print 'numGeom ', numGeom
+                # print 'reflexed ', pyPlane.reflexed
+                # print 'choped ', pyPlane.choped
+                # print 'aligned ', pyPlane.aligned
+                # print 'arrow ', pyPlane.arrow
 
                 prior = utils.sliceIndex(numGeom-1, lenWire)
                 pyPrior = pyPlaneList[prior]
@@ -240,17 +236,17 @@ class _PyWire(_Py):
                     pyLater = pyFace.selectPlane(nW, nG)
                     bigLater = pyLater.bigShape
 
-                print 'prior ', (pyPrior.numWire, pyPrior.numGeom)
-                print 'later ', (pyLater.numWire, pyLater.numGeom)
+                # print 'prior ', (pyPrior.numWire, pyPrior.numGeom)
+                # print 'later ', (pyLater.numWire, pyLater.numGeom)
 
                 geomShape = pyPlane.geom.toShape()
                 cutterList = []
 
                 if pyPlane.reflexed or pyPlane.arrow:
-                    print 'A'
+                    # print 'A'
 
                     if not pyPrior.reflexed:
-                        print '1'
+                        # print '1'
                         cutterList.append(bigPrior)
                     elif not (pyPrior.choped or pyPrior.aligned):
                         pyR = pyFace.selectReflex(self.numWire,
@@ -260,7 +256,7 @@ class _PyWire(_Py):
                             cutterList.append(bigPrior)
 
                     if not pyLater.reflexed:
-                        print '2'
+                        # print '2'
                         cutterList.append(bigLater)
                     elif not (pyLater.choped or pyLater.aligned):
                         pyR = pyFace.selectReflex(self.numWire,
@@ -270,11 +266,11 @@ class _PyWire(_Py):
                             cutterList.append(bigLater)
 
                 else:
-                    print 'B'
+                    # print 'B'
                     cutterList = [bigPrior, bigLater]
 
                 if cutterList:
-                    print 'C'
+                    # print 'C'
                     shape = shape.cut(cutterList, tolerance)
                     shape = utils.selectFace(shape.Faces, geomShape,
                                              tolerance)
@@ -294,16 +290,12 @@ class _PyWire(_Py):
 
         ''''''
 
-        print '###### reviewWire'
-
         for pyReflex in self.reflexs:
             pyReflex.reviewing(tolerance)
 
     def clasifyReflexPlanes(self, tolerance):
 
         ''''''
-
-        print '###### clasifyReflexPlanes'
 
         solved, unsolved = [], []
 
@@ -321,10 +313,8 @@ class _PyWire(_Py):
 
         ''''''
 
-        print '###### reSolveReflexs'
-
         for pyPlane in unsolved:
-            print 'a'
+            # print 'a'
             plane = pyPlane.shape
             gS = pyPlane.geom.toShape()
             cutterList = [pyPl.shape for pyPl in solved]
@@ -333,18 +323,18 @@ class _PyWire(_Py):
             pyPlane.shape = plane
 
             if pyPlane.isSolved(tolerance):
-                print 'aa'
+                # print 'aa'
                 unsolved.remove(pyPlane)
                 solved.append(pyPlane)
                 unsolved.extend(impossible)
                 impossible = []
 
             else:
-                print 'ab'
+                # print 'ab'
                 impossible.append(pyPlane)
 
             if not unsolved:
-                print 'return'
+                # print 'return'
                 return
 
             self.reSolveReflexs(tolerance, solved, unsolved, impossible)
@@ -352,8 +342,6 @@ class _PyWire(_Py):
     def betweenReflexs(self, tolerance):
 
         ''''''
-
-        print '###### betweenReflexs'
 
         pyReflexList = self.reflexs
         lenR = len(pyReflexList)

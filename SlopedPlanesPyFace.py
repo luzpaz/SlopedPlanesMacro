@@ -193,8 +193,6 @@ class _PyFace(_Py):
 
         ''''''
 
-        print '######### parsing'
-
         pyWireList = self.wires
 
         resetFace = self.reset
@@ -396,7 +394,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
 
             print '****** numWire ', pyWire.numWire
-            print '*** print reflexs ', pyWire.reflexs
+            print '*** reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
 
                 print 'rangoInter ', pyReflex.rangoInter
@@ -440,12 +438,12 @@ class _PyFace(_Py):
                     align.geom,\
                     align.geomAligned
 
+        print '###############################################################'
+
     def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl,
                        size, tolerance):
 
         ''''''
-
-        print '# seatAlignament'
 
         numWire = pyWire.numWire
         numGeom = pyPlane.numGeom
@@ -527,8 +525,6 @@ class _PyFace(_Py):
 
         ''''''
 
-        print '# seatReflex'
-
         pyReflex.addLink('planes', pyPlane)
         pyPlane.reflexed = True
 
@@ -602,8 +598,6 @@ class _PyFace(_Py):
     def findRear(self, pyWire, pyPlane, vertex, direction, tolerance):
 
         ''''''
-
-        # print 'findRear'
 
         shapeGeomWire = pyWire.shapeGeom
         lenWire = len(pyWire.planes)
@@ -833,16 +827,12 @@ class _PyFace(_Py):
 
         ''''''
 
-        print '######### planning'
-
         pyWireList = self.wires
         reset = self.reset
 
         for pyWire in pyWireList:
 
             pyWire.planning(reset, normal, size, reverse)
-
-        print '###### alignament rangos'
 
         pyAlignList = self.alignaments
 
@@ -859,8 +849,6 @@ class _PyFace(_Py):
 
         ''''''
 
-        print '######### trimming'
-
         for pyWire in self.wires:
             pyWire.trimming(self, tolerance)
 
@@ -871,8 +859,6 @@ class _PyFace(_Py):
 
         ''''''
 
-        print '######### priorLater'
-
         for pyWire in self.wires:
             pyWire.priorLater(self, tolerance)
 
@@ -882,8 +868,6 @@ class _PyFace(_Py):
     def simulating(self, tolerance):
 
         ''''''
-
-        print '######### simulating'
 
         for pyAlign in self.alignaments:
             if not pyAlign.falsify:
@@ -897,8 +881,6 @@ class _PyFace(_Py):
 
         ''''''
 
-        print '######### reflexing'
-
         for pyWire in self.wires:
             if pyWire.reflexs:
                 pyWire.reflexing(self, tolerance)
@@ -906,8 +888,6 @@ class _PyFace(_Py):
     def reviewing(self, face, tolerance):
 
         ''''''
-
-        print '######### reviewing'
 
         for pyWire in self.wires:
             if len(pyWire.reflexs) > 1:
@@ -926,8 +906,6 @@ class _PyFace(_Py):
 
         ''''''
 
-        print '######### rearing'
-
         for pyWire in self.wires:
             if pyWire.reflexs:
                 pyWire.rearing(tolerance)
@@ -935,8 +913,6 @@ class _PyFace(_Py):
     def ordinaries(self, tolerance):
 
         ''''''
-
-        print '######### ordinaries'
 
         for pyWire in self.wires:
             pyWire.ordinaries(self, tolerance)
@@ -947,8 +923,6 @@ class _PyFace(_Py):
 
         pyWireList = self.wires
         if len(pyWireList) > 1:
-
-            print '######### between'
 
             numWire = -1
             for pyWire in pyWireList:
@@ -981,8 +955,6 @@ class _PyFace(_Py):
 
         ''''''
 
-        print '######### aligning'
-
         pyAlignList = self.alignaments
 
         for pyAlign in pyAlignList:
@@ -996,8 +968,6 @@ class _PyFace(_Py):
     def ending(self, tolerance):
 
         ''''''
-
-        print '######### ending'
 
         pyAlignList = self.alignaments
 

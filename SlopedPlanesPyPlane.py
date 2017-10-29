@@ -446,8 +446,6 @@ class _PyPlane(_Py):
 
         ''''''
 
-        print '###### solvePlane'
-
         pyPlaneList = pyWire.planes
 
         numGeom = self.numGeom
@@ -467,8 +465,6 @@ class _PyPlane(_Py):
                         # print 'b'
                         if pl:
                             # print 'b1'
-
-                            # no seria mejor simulatedShape en el plano ?
 
                             pyAli =\
                                 pyFace.selectAlignament(pyPl.numWire,
@@ -515,18 +511,16 @@ class _PyPlane(_Py):
 
         ''''''
 
-        print '# isSolved'
-
         forward = self.forward
         plane = self.shape
 
         section = plane.section([forward], tolerance)
         if not section.Edges:
-            print 'True'
+            # print 'True'
             self.solved = True
             return True
         else:
-            print 'False'
+            # print 'False'
             self.solved = False
             return False
 
@@ -535,8 +529,6 @@ class _PyPlane(_Py):
         ''''''
 
         rear = self.rear
-
-        print '###### solveRear', rear
 
         plane = self.shape
         pyPlaneList = pyWire.planes
@@ -562,32 +554,30 @@ class _PyPlane(_Py):
 
         ''''''
 
-        print '### rangging'
-
         numGeom = self.numGeom
-        print '# numGeom ', numGeom
+        # print '# numGeom ', numGeom
 
         rear = self.rear
         lenWire = len(pyWire.planes)
         lenRear = len(rear)
-        print '# rear ', rear
+        # print '# rear ', rear
 
         rango = []
 
         if lenRear == 1:
-            print '1'
+            # print '1'
             [nGeom] = rear
 
             if nGeom > numGeom:
-                print '11'
+                # print '11'
 
                 if direction == "forward":
-                    print '111'
+                    # print '111'
                     num = utils.sliceIndex(numGeom+2, lenWire)
                     ran = range(num, nGeom)
 
                 else:
-                    print '112'
+                    # print '112'
                     ranA = range(nGeom+1, lenWire)
                     ranA.reverse()
                     ranB = range(0, numGeom-1)
@@ -595,21 +585,21 @@ class _PyPlane(_Py):
                     ran = ranB + ranA
 
             else:
-                print '12'
+                # print '12'
 
                 if direction == "forward":
-                    print '121'
+                    # print '121'
                     ran = range(numGeom+2, lenWire) +\
                         range(0, nGeom)
 
                 else:
-                    print '122'
+                    # print '122'
                     ran = range(nGeom+1, numGeom-1)
 
             rango.append(ran)
 
         elif lenRear == 2:
-            print '2'
+            # print '2'
             [nGeom1, nGeom2] = rear
 
             number = -1
@@ -617,32 +607,32 @@ class _PyPlane(_Py):
                 number += 1
 
                 if number == 0:
-                    print '21'
+                    # print '21'
 
                     if numGeom < nG:
-                        print '211'
+                        # print '211'
                         ran = range(numGeom+2, nG)
 
                     else:
-                        print '212'
+                        # print '212'
                         ranA = range(numGeom+2, lenWire)
                         ranB = range(0, nG)
                         ran = ranA + ranB
 
                 else:
-                    print '22'
+                    # print '22'
 
                     if numGeom < nG:
-                        print '221'
+                        # print '221'
                         ranA = range(nG+1, lenWire)
                         ranB = range(0, numGeom-1)
                         ran = ranA + ranB
 
                     else:
-                        print '222'
+                        # print '222'
                         ran = range(nG+1, numGeom-1)
 
                 rango.append(ran)
 
-        print 'rango ', rango
+        # print 'rango ', rango
         self.rango = rango
