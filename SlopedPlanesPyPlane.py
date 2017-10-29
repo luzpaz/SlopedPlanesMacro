@@ -442,7 +442,7 @@ class _PyPlane(_Py):
             utils.selectFace(bigShape.Faces, geomShape, tolerance)
         self.bigShape = bigShape
 
-    def solvePlane(self, pyFace, pyWire, tolerance):
+    def ordinaries(self, pyFace, pyWire, tolerance):
 
         ''''''
 

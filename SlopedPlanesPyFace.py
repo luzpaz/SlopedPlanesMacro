@@ -1027,11 +1027,11 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
             if not pyAlign.falsify:
-                pyAlign.solveAlignament(face, self, tolerance)
+                pyAlign.aligning(face, self, tolerance)
 
         for pyAlign in pyAlignList:
             if pyAlign.falsify:
-                pyAlign.solveAlignament(face, self, tolerance)
+                pyAlign.aligning(face, self, tolerance)
 
     def ending(self, tolerance):
 

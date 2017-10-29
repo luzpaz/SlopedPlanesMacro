@@ -77,7 +77,7 @@ class _PyReflex(_Py):
 
         pass
 
-    def processReflex(self, pyFace, pyWire, tolerance):
+    def reflexing(self, pyFace, pyWire, tolerance):
 
         ''''''
 

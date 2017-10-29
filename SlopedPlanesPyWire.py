@@ -285,7 +285,7 @@ class _PyWire(_Py):
         ''''''
 
         for pyReflex in self.reflexs:
-            pyReflex.processReflex(pyFace, self, tolerance)
+            pyReflex.reflexing(pyFace, self, tolerance)
 
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(tolerance)
@@ -402,4 +402,4 @@ class _PyWire(_Py):
         for pyPlane in self.planes:
             if not (pyPlane.reflexed and not pyPlane.aligned):
                 if pyPlane.shape:
-                    pyPlane.solvePlane(pyFace, self, tolerance)
+                    pyPlane.ordinaries(pyFace, self, tolerance)

@@ -450,7 +450,7 @@ class _PyAlignament(_Py):
 
         self.simulatedShape = shapeList
 
-    def solveAlignament(self, face, pyFace, tolerance):
+    def aligning(self, face, pyFace, tolerance):
 
         ''''''
 
