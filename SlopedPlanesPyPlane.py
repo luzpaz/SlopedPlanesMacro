@@ -371,7 +371,7 @@ class _PyPlane(_Py):
 
         self._solved = solved
 
-    def trackShape(self, pyWire, normal, size, reverse):
+    def planning(self, pyWire, normal, size, reverse):
 
         ''''''
 
@@ -423,6 +423,24 @@ class _PyPlane(_Py):
         plane = extendGeom.toShape().extrude(direction*upScale*size)
 
         return plane
+
+    def trimming(self, enormousShape, tolerance):
+
+        ''''''
+
+        shape = self.shape
+        bigShape = self.bigShape
+        geomShape = self.geom.toShape()
+
+        shape = shape.cut([enormousShape], tolerance)
+        shape = utils.selectFace(shape.Faces, geomShape, tolerance)
+        self.shape = shape
+
+        bigShape =\
+            bigShape.cut([enormousShape], tolerance)
+        bigShape =\
+            utils.selectFace(bigShape.Faces, geomShape, tolerance)
+        self.bigShape = bigShape
 
     def solvePlane(self, pyFace, pyWire, tolerance):
 
@@ -512,6 +530,34 @@ class _PyPlane(_Py):
             self.solved = False
             return False
 
+    def rearing(self, pyWire, pyReflex, tolerance):
+
+        ''''''
+
+        rear = self.rear
+
+        print '###### solveRear', rear
+
+        plane = self.shape
+        pyPlaneList = pyWire.planes
+
+        twinReflex = pyReflex.planes
+        ind = twinReflex.index(self)
+        if ind == 0:
+            pyOppPlane = twinReflex[1]
+        else:
+            pyOppPlane = twinReflex[0]
+        oppPlane = pyOppPlane.shape
+
+        for numG in rear:
+            pyPl = pyPlaneList[numG]
+            if not (pyPl.aligned or pyPl.choped):
+                pl = pyPl.shape
+                pl = pl.cut([plane, oppPlane], tolerance)
+                gS = pyPl.geom.toShape()
+                pl = utils.selectFace(pl.Faces, gS, tolerance)
+                pyPl.shape = pl
+
     def rangging(self, pyWire, direction):
 
         ''''''
@@ -600,49 +646,3 @@ class _PyPlane(_Py):
 
         print 'rango ', rango
         self.rango = rango
-
-    def doTrim(self, enormousShape, tolerance):
-
-        ''''''
-
-        shape = self.shape
-        bigShape = self.bigShape
-        geomShape = self.geom.toShape()
-
-        shape = shape.cut([enormousShape], tolerance)
-        shape = utils.selectFace(shape.Faces, geomShape, tolerance)
-        self.shape = shape
-
-        bigShape =\
-            bigShape.cut([enormousShape], tolerance)
-        bigShape =\
-            utils.selectFace(bigShape.Faces, geomShape, tolerance)
-        self.bigShape = bigShape
-
-    def rearing(self, pyWire, pyReflex, tolerance):
-
-        ''''''
-
-        rear = self.rear
-
-        print '###### solveRear', rear
-
-        plane = self.shape
-        pyPlaneList = pyWire.planes
-
-        twinReflex = pyReflex.planes
-        ind = twinReflex.index(self)
-        if ind == 0:
-            pyOppPlane = twinReflex[1]
-        else:
-            pyOppPlane = twinReflex[0]
-        oppPlane = pyOppPlane.shape
-
-        for numG in rear:
-            pyPl = pyPlaneList[numG]
-            if not (pyPl.aligned or pyPl.choped):
-                pl = pyPl.shape
-                pl = pl.cut([plane, oppPlane], tolerance)
-                gS = pyPl.geom.toShape()
-                pl = utils.selectFace(pl.Faces, gS, tolerance)
-                pyPl.shape = pl

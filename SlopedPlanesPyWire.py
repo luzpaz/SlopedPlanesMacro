@@ -136,7 +136,7 @@ class _PyWire(_Py):
 
         for pyPlane in self.planes:
             if pyPlane.geomAligned:
-                pyPlane.trackShape(self, normal, size, reverse)
+                pyPlane.planning(self, normal, size, reverse)
 
         print '###### reflex rangos'
 
@@ -172,7 +172,7 @@ class _PyWire(_Py):
 
                         if not pyPl.reflexed:
 
-                            pyPl.doTrim(enormousShape, tolerance)
+                            pyPl.trimming(enormousShape, tolerance)
 
                         else:
 
@@ -199,48 +199,32 @@ class _PyWire(_Py):
                                                 break
 
                                 if procc:
-                                    pyPl.doTrim(enormousShape, tolerance)
+                                    pyPl.trimming(enormousShape, tolerance)
 
     def priorLater(self, pyFace, tolerance):
 
         ''''''
 
         numWire = self.numWire
+        print 'numWire ', numWire
         pyPlaneList = self.planes
         lenWire = len(pyPlaneList)
         for pyPlane in pyPlaneList:
-            shape = pyPlane.shape
-            if shape:
+
+            if not pyPlane.aligned:
+                shape = pyPlane.shape
 
                 numGeom = pyPlane.numGeom
                 print 'numGeom ', numGeom
                 print 'reflexed ', pyPlane.reflexed
+                print 'choped ', pyPlane.choped
+                print 'aligned ', pyPlane.aligned
                 print 'arrow ', pyPlane.arrow
 
-                if pyPlane.aligned:
-                    pyAlign = pyFace.selectAlignament(numWire, numGeom)
-                    if not pyAlign.falsify:
-                        pyPrior = pyAlign.prior
-                        prior = pyPrior.numGeom
-                        pyLater = pyAlign.later
-                        later = pyLater.numGeom
-                    else:
-                        if pyPlane == pyAlign.base:
-                            pyPrior = pyAlign.prior
-                            prior = pyPrior.numGeom
-                            later = utils.sliceIndex(numGeom+1, lenWire)
-                            pyLater = pyPlaneList[later]
-                        else:
-                            pyLater = pyAlign.later
-                            later = pyLater.numGeom
-                            prior = utils.sliceIndex(numGeom-1, lenWire)
-                            pyPrior = pyPlaneList[prior]
-
-                else:
-                    prior = utils.sliceIndex(numGeom-1, lenWire)
-                    pyPrior = pyPlaneList[prior]
-                    later = utils.sliceIndex(numGeom+1, lenWire)
-                    pyLater = pyPlaneList[later]
+                prior = utils.sliceIndex(numGeom-1, lenWire)
+                pyPrior = pyPlaneList[prior]
+                later = utils.sliceIndex(numGeom+1, lenWire)
+                pyLater = pyPlaneList[later]
 
                 bigPrior = pyPrior.bigShape
                 if not bigPrior:
@@ -256,8 +240,8 @@ class _PyWire(_Py):
                     pyLater = pyFace.selectPlane(nW, nG)
                     bigLater = pyLater.bigShape
 
-                print 'prior ', prior
-                print 'later ', later
+                print 'prior ', (pyPrior.numWire, pyPrior.numGeom)
+                print 'later ', (pyLater.numWire, pyLater.numGeom)
 
                 geomShape = pyPlane.geom.toShape()
                 cutterList = []

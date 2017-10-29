@@ -258,7 +258,11 @@ class _PyFace(_Py):
                 numGeom = pyPlane.numGeom
                 print '### numGeom ', numGeom
 
-                if pyPlane.geomAligned:
+                if not pyPlane.geomAligned:
+
+                    ref = False
+
+                else:
 
                     if ref:
                         print 'ref'
@@ -423,7 +427,7 @@ class _PyFace(_Py):
 
             pyWire.reset = False
 
-        self.priorLaterAlignaments()
+        self.priorLaterAlignaments(tolerance)
 
         print '********* wires ', self.wires
         for pyWire in self.wires:
@@ -827,7 +831,7 @@ class _PyFace(_Py):
 
         return pyAlign
 
-    def priorLaterAlignaments(self):
+    def priorLaterAlignaments(self, tolerance):
 
         ''''''
 
@@ -910,8 +914,10 @@ class _PyFace(_Py):
         print '######### priorLater'
 
         for pyWire in self.wires:
-
             pyWire.priorLater(self, tolerance)
+
+        for pyAlign in self.alignaments:
+            pyAlign.priorLater(self, tolerance)
 
     def simulating(self, tolerance):
 

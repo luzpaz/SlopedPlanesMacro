@@ -71,36 +71,11 @@ class _PyReflex(_Py):
 
         self._rangoInter = rangoInter
 
-    def rangging(self, pyWire):
+    def simulating(self, tolerance):
 
         ''''''
 
-        print '### ranggingInter'
-
-        lenWire = len(pyWire.planes)
-
-        rear = self.planes[0].rear
-        oppRear = self.planes[1].rear
-
-        rG = rear[0]
-        try:
-            oG = oppRear[1]
-        except IndexError:
-            oG = oppRear[0]
-
-        if oG > rG:
-            print '1'
-            ran = range(rG+1, oG)
-
-        elif oG < rG:
-            print '2'
-            ranA = range(rG+1, lenWire)
-            ranB = range(0, oG)
-            ran = ranA + ranB
-
-        print 'rangoInter ', ran
-
-        self.rangoInter = ran
+        pass
 
     def processReflex(self, pyFace, pyWire, tolerance):
 
@@ -519,3 +494,34 @@ class _PyReflex(_Py):
 
         for pyPlane in self.planes:
             pyPlane.rearing(pyWire, self, tolerance)
+
+    def rangging(self, pyWire):
+
+        ''''''
+
+        print '### ranggingInter'
+
+        lenWire = len(pyWire.planes)
+
+        rear = self.planes[0].rear
+        oppRear = self.planes[1].rear
+
+        rG = rear[0]
+        try:
+            oG = oppRear[1]
+        except IndexError:
+            oG = oppRear[0]
+
+        if oG > rG:
+            # print '1'
+            ran = range(rG+1, oG)
+
+        elif oG < rG:
+            # print '2'
+            ranA = range(rG+1, lenWire)
+            ranB = range(0, oG)
+            ran = ranA + ranB
+
+        # print 'rangoInter ', ran
+
+        self.rangoInter = ran
