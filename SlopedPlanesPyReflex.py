@@ -329,6 +329,10 @@ class _PyReflex(_Py):
                 # print 'included cutter ', kind, ' ', (nWire, nn)
                 pyR.addLink('cutter', pl)
 
+        elif pyPl.aligned or pyPl.choped:
+
+            pass
+
         else:
 
             forward = pyR.forward
