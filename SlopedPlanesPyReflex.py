@@ -368,12 +368,40 @@ class _PyReflex(_Py):
 
         ''''''
 
-        # TODO REFACTOR
         [pyR, pyOppR] = self.planes
         # print (pyR.numGeom, pyOppR.numGeom)
 
+        aList, rDiv, AA = self.processReflex(pyR, pyOppR, tolerance)
+
+        bList, oppRDiv, BB = self.processReflex(pyOppR, pyR, tolerance)
+
+        if oppRDiv and not rDiv:
+            # print '1'
+
+            AA = AA.cut(bList, tolerance)
+            gS = pyR.geom.toShape()
+            AA = utils.selectFace(AA.Faces, gS, tolerance)
+            aList = [AA]
+
+        elif rDiv and not oppRDiv:
+            # print '2'
+
+            BB = BB.cut(aList, tolerance)
+            gS = pyOppR.geom.toShape()
+            BB = utils.selectFace(BB.Faces, gS, tolerance)
+            bList = [BB]
+
+        compound = Part.makeCompound(aList)
+        pyR.shape = compound
+
+        compound = Part.makeCompound(bList)
+        pyOppR.shape = compound
+
+    def processReflex(self, pyR, pyOppR, tolerance):
+
+        ''''''
+
         rDiv = False
-        oppRDiv = False
 
         aa = pyR.shape.copy()
         bb = pyOppR.shape.copy()
@@ -399,6 +427,7 @@ class _PyReflex(_Py):
         AA = utils.selectFace(aa.Faces, gS, tolerance)
         aList.append(AA)
 
+        # este condicional sobra
         if len(aa.Faces) == 4:
 
             rDiv = True
@@ -412,68 +441,7 @@ class _PyReflex(_Py):
                             # print 'aa'
                             aList.append(FF)
 
-        # print aList
-
-        cc = pyR.shape.copy()
-        bb = pyOppR.shape.copy()
-
-        cc = cc.cut(pyR.oppCutter, tolerance)
-        gS = pyR.geom.toShape()
-        vertex = pyR.forward.firstVertex(True)
-        for ff in cc.Faces:
-            section = ff.section([gS], tolerance)
-            if section.Edges:
-                section = ff.section([vertex], tolerance)
-                if section.Vertexes:
-                    # print 'b'
-                    cc = ff
-                    break
-
-        bb = bb.cut(pyOppR.cutter + [cc], tolerance)
-        gS = pyOppR.geom.toShape()
-        # print bb.Faces
-        gB = pyOppR.backward
-
-        bList = []
-        BB = utils.selectFace(bb.Faces, gS, tolerance)
-        bList.append(BB)
-
-        if len(bb.Faces) == 4:
-
-            oppRDiv = True
-            for ff in bb.Faces:
-                section = ff.section(gB, tolerance)
-                if section.Edges:
-                    ff = ff.cut([pyR.enormousShape], tolerance)
-                    for FF in ff.Faces:
-                        sect = FF.section([gB], tolerance)
-                        if not sect.Edges:
-                            # print 'bb'
-                            bList.append(FF)
-
-        # print bList
-
-        if oppRDiv and not rDiv:
-            # print '1'
-
-            AA = AA.cut(bList, tolerance)
-            gS = pyR.geom.toShape()
-            AA = utils.selectFace(AA.Faces, gS, tolerance)
-            aList = [AA]
-
-        elif rDiv and not oppRDiv:
-            # print '2'
-
-            BB = BB.cut(aList, tolerance)
-            gS = pyOppR.geom.toShape()
-            BB = utils.selectFace(BB.Faces, gS, tolerance)
-            bList = [BB]
-
-        compound = Part.makeCompound(aList)
-        pyR.shape = compound
-
-        compound = Part.makeCompound(bList)
-        pyOppR.shape = compound
+        return aList, rDiv, AA
 
     def reviewing(self, tolerance):
 
