@@ -300,12 +300,6 @@ class _PyAlignament(_Py):
 
         ''''''
 
-        # TODO primero tienes que hacer los alienamientos normales y luego los
-        # falsos, ya que uno falso podría tener uno o dos alineamientos
-        # verdaderos... (esto ya está hecho)
-        # En este caso los verdaderos (uno o dos) no se incluirian
-        # en ordinaries y between, y si el falso (esto falta)
-
         pyBase = self.base
         base = pyBase.shape.copy()
         enormousBase = pyBase.enormousShape
