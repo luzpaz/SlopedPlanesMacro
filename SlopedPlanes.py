@@ -131,17 +131,12 @@ class _SlopedPlanes():
         step = slopedPlanes.Step
 
         pyFaceList = self.Pyth
-        # print pyFaceList
         lenPyList = len(pyFaceList)
-
         faceList = face.Faces
-        # print faceList
         lenList = len(faceList)
-
         num = lenPyList - lenList
         if num > 0:
             pyFaceList = pyFaceList[:lenList]
-            # print pyFaceList
 
         normal = utils.faceNormal(faceList[0], tolerance)
 
@@ -152,24 +147,17 @@ class _SlopedPlanes():
 
             try:
                 pyFace = pyFaceList[numFace]
-                # print 'a ', numFace
             except IndexError:
                 pyFace = _PyFace(numFace)
                 pyFaceList.append(pyFace)
-                # print 'b ', numFace
 
             pyWireList = pyFace.wires
-            # print pyWireList
             lenPyList = len(pyWireList)
-
             wireList = face.Wires
-            # print wireList
             lenList = len(wireList)
-
             num = lenPyList - lenList
             if num > 0:
                 pyWireList = pyWireList[:lenList]
-                # print pyWireList
 
             numWire = -1
             for wire in wireList:
@@ -177,11 +165,9 @@ class _SlopedPlanes():
 
                 try:
                     pyWire = pyWireList[numWire]
-                    # print 'aa ', numWire
                 except IndexError:
                     pyWire = _PyWire(numWire)
                     pyWireList.append(pyWire)
-                    # print 'bb ', numWire
 
                 coordinates, geomWire, shapeGeomWire =\
                     utils.wireGeometries(wire, tolerance)
@@ -190,32 +176,24 @@ class _SlopedPlanes():
                 coordinates.extend(coordinates[0:2])
 
                 oldCoordinates = pyWire.coordinates
-                # print oldCoordinates
-                # print coordinates
                 if oldCoordinates != coordinates:
-                    # print '1'
                     pyFace.reset = True
                     if len(oldCoordinates) != len(coordinates):
-                        # print '11'
                         pyWire.reset = True
                     elif oldCoordinates[0] != coordinates[0]:
-                        # print '12'
                         pyWire.reset = True
 
                 pyWire.coordinates = coordinates
 
                 pyPlaneList = pyWire.planes
-                # print pyPlaneList
                 lenPyList = len(pyPlaneList)
 
                 planeList = wire.Edges
-                # print planeList
                 lenList = len(planeList)
 
                 num = lenPyList - lenList
                 if num > 0:
                     pyPlaneList = pyPlaneList[:lenList]
-                    # print pyPlaneList
 
                 numGeom = -1
                 for geom in geomWire:
@@ -226,16 +204,13 @@ class _SlopedPlanes():
                         if pyFace.reset:
                             pyPlane = _PyPlane(numWire, numGeom)
                             pyPlaneList[numGeom] = pyPlane
-                            # print 'aaa ', numGeom
                         elif pyWire.reset:
                             pyPlane.angle = slope
                             pyPlane.width = [width, width]
                             pyPlane.length = length
-                            # print 'bbb ', numGeom
                     except IndexError:
                         pyPlane = _PyPlane(numWire, numGeom)
                         pyPlaneList.append(pyPlane)
-                        # print 'ccc ', numGeom
 
                     pyPlane.geom = geom
                     pyPlane.geomAligned = geom
@@ -359,8 +334,6 @@ class _SlopedPlanes():
 
         planeList.extend(secondaries)
         slopedPlanes.Slopes = slopeList
-        # print planeList
-        # print slopeList
 
         for plane in planeList:
             plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
