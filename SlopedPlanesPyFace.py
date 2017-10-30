@@ -828,26 +828,30 @@ class _PyFace(_Py):
                 if pyChopOne.aligned:
                     [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
                     chopOne = pyChopOne.shape
+                    enormous = pyChopOne.enormousShape
                     if not chopOne:
                         [nWire, nGeom] = pyChopOne.angle
                         pyPlane = self.selectPlane(nWire, nGeom)
                         chopOne = pyPlane.shape
+                        enormous = pyPlane.enormousShape
                     pyOne = _PyPlane(nWire, nGeom)
                     pyOne.shape = chopOne.copy()
-                    pyOne.enormousShape = pyChopOne.enormousShape
+                    pyOne.enormousShape = enormous
                 else:
                     pyOne = pyChopOne
 
                 if pyChopTwo.aligned:
                     [nWire, nGeom] = [pyChopTwo.numWire, pyChopTwo.numGeom]
                     chopTwo = pyChopTwo.shape
+                    enormous = pyChopTwo.enormousShape
                     if not chopTwo:
                         [nWire, nGeom] = pyChopTwo.angle
                         pyPlane = self.selectPlane(nWire, nGeom)
                         chopTwo = pyPlane.shape
+                        enormous = pyPlane.enormousShape
                     pyTwo = _PyPlane(nWire, nGeom)
                     pyTwo.shape = chopTwo.copy()
-                    pyTwo.enormousShape = pyChopTwo.enormousShape
+                    pyTwo.enormousShape = enormous
                 else:
                     pyTwo = pyChopTwo
 

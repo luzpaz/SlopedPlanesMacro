@@ -318,6 +318,8 @@ class _PyAlignament(_Py):
             for [pyChopOne, pyChopTwo] in chops:
                 numChop += 1
 
+                [pyOne, pyTwo] = simulatedChops[numChop]
+
                 numWire = pyChopOne.numWire
                 pyWire = pyWireList[numWire]
                 pyPlaneList = pyWire.planes
@@ -332,33 +334,17 @@ class _PyAlignament(_Py):
                         if pl:
                             cList.append(pl)
 
-                # problemas al intentar introducir simulatedChops
-
-                [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
-                chopOne = pyChopOne.shape
-                enormousChopOne = pyChopOne.enormousShape
-                if not chopOne:
-                    [nWire, nGeom] = pyChopOne.angle
-                    pyPlane = pyFace.selectPlane(nWire, nGeom)
-                    chopOne = pyPlane.shape
-                    enormousChopOne = pyPlane.enormousShape
-                chopOneCopy = chopOne.copy()
-
-                [nWire, nGeom] = [pyChopTwo.numWire, pyChopTwo.numGeom]
-                chopTwo = pyChopTwo.shape
-                enormousChopTwo = pyChopTwo.enormousShape
-                if not chopTwo:
-                    [nWire, nGeom] = pyChopTwo.angle
-                    pyPlane = pyFace.selectPlane(nWire, nGeom)
-                    chopTwo = pyPlane.shape
-                    enormousChopTwo = pyPlane.enormousShape
-                chopTwoCopy = chopTwo.copy()
+                enormousChopTwo = pyTwo.enormousShape
+                chopOneCopy = pyOne.shape.copy()
 
                 cutList = [enormousBase, enormousChopTwo] + cList
 
                 chopOneCopy = chopOneCopy.cut(cutList, tolerance)
                 gS = pyChopOne.geom.toShape()
                 chopOneCopy = utils.selectFace(chopOneCopy.Faces, gS, tolerance)
+
+                enormousChopOne = pyOne.enormousShape
+                chopTwoCopy = pyTwo.shape.copy()
 
                 cutList = [enormousBase, enormousChopOne] + cList
 
