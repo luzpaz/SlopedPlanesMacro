@@ -43,6 +43,7 @@ class _PyAlignament(_Py):
         self.base = None
         self.aligns = []
         self.chops = []
+        self.simulatedChops = []
         self.rangoChop = []
         self.falsify = False
         self.simulatedShape = None
@@ -90,6 +91,20 @@ class _PyAlignament(_Py):
         ''''''
 
         self._chops = chops
+
+    @property
+    def simulatedChops(self):
+
+        ''''''
+
+        return self._simulatedChops
+
+    @simulatedChops.setter
+    def simulatedChops(self, simulatedChops):
+
+        ''''''
+
+        self._simulatedChops = simulatedChops
 
     @property
     def rangoChop(self):
@@ -259,31 +274,8 @@ class _PyAlignament(_Py):
         else:
             # print 'B'
 
-            chops = self.chops
-            [pyChopOne, pyChopTwo] = chops[0]
-
-            # esto se repite en aligning y simulating
-            if pyChopOne.aligned:
-                chopOne = pyChopOne.shape
-                if not chopOne:
-                    [nWire, nGeom] = pyChopOne.angle
-                    pyPlane = pyFace.selectPlane(nWire, nGeom)
-                    chopOne = pyPlane.shape
-                pyOne = _PyPlane(nWire, nGeom)
-                pyOne.shape = chopOne.copy()
-            else:
-                pyOne = pyChopOne
-
-            if pyChopTwo.aligned:
-                chopTwo = pyChopTwo.shape
-                if not chopTwo:
-                    [nWire, nGeom] = pyChopTwo.angle
-                    pyPlane = pyFace.selectPlane(nWire, nGeom)
-                    chopTwo = pyPlane.shape
-                pyTwo = _PyPlane(nWire, nGeom)
-                pyTwo.shape = chopTwo.copy()
-            else:
-                pyTwo = pyChopTwo
+            simulatedChops = self.simulatedChops
+            [pyOne, pyTwo] = simulatedChops[0]
 
             cList = [pyOne.shape] + cutterList
 
@@ -315,6 +307,7 @@ class _PyAlignament(_Py):
         # print(pyBase.numWire, pyBase.numGeom)
 
         chops = self.chops
+        simulatedChops = self.simulatedChops
         rangoChop = self.rangoChop
         pyWireList = pyFace.wires
 
@@ -339,7 +332,8 @@ class _PyAlignament(_Py):
                         if pl:
                             cList.append(pl)
 
-                # esto se repite en priorLater y aligning
+                # problemas al intentar introducir simulatedChops
+
                 [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
                 chopOne = pyChopOne.shape
                 enormousChopOne = pyChopOne.enormousShape
@@ -465,6 +459,7 @@ class _PyAlignament(_Py):
         enormousBase = pyBase.enormousShape
         aligns = self.aligns
         chops = self.chops
+        simulatedChops = self.simulatedChops
 
         rangoChopList = self.rangoChop
         rangoChopList = self.rangoChop
@@ -482,30 +477,7 @@ class _PyAlignament(_Py):
 
             rangoChop = rangoChopList[numChop]
 
-            # esto se repite en priorLater y somulating. Unificar y propiedad
-            if pyChopOne.aligned:
-                [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
-                chopOne = pyChopOne.shape
-                if not chopOne:
-                    [nWire, nGeom] = pyChopOne.angle
-                    pyPlane = pyFace.selectPlane(nWire, nGeom)
-                    chopOne = pyPlane.shape
-                pyOne = _PyPlane(nWire, nGeom)
-                pyOne.shape = chopOne.copy()
-            else:
-                pyOne = pyChopOne
-
-            if pyChopTwo.aligned:
-                [nWire, nGeom] = [pyChopTwo.numWire, pyChopTwo.numGeom]
-                chopTwo = pyChopTwo.shape
-                if not chopTwo:
-                    [nWire, nGeom] = pyChopTwo.angle
-                    pyPlane = pyFace.selectPlane(nWire, nGeom)
-                    chopTwo = pyPlane.shape
-                pyTwo = _PyPlane(nWire, nGeom)
-                pyTwo.shape = chopTwo.copy()
-            else:
-                pyTwo = pyChopTwo
+            [pyOne, pyTwo] = simulatedChops[numChop]
 
             nW = pyOne.numWire
             pyW = pyWireList[nW]

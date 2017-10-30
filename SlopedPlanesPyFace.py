@@ -817,6 +817,44 @@ class _PyFace(_Py):
             pyAlign.prior = pyPrior
             pyAlign.later = pyLater
 
+    def simulatedChops(self, tolerance):
+
+        ''''''
+
+        for pyAlign in self.alignaments:
+            simulatedChops = []
+            for [pyChopOne, pyChopTwo] in pyAlign.chops:
+
+                if pyChopOne.aligned:
+                    [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
+                    chopOne = pyChopOne.shape
+                    if not chopOne:
+                        [nWire, nGeom] = pyChopOne.angle
+                        pyPlane = self.selectPlane(nWire, nGeom)
+                        chopOne = pyPlane.shape
+                    pyOne = _PyPlane(nWire, nGeom)
+                    pyOne.shape = chopOne.copy()
+                    pyOne.enormousShape = pyChopOne.enormousShape
+                else:
+                    pyOne = pyChopOne
+
+                if pyChopTwo.aligned:
+                    [nWire, nGeom] = [pyChopTwo.numWire, pyChopTwo.numGeom]
+                    chopTwo = pyChopTwo.shape
+                    if not chopTwo:
+                        [nWire, nGeom] = pyChopTwo.angle
+                        pyPlane = self.selectPlane(nWire, nGeom)
+                        chopTwo = pyPlane.shape
+                    pyTwo = _PyPlane(nWire, nGeom)
+                    pyTwo.shape = chopTwo.copy()
+                    pyTwo.enormousShape = pyChopTwo.enormousShape
+                else:
+                    pyTwo = pyChopTwo
+
+                simulatedChops.append([pyOne, pyTwo])
+
+            pyAlign.simulatedChops = simulatedChops
+
     def planning(self, normal, size, reverse):
 
         ''''''
@@ -848,6 +886,8 @@ class _PyFace(_Py):
 
         for pyAlign in self.alignaments:
             pyAlign.trimming(self, tolerance)
+
+        self.simulatedChops(tolerance)
 
     def priorLater(self, tolerance):
 
