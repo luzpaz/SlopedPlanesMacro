@@ -142,18 +142,23 @@ class _PyReflex(_Py):
 
         for nGeom in rear:
             rearPyPl = pyWire.planes[nGeom]
-            try:
-                rearPl = rearPyPl.shape.copy()
-            except AttributeError:
-                [nWire, nGeom] = rearPyPl.angle
-                rearPyPl = pyFace.selectPlane(nWire, nGeom)
-                rearPl = rearPyPl.shape.copy()
 
-            if rearPyPl.choped:
+            if rearPyPl.aligned:
+                print rearPyPl.numWire
+                print rearPyPl.numGeom
+                pyAlign = pyFace.selectAlignament(rearPyPl.numWire,
+                                                  rearPyPl.numGeom)
+                print pyAlign
+                rearPl = pyAlign.simulatedShape
+
+            elif rearPyPl.choped:
                 rearPl = rearPyPl.shape
 
             elif rearPyPl.reflexed:
                 rearPl = rearPyPl.simulatedShape
+
+            else:
+                rearPl = rearPyPl.shape
 
             pyR.addLink('cutter', rearPl)
             pyOppR.addLink('oppCutter', rearPl)
@@ -420,6 +425,8 @@ class _PyReflex(_Py):
 
         aa = pyR.shape.copy()
         bb = pyOppR.shape.copy()
+
+        print pyOppR.oppCutter
 
         bb = bb.cut(pyOppR.oppCutter, tolerance)
         gS = pyOppR.geom.toShape()

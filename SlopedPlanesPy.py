@@ -36,7 +36,10 @@ class _Py(object):
         ''''''
 
         linkList = getattr(self, prop)
-        linkList.append(obj)
+        if isinstance(obj,list):
+            linkList.extend(obj)
+        else:
+            linkList.append(obj)
         setattr(self, prop, linkList)
 
     def addValue(self, prop, value, direction):

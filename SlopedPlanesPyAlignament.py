@@ -378,7 +378,10 @@ class _PyAlignament(_Py):
                     pyPl = pyPlaneList[nn]
                     if not pyPl.choped:
                         if pyPl != pyBase:
-                            pl = pyPl.shape
+                            if pyPl.reflexed:
+                                pl = pyPl.simulatedShape
+                            else:
+                                pl = pyPl.shape
                             if pl:
                                 cutList.append(pl)
                                 # print 'rango nn ', nn

@@ -528,11 +528,11 @@ class _PyPlane(_Py):
 
         ''''''
 
-        print 'numGeom ', self.numGeom
+        # print 'numGeom ', self.numGeom
 
         rear = self.rear
 
-        print 'rear ', rear
+        # print 'rear ', rear
 
         plane = self.shape
         pyPlaneList = pyWire.planes
@@ -545,14 +545,14 @@ class _PyPlane(_Py):
             pyOppPlane = twinReflex[0]
         oppPlane = pyOppPlane.shape
 
-        print 'numGeom ', pyOppPlane.numGeom
+        # print 'numGeom ', pyOppPlane.numGeom
 
         if self.choped:
             if pyOppPlane.aligned:
-                print 'a'
+                # print 'a'
                 rear = [rear[1]]
             else:
-                print 'b'
+                # print 'b'
                 rear = [rear[0]]
 
         for numG in rear:
