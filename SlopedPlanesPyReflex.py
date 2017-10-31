@@ -144,6 +144,7 @@ class _PyReflex(_Py):
             rearPyPl = pyWire.planes[nGeom]
 
             if rearPyPl.aligned:
+                print 'a'
                 print rearPyPl.numWire
                 print rearPyPl.numGeom
                 pyAlign = pyFace.selectAlignament(rearPyPl.numWire,
@@ -152,12 +153,15 @@ class _PyReflex(_Py):
                 rearPl = pyAlign.simulatedShape
 
             elif rearPyPl.choped:
+                print 'b'
                 rearPl = rearPyPl.shape
 
             elif rearPyPl.reflexed:
+                print 'c'
                 rearPl = rearPyPl.simulatedShape
 
             else:
+                print 'd'
                 rearPl = rearPyPl.shape
 
             pyR.addLink('cutter', rearPl)
@@ -355,8 +359,10 @@ class _PyReflex(_Py):
             forward = pyR.forward
             forw = pyPl.forward
             section = forward.section([forw], tolerance)
+            section = forward.section(forw)
 
-            if not section.Edges:
+            #if not section.Edges:
+            if not section.Vertexes:
 
                 cutList = []
 
@@ -370,7 +376,7 @@ class _PyReflex(_Py):
 
                 pl = pyPl.simulatedShape.copy()
 
-                if cutList :
+                if cutList:
                     pl = pl.cut(cutList, tolerance)
                     gS = pyPl.geom.toShape()
                     pl = utils.selectFace(pl.Faces, gS, tolerance)
@@ -388,11 +394,15 @@ class _PyReflex(_Py):
 
         ''''''
 
+        print '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+
         [pyR, pyOppR] = self.planes
         print (pyR.numGeom, pyOppR.numGeom)
 
+        print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
         aList, rDiv, AA = self.processReflex(pyR, pyOppR, tolerance)
 
+        print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
         bList, oppRDiv, BB = self.processReflex(pyOppR, pyR, tolerance)
 
         if oppRDiv and not rDiv:
@@ -440,6 +450,8 @@ class _PyReflex(_Py):
                     print 'a'
                     break
 
+        print bb
+
         aa = aa.cut(pyR.cutter+[bb], tolerance)
         gS = pyR.geom.toShape()
         print aa.Faces
@@ -450,6 +462,7 @@ class _PyReflex(_Py):
         aList.append(AA)
 
         # este condicional sobra
+        print len(aa.Faces)
         if len(aa.Faces) == 4:
 
             rDiv = True
