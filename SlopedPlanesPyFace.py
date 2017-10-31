@@ -698,16 +698,6 @@ class _PyFace(_Py):
 
         return None
 
-    def removeReflex(self, pyWire, pyPlane):
-
-        ''''''
-
-        pyReflexList = pyWire.reflexs
-        for reflex in pyReflexList:
-            if pyPlane in reflex.planes:
-                pyReflexList.remove(reflex)
-        pyWire.reflexs = pyReflexList
-
     def removeAlignament(self, pyAlign):
 
         ''''''
