@@ -110,14 +110,14 @@ class _PyReflex(_Py):
         pyOppR.oppCutter, pyOppR.cutter = [], []
 
         direction = "forward"
-        # print '### direction ', direction
-        # print(pyR.numGeom, pyOppR.numGeom)
+        print '### direction ', direction
+        print(pyR.numGeom, pyOppR.numGeom)
 
         self.twin(pyFace, pyWire, pyR, pyOppR, direction, tolerance)
 
         direction = "backward"
-        # print '### direction ', direction
-        # print(pyOppR.numGeom, pyR.numGeom)
+        print '### direction ', direction
+        print(pyOppR.numGeom, pyR.numGeom)
 
         self.twin(pyFace, pyWire, pyOppR, pyR, direction, tolerance)
 
@@ -154,7 +154,7 @@ class _PyReflex(_Py):
 
             pyR.addLink('cutter', rearPl)
             pyOppR.addLink('oppCutter', rearPl)
-            # print 'included rear ', (nWire, nGeom)
+            print 'included rear ', (nWire, nGeom)
 
         nWire = pyWire.numWire
 
@@ -173,7 +173,7 @@ class _PyReflex(_Py):
 
             if not pyOppRear.reflexed:
                 pass
-                # print 'included oppRear ', (nWire, nGeom)
+                print 'included oppRear ', (nWire, nGeom)
 
             else:
 
@@ -190,7 +190,7 @@ class _PyReflex(_Py):
                 geomShape = pyOppRear.geom.toShape()
                 oppRearPl = utils.selectFace(oppRearPl.Faces, geomShape,
                                              tolerance)
-                # print 'included oppRear rectified ', (nWire, nGeom)
+                print 'included oppRear rectified ', (nWire, nGeom)
 
             pyR.addLink('cutter', oppRearPl)
             pyOppR.addLink('oppCutter', oppRearPl)
@@ -257,7 +257,7 @@ class _PyReflex(_Py):
             oppRearPl = pyOppRear.shape.copy()
         pyR.addLink('cutter', oppRearPl)
         pyOppR.addLink('oppCutter', oppRearPl)
-        # print 'included oppRear ', (nWire, nGeom)
+        print 'included oppRear ', (nWire, nGeom)
 
         nWire = pyWire.numWire
 
@@ -285,7 +285,7 @@ class _PyReflex(_Py):
         else:
             point = pointWire[nGeom]
 
-        # print 'point ', point
+        print 'point ', point
         vertex = Part.Vertex(point)
 
         for ff in oppRearPl.Faces:
@@ -293,7 +293,7 @@ class _PyReflex(_Py):
             if section.Vertexes:
                 pyR.addLink('cutter', ff)
                 pyOppR.addLink('oppCutter', ff)
-                # print 'included oppRear rectified ', (nWire, nGeom)
+                print 'included oppRear rectified ', (nWire, nGeom)
                 break
 
     def processRango(self, pyFace, pyWire, pyR, pyOppR, nn, kind, tolerance):
@@ -314,24 +314,29 @@ class _PyReflex(_Py):
             pl = pyPl.shape.copy()
 
             if kind == "rangoCorner":
-                # print 'a'
-                # print 'included oppCutter ', kind, ' ', (nWire, nn)
+                print 'a'
+                print 'included oppCutter ', kind, ' ', (nWire, nn)
                 pyOppR.addLink('oppCutter', pl)
                 oppReflexEnormous = pyOppR.enormousShape
                 pl = pl.cut([oppReflexEnormous], tolerance)
                 gS = pyPl.geom.toShape()
                 pl = utils.selectFace(pl.Faces, gS, tolerance)
-                # print 'included cutter ', kind, ' rectified ', (nWire, nn)
+                print 'included cutter ', kind, ' rectified ', (nWire, nn)
                 pyR.addLink('cutter', pl)
 
             else:
-                # print 'b'
-                # print 'included cutter ', kind, ' ', (nWire, nn)
+                print 'b'
+                print 'included cutter ', kind, ' ', (nWire, nn)
                 pyR.addLink('cutter', pl)
 
-        elif pyPl.aligned or pyPl.choped:
+        elif pyPl.aligned:
 
             pass
+
+        elif pyPl.choped:
+
+            print 'included cutter ', kind, ' ', (nWire, nn)
+            pyR.addLink('cutter', pl)
 
         else:
 
@@ -358,13 +363,13 @@ class _PyReflex(_Py):
                     gS = pyPl.geom.toShape()
                     pl = utils.selectFace(pl.Faces, gS, tolerance)
 
-                # print 'c'
-                # print 'included cutter ', kind, ' rectified ', (nWire, nn)
+                print 'c'
+                print 'included cutter ', kind, ' rectified ', (nWire, nn)
                 pyR.addLink('cutter', pl)
 
                 if kind == "rangoCorner":
-                    # print 'd'
-                    # print 'included oppCutter ', kind,
+                    print 'd'
+                    print 'included oppCutter ', kind,
                     # ' rectified ', (nWire, nn)
                     pyOppR.addLink('oppCutter', pl)
 
@@ -373,14 +378,14 @@ class _PyReflex(_Py):
         ''''''
 
         [pyR, pyOppR] = self.planes
-        # print (pyR.numGeom, pyOppR.numGeom)
+        print (pyR.numGeom, pyOppR.numGeom)
 
         aList, rDiv, AA = self.processReflex(pyR, pyOppR, tolerance)
 
         bList, oppRDiv, BB = self.processReflex(pyOppR, pyR, tolerance)
 
         if oppRDiv and not rDiv:
-            # print '1'
+            print '1'
 
             AA = AA.cut(bList, tolerance)
             gS = pyR.geom.toShape()
@@ -388,7 +393,7 @@ class _PyReflex(_Py):
             aList = [AA]
 
         elif rDiv and not oppRDiv:
-            # print '2'
+            print '2'
 
             BB = BB.cut(aList, tolerance)
             gS = pyOppR.geom.toShape()
@@ -419,12 +424,12 @@ class _PyReflex(_Py):
                 section = ff.section([vertex], tolerance)
                 if section.Vertexes:
                     bb = ff
-                    # print 'a'
+                    print 'a'
                     break
 
         aa = aa.cut(pyR.cutter+[bb], tolerance)
         gS = pyR.geom.toShape()
-        # print aa.Faces
+        print aa.Faces
         gB = pyR.backward
 
         aList = []
@@ -442,7 +447,7 @@ class _PyReflex(_Py):
                     for FF in ff.Faces:
                         sect = FF.section([gB], tolerance)
                         if not sect.Edges:
-                            # print 'aa'
+                            print 'aa'
                             aList.append(FF)
 
         return aList, rDiv, AA

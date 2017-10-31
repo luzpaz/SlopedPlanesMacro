@@ -215,11 +215,11 @@ class _PyWire(_Py):
                 shape = pyPlane.shape
 
                 numGeom = pyPlane.numGeom
-                print 'numGeom ', numGeom
-                print 'reflexed ', pyPlane.reflexed
-                print 'choped ', pyPlane.choped
-                print 'aligned ', pyPlane.aligned
-                print 'arrow ', pyPlane.arrow
+                # print 'numGeom ', numGeom
+                # print 'reflexed ', pyPlane.reflexed
+                # print 'choped ', pyPlane.choped
+                # print 'aligned ', pyPlane.aligned
+                # print 'arrow ', pyPlane.arrow
 
                 prior = utils.sliceIndex(numGeom-1, lenWire)
                 pyPrior = pyPlaneList[prior]
@@ -240,17 +240,17 @@ class _PyWire(_Py):
                     pyLater = pyFace.selectPlane(nW, nG)
                     bigLater = pyLater.bigShape
 
-                print 'prior ', (pyPrior.numWire, pyPrior.numGeom)
-                print 'later ', (pyLater.numWire, pyLater.numGeom)
+                # print 'prior ', (pyPrior.numWire, pyPrior.numGeom)
+                # print 'later ', (pyLater.numWire, pyLater.numGeom)
 
                 geomShape = pyPlane.geom.toShape()
                 cutterList = []
 
                 if pyPlane.reflexed or pyPlane.arrow:
-                    print 'A'
+                    # print 'A'
 
                     if not pyPrior.reflexed:
-                        print '1'
+                        # print '1'
                         cutterList.append(bigPrior)
                     elif not (pyPrior.choped or pyPrior.aligned):
                         pyR = pyFace.selectReflex(self.numWire,
@@ -260,7 +260,7 @@ class _PyWire(_Py):
                             cutterList.append(bigPrior)
 
                     if not pyLater.reflexed:
-                        print '2'
+                        # print '2'
                         cutterList.append(bigLater)
                     elif not (pyLater.choped or pyLater.aligned):
                         pyR = pyFace.selectReflex(self.numWire,
@@ -270,11 +270,11 @@ class _PyWire(_Py):
                             cutterList.append(bigLater)
 
                 else:
-                    print 'B'
+                    # print 'B'
                     cutterList = [bigPrior, bigLater]
 
                 if cutterList:
-                    print 'C'
+                    # print 'C'
                     shape = shape.cut(cutterList, tolerance)
                     shape = utils.selectFace(shape.Faces, geomShape,
                                              tolerance)

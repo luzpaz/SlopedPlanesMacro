@@ -225,6 +225,11 @@ class _PyFace(_Py):
 
                 else:
 
+                    nextEje = coord[numGeom+2].sub(coord[numGeom+1])
+                    corner = utils.convexReflex(eje, nextEje, normal, numWire)
+                    # print 'corner ', corner
+                    eje = nextEje
+
                     if ref:
                         # print 'ref'
                         forwardLine = self.forBack(pyPlane, size, 'backward')
@@ -233,13 +238,10 @@ class _PyFace(_Py):
                         if resetFace:
                             if pyPlane.geomAligned:
                                 # print 'ref reset'
+
                                 self.seatReflex(pyWire, pyReflex, pyPlane,
                                                 'backward', tolerance)
 
-                    nextEje = coord[numGeom+2].sub(coord[numGeom+1])
-                    corner = utils.convexReflex(eje, nextEje, normal, numWire)
-                    # print 'corner ', corner
-                    eje = nextEje
                     lineEnd = coord[numGeom+1]
 
                     if corner == 'reflex' or numWire > 0:
@@ -379,6 +381,8 @@ class _PyFace(_Py):
 
         self.priorLaterAlignaments(tolerance)
 
+        self.removeExcessReflex(tolerance)
+
         self.printSummary()
 
     def printSummary(self):
@@ -458,9 +462,6 @@ class _PyFace(_Py):
 
         pyPl.rear = []
 
-        if pyPl.reflexed:
-            self.removeReflex(pyW, pyPl)
-
         aL = pyAlign.aligns
 
         lenWire = len(pyWire.planes)
@@ -528,11 +529,11 @@ class _PyFace(_Py):
         lineShape = pyPlane.forward
         section = lineShape.section(shapeGeomWire, tolerance)
 
-        '''print[v.Point for v in section.Vertexes]
-        print section.Edges
-        print lenWire
-        print len(section.Vertexes)
-        print direction'''
+        # print[v.Point for v in section.Vertexes]
+        # print section.Edges
+        # print lenWire
+        # print len(section.Vertexes)
+        # print direction
 
         if section.Edges:
             # print 'a'
@@ -579,14 +580,6 @@ class _PyFace(_Py):
             pyPl = self.selectPlane(numWire, endNum)
             # print 'arrow'
             pyPl.arrow = True
-
-        if pyPlane.choped:
-            reflexs = pyWire.reflexs
-            try:
-                reflexs.remove(pyReflex)
-                pyWire.reflexs = reflexs
-            except ValueError:
-                pass
 
     def findRear(self, pyWire, pyPlane, vertex, direction, tolerance):
 
@@ -762,6 +755,8 @@ class _PyFace(_Py):
 
         ''''''
 
+        print 'doReflex'
+
         pyReflex = _PyReflex()
         pyWire.addLink('reflexs', pyReflex)
         self.seatReflex(pyWire, pyReflex, pyPlane,
@@ -816,6 +811,34 @@ class _PyFace(_Py):
 
             pyAlign.prior = pyPrior
             pyAlign.later = pyLater
+
+    def removeExcessReflex(self, tolerance):
+
+        ''''''
+
+        for pyWire in self.wires:
+            pyReflexList = pyWire.reflexs
+            # print pyReflexList
+            for pyReflex in pyReflexList[:]:
+                rr = False
+                pyPlaneList = pyReflex.planes
+                # print pyPlaneList
+                # print[pyPl.numGeom for pyPl in pyPlaneList]
+                if len(pyPlaneList) < 2:
+                    # print 'a'
+                    rr = True
+                else:
+                    # print 'b'
+                    [pyR, pyOppR] = pyPlaneList
+                    if ((pyR.aligned or pyR.choped) and
+                       (pyOppR.aligned or pyOppR.choped)):
+                            # print 'bb'
+                            rr = True
+                if rr:
+                    # print 'c'
+                    pyReflexList.remove(pyReflex)
+            # print pyReflexList
+            pyWire.reflexs = pyReflexList
 
     def simulatedChops(self, tolerance):
 

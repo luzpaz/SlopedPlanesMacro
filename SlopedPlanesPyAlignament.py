@@ -217,7 +217,7 @@ class _PyAlignament(_Py):
         ''''''
 
         pyBase = self.base
-        print 'base ', pyBase.numGeom
+        # print 'base ', pyBase.numGeom
         base = pyBase.shape
         bigBase = pyBase.bigShape
         pyCont = self.aligns[0]
@@ -235,12 +235,12 @@ class _PyAlignament(_Py):
 
         if ((not pyPrior.reflexed) or
            (pyPrior.choped and not pyPrior.aligned)):
-            print '1'
+            # print '1'
             cutterList.append(bigPrior)
 
         if ((not pyLater.reflexed) or
            (pyLater.choped and not pyLater.aligned)):
-            print '2'
+            # print '2'
             cutterList.append(bigLater)
 
         if not pyPrior.aligned:
@@ -267,17 +267,17 @@ class _PyAlignament(_Py):
             pyLater.shape = later
 
         if not self.falsify:
-            print 'A'
+            # print 'A'
 
             if cutterList:
-                print '3'
+                # print '3'
                 base = base.cut(cutterList, tolerance)
                 gS = pyBase.geom.toShape()
                 base = utils.selectFace(base.Faces, gS, tolerance)
                 pyBase.shape = base
 
         else:
-            print 'B'
+            # print 'B'
 
             simulatedChops = self.simulatedChops
             [pyOne, pyTwo] = simulatedChops[0]
