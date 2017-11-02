@@ -408,28 +408,16 @@ class _PyReflex(_Py):
 
         [pyR, pyOppR] = self.planes
         print (pyR.numGeom, pyOppR.numGeom)
+        reflex = pyR.shape.copy()
+        oppReflex = pyOppR.shape.copy()
 
         print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-        aList, rDiv, AA = self.processReflex(pyR, pyOppR, face, tolerance)
+        aList = self.processReflex(reflex, oppReflex,
+                                   pyR, pyOppR, face, tolerance)
 
         print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-        bList, oppRDiv, BB = self.processReflex(pyOppR, pyR, face, tolerance)
-
-        if oppRDiv and not rDiv:
-            print '1'
-
-            AA = AA.cut(bList, tolerance)
-            gS = pyR.geom.toShape()
-            AA = utils.selectFace(AA.Faces, gS, tolerance)
-            aList = [AA]
-
-        elif rDiv and not oppRDiv:
-            print '2'
-
-            BB = BB.cut(aList, tolerance)
-            gS = pyOppR.geom.toShape()
-            BB = utils.selectFace(BB.Faces, gS, tolerance)
-            bList = [BB]
+        bList = self.processReflex(oppReflex, reflex,
+                                  pyOppR, pyR, face, tolerance)
 
         compound = Part.makeCompound(aList)
         pyR.shape = compound
@@ -437,14 +425,12 @@ class _PyReflex(_Py):
         compound = Part.makeCompound(bList)
         pyOppR.shape = compound
 
-    def processReflex(self, pyR, pyOppR, face, tolerance):
+    def processReflex(self, reflex, oppReflex, pyR, pyOppR, face, tolerance):
 
         ''''''
 
-        rDiv = False
-
-        aa = pyR.shape.copy()
-        bb = pyOppR.shape.copy()
+        aa = reflex.copy()
+        bb = oppReflex.copy()
 
         bb = bb.cut(pyOppR.oppCutter, tolerance)
         gS = pyOppR.geom.toShape()
@@ -459,8 +445,11 @@ class _PyReflex(_Py):
                     break
 
         aa = aa.cut(pyR.cutter+[bb], tolerance)
-        gS = pyR.geom.toShape()
         print aa.Faces
+        lenA = len(aa.Faces)
+        print lenA
+
+        gS = pyR.geom.toShape()
         forward = pyR.forward
 
         aList = []
@@ -469,32 +458,40 @@ class _PyReflex(_Py):
         print aList
         aa = aa.removeShape([AA])
 
-        '''under = None
-        for ff in aa.Faces:
-            section = ff.section([forward], tolerance)
-            if section.Edges:
+        '''aa = aa.cut([pyOppR.enormousShape], tolerance)
+        print aa.Faces
+        lenB = len(aa.Faces)
+        print lenB
+
+        if lenA == 4:
+
+            under = None
+            for ff in aa.Faces:
                 print 'aa'
-                section = ff.section([face], tolerance)
+                section = ff.section([forward], tolerance)
                 if section.Edges:
                     print 'bb'
-                    under = ff
-                    aa = aa.removeShape([under])
-                    break
-
-        if under:
-            for ff in aa.Faces:
-                section = ff.section([under], tolerance)
-                if section.Edges:
-                    print '11'
                     section = ff.section([face], tolerance)
-                    if not section.Vertexes:
-                        print '22'
-                        section = ff.section([AA], tolerance)
-                        if not section.Edges:
-                            print '33'
+                    if section.Edges:
+                        print 'cc'
+                        under = ff
+                        aa = aa.removeShape([under])
+                        break
+
+            for ff in aa.Faces:
+                print '11'
+                section = ff.section([AA], tolerance)
+                if not section.Edges:
+                    print '22'
+                    section = ff.section([under], tolerance)
+                    if section.Edges:
+                        print '33'
+                        section = ff.section([face], tolerance)
+                        if not section.Vertexes:
+                            print '44'
                             aList.append(ff)'''
 
-        return aList, rDiv, AA
+        return aList
 
     def reviewing(self, tolerance):
 

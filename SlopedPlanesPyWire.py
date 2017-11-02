@@ -357,7 +357,7 @@ class _PyWire(_Py):
         ''''''
 
         for pyPlane in unsolved:
-            # print 'a'
+            print 'a'
             plane = pyPlane.shape
             gS = pyPlane.geom.toShape()
             cutterList = [pyPl.shape for pyPl in solved]
@@ -366,18 +366,18 @@ class _PyWire(_Py):
             pyPlane.shape = plane
 
             if pyPlane.isSolved(tolerance):
-                # print 'aa'
+                print 'aa'
                 unsolved.remove(pyPlane)
                 solved.append(pyPlane)
                 unsolved.extend(impossible)
                 impossible = []
 
             else:
-                # print 'ab'
+                print 'ab'
                 impossible.append(pyPlane)
 
             if not unsolved:
-                # print 'return'
+                print 'return'
                 return
 
             self.reSolveReflexs(tolerance, solved, unsolved, impossible)

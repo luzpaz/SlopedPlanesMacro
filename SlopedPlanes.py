@@ -103,6 +103,7 @@ class _SlopedPlanes():
         slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
         slopedPlanes.Test = False
         slopedPlanes.Step = 15
+
         self.Pyth = []
         self.State = False
 
