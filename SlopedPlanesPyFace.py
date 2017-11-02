@@ -954,13 +954,13 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.simulating(tolerance)
 
-    def reflexing(self, tolerance):
+    def reflexing(self, face, tolerance):
 
         ''''''
 
         for pyWire in self.wires:
             if pyWire.reflexs:
-                pyWire.reflexing(self, tolerance)
+                pyWire.reflexing(self, face, tolerance)
 
     def reviewing(self, face, tolerance):
 

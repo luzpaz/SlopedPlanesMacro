@@ -241,7 +241,7 @@ class _SlopedPlanes():
 
             if step >= 6:
 
-                pyFace.reflexing(tolerance)
+                pyFace.reflexing(face, tolerance)
 
             if step >= 7:
 

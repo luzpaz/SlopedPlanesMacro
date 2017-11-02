@@ -154,6 +154,7 @@ class _PyWire(_Py):
 
         for pyReflex in self.reflexs:
             for pyPlane in pyReflex.planes:
+                print 'cutter ', pyPlane.numGeom
 
                 angle = pyPlane.angle
                 numWire = pyPlane.numWire
@@ -166,7 +167,10 @@ class _PyWire(_Py):
                 pyPlaneList = self.planes
                 for ran in rango:
                     for nG in ran:
+                        print 'cutted ', nG
                         pyPl = pyPlaneList[nG]
+
+                        # TODO pyPl numWire and angle ???
 
                         if not pyPl.reflexed:
 
@@ -179,29 +183,45 @@ class _PyWire(_Py):
                         else:
 
                             forward = pyPlane.forward
+                            gS = pyPlane.geom.toShape()
                             forw = pyPl.forward
-                            section = forward.section(forw)
+                            section = forward.section([forw, gS], tolerance)
 
-                            if not section.Vertexes:
+                            if not section.Edges:
 
-                                procc = True
-                                nWire = pyPl.numWire
-                                pyRList = pyFace.selectAllReflex(nWire, nG)
-                                for pyR in pyRList:
-                                    if not procc:
-                                        break
-                                    for pyP in pyR.planes:
-                                        if pyP != pyPl:
-                                            forw = pyP.forward
-                                            section =\
-                                                forward.section([forw],
-                                                                tolerance)
-                                            if section.Vertexes:
-                                                procc = False
+                                if len(section.Vertexes) == 1:
+
+                                    section = forw.section(section.Vertexes,
+                                                           tolerance)
+
+                                    if not section.Vertexes:
+
+                                        procc = True
+
+                                        nWire = pyPl.numWire
+                                        nGeom = pyPl.numGeom
+                                        pyRList =\
+                                            pyFace.selectAllReflex(nWire,
+                                                                   nGeom)
+
+                                        for pyR in pyRList:
+                                            if not procc:
                                                 break
+                                            for pyP in pyR.planes:
+                                                if pyP != pyPl:
+                                                    ff = pyP.forward
+                                                    section =\
+                                                        ff.section([forward],
+                                                                   tolerance)
 
-                                if procc:
-                                    pyPl.trimming(enormousShape, tolerance)
+                                                    if section.Vertexes:
+                                                        procc = False
+                                                        break
+
+                                        if procc:
+                                            print 'procc'
+                                            pyPl.trimming(enormousShape,
+                                                          tolerance)
 
     def priorLater(self, pyFace, tolerance):
 
@@ -299,7 +319,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.simulating(tolerance)
 
-    def reflexing(self, pyFace, tolerance):
+    def reflexing(self, pyFace, face, tolerance):
 
         ''''''
 
@@ -307,7 +327,7 @@ class _PyWire(_Py):
             pyReflex.reflexing(pyFace, self, tolerance)
 
         for pyReflex in self.reflexs:
-            pyReflex.solveReflex(tolerance)
+            pyReflex.solveReflex(face, tolerance)
 
     def reviewing(self, tolerance):
 
