@@ -544,9 +544,11 @@ class _PyFace(_Py):
             if direction == 'forward':
                 print 'aa'
                 vertex = section.Edges[0].Vertexes[0]
+                #vertex = section.Edges[0].Vertexes[1]
             else:
                 print 'aaa'
                 vertex = section.Edges[-1].Vertexes[1]
+                #vertex = section.Edges[-1].Vertexes[0]
 
         elif len(section.Vertexes) != lenWire:
             print 'b'
@@ -603,18 +605,10 @@ class _PyFace(_Py):
                     break
 
         else:
-            '''print 'b'
-            coord = pyWire.coordinates
-            nGeom = coord.index(vertex.Point)
-            if direction == 'forward':
-                nGeom = utils.sliceIndex(nGeom-1, lenWire)'''
-
             print 'b'
             coord = pyWire.coordinates
             nGeom = coord.index(vertex.Point)
-            if direction == 'forward':
-                pass
-            else:
+            if direction == 'bacward':
                 nGeom = utils.sliceIndex(nGeom-1, lenWire)
 
         pyPlane.addValue('rear', nGeom, direction)
