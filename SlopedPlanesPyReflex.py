@@ -442,8 +442,6 @@ class _PyReflex(_Py):
 
         ''''''
 
-        # TODO no necesito face
-
         aa = reflex.copy()
         bb = oppReflex.copy()
 
@@ -472,21 +470,39 @@ class _PyReflex(_Py):
         print aList
         aa = aa.removeShape([AA])
 
+        '''for ff in aa.Faces:
+            section = ff.section([face], tolerance)
+            if section.Edges:
+                under = ff
+                aa.removeShape([under])
+                break'''
+
         cont = True
         for ff in aa.Faces:
+            print 'a'
             if not cont:
                 break
             section = ff.section([backward], tolerance)
             if section.Edges:
+                print 'b'
                 ff = ff.cut([pyOppR.enormousShape], tolerance)
                 for cc in ff.Faces:
+                    print 'c'
                     section = cc.section([AA], tolerance)
                     if not section.Edges:
+                        print 'd'
                         section = cc.section([forward, backward], tolerance)
                         if not section.Edges:
-                            aList.append(cc)
-                            cont = False
-                            break
+                            print 'e'
+                            rear = pyR.cutter[0]
+                            section = cc.section([rear],tolerance)
+                            if section.Edges:
+                                print 'f'
+                                aList.append(cc)
+                                cont = False
+                                break
+                                # section = cc.section([under], tolerance)
+                                # if section.Edges:
 
         return aList
 

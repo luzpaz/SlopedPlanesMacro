@@ -69,6 +69,8 @@ class _SlopedPlanes():
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyBool", "Reverse",
                                  "SlopedPlanes")
+        # slopedPlanes.addProperty("App::PropertyBool", "Simmetry",
+        # "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyBool", "Solid",
                                  "SlopedPlanes")
         # slopedPlanes.addProperty("App::PropertyFloat", "Cap",
@@ -99,16 +101,16 @@ class _SlopedPlanes():
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
         # slopedPlanes.Cap = 0
+        # slopedPlanes.Simmetry = False
         # slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye", ]
         slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
         slopedPlanes.Test = False
         slopedPlanes.Step = 15
 
-        self.Pyth = []
-        self.State = False
-
         slopedPlanes.Proxy = self
         self.Type = "SlopedPlanes"
+        self.Pyth = []
+        self.State = False
 
     def execute(self, slopedPlanes):
 
