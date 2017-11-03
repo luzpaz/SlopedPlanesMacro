@@ -533,6 +533,8 @@ class _PyFace(_Py):
         lineShape = pyPlane.forward
         section = lineShape.section(shapeGeomWire, tolerance)
 
+        edge = False
+
         print[v.Point for v in section.Vertexes]
         print section.Edges
         print lenWire
@@ -541,14 +543,13 @@ class _PyFace(_Py):
 
         if section.Edges:
             print 'a'
+            edge = True
             if direction == 'forward':
                 print 'aa'
                 vertex = section.Edges[0].Vertexes[0]
-                #vertex = section.Edges[0].Vertexes[1]
             else:
                 print 'aaa'
                 vertex = section.Edges[-1].Vertexes[1]
-                #vertex = section.Edges[-1].Vertexes[0]
 
         elif len(section.Vertexes) != lenWire:
             print 'b'
@@ -573,7 +574,7 @@ class _PyFace(_Py):
         print vertex.Point
 
         nGeom =\
-            self.findRear(pyWire, pyPlane, vertex, direction, tolerance)
+            self.findRear(pyWire, pyPlane, vertex, direction, tolerance, edge)
 
         if direction == 'forward':
             endNum = utils.sliceIndex(numGeom+2, lenWire)
@@ -587,7 +588,8 @@ class _PyFace(_Py):
             print 'arrow'
             pyPl.arrow = True
 
-    def findRear(self, pyWire, pyPlane, vertex, direction, tolerance):
+    def findRear(self, pyWire, pyPlane, vertex, direction, tolerance,
+                 edge=False):
 
         ''''''
 
@@ -608,7 +610,15 @@ class _PyFace(_Py):
             print 'b'
             coord = pyWire.coordinates
             nGeom = coord.index(vertex.Point)
-            if direction == 'bacward':
+            if direction == 'backward':
+                nGeom = utils.sliceIndex(nGeom-1, lenWire)
+
+        if edge:
+            if direction == 'backward':
+                print 'c'
+                nGeom = utils.sliceIndex(nGeom+1, lenWire)
+            else:
+                print 'd'
                 nGeom = utils.sliceIndex(nGeom-1, lenWire)
 
         pyPlane.addValue('rear', nGeom, direction)
