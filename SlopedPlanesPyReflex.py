@@ -407,7 +407,7 @@ class _PyReflex(_Py):
         print '$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
 
         [pyR, pyOppR] = self.planes
-        print (pyR.numGeom, pyOppR.numGeom)
+        print(pyR.numGeom, pyOppR.numGeom)
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
@@ -417,17 +417,32 @@ class _PyReflex(_Py):
 
         print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
         bList = self.processReflex(oppReflex, reflex,
-                                  pyOppR, pyR, face, tolerance)
+                                   pyOppR, pyR, face, tolerance)
 
-        compound = Part.makeCompound(aList)
-        pyR.shape = compound
+        compoundA = Part.makeCompound(aList)
+        compoundB = Part.makeCompound(bList)
 
-        compound = Part.makeCompound(bList)
-        pyOppR.shape = compound
+        lenA = len(aList)
+        lenB = len(bList)
+
+        if lenB > 1 and lenA == 1:
+            compoundA = compoundA.cut([compoundB], tolerance)
+            gS = pyR.geom.toShape()
+            compoundA = utils.selectFace(compoundA.Faces, gS, tolerance)
+
+        elif lenA > 1 and lenB == 1:
+            compoundB = compoundB.cut([compoundA], tolerance)
+            gS = pyOppR.geom.toShape()
+            compoundB = utils.selectFace(compoundB.Faces, gS, tolerance)
+
+        pyR.shape = compoundA
+        pyOppR.shape = compoundB
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR, face, tolerance):
 
         ''''''
+
+        # TODO no necesito face
 
         aa = reflex.copy()
         bb = oppReflex.copy()
@@ -446,11 +461,10 @@ class _PyReflex(_Py):
 
         aa = aa.cut(pyR.cutter+[bb], tolerance)
         print aa.Faces
-        lenA = len(aa.Faces)
-        print lenA
 
         gS = pyR.geom.toShape()
         forward = pyR.forward
+        backward = pyR.backward
 
         aList = []
         AA = utils.selectFace(aa.Faces, gS, tolerance)
@@ -458,38 +472,21 @@ class _PyReflex(_Py):
         print aList
         aa = aa.removeShape([AA])
 
-        '''aa = aa.cut([pyOppR.enormousShape], tolerance)
-        print aa.Faces
-        lenB = len(aa.Faces)
-        print lenB
-
-        if lenA == 4:
-
-            under = None
-            for ff in aa.Faces:
-                print 'aa'
-                section = ff.section([forward], tolerance)
-                if section.Edges:
-                    print 'bb'
-                    section = ff.section([face], tolerance)
-                    if section.Edges:
-                        print 'cc'
-                        under = ff
-                        aa = aa.removeShape([under])
-                        break
-
-            for ff in aa.Faces:
-                print '11'
-                section = ff.section([AA], tolerance)
-                if not section.Edges:
-                    print '22'
-                    section = ff.section([under], tolerance)
-                    if section.Edges:
-                        print '33'
-                        section = ff.section([face], tolerance)
-                        if not section.Vertexes:
-                            print '44'
-                            aList.append(ff)'''
+        cont = True
+        for ff in aa.Faces:
+            if not cont:
+                break
+            section = ff.section([backward], tolerance)
+            if section.Edges:
+                ff = ff.cut([pyOppR.enormousShape], tolerance)
+                for cc in ff.Faces:
+                    section = cc.section([AA], tolerance)
+                    if not section.Edges:
+                        section = cc.section([forward, backward], tolerance)
+                        if not section.Edges:
+                            aList.append(cc)
+                            cont = False
+                            break
 
         return aList
 
