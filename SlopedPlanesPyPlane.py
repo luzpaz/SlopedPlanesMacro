@@ -59,6 +59,8 @@ class _PyPlane(_Py):
         self.simulatedShape = None
         self.cutter = []
         self.oppCutter = []
+        self.divide = []
+        self.compound = None
         self.forward = None
         self.backward = None
         self.solved = False
@@ -330,6 +332,34 @@ class _PyPlane(_Py):
         self._oppCutter = oppCutter
 
     @property
+    def divide(self):
+
+        ''''''
+
+        return self._divide
+
+    @divide.setter
+    def divide(self, divide):
+
+        ''''''
+
+        self._divide = divide
+
+    @property
+    def compound(self):
+
+        ''''''
+
+        return self._compound
+
+    @compound.setter
+    def compound(self, compound):
+
+        ''''''
+
+        self._compound = compound
+
+    @property
     def forward(self):
 
         ''''''
@@ -410,6 +440,8 @@ class _PyPlane(_Py):
             self.enormousShape = enormousPlane
 
             self.simulatedShape = None
+            self.divide = []
+            self.compound = None
 
     def doPlane(self, size, direction, geom, firstParam, lastParam, scale):
 

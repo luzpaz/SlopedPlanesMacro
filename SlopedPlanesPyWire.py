@@ -329,6 +329,12 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(face, tolerance)
 
+        for pyReflex in self.reflexs:
+            pyReflex.rearReflex(self, tolerance)
+
+        for pyReflex in self.reflexs:
+            pyReflex.compounding(tolerance)
+
     def reviewing(self, tolerance):
 
         ''''''
@@ -345,9 +351,11 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             for pyPlane in pyReflex.planes:
                 if pyPlane.solved:
-                    solved.append(pyPlane)
+                    if pyPlane not in solved:
+                        solved.append(pyPlane)
                 else:
-                    unsolved.append(pyPlane)
+                    if pyPlane not in unsolved:
+                        unsolved.append(pyPlane)
 
         return solved, unsolved
 

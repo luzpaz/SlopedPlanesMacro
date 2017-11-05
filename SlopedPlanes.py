@@ -105,7 +105,7 @@ class _SlopedPlanes():
         # slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye", ]
         slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
         slopedPlanes.Test = False
-        slopedPlanes.Step = 6
+        slopedPlanes.Step = 15
 
         slopedPlanes.Proxy = self
         self.Type = "SlopedPlanes"

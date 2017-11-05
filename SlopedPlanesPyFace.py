@@ -121,9 +121,11 @@ class _PyFace(_Py):
                 dd = plane.__dict__.copy()
                 dd['_shape'], dd['_bigShape'], dd['_enormousShape'],\
                     dd['_geom'], dd['_geomAligned'],\
-                    dd['_cutter'], dd['_oppCutter'],\
-                    dd['_forward'], dd['_backward'], dd['_simulatedShape'] =\
-                    None, None, None, None, None, [], [], None, None, None
+                    dd['_cutter'], dd['_oppCutter'], dd['_divide'],\
+                    dd['_forward'], dd['_backward'], dd['_simulatedShape'],\
+                    dd['_compound'] = \
+                    None, None, None, None, None, [], [], [], None, None,\
+                    None, None
                 planeList.append(dd)
             dct['_planes'] = planeList
 
