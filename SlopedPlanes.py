@@ -105,7 +105,7 @@ class _SlopedPlanes():
         # slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye", ]
         slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
         slopedPlanes.Test = False
-        slopedPlanes.Step = 15
+        slopedPlanes.Step = 6
 
         slopedPlanes.Proxy = self
         self.Type = "SlopedPlanes"
@@ -146,6 +146,7 @@ class _SlopedPlanes():
         numFace = -1
         for face in faceList:
             numFace += 1
+
             size = face.BoundBox.DiagonalLength
 
             try:
@@ -177,7 +178,6 @@ class _SlopedPlanes():
 
                 pyWire.shapeGeom = shapeGeomWire
                 coordinates.extend(coordinates[0:2])
-
                 oldCoordinates = pyWire.coordinates
                 if oldCoordinates != coordinates:
                     pyFace.reset = True
@@ -185,15 +185,12 @@ class _SlopedPlanes():
                         pyWire.reset = True
                     elif oldCoordinates[0] != coordinates[0]:
                         pyWire.reset = True
-
                 pyWire.coordinates = coordinates
 
                 pyPlaneList = pyWire.planes
                 lenPyList = len(pyPlaneList)
-
                 planeList = wire.Edges
                 lenList = len(planeList)
-
                 num = lenPyList - lenList
                 if num > 0:
                     pyPlaneList = pyPlaneList[:lenList]

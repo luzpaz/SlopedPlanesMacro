@@ -409,6 +409,8 @@ class _PyPlane(_Py):
                              lastParam, scale)
             self.enormousShape = enormousPlane
 
+            self.simulatedShape = None
+
     def doPlane(self, size, direction, geom, firstParam, lastParam, scale):
 
         ''''''
@@ -528,11 +530,11 @@ class _PyPlane(_Py):
 
         ''''''
 
-        # print 'numGeom ', self.numGeom
+        print 'numGeom ', self.numGeom
 
         rear = self.rear
 
-        # print 'rear ', rear
+        print 'rear ', rear
 
         plane = self.shape
         pyPlaneList = pyWire.planes
@@ -545,24 +547,28 @@ class _PyPlane(_Py):
             pyOppPlane = twinReflex[0]
         oppPlane = pyOppPlane.shape
 
-        # print 'numGeom ', pyOppPlane.numGeom
+        print 'numGeom ', pyOppPlane.numGeom
 
         if self.choped:
             if pyOppPlane.aligned:
-                # print 'a'
+                print 'a'
                 rear = [rear[1]]
             else:
-                # print 'b'
+                print 'b'
                 rear = [rear[0]]
 
         for numG in rear:
             pyPl = pyPlaneList[numG]
             if not (pyPl.aligned or pyPl.choped):
                 pl = pyPl.shape
-                pl = pl.cut([plane, oppPlane], tolerance)
-                gS = pyPl.geom.toShape()
-                pl = utils.selectFace(pl.Faces, gS, tolerance)
-                pyPl.shape = pl
+                if isinstance(pl, Part.Compound):
+                    # TODO necesita un nivel mas de seleccion
+                    pass
+                else:
+                    pl = pl.cut([plane, oppPlane], tolerance)
+                    gS = pyPl.geom.toShape()
+                    pl = utils.selectFace(pl.Faces, gS, tolerance)
+                    pyPl.shape = pl
 
     def rangging(self, pyWire, direction):
 

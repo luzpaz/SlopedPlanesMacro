@@ -358,6 +358,9 @@ class _PyWire(_Py):
 
         for pyPlane in unsolved:
             print 'a'
+            print solved
+            print unsolved
+            print impossible
             plane = pyPlane.shape
             gS = pyPlane.geom.toShape()
             cutterList = [pyPl.shape for pyPl in solved]

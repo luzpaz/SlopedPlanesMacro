@@ -142,46 +142,21 @@ class _PyReflex(_Py):
         rear = pyR.rear
 
         for nGeom in rear:
-            rearPyPl = pyWire.planes[nGeom]
+            rearPyPl = pyPlaneList[nGeom]
 
-            if rearPyPl.aligned:
+            if rearPyPl.reflexed:
                 print 'a'
-                pyAlign = pyFace.selectAlignament(rearPyPl.numWire,
-                                                  rearPyPl.numGeom)
-                rearPl = pyAlign.simulatedShape
-                print 'included rear simulated ', (rearPl, nWire, nGeom)
+                rearPl = rearPyPl.simulatedShape
+                print 'included rear simulated', (rearPl, nWire, nGeom)
+                pyR.addLink('cutter', rearPl)
+                pyOppR.addLink('oppCutter', rearPl)
 
-            elif rearPyPl.choped:
+            else:
                 print 'b'
                 rearPl = rearPyPl.shape
                 print 'included rear ', (rearPl, nWire, nGeom)
-
-            elif rearPyPl.reflexed:
-                print 'c'
-                rr = rearPyPl.rear[0]
-                print rr
-                pyRr = pyPlaneList[rr]
-                print pyRr.rear
-                print rearPyPl.numGeom
-                if pyR.numGeom in pyRr.rear:
-                    print 'a'
-                    rearPl = rearPyPl.shape.copy()
-                    gS = rearPyPl.geom.toShape()
-                    rearPl = rearPl.cut([oppReflexEnormous], tolerance)
-                    rearPl = utils.selectFace(rearPl.Faces, gS, tolerance)
-                    print 'included rear rectified', (rearPl, nWire, nGeom)
-                else:
-                    print 'b'
-                    rearPl = rearPyPl.shape
-                    print 'included rear ', (rearPl, nWire, nGeom)
-
-            else:
-                print 'd'
-                rearPl = rearPyPl.shape
-                print 'included rear ', (rearPl, nWire, nGeom)
-
-            pyR.addLink('cutter', rearPl)
-            pyOppR.addLink('oppCutter', rearPl)
+                pyR.addLink('cutter', rearPl)
+                pyOppR.addLink('oppCutter', rearPl)
 
         nWire = pyWire.numWire
 
@@ -191,23 +166,20 @@ class _PyReflex(_Py):
 
             nGeom = oppRear[0]
             pyOppRear = pyWire.planes[nGeom]
-            try:
-                oppRearPl = pyOppRear.shape.copy()
-            except AttributeError:
-                [nWire, nGeom] = pyOppRear.angle
-                pyOppRear = pyFace.selectPlane(nWire, nGeom)
-                oppRearPl = pyOppRear.shape.copy()
 
-            if not pyOppRear.reflexed:
-                pass
-                print 'included oppRear ', (oppRearPl, nWire, nGeom)
+            if pyOppRear.reflexed:
+                print 'a'
+                oppRearPl = pyOppRear.simulatedShape
+                pyR.addLink('cutter', oppRearPl)
+                pyOppR.addLink('oppCutter', oppRearPl)
+                print 'included oppRear simulated ', (oppRearPl, nWire, nGeom)
 
             else:
-                oppRearPl = pyOppRear.simulatedShape
-                print 'included oppRear rectified ', (oppRearPl, nWire, nGeom)
-
-            pyR.addLink('cutter', oppRearPl)
-            pyOppR.addLink('oppCutter', oppRearPl)
+                print 'b'
+                oppRearPl = pyOppRear.shape
+                pyR.addLink('cutter', oppRearPl)
+                pyOppR.addLink('oppCutter', oppRearPl)
+                print 'included oppRear ', (oppRearPl, nWire, nGeom)
 
         elif len(oppRear) == 2:
 
@@ -318,87 +290,40 @@ class _PyReflex(_Py):
         oppReflexEnormous = pyOppR.enormousShape
         pyPl = pyWire.planes[nn]
 
-        rectified = ''
-
-        if not pyPl.reflexed:
+        if pyPl.reflexed:
             print 'A'
-            pl = pyPl.shape.copy()
 
-        elif pyPl.aligned:
-            print 'B'
-            pl = pyPl.simulatedShape
-            rectified = 'simulated'
+            if pyOppR.numGeom in pyPl.rear:
 
-        elif pyPl.choped:
-            print 'C'
-            pl = pyPl.shape.copy()
-
-        else:
-            print 'D'
-            forward = pyR.forward
-            forwardOpp = pyOppR.forward
-            forw = pyPl.forward
-
-            section = forward.section([forw], tolerance)
-            sect = forwardOpp.section([forw], tolerance)
-
-            if section.Edges:
-                print 'edges'
-                pl = None
-
-            else:
-
-                if pyR.numGeom in pyPl.rear:
-                    print 'D1'
-                    pl = pyPl.simulatedShape
-                    rectified = 'simulated'
-
-                elif section.Vertexes:
-                    print 'D2'
-                    pl = pyPl.shape.copy()
-
-                    if kind == 'rangoInter':
-                        pl = pyPl.simulatedShape
-                        rectified = 'simulated'
-
-                    elif kind == 'rangoNext':
-                        pl = pl.cut([oppReflexEnormous], tolerance)
-                        gS = pyPl.geom.toShape()
-                        pl = utils.selectFace(pl.Faces, gS, tolerance)
-                        rectified = 'rectified'
-
-                elif sect.Vertexes:
-                    print 'D3'
-                    pl = pyPl.simulatedShape
-                    rectified = 'simulated'
-
-                else:
-                    print 'D4'
-                    pl = pyPl.shape.copy()
-
-        if kind == "rangoCorner":
-            print '1'
-
-            if pyPl.reflexed:
-                oppPl = pyPl.simulatedShape
-                print 'included oppCutter ', kind, ' ', (oppPl, nWire, nn)
-                pyOppR.addLink('oppCutter', oppPl)
-
-            else:
-                print 'included oppCutter ', kind, ' ', (pl, nWire, nn)
-                pyOppR.addLink('oppCutter', pl)
-
-            pl = pl.cut([oppReflexEnormous], tolerance)
-            gS = pyPl.geom.toShape()
-            pl = utils.selectFace(pl.Faces, gS, tolerance)
-            print 'included cutter ', kind, ' ', rectified, (pl, nWire, nn)
-            pyR.addLink('cutter', pl)
-
-        else:
-            print '2'
-            if pl:
-                print 'included cutter ', kind, ' ', rectified, (pl, nWire, nn)
+                pl = pyPl.simulatedShape
                 pyR.addLink('cutter', pl)
+                pyOppR.addLink('oppCutter', pl)
+                print 'included rango simulated ', (pl, nWire, nn)
+                print kind
+
+
+                if kind != 'rangoCorner':
+
+                    pl = pyPl.shape.copy()
+                    pl = pl.cut([oppReflexEnormous], tolerance)
+                    gS = pyPl.geom.toShape()
+                    pl = utils.selectFace(pl.Faces, gS, tolerance)
+                    pyR.addLink('cutter', pl)
+                    #pyOppR.addLink('oppCutter', pl)
+                    print 'included rango rectified', (pl, nWire, nn)
+
+            else:
+                pl = pyPl.simulatedShape
+                pyR.addLink('cutter', pl)
+                pyOppR.addLink('oppCutter', pl)
+                print 'included rango simulated ', (pl, nWire, nn)
+
+        else:
+            print 'B'
+            pl = pyPl.shape
+            pyR.addLink('cutter', pl)
+            pyOppR.addLink('oppCutter', pl)
+            print 'included rango ', (pl, nWire, nn)
 
     def solveReflex(self, face, tolerance):
 
@@ -460,30 +385,39 @@ class _PyReflex(_Py):
         aa = aa.cut(pyR.cutter+[bb], tolerance)
         print aa.Faces
 
-        gS = pyR.geom.toShape()
-        forward = pyR.forward
-        backward = pyR.backward
+        # aList = aa.Faces
 
         aList = []
+        gS = pyR.geom.toShape()
         AA = utils.selectFace(aa.Faces, gS, tolerance)
         aList.append(AA)
         print aList
         aa = aa.removeShape([AA])
 
-        '''for ff in aa.Faces:
+        forward = pyR.forward
+        backward = pyR.backward
+
+        rear = pyR.cutter[0]
+
+        for ff in aa.Faces:
+            print 'aa'
             section = ff.section([face], tolerance)
             if section.Edges:
-                under = ff
-                aa.removeShape([under])
-                break'''
+                print 'bb'
+                section = ff.section([rear], tolerance)
+                if section.Edges:
+                    print 'cc'
+                    aa = aa.removeShape([ff])
+                    under = ff
+                    break
 
         cont = True
         for ff in aa.Faces:
             print 'a'
             if not cont:
                 break
-            section = ff.section([backward], tolerance)
-            if section.Edges:
+            section = ff.section([face], tolerance)
+            if not section.Edges:
                 print 'b'
                 ff = ff.cut([pyOppR.enormousShape], tolerance)
                 for cc in ff.Faces:
@@ -494,15 +428,15 @@ class _PyReflex(_Py):
                         section = cc.section([forward, backward], tolerance)
                         if not section.Edges:
                             print 'e'
-                            rear = pyR.cutter[0]
-                            section = cc.section([rear],tolerance)
+                            section = cc.section([rear], tolerance)
                             if section.Edges:
                                 print 'f'
-                                aList.append(cc)
-                                cont = False
-                                break
-                                # section = cc.section([under], tolerance)
-                                # if section.Edges:
+                                section = cc.section([under], tolerance)
+                                if section.Edges:
+                                    print 'g'
+                                    aList.append(cc)
+                                    cont = False
+                                    break
 
         return aList
 
