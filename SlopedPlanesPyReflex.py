@@ -279,10 +279,9 @@ class _PyReflex(_Py):
             if pyOppR.numGeom in pyPl.rear:
 
                 pl = pyPl.simulatedShape
-                pyR.addLink('cutter', pl)
-                pyOppR.addLink('oppCutter', pl)
+                # pyR.addLink('cutter', pl)
+                # pyOppR.addLink('oppCutter', pl)
                 print 'included rango simulated ', (pl, nWire, nn)
-                print kind
 
                 if kind != 'rangoCorner':
 
@@ -295,16 +294,25 @@ class _PyReflex(_Py):
 
             else:
                 pl = pyPl.simulatedShape
-                pyR.addLink('cutter', pl)
-                pyOppR.addLink('oppCutter', pl)
+                # pyR.addLink('cutter', pl)
+                # pyOppR.addLink('oppCutter', pl)
                 print 'included rango simulated ', (pl, nWire, nn)
 
         else:
             print 'B'
-            pl = pyPl.shape
-            pyR.addLink('cutter', pl)
-            pyOppR.addLink('oppCutter', pl)
+            pl = pyPl.shape.copy()
+            # pyR.addLink('cutter', pl)
+            # pyOppR.addLink('oppCutter', pl)
             print 'included rango ', (pl, nWire, nn)
+
+        if kind == 'rangoCorner':
+            print 'C'
+            pl = pl.cut([oppReflexEnormous], tolerance)
+            gS = pyPl.geom.toShape()
+            pl = utils.selectFace(pl.Faces, gS, tolerance)
+
+        pyR.addLink('cutter', pl)
+        pyOppR.addLink('oppCutter', pl)
 
     def solveReflex(self, face, tolerance):
 
