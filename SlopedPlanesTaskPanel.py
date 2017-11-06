@@ -23,6 +23,7 @@
 
 
 import FreeCAD
+import Part
 
 if FreeCAD.GuiUp:
     import FreeCADGui
@@ -148,13 +149,22 @@ class _TaskPanel_SlopedPlanes():
             slopedPlanes = self.obj
             pyFaceList = slopedPlanes.Proxy.Pyth
 
-            numSlope = 0
+            numSlope, num = 0, 0
             for pyFace in pyFaceList:
                 originList = []
                 pyWireList = pyFace.wires
+                numSlope += num
+                num = 0
+
                 for pyWire in pyWireList:
                     numWire = pyWire.numWire
                     for pyPlane in pyWire.planes:
+
+                        plane = pyPlane.shape
+                        if isinstance(plane, Part.Compound):
+                            if len(plane.Faces) > 1:
+                                num += 1
+
                         charge = False
                         numAngle = pyPlane.numGeom
                         angle = pyPlane.angle

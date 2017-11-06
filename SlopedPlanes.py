@@ -75,8 +75,6 @@ class _SlopedPlanes():
                                  "SlopedPlanes")
         # slopedPlanes.addProperty("App::PropertyFloat", "Cap",
         # "SlopedPlanes")
-        #slopedPlanes.addProperty("App::PropertyFloatList", "Slopes",
-        #"SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "SlopeGlobal",
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
@@ -143,6 +141,7 @@ class _SlopedPlanes():
             pyFaceList = pyFaceList[:lenList]
 
         normal = utils.faceNormal(faceList[0], tolerance)
+        faceList.reverse()
 
         numFace = -1
         for face in faceList:
