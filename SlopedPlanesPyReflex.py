@@ -560,6 +560,10 @@ class _PyReflex(_Py):
             ranB = range(0, oG)
             ran = ranA + ranB
 
+        else:
+            # print '3'
+            ran = []
+
         # print 'rangoInter ', ran
 
         self.rangoInter = ran
