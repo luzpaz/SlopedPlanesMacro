@@ -477,13 +477,13 @@ class _PyAlignament(_Py):
                     if not pyPl.aligned:
                         pl = pyPl.shape
                         cutList.append(pl)
-                        # print 'rangoChop ', nn
+                        print 'rangoChop ', nn
 
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
 
-                # print '# chop ', pyPlane.numGeom
+                print '# chop ', pyPlane.numGeom
 
                 cutterList = []
 
@@ -498,7 +498,7 @@ class _PyAlignament(_Py):
                         if not pyPl.aligned:
                             rearPlane = pyPl.shape
                             cutterList.append(rearPlane)
-                            # print 'rearPlane ', nG
+                            print 'rearPlane ', nG
 
                 rango = pyPlane.rango
                 for ran in rango:
@@ -508,7 +508,7 @@ class _PyAlignament(_Py):
                             if not pyPl.aligned:
                                 rangoPlane = pyPl.shape
                                 cutterList.append(rangoPlane)
-                                # print 'rango ', nn
+                                print 'rango ', nn
 
                 cutterList.extend(cutList)
 

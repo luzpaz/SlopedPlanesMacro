@@ -224,13 +224,25 @@ class _PyFace(_Py):
                 if not pyPlane.geomAligned:
 
                     ref = False
+                    eje = coord[numGeom+2].sub(coord[numGeom+1])
 
                 else:
 
                     nextEje = coord[numGeom+2].sub(coord[numGeom+1])
+                    print eje
+                    print nextEje
                     corner = utils.convexReflex(eje, nextEje, normal, numWire)
                     print 'corner ', corner
                     eje = nextEje
+
+                    if corner == 'convex':
+                        print 'a'
+                        if pyPlane.choped:
+                            print 'b'
+                            if not pyPlane.rear:
+                                print 'c'
+                                ref = True
+                                pyReflex = _PyReflex()
 
                     if ref:
                         print 'ref'
@@ -380,6 +392,7 @@ class _PyFace(_Py):
                                             self.doReflex(pyWire, pyPlane,
                                                           tolerance)
 
+                    print pyPlane.rear
                     print self.alignaments
 
             pyWire.reset = False
@@ -847,26 +860,26 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyReflexList = pyWire.reflexs
-            # print pyReflexList
+            print pyReflexList
             for pyReflex in pyReflexList[:]:
                 rr = False
                 pyPlaneList = pyReflex.planes
-                # print pyPlaneList
-                # print[pyPl.numGeom for pyPl in pyPlaneList]
+                print pyPlaneList
+                print[pyPl.numGeom for pyPl in pyPlaneList]
                 if len(pyPlaneList) < 2:
-                    # print 'a'
+                    print 'a'
                     rr = True
                 else:
-                    # print 'b'
+                    print 'b'
                     [pyR, pyOppR] = pyPlaneList
                     if ((pyR.aligned or pyR.choped) and
                        (pyOppR.aligned or pyOppR.choped)):
-                            # print 'bb'
+                            print 'bb'
                             rr = True
                 if rr:
-                    # print 'c'
+                    print 'c'
                     pyReflexList.remove(pyReflex)
-            # print pyReflexList
+            print pyReflexList
             pyWire.reflexs = pyReflexList
 
     def simulatedChops(self, tolerance):

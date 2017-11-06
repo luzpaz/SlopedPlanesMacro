@@ -96,6 +96,8 @@ class _SlopedPlanes():
         # slopedPlanes.addProperty("App::PropertyStringList", "FaceMaker",
         # "SlopedPlanes")
 
+        self.State = False
+
         slopedPlanes.Slopes = []
         slopedPlanes.SlopeGlobal = 45.0
         slopedPlanes.FactorWidth = 1
@@ -110,7 +112,6 @@ class _SlopedPlanes():
         slopedPlanes.Proxy = self
         self.Type = "SlopedPlanes"
         self.Pyth = []
-        self.State = False
 
     def execute(self, slopedPlanes):
 
