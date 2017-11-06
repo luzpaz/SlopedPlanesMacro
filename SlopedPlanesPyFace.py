@@ -1071,30 +1071,30 @@ class _PyFace(_Py):
             base = pyAlign.base.shape
             if base not in cutterList:
                 cutterList.append(base)
-                # print 'a', pyAlign.base.numGeom
+                print 'a', pyAlign.base.numGeom
 
             for pyPlane in pyAlign.aligns:
                 plane = pyPlane.shape
                 if plane:
                     if plane not in cutterList:
                         cutterList.append(plane)
-                        # print 'b', pyPlane.numGeom
+                        print 'b', pyPlane.numGeom
 
             for [pyChopOne, pyChopTwo] in pyAlign.chops:
-                chopOne = pyChopOne.shape
 
+                chopOne = pyChopOne.shape
                 if chopOne:
                     if chopOne not in cutterList:
                         cutterList.append(chopOne)
-                        # print 'c', pyChopOne.numGeom
-                chopTwo = pyChopTwo.shape
+                        print 'c', pyChopOne.numGeom
 
+                chopTwo = pyChopTwo.shape
                 if chopTwo:
                     if chopTwo not in cutterList:
                         cutterList.append(chopTwo)
-                        # print 'd', pyChopTwo.numGeom
+                        print 'd', pyChopTwo.numGeom
 
-        # print 'cutterList ', cutterList
+        print 'cutterList ', cutterList
 
         if cutterList:
 
@@ -1102,10 +1102,11 @@ class _PyFace(_Py):
                 for pyPlane in pyWire.planes:
                     plane = pyPlane.shape
                     if plane:
-                        # print '1'
+                        print '1'
+                        print 'numGeom', pyPlane.numGeom
 
                         if pyPlane.choped or pyPlane.aligned:
-                            # print '2'
+                            print '2'
                             cutterList.remove(plane)
 
                         plane = plane.cut(cutterList, tolerance)
@@ -1114,5 +1115,5 @@ class _PyFace(_Py):
                         pyPlane.shape = plane
 
                         if pyPlane.choped or pyPlane.aligned:
-                            # print '3'
+                            print '3'
                             cutterList.append(plane)

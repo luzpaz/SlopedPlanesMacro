@@ -436,13 +436,12 @@ class _PyAlignament(_Py):
 
         ''''''
 
-        '''print(self.base.numWire, self.base.numGeom)
+        print(self.base.numWire, self.base.numGeom)
         print[(x.numWire, x.numGeom) for x in self.aligns]
         print[[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
-              for [x, y] in self.chops]'''
+              for [x, y] in self.chops]
 
         pyBase = self.base
-        base = pyBase.shape
 
         enormousBase = pyBase.enormousShape
         aligns = self.aligns
@@ -589,19 +588,20 @@ class _PyAlignament(_Py):
                     pl = pyPlaneList[nn].shape
                     if pl:
                         cutterList.append(pl)
-                        # print 'rangoChop ', nn
+                        print 'rangoChop ', nn
 
+                base = pyBase.shape
                 base = base.cut(cutterList, tolerance)
 
                 if len(base.Faces) == 2:
-                    # print 'a'
+                    print 'a'
 
                     gS = pyBase.geom.toShape()
                     base = utils.selectFace(base.Faces, gS, tolerance)
                     pyBase.shape = base
 
                 else:
-                    # print 'b'
+                    print 'b'
 
                     gS = pyBase.geom.toShape()
                     ff = utils.selectFace(base.Faces, gS, tolerance)
@@ -656,6 +656,8 @@ class _PyAlignament(_Py):
             gS = pyCont.geom.toShape()
             cont = utils.selectFace(cont.Faces, gS, tolerance)
             pyCont.shape = cont
+
+        pyFace.printSummary()
 
     def rangging(self, pyFace):
 
