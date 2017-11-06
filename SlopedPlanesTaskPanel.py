@@ -107,8 +107,10 @@ class _TaskPanel_SlopedPlanes():
 
         if button == QtGui.QDialogButtonBox.Apply:
 
+            placement = self.obj.Placement
             self.resetObject()
             self.obj.Proxy.execute(self.obj)
+            self.obj.Placement = placement
 
     def reject(self):
 
