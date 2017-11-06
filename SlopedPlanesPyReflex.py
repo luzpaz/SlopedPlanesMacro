@@ -410,6 +410,7 @@ class _PyReflex(_Py):
                         print 'cc'
                         aa = aa.removeShape([ff])
                         under.append(ff)
+                        ### break
 
             if under:
                 for ff in aa.Faces:
