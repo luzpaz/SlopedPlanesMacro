@@ -415,7 +415,7 @@ class _PyFace(_Py):
         if not pyAlign.falsify:
             pyPl.shape = None
 
-        pyPl.rear = []
+        # pyPl.rear = []
 
         aL = pyAlign.aligns
 
@@ -824,14 +824,17 @@ class _PyFace(_Py):
                     [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
                     chopOne = pyChopOne.shape
                     enormous = pyChopOne.enormousShape
+                    geom = pyChopOne.geom
                     if not chopOne:
                         [nWire, nGeom] = pyChopOne.angle
                         pyPlane = self.selectPlane(nWire, nGeom)
                         chopOne = pyPlane.shape
                         enormous = pyPlane.enormousShape
+                        geom = pyPlane.geom
                     pyOne = _PyPlane(nWire, nGeom)
                     pyOne.shape = chopOne.copy()
                     pyOne.enormousShape = enormous
+                    pyOne.geom = geom
                 else:
                     pyOne = pyChopOne
 
@@ -839,14 +842,17 @@ class _PyFace(_Py):
                     [nWire, nGeom] = [pyChopTwo.numWire, pyChopTwo.numGeom]
                     chopTwo = pyChopTwo.shape
                     enormous = pyChopTwo.enormousShape
+                    geom = pyChopTwo.geom
                     if not chopTwo:
                         [nWire, nGeom] = pyChopTwo.angle
                         pyPlane = self.selectPlane(nWire, nGeom)
                         chopTwo = pyPlane.shape
                         enormous = pyPlane.enormousShape
+                        geom = pyPlane.geom
                     pyTwo = _PyPlane(nWire, nGeom)
                     pyTwo.shape = chopTwo.copy()
                     pyTwo.enormousShape = enormous
+                    pyTwo.geom = geom
                 else:
                     pyTwo = pyChopTwo
 

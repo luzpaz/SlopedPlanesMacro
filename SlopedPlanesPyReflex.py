@@ -106,6 +106,8 @@ class _PyReflex(_Py):
         pyR = pyPlaneList[0]
         pyOppR = pyPlaneList[1]
 
+
+
         pyR.oppCutter, pyR.cutter = [], []
         pyOppR.oppCutter, pyOppR.cutter = [], []
 
@@ -582,8 +584,10 @@ class _PyReflex(_Py):
 
         lenWire = len(pyWire.planes)
 
-        rear = self.planes[0].rear
-        oppRear = self.planes[1].rear
+        pyR = self.planes[0]
+        pyOppR = self.planes[1]
+        rear = pyR.rear
+        oppRear = pyOppR.rear
 
         rG = rear[0]
         try:
