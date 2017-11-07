@@ -69,12 +69,14 @@ class _SlopedPlanes():
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyBool", "Reverse",
                                  "SlopedPlanes")
-        # slopedPlanes.addProperty("App::PropertyBool", "Simmetry",
-        # "SlopedPlanes")
+        slopedPlanes.addProperty("App::PropertyBool", "Simmetry",
+                                 "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyBool", "Solid",
                                  "SlopedPlanes")
-        # slopedPlanes.addProperty("App::PropertyFloat", "Cap",
-        # "SlopedPlanes")
+        slopedPlanes.addProperty("App::PropertyBool", "Down",
+                                 "SlopedPlanes")
+        slopedPlanes.addProperty("App::PropertyFloat", "Up",
+                                 "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "SlopeGlobal",
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
@@ -83,29 +85,19 @@ class _SlopedPlanes():
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyPythonObject", "Test",
+        slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("Part::PropertyShapeHistory", "TestShape",
-                                 "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyPythonObject", "Step",
-                                 "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyString", "Tag",
-                                 "SlopedPlanes")
-        # slopedPlanes.addProperty("App::PropertyStringList", "FaceMaker",
-        # "SlopedPlanes")
 
         self.State = False
 
-        #slopedPlanes.Slopes = []
         slopedPlanes.SlopeGlobal = 45.0
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
-        # slopedPlanes.Cap = 0
-        # slopedPlanes.Simmetry = False
-        # slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye", ]
+        slopedPlanes.Up = 0
+        slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
+                                  "Part::FaceMakerSimple",
+                                  "Part::FaceMakerCheese"]
         slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
-        slopedPlanes.Test = False
-        slopedPlanes.Step = 15
 
         slopedPlanes.Proxy = self
         self.Type = "SlopedPlanes"
@@ -122,15 +114,15 @@ class _SlopedPlanes():
         sketchAngle = sketch.Placement.Rotation.Angle
         shape.Placement = FreeCAD.Placement()
 
-        face = Part.makeFace(shape, "Part::FaceMakerBullseye")
+        faceMaker = slopedPlanes.FaceMaker
+
+        face = Part.makeFace(shape, faceMaker)
 
         tolerance = slopedPlanes.Tolerance
         reverse = slopedPlanes.Reverse
         slope = slopedPlanes.SlopeGlobal
         width = slopedPlanes.FactorWidth
         length = slopedPlanes.FactorLength
-
-        step = slopedPlanes.Step
 
         pyFaceList = self.Pyth
         lenPyList = len(pyFaceList)
@@ -141,7 +133,7 @@ class _SlopedPlanes():
             pyFaceList = pyFaceList[:lenList]
 
         normal = utils.faceNormal(faceList[0], tolerance)
-        faceList.reverse()
+        faceList.reverse()  # TODO: order by lowerLeft
 
         numFace = -1
         for face in faceList:
@@ -219,53 +211,32 @@ class _SlopedPlanes():
 
             pyFace.wires = pyWireList
 
-            if step >= 1:
+            pyFace.parsing(normal, size, tolerance)
 
-                pyFace.parsing(normal, size, tolerance)
+            pyFace.planning(normal, size, reverse)
 
-            if step >= 2:
+            if slopedPlanes.Up:
+                pass
 
-                pyFace.planning(normal, size, reverse)
+            pyFace.trimming(tolerance)
 
-            if step >= 3:
+            pyFace.priorLater(tolerance)
 
-                pyFace.trimming(tolerance)
+            pyFace.simulating(tolerance)
 
-            if step >= 4:
+            pyFace.reflexing(face, tolerance)
 
-                pyFace.priorLater(tolerance)
+            pyFace.reviewing(face, tolerance)
 
-            if step >= 5:
+            pyFace.rearing(tolerance)
 
-                pyFace.simulating(tolerance)
+            pyFace.ordinaries(tolerance)
 
-            if step >= 6:
+            pyFace.between(tolerance)
 
-                pyFace.reflexing(face, tolerance)
+            pyFace.aligning(face, tolerance)
 
-            if step >= 7:
-
-                pyFace.reviewing(face, tolerance)
-
-            if step >= 8:
-
-                pyFace.rearing(tolerance)
-
-            if step >= 9:
-
-                pyFace.ordinaries(tolerance)
-
-            if step >= 10:
-
-                pyFace.between(tolerance)
-
-            if step >= 11:
-
-                pyFace.aligning(face, tolerance)
-
-            if step >= 12:
-
-                pyFace.ending(tolerance)
+            pyFace.ending(tolerance)
 
         self.Pyth = pyFaceList
 
@@ -336,7 +307,20 @@ class _SlopedPlanes():
 
         endShape = Part.makeCompound(shellList)
 
+        if slopedPlanes.Down:
+            pass
+
+        if slopedPlanes.Up:
+            pass
+
+        if slopedPlanes.Complement:
+            endShape.complement()
+
+        if slopedPlanes.Solid:
+            endShape = Part.makeSolid(endShape)
+
         # endShape.removeInternalWires(True)
+
         slopedPlanes.Shape = endShape
 
     def onChanged(self, slopedPlanes, prop):
@@ -430,7 +414,7 @@ class _ViewProvider_SlopedPlanes():
         ''''''
 
         path = os.path.dirname(__file__)
-        return  path + "/SlopedPlanes_Tree.svg"
+        return path + "/SlopedPlanes_Tree.svg"
 
     def getDefaultDisplayMode(self):
 

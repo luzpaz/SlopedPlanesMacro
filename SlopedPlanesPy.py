@@ -36,7 +36,7 @@ class _Py(object):
         ''''''
 
         linkList = getattr(self, prop)
-        if isinstance(obj,list):
+        if isinstance(obj, list):
             linkList.extend(obj)
         else:
             linkList.append(obj)
