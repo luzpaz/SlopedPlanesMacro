@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+# import rpdb2
 import os
 import math
 import FreeCAD
@@ -37,6 +38,9 @@ from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
+
+
+# rpdb2.start_embedded_debugger("test")
 
 
 def makeSlopedPlanes(sketch):
@@ -297,13 +301,13 @@ class _SlopedPlanes():
                                     # print 'bb3'
                                     pass
 
-                planeList.extend(secondaries)
-                for plane in planeList:
-                    plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
-                                 math.degrees(sketchAngle))
-                    plane.translate(sketchBase)
-                shell = Part.makeShell(planeList)
-                shellList.append(shell)
+            planeList.extend(secondaries)
+            for plane in planeList:
+                plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
+                             math.degrees(sketchAngle))
+                plane.translate(sketchBase)
+            shell = Part.makeShell(planeList)
+            shellList.append(shell)
 
         endShape = Part.makeCompound(shellList)
 
@@ -315,6 +319,9 @@ class _SlopedPlanes():
 
         if slopedPlanes.Complement:
             endShape.complement()
+
+        if slopedPlanes.Simmetry:
+            pass
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)

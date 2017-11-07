@@ -24,7 +24,6 @@
 
 import SlopedPlanesUtils as utils
 from SlopedPlanesPy import _Py
-from SlopedPlanesPyPlane import _PyPlane
 
 
 __title__ = "SlopedPlanes Macro"
@@ -217,7 +216,7 @@ class _PyAlignament(_Py):
         ''''''
 
         pyBase = self.base
-        print 'base ', pyBase.numGeom
+        # print 'base ', pyBase.numGeom
         base = pyBase.shape
         bigBase = pyBase.bigShape
         pyCont = self.aligns[0]
@@ -235,12 +234,12 @@ class _PyAlignament(_Py):
 
         if ((not pyPrior.reflexed) or
            (pyPrior.choped and not pyPrior.aligned)):
-            print '1'
+            # print '1'
             cutterList.append(bigPrior)
 
         if ((not pyLater.reflexed) or
            (pyLater.choped and not pyLater.aligned)):
-            print '2'
+            # print '2'
             cutterList.append(bigLater)
 
         if not pyPrior.aligned:
@@ -267,17 +266,17 @@ class _PyAlignament(_Py):
             pyLater.shape = later
 
         if not self.falsify:
-            print 'A'
+            # print 'A'
 
             if cutterList:
-                print '3'
+                # print '3'
                 base = base.cut(cutterList, tolerance)
                 gS = pyBase.geom.toShape()
                 base = utils.selectFace(base.Faces, gS, tolerance)
                 pyBase.shape = base
 
         else:
-            print 'B'
+            # print 'B'
 
             simulatedChops = self.simulatedChops
             [pyOne, pyTwo] = simulatedChops[0]
@@ -296,7 +295,7 @@ class _PyAlignament(_Py):
             cont = utils.selectFace(cont.Faces, gS, tolerance)
             pyCont.shape = cont
 
-    def simulating(self, pyFace, tolerance):
+    def simulatingBase(self, pyFace, tolerance):
 
         ''''''
 
@@ -427,19 +426,43 @@ class _PyAlignament(_Py):
 
             pyCont = self.aligns[0]
             cont = pyCont.shape.copy()
+            pyLater = self.later
+            bigLater = pyLater.bigShape
+            cont = cont.cut([bigLater], tolerance)
+            gS = pyCont.geom.toShape()
+            cont = utils.selectFace(cont.Faces, gS, tolerance)
 
             shapeList = [base, cont]
 
         self.simulatedShape = shapeList
 
+    def simulatingChop(self, tolerance):
+
+        ''''''
+
+        enormous = self.base.enormousShape
+
+        for chop in self.simulatedChops:
+            for pyPlane in chop:
+
+                try:
+                    plCopy = pyPlane.simulatedShape.copy()
+                except AttributeError:
+                    plCopy = pyPlane.shape.copy()
+
+                plCopy = plCopy.cut([enormous], tolerance)
+                gS = pyPlane.geom.toShape()
+                plCopy = utils.selectFace(plCopy.Faces, gS, tolerance)
+                pyPlane.simulatedShape = plCopy
+
     def aligning(self, face, pyFace, tolerance):
 
         ''''''
 
-        print(self.base.numWire, self.base.numGeom)
-        print[(x.numWire, x.numGeom) for x in self.aligns]
-        print[[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
-              for [x, y] in self.chops]
+        # print(self.base.numWire, self.base.numGeom)
+        # print[(x.numWire, x.numGeom) for x in self.aligns]
+        # print[[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
+        # for [x, y] in self.chops]
 
         pyBase = self.base
 
@@ -477,13 +500,13 @@ class _PyAlignament(_Py):
                     if not pyPl.aligned:
                         pl = pyPl.shape
                         cutList.append(pl)
-                        print 'rangoChop ', nn
+                        # print 'rangoChop ', nn
 
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
 
-                print '# chop ', pyPlane.numGeom
+                # print '# chop ', pyPlane.numGeom
 
                 cutterList = []
 
@@ -498,7 +521,7 @@ class _PyAlignament(_Py):
                         if not pyPl.aligned:
                             rearPlane = pyPl.shape
                             cutterList.append(rearPlane)
-                            print 'rearPlane ', nG
+                            # print 'rearPlane ', nG
 
                 rango = pyPlane.rango
                 for ran in rango:
@@ -508,7 +531,7 @@ class _PyAlignament(_Py):
                             if not pyPl.aligned:
                                 rangoPlane = pyPl.shape
                                 cutterList.append(rangoPlane)
-                                print 'rango ', nn
+                                # print 'rango ', nn
 
                 cutterList.extend(cutList)
 
@@ -588,20 +611,20 @@ class _PyAlignament(_Py):
                     pl = pyPlaneList[nn].shape
                     if pl:
                         cutterList.append(pl)
-                        print 'rangoChop ', nn
+                        # print 'rangoChop ', nn
 
                 base = pyBase.shape
                 base = base.cut(cutterList, tolerance)
 
                 if len(base.Faces) == 2:
-                    print 'a'
+                    # print 'a'
 
                     gS = pyBase.geom.toShape()
                     base = utils.selectFace(base.Faces, gS, tolerance)
                     pyBase.shape = base
 
                 else:
-                    print 'b'
+                    # print 'b'
 
                     gS = pyBase.geom.toShape()
                     ff = utils.selectFace(base.Faces, gS, tolerance)
@@ -658,8 +681,6 @@ class _PyAlignament(_Py):
             gS = pyCont.geom.toShape()
             cont = utils.selectFace(cont.Faces, gS, tolerance)
             pyCont.shape = cont
-
-        pyFace.printSummary()
 
     def rangging(self, pyFace):
 

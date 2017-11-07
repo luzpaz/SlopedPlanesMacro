@@ -154,7 +154,7 @@ class _PyWire(_Py):
 
         for pyReflex in self.reflexs:
             for pyPlane in pyReflex.planes:
-                print 'cutter ', pyPlane.numGeom
+                # print 'cutter ', pyPlane.numGeom
 
                 angle = pyPlane.angle
                 numWire = pyPlane.numWire
@@ -167,7 +167,7 @@ class _PyWire(_Py):
                 pyPlaneList = self.planes
                 for ran in rango:
                     for nG in ran:
-                        print 'cutted ', nG
+                        # print 'cutted ', nG
                         pyPl = pyPlaneList[nG]
 
                         # TODO pyPl numWire and angle ???
@@ -219,7 +219,7 @@ class _PyWire(_Py):
                                                         break
 
                                         if procc:
-                                            print 'procc'
+                                            # print 'procc'
                                             pyPl.trimming(enormousShape,
                                                           tolerance)
 
@@ -365,10 +365,10 @@ class _PyWire(_Py):
         ''''''
 
         for pyPlane in unsolved:
-            print 'a'
-            print solved
-            print unsolved
-            print impossible
+            # print 'a'
+            # print solved
+            # print unsolved
+            # print impossible
             plane = pyPlane.shape
             gS = pyPlane.geom.toShape()
             cutterList = [pyPl.shape for pyPl in solved]
@@ -377,18 +377,18 @@ class _PyWire(_Py):
             pyPlane.shape = plane
 
             if pyPlane.isSolved(tolerance):
-                print 'aa'
+                # print 'aa'
                 unsolved.remove(pyPlane)
                 solved.append(pyPlane)
                 unsolved.extend(impossible)
                 impossible = []
 
             else:
-                print 'ab'
+                # print 'ab'
                 impossible.append(pyPlane)
 
             if not unsolved:
-                print 'return'
+                # print 'return'
                 return
 
             self.reSolveReflexs(tolerance, solved, unsolved, impossible)

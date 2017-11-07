@@ -52,3 +52,57 @@ class _Py(object):
         else:
             valueList.append(value)
         setattr(self, prop, valueList)
+
+    def printSummary(self):
+
+        ''''''
+
+        print '********* wires ', self.wires
+        for pyWire in self.wires:
+
+            print '****** numWire ', pyWire.numWire
+            print '*** reflexs ', pyWire.reflexs
+            for pyReflex in pyWire.reflexs:
+
+                print 'rangoInter ', pyReflex.rangoInter
+                print 'planes ', pyReflex.planes
+                for pyPlane in pyReflex.planes:
+                    print pyPlane.numGeom,\
+                        pyPlane.rear,\
+                        pyPlane.rango, \
+                        (pyPlane.forward.firstVertex(True).Point,
+                         pyPlane.forward.lastVertex(True).Point)
+
+        print '********* alignaments ', self.alignaments
+        for pyAlignament in self.alignaments:
+
+            print '****** base'
+            print 'numWire ', pyAlignament.base.numWire
+            print 'numGeom ', pyAlignament.base.numGeom
+            print 'rear ', pyAlignament.base.rear
+            print 'rango ',  pyAlignament.base.rango
+            print 'geom ', pyAlignament.base.geom
+            print 'geomAligned ', pyAlignament.base.geomAligned
+            print 'falsify ', pyAlignament.falsify
+            print 'rangoChop ', pyAlignament.rangoChop
+            print 'prior ', pyAlignament.prior.numGeom
+            print 'later ', pyAlignament.later.numGeom
+
+            print '*** chops ', [[(x.numWire, x.numGeom),
+                                  (y.numWire, y.numGeom)]
+                                 for [x, y] in pyAlignament.chops]
+            for chop in pyAlignament.chops:
+                for pyPlane in chop:
+                    print(pyPlane.numWire, pyPlane.numGeom), ' ',\
+                        pyPlane.rear,\
+                        pyPlane.rango
+
+            print '*** aligns ', [x.numGeom for x in pyAlignament.aligns]
+            for align in pyAlignament.aligns:
+                print(align.numWire, align.numGeom),\
+                    align.rear,\
+                    align.rango,\
+                    align.geom,\
+                    align.geomAligned
+
+        print '###############################################################'
