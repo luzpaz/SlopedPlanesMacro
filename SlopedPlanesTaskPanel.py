@@ -143,27 +143,28 @@ class _TaskPanel_SlopedPlanes():
 
         self.updating = True
         self.tree.clear()
+        slopedPlanes = self.obj
 
-        if self.obj:
+        if slopedPlanes:
 
-            slopedPlanes = self.obj
             pyFaceList = slopedPlanes.Proxy.Pyth
-
             numSlope, num = 0, 0
+            compound = slopedPlanes.Shape
             for pyFace in pyFaceList:
                 originList = []
                 pyWireList = pyFace.wires
+                numFace = pyFace.numFace
+                shell = compound.Shells[numFace]
                 numSlope += num
-                num = 0
+                num, lenFace = 0, 0
 
                 for pyWire in pyWireList:
                     numWire = pyWire.numWire
-                    for pyPlane in pyWire.planes:
+                    pyPlaneList = pyWire.planes
+                    lenWire = len(pyPlaneList)
+                    lenFace += lenWire
 
-                        plane = pyPlane.shape
-                        if isinstance(plane, Part.Compound):
-                            if len(plane.Faces) > 1:
-                                num += 1
+                    for pyPlane in pyPlaneList:
 
                         charge = False
                         numAngle = pyPlane.numGeom
@@ -224,6 +225,8 @@ class _TaskPanel_SlopedPlanes():
                             doubleSpinBox.setValue(width[1])
                             self.tree.setItemWidget(item, 4, doubleSpinBox)
 
+                num = len(shell.Faces) - lenFace
+
         self.retranslateUi(self.form)
         self.updating = False
 
@@ -233,56 +236,54 @@ class _TaskPanel_SlopedPlanes():
 
         slopedPlanes = self.obj
 
-        numSlope = 0
         pyFaceList = slopedPlanes.Proxy.Pyth
-
+        numSlope, num = 0, 0
+        compound = self.obj.Shape
         for pyFace in pyFaceList:
             originList = []
+            numSlope += num
+            num, lenFace = 0, 0
+            numFace = pyFace.numFace
+            shell = compound.Shells[numFace]
 
             pyWireList = pyFace.wires
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
-                # print '### numWire ', numWire
-
+                pyPlaneList = pyWire.planes
+                lenWire = len(pyPlaneList)
+                lenFace += lenWire
                 numAngle = -1
                 pyPlaneList = pyWire.planes
 
                 for pyPlane in pyPlaneList:
                     numAngle += 1
-                    # print '### numAngle ', numAngle
                     angle = pyPlane.angle
                     charge = False
 
                     if [numWire, numAngle] not in originList:
 
                         if isinstance(angle, float):
-                            # print 'a'
                             charge = True
                             numSlope += 1
 
                         else:
-                            # print 'b'
                             alfa, beta = angle[0], angle[1]
                             if [alfa, beta] not in originList:
-                                # print 'c'
                                 originList.append([alfa, beta])
 
                                 if alfa == numWire:
 
                                     if beta > numAngle:
-                                        # print 'd'
                                         charge = True
                                         numSlope += 1
                                         pyPlane = pyWireList[alfa].planes[beta]
 
                                 elif alfa > numWire:
-                                    # print 'e'
                                     charge = True
                                     numSlope += 1
                                     pyPlane = pyWireList[alfa].planes[beta]
 
                                 elif alfa < numWire:
-                                    # print 'f'
                                     pass
 
                     if charge:
@@ -305,6 +306,8 @@ class _TaskPanel_SlopedPlanes():
                         right = doubleSpinBox.value()
 
                         pyPlane.width = [left, right]
+
+                num = len(shell.Faces) - lenFace
 
         slopedPlanes.touch()
         FreeCAD.ActiveDocument.recompute()

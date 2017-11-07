@@ -269,8 +269,9 @@ class _SlopedPlanes():
 
         self.Pyth = pyFaceList
 
-        planeList, secondaries = [], []
+        shellList = []
         for pyFace in pyFaceList:
+            planeList, secondaries = [], []
             originList = []
             pyWireList = pyFace.wires
             for pyWire in pyWireList:
@@ -325,28 +326,15 @@ class _SlopedPlanes():
                                     # print 'bb3'
                                     pass
 
-        planeList.extend(secondaries)
+                planeList.extend(secondaries)
+                for plane in planeList:
+                    plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
+                                 math.degrees(sketchAngle))
+                    plane.translate(sketchBase)
+                shell = Part.makeShell(planeList)
+                shellList.append(shell)
 
-        for plane in planeList:
-            plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
-                         math.degrees(sketchAngle))
-            plane.translate(sketchBase)
-        endShape = Part.makeShell(planeList)
-
-        if slopedPlanes.Solid:
-            if len(faceList) == 1:
-                face = faceList[0]
-                face.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
-                            math.degrees(sketchAngle))
-                face.translate(sketchBase)
-                planeList.extend(faceList)
-                endShape = Part.makeShell(planeList)
-                endShape = Part.makeSolid(endShape)
-            else:
-                slopedPlanes.Solid = False
-
-        elif slopedPlanes.Complement:
-            endShape.complement()
+        endShape = Part.makeCompound(shellList)
 
         # endShape.removeInternalWires(True)
         slopedPlanes.Shape = endShape
