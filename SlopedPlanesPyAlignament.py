@@ -501,6 +501,10 @@ class _PyAlignament(_Py):
                         pl = pyPl.shape
                         cutList.append(pl)
                         # print 'rangoChop ', nn
+                    else:
+                        pass  # ???
+                else:
+                    pass  # ???
 
             num = -1
             for pyPlane in [pyOne, pyTwo]:

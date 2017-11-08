@@ -25,6 +25,7 @@
 import Part
 import SlopedPlanesUtils as utils
 from SlopedPlanesPy import _Py
+from SlopedPlanesPyPlane import _PyPlane
 
 
 __title__ = "SlopedPlanes Macro"
@@ -71,11 +72,12 @@ class _PyReflex(_Py):
 
         self._rangoInter = rangoInter
 
-    def simulating(self, tolerance):
+    def simulating(self, pyFace, tolerance):
 
         ''''''
 
         [pyR, pyOppR] = self.planes
+
         enormousR = pyR.enormousShape
         enormousOppR = pyOppR.enormousShape
         try:
@@ -97,6 +99,40 @@ class _PyReflex(_Py):
         oppRCopy = utils.selectFace(oppRCopy.Faces, gS, tolerance)
         pyOppR.simulatedShape = oppRCopy
 
+    def simulatedReflex(self, pyFace, tolerance):
+
+        ''''''
+
+        [pyR, pyOppR] = self.planes
+
+        if pyR.aligned:
+            if not pyR.geomAligned:
+                [numWire, numGeom] = [pyR.numWire, pyR.numGeom]
+                dct = pyR.__dict__
+                (nW, nG) = pyR.angle
+                pyPlane = pyFace.selectPlane(nW, nG)
+                shape = pyPlane.shape.copy()
+                enormous = pyPlane.enormousShape
+                pyR = _PyPlane(numWire, numGeom)
+                pyR.__dict__ = dct
+                pyR.shape = shape
+                pyR.enormousShape = enormous
+
+        if pyOppR.aligned:
+            if not pyOppR.geomAligned:
+                [numWire, numGeom] = [pyOppR.numWire, pyOppR.numGeom]
+                dct = pyOppR.__dict__
+                (nW, nG) = pyOppR.angle
+                pyPlane = pyFace.selectPlane(nW, nG)
+                shape = pyPlane.shape.copy()
+                enormous = pyPlane.enormousShape
+                pyOppR = _PyPlane(numWire, numGeom)
+                pyOppR.__dict__ = dct
+                pyOppR.shape = shape
+                pyOppR.enormousShape = enormous
+
+        self.planes = [pyR, pyOppR]
+
     def reflexing(self, pyFace, pyWire, tolerance):
 
         ''''''
@@ -105,8 +141,6 @@ class _PyReflex(_Py):
 
         pyR = pyPlaneList[0]
         pyOppR = pyPlaneList[1]
-
-
 
         pyR.oppCutter, pyR.cutter = [], []
         pyOppR.oppCutter, pyOppR.cutter = [], []
@@ -363,13 +397,15 @@ class _PyReflex(_Py):
             pyOppR.addLink('oppCutter', pl)
             print 'included rango ', (pl, nWire, nn)
 
-    def solveReflex(self, face, tolerance):
+    def solveReflex(self, pyFace, face, tolerance):
 
         ''''''
 
-
         [pyR, pyOppR] = self.planes
         # print(pyR.numGeom, pyOppR.numGeom)
+
+        self.planes = [pyR, pyOppR]
+
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
@@ -416,7 +452,12 @@ class _PyReflex(_Py):
                     # print 'a'
                     break
 
-        aa = aa.cut(pyR.cutter+[bb], tolerance)
+        # OJO
+        cList = pyR.cutter
+        if pyR.aligned:
+            cList = []
+
+        aa = aa.cut(cList+[bb], tolerance)
 
         aList = []
         gS = pyR.geom.toShape()

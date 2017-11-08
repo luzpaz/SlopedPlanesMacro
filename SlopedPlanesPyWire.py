@@ -312,12 +312,15 @@ class _PyWire(_Py):
                                              tolerance)
                     pyPlane.shape = shape
 
-    def simulating(self, tolerance):
+    def simulating(self, pyFace, tolerance):
 
         ''''''
 
         for pyReflex in self.reflexs:
-            pyReflex.simulating(tolerance)
+            pyReflex.simulatedReflex(pyFace, tolerance)
+
+        for pyReflex in self.reflexs:
+            pyReflex.simulating(pyFace, tolerance)
 
     def reflexing(self, pyFace, face, tolerance):
 
@@ -327,7 +330,7 @@ class _PyWire(_Py):
             pyReflex.reflexing(pyFace, self, tolerance)
 
         for pyReflex in self.reflexs:
-            pyReflex.solveReflex(face, tolerance)
+            pyReflex.solveReflex(pyFace, face, tolerance)
 
         for pyReflex in self.reflexs:
             pyReflex.rearReflex(self, tolerance)
@@ -414,21 +417,23 @@ class _PyWire(_Py):
 
             for pyPlane in pyReflex.planes:
 
-                plane = pyPlane.shape
+                if not pyPlane.aligned:
 
-                if len(plane.Faces) == 1:
+                    plane = pyPlane.shape
 
-                    cutList = []
-                    for pyR in cutterList:
-                        for pyPl in pyR.planes:
-                            if pyPl != pyPlane:
-                                cutList.append(pyPl.shape)
+                    if len(plane.Faces) == 1:
 
-                    gS = pyPlane.geom.toShape()
-                    plane = plane.cut(cutList, tolerance)
-                    plane = utils.selectFace(plane.Faces, gS,
-                                             tolerance)
-                    pyPlane.shape = plane
+                        cutList = []
+                        for pyR in cutterList:
+                            for pyPl in pyR.planes:
+                                if pyPl != pyPlane:
+                                    cutList.append(pyPl.shape)
+
+                        gS = pyPlane.geom.toShape()
+                        plane = plane.cut(cutList, tolerance)
+                        plane = utils.selectFace(plane.Faces, gS,
+                                                 tolerance)
+                        pyPlane.shape = plane
 
     def rearing(self, tolerance):
 

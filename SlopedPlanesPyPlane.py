@@ -545,6 +545,10 @@ class _PyPlane(_Py):
 
         ''''''
 
+        if self.aligned:
+            self.solved = True
+            return True
+
         forward = self.forward
         plane = self.shape
 

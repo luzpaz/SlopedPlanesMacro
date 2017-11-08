@@ -802,10 +802,12 @@ class _PyFace(_Py):
                 else:
                     # print 'b'
                     [pyR, pyOppR] = pyPlaneList
+
                     if ((pyR.aligned or pyR.choped) and
                        (pyOppR.aligned or pyOppR.choped)):
                             # print 'bb'
                             rr = True
+
                 if rr:
                     # print 'c'
                     pyReflexList.remove(pyReflex)
@@ -920,7 +922,7 @@ class _PyFace(_Py):
             pyAlign.simulatingChop(tolerance)
 
         for pyWire in self.wires:
-            pyWire.simulating(tolerance)
+            pyWire.simulating(self, tolerance)
 
     def reflexing(self, face, tolerance):
 
