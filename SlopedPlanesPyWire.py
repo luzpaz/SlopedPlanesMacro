@@ -374,7 +374,7 @@ class _PyWire(_Py):
             # print impossible
             plane = pyPlane.shape
             gS = pyPlane.geom.toShape()
-            cutterList = [pyPl.shape for pyPl in solved]
+            cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
             plane = plane.cut(cutterList, tolerance)
             plane = utils.selectFace(plane.Faces, gS, tolerance)
             pyPlane.shape = plane
