@@ -129,6 +129,22 @@ def facePoints(face):
     return orientPoint
 
 
+def upperLeftPoint(localCoordinates):
+
+    ''''''
+
+    orig = localCoordinates[0]
+    n = -1
+    for col in localCoordinates:
+        n += 1
+        if col.y > orig.y:
+            orig = col
+        elif col.y == orig.y:
+            if col.x < orig.x:
+                orig = col
+    return localCoordinates.index(orig)
+
+
 def lowerLeftPoint(localCoordinates):
 
     ''''''

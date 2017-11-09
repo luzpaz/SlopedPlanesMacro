@@ -24,7 +24,6 @@
 
 import Part
 import SlopedPlanesUtils as utils
-import SlopedPlanesPy
 from SlopedPlanesPy import _Py
 
 

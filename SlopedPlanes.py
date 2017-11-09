@@ -119,14 +119,14 @@ class _SlopedPlanes():
         sketchAngle = sketch.Placement.Rotation.Angle
         shape.Placement = FreeCAD.Placement()
 
-        tolerance = slopedPlanes.Tolerance
         _Py.tolerance = slopedPlanes.Tolerance
         _Py.reverse = slopedPlanes.Reverse
+
         slope = slopedPlanes.SlopeGlobal
         width = slopedPlanes.FactorWidth
         length = slopedPlanes.FactorLength
-        faceMaker = slopedPlanes.FaceMaker
 
+        faceMaker = slopedPlanes.FaceMaker
         face = Part.makeFace(shape, faceMaker)
 
         fList = face.Faces
@@ -188,16 +188,18 @@ class _SlopedPlanes():
                 coord.extend(coord[0:2])
                 coordinatesInner.append(coord)
 
-            lowerLeftInner = [cc[0] for cc in coordinatesInner]
+            upperLeftInner = [cc[0] for cc in coordinatesInner]
             wireList = []
             falseFaceList = []
             coordinatesInnerOrdered = []
-            while lowerLeftInner:
-                index = utils.lowerLeftPoint(lowerLeftInner)
-                lowerLeftInner.pop(index)
+            while upperLeftInner:
+                # index = utils.lowerLeftPoint(upperLeftInner)
+                index = utils.upperLeftPoint(upperLeftInner)
+                upperLeftInner.pop(index)
                 pop = coordinatesInner.pop(index)
                 coordinatesInnerOrdered.append(pop)
-                wireList.append(wList[index])
+                pop = wList.pop(index)
+                wireList.append(pop)
                 pop = fFaceList.pop(index)
                 falseFaceList.append(pop)
 
@@ -258,8 +260,10 @@ class _SlopedPlanes():
                         pyPlaneListNew.append(pyPlane)
 
                     pyPlane.geom = geom
+                    gS = geom.toShape()
+                    # pyPlane.geomShape = gS
                     pyPlane.geomAligned = geom
-                    geomShapeWire.append(geom.toShape())
+                    geomShapeWire.append(gS)
 
                 pyWire.planes = pyPlaneListNew
                 pyWire.shapeGeom = geomShapeWire
