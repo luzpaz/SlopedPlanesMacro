@@ -23,7 +23,7 @@
 
 
 import SlopedPlanesUtils as utils
-from SlopedPlanesPy import _Py, tolerance
+from SlopedPlanesPy import _Py
 
 
 __title__ = "SlopedPlanes Macro"
@@ -185,14 +185,14 @@ class _PyWire(_Py):
                             forward = pyPlane.forward
                             gS = pyPlane.geom.toShape()
                             forw = pyPl.forward
-                            section = forward.section([forw, gS], tolerance)
+                            section = forward.section([forw, gS], _Py.tolerance)
 
                             if not section.Edges:
 
                                 if len(section.Vertexes) == 1:
 
                                     section = forw.section(section.Vertexes,
-                                                           tolerance)
+                                                           _Py.tolerance)
 
                                     if not section.Vertexes:
 
@@ -212,7 +212,7 @@ class _PyWire(_Py):
                                                     ff = pyP.forward
                                                     section =\
                                                         ff.section([forward],
-                                                                   tolerance)
+                                                                   _Py.tolerance)
 
                                                     if section.Vertexes:
                                                         procc = False
@@ -306,9 +306,9 @@ class _PyWire(_Py):
                 if cutterList:
                     # print'D'
                     # print cutterList
-                    shape = shape.cut(cutterList, tolerance)
+                    shape = shape.cut(cutterList, _Py.tolerance)
                     shape = utils.selectFace(shape.Faces, geomShape,
-                                             tolerance)
+                                             _Py.tolerance)
                     pyPlane.shape = shape
 
     def simulating(self, pyFace):
@@ -374,8 +374,8 @@ class _PyWire(_Py):
             plane = pyPlane.shape
             gS = pyPlane.geom.toShape()
             cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
-            plane = plane.cut(cutterList, tolerance)
-            plane = utils.selectFace(plane.Faces, gS, tolerance)
+            plane = plane.cut(cutterList, _Py.tolerance)
+            plane = utils.selectFace(plane.Faces, gS, _Py.tolerance)
             pyPlane.shape = plane
 
             if pyPlane.isSolved():
@@ -429,9 +429,9 @@ class _PyWire(_Py):
                                     cutList.append(pyPl.shape)
 
                         gS = pyPlane.geom.toShape()
-                        plane = plane.cut(cutList, tolerance)
+                        plane = plane.cut(cutList, _Py.tolerance)
                         plane = utils.selectFace(plane.Faces, gS,
-                                                 tolerance)
+                                                 _Py.tolerance)
                         pyPlane.shape = plane
 
     def rearing(self):

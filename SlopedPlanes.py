@@ -29,8 +29,7 @@ import FreeCAD
 import FreeCADGui
 import Part
 import SlopedPlanesUtils as utils
-import SlopedPlanesPy
-import SlopedPlanesPyPlane
+from SlopedPlanesPy import _Py
 from SlopedPlanesPyFace import _PyFace
 from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyPlane import _PyPlane
@@ -121,8 +120,9 @@ class _SlopedPlanes():
         shape.Placement = FreeCAD.Placement()
 
         tolerance = slopedPlanes.Tolerance
-        SlopedPlanesPy.tolerance = slopedPlanes.Tolerance
-        SlopedPlanesPyPlane.reverse = slopedPlanes.Reverse
+        _Py.tolerance = slopedPlanes.Tolerance
+        #SlopedPlanesPyPlane.reverse = slopedPlanes.Reverse
+        _Py.reverse = slopedPlanes.Reverse
         slope = slopedPlanes.SlopeGlobal
         width = slopedPlanes.FactorWidth
         length = slopedPlanes.FactorLength

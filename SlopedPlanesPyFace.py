@@ -25,7 +25,7 @@
 import FreeCAD
 import Part
 import SlopedPlanesUtils as utils
-from SlopedPlanesPy import _Py, tolerance
+from SlopedPlanesPy import _Py
 from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyReflex import _PyReflex
 from SlopedPlanesPyAlignament import _PyAlignament
@@ -262,7 +262,7 @@ class _PyFace(_Py):
                         print'1'
 
                         forward = pyPlane.forward
-                        section = forward.section(shapeGeomFace, tolerance)
+                        section = forward.section(shapeGeomFace, _Py.tolerance)
 
                         if section.Edges:
                             print'11'
@@ -272,7 +272,7 @@ class _PyFace(_Py):
                                 numEdge += 1
                                 print'111'
                                 edgeStart = edge.firstVertex(True).Point
-                                point = utils.roundVector(edgeStart, tolerance)
+                                point = utils.roundVector(edgeStart, _Py.tolerance)
                                 (nWire, nGeom) =\
                                     self.findAlignament(point)
 
@@ -481,7 +481,7 @@ class _PyFace(_Py):
         lenWire = len(pyWire.planes)
         numGeom = pyPlane.numGeom
         lineShape = pyPlane.forward
-        section = lineShape.section(shapeGeomWire, tolerance)
+        section = lineShape.section(shapeGeomWire, _Py.tolerance)
 
         edge = False
 
@@ -545,14 +545,14 @@ class _PyFace(_Py):
 
         shapeGeomWire = pyWire.shapeGeom
         lenWire = len(pyWire.planes)
-        section = vertex.section(shapeGeomWire, tolerance)
+        section = vertex.section(shapeGeomWire, _Py.tolerance)
 
         if len(section.Vertexes) > lenWire:
             # print 'a'
             nGeom = -1
             for shape in shapeGeomWire:
                 nGeom += 1
-                sect = vertex.section([shape], tolerance)
+                sect = vertex.section([shape], _Py.tolerance)
                 if len(sect.Vertexes) > 0:
                     break
 
@@ -990,9 +990,9 @@ class _PyFace(_Py):
                     if plane:
                         if cutterList:
                             gS = pyPlane.geomAligned.toShape()
-                            plane = plane.cut(cutterList, tolerance)
+                            plane = plane.cut(cutterList, _Py.tolerance)
                             plane = utils.selectFace(plane.Faces, gS,
-                                                     tolerance)
+                                                     _Py.tolerance)
                             pyPlane.shape = plane
 
     def aligning(self, face):
@@ -1060,9 +1060,9 @@ class _PyFace(_Py):
                             # print '2'
                             cutterList.remove(plane)
 
-                        plane = plane.cut(cutterList, tolerance)
+                        plane = plane.cut(cutterList, _Py.tolerance)
                         gS = pyPlane.geom.toShape()
-                        plane = utils.selectFace(plane.Faces, gS, tolerance)
+                        plane = utils.selectFace(plane.Faces, gS, _Py.tolerance)
                         pyPlane.shape = plane
 
                         if pyPlane.choped or pyPlane.aligned:

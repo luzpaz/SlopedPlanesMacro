@@ -24,15 +24,13 @@
 
 import Part
 import SlopedPlanesUtils as utils
-from SlopedPlanesPy import _Py, tolerance
+import SlopedPlanesPy
+from SlopedPlanesPy import _Py
 
 
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
-
-
-reverse = False
 
 
 class _PyPlane(_Py):
@@ -414,7 +412,7 @@ class _PyPlane(_Py):
         eje = coordinates[numGeom+1].sub(coordinates[numGeom])
         direction = utils.rotateVector(eje, normal, 90)
         angle = self.angle
-        if reverse:
+        if _Py.reverse:
             angle = angle * -1
         direction = utils.rotateVector(direction, eje, angle)
         direction.normalize()
@@ -469,14 +467,14 @@ class _PyPlane(_Py):
         bigShape = self.bigShape
         geomShape = self.geom.toShape()
 
-        shape = shape.cut([enormousShape], tolerance)
-        shape = utils.selectFace(shape.Faces, geomShape, tolerance)
+        shape = shape.cut([enormousShape], _Py.tolerance)
+        shape = utils.selectFace(shape.Faces, geomShape, _Py.tolerance)
         self.shape = shape
 
         bigShape =\
-            bigShape.cut([enormousShape], tolerance)
+            bigShape.cut([enormousShape], _Py.tolerance)
         bigShape =\
-            utils.selectFace(bigShape.Faces, geomShape, tolerance)
+            utils.selectFace(bigShape.Faces, geomShape, _Py.tolerance)
         self.bigShape = bigShape
 
     def ordinaries(self, pyFace, pyWire):
@@ -539,9 +537,9 @@ class _PyPlane(_Py):
 
         if cutterList:
             plane = self.shape
-            plane = plane.cut(cutterList, tolerance)
+            plane = plane.cut(cutterList, _Py.tolerance)
             gS = self.geom.toShape()
-            plane = utils.selectFace(plane.Faces, gS, tolerance)
+            plane = utils.selectFace(plane.Faces, gS, _Py.tolerance)
             self.shape = plane
 
     def isSolved(self):
@@ -555,7 +553,7 @@ class _PyPlane(_Py):
         forward = self.forward
         plane = self.shape
 
-        section = plane.section([forward], tolerance)
+        section = plane.section([forward], _Py.tolerance)
         if not section.Edges:
             # print 'True'
             self.solved = True
@@ -604,9 +602,9 @@ class _PyPlane(_Py):
                     # TODO necesita un nivel mas de seleccion
                     pass
                 else:
-                    pl = pl.cut([plane, oppPlane], tolerance)
+                    pl = pl.cut([plane, oppPlane], _Py.tolerance)
                     gS = pyPl.geom.toShape()
-                    pl = utils.selectFace(pl.Faces, gS, tolerance)
+                    pl = utils.selectFace(pl.Faces, gS, _Py.tolerance)
                     pyPl.shape = pl
 
     def rangging(self, pyWire, direction):

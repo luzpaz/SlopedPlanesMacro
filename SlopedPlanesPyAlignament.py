@@ -23,7 +23,7 @@
 
 
 import SlopedPlanesUtils as utils
-from SlopedPlanesPy import _Py, tolerance
+from SlopedPlanesPy import _Py
 
 
 __title__ = "SlopedPlanes Macro"
@@ -244,24 +244,24 @@ class _PyAlignament(_Py):
 
         if not pyPrior.aligned:
 
-            prior = prior.cut([bigBase], tolerance)
+            prior = prior.cut([bigBase], _Py.tolerance)
             gS = pyPrior.geom.toShape()
-            prior = utils.selectFace(prior.Faces, gS, tolerance)
+            prior = utils.selectFace(prior.Faces, gS, _Py.tolerance)
             pyPrior.shape = prior
 
         if not pyLater.aligned:
 
             if not self.falsify:
 
-                later = later.cut([bigBase], tolerance)
+                later = later.cut([bigBase], _Py.tolerance)
                 gS = pyLater.geom.toShape()
-                later = utils.selectFace(later.Faces, gS, tolerance)
+                later = utils.selectFace(later.Faces, gS, _Py.tolerance)
 
             else:
 
-                later = later.cut([bigCont], tolerance)
+                later = later.cut([bigCont], _Py.tolerance)
                 gS = pyLater.geom.toShape()
-                later = utils.selectFace(later.Faces, gS, tolerance)
+                later = utils.selectFace(later.Faces, gS, _Py.tolerance)
 
             pyLater.shape = later
 
@@ -270,9 +270,9 @@ class _PyAlignament(_Py):
 
             if cutterList:
                 # print '3'
-                base = base.cut(cutterList, tolerance)
+                base = base.cut(cutterList, _Py.tolerance)
                 gS = pyBase.geom.toShape()
-                base = utils.selectFace(base.Faces, gS, tolerance)
+                base = utils.selectFace(base.Faces, gS, _Py.tolerance)
                 pyBase.shape = base
 
         else:
@@ -283,16 +283,16 @@ class _PyAlignament(_Py):
 
             cList = [pyOne.bigShape] + cutterList
 
-            base = base.cut(cList, tolerance)
+            base = base.cut(cList, _Py.tolerance)
             gS = pyBase.geom.toShape()
-            base = utils.selectFace(base.Faces, gS, tolerance)
+            base = utils.selectFace(base.Faces, gS, _Py.tolerance)
             pyBase.shape = base
 
             cList = [pyTwo.bigShape] + cutterList
 
-            cont = cont.cut(cList, tolerance)
+            cont = cont.cut(cList, _Py.tolerance)
             gS = pyCont.geom.toShape()
-            cont = utils.selectFace(cont.Faces, gS, tolerance)
+            cont = utils.selectFace(cont.Faces, gS, _Py.tolerance)
             pyCont.shape = cont
 
     def simulatingBase(self, pyFace):
@@ -337,18 +337,18 @@ class _PyAlignament(_Py):
 
                 cutList = [enormousBase, enormousChopTwo] + cList
 
-                chopOneCopy = chopOneCopy.cut(cutList, tolerance)
+                chopOneCopy = chopOneCopy.cut(cutList, _Py.tolerance)
                 gS = pyChopOne.geom.toShape()
-                chopOneCopy = utils.selectFace(chopOneCopy.Faces, gS, tolerance)
+                chopOneCopy = utils.selectFace(chopOneCopy.Faces, gS, _Py.tolerance)
 
                 enormousChopOne = pyOne.enormousShape
                 chopTwoCopy = pyTwo.shape.copy()
 
                 cutList = [enormousBase, enormousChopOne] + cList
 
-                chopTwoCopy = chopTwoCopy.cut(cutList, tolerance)
+                chopTwoCopy = chopTwoCopy.cut(cutList, _Py.tolerance)
                 gS = pyChopTwo.geom.toShape()
-                chopTwoCopy = utils.selectFace(chopTwoCopy.Faces, gS, tolerance)
+                chopTwoCopy = utils.selectFace(chopTwoCopy.Faces, gS, _Py.tolerance)
 
                 chopList.extend([chopOneCopy, chopTwoCopy])
 
@@ -412,10 +412,10 @@ class _PyAlignament(_Py):
             geomList = [py.geom.toShape() for py in self.aligns]
             geomList.insert(0, pyBase.geom.toShape())
 
-            base = base.cut(cutterList, tolerance)
+            base = base.cut(cutterList, _Py.tolerance)
             shapeList = []
             for ff in base.Faces:
-                section = ff.section(geomList, tolerance)
+                section = ff.section(geomList, _Py.tolerance)
                 if section.Edges:
                     # print 'a'
                     shapeList.append(ff)
@@ -428,9 +428,9 @@ class _PyAlignament(_Py):
             cont = pyCont.shape.copy()
             pyLater = self.later
             bigLater = pyLater.bigShape
-            cont = cont.cut([bigLater], tolerance)
+            cont = cont.cut([bigLater], _Py.tolerance)
             gS = pyCont.geom.toShape()
-            cont = utils.selectFace(cont.Faces, gS, tolerance)
+            cont = utils.selectFace(cont.Faces, gS, _Py.tolerance)
 
             shapeList = [base, cont]
 
@@ -450,9 +450,9 @@ class _PyAlignament(_Py):
                 except AttributeError:
                     plCopy = pyPlane.shape.copy()
 
-                plCopy = plCopy.cut([enormous], tolerance)
+                plCopy = plCopy.cut([enormous], _Py.tolerance)
                 gS = pyPlane.geom.toShape()
-                plCopy = utils.selectFace(plCopy.Faces, gS, tolerance)
+                plCopy = utils.selectFace(plCopy.Faces, gS, _Py.tolerance)
                 pyPlane.simulatedShape = plCopy
 
     def aligning(self, face, pyFace):
@@ -542,8 +542,8 @@ class _PyAlignament(_Py):
                 if cutterList:
                     plane = pyPlane.shape
                     gS = [pyChopOne, pyChopTwo][num].geom.toShape()
-                    plane = plane.cut(cutterList, tolerance)
-                    plane = utils.selectFace(plane.Faces, gS, tolerance)
+                    plane = plane.cut(cutterList, _Py.tolerance)
+                    plane = utils.selectFace(plane.Faces, gS, _Py.tolerance)
                     pyPlane.shape = plane
 
             num = -1
@@ -562,16 +562,16 @@ class _PyAlignament(_Py):
                         cList = [enormousCont]
 
                 gS = [pyChopOne, pyChopTwo][num].geom.toShape()
-                planeCopy = planeCopy.cut(cList, tolerance)
+                planeCopy = planeCopy.cut(cList, _Py.tolerance)
 
                 for ff in planeCopy.Faces:
-                    section = ff.section([gS], tolerance)
+                    section = ff.section([gS], _Py.tolerance)
                     if not section.Edges:
-                        sect = ff.section([face], tolerance)
+                        sect = ff.section([face], _Py.tolerance)
                         if sect.Edges:
                             planeCopy = ff
-                            plane = plane.cut([planeCopy], tolerance)
-                            plane = utils.selectFace(plane.Faces, gS, tolerance)
+                            plane = plane.cut([planeCopy], _Py.tolerance)
+                            plane = utils.selectFace(plane.Faces, gS, _Py.tolerance)
                             pyPlane.shape = plane
                             break
 
@@ -579,15 +579,15 @@ class _PyAlignament(_Py):
             shapeTwo = pyTwo.shape
 
             cutterList = [shapeTwo]
-            shapeOne = shapeOne.cut(cutterList, tolerance)
+            shapeOne = shapeOne.cut(cutterList, _Py.tolerance)
             geomShape = pyChopOne.geom.toShape()
-            ff = utils.selectFace(shapeOne.Faces, geomShape, tolerance)
+            ff = utils.selectFace(shapeOne.Faces, geomShape, _Py.tolerance)
             pyOne.shape = ff
 
             cutterList = [shapeOne]
-            shapeTwo = shapeTwo.cut(cutterList, tolerance)
+            shapeTwo = shapeTwo.cut(cutterList, _Py.tolerance)
             geomShape = pyChopTwo.geom.toShape()
-            ff = utils.selectFace(shapeTwo.Faces, geomShape, tolerance)
+            ff = utils.selectFace(shapeTwo.Faces, geomShape, _Py.tolerance)
             pyTwo.shape = ff
 
             chopList.append([pyOne, pyTwo])
@@ -618,29 +618,29 @@ class _PyAlignament(_Py):
                         # print 'rangoChop ', nn
 
                 base = pyBase.shape
-                base = base.cut(cutterList, tolerance)
+                base = base.cut(cutterList, _Py.tolerance)
 
                 if len(base.Faces) == 2:
                     # print 'a'
 
                     gS = pyBase.geom.toShape()
-                    base = utils.selectFace(base.Faces, gS, tolerance)
+                    base = utils.selectFace(base.Faces, gS, _Py.tolerance)
                     pyBase.shape = base
 
                 else:
                     # print 'b'
 
                     gS = pyBase.geom.toShape()
-                    ff = utils.selectFace(base.Faces, gS, tolerance)
+                    ff = utils.selectFace(base.Faces, gS, _Py.tolerance)
                     pyBase.shape = ff
 
                     gS = pyChopTwo.geom.toShape()
-                    shapeTwo = shapeTwo.cut([ff], tolerance)
-                    shapeTwo = utils.selectFace(shapeTwo.Faces, gS, tolerance)
+                    shapeTwo = shapeTwo.cut([ff], _Py.tolerance)
+                    shapeTwo = utils.selectFace(shapeTwo.Faces, gS, _Py.tolerance)
                     pyTwo.shape = shapeTwo
 
                     gS = pyCont.geom.toShape()
-                    ff = utils.selectFace(base.Faces, gS, tolerance)
+                    ff = utils.selectFace(base.Faces, gS, _Py.tolerance)
                     pyCont.shape = ff
 
                     try:
@@ -652,8 +652,8 @@ class _PyAlignament(_Py):
                     pyCont.angle = pyBase.angle
 
                     gS = pyChopOne.geom.toShape()
-                    shapeOne = shapeOne.cut([ff], tolerance)
-                    shapeOne = utils.selectFace(shapeOne.Faces, gS, tolerance)
+                    shapeOne = shapeOne.cut([ff], _Py.tolerance)
+                    shapeOne = utils.selectFace(shapeOne.Faces, gS, _Py.tolerance)
                     pyOne.shape = shapeOne
 
                     pyBase = aligns[numChop]
@@ -676,14 +676,14 @@ class _PyAlignament(_Py):
                     cutterList.append(pl)
                     # print 'rangoChop ', nn
 
-            base = base.cut(cutterList, tolerance)
+            base = base.cut(cutterList, _Py.tolerance)
             gS = pyBase.geom.toShape()
-            base = utils.selectFace(base.Faces, gS, tolerance)
+            base = utils.selectFace(base.Faces, gS, _Py.tolerance)
             pyBase.shape = base
 
-            cont = cont.cut(cutterList, tolerance)
+            cont = cont.cut(cutterList, _Py.tolerance)
             gS = pyCont.geom.toShape()
-            cont = utils.selectFace(cont.Faces, gS, tolerance)
+            cont = utils.selectFace(cont.Faces, gS, _Py.tolerance)
             pyCont.shape = cont
 
     def rangging(self, pyFace):
