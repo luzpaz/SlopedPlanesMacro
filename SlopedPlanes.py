@@ -29,6 +29,7 @@ import FreeCAD
 import FreeCADGui
 import Part
 import SlopedPlanesUtils as utils
+import SlopedPlanesPy
 from SlopedPlanesPyFace import _PyFace
 from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyPlane import _PyPlane
@@ -119,6 +120,7 @@ class _SlopedPlanes():
         shape.Placement = FreeCAD.Placement()
 
         tolerance = slopedPlanes.Tolerance
+        SlopedPlanesPy.tolerance = slopedPlanes.Tolerance
         reverse = slopedPlanes.Reverse
         slope = slopedPlanes.SlopeGlobal
         width = slopedPlanes.FactorWidth
@@ -233,6 +235,7 @@ class _SlopedPlanes():
 
                 pyPlaneListOld = pyWire.planes
                 pyPlaneListNew = []
+                geomShapeWire = []
                 numGeom = -1
                 for geom in geomWire:
                     numGeom += 1
@@ -250,37 +253,39 @@ class _SlopedPlanes():
 
                     pyPlane.geom = geom
                     pyPlane.geomAligned = geom
+                    geomShapeWire.append(geom.toShape())
 
                 pyWire.planes = pyPlaneListNew
+                pyWire.shapeGeom = geomShapeWire
 
             pyFace.wires = pyWireListNew
 
-            pyFace.parsing(normal, size, tolerance)
+            pyFace.parsing(normal, size)
 
             pyFace.planning(normal, size, reverse)
 
             if slopedPlanes.Up:
                 pass
 
-            pyFace.trimming(tolerance)
+            pyFace.trimming()
 
-            pyFace.priorLater(tolerance)
+            pyFace.priorLater()
 
-            pyFace.simulating(tolerance)
+            pyFace.simulating()
 
-            pyFace.reflexing(face, tolerance)
+            pyFace.reflexing(face)
 
-            pyFace.reviewing(face, tolerance)
+            pyFace.reviewing(face)
 
-            pyFace.rearing(tolerance)
+            pyFace.rearing()
 
-            pyFace.ordinaries(tolerance)
+            pyFace.ordinaries()
 
-            pyFace.between(tolerance)
+            pyFace.between()
 
-            pyFace.aligning(face, tolerance)
+            pyFace.aligning(face)
 
-            pyFace.ending(tolerance)
+            pyFace.ending()
 
         self.Pyth = pyFaceListNew
         print 'self.Pyth ', self.Pyth

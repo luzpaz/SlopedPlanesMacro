@@ -24,7 +24,7 @@
 
 import Part
 import SlopedPlanesUtils as utils
-from SlopedPlanesPy import _Py
+from SlopedPlanesPy import _Py, tolerance
 from SlopedPlanesPyPlane import _PyPlane
 
 
@@ -72,7 +72,7 @@ class _PyReflex(_Py):
 
         self._rangoInter = rangoInter
 
-    def simulating(self, pyFace, tolerance):
+    def simulating(self, pyFace):
 
         ''''''
 
@@ -99,7 +99,7 @@ class _PyReflex(_Py):
         oppRCopy = utils.selectFace(oppRCopy.Faces, gS, tolerance)
         pyOppR.simulatedShape = oppRCopy
 
-    def simulatedReflex(self, pyFace, tolerance):
+    def simulatedReflex(self, pyFace):
 
         ''''''
 
@@ -133,7 +133,7 @@ class _PyReflex(_Py):
 
         self.planes = [pyR, pyOppR]
 
-    def reflexing(self, pyFace, pyWire, tolerance):
+    def reflexing(self, pyFace, pyWire):
 
         ''''''
 
@@ -149,15 +149,15 @@ class _PyReflex(_Py):
         print '### direction ', direction
         print(pyR.numGeom, pyOppR.numGeom)
 
-        self.twin(pyFace, pyWire, pyR, pyOppR, direction, tolerance)
+        self.twin(pyFace, pyWire, pyR, pyOppR, direction)
 
         direction = "backward"
         print '### direction ', direction
         print(pyOppR.numGeom, pyR.numGeom)
 
-        self.twin(pyFace, pyWire, pyOppR, pyR, direction, tolerance)
+        self.twin(pyFace, pyWire, pyOppR, pyR, direction)
 
-    def twin(self, pyFace, pyWire, pyR, pyOppR, direction, tolerance):
+    def twin(self, pyFace, pyWire, pyR, pyOppR, direction):
 
         ''''''
 
@@ -249,12 +249,12 @@ class _PyReflex(_Py):
             if direction == 'forward':
 
                 self.processOppRear(oppRear, direction, pyFace, pyWire, pyR,
-                                    pyOppR, oppReflexEnormous, tolerance)
+                                    pyOppR, oppReflexEnormous)
 
             else:
 
                 self.processOppRear(oppRear, direction, pyFace, pyWire, pyR,
-                                    pyOppR, oppReflexEnormous, tolerance)
+                                    pyOppR, oppReflexEnormous)
 
         rangoCorner = pyR.rango
 
@@ -263,7 +263,7 @@ class _PyReflex(_Py):
                 if nn not in oppRear:
 
                     self.processRango(pyFace, pyWire, pyR, pyOppR,
-                                      nn, 'rangoCorner', tolerance)
+                                      nn, 'rangoCorner')
 
         rangoNext = pyOppR.rango
 
@@ -272,7 +272,7 @@ class _PyReflex(_Py):
                 for nn in ran:
 
                     self.processRango(pyFace, pyWire, pyR, pyOppR,
-                                      nn, 'rangoNext', tolerance)
+                                      nn, 'rangoNext')
 
         rangoInter = self.rangoInter
         if rangoInter:
@@ -281,10 +281,10 @@ class _PyReflex(_Py):
             for nn in ran:
 
                 self.processRango(pyFace, pyWire, pyR, pyOppR, nn,
-                                  'rangoInter', tolerance)
+                                  'rangoInter')
 
     def processOppRear(self, oppRear, direction, pyFace, pyWire, pyR, pyOppR,
-                       oppReflexEnormous, tolerance):
+                       oppReflexEnormous):
 
         ''''''
 
@@ -328,7 +328,7 @@ class _PyReflex(_Py):
                 print 'included oppRear rectified ', (oppRearPl, nWire, nGeom)
                 break
 
-    def processRango(self, pyFace, pyWire, pyR, pyOppR, nn, kind, tolerance):
+    def processRango(self, pyFace, pyWire, pyR, pyOppR, nn, kind):
 
         ''''''
 
@@ -397,7 +397,7 @@ class _PyReflex(_Py):
             pyOppR.addLink('oppCutter', pl)
             print 'included rango ', (pl, nWire, nn)
 
-    def solveReflex(self, pyFace, face, tolerance):
+    def solveReflex(self, pyFace, face):
 
         ''''''
 
@@ -411,14 +411,14 @@ class _PyReflex(_Py):
 
         self.processReflex(reflex, oppReflex,
                            pyR, pyOppR, face,
-                           'forward', tolerance)
+                           'forward')
 
         self.processReflex(oppReflex, reflex,
                            pyOppR, pyR, face,
-                           'backward', tolerance)
+                           'backward')
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR, face,
-                      direction, tolerance):
+                      direction):
 
         ''''''
 
@@ -537,7 +537,7 @@ class _PyReflex(_Py):
         else:
             pyR.compound = compound
 
-    def rearReflex(self, pyWire, tolerance):
+    def rearReflex(self, pyWire):
 
         ''''''
 
@@ -559,7 +559,7 @@ class _PyReflex(_Py):
 
                         # TODO aplica tambien al oppReflex de rearPl
 
-    def compounding(self, tolerance):
+    def compounding(self):
 
         ''''''
 
@@ -604,20 +604,20 @@ class _PyReflex(_Py):
         pyR.shape = compoundA
         pyOppR.shape = compoundB
 
-    def reviewing(self, tolerance):
+    def reviewing(self):
 
         ''''''
 
         for pyPlane in self.planes:
-            pyPlane.isSolved(tolerance)
+            pyPlane.isSolved()
 
-    def rearing(self, pyWire, tolerance):
+    def rearing(self, pyWire):
 
         ''''''
 
         for pyPlane in self.planes:
             if not pyPlane.reflexed:
-                pyPlane.rearing(pyWire, self, tolerance)
+                pyPlane.rearing(pyWire, self)
 
     def rangging(self, pyWire):
 

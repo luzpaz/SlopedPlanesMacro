@@ -23,7 +23,7 @@
 
 
 import SlopedPlanesUtils as utils
-from SlopedPlanesPy import _Py
+from SlopedPlanesPy import _Py, tolerance
 
 
 __title__ = "SlopedPlanes Macro"
@@ -175,7 +175,7 @@ class _PyAlignament(_Py):
 
         self._later = later
 
-    def trimming(self, pyFace, tolerance):
+    def trimming(self, pyFace):
 
         ''''''
 
@@ -192,7 +192,7 @@ class _PyAlignament(_Py):
                 pyPl = pyPlaneList[nG]
                 if not pyPl.aligned:
 
-                    pyPl.trimming(enormousShape, tolerance)
+                    pyPl.trimming(enormousShape)
 
         for chop in self.chops:
 
@@ -209,9 +209,9 @@ class _PyAlignament(_Py):
                             pyPl = pyPlaneList[nG]
                             if not pyPl.aligned:
 
-                                pyPl.trimming(enormousShape, tolerance)
+                                pyPl.trimming(enormousShape)
 
-    def priorLater(self, pyFace, tolerance):
+    def priorLater(self, pyFace):
 
         ''''''
 
@@ -295,7 +295,7 @@ class _PyAlignament(_Py):
             cont = utils.selectFace(cont.Faces, gS, tolerance)
             pyCont.shape = cont
 
-    def simulatingBase(self, pyFace, tolerance):
+    def simulatingBase(self, pyFace):
 
         ''''''
 
@@ -436,7 +436,7 @@ class _PyAlignament(_Py):
 
         self.simulatedShape = shapeList
 
-    def simulatingChop(self, tolerance):
+    def simulatingChop(self):
 
         ''''''
 
@@ -455,7 +455,7 @@ class _PyAlignament(_Py):
                 plCopy = utils.selectFace(plCopy.Faces, gS, tolerance)
                 pyPlane.simulatedShape = plCopy
 
-    def aligning(self, face, pyFace, tolerance):
+    def aligning(self, face, pyFace):
 
         ''''''
 

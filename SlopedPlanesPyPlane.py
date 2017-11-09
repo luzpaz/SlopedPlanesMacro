@@ -24,7 +24,7 @@
 
 import Part
 import SlopedPlanesUtils as utils
-from SlopedPlanesPy import _Py
+from SlopedPlanesPy import _Py, tolerance
 
 
 __title__ = "SlopedPlanes Macro"
@@ -458,7 +458,7 @@ class _PyPlane(_Py):
 
         return plane
 
-    def trimming(self, enormousShape, tolerance):
+    def trimming(self, enormousShape):
 
         ''''''
 
@@ -476,7 +476,7 @@ class _PyPlane(_Py):
             utils.selectFace(bigShape.Faces, geomShape, tolerance)
         self.bigShape = bigShape
 
-    def ordinaries(self, pyFace, pyWire, tolerance):
+    def ordinaries(self, pyFace, pyWire):
 
         ''''''
 
@@ -541,7 +541,7 @@ class _PyPlane(_Py):
             plane = utils.selectFace(plane.Faces, gS, tolerance)
             self.shape = plane
 
-    def isSolved(self, tolerance):
+    def isSolved(self):
 
         ''''''
 
@@ -562,7 +562,7 @@ class _PyPlane(_Py):
             self.solved = False
             return False
 
-    def rearing(self, pyWire, pyReflex, tolerance):
+    def rearing(self, pyWire, pyReflex):
 
         ''''''
 

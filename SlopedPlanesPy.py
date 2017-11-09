@@ -27,6 +27,9 @@ __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
 
 
+tolerance = 1e-7
+
+
 class _Py(object):
 
     ''''''

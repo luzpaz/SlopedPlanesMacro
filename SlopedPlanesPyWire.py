@@ -23,7 +23,7 @@
 
 
 import SlopedPlanesUtils as utils
-from SlopedPlanesPy import _Py
+from SlopedPlanesPy import _Py, tolerance
 
 
 __title__ = "SlopedPlanes Macro"
@@ -148,7 +148,7 @@ class _PyWire(_Py):
                     pyPlane.rangging(self, direction)
                     direction = "backward"
 
-    def trimming(self, pyFace, tolerance):
+    def trimming(self, pyFace):
 
         ''''''
 
@@ -174,7 +174,7 @@ class _PyWire(_Py):
 
                         if not pyPl.reflexed:
 
-                            pyPl.trimming(enormousShape, tolerance)
+                            pyPl.trimming(enormousShape)
 
                         elif pyPl.aligned:
 
@@ -220,10 +220,9 @@ class _PyWire(_Py):
 
                                         if procc:
                                             # print 'procc'
-                                            pyPl.trimming(enormousShape,
-                                                          tolerance)
+                                            pyPl.trimming(enormousShape)
 
-    def priorLater(self, pyFace, tolerance):
+    def priorLater(self, pyFace):
 
         ''''''
 
@@ -312,40 +311,40 @@ class _PyWire(_Py):
                                              tolerance)
                     pyPlane.shape = shape
 
-    def simulating(self, pyFace, tolerance):
+    def simulating(self, pyFace):
 
         ''''''
 
         for pyReflex in self.reflexs:
-            pyReflex.simulatedReflex(pyFace, tolerance)
+            pyReflex.simulatedReflex(pyFace)
 
         for pyReflex in self.reflexs:
-            pyReflex.simulating(pyFace, tolerance)
+            pyReflex.simulating(pyFace)
 
-    def reflexing(self, pyFace, face, tolerance):
+    def reflexing(self, pyFace, face):
 
         ''''''
 
         for pyReflex in self.reflexs:
-            pyReflex.reflexing(pyFace, self, tolerance)
+            pyReflex.reflexing(pyFace, self)
 
         for pyReflex in self.reflexs:
-            pyReflex.solveReflex(pyFace, face, tolerance)
+            pyReflex.solveReflex(pyFace, face)
 
         for pyReflex in self.reflexs:
-            pyReflex.rearReflex(self, tolerance)
+            pyReflex.rearReflex(self)
 
         for pyReflex in self.reflexs:
-            pyReflex.compounding(tolerance)
+            pyReflex.compounding()
 
-    def reviewing(self, tolerance):
+    def reviewing(self):
 
         ''''''
 
         for pyReflex in self.reflexs:
-            pyReflex.reviewing(tolerance)
+            pyReflex.reviewing()
 
-    def clasifyReflexPlanes(self, tolerance):
+    def clasifyReflexPlanes(self):
 
         ''''''
 
@@ -362,7 +361,7 @@ class _PyWire(_Py):
 
         return solved, unsolved
 
-    def reSolveReflexs(self, tolerance, solved=[], unsolved=[],
+    def reSolveReflexs(self, solved=[], unsolved=[],
                        impossible=[]):
 
         ''''''
@@ -379,7 +378,7 @@ class _PyWire(_Py):
             plane = utils.selectFace(plane.Faces, gS, tolerance)
             pyPlane.shape = plane
 
-            if pyPlane.isSolved(tolerance):
+            if pyPlane.isSolved():
                 # print 'aa'
                 unsolved.remove(pyPlane)
                 solved.append(pyPlane)
@@ -394,9 +393,9 @@ class _PyWire(_Py):
                 # print 'return'
                 return
 
-            self.reSolveReflexs(tolerance, solved, unsolved, impossible)
+            self.reSolveReflexs(solved, unsolved, impossible)
 
-    def betweenReflexs(self, tolerance):
+    def betweenReflexs(self):
 
         ''''''
 
@@ -435,18 +434,18 @@ class _PyWire(_Py):
                                                  tolerance)
                         pyPlane.shape = plane
 
-    def rearing(self, tolerance):
+    def rearing(self):
 
         ''''''
 
         for pyReflex in self.reflexs:
-            pyReflex.rearing(self, tolerance)
+            pyReflex.rearing(self)
 
-    def ordinaries(self, pyFace, tolerance):
+    def ordinaries(self, pyFace):
 
         ''''''
 
         for pyPlane in self.planes:
             if not (pyPlane.reflexed and not pyPlane.aligned):
                 if pyPlane.shape:
-                    pyPlane.ordinaries(pyFace, self, tolerance)
+                    pyPlane.ordinaries(pyFace, self)
