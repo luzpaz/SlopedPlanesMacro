@@ -127,8 +127,6 @@ class _SlopedPlanes():
         length = slopedPlanes.FactorLength
         faceMaker = slopedPlanes.FaceMaker
 
-        face = Part.makeFace(shape, faceMaker)
-
         fList = face.Faces
         normal = utils.faceNormal(fList[0], tolerance)
         _Py.normal = normal
@@ -152,7 +150,8 @@ class _SlopedPlanes():
             lowerLeftFaces.pop(index)
             pop = coordinatesOuter.pop(index)
             coordinatesOuterOrdered.append(pop)
-            faceList.append(fList[index])
+            pop = fList.pop(index)
+            faceList.append(pop)
             pop = fFaceOuter.pop(index)
             falseFaceOuter.append(pop)
 
@@ -293,7 +292,6 @@ class _SlopedPlanes():
             pyFace.ending()
 
         self.Pyth = pyFaceListNew
-        print 'self.Pyth ', self.Pyth
 
         shellList = []
         for pyFace in pyFaceListNew:
