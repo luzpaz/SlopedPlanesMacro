@@ -162,6 +162,7 @@ class _SlopedPlanes():
         for face in faceList:
             numFace += 1
             size = face.BoundBox.DiagonalLength
+            _Py.size = size
             coordinatesOuter = coordinatesOuterOrdered[numFace]
             for pyFace in pyFaceListOld:
                 oldCoord = pyFace.wires[0].coordinates
@@ -261,9 +262,9 @@ class _SlopedPlanes():
 
             pyFace.wires = pyWireListNew
 
-            pyFace.parsing(size)
+            pyFace.parsing()
 
-            pyFace.planning(size)
+            pyFace.planning()
 
             if slopedPlanes.Up:
                 pass

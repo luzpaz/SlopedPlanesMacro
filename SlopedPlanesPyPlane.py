@@ -402,7 +402,7 @@ class _PyPlane(_Py):
 
         self._solved = solved
 
-    def planning(self, pyWire, size):
+    def planning(self, pyWire):
 
         ''''''
 
@@ -422,13 +422,13 @@ class _PyPlane(_Py):
 
         scale = 1
         plane =\
-            self.doPlane(size, direction, geom, firstParam,
+            self.doPlane(direction, geom, firstParam,
                          lastParam, scale)
         self.shape = plane
 
         scale = 10
         bigPlane =\
-            self.doPlane(size, direction, geom, firstParam,
+            self.doPlane(direction, geom, firstParam,
                          lastParam, scale)
         self.bigShape = bigPlane
 
@@ -436,7 +436,7 @@ class _PyPlane(_Py):
 
             scale = 100
             enormousPlane =\
-                self.doPlane(size, direction, geom, firstParam,
+                self.doPlane(direction, geom, firstParam,
                              lastParam, scale)
             self.enormousShape = enormousPlane
 
@@ -444,7 +444,7 @@ class _PyPlane(_Py):
             self.divide = []
             self.compound = None
 
-    def doPlane(self, size, direction, geom, firstParam, lastParam, scale):
+    def doPlane(self, direction, geom, firstParam, lastParam, scale):
 
         ''''''
 
@@ -452,10 +452,10 @@ class _PyPlane(_Py):
         rightScale = self.width[1] * scale
         upScale = self.length * scale
 
-        startParam = firstParam - leftScale * size
-        endParam = lastParam + rightScale * size
+        startParam = firstParam - leftScale * _Py.size
+        endParam = lastParam + rightScale * _Py.size
         extendGeom = Part.LineSegment(geom, startParam, endParam)
-        plane = extendGeom.toShape().extrude(direction*upScale*size)
+        plane = extendGeom.toShape().extrude(direction*upScale*_Py.size)
 
         return plane
 

@@ -192,7 +192,7 @@ class _PyFace(_Py):
 
         return wireList, alignList
 
-    def parsing(self, size):
+    def parsing(self):
 
         ''''''
 
@@ -242,7 +242,7 @@ class _PyFace(_Py):
 
                     if ref:
                         print'ref'
-                        forwardLine = self.forBack(pyPlane, size, 'backward')
+                        forwardLine = self.forBack(pyPlane, 'backward')
                         ref = False
 
                         if resetFace:
@@ -255,7 +255,7 @@ class _PyFace(_Py):
                     lineEnd = coord[numGeom+1]
 
                     if corner == 'reflex' or numWire > 0:
-                        forwardLine = self.forBack(pyPlane, size, 'forward')
+                        forwardLine = self.forBack(pyPlane, 'forward')
 
                     if ((numWire == 0 and corner == 'reflex') or
                        (numWire > 0 and corner == 'convex')):
@@ -320,8 +320,7 @@ class _PyFace(_Py):
 
                                         self.seatAlignament(pyAlign,
                                                             pyWire, pyPlane,
-                                                            pyW, pyPl,
-                                                            size)
+                                                            pyW, pyPl)
 
                                         if pyPl.numWire == pyPlane.numWire:
                                             ref = True
@@ -392,8 +391,7 @@ class _PyFace(_Py):
 
         self.printSummary()
 
-    def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl,
-                       size):
+    def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
         ''''''
 
@@ -690,21 +688,21 @@ class _PyFace(_Py):
         pyAlignList.remove(pyAlign)
         self.alignaments = pyAlignList
 
-    def forBack(self, pyPlane, size, direction):
+    def forBack(self, pyPlane, direction):
 
         ''''''
 
         line = pyPlane.geom
 
         lineLastParam = line.LastParameter
-        lineEndParam = lineLastParam + size
+        lineEndParam = lineLastParam + _Py.size
         forwardLine = Part.LineSegment(line, lineLastParam,
                                        lineEndParam)
         # print'forwardLine ', forwardLine
         forwardLineShape = forwardLine.toShape()
 
         lineStartParam = line.FirstParameter
-        lineEndParam = lineStartParam - size
+        lineEndParam = lineStartParam - _Py.size
         backwardLine =\
             Part.LineSegment(line, lineStartParam, lineEndParam)
         # print'backwardLine ', backwardLine
@@ -859,7 +857,7 @@ class _PyFace(_Py):
 
             pyAlign.simulatedChops = simulatedChops
 
-    def planning(self, size):
+    def planning(self):
 
         ''''''
 
@@ -868,7 +866,7 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
 
-            pyWire.planning(reset, size)
+            pyWire.planning(reset)
 
         pyAlignList = self.alignaments
 
