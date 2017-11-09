@@ -127,6 +127,8 @@ class _SlopedPlanes():
         length = slopedPlanes.FactorLength
         faceMaker = slopedPlanes.FaceMaker
 
+        face = Part.makeFace(shape, faceMaker)
+
         fList = face.Faces
         normal = utils.faceNormal(fList[0], tolerance)
         _Py.normal = normal

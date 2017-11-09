@@ -60,12 +60,93 @@ class _Py(object):
             valueList.append(value)
         setattr(self, prop, valueList)
 
+    def selectAlignament(self, nWire, nGeom):
+
+        ''''''
+
+        pyWireList = _Py.pyFace.wires
+        pyWire = pyWireList[nWire]
+        pyPlaneList = pyWire.planes
+        pyPlane = pyPlaneList[nGeom]
+
+        pyAlignList = _Py.pyFace.alignaments
+        for pyAlign in pyAlignList:
+            if pyAlign.base == pyPlane:
+                # print 'a'
+                return pyAlign
+            elif pyPlane in pyAlign.aligns:
+                # print 'b'
+                return pyAlign
+
+        return None
+
+    def selectAlignamentBase(self, nWire, nGeom):
+
+        ''''''
+
+        pyWireList = _Py.pyFace.wires
+        pyWire = pyWireList[nWire]
+        pyPlaneList = pyWire.planes
+        pyPlane = pyPlaneList[nGeom]
+
+        pyAlignList = _Py.pyFace.alignaments
+        for pyAlign in pyAlignList:
+            if pyAlign.base == pyPlane:
+                return pyAlign
+
+        return None
+
+    def selectReflex(self, numWire, numGeom, nGeom):
+
+        ''''''
+
+        pyReflexList = _Py.pyFace.wires[numWire].reflexs
+        for pyReflex in pyReflexList:
+            [pyPlane, pyPl] = pyReflex.planes
+            [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
+            if [nn, mm] == [numGeom, nGeom] or [nn, mm] == [nGeom, numGeom]:
+                return pyReflex
+
+        return None
+
+    def selectAllReflex(self, numWire, numGeom):
+
+        ''''''
+
+        pyRList = []
+        pyReflexList = _Py.pyFace.wires[numWire].reflexs
+        for pyReflex in pyReflexList:
+            [pyPlane, pyPl] = pyReflex.planes
+            [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
+            if numGeom in [nn, mm]:
+                pyRList.append(pyReflex)
+
+        return pyRList
+
+    def selectPlane(self, nWire, nGeom):
+
+        ''''''
+
+        pyWireList = _Py.pyFace.wires
+        for wire in pyWireList:
+            if wire.numWire == nWire:
+                pyPlaneList = wire.planes
+                for plane in pyPlaneList:
+                    if plane.numGeom == nGeom:
+                        return plane
+
+        return None
+
+
+
+
+
     def printSummary(self):
 
         ''''''
 
-        print '********* wires ', self.wires
-        for pyWire in self.wires:
+        print '********* wires ', _Py.pyFace.wires
+        for pyWire in _Py.pyFace.wires:
 
             print '****** numWire ', pyWire.numWire
             print '*** reflexs ', pyWire.reflexs
@@ -80,8 +161,8 @@ class _Py(object):
                         (pyPlane.forward.firstVertex(True).Point,
                          pyPlane.forward.lastVertex(True).Point)
 
-        print '********* alignaments ', self.alignaments
-        for pyAlignament in self.alignaments:
+        print '********* alignaments ', _Py.pyFace.alignaments
+        for pyAlignament in _Py.pyFace.alignaments:
 
             print '****** base'
             print 'numWire ', pyAlignament.base.numWire

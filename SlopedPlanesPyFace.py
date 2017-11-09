@@ -389,7 +389,7 @@ class _PyFace(_Py):
 
         self.removeExcessReflex()
 
-        self.printSummary()
+        # self.printSummary()
 
     def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -603,82 +603,7 @@ class _PyFace(_Py):
 
         return (nWire, nGeom)
 
-    def selectAlignament(self, nWire, nGeom):
 
-        ''''''
-
-        pyWireList = self.wires
-        pyWire = pyWireList[nWire]
-        pyPlaneList = pyWire.planes
-        pyPlane = pyPlaneList[nGeom]
-
-        pyAlignList = self.alignaments
-        for pyAlign in pyAlignList:
-            if pyAlign.base == pyPlane:
-                # print 'a'
-                return pyAlign
-            elif pyPlane in pyAlign.aligns:
-                # print 'b'
-                return pyAlign
-
-        return None
-
-    def selectAlignamentBase(self, nWire, nGeom):
-
-        ''''''
-
-        pyWireList = self.wires
-        pyWire = pyWireList[nWire]
-        pyPlaneList = pyWire.planes
-        pyPlane = pyPlaneList[nGeom]
-
-        pyAlignList = self.alignaments
-        for pyAlign in pyAlignList:
-            if pyAlign.base == pyPlane:
-                return pyAlign
-
-        return None
-
-    def selectReflex(self, numWire, numGeom, nGeom):
-
-        ''''''
-
-        pyReflexList = self.wires[numWire].reflexs
-        for pyReflex in pyReflexList:
-            [pyPlane, pyPl] = pyReflex.planes
-            [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
-            if [nn, mm] == [numGeom, nGeom] or [nn, mm] == [nGeom, numGeom]:
-                return pyReflex
-
-        return None
-
-    def selectAllReflex(self, numWire, numGeom):
-
-        ''''''
-
-        pyRList = []
-        pyReflexList = self.wires[numWire].reflexs
-        for pyReflex in pyReflexList:
-            [pyPlane, pyPl] = pyReflex.planes
-            [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
-            if numGeom in [nn, mm]:
-                pyRList.append(pyReflex)
-
-        return pyRList
-
-    def selectPlane(self, nWire, nGeom):
-
-        ''''''
-
-        pyWireList = self.wires
-        for wire in pyWireList:
-            if wire.numWire == nWire:
-                pyPlaneList = wire.planes
-                for plane in pyPlaneList:
-                    if plane.numGeom == nGeom:
-                        return plane
-
-        return None
 
     def removeAlignament(self, pyAlign):
 
