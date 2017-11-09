@@ -24,6 +24,7 @@
 import math
 import FreeCAD
 import Part
+from SlopedPlanesPy import _Py
 
 
 __title__ = "SlopedPlanes Macro"
@@ -33,16 +34,15 @@ __url__ = "http://www.freecadweb.org"
 ###############################################################################
 
 
-globalOrigin = FreeCAD.Vector(0, 0, 0)
-axisX = FreeCAD.Vector(1, 0, 0)
+origin = FreeCAD.Vector(0, 0, 0)
 axisZ = FreeCAD.Vector(0, 0, 1)
 
 
-def roundVector(vector, tolerance):
+def roundVector(vector):
 
     ''''''
 
-    precision = 1 / tolerance
+    precision = 1 / _Py.tolerance
     precision = str(precision)
     precision = precision[:].find('.')
 
@@ -55,20 +55,20 @@ def rotateVector(vector, axis, angle):
 
     ''''''
 
-    line = Part.LineSegment(globalOrigin, vector)
+    line = Part.LineSegment(origin, vector)
     rotation = FreeCAD.Rotation(axis, angle)
-    placement = FreeCAD.Placement(globalOrigin, rotation)
+    placement = FreeCAD.Placement(origin, rotation)
     line.rotate(placement)
     vector = line.EndPoint
     return vector
 
 
-def faceNormal(face, tolerance):
+def faceNormal(face):
 
     ''''''
 
     normal = face.normalAt(0, 0)
-    return roundVector(normal, tolerance)
+    return roundVector(normal)
 
 
 def geometries(pointList):
@@ -88,7 +88,7 @@ def geometries(pointList):
     return geometryList
 
 
-def orientedVertixes(wire, normal, tolerance):
+def orientedVertixes(wire, normal):
 
     ''''''
 
@@ -99,7 +99,7 @@ def orientedVertixes(wire, normal, tolerance):
     edges = [line.toShape() for line in geometryList]
     wire = Part.Wire(edges)
     face = Part.makeFace(wire, "Part::FaceMakerSimple")
-    norm = faceNormal(face, tolerance)
+    norm = faceNormal(face)
 
     if normal == norm.negative():
         orderVert.reverse()
@@ -108,24 +108,24 @@ def orientedVertixes(wire, normal, tolerance):
     return orientVert
 
 
-def orientedPoints(wire, normal, tolerance):
+def orientedPoints(wire, normal):
 
     ''''''
 
-    orientVert = orientedVertixes(wire, normal, tolerance)
+    orientVert = orientedVertixes(wire, normal)
     orientPoint = [vert.Point for vert in orientVert]
-    orientRoundPoint = [roundVector(vector, tolerance)
+    orientRoundPoint = [roundVector(vector)
                         for vector in orientPoint]
     return orientRoundPoint
 
 
-def facePoints(face, tolerance):
+def facePoints(face):
 
     ''''''
 
-    normal = faceNormal(face, tolerance)
+    normal = faceNormal(face)
     wire = face.OuterWire
-    orientPoint = orientedPoints(wire, normal, tolerance)
+    orientPoint = orientedPoints(wire, normal)
     return orientPoint
 
 
@@ -145,25 +145,25 @@ def lowerLeftPoint(localCoordinates):
     return localCoordinates.index(orig)
 
 
-def faceDatas(face, tolerance):
+def faceDatas(face):
 
     ''''''
 
-    normal = faceNormal(face, tolerance)
+    normal = faceNormal(face)
     tilt = normal.getAngle(FreeCAD.Vector(0, 0, 1))
     tilt = math.degrees(tilt)
 
     if tilt == 0:
         x = FreeCAD.Vector(1, 0, 0)
-        y = FreeCAD.Vector(0, 1, 0)
+        # y = FreeCAD.Vector(0, 1, 0)
 
     elif tilt == 180:
         x = FreeCAD.Vector(1, 0, 0)
-        y = FreeCAD.Vector(0, -1, 0)
+        # y = FreeCAD.Vector(0, -1, 0)
 
     elif tilt == 90:
         x = rotateVector(normal, axisZ, 90)
-        y = rotateVector(x, normal, 90)
+        # y = rotateVector(x, normal, 90)
 
     else:
         pnorm = normal.projectToPlane(FreeCAD.Vector(0, 0, 0),
@@ -172,31 +172,31 @@ def faceDatas(face, tolerance):
         normal = faceNormal(face)
         # y = rotateVector(normal, x, -90)
 
-    normal = faceNormal(face, tolerance)
-    globalCoord = facePoints(face, tolerance)
+    normal = faceNormal(face)
+    globalCoord = facePoints(face)
 
     angleZ = normal.getAngle(axisZ)
     angleZ = math.degrees(angleZ)
-    projection = x.projectToPlane(globalOrigin, axisZ)
-    angleX = projection.getAngle(axisX)
+    projection = x.projectToPlane(origin, axisZ)
+    angleX = projection.getAngle(FreeCAD.Vector(1, 0, 0))
     if projection.y < 0:
         angleX = -1 * angleX
     angleX = math.degrees(angleX)
     copyFace = face.copy()
-    copyFace.rotate(globalOrigin, FreeCAD.Vector(0, 0, -1), angleX)
-    copyFace.rotate(globalOrigin, FreeCAD.Vector(-1, 0, 0), angleZ)
+    copyFace.rotate(origin, FreeCAD.Vector(0, 0, -1), angleX)
+    copyFace.rotate(origin, FreeCAD.Vector(-1, 0, 0), angleZ)
 
-    localCoord = facePoints(copyFace, tolerance)
+    localCoord = facePoints(copyFace)
     index = lowerLeftPoint(localCoord)
     localCoord = localCoord[index:] + localCoord[:index]
     localCoord = [coord.sub(localCoord[0]) for coord in localCoord]
-    localCoord = [roundVector(point, tolerance) for point in localCoord]
+    localCoord = [roundVector(point) for point in localCoord]
     globalCoord = globalCoord[index:] + globalCoord[:index]
 
     return localCoord, globalCoord, angleX, angleZ
 
 
-def arcGeometries(face, coordinates, tolerance):
+def arcGeometries(face, coordinates):
 
     ''''''
 
@@ -208,9 +208,9 @@ def arcGeometries(face, coordinates, tolerance):
     number = -1
     for edge in edgeList:
         number += 1
-        start = roundVector(edge.Vertexes[0].Point, tolerance)
+        start = roundVector(edge.Vertexes[0].Point)
         if start == first or start == second:
-            end = roundVector(edge.Vertexes[1].Point, tolerance)
+            end = roundVector(edge.Vertexes[1].Point)
             if end == first or end == second:
                 break
     edgeList = edgeList[number:] + edgeList[:number]
@@ -241,77 +241,15 @@ def arcGeometries(face, coordinates, tolerance):
     return geometries
 
 
-'''def arcGeometries(face, tolerance):
-
-    ''''''
-
-    globalCoord = faceDatas(face, tolerance)[1]
-    globalCoord.append(globalCoord[0])
-    first = globalCoord[0]
-    second = globalCoord[1]
-    edgeList = face.OuterWire.OrderedEdges
-
-    number = -1
-    for edge in edgeList:
-        number += 1
-        start = roundVector(edge.Vertexes[0].Point, tolerance)
-        if start == first or start == second:
-            end = roundVector(edge.Vertexes[1].Point, tolerance)
-            if end == first or end == second:
-                break
-    edgeList = edgeList[number:] + edgeList[:number]
-
-    geometries = []
-    number = -1
-    for edge in edgeList:
-        number += 1
-        curve = edge.Curve
-        startParam = curve.parameter(globalCoord[number])
-        endParam = curve.parameter(globalCoord[number+1])
-
-        if isinstance(curve, Part.Line):
-            geom = Part.LineSegment(globalCoord[number], globalCoord[number+1])
-        elif isinstance(curve, Part.Circle):
-            geom = Part.ArcOfCircle(curve, startParam, endParam)
-        elif isinstance(curve, Part.Ellipse):
-            geom = Part.ArcOfEllipse(curve, startParam, endParam)
-        elif isinstance(curve, Part.Hyperbola):
-            geom = Part.ArcOfHyperbola(curve, startParam, endParam)
-        elif isinstance(curve, Part.Parabola):
-            geom = Part.ArcOfParabola(curve, startParam, endParam)
-
-        geometries.append(geom)
-
-    globalCoord.pop()
-
-    return globalCoord, geometries'''
-
-
-def wireGeometries(wire, tolerance):
-
-    ''''''
-
-    falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
-    pointWire, geomWire = arcGeometries(falseFace, tolerance)
-
-    shapeGeomWire = []
-    numGeom = -1
-    for geom in geomWire:
-        numGeom += 1
-        shapeGeomWire.append(geom.toShape())
-
-    return pointWire, geomWire, shapeGeomWire
-
-
-def convexReflex(eje, nextEje, normal, numWire):
+def convexReflex(eje, nextEje, numWire):
 
     ''''''
 
     cross = eje.cross(nextEje)
     corner = None
-    if cross != globalOrigin:
+    if cross != origin:
         cross.normalize()
-        if cross == normal:
+        if cross == _Py.normal:
             if numWire == 0:
                 corner = 'convex'
             else:
@@ -338,13 +276,12 @@ def sliceIndex(index, lenWire):
     return index
 
 
-def selectFace(faceList, geomShape, tolerance):
+def selectFace(faceList, geomShape):
 
     ''''''
 
     for face in faceList:
-        section = face.section(geomShape, tolerance)
+        section = face.section(geomShape)
         if section.Edges:
             return face
     return faceList[0]
-

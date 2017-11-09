@@ -231,7 +231,7 @@ class _PyFace(_Py):
                 else:
 
                     nextEje = coord[numGeom+2].sub(coord[numGeom+1])
-                    corner = utils.convexReflex(eje, nextEje, _Py.normal, numWire)
+                    corner = utils.convexReflex(eje, nextEje, numWire)
                     eje = nextEje
 
                     if corner == 'convex':
@@ -272,7 +272,7 @@ class _PyFace(_Py):
                                 numEdge += 1
                                 # print'111'
                                 edgeStart = edge.firstVertex(True).Point
-                                point = utils.roundVector(edgeStart, _Py.tolerance)
+                                point = utils.roundVector(edgeStart)
                                 (nWire, nGeom) =\
                                     self.findAlignament(point)
 
@@ -914,8 +914,7 @@ class _PyFace(_Py):
                         if cutterList:
                             gS = pyPlane.geomAligned.toShape()
                             plane = plane.cut(cutterList, _Py.tolerance)
-                            plane = utils.selectFace(plane.Faces, gS,
-                                                     _Py.tolerance)
+                            plane = utils.selectFace(plane.Faces, gS)
                             pyPlane.shape = plane
 
     def aligning(self):
@@ -985,7 +984,7 @@ class _PyFace(_Py):
 
                         plane = plane.cut(cutterList, _Py.tolerance)
                         gS = pyPlane.geom.toShape()
-                        plane = utils.selectFace(plane.Faces, gS, _Py.tolerance)
+                        plane = utils.selectFace(plane.Faces, gS)
                         pyPlane.shape = plane
 
                         if pyPlane.choped or pyPlane.aligned:

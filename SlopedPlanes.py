@@ -130,7 +130,7 @@ class _SlopedPlanes():
         face = Part.makeFace(shape, faceMaker)
 
         fList = face.Faces
-        normal = utils.faceNormal(fList[0], tolerance)
+        normal = utils.faceNormal(fList[0])
         _Py.normal = normal
 
         fFaceOuter = []
@@ -139,7 +139,7 @@ class _SlopedPlanes():
             outerWire = face.OuterWire
             falseFace = Part.makeFace(outerWire, "Part::FaceMakerSimple")
             fFaceOuter.append(falseFace)
-            coordinates = utils.faceDatas(falseFace, tolerance)[1]
+            coordinates = utils.faceDatas(falseFace)[1]
             coordinates.extend(coordinates[0:2])
             coordinatesOuter.append(coordinates)
 
@@ -184,7 +184,7 @@ class _SlopedPlanes():
             for wire in wList:
                 falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
                 fFaceList.append(falseFace)
-                coord = utils.faceDatas(falseFace, tolerance)[1]
+                coord = utils.faceDatas(falseFace)[1]
                 coord.extend(coord[0:2])
                 coordinatesInner.append(coord)
 
@@ -237,7 +237,7 @@ class _SlopedPlanes():
                 pyWire.coordinates = coo
 
                 falseFace = falseFaceList[numWire]
-                geomWire = utils.arcGeometries(falseFace, coo[:-2], tolerance)
+                geomWire = utils.arcGeometries(falseFace, coo[:-2])
 
                 pyPlaneListOld = pyWire.planes
                 pyPlaneListNew = []

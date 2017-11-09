@@ -201,7 +201,7 @@ class _PyWire(_Py):
                                         nWire = pyPl.numWire
                                         nGeom = pyPl.numGeom
                                         pyRList =\
-                                            _Py.pyFace.selectAllReflex(nWire,
+                                            self.selectAllReflex(nWire,
                                                                    nGeom)
 
                                         for pyR in pyRList:
@@ -249,14 +249,14 @@ class _PyWire(_Py):
                 if not bigPrior:
                     [nW, nG] = pyPrior.angle
                     prior = nG
-                    pyPrior = _Py.pyFace.selectPlane(nW, nG)
+                    pyPrior = self.selectPlane(nW, nG)
                     bigPrior = pyPrior.bigShape
 
                 bigLater = pyLater.bigShape
                 if not bigLater:
                     [nW, nG] = pyLater.angle
                     later = nG
-                    pyLater = _Py.pyFace.selectPlane(nW, nG)
+                    pyLater = self.selectPlane(nW, nG)
                     bigLater = pyLater.bigShape
 
                 # print'prior ', (pyPrior.numWire, pyPrior.numGeom)
@@ -283,7 +283,7 @@ class _PyWire(_Py):
                         # print'1'
                         cutterList.append(bigPrior)
                     elif not (pyPrior.choped or pyPrior.aligned):
-                        pyR = _Py.pyFace.selectReflex(self.numWire,
+                        pyR = self.selectReflex(self.numWire,
                                                   pyPlane.numGeom,
                                                   pyPrior.numGeom)
                         if not pyR:
@@ -293,7 +293,7 @@ class _PyWire(_Py):
                         # print'2'
                         cutterList.append(bigLater)
                     elif not (pyLater.choped or pyLater.aligned):
-                        pyR = _Py.pyFace.selectReflex(self.numWire,
+                        pyR = self.selectReflex(self.numWire,
                                                   pyPlane.numGeom,
                                                   pyLater.numGeom)
                         if not pyR:
@@ -308,7 +308,7 @@ class _PyWire(_Py):
                     # print cutterList
                     shape = shape.cut(cutterList, _Py.tolerance)
                     shape = utils.selectFace(shape.Faces, geomShape,
-                                             _Py.tolerance)
+                                             )
                     pyPlane.shape = shape
 
     def simulating(self):
@@ -375,7 +375,7 @@ class _PyWire(_Py):
             gS = pyPlane.geom.toShape()
             cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
             plane = plane.cut(cutterList, _Py.tolerance)
-            plane = utils.selectFace(plane.Faces, gS, _Py.tolerance)
+            plane = utils.selectFace(plane.Faces, gS)
             pyPlane.shape = plane
 
             if pyPlane.isSolved():
@@ -431,7 +431,7 @@ class _PyWire(_Py):
                         gS = pyPlane.geom.toShape()
                         plane = plane.cut(cutList, _Py.tolerance)
                         plane = utils.selectFace(plane.Faces, gS,
-                                                 _Py.tolerance)
+                                                 )
                         pyPlane.shape = plane
 
     def rearing(self):

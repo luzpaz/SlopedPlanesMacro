@@ -468,13 +468,13 @@ class _PyPlane(_Py):
         geomShape = self.geom.toShape()
 
         shape = shape.cut([enormousShape], _Py.tolerance)
-        shape = utils.selectFace(shape.Faces, geomShape, _Py.tolerance)
+        shape = utils.selectFace(shape.Faces, geomShape)
         self.shape = shape
 
         bigShape =\
             bigShape.cut([enormousShape], _Py.tolerance)
         bigShape =\
-            utils.selectFace(bigShape.Faces, geomShape, _Py.tolerance)
+            utils.selectFace(bigShape.Faces, geomShape)
         self.bigShape = bigShape
 
     def ordinaries(self, pyWire):
@@ -502,14 +502,14 @@ class _PyPlane(_Py):
                             # print 'b1'
 
                             pyAli =\
-                                _Py.pyFace.selectAlignament(pyPl.numWire,
+                                self.selectAlignament(pyPl.numWire,
                                                         pyPl.numGeom)
 
                             if self.aligned:
                                 # print 'b11'
 
                                 pyAlign =\
-                                    _Py.pyFace.selectAlignament(self.numWire,
+                                    self.selectAlignament(self.numWire,
                                                             self.numGeom)
 
                                 ch = []
@@ -539,7 +539,7 @@ class _PyPlane(_Py):
             plane = self.shape
             plane = plane.cut(cutterList, _Py.tolerance)
             gS = self.geom.toShape()
-            plane = utils.selectFace(plane.Faces, gS, _Py.tolerance)
+            plane = utils.selectFace(plane.Faces, gS)
             self.shape = plane
 
     def isSolved(self):
@@ -604,7 +604,7 @@ class _PyPlane(_Py):
                 else:
                     pl = pl.cut([plane, oppPlane], _Py.tolerance)
                     gS = pyPl.geom.toShape()
-                    pl = utils.selectFace(pl.Faces, gS, _Py.tolerance)
+                    pl = utils.selectFace(pl.Faces, gS)
                     pyPl.shape = pl
 
     def rangging(self, pyWire, direction):
