@@ -919,15 +919,15 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.simulating(self)
 
-    def reflexing(self, face):
+    def reflexing(self):
 
         ''''''
 
         for pyWire in self.wires:
             if pyWire.reflexs:
-                pyWire.reflexing(self, face)
+                pyWire.reflexing(self)
 
-    def reviewing(self, face):
+    def reviewing(self):
 
         ''''''
 
@@ -993,7 +993,7 @@ class _PyFace(_Py):
                                                      _Py.tolerance)
                             pyPlane.shape = plane
 
-    def aligning(self, face):
+    def aligning(self):
 
         ''''''
 
@@ -1001,11 +1001,11 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
             if not pyAlign.falsify:
-                pyAlign.aligning(face, self)
+                pyAlign.aligning(self)
 
         for pyAlign in pyAlignList:
             if pyAlign.falsify:
-                pyAlign.aligning(face, self)
+                pyAlign.aligning(self)
 
     def ending(self):
 

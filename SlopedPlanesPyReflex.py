@@ -397,7 +397,7 @@ class _PyReflex(_Py):
             pyOppR.addLink('oppCutter', pl)
             print 'included rango ', (pl, nWire, nn)
 
-    def solveReflex(self, pyFace, face):
+    def solveReflex(self, pyFace):
 
         ''''''
 
@@ -410,14 +410,14 @@ class _PyReflex(_Py):
         oppReflex = pyOppR.shape.copy()
 
         self.processReflex(reflex, oppReflex,
-                           pyR, pyOppR, face,
+                           pyR, pyOppR,
                            'forward')
 
         self.processReflex(oppReflex, reflex,
-                           pyOppR, pyR, face,
+                           pyOppR, pyR,
                            'backward')
 
-    def processReflex(self, reflex, oppReflex, pyR, pyOppR, face,
+    def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
 
         ''''''
@@ -490,7 +490,7 @@ class _PyReflex(_Py):
             under = []
             for ff in aa.Faces:
                 # print 'aa'
-                section = ff.section([face], _Py.tolerance)
+                section = ff.section([_Py.face], _Py.tolerance)
                 if section.Edges:
                     # print 'bb'
                     section = ff.section([rear], _Py.tolerance)
@@ -503,7 +503,7 @@ class _PyReflex(_Py):
             if under:
                 for ff in aa.Faces:
                     # print 'a'
-                    section = ff.section([face], _Py.tolerance)
+                    section = ff.section([_Py.face], _Py.tolerance)
                     if not section.Edges:
                         # print 'b'
                         section = ff.section(under, _Py.tolerance)

@@ -163,6 +163,7 @@ class _SlopedPlanes():
             numFace += 1
             size = face.BoundBox.DiagonalLength
             _Py.size = size
+            _Py.face = face
             coordinatesOuter = coordinatesOuterOrdered[numFace]
             for pyFace in pyFaceListOld:
                 oldCoord = pyFace.wires[0].coordinates
@@ -275,9 +276,9 @@ class _SlopedPlanes():
 
             pyFace.simulating()
 
-            pyFace.reflexing(face)
+            pyFace.reflexing()
 
-            pyFace.reviewing(face)
+            pyFace.reviewing()
 
             pyFace.rearing()
 
@@ -285,7 +286,7 @@ class _SlopedPlanes():
 
             pyFace.between()
 
-            pyFace.aligning(face)
+            pyFace.aligning()
 
             pyFace.ending()
 

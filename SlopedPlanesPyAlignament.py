@@ -455,7 +455,7 @@ class _PyAlignament(_Py):
                 plCopy = utils.selectFace(plCopy.Faces, gS, _Py.tolerance)
                 pyPlane.simulatedShape = plCopy
 
-    def aligning(self, face, pyFace):
+    def aligning(self, pyFace):
 
         ''''''
 
@@ -567,7 +567,7 @@ class _PyAlignament(_Py):
                 for ff in planeCopy.Faces:
                     section = ff.section([gS], _Py.tolerance)
                     if not section.Edges:
-                        sect = ff.section([face], _Py.tolerance)
+                        sect = ff.section([_Py.face], _Py.tolerance)
                         if sect.Edges:
                             planeCopy = ff
                             plane = plane.cut([planeCopy], _Py.tolerance)
