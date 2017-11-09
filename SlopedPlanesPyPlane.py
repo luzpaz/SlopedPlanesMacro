@@ -32,6 +32,9 @@ __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
 
 
+reverse = False
+
+
 class _PyPlane(_Py):
 
     ''''''
@@ -401,7 +404,7 @@ class _PyPlane(_Py):
 
         self._solved = solved
 
-    def planning(self, pyWire, normal, size, reverse):
+    def planning(self, pyWire, normal, size):
 
         ''''''
 

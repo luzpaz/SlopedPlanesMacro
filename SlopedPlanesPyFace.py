@@ -211,7 +211,7 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
             numWire = pyWire.numWire
-            print '###### numWire ', numWire
+            # print'###### numWire ', numWire
             ref = False
 
             lenWire = len(pyWire.planes)
@@ -220,8 +220,8 @@ class _PyFace(_Py):
             pyPlaneList = pyWire.planes
             for pyPlane in pyPlaneList:
                 numGeom = pyPlane.numGeom
-                print '### numGeom ', numGeom
-                print pyPlane.geom
+                # print'### numGeom ', numGeom
+                # printpyPlane.geom
 
                 if not pyPlane.geomAligned:
 
@@ -485,30 +485,30 @@ class _PyFace(_Py):
 
         edge = False
 
-        print[v.Point for v in section.Vertexes]
-        print section.Edges
-        print lenWire
-        print len(section.Vertexes)
-        print direction
+        # print[v.Point for v in section.Vertexes]
+        # printsection.Edges
+        # printlenWire
+        # printlen(section.Vertexes)
+        # printdirection
 
         if section.Edges:
-            print 'a'
+            # print'a'
             edge = True
             if direction == 'forward':
-                print 'aa'
+                # print'aa'
                 vertex = section.Edges[0].Vertexes[0]
             else:
-                print 'aaa'
+                # print'aaa'
                 vertex = section.Edges[-1].Vertexes[1]
 
         elif len(section.Vertexes) != lenWire:
-            print 'b'
+            # print'b'
             vertex = section.Vertexes[1]
 
         else:
-            print 'c'
+            # print'c'
             if pyPlane.aligned:
-                print 'cc'
+                # print'cc'
                 if pyPlane.shape:
                     lineEndPoint = pyPlane.geomAligned.EndPoint
                     if section.Vertexes[0].Point == lineEndPoint:
@@ -518,10 +518,10 @@ class _PyFace(_Py):
                 else:
                     return
             else:
-                print 'ccc'
+                # print'ccc'
                 vertex = section.Vertexes[1]
 
-        print vertex.Point
+        # printvertex.Point
 
         nGeom =\
             self.findRear(pyWire, pyPlane, vertex, direction, edge)
@@ -531,11 +531,11 @@ class _PyFace(_Py):
         else:
             endNum = utils.sliceIndex(numGeom-2, lenWire)
 
-        print 'direction, endNum ', direction, endNum
+        # print'direction, endNum ', direction, endNum
 
         if nGeom == endNum:
             pyPl = self.selectPlane(numWire, endNum)
-            print 'arrow'
+            # print'arrow'
             pyPl.arrow = True
 
     def findRear(self, pyWire, pyPlane, vertex, direction,
@@ -700,25 +700,25 @@ class _PyFace(_Py):
         lineEndParam = lineLastParam + size
         forwardLine = Part.LineSegment(line, lineLastParam,
                                        lineEndParam)
-        print 'forwardLine ', forwardLine
+        # print'forwardLine ', forwardLine
         forwardLineShape = forwardLine.toShape()
 
         lineStartParam = line.FirstParameter
         lineEndParam = lineStartParam - size
         backwardLine =\
             Part.LineSegment(line, lineStartParam, lineEndParam)
-        print 'backwardLine ', backwardLine
+        # print'backwardLine ', backwardLine
         backwardLineShape = backwardLine.toShape()
-        print direction
+        # printdirection
 
         if direction == "forward":
-            print 'a'
+            # print'a'
             pyPlane.backward = backwardLineShape
             pyPlane.forward = forwardLineShape
             return forwardLine
 
         else:
-            print 'b'
+            # print'b'
             pyPlane.backward = forwardLineShape
             pyPlane.forward = backwardLineShape
             return backwardLine
@@ -859,7 +859,7 @@ class _PyFace(_Py):
 
             pyAlign.simulatedChops = simulatedChops
 
-    def planning(self, normal, size, reverse):
+    def planning(self, normal, size):
 
         ''''''
 
@@ -868,7 +868,7 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
 
-            pyWire.planning(reset, normal, size, reverse)
+            pyWire.planning(reset, normal, size)
 
         pyAlignList = self.alignaments
 
