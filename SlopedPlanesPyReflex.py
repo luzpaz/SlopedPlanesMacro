@@ -72,7 +72,7 @@ class _PyReflex(_Py):
 
         self._rangoInter = rangoInter
 
-    def simulating(self, pyFace):
+    def simulating(self):
 
         ''''''
 
@@ -99,7 +99,7 @@ class _PyReflex(_Py):
         oppRCopy = utils.selectFace(oppRCopy.Faces, gS, _Py.tolerance)
         pyOppR.simulatedShape = oppRCopy
 
-    def simulatedReflex(self, pyFace):
+    def simulatedReflex(self):
 
         ''''''
 
@@ -110,7 +110,7 @@ class _PyReflex(_Py):
                 [numWire, numGeom] = [pyR.numWire, pyR.numGeom]
                 dct = pyR.__dict__
                 (nW, nG) = pyR.angle
-                pyPlane = pyFace.selectPlane(nW, nG)
+                pyPlane = _Py.pyFace.selectPlane(nW, nG)
                 shape = pyPlane.shape.copy()
                 enormous = pyPlane.enormousShape
                 pyR = _PyPlane(numWire, numGeom)
@@ -123,7 +123,7 @@ class _PyReflex(_Py):
                 [numWire, numGeom] = [pyOppR.numWire, pyOppR.numGeom]
                 dct = pyOppR.__dict__
                 (nW, nG) = pyOppR.angle
-                pyPlane = pyFace.selectPlane(nW, nG)
+                pyPlane = _Py.pyFace.selectPlane(nW, nG)
                 shape = pyPlane.shape.copy()
                 enormous = pyPlane.enormousShape
                 pyOppR = _PyPlane(numWire, numGeom)
@@ -133,7 +133,7 @@ class _PyReflex(_Py):
 
         self.planes = [pyR, pyOppR]
 
-    def reflexing(self, pyFace, pyWire):
+    def reflexing(self, pyWire):
 
         ''''''
 
@@ -149,15 +149,15 @@ class _PyReflex(_Py):
         print '### direction ', direction
         print(pyR.numGeom, pyOppR.numGeom)
 
-        self.twin(pyFace, pyWire, pyR, pyOppR, direction)
+        self.twin(pyWire, pyR, pyOppR, direction)
 
         direction = "backward"
         print '### direction ', direction
         print(pyOppR.numGeom, pyR.numGeom)
 
-        self.twin(pyFace, pyWire, pyOppR, pyR, direction)
+        self.twin(pyWire, pyOppR, pyR, direction)
 
-    def twin(self, pyFace, pyWire, pyR, pyOppR, direction):
+    def twin(self, pyWire, pyR, pyOppR, direction):
 
         ''''''
 
@@ -181,7 +181,7 @@ class _PyReflex(_Py):
 
             if rearPyPl.aligned:
                 print 'a'
-                pyAlign = pyFace.selectAlignament(numWire, nGeom)
+                pyAlign = _Py.pyFace.selectAlignament(numWire, nGeom)
                 rearPl = pyAlign.simulatedShape
                 pyOppR.addLink('oppCutter', rearPl)
                 pyR.addLink('cutter', rearPl)
@@ -217,7 +217,7 @@ class _PyReflex(_Py):
 
             if pyOppRear.aligned:
                 print 'a'
-                pyAlign = pyFace.selectAlignament(numWire, nGeom)
+                pyAlign = _Py.pyFace.selectAlignament(numWire, nGeom)
                 oppRearPl = pyAlign.simulatedShape
                 pyOppR.addLink('oppCutter', oppRearPl)
                 pyR.addLink('cutter', oppRearPl)
@@ -248,12 +248,12 @@ class _PyReflex(_Py):
 
             if direction == 'forward':
 
-                self.processOppRear(oppRear, direction, pyFace, pyWire, pyR,
+                self.processOppRear(oppRear, direction, pyWire, pyR,
                                     pyOppR, oppReflexEnormous)
 
             else:
 
-                self.processOppRear(oppRear, direction, pyFace, pyWire, pyR,
+                self.processOppRear(oppRear, direction, pyWire, pyR,
                                     pyOppR, oppReflexEnormous)
 
         rangoCorner = pyR.rango
@@ -262,7 +262,7 @@ class _PyReflex(_Py):
             for nn in ran:
                 if nn not in oppRear:
 
-                    self.processRango(pyFace, pyWire, pyR, pyOppR,
+                    self.processRango(pyWire, pyR, pyOppR,
                                       nn, 'rangoCorner')
 
         rangoNext = pyOppR.rango
@@ -271,7 +271,7 @@ class _PyReflex(_Py):
             for ran in rangoNext:
                 for nn in ran:
 
-                    self.processRango(pyFace, pyWire, pyR, pyOppR,
+                    self.processRango(pyWire, pyR, pyOppR,
                                       nn, 'rangoNext')
 
         rangoInter = self.rangoInter
@@ -280,10 +280,10 @@ class _PyReflex(_Py):
 
             for nn in ran:
 
-                self.processRango(pyFace, pyWire, pyR, pyOppR, nn,
+                self.processRango(pyWire, pyR, pyOppR, nn,
                                   'rangoInter')
 
-    def processOppRear(self, oppRear, direction, pyFace, pyWire, pyR, pyOppR,
+    def processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR,
                        oppReflexEnormous):
 
         ''''''
@@ -328,7 +328,7 @@ class _PyReflex(_Py):
                 print 'included oppRear rectified ', (oppRearPl, nWire, nGeom)
                 break
 
-    def processRango(self, pyFace, pyWire, pyR, pyOppR, nn, kind):
+    def processRango(self, pyWire, pyR, pyOppR, nn, kind):
 
         ''''''
 
@@ -338,7 +338,7 @@ class _PyReflex(_Py):
 
         if pyPl.aligned:
             print 'A'
-            pyAlign = pyFace.selectAlignament(nWire, nn)
+            pyAlign = _Py.pyFace.selectAlignament(nWire, nn)
             pl = pyAlign.simulatedShape
             pyR.addLink('cutter', pl)
             pyOppR.addLink('oppCutter', pl)
@@ -397,7 +397,7 @@ class _PyReflex(_Py):
             pyOppR.addLink('oppCutter', pl)
             print 'included rango ', (pl, nWire, nn)
 
-    def solveReflex(self, pyFace):
+    def solveReflex(self):
 
         ''''''
 

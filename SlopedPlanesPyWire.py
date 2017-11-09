@@ -148,7 +148,7 @@ class _PyWire(_Py):
                     pyPlane.rangging(self, direction)
                     direction = "backward"
 
-    def trimming(self, pyFace):
+    def trimming(self):
 
         ''''''
 
@@ -201,7 +201,7 @@ class _PyWire(_Py):
                                         nWire = pyPl.numWire
                                         nGeom = pyPl.numGeom
                                         pyRList =\
-                                            pyFace.selectAllReflex(nWire,
+                                            _Py.pyFace.selectAllReflex(nWire,
                                                                    nGeom)
 
                                         for pyR in pyRList:
@@ -222,7 +222,7 @@ class _PyWire(_Py):
                                             # print 'procc'
                                             pyPl.trimming(enormousShape)
 
-    def priorLater(self, pyFace):
+    def priorLater(self):
 
         ''''''
 
@@ -249,14 +249,14 @@ class _PyWire(_Py):
                 if not bigPrior:
                     [nW, nG] = pyPrior.angle
                     prior = nG
-                    pyPrior = pyFace.selectPlane(nW, nG)
+                    pyPrior = _Py.pyFace.selectPlane(nW, nG)
                     bigPrior = pyPrior.bigShape
 
                 bigLater = pyLater.bigShape
                 if not bigLater:
                     [nW, nG] = pyLater.angle
                     later = nG
-                    pyLater = pyFace.selectPlane(nW, nG)
+                    pyLater = _Py.pyFace.selectPlane(nW, nG)
                     bigLater = pyLater.bigShape
 
                 # print'prior ', (pyPrior.numWire, pyPrior.numGeom)
@@ -283,7 +283,7 @@ class _PyWire(_Py):
                         # print'1'
                         cutterList.append(bigPrior)
                     elif not (pyPrior.choped or pyPrior.aligned):
-                        pyR = pyFace.selectReflex(self.numWire,
+                        pyR = _Py.pyFace.selectReflex(self.numWire,
                                                   pyPlane.numGeom,
                                                   pyPrior.numGeom)
                         if not pyR:
@@ -293,7 +293,7 @@ class _PyWire(_Py):
                         # print'2'
                         cutterList.append(bigLater)
                     elif not (pyLater.choped or pyLater.aligned):
-                        pyR = pyFace.selectReflex(self.numWire,
+                        pyR = _Py.pyFace.selectReflex(self.numWire,
                                                   pyPlane.numGeom,
                                                   pyLater.numGeom)
                         if not pyR:
@@ -311,25 +311,25 @@ class _PyWire(_Py):
                                              _Py.tolerance)
                     pyPlane.shape = shape
 
-    def simulating(self, pyFace):
+    def simulating(self):
 
         ''''''
 
         for pyReflex in self.reflexs:
-            pyReflex.simulatedReflex(pyFace)
+            pyReflex.simulatedReflex()
 
         for pyReflex in self.reflexs:
-            pyReflex.simulating(pyFace)
+            pyReflex.simulating()
 
-    def reflexing(self, pyFace):
+    def reflexing(self):
 
         ''''''
 
         for pyReflex in self.reflexs:
-            pyReflex.reflexing(pyFace, self)
+            pyReflex.reflexing(self)
 
         for pyReflex in self.reflexs:
-            pyReflex.solveReflex(pyFace)
+            pyReflex.solveReflex()
 
         for pyReflex in self.reflexs:
             pyReflex.rearReflex(self)
@@ -441,11 +441,11 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.rearing(self)
 
-    def ordinaries(self, pyFace):
+    def ordinaries(self):
 
         ''''''
 
         for pyPlane in self.planes:
             if not (pyPlane.reflexed and not pyPlane.aligned):
                 if pyPlane.shape:
-                    pyPlane.ordinaries(pyFace, self)
+                    pyPlane.ordinaries(self)

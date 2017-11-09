@@ -873,9 +873,9 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             if reset:
 
-                pyAlign.rangging(self)
+                pyAlign.rangging()
 
-            pyAlign.ranggingChop(self)
+            pyAlign.ranggingChop()
 
         self.reset = False
 
@@ -884,10 +884,10 @@ class _PyFace(_Py):
         ''''''
 
         for pyWire in self.wires:
-            pyWire.trimming(self)
+            pyWire.trimming()
 
         for pyAlign in self.alignaments:
-            pyAlign.trimming(self)
+            pyAlign.trimming()
 
         self.simulatedChops()
 
@@ -896,10 +896,10 @@ class _PyFace(_Py):
         ''''''
 
         for pyWire in self.wires:
-            pyWire.priorLater(self)
+            pyWire.priorLater()
 
         for pyAlign in self.alignaments:
-            pyAlign.priorLater(self)
+            pyAlign.priorLater()
 
     def simulating(self):
 
@@ -907,17 +907,17 @@ class _PyFace(_Py):
 
         for pyAlign in self.alignaments:
             if not pyAlign.falsify:
-                pyAlign.simulatingBase(self)
+                pyAlign.simulatingBase()
 
         for pyAlign in self.alignaments:
             if pyAlign.falsify:
-                pyAlign.simulatingBase(self)
+                pyAlign.simulatingBase()
 
         for pyAlign in self.alignaments:
             pyAlign.simulatingChop()
 
         for pyWire in self.wires:
-            pyWire.simulating(self)
+            pyWire.simulating()
 
     def reflexing(self):
 
@@ -925,7 +925,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             if pyWire.reflexs:
-                pyWire.reflexing(self)
+                pyWire.reflexing()
 
     def reviewing(self):
 
@@ -957,7 +957,7 @@ class _PyFace(_Py):
         ''''''
 
         for pyWire in self.wires:
-            pyWire.ordinaries(self)
+            pyWire.ordinaries()
 
     def between(self):
 
@@ -1001,11 +1001,11 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
             if not pyAlign.falsify:
-                pyAlign.aligning(self)
+                pyAlign.aligning()
 
         for pyAlign in pyAlignList:
             if pyAlign.falsify:
-                pyAlign.aligning(self)
+                pyAlign.aligning()
 
     def ending(self):
 

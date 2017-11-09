@@ -175,11 +175,11 @@ class _PyAlignament(_Py):
 
         self._later = later
 
-    def trimming(self, pyFace):
+    def trimming(self):
 
         ''''''
 
-        pyWireList = pyFace.wires
+        pyWireList = _Py.pyFace.wires
         enormousShape = self.base.enormousShape
         numWire = self.base.numWire
         pyWire = pyWireList[numWire]
@@ -211,7 +211,7 @@ class _PyAlignament(_Py):
 
                                 pyPl.trimming(enormousShape)
 
-    def priorLater(self, pyFace):
+    def priorLater(self):
 
         ''''''
 
@@ -295,7 +295,7 @@ class _PyAlignament(_Py):
             cont = utils.selectFace(cont.Faces, gS, _Py.tolerance)
             pyCont.shape = cont
 
-    def simulatingBase(self, pyFace):
+    def simulatingBase(self):
 
         ''''''
 
@@ -307,7 +307,7 @@ class _PyAlignament(_Py):
         chops = self.chops
         simulatedChops = self.simulatedChops
         rangoChop = self.rangoChop
-        pyWireList = pyFace.wires
+        pyWireList = _Py.pyFace.wires
 
         if not self.falsify:
 
@@ -455,7 +455,7 @@ class _PyAlignament(_Py):
                 plCopy = utils.selectFace(plCopy.Faces, gS, _Py.tolerance)
                 pyPlane.simulatedShape = plCopy
 
-    def aligning(self, pyFace):
+    def aligning(self):
 
         ''''''
 
@@ -473,7 +473,7 @@ class _PyAlignament(_Py):
 
         rangoChopList = self.rangoChop
         rangoChopList = self.rangoChop
-        pyWireList = pyFace.wires
+        pyWireList = _Py.pyFace.wires
 
         pyCont = aligns[0]
         cont = pyCont.shape
@@ -686,11 +686,11 @@ class _PyAlignament(_Py):
             cont = utils.selectFace(cont.Faces, gS, _Py.tolerance)
             pyCont.shape = cont
 
-    def rangging(self, pyFace):
+    def rangging(self):
 
         ''''''
 
-        pyWireList = pyFace.wires
+        pyWireList = _Py.pyFace.wires
 
         for [pyPlane, pyPl] in self.chops:
 
@@ -700,11 +700,11 @@ class _PyAlignament(_Py):
             pyPlane.rangging(pyWire, 'backward')
             pyPl.rangging(pyW, 'forward')
 
-    def ranggingChop(self, pyFace):
+    def ranggingChop(self):
 
         ''''''
 
-        pyWireList = pyFace.wires
+        pyWireList = _Py.pyFace.wires
 
         for [pyPlane, pyPl] in self.chops:
             [(w1, g1), (w2, g2)] =\

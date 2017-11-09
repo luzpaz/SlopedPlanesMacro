@@ -175,6 +175,8 @@ class _SlopedPlanes():
                 pyFace = _PyFace(numFace)
                 pyFaceListNew.append(pyFace)
 
+            _Py.pyFace = pyFace
+
             wList = face.Wires[1:]
             coordinatesInner = []
             fFaceList = []

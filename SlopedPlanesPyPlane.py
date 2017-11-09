@@ -477,7 +477,7 @@ class _PyPlane(_Py):
             utils.selectFace(bigShape.Faces, geomShape, _Py.tolerance)
         self.bigShape = bigShape
 
-    def ordinaries(self, pyFace, pyWire):
+    def ordinaries(self, pyWire):
 
         ''''''
 
@@ -502,14 +502,14 @@ class _PyPlane(_Py):
                             # print 'b1'
 
                             pyAli =\
-                                pyFace.selectAlignament(pyPl.numWire,
+                                _Py.pyFace.selectAlignament(pyPl.numWire,
                                                         pyPl.numGeom)
 
                             if self.aligned:
                                 # print 'b11'
 
                                 pyAlign =\
-                                    pyFace.selectAlignament(self.numWire,
+                                    _Py.pyFace.selectAlignament(self.numWire,
                                                             self.numGeom)
 
                                 ch = []
