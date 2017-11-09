@@ -24,12 +24,15 @@
 
 import Part
 import SlopedPlanesUtils as utils
-from SlopedPlanesPy import _Py, tolerance, reverse
+from SlopedPlanesPy import _Py, tolerance
 
 
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
+
+
+reverse = False
 
 
 class _PyPlane(_Py):

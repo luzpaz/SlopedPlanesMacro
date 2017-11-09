@@ -122,8 +122,7 @@ class _SlopedPlanes():
 
         tolerance = slopedPlanes.Tolerance
         SlopedPlanesPy.tolerance = slopedPlanes.Tolerance
-        reverse = slopedPlanes.Reverse
-        SlopedPlanesPy.reverse = reverse
+        SlopedPlanesPyPlane.reverse = slopedPlanes.Reverse
         slope = slopedPlanes.SlopeGlobal
         width = slopedPlanes.FactorWidth
         length = slopedPlanes.FactorLength

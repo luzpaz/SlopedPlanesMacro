@@ -28,7 +28,6 @@ __url__ = "http://www.freecadweb.org"
 
 
 tolerance = 1e-7
-reverse = False
 
 
 class _Py(object):
