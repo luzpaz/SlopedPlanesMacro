@@ -148,6 +148,7 @@ class _TaskPanel_SlopedPlanes():
         if slopedPlanes:
 
             pyFaceList = slopedPlanes.Proxy.Pyth
+            print pyFaceList
             numSlope, num = 0, 0
             compound = slopedPlanes.Shape
             for pyFace in pyFaceList:

@@ -196,7 +196,52 @@ def faceDatas(face, tolerance):
     return localCoord, globalCoord, angleX, angleZ
 
 
-def arcGeometries(face, tolerance):
+def arcGeometries(face, coordinates, tolerance):
+
+    ''''''
+
+    coordinates.append(coordinates[0])
+    first = coordinates[0]
+    second = coordinates[1]
+    edgeList = face.OuterWire.OrderedEdges
+
+    number = -1
+    for edge in edgeList:
+        number += 1
+        start = roundVector(edge.Vertexes[0].Point, tolerance)
+        if start == first or start == second:
+            end = roundVector(edge.Vertexes[1].Point, tolerance)
+            if end == first or end == second:
+                break
+    edgeList = edgeList[number:] + edgeList[:number]
+
+    geometries = []
+    number = -1
+    for edge in edgeList:
+        number += 1
+        curve = edge.Curve
+        startParam = curve.parameter(coordinates[number])
+        endParam = curve.parameter(coordinates[number+1])
+
+        if isinstance(curve, Part.Line):
+            geom = Part.LineSegment(coordinates[number], coordinates[number+1])
+        elif isinstance(curve, Part.Circle):
+            geom = Part.ArcOfCircle(curve, startParam, endParam)
+        elif isinstance(curve, Part.Ellipse):
+            geom = Part.ArcOfEllipse(curve, startParam, endParam)
+        elif isinstance(curve, Part.Hyperbola):
+            geom = Part.ArcOfHyperbola(curve, startParam, endParam)
+        elif isinstance(curve, Part.Parabola):
+            geom = Part.ArcOfParabola(curve, startParam, endParam)
+
+        geometries.append(geom)
+
+    coordinates.pop()
+
+    return geometries
+
+
+'''def arcGeometries(face, tolerance):
 
     ''''''
 
@@ -239,7 +284,7 @@ def arcGeometries(face, tolerance):
 
     globalCoord.pop()
 
-    return globalCoord, geometries
+    return globalCoord, geometries'''
 
 
 def wireGeometries(wire, tolerance):

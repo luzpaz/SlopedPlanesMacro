@@ -118,102 +118,142 @@ class _SlopedPlanes():
         sketchAngle = sketch.Placement.Rotation.Angle
         shape.Placement = FreeCAD.Placement()
 
-        faceMaker = slopedPlanes.FaceMaker
-
-        face = Part.makeFace(shape, faceMaker)
-
         tolerance = slopedPlanes.Tolerance
         reverse = slopedPlanes.Reverse
         slope = slopedPlanes.SlopeGlobal
         width = slopedPlanes.FactorWidth
         length = slopedPlanes.FactorLength
+        faceMaker = slopedPlanes.FaceMaker
 
-        pyFaceList = self.Pyth
-        lenPyList = len(pyFaceList)
-        faceList = face.Faces
-        lenList = len(faceList)
-        num = lenPyList - lenList
-        if num > 0:
-            pyFaceList = pyFaceList[:lenList]
+        face = Part.makeFace(shape, faceMaker)
 
-        normal = utils.faceNormal(faceList[0], tolerance)
-        faceList.reverse()  # TODO: order by lowerLeft
+        fList = face.Faces
+        normal = utils.faceNormal(fList[0], tolerance)
 
+        fFaceOuter = []
+        coordinatesOuter = []
+        for face in fList:
+            outerWire = face.OuterWire
+            falseFace = Part.makeFace(outerWire, "Part::FaceMakerSimple")
+            fFaceOuter.append(falseFace)
+            coordinates = utils.faceDatas(falseFace, tolerance)[1]
+            coordinates.extend(coordinates[0:2])
+            coordinatesOuter.append(coordinates)
+
+        lowerLeftFaces = [cc[0] for cc in coordinatesOuter]
+        faceList = []
+        falseFaceOuter = []
+        coordinatesOuterOrdered = []
+        while lowerLeftFaces:
+            index = utils.lowerLeftPoint(lowerLeftFaces)
+            lowerLeftFaces.pop(index)
+            pop = coordinatesOuter.pop(index)
+            coordinatesOuterOrdered.append(pop)
+            faceList.append(fList[index])
+            pop = fFaceOuter.pop(index)
+            falseFaceOuter.append(pop)
+
+        pyFaceListOld = self.Pyth
+        pyFaceListNew = []
         numFace = -1
         for face in faceList:
             numFace += 1
-
             size = face.BoundBox.DiagonalLength
-
-            try:
-                pyFace = pyFaceList[numFace]
-            except IndexError:
+            coordinatesOuter = coordinatesOuterOrdered[numFace]
+            for pyFace in pyFaceListOld:
+                oldCoord = pyFace.wires[0].coordinates
+                if oldCoord[0] == coordinatesOuter[0]:
+                    pyFaceListNew.append(pyFace)
+                    pyFace.numFace = numFace
+                    break
+            else:
                 pyFace = _PyFace(numFace)
-                pyFaceList.append(pyFace)
+                pyFaceListNew.append(pyFace)
 
-            pyWireList = pyFace.wires
-            lenPyList = len(pyWireList)
-            wireList = face.Wires
-            lenList = len(wireList)
-            num = lenPyList - lenList
-            if num > 0:
-                pyWireList = pyWireList[:lenList]
+            wList = face.Wires[1:]
+            coordinatesInner = []
+            fFaceList = []
+            for wire in wList:
+                falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
+                fFaceList.append(falseFace)
+                coord = utils.faceDatas(falseFace, tolerance)[1]
+                coord.extend(coord[0:2])
+                coordinatesInner.append(coord)
+
+            lowerLeftInner = [cc[0] for cc in coordinatesInner]
+            wireList = []
+            falseFaceList = []
+            coordinatesInnerOrdered = []
+            while lowerLeftInner:
+                index = utils.lowerLeftPoint(lowerLeftInner)
+                lowerLeftInner.pop(index)
+                pop = coordinatesInner.pop(index)
+                coordinatesInnerOrdered.append(pop)
+                wireList.append(wList[index])
+                pop = fFaceList.pop(index)
+                falseFaceList.append(pop)
+
+            wireList.insert(0, face.OuterWire)
+            falseFaceList.insert(0, falseFaceOuter[numFace])
+
+            coordinates = [coordinatesOuter]
+            if coordinatesInnerOrdered:
+                coordinates.extend(coordinatesInnerOrdered)
+
+            pyWireListOld = pyFace.wires
+            pyWireListNew = []
 
             numWire = -1
             for wire in wireList:
                 numWire += 1
-
-                try:
-                    pyWire = pyWireList[numWire]
-                except IndexError:
+                coo = coordinates[numWire]
+                brea = False
+                for pyWire in pyWireListOld:
+                    oldCoo = pyWire.coordinates
+                    if oldCoo[0] == coo[0]:
+                        brea = True
+                        if oldCoo != coo:
+                            pyFace.reset = True
+                            if len(oldCoo) != len(coo):
+                                pyWire.reset = True
+                        if brea:
+                            pyWireListNew.append(pyWire)
+                            pyWire.numWire = numWire
+                            break
+                else:
                     pyWire = _PyWire(numWire)
-                    pyWireList.append(pyWire)
-
-                coordinates, geomWire, shapeGeomWire =\
-                    utils.wireGeometries(wire, tolerance)
-
-                pyWire.shapeGeom = shapeGeomWire
-                coordinates.extend(coordinates[0:2])
-                oldCoordinates = pyWire.coordinates
-                if oldCoordinates != coordinates:
+                    pyWireListNew.append(pyWire)
+                    pyWire.reset = True
                     pyFace.reset = True
-                    if len(oldCoordinates) != len(coordinates):
-                        pyWire.reset = True
-                    elif oldCoordinates[0] != coordinates[0]:
-                        pyWire.reset = True
-                pyWire.coordinates = coordinates
 
-                pyPlaneList = pyWire.planes
-                lenPyList = len(pyPlaneList)
-                planeList = wire.Edges
-                lenList = len(planeList)
-                num = lenPyList - lenList
-                if num > 0:
-                    pyPlaneList = pyPlaneList[:lenList]
+                pyWire.coordinates = coo
 
+                falseFace = falseFaceList[numWire]
+                geomWire = utils.arcGeometries(falseFace, coo[:-2], tolerance)
+
+                pyPlaneListOld = pyWire.planes
+                pyPlaneListNew = []
                 numGeom = -1
                 for geom in geomWire:
                     numGeom += 1
-
                     try:
-                        pyPlane = pyPlaneList[numGeom]
-                        if pyFace.reset:
-                            pyPlane = _PyPlane(numWire, numGeom)
-                            pyPlaneList[numGeom] = pyPlane
-                        elif pyWire.reset:
+                        pyPlane = pyPlaneListOld[numGeom]
+                        pyPlaneListNew.append(pyPlane)
+                        pyPlane.numGeom = numGeom
+                        if pyWire.reset:
                             pyPlane.angle = slope
                             pyPlane.width = [width, width]
                             pyPlane.length = length
                     except IndexError:
                         pyPlane = _PyPlane(numWire, numGeom)
-                        pyPlaneList.append(pyPlane)
+                        pyPlaneListNew.append(pyPlane)
 
                     pyPlane.geom = geom
                     pyPlane.geomAligned = geom
 
-                pyWire.planes = pyPlaneList
+                pyWire.planes = pyPlaneListNew
 
-            pyFace.wires = pyWireList
+            pyFace.wires = pyWireListNew
 
             pyFace.parsing(normal, size, tolerance)
 
@@ -242,10 +282,11 @@ class _SlopedPlanes():
 
             pyFace.ending(tolerance)
 
-        self.Pyth = pyFaceList
+        self.Pyth = pyFaceListNew
+        print 'self.Pyth ', self.Pyth
 
         shellList = []
-        for pyFace in pyFaceList:
+        for pyFace in pyFaceListNew:
             planeList, secondaries = [], []
             originList = []
             pyWireList = pyFace.wires
