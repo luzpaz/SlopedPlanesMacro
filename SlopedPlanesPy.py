@@ -137,6 +137,26 @@ class _Py(object):
 
         return None
 
+    def cutting(self, cutted, cutter, geomShape):
+
+        ''''''
+
+        cutted = cutted.cut(cutter, _Py.tolerance)
+        cutted = self.selectFace(cutted.Faces, geomShape)
+
+        return cutted
+
+    def selectFace(self, faceList, geomShape):
+
+        ''''''
+
+        for face in faceList:
+            section = face.section([geomShape], _Py.tolerance)
+            if section.Edges:
+                return face
+
+        return None
+
     def printSummary(self):
 
         ''''''

@@ -912,9 +912,10 @@ class _PyFace(_Py):
                     plane = pyPlane.shape
                     if plane:
                         if cutterList:
-                            gS = pyPlane.geomAligned.toShape()
-                            plane = plane.cut(cutterList, _Py.tolerance)
-                            plane = utils.selectFace(plane.Faces, gS)
+                            gS = pyPlane.geom.toShape()
+                            plane = self.cutting(plane, cutterList, gS)
+                            #plane = plane.cut(cutterList, _Py.tolerance)
+                            #plane = utils.selectFace(plane.Faces, gS)
                             pyPlane.shape = plane
 
     def aligning(self):

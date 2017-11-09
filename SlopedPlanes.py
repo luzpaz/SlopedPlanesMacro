@@ -193,7 +193,6 @@ class _SlopedPlanes():
             falseFaceList = []
             coordinatesInnerOrdered = []
             while upperLeftInner:
-                # index = utils.lowerLeftPoint(upperLeftInner)
                 index = utils.upperLeftPoint(upperLeftInner)
                 upperLeftInner.pop(index)
                 pop = coordinatesInner.pop(index)
