@@ -130,13 +130,13 @@ class _PyWire(_Py):
 
         self._reset = reset
 
-    def planning(self, reset, normal, size):
+    def planning(self, reset, size):
 
         ''''''
 
         for pyPlane in self.planes:
             if pyPlane.geomAligned:
-                pyPlane.planning(self, normal, size)
+                pyPlane.planning(self, size)
 
         if reset:
             for pyReflex in self.reflexs:

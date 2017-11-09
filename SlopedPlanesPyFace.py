@@ -192,7 +192,7 @@ class _PyFace(_Py):
 
         return wireList, alignList
 
-    def parsing(self, normal, size):
+    def parsing(self, size):
 
         ''''''
 
@@ -231,7 +231,7 @@ class _PyFace(_Py):
                 else:
 
                     nextEje = coord[numGeom+2].sub(coord[numGeom+1])
-                    corner = utils.convexReflex(eje, nextEje, normal, numWire)
+                    corner = utils.convexReflex(eje, nextEje, _Py.normal, numWire)
                     eje = nextEje
 
                     if corner == 'convex':
@@ -859,7 +859,7 @@ class _PyFace(_Py):
 
             pyAlign.simulatedChops = simulatedChops
 
-    def planning(self, normal, size):
+    def planning(self, size):
 
         ''''''
 
@@ -868,7 +868,7 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
 
-            pyWire.planning(reset, normal, size)
+            pyWire.planning(reset, size)
 
         pyAlignList = self.alignaments
 

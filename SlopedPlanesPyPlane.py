@@ -402,7 +402,7 @@ class _PyPlane(_Py):
 
         self._solved = solved
 
-    def planning(self, pyWire, normal, size):
+    def planning(self, pyWire, size):
 
         ''''''
 
@@ -410,7 +410,7 @@ class _PyPlane(_Py):
         numGeom = self.numGeom
         geom = self.geomAligned
         eje = coordinates[numGeom+1].sub(coordinates[numGeom])
-        direction = utils.rotateVector(eje, normal, 90)
+        direction = utils.rotateVector(eje, _Py.normal, 90)
         angle = self.angle
         if _Py.reverse:
             angle = angle * -1

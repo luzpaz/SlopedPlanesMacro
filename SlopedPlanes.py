@@ -121,7 +121,6 @@ class _SlopedPlanes():
 
         tolerance = slopedPlanes.Tolerance
         _Py.tolerance = slopedPlanes.Tolerance
-        #SlopedPlanesPyPlane.reverse = slopedPlanes.Reverse
         _Py.reverse = slopedPlanes.Reverse
         slope = slopedPlanes.SlopeGlobal
         width = slopedPlanes.FactorWidth
@@ -132,6 +131,7 @@ class _SlopedPlanes():
 
         fList = face.Faces
         normal = utils.faceNormal(fList[0], tolerance)
+        _Py.normal = normal
 
         fFaceOuter = []
         coordinatesOuter = []
@@ -261,9 +261,9 @@ class _SlopedPlanes():
 
             pyFace.wires = pyWireListNew
 
-            pyFace.parsing(normal, size)
+            pyFace.parsing(size)
 
-            pyFace.planning(normal, size)
+            pyFace.planning(size)
 
             if slopedPlanes.Up:
                 pass

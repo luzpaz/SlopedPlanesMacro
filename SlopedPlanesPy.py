@@ -33,6 +33,10 @@ class _Py(object):
 
     tolerance = 1e-7
     reverse = False
+    size = 0
+    normal = 0
+    face = None
+    pyFace = None
 
     def addLink(self, prop, obj):
 
