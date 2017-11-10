@@ -432,7 +432,10 @@ class _PyAlignament(_Py):
         virtualizedChops = []
         for [pyChopOne, pyChopTwo] in self.chops:
 
-            if pyChopOne.aligned:
+            pyOne = self.virtualizingChopPlane(pyChopOne)
+            pyTwo = self.virtualizingChopPlane(pyChopTwo)
+
+            '''if pyChopOne.aligned:
                 [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
                 chopOne = pyChopOne.shape
                 enormous = pyChopOne.enormousShape
@@ -470,12 +473,38 @@ class _PyAlignament(_Py):
                 pyTwo.geom = geom
                 pyTwo.geomShape = geomShape
             else:
-                pyTwo = pyChopTwo
+                pyTwo = pyChopTwo'''
 
             virtualizedChops.append([pyOne, pyTwo])
 
         self.virtualizedChops = virtualizedChops
         # self.chops = virtualizedChops   TODO
+
+    def virtualizingChopPlane(self, pyChopOne):
+
+        ''''''
+
+        if pyChopOne.aligned:
+            [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
+            chopOne = pyChopOne.shape
+            enormous = pyChopOne.enormousShape
+            geom = pyChopOne.geom
+            geomShape = pyChopOne.geomShape
+            if not chopOne:
+                [nWire, nGeom] = pyChopOne.angle
+                pyPlane = self.selectPlane(nWire, nGeom)
+                chopOne = pyPlane.shape
+                enormous = pyPlane.enormousShape
+                geom = pyPlane.geom  # ??
+            pyOne = _PyPlane(nWire, nGeom)
+            pyOne.shape = chopOne.copy()
+            pyOne.enormousShape = enormous
+            pyOne.geom = geom
+            pyOne.geomShape = geomShape
+        else:
+            pyOne = pyChopOne
+
+        return pyOne
 
     def simulating(self):
 
@@ -483,7 +512,7 @@ class _PyAlignament(_Py):
 
         enormousShape = self.base.enormousShape
 
-        for chop in self.chops:
+        for chop in self.virtualizedChops:
             for pyPlane in chop:
                 pyPlane.simulating(enormousShape)
 
@@ -648,14 +677,14 @@ class _PyAlignament(_Py):
                 base = base.cut(cutterList, _Py.tolerance)
 
                 if len(base.Faces) == 2:
-                    print 'a'
+                    # print 'a'
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
                     pyBase.shape = base
 
                 else:
-                    print 'b'
+                    # print 'b'
 
                     gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
