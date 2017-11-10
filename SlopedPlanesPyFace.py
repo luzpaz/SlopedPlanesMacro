@@ -118,18 +118,21 @@ class _PyFace(_Py):
 
             planeList = []
             for plane in wire.planes:
-                dd = dict()
-                dd['_numWire'] = plane.numWire
-                dd['_numGeom'] = plane.numGeom
-                dd['_angle'] = plane.angle
-                dd['_width'] = plane.width
-                dd['_length'] = plane.length
-                dd['_rear'] = plane.rear
-                dd['_rango'] = plane.rango
-                dd['_reflexed'] = plane.reflexed
-                dd['_aligned'] = plane.aligned
-                dd['_choped'] = plane.choped
-                dd['_arrow'] = plane.arrow
+                dd = plane.__dict__.copy()
+
+                dd['_shape'] = None
+                dd['_bigShape'] = None
+                dd['_enormousShape'] = None
+                dd['_geom'] = None
+                dd['_geomAligned'] = None
+                dd['_cutter'] = []
+                dd['_oppCutter'] = []
+                dd['_divide'] = []
+                dd['_forward'] = None
+                dd['_backward'] = None
+                dd['_simulatedShape'] = None
+                dd['_compound'] = None
+
                 planeList.append(dd)
             dct['_planes'] = planeList
 
@@ -392,7 +395,7 @@ class _PyFace(_Py):
 
         self.removeExcessReflex()
 
-        # self.printSummary()
+        self.printSummary()
 
     def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -986,9 +989,10 @@ class _PyFace(_Py):
                             # print '2'
                             cutterList.remove(plane)
 
-                        plane = plane.cut(cutterList, _Py.tolerance)
                         gS = pyPlane.geom.toShape()
-                        plane = utils.selectFace(plane.Faces, gS)
+                        plane = self.cutting(plane, cutterList, gS)
+                        #plane = plane.cut(cutterList, _Py.tolerance)
+                        # plane = utils.selectFace(plane.Faces, gS)
                         pyPlane.shape = plane
 
                         if pyPlane.choped or pyPlane.aligned:
