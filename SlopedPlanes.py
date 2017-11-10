@@ -143,13 +143,13 @@ class _SlopedPlanes():
             coordinates.extend(coordinates[0:2])
             coordinatesOuter.append(coordinates)
 
-        lowerLeftFaces = [cc[0] for cc in coordinatesOuter]
+        lowerLeft = [cc[0] for cc in coordinatesOuter]
         faceList = []
         falseFaceOuter = []
         coordinatesOuterOrdered = []
-        while lowerLeftFaces:
-            index = utils.lowerLeftPoint(lowerLeftFaces)
-            lowerLeftFaces.pop(index)
+        while lowerLeft:
+            index = utils.lowerLeftPoint(lowerLeft)
+            lowerLeft.pop(index)
             pop = coordinatesOuter.pop(index)
             coordinatesOuterOrdered.append(pop)
             pop = fList.pop(index)
@@ -188,13 +188,13 @@ class _SlopedPlanes():
                 coord.extend(coord[0:2])
                 coordinatesInner.append(coord)
 
-            upperLeftInner = [cc[0] for cc in coordinatesInner]
+            upperLeft = [cc[0] for cc in coordinatesInner]
             wireList = []
             falseFaceList = []
             coordinatesInnerOrdered = []
-            while upperLeftInner:
-                index = utils.upperLeftPoint(upperLeftInner)
-                upperLeftInner.pop(index)
+            while upperLeft:
+                index = utils.upperLeftPoint(upperLeft)
+                upperLeft.pop(index)
                 pop = coordinatesInner.pop(index)
                 coordinatesInnerOrdered.append(pop)
                 pop = wList.pop(index)
@@ -261,8 +261,8 @@ class _SlopedPlanes():
                     pyPlane.geom = geom
                     gS = geom.toShape()
                     # pyPlane.geomShape = gS
-                    pyPlane.geomAligned = geom
                     geomShapeWire.append(gS)
+                    pyPlane.geomAligned = geom
 
                 pyWire.planes = pyPlaneListNew
                 pyWire.shapeGeom = geomShapeWire

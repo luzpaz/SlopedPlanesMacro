@@ -118,15 +118,20 @@ class _PyFace(_Py):
 
             planeList = []
             for plane in wire.planes:
-                dd = plane.__dict__.copy()
+                # dd = plane.__dict__.copy()
                 # TODO change
-                dd['_shape'], dd['_bigShape'], dd['_enormousShape'],\
-                    dd['_geom'], dd['_geomAligned'],\
-                    dd['_cutter'], dd['_oppCutter'], dd['_divide'],\
-                    dd['_forward'], dd['_backward'], dd['_simulatedShape'],\
-                    dd['_compound'] = \
-                    None, None, None, None, None, [], [], [], None, None,\
-                    None, None
+                dd = dict()
+                dd['_numWire'] = plane.numWire
+                dd['_numGeom'] = plane.numGeom
+                dd['_angle'] = plane.angle
+                dd['_width'] = plane.width
+                dd['_length'] = plane.length
+                dd['_rear'] = plane.rear
+                dd['_rango'] = plane.rango
+                dd['_reflexed'] = plane.reflexed
+                dd['_aligned'] = plane.aligned
+                dd['_choped'] = plane.choped
+                dd['_arrow'] = plane.arrow
                 planeList.append(dd)
             dct['_planes'] = planeList
 
