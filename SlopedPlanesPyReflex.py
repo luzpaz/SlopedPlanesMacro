@@ -41,7 +41,7 @@ class _PyReflex(_Py):
         ''''''
 
         self.planes = []
-        self.rangoInter = []
+        self.rango = []
 
     @property
     def planes(self):
@@ -58,18 +58,18 @@ class _PyReflex(_Py):
         self._planes = planes
 
     @property
-    def rangoInter(self):
+    def rango(self):
 
         ''''''
 
-        return self._rangoInter
+        return self._rango
 
-    @rangoInter.setter
-    def rangoInter(self, rangoInter):
+    @rango.setter
+    def rango(self, rango):
 
         ''''''
 
-        self._rangoInter = rangoInter
+        self._rango = rango
 
     def simulating(self):
 
@@ -258,14 +258,11 @@ class _PyReflex(_Py):
                     self.processRango(pyWire, pyR, pyOppR,
                                       nn, 'rangoNext')
 
-        rangoInter = self.rangoInter
-        if rangoInter:
-            ran = rangoInter
+        rangoInter = self.rango
+        for nn in rangoInter:
 
-            for nn in ran:
-
-                self.processRango(pyWire, pyR, pyOppR, nn,
-                                  'rangoInter')
+            self.processRango(pyWire, pyR, pyOppR, nn,
+                              'rangoInter')
 
     def processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR,
                        oppReflexEnormous):
@@ -613,19 +610,14 @@ class _PyReflex(_Py):
             oG = oppRear[0]
 
         if oG > rG:
-            # print '1'
             ran = range(rG+1, oG)
 
         elif oG < rG:
-            # print '2'
             ranA = range(rG+1, lenWire)
             ranB = range(0, oG)
             ran = ranA + ranB
 
         else:
-            # print '3'
             ran = []
 
-        # print 'rangoInter ', ran
-
-        self.rangoInter = ran
+        self.rango = ran
