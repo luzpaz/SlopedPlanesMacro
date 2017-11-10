@@ -464,16 +464,19 @@ class _PyPlane(_Py):
 
         shape = self.shape
         bigShape = self.bigShape
-        geomShape = self.geom.toShape()
+        gS = self.geom.toShape()
 
-        shape = shape.cut([enormousShape], _Py.tolerance)
-        shape = utils.selectFace(shape.Faces, geomShape)
+        # shape = shape.cut([enormousShape], _Py.tolerance)
+        # shape = utils.selectFace(shape.Faces, geomShape)
+        shape = self.cutting(shape, [enormousShape], gS)
         self.shape = shape
 
-        bigShape =\
+
+        bigShape = self.cutting(bigShape, [enormousShape], gS)
+        '''bigShape =\
             bigShape.cut([enormousShape], _Py.tolerance)
         bigShape =\
-            utils.selectFace(bigShape.Faces, geomShape)
+            utils.selectFace(bigShape.Faces, geomShape)'''
         self.bigShape = bigShape
 
     def ordinaries(self, pyWire):
@@ -536,9 +539,10 @@ class _PyPlane(_Py):
 
         if cutterList:
             plane = self.shape
-            plane = plane.cut(cutterList, _Py.tolerance)
+            #plane = plane.cut(cutterList, _Py.tolerance)
             gS = self.geom.toShape()
-            plane = utils.selectFace(plane.Faces, gS)
+            plane = self.cutting(plane, cutterList, gS)
+            #plane = utils.selectFace(plane.Faces, gS)
             self.shape = plane
 
     def isSolved(self):
@@ -601,9 +605,10 @@ class _PyPlane(_Py):
                     # TODO necesita un nivel mas de seleccion
                     pass
                 else:
-                    pl = pl.cut([plane, oppPlane], _Py.tolerance)
+                    # pl = pl.cut([plane, oppPlane], _Py.tolerance)
                     gS = pyPl.geom.toShape()
-                    pl = utils.selectFace(pl.Faces, gS)
+                    pl = self.cutting(pl, [plane, oppPlane], gS)
+                    #pl = utils.selectFace(pl.Faces, gS)
                     pyPl.shape = pl
 
     def rangging(self, pyWire, direction):

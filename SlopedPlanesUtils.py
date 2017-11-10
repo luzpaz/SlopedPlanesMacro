@@ -290,14 +290,3 @@ def sliceIndex(index, lenWire):
         index = index + lenWire
 
     return index
-
-
-def selectFace(faceList, geomShape):
-
-    ''''''
-
-    for face in faceList:
-        section = face.section(geomShape)
-        if section.Edges:
-            return face
-    return faceList[0]

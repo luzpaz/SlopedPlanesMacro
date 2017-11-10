@@ -262,7 +262,7 @@ class _PyWire(_Py):
                 # print'prior ', (pyPrior.numWire, pyPrior.numGeom)
                 # print'later ', (pyLater.numWire, pyLater.numGeom)
 
-                geomShape = pyPlane.geom.toShape()
+                gS = pyPlane.geom.toShape()
                 cutterList = []
 
                 if pyPlane.arrow:
@@ -306,9 +306,9 @@ class _PyWire(_Py):
                 if cutterList:
                     # print'D'
                     # print cutterList
-                    shape = shape.cut(cutterList, _Py.tolerance)
-                    shape = utils.selectFace(shape.Faces, geomShape,
-                                             )
+                    # shape = shape.cut(cutterList, _Py.tolerance)
+                    # shape = utils.selectFace(shape.Faces, geomShape)
+                    shape = self.cutting(shape, cutterList, gS)
                     pyPlane.shape = shape
 
     def simulating(self):
@@ -374,8 +374,9 @@ class _PyWire(_Py):
             plane = pyPlane.shape
             gS = pyPlane.geom.toShape()
             cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
-            plane = plane.cut(cutterList, _Py.tolerance)
-            plane = utils.selectFace(plane.Faces, gS)
+            plane = self.cutting(plane, cutterList, gS)
+            # plane = plane.cut(cutterList, _Py.tolerance)
+            # plane = utils.selectFace(plane.Faces, gS)
             pyPlane.shape = plane
 
             if pyPlane.isSolved():
@@ -429,9 +430,9 @@ class _PyWire(_Py):
                                     cutList.append(pyPl.shape)
 
                         gS = pyPlane.geom.toShape()
-                        plane = plane.cut(cutList, _Py.tolerance)
-                        plane = utils.selectFace(plane.Faces, gS,
-                                                 )
+                        #plane = plane.cut(cutList, _Py.tolerance)
+                        #plane = utils.selectFace(plane.Faces, gS)
+                        plane = self.cutting(plane, cutList, gS)
                         pyPlane.shape = plane
 
     def rearing(self):
