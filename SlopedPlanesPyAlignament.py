@@ -43,7 +43,7 @@ class _PyAlignament(_Py):
         self.aligns = []
         self.chops = []
         self.virtualizedChops = []
-        self.rangoChop = []
+        self.rango = []
         self.falsify = False
         self.virtualizedBase = None
         self.prior = None
@@ -106,18 +106,18 @@ class _PyAlignament(_Py):
         self._virtualizedChops = virtualizedChops
 
     @property
-    def rangoChop(self):
+    def rango(self):
 
         ''''''
 
-        return self._rangoChop
+        return self._rango
 
-    @rangoChop.setter
-    def rangoChop(self, rangoChop):
+    @rango.setter
+    def rango(self, rango):
 
         ''''''
 
-        self._rangoChop = rangoChop
+        self._rango = rango
 
     @property
     def falsify(self):
@@ -184,10 +184,10 @@ class _PyAlignament(_Py):
         numWire = self.base.numWire
         pyWire = pyWireList[numWire]
 
-        rangoChop = self.rangoChop
+        rango = self.rango
         pyPlaneList = pyWire.planes
 
-        for ran in rangoChop:
+        for ran in rango:
             for nG in ran:
                 pyPl = pyPlaneList[nG]
                 if not pyPl.aligned:
@@ -300,7 +300,7 @@ class _PyAlignament(_Py):
 
         chops = self.chops
         virtualizedChops = self.virtualizedChops
-        rangoChop = self.rangoChop
+        rango = self.rango
         pyWireList = _Py.pyFace.wires
 
         if not self.falsify:
@@ -316,7 +316,7 @@ class _PyAlignament(_Py):
                 pyWire = pyWireList[numWire]
                 pyPlaneList = pyWire.planes
 
-                rChop = rangoChop[numChop]
+                rChop = rango[numChop]
                 # print 'rChop ', rChop
                 cList = []
                 for nn in rChop:
@@ -505,8 +505,8 @@ class _PyAlignament(_Py):
         chops = self.chops
         virtualizedChops = self.virtualizedChops
 
-        rangoChopList = self.rangoChop
-        rangoChopList = self.rangoChop
+        rangoChopList = self.rango
+        rangoChopList = self.rango
         pyWireList = _Py.pyFace.wires
 
         pyCont = aligns[0]
@@ -757,6 +757,6 @@ class _PyAlignament(_Py):
                 # print '2'
                 rangoChop = []
 
-            self.addValue('rangoChop', rangoChop, 'backward')
+            self.addValue('rango', rangoChop, 'backward')
 
         # print 'rangoChop ', self.rangoChop
