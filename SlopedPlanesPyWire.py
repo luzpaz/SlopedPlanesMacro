@@ -182,7 +182,7 @@ class _PyWire(_Py):
                         else:
 
                             forward = pyPlane.forward
-                            gS = pyPlane.geom.toShape()
+                            gS = pyPlane.geomShape
                             forw = pyPl.forward
                             section = forward.section([forw, gS], _Py.tolerance)
 
@@ -261,7 +261,7 @@ class _PyWire(_Py):
                 # print'prior ', (pyPrior.numWire, pyPrior.numGeom)
                 # print'later ', (pyLater.numWire, pyLater.numGeom)
 
-                gS = pyPlane.geom.toShape()
+                gS = pyPlane.geomShape
                 cutterList = []
 
                 if pyPlane.arrow:
@@ -369,7 +369,7 @@ class _PyWire(_Py):
             # print unsolved
             # print impossible
             plane = pyPlane.shape
-            gS = pyPlane.geom.toShape()
+            gS = pyPlane.geomShape
             cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
             plane = self.cutting(plane, cutterList, gS)
             pyPlane.shape = plane
@@ -424,7 +424,7 @@ class _PyWire(_Py):
                                 if pyPl != pyPlane:
                                     cutList.append(pyPl.shape)
 
-                        gS = pyPlane.geom.toShape()
+                        gS = pyPlane.geomShape
                         plane = self.cutting(plane, cutList, gS)
                         pyPlane.shape = plane
 

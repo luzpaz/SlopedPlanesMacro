@@ -51,6 +51,7 @@ class _PyPlane(_Py):
         self.choped = False
         self.arrow = False
         self.geom = None
+        self.geomShape = None
         self.geomAligned = None
         self.shape = None
         self.bigShape = None
@@ -231,6 +232,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._geom = geom
+
+    @property
+    def geomShape(self):
+
+        ''''''
+
+        return self._geomShape
+
+    @geomShape.setter
+    def geomShape(self, geomShape):
+
+        ''''''
+
+        self._geomShape = geomShape
 
     @property
     def geomAligned(self):
@@ -463,7 +478,7 @@ class _PyPlane(_Py):
 
         shape = self.shape
         bigShape = self.bigShape
-        gS = self.geom.toShape()
+        gS = self.geomShape
 
         shape = self.cutting(shape, [enormousShape], gS)
         self.shape = shape
@@ -531,7 +546,7 @@ class _PyPlane(_Py):
 
         if cutterList:
             plane = self.shape
-            gS = self.geom.toShape()
+            gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)
             self.shape = plane
 
@@ -595,7 +610,7 @@ class _PyPlane(_Py):
                     # TODO necesita un nivel mas de seleccion
                     pass
                 else:
-                    gS = pyPl.geom.toShape()
+                    gS = pyPl.geomShape
                     pl = self.cutting(pl, [plane, oppPlane], gS)
                     pyPl.shape = pl
 

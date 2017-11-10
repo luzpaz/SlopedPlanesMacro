@@ -164,10 +164,10 @@ class _SlopedPlanes(_Py):
             size = face.BoundBox.DiagonalLength
             _Py.size = size
             _Py.face = face
-            coordinatesOuter = coordinatesOuterOrdered[numFace]
+            coordinates = coordinatesOuterOrdered[numFace]
             for pyFace in pyFaceListOld:
                 oldCoord = pyFace.wires[0].coordinates
-                if oldCoord[0] == coordinatesOuter[0]:
+                if oldCoord[0] == coordinates[0]:
                     pyFaceListNew.append(pyFace)
                     pyFace.numFace = numFace
                     break
@@ -204,7 +204,7 @@ class _SlopedPlanes(_Py):
             wireList.insert(0, face.OuterWire)
             falseFaceList.insert(0, falseFaceOuter[numFace])
 
-            coordinates = [coordinatesOuter]
+            coordinates = [coordinates]
             if coordinatesInnerOrdered:
                 coordinates.extend(coordinatesInnerOrdered)
 
@@ -259,7 +259,7 @@ class _SlopedPlanes(_Py):
 
                     pyPlane.geom = geom
                     gS = geom.toShape()
-                    # pyPlane.geomShape = gS
+                    pyPlane.geomShape = gS
                     geomShapeWire.append(gS)
                     pyPlane.geomAligned = geom
 
@@ -304,54 +304,42 @@ class _SlopedPlanes(_Py):
             pyWireList = pyFace.wires
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
-                # print 'numWire ', numWire
                 for pyPlane in pyWire.planes:
                     numAngle = pyPlane.numGeom
                     angle = pyPlane.angle
-                    # print '(numAngle, angle) ', (numAngle, angle)
-                    # print pyPlane.shape
+
                     if [numWire, numAngle] not in originList:
 
                         if isinstance(angle, float):
-                            # print 'a'
 
                             plane = pyPlane.shape
+
                             if isinstance(plane, Part.Compound):
-                                # print 'a1'
                                 planeList.append(plane.Faces[0])
                                 secondaries.extend(plane.Faces[1:])
+
                             else:
-                                # print 'a2'
                                 planeList.append(plane)
 
                         else:
-                            # print 'b'
+
                             alfa, beta = angle[0], angle[1]
 
                             if [alfa, beta] not in originList:
-                                # print 'bb'
                                 originList.append([alfa, beta])
-                                # print[alfa, beta]
 
                                 if alfa == numWire:
-                                    # print 'bb1'
-
                                     if beta > numAngle:
-                                        # print 'bb11'
-
                                         pyPl = pyFace.selectPlane(alfa, beta)
                                         pl = pyPl.shape
                                         planeList.append(pl)
 
                                 elif alfa > numWire:
-                                    # print 'bb2'
-
                                     pyPl = pyFace.selectPlane(alfa, beta)
                                     pl = pyPl.shape
                                     planeList.append(pl)
 
                                 elif alfa < numWire:
-                                    # print 'bb3'
                                     pass
 
             planeList.extend(secondaries)

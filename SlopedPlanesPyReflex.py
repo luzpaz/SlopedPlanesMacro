@@ -88,11 +88,11 @@ class _PyReflex(_Py):
         except AttributeError:
             oppRCopy = pyOppR.shape.copy()
 
-        gS = pyR.geom.toShape()
+        gS = pyR.geomShape
         rCopy = self.cutting(rCopy, [enormousOppR], gS)
         pyR.simulatedShape = rCopy
 
-        gS = pyOppR.geom.toShape()
+        gS = pyOppR.geomShape
         oppRCopy = self.cutting(oppRCopy, [enormousR], gS)
         pyOppR.simulatedShape = oppRCopy
 
@@ -361,7 +361,7 @@ class _PyReflex(_Py):
                 if kind != 'rangoCorner':
 
                     pl = pyPl.shape.copy()
-                    gS = pyPl.geom.toShape()
+                    gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
                     pyR.addLink('divide', pl)
                     # print 'included rango divide', (pl, nWire, nn)
@@ -371,7 +371,7 @@ class _PyReflex(_Py):
 
                 if kind == 'rangoCorner':
                     # print 'Corner'
-                    gS = pyPl.geom.toShape()
+                    gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
 
                 pyR.addLink('cutter', pl)
@@ -384,7 +384,7 @@ class _PyReflex(_Py):
 
             if kind == 'rangoCorner':
                 # print 'rangoCorner'
-                gS = pyPl.geom.toShape()
+                gS = pyPl.geomShape
                 pl = self.cutting(pl, [oppReflexEnormous], gS)
 
             pyR.addLink('cutter', pl)
@@ -424,7 +424,7 @@ class _PyReflex(_Py):
         divide = pyR.divide
 
         bb = bb.cut(pyOppR.oppCutter + divide, _Py.tolerance)
-        gS = pyOppR.geom.toShape()
+        gS = pyOppR.geomShape
         if len(pyOppR.rear) == 1:
             if numWire == 0:
                 vertex = pyOppR.forward.firstVertex(True)
@@ -454,7 +454,7 @@ class _PyReflex(_Py):
         aa = aa.cut(cList+[bb], _Py.tolerance)
 
         aList = []
-        gS = pyR.geom.toShape()
+        gS = pyR.geomShape
         AA = self.selectFace(aa.Faces, gS)
         aList.append(AA)
         aa = aa.removeShape([AA])
@@ -546,7 +546,7 @@ class _PyReflex(_Py):
                         # print 'rearReflex'
                         # print pyRear.numGeom
                         rearPl = pyRear.compound
-                        gS = pyRear.geom.toShape()
+                        gS = pyRear.geomShape
                         rearPl = self.cutting(rearPl, [pyPlane.compound], gS)
                         pyRear.compound = rearPl
 
@@ -569,21 +569,21 @@ class _PyReflex(_Py):
 
         if lenB > 1 and lenA == 1:
             # print 'A'
-            gS = pyR.geom.toShape()
+            gS = pyR.geomShape
             compoundA = self.cutting(compoundA, [compoundB], gS)
 
         elif lenA > 1 and lenB == 1:
             # print 'B'
-            gS = pyOppR.geom.toShape()
+            gS = pyOppR.geomShape
             compoundB = self.cutting(compoundB, [compoundA], gS)
 
         elif lenA == 1 and lenB == 1:
             # print 'C'
             # TODO make copy
-            gS = pyR.geom.toShape()
+            gS = pyR.geomShape
             compoundA = self.cutting(compoundA, [compoundB], gS)
 
-            gS = pyOppR.geom.toShape()
+            gS = pyOppR.geomShape
             compoundB = self.cutting(compoundB, [compoundA], gS)
 
         else:

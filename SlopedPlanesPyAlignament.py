@@ -243,7 +243,7 @@ class _PyAlignament(_Py):
 
         if not pyPrior.aligned:
 
-            gS = pyPrior.geom.toShape()
+            gS = pyPrior.geomShape
             prior = self.cutting(prior, [bigBase], gS)
             pyPrior.shape = prior
 
@@ -251,12 +251,12 @@ class _PyAlignament(_Py):
 
             if not self.falsify:
 
-                gS = pyLater.geom.toShape()
+                gS = pyLater.geomShape
                 later = self.cutting(later, [bigBase], gS)
 
             else:
 
-                gS = pyLater.geom.toShape()
+                gS = pyLater.geomShape
                 later = self.cutting(later, [bigCont], gS)
 
             pyLater.shape = later
@@ -266,7 +266,7 @@ class _PyAlignament(_Py):
 
             if cutterList:
                 # print '3'
-                gS = pyBase.geom.toShape()
+                gS = pyBase.geomShape
                 base = self.cutting(base, cutterList, gS)
                 pyBase.shape = base
 
@@ -278,13 +278,13 @@ class _PyAlignament(_Py):
 
             cList = [pyOne.bigShape] + cutterList
 
-            gS = pyBase.geom.toShape()
+            gS = pyBase.geomShape
             base = self.cutting(base, cList, gS)
             pyBase.shape = base
 
             cList = [pyTwo.bigShape] + cutterList
 
-            gS = pyCont.geom.toShape()
+            gS = pyCont.geomShape
             cont = self.cutting(cont, cList, gS)
             pyCont.shape = cont
 
@@ -330,7 +330,7 @@ class _PyAlignament(_Py):
 
                 cutList = [enormousBase, enormousChopTwo] + cList
 
-                gS = pyChopOne.geom.toShape()
+                gS = pyChopOne.geomShape
                 chopOneCopy = self.cutting(chopOneCopy, cutList, gS)
 
                 enormousChopOne = pyOne.enormousShape
@@ -338,7 +338,7 @@ class _PyAlignament(_Py):
 
                 cutList = [enormousBase, enormousChopOne] + cList
 
-                gS = pyChopTwo.geom.toShape()
+                gS = pyChopTwo.geomShape
                 chopTwoCopy = self.cutting(chopTwoCopy, cutList, gS)
 
                 chopList.extend([chopOneCopy, chopTwoCopy])
@@ -400,8 +400,8 @@ class _PyAlignament(_Py):
             limitList.extend([bigPrior, bigLater])
             cutterList.extend(limitList)
 
-            geomList = [py.geom.toShape() for py in self.aligns]
-            geomList.insert(0, pyBase.geom.toShape())
+            geomList = [py.geomShape for py in self.aligns]
+            geomList.insert(0, pyBase.geomShape)
 
             base = base.cut(cutterList, _Py.tolerance)
             shapeList = []
@@ -419,7 +419,7 @@ class _PyAlignament(_Py):
             cont = pyCont.shape.copy()
             pyLater = self.later
             bigLater = pyLater.bigShape
-            gS = pyCont.geom.toShape()
+            gS = pyCont.geomShape
             cont = self.cutting(cont, [bigLater], gS)
 
             shapeList = [base, cont]
@@ -440,7 +440,7 @@ class _PyAlignament(_Py):
                 except AttributeError:
                     plCopy = pyPlane.shape.copy()
 
-                gS = pyPlane.geom.toShape()
+                gS = pyPlane.geomShape
                 plCopy = self.cutting(plCopy, [enormous], gS)
                 pyPlane.simulatedShape = plCopy
 
@@ -530,7 +530,7 @@ class _PyAlignament(_Py):
 
                 if cutterList:
                     plane = pyPlane.shape
-                    gS = [pyChopOne, pyChopTwo][num].geom.toShape()
+                    gS = [pyChopOne, pyChopTwo][num].geomShape
                     plane = self.cutting(plane, cutterList, gS)
                     pyPlane.shape = plane
 
@@ -549,7 +549,7 @@ class _PyAlignament(_Py):
                     else:
                         cList = [enormousCont]
 
-                gS = [pyChopOne, pyChopTwo][num].geom.toShape()
+                gS = [pyChopOne, pyChopTwo][num].geomShape
                 planeCopy = planeCopy.cut(cList, _Py.tolerance)
 
                 for ff in planeCopy.Faces:
@@ -566,12 +566,12 @@ class _PyAlignament(_Py):
             shapeTwo = pyTwo.shape
 
             cutterList = [shapeTwo]
-            gS = pyChopOne.geom.toShape()
+            gS = pyChopOne.geomShape
             ff = self.cutting(shapeOne, cutterList, gS)
             pyOne.shape = ff
 
             cutterList = [shapeOne]
-            gS = pyChopTwo.geom.toShape()
+            gS = pyChopTwo.geomShape
             ff = self.cutting(shapeTwo, cutterList, gS)
             pyTwo.shape = ff
 
@@ -608,22 +608,22 @@ class _PyAlignament(_Py):
                 if len(base.Faces) == 2:
                     # print 'a'
 
-                    gS = pyBase.geom.toShape()
+                    gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
                     pyBase.shape = base
 
                 else:
                     # print 'b'
 
-                    gS = pyBase.geom.toShape()
+                    gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
                     pyBase.shape = ff
 
-                    gS = pyChopTwo.geom.toShape()
+                    gS = pyChopTwo.geomShape
                     shapeTwo = self.cutting(shapeTwo, [ff], gS)
                     pyTwo.shape = shapeTwo
 
-                    gS = pyCont.geom.toShape()
+                    gS = pyCont.geomShape
                     ff = self.selectFace(base.Faces, gS)
                     pyCont.shape = ff
 
@@ -635,7 +635,7 @@ class _PyAlignament(_Py):
 
                     pyCont.angle = pyBase.angle
 
-                    gS = pyChopOne.geom.toShape()
+                    gS = pyChopOne.geomShape
                     shapeOne = self.cutting(shapeOne, [ff], gS)
                     pyOne.shape = shapeOne
 
@@ -659,11 +659,11 @@ class _PyAlignament(_Py):
                     cutterList.append(pl)
                     # print 'rangoChop ', nn
 
-            gS = pyBase.geom.toShape()
+            gS = pyBase.geomShape
             base = self.cutting(base, cutterList, gS)
             pyBase.shape = base
 
-            gS = pyCont.geom.toShape()
+            gS = pyCont.geomShape
             cont = self.cutting(cont, cutterList, gS)
             pyCont.shape = cont
 

@@ -123,6 +123,7 @@ class _PyFace(_Py):
                 dd['_bigShape'] = None
                 dd['_enormousShape'] = None
                 dd['_geom'] = None
+                dd['_geomShape'] = None
                 dd['_geomAligned'] = None
                 dd['_cutter'] = []
                 dd['_oppCutter'] = []
@@ -226,7 +227,6 @@ class _PyFace(_Py):
             for pyPlane in pyPlaneList:
                 numGeom = pyPlane.numGeom
                 # print'### numGeom ', numGeom
-                # printpyPlane.geom
 
                 if not pyPlane.geomAligned:
 
@@ -489,10 +489,6 @@ class _PyFace(_Py):
         edge = False
 
         # print[v.Point for v in section.Vertexes]
-        # printsection.Edges
-        # printlenWire
-        # printlen(section.Vertexes)
-        # printdirection
 
         if section.Edges:
             # print'a'
@@ -608,8 +604,6 @@ class _PyFace(_Py):
 
         return (nWire, nGeom)
 
-
-
     def removeAlignament(self, pyAlign):
 
         ''''''
@@ -715,28 +709,23 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyReflexList = pyWire.reflexs
-            # print pyReflexList
             for pyReflex in pyReflexList[:]:
                 rr = False
                 pyPlaneList = pyReflex.planes
-                # print pyPlaneList
-                # print[pyPl.numGeom for pyPl in pyPlaneList]
+
                 if len(pyPlaneList) < 2:
-                    # print 'a'
                     rr = True
+
                 else:
-                    # print 'b'
                     [pyR, pyOppR] = pyPlaneList
 
                     if ((pyR.aligned or pyR.choped) and
                        (pyOppR.aligned or pyOppR.choped)):
-                            # print 'bb'
                             rr = True
 
                 if rr:
-                    # print 'c'
                     pyReflexList.remove(pyReflex)
-            # print pyReflexList
+
             pyWire.reflexs = pyReflexList
 
     def simulatedChops(self):
@@ -917,7 +906,7 @@ class _PyFace(_Py):
                     plane = pyPlane.shape
                     if plane:
                         if cutterList:
-                            gS = pyPlane.geom.toShape()
+                            gS = pyPlane.geomShape
                             plane = self.cutting(plane, cutterList, gS)
                             pyPlane.shape = plane
 
@@ -986,7 +975,7 @@ class _PyFace(_Py):
                             # print '2'
                             cutterList.remove(plane)
 
-                        gS = pyPlane.geom.toShape()
+                        gS = pyPlane.geomShape
                         plane = self.cutting(plane, cutterList, gS)
                         pyPlane.shape = plane
 
