@@ -177,7 +177,7 @@ class _Py(object):
             print '*** reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
 
-                print 'rangoInter ', pyReflex.rangoInter
+                print 'rangoInter ', pyReflex.rango
                 print 'planes ', pyReflex.planes
                 for pyPlane in pyReflex.planes:
                     print pyPlane.numGeom,\
@@ -197,7 +197,7 @@ class _Py(object):
             print 'geom ', pyAlignament.base.geom
             print 'geomAligned ', pyAlignament.base.geomAligned
             print 'falsify ', pyAlignament.falsify
-            print 'rangoChop ', pyAlignament.rangoChop
+            print 'rangoChop ', pyAlignament.rango
             print 'prior ', pyAlignament.prior.numGeom
             print 'later ', pyAlignament.later.numGeom
 

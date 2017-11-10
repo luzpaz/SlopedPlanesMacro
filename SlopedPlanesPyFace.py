@@ -394,7 +394,7 @@ class _PyFace(_Py):
 
         self.removeExcessReflex()
 
-        # self.printSummary()
+        self.printSummary()
 
     def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -631,7 +631,7 @@ class _PyFace(_Py):
             Part.LineSegment(line, lineStartParam, lineEndParam)
         # print'backwardLine ', backwardLine
         backwardLineShape = backwardLine.toShape()
-        # printdirection
+        # print direction
 
         if direction == "forward":
             # print'a'
@@ -779,8 +779,10 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.virtualizingBase()
 
+
         for pyAlign in self.alignaments:
             pyAlign.simulating()
+
 
         for pyWire in self.wires:
             pyWire.simulating()
@@ -923,6 +925,7 @@ class _PyFace(_Py):
                             cutterList.remove(plane)
 
                         gS = pyPlane.geomShape
+
                         plane = self.cutting(plane, cutterList, gS)
                         pyPlane.shape = plane
 

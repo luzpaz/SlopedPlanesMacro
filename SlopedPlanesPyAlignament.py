@@ -389,8 +389,6 @@ class _PyAlignament(_Py):
                         cutList.append(pl)
                         # print 'rear nn ', nn
 
-            # print 'cutList ', cutList
-
             cutterList = chopList + cutList
 
             limitList = []
@@ -477,7 +475,7 @@ class _PyAlignament(_Py):
             virtualizedChops.append([pyOne, pyTwo])
 
         self.virtualizedChops = virtualizedChops
-        # self.chops = virtualizedChops
+        # self.chops = virtualizedChops   TODO
 
     def simulating(self):
 
@@ -485,7 +483,7 @@ class _PyAlignament(_Py):
 
         enormousShape = self.base.enormousShape
 
-        for chop in self.virtualizedChops:
+        for chop in self.chops:
             for pyPlane in chop:
                 pyPlane.simulating(enormousShape)
 
@@ -505,7 +503,6 @@ class _PyAlignament(_Py):
         chops = self.chops
         virtualizedChops = self.virtualizedChops
 
-        rangoChopList = self.rango
         rangoChopList = self.rango
         pyWireList = _Py.pyFace.wires
 
@@ -651,14 +648,14 @@ class _PyAlignament(_Py):
                 base = base.cut(cutterList, _Py.tolerance)
 
                 if len(base.Faces) == 2:
-                    # print 'a'
+                    print 'a'
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
                     pyBase.shape = base
 
                 else:
-                    # print 'b'
+                    print 'b'
 
                     gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
@@ -737,26 +734,18 @@ class _PyAlignament(_Py):
                 [(pyPlane.numWire, pyPlane.numGeom),
                  (pyPl.numWire, pyPl.numGeom)]
 
-            # print[(w1, g1), (w2, g2)]
-
             if w1 == w2:
-                # print '1'
                 pyWire = pyWireList[w1]
                 lenWire = len(pyWire.planes)
                 if g1 > g2:
-                    # print '11'
                     ranA = range(g1+1, lenWire)
                     ranB = range(0, g2)
                     ran = ranA + ranB
                 else:
-                    # print '12'
                     ran = range(g1+1, g2)
                 rangoChop = ran
 
             else:
-                # print '2'
                 rangoChop = []
 
             self.addValue('rango', rangoChop, 'backward')
-
-        # print 'rangoChop ', self.rangoChop

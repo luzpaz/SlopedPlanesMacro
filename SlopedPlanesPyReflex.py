@@ -87,35 +87,42 @@ class _PyReflex(_Py):
 
         ''''''
 
-        [pyR, pyOppR] = self.planes
+        [pyReflex, pyOppReflex] = self.planes
 
-        if pyR.aligned:
-            if not pyR.geomAligned:
-                [numWire, numGeom] = [pyR.numWire, pyR.numGeom]
-                dct = pyR.__dict__
-                (nW, nG) = pyR.angle
+        pyR = self.virtualizingPlane(pyReflex)
+
+        pyOppR = self.virtualizingPlane(pyOppReflex)
+
+        self.planes = [pyR, pyOppR]
+
+    def virtualizingPlane(self, pyReflex):
+
+        ''''''
+
+        if pyReflex.aligned:
+            if not pyReflex.geomAligned:
+                [numWire, numGeom] = [pyReflex.numWire, pyReflex.numGeom]
+                geomShape = pyReflex.geomShape
+                forward = pyReflex.forward
+                rear = pyReflex.rear
+                rango = pyReflex.rango
+                (nW, nG) = pyReflex.angle
                 pyPlane = self.selectPlane(nW, nG)
                 shape = pyPlane.shape.copy()
                 enormous = pyPlane.enormousShape
                 pyR = _PyPlane(numWire, numGeom)
-                pyR.__dict__ = dct
+                pyR.geomShape = geomShape
+                pyR.forward = forward
+                pyR.rear = rear
+                pyR.rango = rango
+                pyR.aligned = True
+                pyR.reflexed = True
                 pyR.shape = shape
                 pyR.enormousShape = enormous
 
-        if pyOppR.aligned:
-            if not pyOppR.geomAligned:
-                [numWire, numGeom] = [pyOppR.numWire, pyOppR.numGeom]
-                dct = pyOppR.__dict__
-                (nW, nG) = pyOppR.angle
-                pyPlane = self.selectPlane(nW, nG)
-                shape = pyPlane.shape.copy()
-                enormous = pyPlane.enormousShape
-                pyOppR = _PyPlane(numWire, numGeom)
-                pyOppR.__dict__ = dct
-                pyOppR.shape = shape
-                pyOppR.enormousShape = enormous
+                return pyR
 
-        self.planes = [pyR, pyOppR]
+        return pyReflex
 
     def reflexing(self, pyWire):
 
@@ -173,7 +180,7 @@ class _PyReflex(_Py):
 
             elif rearPyPl.choped:
                 # print 'b'
-                rearPl = rearPyPl.virtualizedBase
+                rearPl = rearPyPl.simulatedShape
                 pyR.addLink('cutter', rearPl)
                 pyOppR.addLink('oppCutter', rearPl)
                 # print 'included rear simulated ', (rearPl, numWire, nGeom)
