@@ -433,47 +433,8 @@ class _PyAlignament(_Py):
         for [pyChopOne, pyChopTwo] in self.chops:
 
             pyOne = self.virtualizingChopPlane(pyChopOne)
+
             pyTwo = self.virtualizingChopPlane(pyChopTwo)
-
-            '''if pyChopOne.aligned:
-                [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
-                chopOne = pyChopOne.shape
-                enormous = pyChopOne.enormousShape
-                geom = pyChopOne.geom
-                geomShape = pyChopOne.geomShape
-                if not chopOne:
-                    [nWire, nGeom] = pyChopOne.angle
-                    pyPlane = self.selectPlane(nWire, nGeom)
-                    chopOne = pyPlane.shape
-                    enormous = pyPlane.enormousShape
-                    geom = pyPlane.geom  # ??
-                pyOne = _PyPlane(nWire, nGeom)
-                pyOne.shape = chopOne.copy()
-                pyOne.enormousShape = enormous
-                pyOne.geom = geom
-                pyOne.geomShape = geomShape
-            else:
-                pyOne = pyChopOne
-
-            if pyChopTwo.aligned:
-                [nWire, nGeom] = [pyChopTwo.numWire, pyChopTwo.numGeom]
-                chopTwo = pyChopTwo.shape
-                enormous = pyChopTwo.enormousShape
-                geom = pyChopTwo.geom
-                geomShape = pyChopTwo.geomShape
-                if not chopTwo:
-                    [nWire, nGeom] = pyChopTwo.angle
-                    pyPlane = self.selectPlane(nWire, nGeom)
-                    chopTwo = pyPlane.shape
-                    enormous = pyPlane.enormousShape
-                    geom = pyPlane.geom  # ??
-                pyTwo = _PyPlane(nWire, nGeom)
-                pyTwo.shape = chopTwo.copy()
-                pyTwo.enormousShape = enormous
-                pyTwo.geom = geom
-                pyTwo.geomShape = geomShape
-            else:
-                pyTwo = pyChopTwo'''
 
             virtualizedChops.append([pyOne, pyTwo])
 
