@@ -728,72 +728,18 @@ class _PyFace(_Py):
 
             pyWire.reflexs = pyReflexList
 
-    def simulatedChops(self):
-
-        ''''''
-
-        for pyAlign in self.alignaments:
-            simulatedChops = []
-            for [pyChopOne, pyChopTwo] in pyAlign.chops:
-
-                if pyChopOne.aligned:
-                    [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
-                    chopOne = pyChopOne.shape
-                    enormous = pyChopOne.enormousShape
-                    geom = pyChopOne.geom
-                    if not chopOne:
-                        [nWire, nGeom] = pyChopOne.angle
-                        pyPlane = self.selectPlane(nWire, nGeom)
-                        chopOne = pyPlane.shape
-                        enormous = pyPlane.enormousShape
-                        geom = pyPlane.geom
-                    pyOne = _PyPlane(nWire, nGeom)
-                    pyOne.shape = chopOne.copy()
-                    pyOne.enormousShape = enormous
-                    pyOne.geom = geom
-                else:
-                    pyOne = pyChopOne
-
-                if pyChopTwo.aligned:
-                    [nWire, nGeom] = [pyChopTwo.numWire, pyChopTwo.numGeom]
-                    chopTwo = pyChopTwo.shape
-                    enormous = pyChopTwo.enormousShape
-                    geom = pyChopTwo.geom
-                    if not chopTwo:
-                        [nWire, nGeom] = pyChopTwo.angle
-                        pyPlane = self.selectPlane(nWire, nGeom)
-                        chopTwo = pyPlane.shape
-                        enormous = pyPlane.enormousShape
-                        geom = pyPlane.geom
-                    pyTwo = _PyPlane(nWire, nGeom)
-                    pyTwo.shape = chopTwo.copy()
-                    pyTwo.enormousShape = enormous
-                    pyTwo.geom = geom
-                else:
-                    pyTwo = pyChopTwo
-
-                simulatedChops.append([pyOne, pyTwo])
-
-            pyAlign.simulatedChops = simulatedChops
-
     def planning(self):
 
         ''''''
 
-        pyWireList = self.wires
         reset = self.reset
 
-        for pyWire in pyWireList:
-
+        for pyWire in self.wires:
             pyWire.planning(reset)
 
-        pyAlignList = self.alignaments
-
-        for pyAlign in pyAlignList:
+        for pyAlign in self.alignaments:
             if reset:
-
                 pyAlign.rangging()
-
             pyAlign.ranggingChop()
 
         self.reset = False
@@ -808,7 +754,8 @@ class _PyFace(_Py):
         for pyAlign in self.alignaments:
             pyAlign.trimming()
 
-        self.simulatedChops()
+        for pyAlign in self.alignaments:
+            pyAlign.virtualizingChop()
 
     def priorLater(self):
 
@@ -826,14 +773,14 @@ class _PyFace(_Py):
 
         for pyAlign in self.alignaments:
             if not pyAlign.falsify:
-                pyAlign.simulatingBase()
+                pyAlign.virtualizingBase()
 
         for pyAlign in self.alignaments:
             if pyAlign.falsify:
-                pyAlign.simulatingBase()
+                pyAlign.virtualizingBase()
 
         for pyAlign in self.alignaments:
-            pyAlign.simulatingChop()
+            pyAlign.simulating()
 
         for pyWire in self.wires:
             pyWire.simulating()

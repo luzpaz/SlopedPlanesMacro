@@ -79,24 +79,11 @@ class _PyReflex(_Py):
 
         enormousR = pyR.enormousShape
         enormousOppR = pyOppR.enormousShape
-        try:
-            rCopy = pyR.simulatedShape.copy()
-        except AttributeError:
-            rCopy = pyR.shape.copy()
-        try:
-            oppRCopy = pyOppR.simulatedShape.copy()
-        except AttributeError:
-            oppRCopy = pyOppR.shape.copy()
 
-        gS = pyR.geomShape
-        rCopy = self.cutting(rCopy, [enormousOppR], gS)
-        pyR.simulatedShape = rCopy
+        pyR.simulating(enormousOppR)
+        pyOppR.simulating(enormousR)
 
-        gS = pyOppR.geomShape
-        oppRCopy = self.cutting(oppRCopy, [enormousR], gS)
-        pyOppR.simulatedShape = oppRCopy
-
-    def simulatedReflex(self):
+    def virtualizing(self):
 
         ''''''
 

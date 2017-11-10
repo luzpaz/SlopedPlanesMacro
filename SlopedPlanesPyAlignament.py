@@ -23,6 +23,7 @@
 
 
 from SlopedPlanesPy import _Py
+from SlopedPlanesPyPlane import _PyPlane
 
 
 __title__ = "SlopedPlanes Macro"
@@ -288,7 +289,7 @@ class _PyAlignament(_Py):
             cont = self.cutting(cont, cList, gS)
             pyCont.shape = cont
 
-    def simulatingBase(self):
+    def virtualizingBase(self):
 
         ''''''
 
@@ -426,23 +427,66 @@ class _PyAlignament(_Py):
 
         self.simulatedShape = shapeList
 
-    def simulatingChop(self):
+    def virtualizingChop(self):
 
         ''''''
 
-        enormous = self.base.enormousShape
+        simulatedChops = []
+        for [pyChopOne, pyChopTwo] in self.chops:
+
+            if pyChopOne.aligned:
+                [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
+                chopOne = pyChopOne.shape
+                enormous = pyChopOne.enormousShape
+                geom = pyChopOne.geom
+                geomShape = pyChopOne.geomShape
+                if not chopOne:
+                    [nWire, nGeom] = pyChopOne.angle
+                    pyPlane = self.selectPlane(nWire, nGeom)
+                    chopOne = pyPlane.shape
+                    enormous = pyPlane.enormousShape
+                    geom = pyPlane.geom
+                pyOne = _PyPlane(nWire, nGeom)
+                pyOne.shape = chopOne.copy()
+                pyOne.enormousShape = enormous
+                pyOne.geom = geom
+                pyOne.geomShape = geomShape
+            else:
+                pyOne = pyChopOne
+
+            if pyChopTwo.aligned:
+                [nWire, nGeom] = [pyChopTwo.numWire, pyChopTwo.numGeom]
+                chopTwo = pyChopTwo.shape
+                enormous = pyChopTwo.enormousShape
+                geom = pyChopTwo.geom
+                geomShape = pyChopTwo.geomShape
+                if not chopTwo:
+                    [nWire, nGeom] = pyChopTwo.angle
+                    pyPlane = self.selectPlane(nWire, nGeom)
+                    chopTwo = pyPlane.shape
+                    enormous = pyPlane.enormousShape
+                    geom = pyPlane.geom
+                pyTwo = _PyPlane(nWire, nGeom)
+                pyTwo.shape = chopTwo.copy()
+                pyTwo.enormousShape = enormous
+                pyTwo.geom = geom
+                pyTwo.geomShape = geomShape
+            else:
+                pyTwo = pyChopTwo
+
+            simulatedChops.append([pyOne, pyTwo])
+
+        self.simulatedChops = simulatedChops
+
+    def simulating(self):
+
+        ''''''
+
+        enormousShape = self.base.enormousShape
 
         for chop in self.simulatedChops:
             for pyPlane in chop:
-
-                try:
-                    plCopy = pyPlane.simulatedShape.copy()
-                except AttributeError:
-                    plCopy = pyPlane.shape.copy()
-
-                gS = pyPlane.geomShape
-                plCopy = self.cutting(plCopy, [enormous], gS)
-                pyPlane.simulatedShape = plCopy
+                pyPlane.simulating(enormousShape)
 
     def aligning(self):
 

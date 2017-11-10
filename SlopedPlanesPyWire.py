@@ -313,7 +313,7 @@ class _PyWire(_Py):
         ''''''
 
         for pyReflex in self.reflexs:
-            pyReflex.simulatedReflex()
+            pyReflex.virtualizing()
 
         for pyReflex in self.reflexs:
             pyReflex.simulating()

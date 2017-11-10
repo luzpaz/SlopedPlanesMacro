@@ -486,6 +486,19 @@ class _PyPlane(_Py):
         bigShape = self.cutting(bigShape, [enormousShape], gS)
         self.bigShape = bigShape
 
+    def simulating(self, enormousShape):
+
+        ''''''
+
+        try:
+            plCopy = self.simulatedShape.copy()
+        except AttributeError:
+            plCopy = self.shape.copy()
+
+        gS = self.geomShape
+        plCopy = self.cutting(plCopy, [enormousShape], gS)
+        self.simulatedShape = plCopy
+
     def ordinaries(self, pyWire):
 
         ''''''
