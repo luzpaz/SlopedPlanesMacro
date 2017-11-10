@@ -88,16 +88,12 @@ class _PyReflex(_Py):
         except AttributeError:
             oppRCopy = pyOppR.shape.copy()
 
-        # rCopy = rCopy.cut([enormousOppR], _Py.tolerance)
         gS = pyR.geom.toShape()
         rCopy = self.cutting(rCopy, [enormousOppR], gS)
-        # rCopy = utils.selectFace(rCopy.Faces, gS)
         pyR.simulatedShape = rCopy
 
-        # oppRCopy = oppRCopy.cut([enormousR], _Py.tolerance)
         gS = pyOppR.geom.toShape()
         oppRCopy = self.cutting(oppRCopy, [enormousR], gS)
-        # oppRCopy = utils.selectFace(oppRCopy.Faces, gS)
         pyOppR.simulatedShape = oppRCopy
 
     def simulatedReflex(self):
@@ -365,10 +361,8 @@ class _PyReflex(_Py):
                 if kind != 'rangoCorner':
 
                     pl = pyPl.shape.copy()
-                    # pl = pl.cut([oppReflexEnormous], _Py.tolerance)
                     gS = pyPl.geom.toShape()
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
-                    # pl = utils.selectFace(pl.Faces, gS)
                     pyR.addLink('divide', pl)
                     # print 'included rango divide', (pl, nWire, nn)
 
@@ -377,10 +371,8 @@ class _PyReflex(_Py):
 
                 if kind == 'rangoCorner':
                     # print 'Corner'
-                    # pl = pl.cut([oppReflexEnormous], _Py.tolerance)
                     gS = pyPl.geom.toShape()
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
-                    # pl = utils.selectFace(pl.Faces, gS)
 
                 pyR.addLink('cutter', pl)
                 pyOppR.addLink('oppCutter', pl)
@@ -392,10 +384,8 @@ class _PyReflex(_Py):
 
             if kind == 'rangoCorner':
                 # print 'rangoCorner'
-                # pl = pl.cut([oppReflexEnormous], _Py.tolerance)
                 gS = pyPl.geom.toShape()
                 pl = self.cutting(pl, [oppReflexEnormous], gS)
-                # pl = utils.selectFace(pl.Faces, gS)
 
             pyR.addLink('cutter', pl)
             pyOppR.addLink('oppCutter', pl)
@@ -556,10 +546,8 @@ class _PyReflex(_Py):
                         # print 'rearReflex'
                         # print pyRear.numGeom
                         rearPl = pyRear.compound
-                        # rearPl = rearPl.cut([pyPlane.compound], _Py.tolerance)
                         gS = pyRear.geom.toShape()
                         rearPl = self.cutting(rearPl, [pyPlane.compound], gS)
-                        # rearPl = utils.selectFace(rearPl.Faces, gS)
                         pyRear.compound = rearPl
 
                         # TODO aplica tambien al oppReflex de rearPl
@@ -581,30 +569,22 @@ class _PyReflex(_Py):
 
         if lenB > 1 and lenA == 1:
             # print 'A'
-            # compoundA = compoundA.cut([compoundB], _Py.tolerance)
             gS = pyR.geom.toShape()
             compoundA = self.cutting(compoundA, [compoundB], gS)
-            # compoundA = utils.selectFace(compoundA.Faces, gS)
 
         elif lenA > 1 and lenB == 1:
             # print 'B'
-            # compoundB = compoundB.cut([compoundA], _Py.tolerance)
             gS = pyOppR.geom.toShape()
             compoundB = self.cutting(compoundB, [compoundA], gS)
-            # compoundB = utils.selectFace(compoundB.Faces, gS)
 
         elif lenA == 1 and lenB == 1:
             # print 'C'
             # TODO make copy
-            # compoundA = compoundA.cut([compoundB], _Py.tolerance)
             gS = pyR.geom.toShape()
             compoundA = self.cutting(compoundA, [compoundB], gS)
-            # compoundA = utils.selectFace(compoundA.Faces, gS)
 
-            # compoundB = compoundB.cut([compoundA], _Py.tolerance)
             gS = pyOppR.geom.toShape()
             compoundB = self.cutting(compoundB, [compoundA], gS)
-            # compoundB = utils.selectFace(compoundB.Faces, gS)
 
         else:
             # print 'D'

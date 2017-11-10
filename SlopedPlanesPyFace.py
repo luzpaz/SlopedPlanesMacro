@@ -394,7 +394,7 @@ class _PyFace(_Py):
 
         self.removeExcessReflex()
 
-        self.printSummary()
+        # self.printSummary()
 
     def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -919,8 +919,6 @@ class _PyFace(_Py):
                         if cutterList:
                             gS = pyPlane.geom.toShape()
                             plane = self.cutting(plane, cutterList, gS)
-                            #plane = plane.cut(cutterList, _Py.tolerance)
-                            #plane = utils.selectFace(plane.Faces, gS)
                             pyPlane.shape = plane
 
     def aligning(self):
@@ -990,8 +988,6 @@ class _PyFace(_Py):
 
                         gS = pyPlane.geom.toShape()
                         plane = self.cutting(plane, cutterList, gS)
-                        #plane = plane.cut(cutterList, _Py.tolerance)
-                        # plane = utils.selectFace(plane.Faces, gS)
                         pyPlane.shape = plane
 
                         if pyPlane.choped or pyPlane.aligned:
