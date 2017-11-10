@@ -42,10 +42,10 @@ class _PyAlignament(_Py):
         self.base = None
         self.aligns = []
         self.chops = []
-        self.simulatedChops = []
+        self.virtualizedChops = []
         self.rangoChop = []
         self.falsify = False
-        self.virtualizedShape = None
+        self.virtualizedBase = None
         self.prior = None
         self.later = None
 
@@ -92,18 +92,18 @@ class _PyAlignament(_Py):
         self._chops = chops
 
     @property
-    def simulatedChops(self):
+    def virtualizedChops(self):
 
         ''''''
 
-        return self._simulatedChops
+        return self._virtualizedChops
 
-    @simulatedChops.setter
-    def simulatedChops(self, simulatedChops):
+    @virtualizedChops.setter
+    def virtualizedChops(self, virtualizedChops):
 
         ''''''
 
-        self._simulatedChops = simulatedChops
+        self._virtualizedChops = virtualizedChops
 
     @property
     def rangoChop(self):
@@ -134,18 +134,18 @@ class _PyAlignament(_Py):
         self._falsify = falsify
 
     @property
-    def virtualizedShape(self):
+    def virtualizedBase(self):
 
         ''''''
 
-        return self._virtualizedShape
+        return self._virtualizedBase
 
-    @virtualizedShape.setter
-    def virtualizedShape(self, virtualizedShape):
+    @virtualizedBase.setter
+    def virtualizedBase(self, virtualizedBase):
 
         ''''''
 
-        self._virtualizedShape = virtualizedShape
+        self._virtualizedBase = virtualizedBase
 
     @property
     def prior(self):
@@ -274,8 +274,8 @@ class _PyAlignament(_Py):
         else:
             # print 'B'
 
-            simulatedChops = self.simulatedChops
-            [pyOne, pyTwo] = simulatedChops[0]
+            virtualizedChops = self.virtualizedChops
+            [pyOne, pyTwo] = virtualizedChops[0]
 
             cList = [pyOne.bigShape] + cutterList
 
@@ -299,7 +299,7 @@ class _PyAlignament(_Py):
         # print(pyBase.numWire, pyBase.numGeom)
 
         chops = self.chops
-        simulatedChops = self.simulatedChops
+        virtualizedChops = self.virtualizedChops
         rangoChop = self.rangoChop
         pyWireList = _Py.pyFace.wires
 
@@ -310,7 +310,7 @@ class _PyAlignament(_Py):
             for [pyChopOne, pyChopTwo] in chops:
                 numChop += 1
 
-                [pyOne, pyTwo] = simulatedChops[numChop]
+                [pyOne, pyTwo] = virtualizedChops[numChop]
 
                 numWire = pyChopOne.numWire
                 pyWire = pyWireList[numWire]
@@ -425,13 +425,13 @@ class _PyAlignament(_Py):
 
             shapeList = [base, cont]
 
-        self.virtualizedShape = shapeList
+        self.virtualizedBase = shapeList
 
     def virtualizingChop(self):
 
         ''''''
 
-        simulatedChops = []
+        virtualizedChops = []
         for [pyChopOne, pyChopTwo] in self.chops:
 
             if pyChopOne.aligned:
@@ -445,7 +445,7 @@ class _PyAlignament(_Py):
                     pyPlane = self.selectPlane(nWire, nGeom)
                     chopOne = pyPlane.shape
                     enormous = pyPlane.enormousShape
-                    geom = pyPlane.geom
+                    geom = pyPlane.geom  # ??
                 pyOne = _PyPlane(nWire, nGeom)
                 pyOne.shape = chopOne.copy()
                 pyOne.enormousShape = enormous
@@ -465,7 +465,7 @@ class _PyAlignament(_Py):
                     pyPlane = self.selectPlane(nWire, nGeom)
                     chopTwo = pyPlane.shape
                     enormous = pyPlane.enormousShape
-                    geom = pyPlane.geom
+                    geom = pyPlane.geom  # ??
                 pyTwo = _PyPlane(nWire, nGeom)
                 pyTwo.shape = chopTwo.copy()
                 pyTwo.enormousShape = enormous
@@ -474,9 +474,10 @@ class _PyAlignament(_Py):
             else:
                 pyTwo = pyChopTwo
 
-            simulatedChops.append([pyOne, pyTwo])
+            virtualizedChops.append([pyOne, pyTwo])
 
-        self.simulatedChops = simulatedChops
+        self.virtualizedChops = virtualizedChops
+        # self.chops = virtualizedChops
 
     def simulating(self):
 
@@ -484,7 +485,7 @@ class _PyAlignament(_Py):
 
         enormousShape = self.base.enormousShape
 
-        for chop in self.simulatedChops:
+        for chop in self.virtualizedChops:
             for pyPlane in chop:
                 pyPlane.simulating(enormousShape)
 
@@ -502,7 +503,7 @@ class _PyAlignament(_Py):
         enormousBase = pyBase.enormousShape
         aligns = self.aligns
         chops = self.chops
-        simulatedChops = self.simulatedChops
+        virtualizedChops = self.virtualizedChops
 
         rangoChopList = self.rangoChop
         rangoChopList = self.rangoChop
@@ -520,7 +521,7 @@ class _PyAlignament(_Py):
 
             rangoChop = rangoChopList[numChop]
 
-            [pyOne, pyTwo] = simulatedChops[numChop]
+            [pyOne, pyTwo] = virtualizedChops[numChop]
 
             nW = pyOne.numWire
             pyW = pyWireList[nW]

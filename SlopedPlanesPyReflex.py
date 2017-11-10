@@ -166,14 +166,14 @@ class _PyReflex(_Py):
             if rearPyPl.aligned:
                 # print 'a'
                 pyAlign = self.selectAlignament(numWire, nGeom)
-                rearPl = pyAlign.virtualizedShape
+                rearPl = pyAlign.virtualizedBase
                 pyOppR.addLink('oppCutter', rearPl)
                 pyR.addLink('cutter', rearPl)
                 # print 'included rear simulated', (rearPl, numWire, nGeom)
 
             elif rearPyPl.choped:
                 # print 'b'
-                rearPl = rearPyPl.virtualizedShape
+                rearPl = rearPyPl.virtualizedBase
                 pyR.addLink('cutter', rearPl)
                 pyOppR.addLink('oppCutter', rearPl)
                 # print 'included rear simulated ', (rearPl, numWire, nGeom)
@@ -202,7 +202,7 @@ class _PyReflex(_Py):
             if pyOppRear.aligned:
                 # print 'a'
                 pyAlign = self.selectAlignament(numWire, nGeom)
-                oppRearPl = pyAlign.virtualizedShape
+                oppRearPl = pyAlign.virtualizedBase
                 pyOppR.addLink('oppCutter', oppRearPl)
                 pyR.addLink('cutter', oppRearPl)
                 # print 'included oppRear simulated', (rearPl, numWire, nGeom)
@@ -323,7 +323,7 @@ class _PyReflex(_Py):
         if pyPl.aligned:
             # print 'A'
             pyAlign = self.selectAlignament(nWire, nn)
-            pl = pyAlign.virtualizedShape
+            pl = pyAlign.virtualizedBase
             pyR.addLink('cutter', pl)
             pyOppR.addLink('oppCutter', pl)
             # print 'included rango simulated ', (pl, nWire, nn)
