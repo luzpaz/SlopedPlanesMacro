@@ -22,7 +22,6 @@
 # *****************************************************************************
 
 
-import SlopedPlanesUtils as utils
 from SlopedPlanesPy import _Py
 
 
@@ -240,9 +239,9 @@ class _PyWire(_Py):
                 # print'aligned ', pyPlane.aligned
                 # print'arrow ', pyPlane.arrow
 
-                prior = utils.sliceIndex(numGeom-1, lenWire)
+                prior = self.sliceIndex(numGeom-1, lenWire)
                 pyPrior = pyPlaneList[prior]
-                later = utils.sliceIndex(numGeom+1, lenWire)
+                later = self.sliceIndex(numGeom+1, lenWire)
                 pyLater = pyPlaneList[later]
 
                 bigPrior = pyPrior.bigShape
@@ -406,8 +405,8 @@ class _PyWire(_Py):
         for pyReflex in pyReflexList:
             num += 1
             cutterList = []
-            prior = utils.sliceIndex(num-1, lenR)
-            later = utils.sliceIndex(num+1, lenR)
+            prior = self.sliceIndex(num-1, lenR)
+            later = self.sliceIndex(num+1, lenR)
             if prior != num:
                 pyPriorReflex = pyReflexList[prior]
                 cutterList.append(pyPriorReflex)

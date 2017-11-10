@@ -22,7 +22,6 @@
 # *****************************************************************************
 
 
-import SlopedPlanesUtils as utils
 from SlopedPlanesPy import _Py
 
 

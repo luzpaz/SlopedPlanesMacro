@@ -24,7 +24,6 @@
 
 import FreeCAD
 import Part
-import SlopedPlanesUtils as utils
 from SlopedPlanesPy import _Py
 from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyReflex import _PyReflex
@@ -237,7 +236,7 @@ class _PyFace(_Py):
                 else:
 
                     nextEje = coord[numGeom+2].sub(coord[numGeom+1])
-                    corner = utils.convexReflex(eje, nextEje, numWire)
+                    corner = self.convexReflex(eje, nextEje, numWire)
                     eje = nextEje
 
                     if corner == 'convex':
@@ -278,7 +277,7 @@ class _PyFace(_Py):
                                 numEdge += 1
                                 # print'111'
                                 edgeStart = edge.firstVertex(True).Point
-                                point = utils.roundVector(edgeStart)
+                                point = self.roundVector(edgeStart)
                                 (nWire, nGeom) =\
                                     self.findAlignament(point)
 
@@ -379,7 +378,7 @@ class _PyFace(_Py):
                             # print'21'
                             if not pyPlane.choped:
                                 # print'211'
-                                num = utils.sliceIndex(numGeom+1, lenWire)
+                                num = self.sliceIndex(numGeom+1, lenWire)
                                 pyNextPlane = pyPlaneList[num]
                                 if not pyNextPlane.choped:
                                     # print'2111'
@@ -424,10 +423,10 @@ class _PyFace(_Py):
         lenWire = len(pyWire.planes)
         if aL:
             num = aL[-1].numGeom
-            chopOne = utils.sliceIndex(num+1, lenWire)
+            chopOne = self.sliceIndex(num+1, lenWire)
             numC = aL[-1].numWire
         else:
-            chopOne = utils.sliceIndex(numGeom+1, lenWire)
+            chopOne = self.sliceIndex(numGeom+1, lenWire)
             numC = numWire
 
         aL.append(pyPl)
@@ -445,10 +444,10 @@ class _PyFace(_Py):
         pyWireList = self.wires
 
         if numWire == nWire:
-            chopTwo = utils.sliceIndex(nGeom-1, lenWire)
+            chopTwo = self.sliceIndex(nGeom-1, lenWire)
         else:
             lenW = len(pyWireList[nWire].planes)
-            chopTwo = utils.sliceIndex(nGeom-1, lenW)
+            chopTwo = self.sliceIndex(nGeom-1, lenW)
 
         # print 'chopOne ', (numC, chopOne)
         # print 'chopTwo ', (nWire, chopTwo)
@@ -531,9 +530,9 @@ class _PyFace(_Py):
             self.findRear(pyWire, pyPlane, vertex, direction, edge)
 
         if direction == 'forward':
-            endNum = utils.sliceIndex(numGeom+2, lenWire)
+            endNum = self.sliceIndex(numGeom+2, lenWire)
         else:
-            endNum = utils.sliceIndex(numGeom-2, lenWire)
+            endNum = self.sliceIndex(numGeom-2, lenWire)
 
         # print'direction, endNum ', direction, endNum
 
@@ -565,15 +564,15 @@ class _PyFace(_Py):
             coord = pyWire.coordinates
             nGeom = coord.index(vertex.Point)
             if direction == 'backward':
-                nGeom = utils.sliceIndex(nGeom-1, lenWire)
+                nGeom = self.sliceIndex(nGeom-1, lenWire)
 
         if edge:
             if direction == 'backward':
                 # print 'c'
-                nGeom = utils.sliceIndex(nGeom+1, lenWire)
+                nGeom = self.sliceIndex(nGeom+1, lenWire)
             else:
                 # print 'd'
-                nGeom = utils.sliceIndex(nGeom-1, lenWire)
+                nGeom = self.sliceIndex(nGeom-1, lenWire)
 
         pyPlane.addValue('rear', nGeom, direction)
 
@@ -686,7 +685,7 @@ class _PyFace(_Py):
             pyPlaneList = pyWire.planes
             lenWire = len(pyPlaneList)
 
-            prior = utils.sliceIndex(numGeom-1, lenWire)
+            prior = self.sliceIndex(numGeom-1, lenWire)
             pyPrior = pyPlaneList[prior]
 
             prior = pyPrior.geomAligned
@@ -699,7 +698,7 @@ class _PyFace(_Py):
             pyW = pyWireList[nW]
             lenW = len(pyW.planes)
 
-            later = utils.sliceIndex(nG+1, lenW)
+            later = self.sliceIndex(nG+1, lenW)
             pyLater = self.selectPlane(nW, later)
 
             later = pyLater.geomAligned

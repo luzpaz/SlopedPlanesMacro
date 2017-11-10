@@ -23,7 +23,6 @@
 
 
 import Part
-import SlopedPlanesUtils as utils
 from SlopedPlanesPy import _Py
 
 
@@ -409,11 +408,11 @@ class _PyPlane(_Py):
         numGeom = self.numGeom
         geom = self.geomAligned
         eje = coordinates[numGeom+1].sub(coordinates[numGeom])
-        direction = utils.rotateVector(eje, _Py.normal, 90)
+        direction = self.rotateVector(eje, _Py.normal, 90)
         angle = self.angle
         if _Py.reverse:
             angle = angle * -1
-        direction = utils.rotateVector(direction, eje, angle)
+        direction = self.rotateVector(direction, eje, angle)
         direction.normalize()
 
         firstParam = geom.FirstParameter
@@ -634,7 +633,7 @@ class _PyPlane(_Py):
 
                 if direction == "forward":
                     # print '111'
-                    num = utils.sliceIndex(numGeom+2, lenWire)
+                    num = self.sliceIndex(numGeom+2, lenWire)
                     ran = range(num, nGeom)
 
                 else:

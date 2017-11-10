@@ -28,7 +28,6 @@ import math
 import FreeCAD
 import FreeCADGui
 import Part
-import SlopedPlanesUtils as utils
 from SlopedPlanesPy import _Py
 from SlopedPlanesPyFace import _PyFace
 from SlopedPlanesPyWire import _PyWire
@@ -60,7 +59,7 @@ def makeSlopedPlanes(sketch):
     return slopedPlanes
 
 
-class _SlopedPlanes():
+class _SlopedPlanes(_Py):
 
     ''''''
 
@@ -130,7 +129,7 @@ class _SlopedPlanes():
         face = Part.makeFace(shape, faceMaker)
 
         fList = face.Faces
-        normal = utils.faceNormal(fList[0])
+        normal = self.faceNormal(fList[0])
         _Py.normal = normal
 
         fFaceOuter = []
@@ -139,7 +138,7 @@ class _SlopedPlanes():
             outerWire = face.OuterWire
             falseFace = Part.makeFace(outerWire, "Part::FaceMakerSimple")
             fFaceOuter.append(falseFace)
-            coordinates = utils.faceDatas(falseFace)[1]
+            coordinates = self.faceDatas(falseFace)[1]
             coordinates.extend(coordinates[0:2])
             coordinatesOuter.append(coordinates)
 
@@ -148,7 +147,7 @@ class _SlopedPlanes():
         falseFaceOuter = []
         coordinatesOuterOrdered = []
         while lowerLeft:
-            index = utils.lowerLeftPoint(lowerLeft)
+            index = self.lowerLeftPoint(lowerLeft)
             lowerLeft.pop(index)
             pop = coordinatesOuter.pop(index)
             coordinatesOuterOrdered.append(pop)
@@ -184,7 +183,7 @@ class _SlopedPlanes():
             for wire in wList:
                 falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
                 fFaceList.append(falseFace)
-                coord = utils.faceDatas(falseFace)[1]
+                coord = self.faceDatas(falseFace)[1]
                 coord.extend(coord[0:2])
                 coordinatesInner.append(coord)
 
@@ -193,7 +192,7 @@ class _SlopedPlanes():
             falseFaceList = []
             coordinatesInnerOrdered = []
             while upperLeft:
-                index = utils.upperLeftPoint(upperLeft)
+                index = self.upperLeftPoint(upperLeft)
                 upperLeft.pop(index)
                 pop = coordinatesInner.pop(index)
                 coordinatesInnerOrdered.append(pop)
@@ -238,7 +237,7 @@ class _SlopedPlanes():
                 pyWire.coordinates = coo
 
                 falseFace = falseFaceList[numWire]
-                geomWire = utils.arcGeometries(falseFace, coo[:-2])
+                geomWire = self.arcGeometries(falseFace, coo[:-2])
 
                 pyPlaneListOld = pyWire.planes
                 pyPlaneListNew = []
