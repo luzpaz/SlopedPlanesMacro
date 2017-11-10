@@ -118,8 +118,6 @@ class _PyFace(_Py):
 
             planeList = []
             for plane in wire.planes:
-                # dd = plane.__dict__.copy()
-                # TODO change
                 dd = dict()
                 dd['_numWire'] = plane.numWire
                 dd['_numGeom'] = plane.numGeom
