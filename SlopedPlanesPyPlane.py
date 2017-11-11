@@ -573,10 +573,6 @@ class _PyPlane(_Py):
                                     self.selectAlignament(self.numWire,
                                                             self.numGeom)
 
-                                '''ch = []
-                                for [ch1, ch2] in pyAli.chops:
-                                    ch.extend([ch1, ch2])'''
-
                                 ch = []
                                 for [ch1, ch2] in pyAli.chops:
                                     ch.append((ch1.numWire, ch1.numGeom))
@@ -585,8 +581,6 @@ class _PyPlane(_Py):
                                 ali = []
                                 for align in pyAli.aligns:
                                     ali.append((align.numWire, align.numGeom))
-
-                                # for [pyChopOne, pyChopTwo] in pyAlign.chops:
 
                                 pl = (pyPl.numWire, pyPl.numGeom)
 
@@ -600,17 +594,6 @@ class _PyPlane(_Py):
                                         break
                                     elif chop[0] in ch or chop[1] in ch:
                                         break
-
-
-                                    '''if pyPl in [pyChopOne, pyChopTwo]:
-                                        break
-                                    elif (pyChopOne in pyAli.aligns or
-                                          pyChopTwo in pyAli.aligns):
-                                        break
-                                    elif (pyChopOne in ch or
-                                          pyChopTwo in ch):
-                                        break'''
-
 
                                 else:
                                     # print 'b111'
