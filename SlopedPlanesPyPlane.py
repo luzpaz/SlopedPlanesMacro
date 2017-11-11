@@ -63,7 +63,7 @@ class _PyPlane(_Py):
         self.compound = None
         self.forward = None
         self.backward = None
-        self.solved = False
+        self.unsolved = []
 
     @property
     def numWire(self):
@@ -402,18 +402,18 @@ class _PyPlane(_Py):
         self._backward = backward
 
     @property
-    def solved(self):
+    def unsolved(self):
 
         ''''''
 
-        return self._solved
+        return self._unsolved
 
-    @solved.setter
-    def solved(self, solved):
+    @unsolved.setter
+    def unsolved(self, unsolved):
 
         ''''''
 
-        self._solved = solved
+        self._unsolved = unsolved
 
     def planning(self, pyWire):
 
@@ -609,27 +609,28 @@ class _PyPlane(_Py):
             plane = self.cutting(plane, cutterList, gS)
             self.shape = plane
 
-    def isSolved(self):
+    def isUnsolved(self):
 
         ''''''
 
+        self.unsolved = []
+
         if self.aligned:
-            self.solved = True
-            return True
+            self.unsolved = []
+            return []
 
         forward = self.forward
         backward = self.backward
         plane = self.shape
 
-        section = plane.section([forward, backward], _Py.tolerance)
-        if not section.Edges:
-            # print 'True'
-            self.solved = True
-            return True
-        else:
-            # print 'False'
-            self.solved = False
-            return False
+        section = plane.section([forward], _Py.tolerance)
+        if section.Edges:
+            self.addValue('unsolved', 'forward', 'forward')
+        section = plane.section([backward], _Py.tolerance)
+        if section.Edges:
+            self.addValue('unsolved', 'backward', 'backward')
+
+        return self.unsolved
 
     def rearing(self, pyWire, pyReflex):
 

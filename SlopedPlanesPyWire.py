@@ -349,50 +349,45 @@ class _PyWire(_Py):
 
         for pyReflex in self.reflexs:
             for pyPlane in pyReflex.planes:
-                if pyPlane.solved:
-                    if pyPlane not in solved:
-                        solved.append(pyPlane)
-                else:
+                if pyPlane.unsolved:
                     if pyPlane not in unsolved:
                         unsolved.append(pyPlane)
+                else:
+                    if pyPlane not in solved:
+                        solved.append(pyPlane)
 
         return solved, unsolved
 
-    def reSolveReflexs(self, solved=[], unsolved=[],
-                       impossible=[]):
+    def reSolveReflexs(self, solved=[], unsolved=[]):
 
         ''''''
 
-        print 'solved ', [p.numGeom for p in solved]
-        print 'unsolved ', [p.numGeom for p in unsolved]
+        # print 'solved ', [p.numGeom for p in solved]
+        # print 'unsolved ', [p.numGeom for p in unsolved]
 
-        for pyPlane in unsolved:
-            # print 'a'
-            # print solved
-            # print unsolved
-            # print impossible
+        cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
+
+        for pyPlane in unsolved[:]:
+            # print 'a', pyPlane.numGeom
             plane = pyPlane.shape
             gS = pyPlane.geomShape
-            cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
+
             plane = self.cutting(plane, cutterList, gS)
             pyPlane.shape = plane
 
-            if pyPlane.isSolved():
+            if pyPlane.isUnsolved():
                 # print 'aa'
-                unsolved.remove(pyPlane)
-                solved.append(pyPlane)
-                unsolved.extend(impossible)
-                impossible = []
 
             else:
                 # print 'ab'
-                impossible.append(pyPlane)
+                unsolved.remove(pyPlane)
+                solved.append(pyPlane)
 
-            if not unsolved:
-                # print 'return'
-                return
+        if not unsolved:
+            # print 'return'
+            return
 
-            self.reSolveReflexs(solved, unsolved, impossible)
+        self.reSolveReflexs(solved, unsolved)
 
     def betweenReflexs(self):
 
