@@ -618,9 +618,10 @@ class _PyPlane(_Py):
             return True
 
         forward = self.forward
+        backward = self.backward
         plane = self.shape
 
-        section = plane.section([forward], _Py.tolerance)
+        section = plane.section([forward, backward], _Py.tolerance)
         if not section.Edges:
             # print 'True'
             self.solved = True

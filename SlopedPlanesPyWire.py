@@ -363,6 +363,9 @@ class _PyWire(_Py):
 
         ''''''
 
+        print 'solved ', [p.numGeom for p in solved]
+        print 'unsolved ', [p.numGeom for p in unsolved]
+
         for pyPlane in unsolved:
             # print 'a'
             # print solved
