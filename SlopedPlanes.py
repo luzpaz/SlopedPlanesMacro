@@ -23,7 +23,7 @@
 
 
 # import rpdb2
-import os
+from os import path
 from math import degrees
 import FreeCAD
 import FreeCADGui
@@ -461,8 +461,8 @@ class _ViewProvider_SlopedPlanes():
 
         ''''''
 
-        path = os.path.dirname(__file__)
-        return path + "/SlopedPlanes_Tree.svg"
+        pth = path.dirname(__file__)
+        return pth + "/SlopedPlanes_Tree.svg"
 
     def getDefaultDisplayMode(self):
 
