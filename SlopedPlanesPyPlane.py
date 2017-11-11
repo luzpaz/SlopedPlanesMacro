@@ -595,12 +595,12 @@ class _PyPlane(_Py):
 
                                 else:
                                     # print 'b111'
-                                    simulatedPl = pyAli.virtualizedBase
+                                    simulatedPl = pyAli.simulatedShape
                                     cutterList.extend(simulatedPl)
 
                             else:
                                 # print 'b12'
-                                simulatedPl = pyAli.virtualizedBase
+                                simulatedPl = pyAli.simulatedShape
                                 cutterList.extend(simulatedPl)
 
         if cutterList:

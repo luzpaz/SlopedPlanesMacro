@@ -44,7 +44,7 @@ class _PyAlignament(_Py):
         self.chops = []
         self.rango = []
         self.falsify = False
-        self.virtualizedBase = None
+        self.simulatedShape = None
         self.prior = None
         self.later = None
 
@@ -119,18 +119,18 @@ class _PyAlignament(_Py):
         self._falsify = falsify
 
     @property
-    def virtualizedBase(self):
+    def simulatedShape(self):
 
         ''''''
 
-        return self._virtualizedBase
+        return self._simulatedShape
 
-    @virtualizedBase.setter
-    def virtualizedBase(self, virtualizedBase):
+    @simulatedShape.setter
+    def simulatedShape(self, simulatedShape):
 
         ''''''
 
-        self._virtualizedBase = virtualizedBase
+        self._simulatedShape = simulatedShape
 
     @property
     def prior(self):
@@ -273,7 +273,7 @@ class _PyAlignament(_Py):
             cont = self.cutting(cont, cList, gS)
             pyCont.shape = cont
 
-    def virtualizingBase(self):
+    def simulatingAlignament(self):
 
         ''''''
 
@@ -404,9 +404,9 @@ class _PyAlignament(_Py):
 
             shapeList = [base, cont]
 
-        self.virtualizedBase = shapeList
+        self.simulatedShape = shapeList
 
-    def virtualizingChop(self):
+    def virtualizing(self):
 
         ''''''
 

@@ -755,7 +755,7 @@ class _PyFace(_Py):
             pyAlign.trimming()
 
         for pyAlign in self.alignaments:
-            pyAlign.virtualizingChop()
+            pyAlign.virtualizing()
 
     def priorLater(self):
 
@@ -773,16 +773,14 @@ class _PyFace(_Py):
 
         for pyAlign in self.alignaments:
             if not pyAlign.falsify:
-                pyAlign.virtualizingBase()
+                pyAlign.simulatingAlignament()
 
         for pyAlign in self.alignaments:
             if pyAlign.falsify:
-                pyAlign.virtualizingBase()
-
+                pyAlign.simulatingAlignament()
 
         for pyAlign in self.alignaments:
             pyAlign.simulating()
-
 
         for pyWire in self.wires:
             pyWire.simulating()
