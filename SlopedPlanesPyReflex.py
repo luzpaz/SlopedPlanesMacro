@@ -88,41 +88,9 @@ class _PyReflex(_Py):
         ''''''
 
         [pyReflex, pyOppReflex] = self.planes
-
-        pyR = self.virtualizingPlane(pyReflex)
-
-        pyOppR = self.virtualizingPlane(pyOppReflex)
-
+        pyR = pyReflex.virtualizing()
+        pyOppR = pyOppReflex.virtualizing()
         self.planes = [pyR, pyOppR]
-
-    def virtualizingPlane(self, pyReflex):
-
-        ''''''
-
-        if pyReflex.aligned:
-            if not pyReflex.geomAligned:
-                [numWire, numGeom] = [pyReflex.numWire, pyReflex.numGeom]
-                geomShape = pyReflex.geomShape
-                forward = pyReflex.forward
-                rear = pyReflex.rear
-                rango = pyReflex.rango
-                (nW, nG) = pyReflex.angle
-                pyPlane = self.selectPlane(nW, nG)
-                shape = pyPlane.shape.copy()
-                enormous = pyPlane.enormousShape
-                pyR = _PyPlane(numWire, numGeom)
-                pyR.geomShape = geomShape
-                pyR.forward = forward
-                pyR.rear = rear
-                pyR.rango = rango
-                pyR.aligned = True
-                pyR.reflexed = True
-                pyR.shape = shape
-                pyR.enormousShape = enormous
-
-                return pyR
-
-        return pyReflex
 
     def reflexing(self, pyWire):
 

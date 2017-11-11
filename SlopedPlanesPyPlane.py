@@ -499,6 +499,45 @@ class _PyPlane(_Py):
         plCopy = self.cutting(plCopy, [enormousShape], gS)
         self.simulatedShape = plCopy
 
+    def virtualizing(self):
+
+        ''''''
+
+        if self.aligned:
+            [numWire, numGeom] = [self.numWire, self.numGeom]
+            plane = self.shape
+            enormous = self.enormousShape
+            geom = self.geom
+            geomShape = self.geomShape
+            forward = self.forward
+            backward = self.backward
+            rear = self.rear
+            rango = self.rango
+
+            if not plane:
+                (numWire, numGeom) = self.angle
+                pyPlane = self.selectPlane(numWire, numGeom)
+                # geomShape = pyPlane.geomShape
+                # geom = pyPlane.geom
+                plane = pyPlane.shape
+                enormous = pyPlane.enormousShape
+
+            pyPlane = _PyPlane(numWire, numGeom)
+            pyPlane.geomShape = geomShape
+            pyPlane.geom = geom
+            pyPlane.forward = forward
+            pyPlane.backward = backward
+            pyPlane.rear = rear
+            pyPlane.rango = rango
+            pyPlane.aligned = True
+            pyPlane.reflexed = True
+            pyPlane.shape = plane.copy()
+            pyPlane.enormousShape = enormous
+            return pyPlane
+
+        else:
+            return self
+
     def ordinaries(self, pyWire):
 
         ''''''

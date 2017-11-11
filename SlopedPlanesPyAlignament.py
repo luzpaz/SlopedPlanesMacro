@@ -432,40 +432,15 @@ class _PyAlignament(_Py):
         virtualizedChops = []
         for [pyChopOne, pyChopTwo] in self.chops:
 
-            pyOne = self.virtualizingChopPlane(pyChopOne)
-
-            pyTwo = self.virtualizingChopPlane(pyChopTwo)
+            pyOne = pyChopOne.virtualizing()
+            pyOne.choped = True
+            pyTwo = pyChopTwo.virtualizing()
+            pyTwo.choped = True
 
             virtualizedChops.append([pyOne, pyTwo])
 
         self.virtualizedChops = virtualizedChops
         # self.chops = virtualizedChops   TODO
-
-    def virtualizingChopPlane(self, pyChopOne):
-
-        ''''''
-
-        if pyChopOne.aligned:
-            [nWire, nGeom] = [pyChopOne.numWire, pyChopOne.numGeom]
-            chopOne = pyChopOne.shape
-            enormous = pyChopOne.enormousShape
-            geom = pyChopOne.geom
-            geomShape = pyChopOne.geomShape
-            if not chopOne:
-                [nWire, nGeom] = pyChopOne.angle
-                pyPlane = self.selectPlane(nWire, nGeom)
-                chopOne = pyPlane.shape
-                enormous = pyPlane.enormousShape
-                geom = pyPlane.geom  # ??
-            pyOne = _PyPlane(nWire, nGeom)
-            pyOne.shape = chopOne.copy()
-            pyOne.enormousShape = enormous
-            pyOne.geom = geom
-            pyOne.geomShape = geomShape
-        else:
-            pyOne = pyChopOne
-
-        return pyOne
 
     def simulating(self):
 
