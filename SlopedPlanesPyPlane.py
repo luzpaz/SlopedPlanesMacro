@@ -517,8 +517,6 @@ class _PyPlane(_Py):
             if not plane:
                 (nWire, nGeom) = self.angle
                 pyPlane = self.selectPlane(nWire, nGeom)
-                #geomShape = pyPlane.geomShape
-                #geom = pyPlane.geom
                 plane = pyPlane.shape
                 enormous = pyPlane.enormousShape
 
