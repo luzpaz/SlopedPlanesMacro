@@ -440,7 +440,7 @@ class _PyAlignament(_Py):
             virtualizedChops.append([pyOne, pyTwo])
 
         self.virtualizedChops = virtualizedChops
-        # self.chops = virtualizedChops   TODO
+        self.chops = virtualizedChops   # TODO
 
     def simulating(self):
 
@@ -456,10 +456,10 @@ class _PyAlignament(_Py):
 
         ''''''
 
-        # print(self.base.numWire, self.base.numGeom)
-        # print[(x.numWire, x.numGeom) for x in self.aligns]
-        # print[[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
-        # for [x, y] in self.chops]
+        print(self.base.numWire, self.base.numGeom)
+        print[(x.numWire, x.numGeom) for x in self.aligns]
+        print[[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
+              for [x, y] in self.chops]
 
         pyBase = self.base
 

@@ -897,14 +897,16 @@ class _PyFace(_Py):
 
             for [pyChopOne, pyChopTwo] in pyAlign.chops:
 
-                chopOne = pyChopOne.shape
-                if chopOne:
+                if pyChopOne.geomAligned:
+                    chopOne = pyChopOne.shape
+                    #if chopOne:
                     if chopOne not in cutterList:
                         cutterList.append(chopOne)
                         # print 'c', pyChopOne.numGeom
 
-                chopTwo = pyChopTwo.shape
-                if chopTwo:
+                if pyChopTwo.geomAligned:
+                    chopTwo = pyChopTwo.shape
+                    #if chopTwo:
                     if chopTwo not in cutterList:
                         cutterList.append(chopTwo)
                         # print 'd', pyChopTwo.numGeom
