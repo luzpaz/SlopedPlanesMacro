@@ -22,7 +22,7 @@
 # *****************************************************************************
 
 
-import math
+from math import degrees
 import FreeCAD
 import Part
 
@@ -340,7 +340,7 @@ class _Py(object):
 
         normal = self.faceNormal(face)
         tilt = normal.getAngle(FreeCAD.Vector(0, 0, 1))
-        tilt = math.degrees(tilt)
+        tilt = degrees(tilt)
 
         if tilt == 0:
             x = FreeCAD.Vector(1, 0, 0)
@@ -365,12 +365,12 @@ class _Py(object):
         globalCoord = self.facePoints(face)
 
         angleZ = normal.getAngle(axisZ)
-        angleZ = math.degrees(angleZ)
+        angleZ = degrees(angleZ)
         projection = x.projectToPlane(origin, axisZ)
         angleX = projection.getAngle(FreeCAD.Vector(1, 0, 0))
         if projection.y < 0:
             angleX = -1 * angleX
-        angleX = math.degrees(angleX)
+        angleX = degrees(angleX)
         copyFace = face.copy()
         copyFace.rotate(origin, FreeCAD.Vector(0, 0, -1), angleX)
         copyFace.rotate(origin, FreeCAD.Vector(-1, 0, 0), angleZ)

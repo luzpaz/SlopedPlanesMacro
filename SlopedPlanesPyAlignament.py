@@ -23,7 +23,6 @@
 
 
 from SlopedPlanesPy import _Py
-from SlopedPlanesPyPlane import _PyPlane
 
 
 __title__ = "SlopedPlanes Macro"

@@ -24,7 +24,7 @@
 
 # import rpdb2
 import os
-import math
+from math import degrees
 import FreeCAD
 import FreeCADGui
 import Part
@@ -345,7 +345,7 @@ class _SlopedPlanes(_Py):
             planeList.extend(secondaries)
             for plane in planeList:
                 plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
-                             math.degrees(sketchAngle))
+                             degrees(sketchAngle))
                 plane.translate(sketchBase)
             shell = Part.makeShell(planeList)
             shellList.append(shell)
