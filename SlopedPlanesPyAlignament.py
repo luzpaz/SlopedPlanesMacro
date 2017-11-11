@@ -448,7 +448,7 @@ class _PyAlignament(_Py):
 
         enormousShape = self.base.enormousShape
 
-        for chop in self.virtualizedChops:
+        for chop in self.chops:
             for pyPlane in chop:
                 pyPlane.simulating(enormousShape)
 
@@ -466,7 +466,6 @@ class _PyAlignament(_Py):
         enormousBase = pyBase.enormousShape
         aligns = self.aligns
         chops = self.chops
-        virtualizedChops = self.virtualizedChops
 
         rangoChopList = self.rango
         pyWireList = _Py.pyFace.wires
@@ -478,12 +477,10 @@ class _PyAlignament(_Py):
         chopList = []
 
         numChop = -1
-        for [pyChopOne, pyChopTwo] in self.chops:
+        for [pyOne, pyTwo] in self.chops:
             numChop += 1
 
             rangoChop = rangoChopList[numChop]
-
-            [pyOne, pyTwo] = virtualizedChops[numChop]
 
             nW = pyOne.numWire
             pyW = pyWireList[nW]
@@ -537,7 +534,7 @@ class _PyAlignament(_Py):
 
                 if cutterList:
                     plane = pyPlane.shape
-                    gS = [pyChopOne, pyChopTwo][num].geomShape
+                    gS = [pyOne, pyTwo][num].geomShape
                     plane = self.cutting(plane, cutterList, gS)
                     pyPlane.shape = plane
 
@@ -556,7 +553,7 @@ class _PyAlignament(_Py):
                     else:
                         cList = [enormousCont]
 
-                gS = [pyChopOne, pyChopTwo][num].geomShape
+                gS = [pyOne, pyTwo][num].geomShape
                 planeCopy = planeCopy.cut(cList, _Py.tolerance)
 
                 for ff in planeCopy.Faces:
@@ -573,12 +570,12 @@ class _PyAlignament(_Py):
             shapeTwo = pyTwo.shape
 
             cutterList = [shapeTwo]
-            gS = pyChopOne.geomShape
+            gS = pyOne.geomShape
             ff = self.cutting(shapeOne, cutterList, gS)
             pyOne.shape = ff
 
             cutterList = [shapeOne]
-            gS = pyChopTwo.geomShape
+            gS = pyTwo.geomShape
             ff = self.cutting(shapeTwo, cutterList, gS)
             pyTwo.shape = ff
 
@@ -590,11 +587,10 @@ class _PyAlignament(_Py):
             for pyCont in aligns:
                 numChop += 1
 
-                [pyChopOne, pyChopTwo] = chops[numChop]
                 [pyOne, pyTwo] = chopList[numChop]
                 rangoChop = rangoChopList[numChop]
 
-                nW = pyChopOne.numWire
+                nW = pyOne.numWire
                 pyW = pyWireList[nW]
                 pyPlaneList = pyW.planes
 
@@ -626,7 +622,7 @@ class _PyAlignament(_Py):
                     ff = self.selectFace(base.Faces, gS)
                     pyBase.shape = ff
 
-                    gS = pyChopTwo.geomShape
+                    gS = pyTwo.geomShape
                     shapeTwo = self.cutting(shapeTwo, [ff], gS)
                     pyTwo.shape = shapeTwo
 
@@ -642,7 +638,7 @@ class _PyAlignament(_Py):
 
                     pyCont.angle = pyBase.angle
 
-                    gS = pyChopOne.geomShape
+                    gS = pyOne.geomShape
                     shapeOne = self.cutting(shapeOne, [ff], gS)
                     pyOne.shape = shapeOne
 
