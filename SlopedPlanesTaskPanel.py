@@ -23,7 +23,6 @@
 
 
 import FreeCAD
-import Part
 
 if FreeCAD.GuiUp:
     import FreeCADGui
