@@ -363,26 +363,29 @@ class _SlopedPlanes(_Py):
                     wire = Part.Wire(cut.Edges[4:])
                     wireList.append(wire)
 
-            planeWireList.extend(secondaries)
+                planeFaceList.extend(planeWireList)
+
+            planeFaceList.extend(secondaries)
 
             if slopedPlanes.Down:
                 numFace = pyFace.numFace
                 face = faceList[numFace]
-                planeWireList.append(face)
+                planeFaceList.append(face)
 
             if up:
                 upFace = Part.makeFace(wireList, faceMaker)
-                planeWireList.append(upFace)
+                planeFaceList.append(upFace)
 
             if slopedPlanes.Simmetry:
-                pass
+                shell = Part.makeShell(planeFaceList)
+                mirror = shell.mirror(FreeCAD.Vector(0, 0, 0),
+                                      FreeCAD.Vector(0, 0, -1))
+                planeFaceList.extend(mirror.Faces)
 
-            for plane in planeWireList:
+            for plane in planeFaceList:
                 plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
                              degrees(sketchAngle))
                 plane.translate(sketchBase)
-
-            planeFaceList.extend(planeWireList)
 
             figList.append(planeFaceList)
 
