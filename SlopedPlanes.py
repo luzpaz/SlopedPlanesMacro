@@ -156,6 +156,11 @@ class _SlopedPlanes(_Py):
             pop = fFaceOuter.pop(index)
             falseFaceOuter.append(pop)
 
+        up = slopedPlanes.Up
+        if up:
+            upPlane = Part.makePlane(1e6, 1e6, FreeCAD.Vector(-1e3, -1e3, 0))
+            upPlane.translate(FreeCAD.Vector(0, 0, 1)*up)
+
         pyFaceListOld = self.Pyth
         pyFaceListNew = []
         numFace = -1
@@ -272,8 +277,15 @@ class _SlopedPlanes(_Py):
 
             pyFace.planning()
 
-            if slopedPlanes.Up:
-                pass
+            if up:
+
+                for pyWire in pyFace.wires:
+                    for pyPlane in pyWire.planes:
+                        plane = pyPlane.shape
+                        if plane:
+                            gS = pyPlane.geomShape
+                            plane = self.cutting(plane, [upPlane], gS)
+                            pyPlane.shape = plane
 
             pyFace.trimming()
 
@@ -299,11 +311,14 @@ class _SlopedPlanes(_Py):
 
         figList = []
         for pyFace in pyFaceListNew:
-            planeList, secondaries = [], []
+            secondaries = []
+            planeFaceList = []
             originList = []
             pyWireList = pyFace.wires
+            wireList = []
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
+                planeWireList = []
                 for pyPlane in pyWire.planes:
                     numAngle = pyPlane.numGeom
                     angle = pyPlane.angle
@@ -315,11 +330,11 @@ class _SlopedPlanes(_Py):
                             plane = pyPlane.shape
 
                             if isinstance(plane, Part.Compound):
-                                planeList.append(plane.Faces[0])
+                                planeWireList.append(plane.Faces[0])
                                 secondaries.extend(plane.Faces[1:])
 
                             else:
-                                planeList.append(plane)
+                                planeWireList.append(plane)
 
                         else:
 
@@ -332,35 +347,44 @@ class _SlopedPlanes(_Py):
                                     if beta > numAngle:
                                         pyPl = pyFace.selectPlane(alfa, beta)
                                         pl = pyPl.shape
-                                        planeList.append(pl)
+                                        planeWireList.append(pl)
 
                                 elif alfa > numWire:
                                     pyPl = pyFace.selectPlane(alfa, beta)
                                     pl = pyPl.shape
-                                    planeList.append(pl)
+                                    planeWireList.append(pl)
 
                                 elif alfa < numWire:
                                     pass
 
-            planeList.extend(secondaries)
-            for plane in planeList:
+                if up:
+                    upPlaneCopy = upPlane.copy()
+                    cut = upPlaneCopy.cut(planeWireList, _Py.tolerance)
+                    wire = Part.Wire(cut.Edges[4:])
+                    wireList.append(wire)
+
+            planeWireList.extend(secondaries)
+
+            if slopedPlanes.Down:
+                numFace = pyFace.numFace
+                face = faceList[numFace]
+                planeWireList.append(face)
+
+            if up:
+                upFace = Part.makeFace(wireList, faceMaker)
+                planeWireList.append(upFace)
+
+            if slopedPlanes.Simmetry:
+                pass
+
+            for plane in planeWireList:
                 plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
                              degrees(sketchAngle))
                 plane.translate(sketchBase)
-            figList.append(planeList)
 
-        if slopedPlanes.Down:
-            num = -1
-            for planeList in figList:
-                num += 1
-                face = faceList[num]
-                face.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
-                            degrees(sketchAngle))
-                face.translate(sketchBase)
-                planeList.append(face)
+            planeFaceList.extend(planeWireList)
 
-        if slopedPlanes.Up:
-            pass
+            figList.append(planeFaceList)
 
         shellList = []
         for planeList in figList:
@@ -371,9 +395,6 @@ class _SlopedPlanes(_Py):
 
         if slopedPlanes.Complement:
             endShape.complement()
-
-        if slopedPlanes.Simmetry:
-            pass
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
