@@ -59,7 +59,7 @@ class _TaskPanel_SlopedPlanes():
         #self.tree.setColumnCount(5)
         self.tree.setColumnCount(2)
         self.tree.header().resizeSection(0, 60)
-        self.tree.header().resizeSection(1, 90)
+        self.tree.header().resizeSection(1, 30)
         # self.tree.header().resizeSection(2, 90)
         # self.tree.header().resizeSection(3, 90)
         # self.tree.header().resizeSection(4, 90)
@@ -209,6 +209,7 @@ class _TaskPanel_SlopedPlanes():
                             item.setText(0, str(numSlope))
 
                             doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                            doubleSpinBox.setMaximum(1000.00)
                             doubleSpinBox.setValue(angle)
                             self.tree.setItemWidget(item, 1, doubleSpinBox)
 

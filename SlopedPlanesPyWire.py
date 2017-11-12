@@ -377,6 +377,7 @@ class _PyWire(_Py):
 
             if pyPlane.isUnsolved():
                 # print 'aa'
+                pass
 
             else:
                 # print 'ab'
