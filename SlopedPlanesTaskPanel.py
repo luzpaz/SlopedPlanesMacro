@@ -148,27 +148,39 @@ class _TaskPanel_SlopedPlanes():
 
         if slopedPlanes:
 
+            up = slopedPlanes.Up
+            simmetry = slopedPlanes.Simmetry
+
             pyFaceList = slopedPlanes.Proxy.Pyth
             numSlope, num = 0, 0
             compound = slopedPlanes.Shape
+            upFace = False
             for pyFace in pyFaceList:
                 originList = []
                 pyWireList = pyFace.wires
                 numFace = pyFace.numFace
+                print '### numFace ', numFace
                 shell = compound.Shells[numFace]
                 numSlope += num
                 num, lenFace = 0, 0
 
                 for pyWire in pyWireList:
                     numWire = pyWire.numWire
+                    print '## numWire ', numWire
                     pyPlaneList = pyWire.planes
                     lenWire = len(pyPlaneList)
                     lenFace += lenWire
+
+                    if up:
+                        if numWire == 1:
+                            numSlope += 1
+                            upFace = True
 
                     for pyPlane in pyPlaneList:
 
                         charge = False
                         numAngle = pyPlane.numGeom
+                        print '# numGeom ', numAngle
                         angle = pyPlane.angle
                         if [numWire, numAngle] not in originList:
 
@@ -202,6 +214,8 @@ class _TaskPanel_SlopedPlanes():
 
                         if charge:
 
+                            print 'numSlope ', numSlope
+
                             item = QtGui.QTreeWidgetItem(self.tree)
                             item.setFlags(item.flags() |
                                           QtCore.Qt.ItemIsEditable)
@@ -227,7 +241,17 @@ class _TaskPanel_SlopedPlanes():
                             doubleSpinBox.setValue(width[1])
                             self.tree.setItemWidget(item, 4, doubleSpinBox)'''
 
-                num = len(shell.Faces) - lenFace
+                value = 0
+                if upFace:
+                    value += 1
+                    upFace = False
+
+                print lenFace
+                print len(shell.Faces)
+                print value
+
+                num = len(shell.Faces) - value - lenFace
+                print 'num ', num
 
         self.retranslateUi(self.form)
         self.updating = False
@@ -238,28 +262,41 @@ class _TaskPanel_SlopedPlanes():
 
         slopedPlanes = self.obj
 
+        up = slopedPlanes.Up
+        simmetry = slopedPlanes.Simmetry
+
         pyFaceList = slopedPlanes.Proxy.Pyth
         numSlope, num = 0, 0
         compound = self.obj.Shape
+        upFace = False
         for pyFace in pyFaceList:
             originList = []
             numSlope += num
             num, lenFace = 0, 0
             numFace = pyFace.numFace
+            print '### numFace', numFace
             shell = compound.Shells[numFace]
 
             pyWireList = pyFace.wires
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
+                print '## numWire', numWire
                 pyPlaneList = pyWire.planes
                 lenWire = len(pyPlaneList)
                 lenFace += lenWire
                 numAngle = -1
                 pyPlaneList = pyWire.planes
+                #numSlope = num
+
+                if up:
+                    if numWire == 1:
+                        numSlope += 1
+                        upFace = True
 
                 for pyPlane in pyPlaneList:
                     numAngle += 1
                     angle = pyPlane.angle
+                    print '# numAngle ', numAngle
                     charge = False
 
                     if [numWire, numAngle] not in originList:
@@ -290,6 +327,8 @@ class _TaskPanel_SlopedPlanes():
 
                     if charge:
 
+                        print 'numSlope ', numSlope
+
                         it = self.tree.findItems(str(numSlope),
                                                  QtCore.Qt.MatchExactly, 0)[0]
 
@@ -309,7 +348,17 @@ class _TaskPanel_SlopedPlanes():
 
                         pyPlane.width = [left, right]'''
 
-                num = len(shell.Faces) - lenFace
+                value = 0
+                if upFace:
+                    value += 1
+                    upFace = False
+
+                print lenFace
+                print len(shell.Faces)
+                print value
+
+                num = len(shell.Faces) - value - lenFace
+                print 'num ', num
 
         slopedPlanes.touch()
         FreeCAD.ActiveDocument.recompute()

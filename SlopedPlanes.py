@@ -367,14 +367,14 @@ class _SlopedPlanes(_Py):
 
             planeFaceList.extend(secondaries)
 
+            if up:
+                upFace = Part.makeFace(wireList, faceMaker)
+                planeFaceList.append(upFace)
+
             if slopedPlanes.Down:
                 numFace = pyFace.numFace
                 face = faceList[numFace]
                 planeFaceList.append(face)
-
-            if up:
-                upFace = Part.makeFace(wireList, faceMaker)
-                planeFaceList.append(upFace)
 
             if slopedPlanes.Simmetry:
                 shell = Part.makeShell(planeFaceList)
@@ -396,7 +396,7 @@ class _SlopedPlanes(_Py):
 
         endShape = Part.makeCompound(shellList)
 
-        if slopedPlanes.Complement:
+        if not slopedPlanes.Complement:
             endShape.complement()
 
         if slopedPlanes.Solid:
