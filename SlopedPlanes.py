@@ -257,7 +257,7 @@ class _SlopedPlanes(_Py):
                         pyPlane = _PyPlane(numWire, numGeom)
                         pyPlaneListNew.append(pyPlane)
 
-                    pyPlane.geom = geom
+                    pyPlane.geom = geom    # quitar
                     gS = geom.toShape()
                     pyPlane.geomShape = gS
                     geomShapeWire.append(gS)
@@ -297,7 +297,7 @@ class _SlopedPlanes(_Py):
 
         self.Pyth = pyFaceListNew
 
-        shellList = []
+        figList = []
         for pyFace in pyFaceListNew:
             planeList, secondaries = [], []
             originList = []
@@ -347,16 +347,27 @@ class _SlopedPlanes(_Py):
                 plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
                              degrees(sketchAngle))
                 plane.translate(sketchBase)
+            figList.append(planeList)
+
+        if slopedPlanes.Down:
+            num = -1
+            for planeList in figList:
+                num += 1
+                face = faceList[num]
+                face.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
+                            degrees(sketchAngle))
+                face.translate(sketchBase)
+                planeList.append(face)
+
+        if slopedPlanes.Up:
+            pass
+
+        shellList = []
+        for planeList in figList:
             shell = Part.makeShell(planeList)
             shellList.append(shell)
 
         endShape = Part.makeCompound(shellList)
-
-        if slopedPlanes.Down:
-            pass
-
-        if slopedPlanes.Up:
-            pass
 
         if slopedPlanes.Complement:
             endShape.complement()
