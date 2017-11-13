@@ -358,12 +358,15 @@ class _PyWire(_Py):
 
         return solved, unsolved
 
-    def reSolveReflexs(self, solved=[], unsolved=[]):
+    def reSolveReflexs(self, solved=[], unsolved=[], counter=0):
 
         ''''''
 
         # print 'solved ', [p.numGeom for p in solved]
         # print 'unsolved ', [p.numGeom for p in unsolved]
+
+        if counter > len(solved) + len(unsolved):
+            return
 
         cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
 
@@ -388,7 +391,8 @@ class _PyWire(_Py):
             # print 'return'
             return
 
-        self.reSolveReflexs(solved, unsolved)
+        counter += 1
+        self.reSolveReflexs(solved, unsolved, counter)
 
     def betweenReflexs(self):
 

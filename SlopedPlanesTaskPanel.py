@@ -55,7 +55,7 @@ class _TaskPanel_SlopedPlanes():
         self.tree = QtGui.QTreeWidget(self.form)
         self.grid.addWidget(self.tree, 1, 0, 1, 2)
 
-        #self.tree.setColumnCount(5)
+        # self.tree.setColumnCount(5)
         self.tree.setColumnCount(2)
         self.tree.header().resizeSection(0, 60)
         self.tree.header().resizeSection(1, 30)
