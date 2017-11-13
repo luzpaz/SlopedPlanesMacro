@@ -47,7 +47,11 @@ def makeSlopedPlanes(sketch):
 
     ''''''
 
-    if sketch.TypeId != "Sketcher::SketchObject":
+    if hasattr(sketch, 'Proxy'):
+        if sketch.Proxy.Type != 'Wire':
+            return
+
+    elif sketch.TypeId != "Sketcher::SketchObject":
         return
 
     slopedPlanes =\

@@ -38,3 +38,7 @@ for select in selection:
 
     if obj.TypeId == "Sketcher::SketchObject":
         SlopedPlanes.makeSlopedPlanes(obj)
+    elif hasattr(obj, 'Proxy'):
+        if obj.Proxy.Type == 'Wire':
+            print 'b'
+            SlopedPlanes.makeSlopedPlanes(obj)
