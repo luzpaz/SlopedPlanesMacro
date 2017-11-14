@@ -509,18 +509,23 @@ class _PyFace(_Py):
             if pyPlane.aligned:
                 # print'cc'
                 if pyPlane.shape:
+                    # print 'cc1'
                     lineEndPoint = pyPlane.geomAligned.EndPoint
                     if section.Vertexes[0].Point == lineEndPoint:
+                        # print 'cc11'
                         return
                     else:
+                        # print 'cc12'
                         vertex = section.Vertexes[1]
                 else:
+                    # print cc2'
                     return
             else:
                 # print'ccc'
-                vertex = section.Vertexes[1]
+                # vertex = section.Vertexes[1]
+                return
 
-        # printvertex.Point
+        # print vertex.Point
 
         nGeom =\
             self.findRear(pyWire, pyPlane, vertex, direction, edge)

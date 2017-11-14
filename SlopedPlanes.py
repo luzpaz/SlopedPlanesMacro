@@ -77,7 +77,7 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyBool", "Reverse",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyBool", "Simmetry",
+        slopedPlanes.addProperty("App::PropertyBool", "Symmetry",
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyBool", "Solid",
                                  "SlopedPlanes")
@@ -266,7 +266,7 @@ class _SlopedPlanes(_Py):
                         pyPlane = _PyPlane(numWire, numGeom)
                         pyPlaneListNew.append(pyPlane)
 
-                    pyPlane.geom = geom    # quitar
+                    pyPlane.geom = geom    # quitar NO no quitar
                     gS = geom.toShape()
                     pyPlane.geomShape = gS
                     geomShapeWire.append(gS)
@@ -281,6 +281,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.planning()
 
+            # pyFace.upping()
             if up:
 
                 for pyWire in pyFace.wires:
@@ -366,8 +367,11 @@ class _SlopedPlanes(_Py):
                     cut = upPlaneCopy.cut(planeWireList, _Py.tolerance)
                     edgeList = cut.Edges[4:]
                     if numWire > 0:
-                        edgeList.reverse()      # no parece que sea necesario
-                        # prueba invirtiendo cada edge y la lista
+                        # for edge in edgeList:
+                            # edge.reverse()
+                        #edgeList.reverse()
+                        pass
+                        
                     wire = Part.Wire(edgeList)
                     wireList.append(wire)
 
@@ -377,17 +381,24 @@ class _SlopedPlanes(_Py):
 
             if up:
                 upFace = Part.makeFace(wireList, faceMaker)
+
+                # hay que comprobar para cada interior wire que realmente corta
+                # o diseñar otra solución para evitar open wires
+                # mirar cut
+
                 planeFaceList.append(upFace)
+
                 # the Up System break the interior wires numeration
                 # first give the angles and later apply Up
-                # hay que comprobar para cada interior wire que realmente corta
+                # tal vez si no ordenas los wires interiores no hay error
+                # probar primero edgeList.reverse
 
             if slopedPlanes.Down:
                 numFace = pyFace.numFace
                 face = faceList[numFace]
                 planeFaceList.append(face)
 
-            if slopedPlanes.Simmetry:
+            if slopedPlanes.Symmetry:
                 shell = Part.makeShell(planeFaceList)
                 mirror = shell.mirror(FreeCAD.Vector(0, 0, 0),
                                       FreeCAD.Vector(0, 0, -1))
