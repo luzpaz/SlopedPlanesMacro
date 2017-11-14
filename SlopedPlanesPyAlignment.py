@@ -30,7 +30,7 @@ __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
 
 
-class _PyAlignament(_Py):
+class _PyAlignment(_Py):
 
     ''''''
 
@@ -272,7 +272,7 @@ class _PyAlignament(_Py):
             cont = self.cutting(cont, cList, gS)
             pyCont.shape = cont
 
-    def simulatingAlignament(self):
+    def simulatingAlignment(self):
 
         ''''''
 

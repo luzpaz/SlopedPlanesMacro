@@ -139,7 +139,7 @@ class _PyReflex(_Py):
 
             if rearPyPl.aligned:
                 # print 'a'
-                pyAlign = self.selectAlignament(numWire, nGeom)
+                pyAlign = self.selectAlignment(numWire, nGeom)
                 rearPl = pyAlign.simulatedShape
                 pyOppR.addLink('oppCutter', rearPl)
                 pyR.addLink('cutter', rearPl)
@@ -175,7 +175,7 @@ class _PyReflex(_Py):
 
             if pyOppRear.aligned:
                 # print 'a'
-                pyAlign = self.selectAlignament(numWire, nGeom)
+                pyAlign = self.selectAlignment(numWire, nGeom)
                 oppRearPl = pyAlign.simulatedShape
                 pyOppR.addLink('oppCutter', oppRearPl)
                 pyR.addLink('cutter', oppRearPl)
@@ -293,7 +293,7 @@ class _PyReflex(_Py):
 
         if pyPl.aligned:
             # print 'A'
-            pyAlign = self.selectAlignament(nWire, nn)
+            pyAlign = self.selectAlignment(nWire, nn)
             pl = pyAlign.simulatedShape
             pyR.addLink('cutter', pl)
             pyOppR.addLink('oppCutter', pl)

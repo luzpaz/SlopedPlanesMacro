@@ -27,7 +27,7 @@ import Part
 from SlopedPlanesPy import _Py
 from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyReflex import _PyReflex
-from SlopedPlanesPyAlignament import _PyAlignament
+from SlopedPlanesPyAlignment import _PyAlignment
 from SlopedPlanesPyPlane import _PyPlane
 
 
@@ -46,7 +46,7 @@ class _PyFace(_Py):
 
         self.numFace = numFace
         self.wires = []
-        self.alignaments = []
+        self.alignments = []
         self.reset = False
 
     @property
@@ -78,18 +78,18 @@ class _PyFace(_Py):
         self._wires = wires
 
     @property
-    def alignaments(self):
+    def alignments(self):
 
         ''''''
 
-        return self._alignaments
+        return self._alignments
 
-    @alignaments.setter
-    def alignaments(self, alignaments):
+    @alignments.setter
+    def alignments(self, alignments):
 
         ''''''
 
-        self._alignaments = alignaments
+        self._alignments = alignments
 
     @property
     def reset(self):
@@ -148,13 +148,13 @@ class _PyFace(_Py):
             wireList.append(dct)
 
         alignList = []
-        for align in self.alignaments:
+        for align in self.alignments:
             dct = {}
             alignList.append(dct)
 
         return wireList, alignList
 
-    def __setstate__(self, wires, alignaments):
+    def __setstate__(self, wires, alignments):
 
         ''''''
 
@@ -192,9 +192,9 @@ class _PyFace(_Py):
             wireList.append(wire)
 
         alignList = []
-        for dct in alignaments:
-            alignament = _PyAlignament()
-            alignList.append(alignament)
+        for dct in alignments:
+            alignment = _PyAlignment()
+            alignList.append(alignment)
 
         return wireList, alignList
 
@@ -209,7 +209,7 @@ class _PyFace(_Py):
             for pyWire in pyWireList:
                 pyWire.reflexs = []
 
-        self.alignaments = []
+        self.alignments = []
 
         shapeGeomFace = []
         for pyWire in pyWireList:
@@ -279,7 +279,7 @@ class _PyFace(_Py):
                                 edgeStart = edge.firstVertex(True).Point
                                 point = self.roundVector(edgeStart)
                                 (nWire, nGeom) =\
-                                    self.findAlignament(point)
+                                    self.findAlignment(point)
 
                                 pyW = pyWireList[nWire]
                                 pyPl = pyW.planes[nGeom]
@@ -294,7 +294,7 @@ class _PyFace(_Py):
 
                                         if numEdge == 0:
                                             pyAlign =\
-                                                self.doAlignament(pyPlane)
+                                                self.doAlignment(pyPlane)
 
                                         fAng = self.findAngle(numWire, numGeom)
                                         sAng = self.findAngle(nWire, nGeom)
@@ -320,10 +320,10 @@ class _PyFace(_Py):
                                             # print'111112'
                                             if numEdge > 0:
                                                 pyAlign =\
-                                                    self.doAlignament(pyPlane)
+                                                    self.doAlignment(pyPlane)
                                             pyAlign.falsify = True
 
-                                        self.seatAlignament(pyAlign,
+                                        self.seatAlignment(pyAlign,
                                                             pyWire, pyPlane,
                                                             pyW, pyPl)
 
@@ -390,13 +390,13 @@ class _PyFace(_Py):
 
             pyWire.reset = False
 
-        self.priorLaterAlignaments()
+        self.priorLaterAlignments()
 
         self.removeExcessReflex()
 
         self.printSummary()
 
-    def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
+    def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
         ''''''
 
@@ -434,7 +434,7 @@ class _PyFace(_Py):
         if pyAlign.falsify:
             pyAli = None
         else:
-            pyAli = self.selectAlignamentBase(nWire, nGeom)
+            pyAli = self.selectAlignmentBase(nWire, nGeom)
             if pyAli:
                 bL = pyAli.aligns
                 aL.extend(bL)
@@ -470,7 +470,7 @@ class _PyFace(_Py):
 
         if pyAli:
             # print 'remove'
-            self.removeAlignament(pyAli)
+            self.removeAlignment(pyAli)
 
     def seatReflex(self, pyWire, pyReflex, pyPlane, direction):
 
@@ -594,7 +594,7 @@ class _PyFace(_Py):
 
         return angle
 
-    def findAlignament(self, point):
+    def findAlignment(self, point):
 
         ''''''
 
@@ -609,13 +609,13 @@ class _PyFace(_Py):
 
         return (nWire, nGeom)
 
-    def removeAlignament(self, pyAlign):
+    def removeAlignment(self, pyAlign):
 
         ''''''
 
-        pyAlignList = self.alignaments
+        pyAlignList = self.alignments
         pyAlignList.remove(pyAlign)
-        self.alignaments = pyAlignList
+        self.alignments = pyAlignList
 
     def forBack(self, pyPlane, direction):
 
@@ -660,23 +660,23 @@ class _PyFace(_Py):
 
         return pyReflex
 
-    def doAlignament(self, pyPlane):
+    def doAlignment(self, pyPlane):
 
         ''''''
 
-        pyAlign = _PyAlignament()
-        self.addLink('alignaments', pyAlign)
+        pyAlign = _PyAlignment()
+        self.addLink('alignments', pyAlign)
         pyAlign.base = pyPlane
 
         return pyAlign
 
-    def priorLaterAlignaments(self):
+    def priorLaterAlignments(self):
 
         ''''''
 
         pyWireList = self.wires
 
-        for pyAlign in self.alignaments:
+        for pyAlign in self.alignments:
 
             numWire = pyAlign.base.numWire
             numGeom = pyAlign.base.numGeom
@@ -742,7 +742,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.planning(reset)
 
-        for pyAlign in self.alignaments:
+        for pyAlign in self.alignments:
             if reset:
                 pyAlign.rangging()
             pyAlign.ranggingChop()
@@ -756,10 +756,10 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.trimming()
 
-        for pyAlign in self.alignaments:
+        for pyAlign in self.alignments:
             pyAlign.trimming()
 
-        for pyAlign in self.alignaments:
+        for pyAlign in self.alignments:
             pyAlign.virtualizing()
 
     def priorLater(self):
@@ -769,22 +769,22 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.priorLater()
 
-        for pyAlign in self.alignaments:
+        for pyAlign in self.alignments:
             pyAlign.priorLater()
 
     def simulating(self):
 
         ''''''
 
-        for pyAlign in self.alignaments:
+        for pyAlign in self.alignments:
             if not pyAlign.falsify:
-                pyAlign.simulatingAlignament()
+                pyAlign.simulatingAlignment()
 
-        for pyAlign in self.alignaments:
+        for pyAlign in self.alignments:
             if pyAlign.falsify:
-                pyAlign.simulatingAlignament()
+                pyAlign.simulatingAlignment()
 
-        for pyAlign in self.alignaments:
+        for pyAlign in self.alignments:
             pyAlign.simulating()
 
         for pyWire in self.wires:
@@ -857,7 +857,7 @@ class _PyFace(_Py):
                             else:
                                 print 'b'
                                 pyAlign =\
-                                    self.selectAlignamentBase(pyPl.numWire,
+                                    self.selectAlignmentBase(pyPl.numWire,
                                                               pyPl.numGeom)
                                 if pyAlign:
                                     print 'c'
@@ -899,7 +899,7 @@ class _PyFace(_Py):
 
         ''''''
 
-        pyAlignList = self.alignaments
+        pyAlignList = self.alignments
 
         print pyAlignList
 
@@ -919,7 +919,7 @@ class _PyFace(_Py):
 
         ''''''
 
-        pyAlignList = self.alignaments
+        pyAlignList = self.alignments
 
         cutterList = []
 

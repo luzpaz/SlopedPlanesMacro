@@ -561,14 +561,14 @@ class _PyPlane(_Py):
                             # print 'b1'
 
                             pyAli =\
-                                self.selectAlignament(pyPl.numWire,
+                                self.selectAlignment(pyPl.numWire,
                                                         pyPl.numGeom)
 
                             if self.aligned:
                                 # print 'b11'
 
                                 pyAlign =\
-                                    self.selectAlignament(self.numWire,
+                                    self.selectAlignment(self.numWire,
                                                             self.numGeom)
 
                                 ch = []

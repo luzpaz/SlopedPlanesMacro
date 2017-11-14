@@ -476,8 +476,8 @@ class _SlopedPlanes(_Py):
         pyth = []
         for pyFace in self.Pyth:
             dct = pyFace.__dict__.copy()
-            wires, alignaments = pyFace.__getstate__()
-            dct['_wires'], dct['_alignaments'] = wires, alignaments
+            wires, alignments = pyFace.__getstate__()
+            dct['_wires'], dct['_alignments'] = wires, alignments
             pyth.append(dct)
         state['Pyth'] = pyth
 
@@ -494,9 +494,9 @@ class _SlopedPlanes(_Py):
         for dct in state['Pyth']:
             numFace += 1
             pyFace = _PyFace(numFace)
-            wires, alignaments = dct['_wires'], dct['_alignaments']
-            wires, alignaments = pyFace.__setstate__(wires, alignaments)
-            dct['_wires'], dct['_alignaments'] = wires, alignaments
+            wires, alignments = dct['_wires'], dct['_alignments']
+            wires, alignments = pyFace.__setstate__(wires, alignments)
+            dct['_wires'], dct['_alignments'] = wires, alignments
             pyFace.__dict__ = dct
             pyth.append(pyFace)
         self.Pyth = pyth

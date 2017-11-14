@@ -69,7 +69,7 @@ class _Py(object):
             valueList.append(value)
         setattr(self, prop, valueList)
 
-    def selectAlignament(self, nWire, nGeom):
+    def selectAlignment(self, nWire, nGeom):
 
         ''''''
 
@@ -78,7 +78,7 @@ class _Py(object):
         pyPlaneList = pyWire.planes
         pyPlane = pyPlaneList[nGeom]
 
-        pyAlignList = _Py.pyFace.alignaments
+        pyAlignList = _Py.pyFace.alignments
         for pyAlign in pyAlignList:
             if pyAlign.base == pyPlane:
                 # print 'a'
@@ -89,7 +89,7 @@ class _Py(object):
 
         return None
 
-    def selectAlignamentBase(self, nWire, nGeom):
+    def selectAlignmentBase(self, nWire, nGeom):
 
         ''''''
 
@@ -98,20 +98,20 @@ class _Py(object):
         pyPlaneList = pyWire.planes
         pyPlane = pyPlaneList[nGeom]
 
-        pyAlignList = _Py.pyFace.alignaments
+        pyAlignList = _Py.pyFace.alignments
         for pyAlign in pyAlignList:
             if pyAlign.base == pyPlane:
                 return pyAlign
 
         return None
 
-    def selectAllAlignament(self, nWire, nGeom):
+    def selectAllAlignment(self, nWire, nGeom):
 
         ''''''
 
         pyAlignList = []
 
-        for pyAlign in _Py.pyFace.alignaments:
+        for pyAlign in _Py.pyFace.alignments:
             for chop in pyAlign.chops:
                 for pyPlane in chop:
                     if pyPlane.numWire == nWire and pyPlane.numGeom == nGeom:
@@ -200,32 +200,32 @@ class _Py(object):
                         (pyPlane.forward.firstVertex(True).Point,
                          pyPlane.forward.lastVertex(True).Point)
 
-        print '********* alignaments ', _Py.pyFace.alignaments
-        for pyAlignament in _Py.pyFace.alignaments:
+        print '********* alignments ', _Py.pyFace.alignments
+        for pyAlignment in _Py.pyFace.alignments:
 
             print '****** base'
-            print 'numWire ', pyAlignament.base.numWire
-            print 'numGeom ', pyAlignament.base.numGeom
-            print 'rear ', pyAlignament.base.rear
-            print 'rango ',  pyAlignament.base.rango
-            print 'geom ', pyAlignament.base.geom
-            print 'geomAligned ', pyAlignament.base.geomAligned
-            print 'falsify ', pyAlignament.falsify
-            print 'rangoChop ', pyAlignament.rango
-            print 'prior ', pyAlignament.prior.numGeom
-            print 'later ', pyAlignament.later.numGeom
+            print 'numWire ', pyAlignment.base.numWire
+            print 'numGeom ', pyAlignment.base.numGeom
+            print 'rear ', pyAlignment.base.rear
+            print 'rango ',  pyAlignment.base.rango
+            print 'geom ', pyAlignment.base.geom
+            print 'geomAligned ', pyAlignment.base.geomAligned
+            print 'falsify ', pyAlignment.falsify
+            print 'rangoChop ', pyAlignment.rango
+            print 'prior ', pyAlignment.prior.numGeom
+            print 'later ', pyAlignment.later.numGeom
 
             print '*** chops ', [[(x.numWire, x.numGeom),
                                   (y.numWire, y.numGeom)]
-                                 for [x, y] in pyAlignament.chops]
-            for chop in pyAlignament.chops:
+                                 for [x, y] in pyAlignment.chops]
+            for chop in pyAlignment.chops:
                 for pyPlane in chop:
                     print(pyPlane.numWire, pyPlane.numGeom), ' ',\
                         pyPlane.rear,\
                         pyPlane.rango
 
-            print '*** aligns ', [x.numGeom for x in pyAlignament.aligns]
-            for align in pyAlignament.aligns:
+            print '*** aligns ', [x.numGeom for x in pyAlignment.aligns]
+            for align in pyAlignment.aligns:
                 print(align.numWire, align.numGeom),\
                     align.rear,\
                     align.rango,\
