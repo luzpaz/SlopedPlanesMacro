@@ -45,7 +45,8 @@ __url__ = "http://www.freecadweb.org"
 
 def makeSlopedPlanes(sketch):
 
-    ''''''
+    '''makeSlopedPlanes(sketch)
+    makes the SlopedPlanes object from a sketch or a DWire'''
 
     if hasattr(sketch, 'Proxy'):
         if sketch.Proxy.Type != 'Wire':
@@ -65,11 +66,13 @@ def makeSlopedPlanes(sketch):
 
 class _SlopedPlanes(_Py):
 
-    ''''''
+    '''The SlopedPlanes object Class'''
 
     def __init__(self, slopedPlanes):
 
-        ''''''
+        '''__init__(self, slopedPlanes)
+        Initializes the properties of the SlopedPlanes object and its Proxy.
+        The Proxy store the Type and the complementary python objects'''
 
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "SlopedPlanes")
@@ -113,7 +116,8 @@ class _SlopedPlanes(_Py):
 
     def execute(self, slopedPlanes):
 
-        ''''''
+        '''execute(self, slopedPlanes)
+        builds the shape of the slopedPlanes object'''
 
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
