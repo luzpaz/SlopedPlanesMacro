@@ -105,6 +105,20 @@ class _Py(object):
 
         return None
 
+    def selectAllAlignament(self, nWire, nGeom):
+
+        ''''''
+
+        pyAlignList = []
+
+        for pyAlign in _Py.pyFace.alignaments:
+            for chop in pyAlign.chops:
+                for pyPlane in chop:
+                    if pyPlane.numWire == nWire and pyPlane.numGeom == nGeom:
+                        pyAlignList.append(pyAlign)
+
+        return pyAlignList
+
     def selectReflex(self, numWire, numGeom, nGeom):
 
         ''''''

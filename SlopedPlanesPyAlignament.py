@@ -401,6 +401,7 @@ class _PyAlignament(_Py):
 
             shapeList = [base, cont]
 
+        # print shapeList
         self.simulatedShape = shapeList
 
     def virtualizing(self):
@@ -433,10 +434,10 @@ class _PyAlignament(_Py):
 
         ''''''
 
-        '''print(self.base.numWire, self.base.numGeom)
-        print[(x.numWire, x.numGeom) for x in self.aligns]
-        print[[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
-              for [x, y] in self.chops]'''
+        # print(self.base.numWire, self.base.numGeom)
+        # print[(x.numWire, x.numGeom) for x in self.aligns]
+        # print[[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
+        # for [x, y] in self.chops]
 
         pyBase = self.base
 

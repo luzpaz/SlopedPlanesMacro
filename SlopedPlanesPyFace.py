@@ -394,7 +394,7 @@ class _PyFace(_Py):
 
         self.removeExcessReflex()
 
-        # self.printSummary()
+        self.printSummary()
 
     def seatAlignament(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -834,32 +834,65 @@ class _PyFace(_Py):
 
         ''''''
 
-        pyWireList = self.wires
+        pyWireList = self.wires[:]
         if len(pyWireList) > 1:
 
             numWire = -1
             for pyWire in pyWireList:
                 numWire += 1
-                # print 'numWire ', numWire
+                print '### numWire ', numWire
                 pop = pyWireList.pop(numWire)
                 cutterList = []
+                aliList = []
                 for pyW in pyWireList:
+                    print '# nW', pyW.numWire
                     pyPlaneList = pyW.planes
-                    # nW = pyW.numWire
                     for pyPl in pyPlaneList:
                         if not pyPl.choped:
+                            print pyPl.numGeom
                             if not pyPl.aligned:
+                                print 'a'
                                 pl = pyPl.shape
                                 cutterList.append(pl)
+                            else:
+                                print 'b'
+                                pyAlign =\
+                                    self.selectAlignamentBase(pyPl.numWire,
+                                                              pyPl.numGeom)
+                                if pyAlign:
+                                    print 'c'
+                                    aliList.append(pyAlign)
                 pyWireList.insert(numWire, pop)
 
                 for pyPlane in pyWire.planes:
-                    # print 'numGeom ', pyPlane.numGeom
                     plane = pyPlane.shape
                     if plane:
-                        if cutterList:
+                        print 'numGeom ', pyPlane.numGeom
+                        #if cutterList:
+                        totalList = cutterList[:]
+                        if aliList:
+                            cont = True
+                            print 'aliList ', aliList
+                            for pyAlign in aliList:
+                                for chop in pyAlign.chops:
+                                    print 'A'
+                                    if not cont:
+                                        break
+                                    for pyPl in chop:
+                                        print 'B'
+                                        if ((pyPl.numWire, pyPl.numGeom) ==
+                                            (pyPlane.numWire,
+                                             pyPlane.numGeom)):
+                                            print 'C'
+                                            cont = False
+                                            break
+                                else:
+                                    print 'D'
+                                    totalList.extend(pyAlign.simulatedShape)
+
+                        if totalList:
                             gS = pyPlane.geomShape
-                            plane = self.cutting(plane, cutterList, gS)
+                            plane = self.cutting(plane, totalList, gS)
                             pyPlane.shape = plane
 
     def aligning(self):
@@ -868,12 +901,18 @@ class _PyFace(_Py):
 
         pyAlignList = self.alignaments
 
+        print pyAlignList
+
         for pyAlign in pyAlignList:
             if not pyAlign.falsify:
+                print 'a'
+                print(pyAlign.base.numWire, pyAlign.base.numGeom)
                 pyAlign.aligning()
 
         for pyAlign in pyAlignList:
             if pyAlign.falsify:
+                print 'b'
+                print(pyAlign.base.numWire, pyAlign.base.numGeom)
                 pyAlign.aligning()
 
     def ending(self):
