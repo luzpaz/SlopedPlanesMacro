@@ -46,6 +46,8 @@ class _Py(object):
     normal = 0
     face = None
     pyFace = None
+    slopedPlanes = None
+    upPlane = None
 
     def addLink(self, prop, obj):
 

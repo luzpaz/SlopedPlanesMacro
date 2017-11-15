@@ -119,6 +119,8 @@ class _SlopedPlanes(_Py):
         '''execute(self, slopedPlanes)
         builds the shape of the slopedPlanes object'''
 
+        _Py.slopedPlanes = slopedPlanes
+
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
         sketchBase = sketch.Placement.Base
@@ -172,6 +174,7 @@ class _SlopedPlanes(_Py):
         if up:
             upPlane = Part.makePlane(1e6, 1e6, FreeCAD.Vector(-1e3, -1e3, 0))
             upPlane.translate(FreeCAD.Vector(0, 0, 1)*up)
+            _Py.upPlane = upPlane
 
         # procedees face by face and stores them into the Proxy
 
@@ -294,16 +297,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.planning()
 
-            # pyFace.upping()
-            if up:
-
-                for pyWire in pyFace.wires:
-                    for pyPlane in pyWire.planes:
-                        plane = pyPlane.shape
-                        if plane:
-                            gS = pyPlane.geomShape
-                            plane = self.cutting(plane, [upPlane], gS)
-                            pyPlane.shape = plane
+            pyFace.upping()
 
             pyFace.trimming()
 

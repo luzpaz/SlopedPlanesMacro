@@ -524,6 +524,7 @@ class _PyFace(_Py):
                     return
             elif pyPlane.choped:
                 # print 'ccc'
+                # necesita más casos
                 return
             else:
                 # print'cccc'
@@ -752,6 +753,20 @@ class _PyFace(_Py):
             pyAlign.ranggingChop()
 
         self.reset = False
+
+    def upping(self):
+
+        ''''''
+
+        if _Py.slopedPlanes.Up:
+
+            for pyWire in self.wires:
+                for pyPlane in pyWire.planes:
+                    plane = pyPlane.shape
+                    if plane:
+                        gS = pyPlane.geomShape
+                        plane = self.cutting(plane, [_Py.upPlane], gS)
+                        pyPlane.shape = plane
 
     def trimming(self):
 
