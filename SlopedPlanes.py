@@ -80,7 +80,7 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyBool", "Reverse",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyBool", "Symmetry",
+        slopedPlanes.addProperty("App::PropertyBool", "Mirror",
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyBool", "Solid",
                                  "SlopedPlanes")
@@ -88,7 +88,7 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "Up",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyFloat", "SlopeGlobal",
+        slopedPlanes.addProperty("App::PropertyFloat", "Slope",
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
                                  "SlopedPlanes")
@@ -101,7 +101,7 @@ class _SlopedPlanes(_Py):
 
         self.State = False
 
-        slopedPlanes.SlopeGlobal = 45.0
+        slopedPlanes.Slope = 45.0
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
         slopedPlanes.Up = 0
@@ -129,7 +129,7 @@ class _SlopedPlanes(_Py):
         _Py.tolerance = slopedPlanes.Tolerance
         _Py.reverse = slopedPlanes.Reverse
 
-        slope = slopedPlanes.SlopeGlobal
+        slope = slopedPlanes.Slope
         width = slopedPlanes.FactorWidth
         length = slopedPlanes.FactorLength
 
@@ -413,7 +413,7 @@ class _SlopedPlanes(_Py):
                 face = faceList[numFace]
                 planeFaceList.append(face)
 
-            if slopedPlanes.Symmetry:
+            if slopedPlanes.Mirror:
                 shell = Part.makeShell(planeFaceList)
                 mirror = shell.mirror(FreeCAD.Vector(0, 0, 0),
                                       FreeCAD.Vector(0, 0, -1))
@@ -452,9 +452,9 @@ class _SlopedPlanes(_Py):
         if self.State:
             return
 
-        if prop == "SlopeGlobal":
+        if prop == "Slope":
 
-            slope = slopedPlanes.SlopeGlobal
+            slope = slopedPlanes.Slope
             value = slope
             prop = "angle"
             self.overWritePyProp(prop, value)
