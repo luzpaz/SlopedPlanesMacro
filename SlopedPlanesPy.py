@@ -38,7 +38,7 @@ axisZ = FreeCAD.Vector(0, 0, 1)
 
 class _Py(object):
 
-    ''''''
+    '''A functional Class bequeaths methods and class variables'''
 
     tolerance = 1e-7
     reverse = False

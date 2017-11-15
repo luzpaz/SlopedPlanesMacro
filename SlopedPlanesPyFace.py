@@ -38,7 +38,7 @@ __url__ = "http://www.freecadweb.org"
 
 class _PyFace(_Py):
 
-    ''''''
+    '''The face complementary python object Class'''
 
     def __init__(self, numFace):
 
@@ -200,7 +200,8 @@ class _PyFace(_Py):
 
     def parsing(self):
 
-        ''''''
+        '''parsing(self)
+        splits the face finding its reflexs corners and alignments'''
 
         pyWireList = self.wires
 
@@ -398,7 +399,8 @@ class _PyFace(_Py):
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
-        ''''''
+        '''seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl)
+        '''
 
         numWire = pyWire.numWire
         numGeom = pyPlane.numGeom
