@@ -72,7 +72,7 @@ class _SlopedPlanes(_Py):
 
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
-        The Proxy store the Type and the complementary python objects'''
+        The Proxy stores the Type and the complementary python objects'''
 
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "SlopedPlanes")
@@ -140,6 +140,8 @@ class _SlopedPlanes(_Py):
         normal = self.faceNormal(fList[0])
         _Py.normal = normal
 
+        # gathers the exterior wires. Lower Left criteria
+
         fFaceOuter = []
         coordinatesOuter = []
         for face in fList:
@@ -164,16 +166,23 @@ class _SlopedPlanes(_Py):
             pop = fFaceOuter.pop(index)
             falseFaceOuter.append(pop)
 
+        # prepares a giant plane
+
         up = slopedPlanes.Up
         if up:
             upPlane = Part.makePlane(1e6, 1e6, FreeCAD.Vector(-1e3, -1e3, 0))
             upPlane.translate(FreeCAD.Vector(0, 0, 1)*up)
+
+        # procedees face by face and stores them into the Proxy
 
         pyFaceListOld = self.Pyth
         pyFaceListNew = []
         numFace = -1
         for face in faceList:
             numFace += 1
+
+            # elaborates complementary python objects of a face
+
             size = face.BoundBox.DiagonalLength
             _Py.size = size
             _Py.face = face
@@ -318,6 +327,8 @@ class _SlopedPlanes(_Py):
 
         self.Pyth = pyFaceListNew
 
+        # elaborates a list of planes for every face
+
         figList = []
         for pyFace in pyFaceListNew:
             secondaries = []
@@ -414,6 +425,8 @@ class _SlopedPlanes(_Py):
                 plane.translate(sketchBase)
 
             figList.append(planeFaceList)
+
+        # makes a shell for every planes list, compunds them, and end
 
         shellList = []
         for planeList in figList:
