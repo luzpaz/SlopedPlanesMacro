@@ -522,10 +522,12 @@ class _PyFace(_Py):
                 else:
                     # print cc2'
                     return
-            else:
-                # print'ccc'
-                # vertex = section.Vertexes[1]
+            elif pyPlane.choped:
+                # print 'ccc'
                 return
+            else:
+                # print'cccc'
+                vertex = section.Vertexes[1]
 
         # print vertex.Point
 
