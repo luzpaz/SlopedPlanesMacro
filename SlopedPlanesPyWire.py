@@ -129,19 +129,21 @@ class _PyWire(_Py):
 
         self._reset = reset
 
-    def planning(self, reset):
+    def planning(self):
 
-        ''''''
+        '''planning(self):
+        Transfer to PyPlane
+        Arranges the reflex and plane ranges
+        '''
 
         for pyPlane in self.planes:
             if pyPlane.geomAligned:
                 pyPlane.planning(self)
 
+        reset = _Py.pyFace.reset
         if reset:
             for pyReflex in self.reflexs:
-
                 pyReflex.rangging(self)
-
                 direction = "forward"
                 for pyPlane in pyReflex.planes:
                     pyPlane.rangging(self, direction)

@@ -740,15 +740,16 @@ class _PyFace(_Py):
 
     def planning(self):
 
-        ''''''
-
-        reset = self.reset
+        '''planning(self)
+        Transferes to PyWire
+        Arranges the alignment ranges
+        Rearmes tha face reset system'''
 
         for pyWire in self.wires:
-            pyWire.planning(reset)
+            pyWire.planning()
 
         for pyAlign in self.alignments:
-            if reset:
+            if self.reset:
                 pyAlign.rangging()
             pyAlign.ranggingChop()
 
