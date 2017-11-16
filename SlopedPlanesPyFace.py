@@ -741,7 +741,7 @@ class _PyFace(_Py):
     def planning(self):
 
         '''planning(self)
-        Transferes to PyWire
+        Transfers to PyWire
         Arranges the alignment ranges
         Rearmes tha face reset system'''
 
@@ -769,9 +769,18 @@ class _PyFace(_Py):
                         plane = self.cutting(plane, [_Py.upPlane], gS)
                         pyPlane.shape = plane
 
-    def trimming(self):
+    def virtualizing(self):
 
         ''''''
+
+        for pyAlign in self.alignments:
+            pyAlign.virtualizing()
+
+    def trimming(self):
+
+        '''trimming(self)
+        Transfers to PyWire and PyAlignment
+        Arranges the virtualization of the alignments'''
 
         for pyWire in self.wires:
             pyWire.trimming()
@@ -779,8 +788,8 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.trimming()
 
-        for pyAlign in self.alignments:
-            pyAlign.virtualizing()
+        '''for pyAlign in self.alignments:
+            pyAlign.virtualizing()'''
 
     def priorLater(self):
 

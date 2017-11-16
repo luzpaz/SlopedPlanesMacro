@@ -161,7 +161,9 @@ class _PyAlignment(_Py):
 
     def trimming(self):
 
-        ''''''
+        '''trimming(self)
+        The alignment blocks the progress
+        of the planes in its front and laterals'''
 
         pyWireList = _Py.pyFace.wires
         enormousShape = self.base.enormousShape
@@ -178,22 +180,55 @@ class _PyAlignment(_Py):
 
                     pyPl.trimming(enormousShape)
 
+        falsify = self.falsify
+
         for chop in self.chops:
+
+            [pyOne, pyTwo] = chop
+
+            if not falsify:
+
+                # esto está repetido en trimming
+
+                # he adelantado virtualizing
+
+                enormousShapeOne = pyOne.enormousShape         # bigShape?
+                enormousShapeTwo = pyTwo.enormousShape
+
+                shapeOne = pyOne.shape.copy()
+                cutterList = [enormousShapeTwo]
+                gS = pyOne.geomShape
+                ffOne = self.cutting(shapeOne, cutterList, gS)
+
+                shapeTwo = pyTwo.shape.copy()
+                cutterList = [enormousShapeOne]
+                gS = pyTwo.geomShape
+                ffTwo = self.cutting(shapeTwo, cutterList, gS)
+
+            else:
+
+                ffOne = pyOne.enormousShape
+                ffTwo = pyTwo.enormousShape
+
+            enormShape = ffOne
 
             for pyPlane in chop:
 
                 enormousShape = pyPlane.enormousShape
+
                 if enormousShape:
                     numWire = pyPlane.numWire
                     pyWire = pyWireList[numWire]
                     pyPlaneList = pyWire.planes
 
-                    for rango in pyPlane.rango:
-                        for nG in rango:
+                    for ran in pyPlane.rango:
+                        for nG in ran:
                             pyPl = pyPlaneList[nG]
                             if not pyPl.aligned:
 
-                                pyPl.trimming(enormousShape)
+                                pyPl.trimming(enormousShape, enormShape)
+
+                enormShape = ffTwo
 
     def priorLater(self):
 
@@ -543,6 +578,8 @@ class _PyAlignment(_Py):
                             plane = self.cutting(plane, [planeCopy], gS)
                             pyPlane.shape = plane
                             break
+
+            # esto lo voy a repetir en trimming
 
             shapeOne = pyOne.shape
             shapeTwo = pyTwo.shape

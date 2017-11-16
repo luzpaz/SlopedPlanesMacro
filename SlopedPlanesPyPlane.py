@@ -472,7 +472,7 @@ class _PyPlane(_Py):
 
         return plane
 
-    def trimming(self, enormousShape):
+    def trimming(self, enormousShape, enormShape=None):
 
         ''''''
 
@@ -480,7 +480,12 @@ class _PyPlane(_Py):
         bigShape = self.bigShape
         gS = self.geomShape
 
-        shape = self.cutting(shape, [enormousShape], gS)
+        if enormShape:
+            cutterList = [enormShape]
+        else:
+            cutterList = [enormousShape]
+
+        shape = self.cutting(shape, cutterList, gS)
         self.shape = shape
 
         bigShape = self.cutting(bigShape, [enormousShape], gS)

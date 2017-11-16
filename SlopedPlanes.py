@@ -189,6 +189,7 @@ class _SlopedPlanes(_Py):
             size = face.BoundBox.DiagonalLength
             _Py.size = size
             _Py.face = face
+
             coordinates = coordinatesOuterOrdered[numFace]
             for pyFace in pyFaceListOld:
                 oldCoord = pyFace.wires[0].coordinates
@@ -201,6 +202,8 @@ class _SlopedPlanes(_Py):
                 pyFaceListNew.append(pyFace)
 
             _Py.pyFace = pyFace
+
+            # gathers the interior wires. Upper Left criteria
 
             wList = face.Wires[1:]
             coordinatesInner = []
@@ -298,6 +301,8 @@ class _SlopedPlanes(_Py):
             pyFace.planning()
 
             pyFace.upping()
+
+            pyFace.virtualizing()
 
             pyFace.trimming()
 

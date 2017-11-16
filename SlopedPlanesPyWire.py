@@ -132,7 +132,7 @@ class _PyWire(_Py):
     def planning(self):
 
         '''planning(self):
-        Transfer to PyPlane
+        Transfers to PyPlane
         Arranges the reflex and plane ranges
         '''
 
@@ -151,7 +151,9 @@ class _PyWire(_Py):
 
     def trimming(self):
 
-        ''''''
+        '''trimming(self)
+        The reflex corners act like a dam
+        blocking the progress of others planes'''
 
         for pyReflex in self.reflexs:
             for pyPlane in pyReflex.planes:
@@ -171,7 +173,7 @@ class _PyWire(_Py):
                         # print 'cutted ', nG
                         pyPl = pyPlaneList[nG]
 
-                        # TODO pyPl numWire and angle ???
+                        # TODO pyPl numWire and angle
 
                         if not pyPl.reflexed:
 
