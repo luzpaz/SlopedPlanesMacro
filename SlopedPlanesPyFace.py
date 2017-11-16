@@ -676,7 +676,7 @@ class _PyFace(_Py):
 
         for pyAlign in self.alignments:
 
-            pyBase = pyAlign.Base
+            pyBase = pyAlign.base
             numWire = pyBase.numWire
             numGeom = pyBase.numGeom
             pyWire = pyWireList[numWire]

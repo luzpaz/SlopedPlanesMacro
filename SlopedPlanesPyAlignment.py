@@ -159,6 +159,23 @@ class _PyAlignment(_Py):
 
         self._later = later
 
+    def virtualizing(self):
+
+        '''virtualizing(self)
+        '''
+
+        virtualizedChops = []
+        for [pyChopOne, pyChopTwo] in self.chops:
+
+            pyOne = pyChopOne.virtualizing()
+            pyOne.choped = True
+            pyTwo = pyChopTwo.virtualizing()
+            pyTwo.choped = True
+
+            virtualizedChops.append([pyOne, pyTwo])
+
+        self.chops = virtualizedChops
+
     def trimming(self):
 
         '''trimming(self)
@@ -187,8 +204,6 @@ class _PyAlignment(_Py):
             [pyOne, pyTwo] = chop
 
             if not falsify:
-
-                # esto está repetido en trimming
 
                 enormousShapeOne = pyOne.enormousShape
                 enormousShapeTwo = pyTwo.enormousShape
@@ -434,24 +449,7 @@ class _PyAlignment(_Py):
 
             shapeList = [base, cont]
 
-        # print shapeList
         self.simulatedShape = shapeList
-
-    def virtualizing(self):
-
-        ''''''
-
-        virtualizedChops = []
-        for [pyChopOne, pyChopTwo] in self.chops:
-
-            pyOne = pyChopOne.virtualizing()
-            pyOne.choped = True
-            pyTwo = pyChopTwo.virtualizing()
-            pyTwo.choped = True
-
-            virtualizedChops.append([pyOne, pyTwo])
-
-        self.chops = virtualizedChops
 
     def simulating(self):
 
@@ -476,7 +474,6 @@ class _PyAlignment(_Py):
 
         enormousBase = pyBase.enormousShape
         aligns = self.aligns
-        chops = self.chops
 
         rangoChopList = self.rango
         pyWireList = _Py.pyFace.wires
@@ -509,10 +506,6 @@ class _PyAlignment(_Py):
                         pass  # ???
                 else:
                     pass  # ???
-
-            '''nW = pyOne.numWire
-            pyW = pyWireList[nW]
-            pyPlaneList = pyW.planes'''
 
             oneList = []
             rangoOne = pyOne.rango
@@ -561,16 +554,6 @@ class _PyAlignment(_Py):
                             cutterList.append(rearPlane)
                             # print 'rearPlane ', nG
 
-                '''rango = pyPlane.rango
-                for ran in rango:
-                    for nn in ran:
-                        pyPl = pyPlaneList[nn]
-                        if not pyPl.choped:
-                            if not pyPl.aligned:
-                                rangoPlane = pyPl.shape
-                                cutterList.append(rangoPlane)
-                                # print 'rango ', nn'''
-
                 cutterList.extend(cutList)
 
                 if self.falsify:
@@ -616,8 +599,6 @@ class _PyAlignment(_Py):
                             plane = self.cutting(plane, [planeCopy], gS)
                             pyPlane.shape = plane
                             break
-
-            # esto lo voy a repetir en trimming
 
             shapeOne = pyOne.shape
             shapeTwo = pyTwo.shape
