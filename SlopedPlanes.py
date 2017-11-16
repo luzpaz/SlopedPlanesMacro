@@ -72,7 +72,8 @@ class _SlopedPlanes(_Py):
 
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
-        The Proxy stores the Type and the complementary python objects'''
+        The Proxy stores:
+        State, Type, and the complementary python objects'''
 
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "SlopedPlanes")
@@ -117,7 +118,7 @@ class _SlopedPlanes(_Py):
     def execute(self, slopedPlanes):
 
         '''execute(self, slopedPlanes)
-        builds the shape of the slopedPlanes object'''
+        Builds the shape of the slopedPlanes object'''
 
         _Py.slopedPlanes = slopedPlanes
 
