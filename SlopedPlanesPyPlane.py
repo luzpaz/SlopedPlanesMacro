@@ -685,29 +685,24 @@ class _PyPlane(_Py):
         ''''''
 
         numGeom = self.numGeom
-        # print '# numGeom ', numGeom
 
         rear = self.rear
         lenWire = len(pyWire.planes)
         lenRear = len(rear)
-        # print '# rear ', rear
 
         rango = []
 
         if lenRear == 1:
-            # print '1'
+
             [nGeom] = rear
 
             if nGeom > numGeom:
-                # print '11'
 
                 if direction == "forward":
-                    # print '111'
                     num = self.sliceIndex(numGeom+2, lenWire)
                     ran = range(num, nGeom)
 
                 else:
-                    # print '112'
                     ranA = range(nGeom+1, lenWire)
                     ranA.reverse()
                     ranB = range(0, numGeom-1)
@@ -715,21 +710,17 @@ class _PyPlane(_Py):
                     ran = ranB + ranA
 
             else:
-                # print '12'
 
                 if direction == "forward":
-                    # print '121'
                     ran = range(numGeom+2, lenWire) +\
                         range(0, nGeom)
 
                 else:
-                    # print '122'
                     ran = range(nGeom+1, numGeom-1)
 
             rango.append(ran)
 
         elif lenRear == 2:
-            # print '2'
             [nGeom1, nGeom2] = rear
 
             number = -1
@@ -737,32 +728,25 @@ class _PyPlane(_Py):
                 number += 1
 
                 if number == 0:
-                    # print '21'
 
                     if numGeom < nG:
-                        # print '211'
                         ran = range(numGeom+2, nG)
 
                     else:
-                        # print '212'
                         ranA = range(numGeom+2, lenWire)
                         ranB = range(0, nG)
                         ran = ranA + ranB
 
                 else:
-                    # print '22'
 
                     if numGeom < nG:
-                        # print '221'
                         ranA = range(nG+1, lenWire)
                         ranB = range(0, numGeom-1)
                         ran = ranA + ranB
 
                     else:
-                        # print '222'
                         ran = range(nG+1, numGeom-1)
 
                 rango.append(ran)
 
-        # print 'rango ', rango
         self.rango = rango

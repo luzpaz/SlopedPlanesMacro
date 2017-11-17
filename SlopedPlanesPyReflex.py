@@ -243,8 +243,6 @@ class _PyReflex(_Py):
 
         ''''''
 
-        nWire = pyWire.numWire
-
         if direction == "forward":
             nGeom = oppRear[1]
         else:
@@ -531,12 +529,8 @@ class _PyReflex(_Py):
 
         compoundA = pyR.compound
         compoundB = pyOppR.compound
-
         lenA = len(compoundA.Faces)
         lenB = len(compoundB.Faces)
-
-        # print lenA
-        # print lenB
 
         if lenB > 1 and lenA == 1:
             # print 'A'
