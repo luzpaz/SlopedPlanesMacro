@@ -76,6 +76,7 @@ class _TaskPanel_SlopedPlanes():
 
         taskPanel.setWindowTitle("SlopedPlanes")
         self.title.setText("SlopedPlanes parameters")
+        # TODO extensible
         self.tree.setHeaderLabels([("Face"),
                                    ("Angle")])
         # ("Length"),

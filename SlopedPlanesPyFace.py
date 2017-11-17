@@ -622,26 +622,30 @@ class _PyFace(_Py):
         '''forBack(self, pyPlane, direction)
         '''
 
-        line = pyPlane.geom
-        lineLastParam = line.LastParameter
-        lineEndParam = lineLastParam + _Py.size
-        forwardLine = Part.LineSegment(line, lineLastParam, lineEndParam)
+        curve = pyPlane.geom
+
+        lastParam = curve.LastParameter
+        endParam = lastParam + _Py.size
+
+        forwardLine = self.makeGeom(curve, lastParam, endParam)
         # print'forwardLine ', forwardLine
+
         forwardLineShape = forwardLine.toShape()
-        lineStartParam = line.FirstParameter
-        lineEndParam = lineStartParam - _Py.size
-        backwardLine = Part.LineSegment(line, lineStartParam, lineEndParam)
+
+        startParam = curve.FirstParameter
+        endParam = startParam - _Py.size
+
+        backwardLine = self.makeGeom(curve, startParam, endParam)
         # print'backwardLine ', backwardLine
+
         backwardLineShape = backwardLine.toShape()
 
         if direction == "forward":
-            # print'a'
             pyPlane.backward = backwardLineShape
             pyPlane.forward = forwardLineShape
             return forwardLine
 
         else:
-            # print'b'
             pyPlane.backward = forwardLineShape
             pyPlane.forward = backwardLineShape
             return backwardLine

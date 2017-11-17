@@ -442,16 +442,7 @@ class _Py(object):
             startParam = curve.parameter(coordinates[number])
             endParam = curve.parameter(coordinates[number+1])
 
-            if isinstance(curve, Part.Line):
-                geom = Part.LineSegment(coordinates[number], coordinates[number+1])
-            elif isinstance(curve, Part.Circle):
-                geom = Part.ArcOfCircle(curve, startParam, endParam)
-            elif isinstance(curve, Part.Ellipse):
-                geom = Part.ArcOfEllipse(curve, startParam, endParam)
-            elif isinstance(curve, Part.Hyperbola):
-                geom = Part.ArcOfHyperbola(curve, startParam, endParam)
-            elif isinstance(curve, Part.Parabola):
-                geom = Part.ArcOfParabola(curve, startParam, endParam)
+            geom = self.makeGeom(curve, startParam, endParam)
 
             geometries.append(geom)
 
@@ -491,3 +482,28 @@ class _Py(object):
             index = index + lenWire
 
         return index
+
+    def makeGeom(self, curve, startParam, endParam):
+
+        ''''''
+
+        if isinstance(curve, Part.Line):
+            geom = Part.LineSegment(curve, startParam, endParam)
+
+        elif isinstance(curve, Part.Circle):
+            geom = Part.ArcOfCircle(curve, startParam, endParam)
+
+        elif isinstance(curve, Part.Ellipse):
+            geom = Part.ArcOfEllipse(curve, startParam, endParam)
+
+        elif isinstance(curve, Part.Hyperbola):
+            geom = Part.ArcOfHyperbola(curve, startParam, endParam)
+
+        elif isinstance(curve, Part.Parabola):
+            geom = Part.ArcOfParabola(curve, startParam, endParam)
+
+        else:
+            pass
+            # TODO
+
+        return geom

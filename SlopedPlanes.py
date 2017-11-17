@@ -409,7 +409,7 @@ class _SlopedPlanes(_Py):
                 # probar primero edgeList.reverse
 
             if slopedPlanes.Down:
-                numFace = pyFace.numFace
+                # numFace = pyFace.numFace
                 face = faceList[numFace]
                 planeFaceList.append(face)
 
