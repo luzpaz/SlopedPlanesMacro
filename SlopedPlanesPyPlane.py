@@ -467,7 +467,11 @@ class _PyPlane(_Py):
 
         startParam = firstParam - leftScale * _Py.size
         endParam = lastParam + rightScale * _Py.size
-        extendGeom = Part.LineSegment(geom, startParam, endParam)
+
+        print geom
+        extendGeom = self.makeGeom(geom, startParam, endParam)
+        # extendGeom = Part.LineSegment(geom, startParam, endParam)
+
         plane = extendGeom.toShape().extrude(direction*upScale*_Py.size)
 
         return plane
