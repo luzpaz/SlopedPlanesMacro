@@ -447,7 +447,8 @@ class _SlopedPlanes(_Py):
 
     def onChanged(self, slopedPlanes, prop):
 
-        ''''''
+        '''onChanged(self, slopedPlanes, prop)
+        '''
 
         if self.State:
             return

@@ -148,19 +148,34 @@ class _Py(object):
 
         return pyRList
 
-    def selectPlane(self, nWire, nGeom):
+    def selectPlane(self, numWire, numGeom):
 
         ''''''
 
         pyWireList = _Py.pyFace.wires
         for wire in pyWireList:
-            if wire.numWire == nWire:
+            if wire.numWire == numWire:
                 pyPlaneList = wire.planes
                 for plane in pyPlaneList:
-                    if plane.numGeom == nGeom:
+                    if plane.numGeom == numGeom:
                         return plane
 
         return None
+
+    def selectBasePlane(self, numWire, numGeom):
+
+        ''''''
+
+        pyWireList = _Py.pyFace.wires
+        pyWire = pyWireList[numWire]
+        pyPlaneList = pyWire.planes
+        pyPlane = pyPlaneList[numGeom]
+
+        if not pyPlane.geomAligned:
+            [nW, nG] = pyPlane.angle
+            pyPlane = self.selectPlane(nW, nG)
+
+        return pyPlane
 
     def cutting(self, cutted, cutter, geomShape):
 

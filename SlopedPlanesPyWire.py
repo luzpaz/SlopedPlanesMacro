@@ -188,42 +188,42 @@ class _PyWire(_Py):
                             forward = pyPlane.forward
                             gS = pyPlane.geomShape
                             forw = pyPl.forward
-                            section = forward.section([forw, gS], _Py.tolerance)
+                            section = forward.section([forw, gS],
+                                                      _Py.tolerance)
 
-                            if not section.Edges:
+                            if (not section.Edges and
+                               len(section.Vertexes) == 1):
 
-                                if len(section.Vertexes) == 1:
+                                section = forw.section(section.Vertexes,
+                                                       _Py.tolerance)
 
-                                    section = forw.section(section.Vertexes,
-                                                           _Py.tolerance)
+                                if not section.Vertexes:
 
-                                    if not section.Vertexes:
+                                    procc = True
 
-                                        procc = True
+                                    nWire = pyPl.numWire
+                                    nGeom = pyPl.numGeom
+                                    pyRList =\
+                                        self.selectAllReflex(nWire,
+                                                             nGeom)
 
-                                        nWire = pyPl.numWire
-                                        nGeom = pyPl.numGeom
-                                        pyRList =\
-                                            self.selectAllReflex(nWire,
-                                                                   nGeom)
+                                    for pyR in pyRList:
+                                        if not procc:
+                                            break
+                                        for pyP in pyR.planes:
+                                            if pyP != pyPl:
+                                                ff = pyP.forward
+                                                section =\
+                                                    ff.section([forward],
+                                                               _Py.tolerance)
 
-                                        for pyR in pyRList:
-                                            if not procc:
-                                                break
-                                            for pyP in pyR.planes:
-                                                if pyP != pyPl:
-                                                    ff = pyP.forward
-                                                    section =\
-                                                        ff.section([forward],
-                                                                   _Py.tolerance)
+                                                if section.Vertexes:
+                                                    procc = False
+                                                    break
 
-                                                    if section.Vertexes:
-                                                        procc = False
-                                                        break
-
-                                        if procc:
-                                            # print 'procc'
-                                            pyPl.trimming(enormousShape)
+                                    if procc:
+                                        # print 'procc'
+                                        pyPl.trimming(enormousShape)
 
     def priorLater(self):
 
@@ -231,6 +231,7 @@ class _PyWire(_Py):
 
         pyPlaneList = self.planes
         lenWire = len(pyPlaneList)
+        numWire = self.numWire
         for pyPlane in pyPlaneList:
 
             if not pyPlane.aligned:
@@ -238,29 +239,16 @@ class _PyWire(_Py):
 
                 numGeom = pyPlane.numGeom
                 # print'numGeom ', numGeom
-                # print'reflexed ', pyPlane.reflexed
-                # print'choped ', pyPlane.choped
-                # print'aligned ', pyPlane.aligned
-                # print'arrow ', pyPlane.arrow
 
                 prior = self.sliceIndex(numGeom-1, lenWire)
-                pyPrior = pyPlaneList[prior]
+                # pyPrior = pyPlaneList[prior]
                 later = self.sliceIndex(numGeom+1, lenWire)
-                pyLater = pyPlaneList[later]
+                # pyLater = pyPlaneList[later]
 
+                pyPrior = self.selectBasePlane(numWire, prior)
+                pyLater = self.selectBasePlane(numWire, later)
                 bigPrior = pyPrior.bigShape
-                if not bigPrior:
-                    [nW, nG] = pyPrior.angle
-                    prior = nG
-                    pyPrior = self.selectPlane(nW, nG)
-                    bigPrior = pyPrior.bigShape
-
                 bigLater = pyLater.bigShape
-                if not bigLater:
-                    [nW, nG] = pyLater.angle
-                    later = nG
-                    pyLater = self.selectPlane(nW, nG)
-                    bigLater = pyLater.bigShape
 
                 # print'prior ', (pyPrior.numWire, pyPrior.numGeom)
                 # print'later ', (pyLater.numWire, pyLater.numGeom)
@@ -308,7 +296,6 @@ class _PyWire(_Py):
 
                 if cutterList:
                     # print'D'
-                    # print cutterList
                     shape = self.cutting(shape, cutterList, gS)
                     pyPlane.shape = shape
 
