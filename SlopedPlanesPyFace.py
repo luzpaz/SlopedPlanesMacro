@@ -684,12 +684,7 @@ class _PyFace(_Py):
             lenWire = len(pyPlaneList)
 
             prior = self.sliceIndex(numGeom-1, lenWire)
-            pyPrior = pyPlaneList[prior]
-
-            prior = pyPrior.geomAligned
-            if not prior:
-                [nW, nG] = pyPrior.angle
-                pyPrior = self.selectPlane(nW, nG)
+            pyPrior = self.selectBasePlane(numWire, prior)
 
             pyPl = pyAlign.aligns[-1]
             [nW, nG] = [pyPl.numWire, pyPl.numGeom]
@@ -697,12 +692,7 @@ class _PyFace(_Py):
             lenW = len(pyW.planes)
 
             later = self.sliceIndex(nG+1, lenW)
-            pyLater = self.selectPlane(nW, later)
-
-            later = pyLater.geomAligned
-            if not later:
-                [nW, nG] = pyLater.angle
-                pyLater = self.selectPlane(nW, nG)
+            pyLater = self.selectBasePlane(nW, later)
 
             pyAlign.prior = pyPrior
             pyAlign.later = pyLater
