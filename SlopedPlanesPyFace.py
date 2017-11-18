@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+from math import pi
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
@@ -312,6 +313,8 @@ class _PyFace(_Py):
                                             pyPl.geomAligned = None
                                             pyPl.angle = [numWire, numGeom]
 
+                                            # TODO curved 
+
                                             startParam = fGeom.FirstParameter
                                             endPoint = sGeom.EndPoint
                                             endParam =\
@@ -560,7 +563,7 @@ class _PyFace(_Py):
         else:
             # print 'b'
             coord = pyWire.coordinates
-            nGeom = coord.index(vertex.Point)
+            nGeom = coord.index(self.roundVector(vertex.Point))
             if direction == 'backward':
                 nGeom = self.sliceIndex(nGeom-1, lenWire)
 
@@ -625,19 +628,24 @@ class _PyFace(_Py):
         curve = pyPlane.geom
 
         lastParam = curve.LastParameter
-        endParam = lastParam + _Py.size
+        startParam = curve.FirstParameter
+
+        if isinstance(curve, Part.LineSegment):
+            endParam = lastParam + _Py.size
+            eParam = startParam - _Py.size
+        elif isinstance(curve, Part.ArcOfCircle):
+            # distance = lastParam - startParam
+            endParam = lastParam + 2 * pi  # - distance
+            eParam = startParam - 2 * pi
+        else:
+            pass
+            # TODO
 
         forwardLine = self.makeGeom(curve, lastParam, endParam)
         # print'forwardLine ', forwardLine
-
         forwardLineShape = forwardLine.toShape()
-
-        startParam = curve.FirstParameter
-        endParam = startParam - _Py.size
-
-        backwardLine = self.makeGeom(curve, startParam, endParam)
+        backwardLine = self.makeGeom(curve, startParam, eParam)
         # print'backwardLine ', backwardLine
-
         backwardLineShape = backwardLine.toShape()
 
         if direction == "forward":

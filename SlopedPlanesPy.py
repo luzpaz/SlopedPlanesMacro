@@ -213,9 +213,9 @@ class _Py(object):
                 for pyPlane in pyReflex.planes:
                     print pyPlane.numGeom,\
                         pyPlane.rear,\
-                        pyPlane.rango, \
-                        (pyPlane.forward.firstVertex(True).Point,
-                         pyPlane.forward.lastVertex(True).Point)
+                        pyPlane.rango,\
+                        (pyPlane.forward.FirstParameter,
+                         pyPlane.forward.LastParameter)
 
         print '********* alignments ', _Py.pyFace.alignments
         for pyAlignment in _Py.pyFace.alignments:

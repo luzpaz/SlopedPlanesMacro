@@ -305,7 +305,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.virtualizing()
 
-            pyFace.trimming()
+            '''pyFace.trimming()
 
             pyFace.priorLater()
 
@@ -323,7 +323,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.aligning()
 
-            pyFace.ending()
+            pyFace.ending()'''
 
         self.Pyth = pyFaceListNew
 

@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+from math import pi
 import Part
 from SlopedPlanesPy import _Py
 
@@ -465,13 +466,18 @@ class _PyPlane(_Py):
         rightScale = self.width[1] * scale
         upScale = self.length * scale
 
-        startParam = firstParam - leftScale * _Py.size
-        endParam = lastParam + rightScale * _Py.size
+        print 'geom ', geom
+        if isinstance(geom, Part.LineSegment):
+            startParam = firstParam - leftScale * _Py.size
+            endParam = lastParam + rightScale * _Py.size
+        elif isinstance(geom, Part.ArcOfCircle):
+            startParam = (2 * pi - (lastParam - firstParam) ) / 2 + lastParam
+            endParam = startParam + 2 * pi
+        else:
+            # TODO
+            pass
 
-        print geom
         extendGeom = self.makeGeom(geom, startParam, endParam)
-        # extendGeom = Part.LineSegment(geom, startParam, endParam)
-
         plane = extendGeom.toShape().extrude(direction*upScale*_Py.size)
 
         return plane
