@@ -661,8 +661,15 @@ class _PyFace(_Py):
             print 'eParam ', eParam
 
         elif isinstance(geom, Part.ArcOfHyperbola):
-
             pass
+
+        elif isinstance(geom, Part.BSplineCurve):
+            startParam = lastParam
+            endParam = lastParam + _Py.size
+
+            gg = geom
+            sParam = firstParam
+            eParam = firstParam - _Py.size
 
         else:
             pass

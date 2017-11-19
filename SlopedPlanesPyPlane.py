@@ -480,6 +480,10 @@ class _PyPlane(_Py):
         elif isinstance(geom, Part.ArcOfHyperbola):
             pass
 
+        elif isinstance(geom, Part.BSplineCurve):
+            startParam = firstParam - leftScale * _Py.size
+            endParam = lastParam + rightScale * _Py.size
+
         else:
             # TODO
             pass

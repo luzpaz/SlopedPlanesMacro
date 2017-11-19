@@ -518,6 +518,9 @@ class _Py(object):
         elif isinstance(curve, Part.ArcOfParabola):
             geom = Part.ArcOfParabola(curve.Parabola, startParam, endParam)
 
+        elif isinstance(curve, Part.BSplineCurve):
+            geom = Part.BSplineCurve(curve, startParam, endParam)
+
         else:
             pass
             # TODO
