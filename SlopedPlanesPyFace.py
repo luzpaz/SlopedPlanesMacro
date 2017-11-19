@@ -633,7 +633,9 @@ class _PyFace(_Py):
         print 'firstParam ', firstParam
         print 'lastParam ', lastParam
 
-        if isinstance(geom, Part.LineSegment):
+        if isinstance(geom, (Part.LineSegment,
+                             Part.ArcOfParabola)):
+
             startParam = lastParam
             endParam = lastParam + _Py.size
 
@@ -641,7 +643,9 @@ class _PyFace(_Py):
             sParam = firstParam
             eParam = firstParam - _Py.size
 
-        elif isinstance(geom, Part.ArcOfCircle):
+        elif isinstance(geom, (Part.ArcOfCircle,
+                               Part.ArcOfEllipse)):
+
             half = (2 * pi - (lastParam - firstParam)) / 2
             print 'half ', half
             startParam = lastParam
@@ -655,6 +659,10 @@ class _PyFace(_Py):
             print 'sParam ', sParam
             eParam = sParam + half
             print 'eParam ', eParam
+
+        elif isinstance(geom, Part.ArcOfHyperbola):
+
+            pass
 
         else:
             pass

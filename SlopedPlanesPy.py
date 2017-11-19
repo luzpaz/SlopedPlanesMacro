@@ -503,11 +503,20 @@ class _Py(object):
         elif isinstance(curve, Part.Ellipse):
             geom = Part.ArcOfEllipse(curve, startParam, endParam)
 
+        elif isinstance(curve, Part.ArcOfEllipse):
+            geom = Part.ArcOfEllipse(curve.Ellipse, startParam, endParam)
+
         elif isinstance(curve, Part.Hyperbola):
             geom = Part.ArcOfHyperbola(curve, startParam, endParam)
 
+        elif isinstance(curve, Part.ArcOfHyperbola):
+            geom = Part.ArcOfHyperbola(curve.Hyperbola, startParam, endParam)
+
         elif isinstance(curve, Part.Parabola):
             geom = Part.ArcOfParabola(curve, startParam, endParam)
+
+        elif isinstance(curve, Part.ArcOfParabola):
+            geom = Part.ArcOfParabola(curve.Parabola, startParam, endParam)
 
         else:
             pass

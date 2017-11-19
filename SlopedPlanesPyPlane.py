@@ -467,12 +467,19 @@ class _PyPlane(_Py):
         rightScale = self.width[1] * scale
         upScale = self.length * scale
 
-        if isinstance(geom, Part.LineSegment):
+        if isinstance(geom, (Part.LineSegment,
+                             Part.ArcOfParabola)):
             startParam = firstParam - leftScale * _Py.size
             endParam = lastParam + rightScale * _Py.size
-        elif isinstance(geom, Part.ArcOfCircle):
-            startParam = (2 * pi - (lastParam - firstParam) ) / 2 + lastParam
+
+        elif isinstance(geom, (Part.ArcOfCircle,
+                               Part.ArcOfEllipse)):
+            startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
             endParam = startParam + 2 * pi
+
+        elif isinstance(geom, Part.ArcOfHyperbola):
+            pass
+
         else:
             # TODO
             pass
