@@ -625,27 +625,46 @@ class _PyFace(_Py):
         '''forBack(self, pyPlane, direction)
         '''
 
-        curve = pyPlane.geom
+        geom = pyPlane.geom
+        print 'geom ', geom
 
-        lastParam = curve.LastParameter
-        startParam = curve.FirstParameter
+        firstParam = geom.FirstParameter
+        lastParam = geom.LastParameter
+        print 'firstParam ', firstParam
+        print 'lastParam ', lastParam
 
-        if isinstance(curve, Part.LineSegment):
+        if isinstance(geom, Part.LineSegment):
+            startParam = lastParam
             endParam = lastParam + _Py.size
-            eParam = startParam - _Py.size
-        elif isinstance(curve, Part.ArcOfCircle):
-            # distance = lastParam - startParam
-            endParam = lastParam + 2 * pi  # - distance
-            eParam = startParam - 2 * pi
+
+            gg = geom
+            sParam = firstParam
+            eParam = firstParam - _Py.size
+
+        elif isinstance(geom, Part.ArcOfCircle):
+            half = (2 * pi - (lastParam - firstParam)) / 2
+            print 'half ', half
+            startParam = lastParam
+            print 'startParam ', startParam
+            endParam = lastParam + half
+            print 'endParam ', endParam
+
+            gg = geom.copy()
+            gg.Axis = _Py.normal * -1
+            sParam = 2 * pi - firstParam
+            print 'sParam ', sParam
+            eParam = sParam + half
+            print 'eParam ', eParam
+
         else:
             pass
             # TODO
 
-        forwardLine = self.makeGeom(curve, lastParam, endParam)
-        # print'forwardLine ', forwardLine
+        forwardLine = self.makeGeom(geom, startParam, endParam)
+        print'forwardLine ', forwardLine
         forwardLineShape = forwardLine.toShape()
-        backwardLine = self.makeGeom(curve, startParam, eParam)
-        # print'backwardLine ', backwardLine
+        backwardLine = self.makeGeom(gg, sParam, eParam)
+        print'backwardLine ', backwardLine
         backwardLineShape = backwardLine.toShape()
 
         if direction == "forward":

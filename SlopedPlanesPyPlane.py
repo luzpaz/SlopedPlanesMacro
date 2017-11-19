@@ -423,6 +423,7 @@ class _PyPlane(_Py):
         coordinates = pyWire.coordinates
         numGeom = self.numGeom
         geom = self.geomAligned
+        print 'geom ', geom
         eje = coordinates[numGeom+1].sub(coordinates[numGeom])
         direction = self.rotateVector(eje, _Py.normal, 90)
         angle = self.angle
@@ -466,7 +467,6 @@ class _PyPlane(_Py):
         rightScale = self.width[1] * scale
         upScale = self.length * scale
 
-        print 'geom ', geom
         if isinstance(geom, Part.LineSegment):
             startParam = firstParam - leftScale * _Py.size
             endParam = lastParam + rightScale * _Py.size

@@ -215,7 +215,11 @@ class _Py(object):
                         pyPlane.rear,\
                         pyPlane.rango,\
                         (pyPlane.forward.FirstParameter,
-                         pyPlane.forward.LastParameter)
+                         pyPlane.forward.LastParameter),\
+                        (self.roundVector(pyPlane.forward.firstVertex(True).Point),
+                         self.roundVector(pyPlane.forward.lastVertex(True).Point)),\
+                        (self.roundVector(pyPlane.backward.firstVertex(True).Point),
+                         self.roundVector(pyPlane.backward.lastVertex(True).Point))
 
         print '********* alignments ', _Py.pyFace.alignments
         for pyAlignment in _Py.pyFace.alignments:
