@@ -381,12 +381,11 @@ class _SlopedPlanes(_Py):
                     upPlaneCopy = upPlane.copy()
                     cut = upPlaneCopy.cut(planeWireList, _Py.tolerance)
                     edgeList = cut.Edges[4:]
-                    if numWire > 0:
-                        # for edge in edgeList:
-                            # edge.reverse()
-                        #edgeList.reverse()
+                    if numWire > 0:     # this doesn't seem to be necessary
+                        for edge in edgeList:
+                            edge.reverse()
+                        edgeList.reverse()
                         pass
-                        
                     wire = Part.Wire(edgeList)
                     wireList.append(wire)
 
@@ -398,18 +397,14 @@ class _SlopedPlanes(_Py):
                 upFace = Part.makeFace(wireList, faceMaker)
 
                 # hay que comprobar para cada interior wire que realmente corta
-                # o diseñar otra solución para evitar open wires
-                # mirar cut
+                # o diseñar otra solución para evitar open wires. Mirar cut
 
                 planeFaceList.append(upFace)
 
                 # the Up System break the interior wires numeration
                 # first give the angles and later apply Up
-                # tal vez si no ordenas los wires interiores no hay error
-                # probar primero edgeList.reverse
 
             if slopedPlanes.Down:
-                # numFace = pyFace.numFace
                 face = faceList[numFace]
                 planeFaceList.append(face)
 

@@ -423,7 +423,6 @@ class _PyPlane(_Py):
         coordinates = pyWire.coordinates
         numGeom = self.numGeom
         geom = self.geomAligned
-        print 'geom ', geom
         eje = coordinates[numGeom+1].sub(coordinates[numGeom])
         direction = self.rotateVector(eje, _Py.normal, 90)
         angle = self.angle
@@ -481,11 +480,9 @@ class _PyPlane(_Py):
             pass
 
         elif isinstance(geom, Part.BSplineCurve):
-            startParam = firstParam - leftScale * _Py.size
-            endParam = lastParam + rightScale * _Py.size
+            pass
 
         else:
-            # TODO
             pass
 
         extendGeom = self.makeGeom(geom, startParam, endParam)

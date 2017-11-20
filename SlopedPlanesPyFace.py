@@ -626,12 +626,8 @@ class _PyFace(_Py):
         '''
 
         geom = pyPlane.geom
-        print 'geom ', geom
-
         firstParam = geom.FirstParameter
         lastParam = geom.LastParameter
-        print 'firstParam ', firstParam
-        print 'lastParam ', lastParam
 
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola)):
@@ -647,39 +643,28 @@ class _PyFace(_Py):
                                Part.ArcOfEllipse)):
 
             half = (2 * pi - (lastParam - firstParam)) / 2
-            print 'half ', half
             startParam = lastParam
-            print 'startParam ', startParam
             endParam = lastParam + half
-            print 'endParam ', endParam
 
             gg = geom.copy()
             gg.Axis = _Py.normal * -1
             sParam = 2 * pi - firstParam
-            print 'sParam ', sParam
             eParam = sParam + half
-            print 'eParam ', eParam
 
         elif isinstance(geom, Part.ArcOfHyperbola):
             pass
 
         elif isinstance(geom, Part.BSplineCurve):
-            startParam = lastParam
-            endParam = lastParam + _Py.size
-
-            gg = geom
-            sParam = firstParam
-            eParam = firstParam - _Py.size
+            pass
 
         else:
             pass
-            # TODO
 
         forwardLine = self.makeGeom(geom, startParam, endParam)
-        print'forwardLine ', forwardLine
+        # print'forwardLine ', forwardLine
         forwardLineShape = forwardLine.toShape()
         backwardLine = self.makeGeom(gg, sParam, eParam)
-        print'backwardLine ', backwardLine
+        # print'backwardLine ', backwardLine
         backwardLineShape = backwardLine.toShape()
 
         if direction == "forward":
