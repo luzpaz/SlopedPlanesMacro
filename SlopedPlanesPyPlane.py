@@ -499,7 +499,7 @@ class _PyPlane(_Py):
         gS = self.geomShape
 
         if enormShape:
-            cutterList = [enormShape]
+            cutterList = enormShape
         else:
             cutterList = [enormousShape]
 
