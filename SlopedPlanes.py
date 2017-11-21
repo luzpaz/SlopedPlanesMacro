@@ -343,13 +343,31 @@ class _SlopedPlanes(_Py):
                     numAngle = pyPlane.numGeom
                     angle = pyPlane.angle
 
+                    # some figures break the planes numeration
+                    '''print 'numGeom ', numAngle
+                    plane = pyPlane.shape
+                    gS = pyPlane.geomShape
+                    print (gS.firstVertex(True).Point,
+                           gS.lastVertex(True).Point)
+                    if plane:
+                        section = plane.section(gS)
+                        if section.Edges:
+                            print 'okey'
+                        else:
+                            print 'bad'
+                    else:
+                        print 'no plane'
+                    '''
+
                     if [numWire, numAngle] not in originList:
 
                         if isinstance(angle, float):
+                            # print 'a'
 
                             plane = pyPlane.shape
 
                             if isinstance(plane, Part.Compound):
+                                # print 'compound'
                                 planeWireList.append(plane.Faces[0])
                                 secondaries.extend(plane.Faces[1:])
 
@@ -357,6 +375,7 @@ class _SlopedPlanes(_Py):
                                 planeWireList.append(plane)
 
                         else:
+                            # print 'b'
 
                             alfa, beta = angle[0], angle[1]
 

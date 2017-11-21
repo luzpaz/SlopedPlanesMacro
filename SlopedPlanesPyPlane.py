@@ -529,6 +529,7 @@ class _PyPlane(_Py):
         if self.aligned:
             [numWire, numGeom] = [self.numWire, self.numGeom]
             plane = self.shape
+            big = self.bigShape
             enormous = self.enormousShape
             geom = self.geom
             geomShape = self.geomShape
@@ -541,6 +542,7 @@ class _PyPlane(_Py):
                 (nWire, nGeom) = self.angle
                 pyPlane = self.selectPlane(nWire, nGeom)
                 plane = pyPlane.shape
+                big = pyPlane.bigShape
                 enormous = pyPlane.enormousShape
 
             pyPlane = _PyPlane(numWire, numGeom)
@@ -553,6 +555,7 @@ class _PyPlane(_Py):
             pyPlane.aligned = True
             pyPlane.reflexed = True
             pyPlane.shape = plane.copy()
+            pyPlane.bigShape = big
             pyPlane.enormousShape = enormous
             return pyPlane
 
@@ -570,29 +573,35 @@ class _PyPlane(_Py):
         cutterList = []
         for pyPl in pyPlaneList:
             if pyPl.numGeom != numGeom:
-                # print 'numGeom ', pyPl.numGeom
+                print 'numGeom ', pyPl.numGeom
                 if not (pyPl.choped and not pyPl.aligned):
                     pl = pyPl.shape
 
                     if not pyPl.aligned:
-                        # print 'a'
+                        print 'a'
                         cutterList.append(pl)
 
                     else:
-                        # print 'b'
+                        print 'b'
                         if pl:
-                            # print 'b1'
+                            print 'b1'
 
                             pyAli =\
                                 self.selectAlignment(pyPl.numWire,
                                                         pyPl.numGeom)
 
+                            print pyAli.base.numGeom
+                            print pyAli.falsify
+
                             if self.aligned:
-                                # print 'b11'
+                                print 'b11'
 
                                 pyAlign =\
                                     self.selectAlignment(self.numWire,
                                                             self.numGeom)
+
+                                print pyAlign.base.numGeom
+                                print pyAlign.falsify
 
                                 ch = []
                                 for [ch1, ch2] in pyAli.chops:
@@ -611,18 +620,24 @@ class _PyPlane(_Py):
 
                                     if pl in chop:
                                         break
+                                        # elif pl in ali:
+                                        # break
+                                    elif (self.numWire, self.numGeom) in ali:
+                                        break
                                     elif chop[0] in ali or chop[1] in ali:
                                         break
                                     elif chop[0] in ch or chop[1] in ch:
                                         break
 
+
+
                                 else:
-                                    # print 'b111'
+                                    print 'b111'
                                     simulatedPl = pyAli.simulatedShape
                                     cutterList.extend(simulatedPl)
 
                             else:
-                                # print 'b12'
+                                print 'b12'
                                 simulatedPl = pyAli.simulatedShape
                                 cutterList.extend(simulatedPl)
 
