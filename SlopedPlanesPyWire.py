@@ -437,9 +437,11 @@ class _PyWire(_Py):
         for pyPlane in self.planes:
             # no reflexed and choped. Yes aligned
             if not (pyPlane.reflexed and not pyPlane.aligned):
+                print pyPlane.numGeom
+                print pyPlane.reflexed
+                print pyPlane.choped
+                print pyPlane.aligned
                 if pyPlane.shape:
                     print 'ordinaries ', pyPlane.numGeom
-                    print pyPlane.reflexed
-                    print pyPlane.choped
-                    print pyPlane.aligned
                     pyPlane.ordinaries(self)
+

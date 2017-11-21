@@ -176,6 +176,11 @@ class _PyAlignment(_Py):
 
         self.chops = virtualizedChops
 
+        if self.falsify:
+            if not self.base.shape:
+                virtualBase = self.base.virtualizing()
+                self.base = virtualBase
+
     def trimming(self):
 
         '''trimming(self)
@@ -185,7 +190,9 @@ class _PyAlignment(_Py):
         print 'base ', self.base.numGeom
 
         pyWireList = _Py.pyFace.wires
+
         enormousShape = self.base.enormousShape
+
         numWire = self.base.numWire
         pyWire = pyWireList[numWire]
 
@@ -262,6 +269,9 @@ class _PyAlignment(_Py):
 
                                 pyPl.trimming(enShape, cList)
 
+                                if pyPl.choped:
+                                    brea = True
+
                             else:
                                 brea = True
 
@@ -274,8 +284,10 @@ class _PyAlignment(_Py):
 
         pyBase = self.base
         print 'base ', pyBase.numGeom
+
         base = pyBase.shape
         bigBase = pyBase.bigShape
+
         pyCont = self.aligns[0]
         cont = pyCont.shape
         bigCont = pyCont.bigShape
@@ -502,11 +514,12 @@ class _PyAlignment(_Py):
         print 'base shape ', self.base.shape
         print 'aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
         print 'chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
-              for [x, y] in self.chops]
+                         for [x, y] in self.chops]
 
         pyBase = self.base
 
         enormousBase = pyBase.enormousShape
+
         aligns = self.aligns
 
         rangoChopList = self.rango

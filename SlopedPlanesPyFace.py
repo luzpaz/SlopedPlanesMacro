@@ -288,6 +288,7 @@ class _PyFace(_Py):
                             for edge in section.Edges:
                                 numEdge += 1
                                 print'111'
+
                                 edgeStart = edge.firstVertex(True).Point
                                 point = self.roundVector(edgeStart)
                                 (nWire, nGeom) =\
@@ -341,14 +342,20 @@ class _PyFace(_Py):
                                                     self.doAlignment(pyPlane)
                                             pyAlign.falsify = True
 
-                                        self.seatAlignment(pyAlign,
-                                                           pyWire, pyPlane,
-                                                           pyW, pyPl)
+                                        pyAli =\
+                                            self.seatAlignment(pyAlign,
+                                                               pyWire, pyPlane,
+                                                               pyW, pyPl)
 
                                         if pyPl.numWire == pyPlane.numWire:
                                             ref = True
 
                                         pyReflex = _PyReflex()
+
+                                        if pyAli:
+                                            if pyAli.falsify:
+                                                print'break'
+                                                break
 
                                         if pyAlign.falsify:
                                             print'break'
@@ -416,6 +423,8 @@ class _PyFace(_Py):
                                         pyReflex =\
                                             self.doReflex(pyWire, pyPlane)
 
+                # print self.alignments
+
             pyWire.reset = False
 
         self.priorLaterAlignments()
@@ -461,10 +470,11 @@ class _PyFace(_Py):
         else:
             pyAli = self.selectAlignmentBase(nWire, nGeom)
             if pyAli:
-                bL = pyAli.aligns
-                aL.extend(bL)
-                for b in bL:
-                    b.angle = [numWire, numGeom]
+                if not pyAli.falsify:
+                    bL = pyAli.aligns
+                    aL.extend(bL)
+                    for b in bL:
+                        b.angle = [numWire, numGeom]
 
         pyWireList = self.wires
 
@@ -484,14 +494,18 @@ class _PyFace(_Py):
         cL.append([pyOne, pyTwo])
 
         if pyAli:
-            dL = pyAli.chops
-            cL.extend(dL)
+            if not pyAli.falsify:
+                dL = pyAli.chops
+                cL.extend(dL)
 
         pyAlign.aligns = aL
         pyAlign.chops = cL
 
         if pyAli:
-            self.removeAlignment(pyAli)
+            if not pyAli.falsify:
+                self.removeAlignment(pyAli)
+
+        return pyAli
 
     def seatReflex(self, pyWire, pyReflex, pyPlane, direction):
 
@@ -854,10 +868,6 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulating()
 
-        for pyAlign in self.alignments:
-            print pyAlign.base.numGeom
-            print pyAlign.base.shape
-
         for pyWire in self.wires:
             pyWire.simulating()
 
@@ -900,16 +910,8 @@ class _PyFace(_Py):
         '''ordinaries(self)
         '''
 
-        for pyAlign in self.alignments:
-            print pyAlign.base.numGeom
-            print pyAlign.base.shape
-
         for pyWire in self.wires:
             pyWire.ordinaries()
-
-        for pyAlign in self.alignments:
-            print pyAlign.base.numGeom
-            print pyAlign.base.shape
 
     def between(self):
 
@@ -1002,17 +1004,18 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
 
-            base = pyAlign.base.shape
-            if base not in cutterList:
-                cutterList.append(base)
-                # print 'a', pyAlign.base.numGeom
+            if isinstance(pyAlign.base.angle, float):
+                base = pyAlign.base.shape
+                if base not in cutterList:
+                    cutterList.append(base)
+                    print 'a', pyAlign.base.numGeom
 
             for pyPlane in pyAlign.aligns:
                 plane = pyPlane.shape
                 if plane:
                     if plane not in cutterList:
                         cutterList.append(plane)
-                        # print 'b', pyPlane.numGeom
+                        print 'b', pyPlane.numGeom
 
             for [pyChopOne, pyChopTwo] in pyAlign.chops:
 
@@ -1020,13 +1023,13 @@ class _PyFace(_Py):
                     chopOne = pyChopOne.shape
                     if chopOne not in cutterList:
                         cutterList.append(chopOne)
-                        # print 'c', pyChopOne.numGeom
+                        print 'c', pyChopOne.numGeom
 
                 if pyChopTwo.geomAligned:
                     chopTwo = pyChopTwo.shape
                     if chopTwo not in cutterList:
                         cutterList.append(chopTwo)
-                        # print 'd', pyChopTwo.numGeom
+                        print 'd', pyChopTwo.numGeom
 
         if cutterList:
 
@@ -1034,7 +1037,7 @@ class _PyFace(_Py):
                 for pyPlane in pyWire.planes:
                     plane = pyPlane.shape
                     if plane:
-                        # print 'numGeom', pyPlane.numGeom
+                        print 'numGeom', pyPlane.numGeom
 
                         if pyPlane.choped or pyPlane.aligned:
                             cutterList.remove(plane)
