@@ -527,45 +527,43 @@ class _PyPlane(_Py):
         ''''''
 
         if self.aligned:
+
+            [numWire, numGeom] = [self.numWire, self.numGeom]
             plane = self.shape
+            big = self.bigShape
+            enormous = self.enormousShape
+            geom = self.geom
+            geomShape = self.geomShape
+            forward = self.forward
+            backward = self.backward
+            rear = self.rear
+            rango = self.rango
+
             if not plane:
-                [numWire, numGeom] = [self.numWire, self.numGeom]
-                
-                big = self.bigShape
-                enormous = self.enormousShape
-                geom = self.geom
-                geomShape = self.geomShape
-                forward = self.forward
-                backward = self.backward
-                rear = self.rear
-                rango = self.rango
-    
-                #if not plane:
                 (nWire, nGeom) = self.angle
                 pyPlane = self.selectPlane(nWire, nGeom)
                 plane = pyPlane.shape
                 big = pyPlane.bigShape
                 enormous = pyPlane.enormousShape
-    
-                pyPlane = _PyPlane(numWire, numGeom)
-                pyPlane.geomShape = geomShape
-                pyPlane.geom = geom
-                pyPlane.forward = forward
-                pyPlane.backward = backward
-                pyPlane.rear = rear
-                pyPlane.rango = rango
-                pyPlane.aligned = True
-                pyPlane.reflexed = True
-                pyPlane.shape = plane.copy()
-                pyPlane.bigShape = big
-                pyPlane.enormousShape = enormous
-                pyPlane.angle = self.angle
-                return pyPlane
 
-            else:
-                return self
+            pyPlane = _PyPlane(numWire, numGeom)
+            pyPlane.geomShape = geomShape
+            pyPlane.geom = geom
+            pyPlane.forward = forward
+            pyPlane.backward = backward
+            pyPlane.rear = rear
+            pyPlane.rango = rango
+            pyPlane.aligned = True
+            pyPlane.reflexed = True
+            pyPlane.shape = plane.copy()
+            pyPlane.bigShape = big
+            pyPlane.enormousShape = enormous
+            pyPlane.angle = self.angle
+
+            return pyPlane
 
         else:
+
             return self
 
     def ordinaries(self, pyWire):
@@ -579,25 +577,25 @@ class _PyPlane(_Py):
         cutterList = []
         for pyPl in pyPlaneList:
             if pyPl.numGeom != numGeom:
-                print 'numGeom ', pyPl.numGeom
+                # print 'numGeom ', pyPl.numGeom
                 if not (pyPl.choped and not pyPl.aligned):
                     pl = pyPl.shape
 
                     if not pyPl.aligned:
-                        print 'a'
+                        # print 'a'
                         cutterList.append(pl)
 
                     else:
-                        print 'b'
+                        # print 'b'
                         if pl:
-                            print 'b1'
+                            # print 'b1'
 
                             pyAli =\
                                 self.selectAlignment(pyPl.numWire,
                                                      pyPl.numGeom)
 
                             if self.aligned:
-                                print 'b11'
+                                # print 'b11'
 
                                 pyAlign =\
                                     self.selectAlignment(self.numWire,
@@ -636,12 +634,12 @@ class _PyPlane(_Py):
                                             break
     
                                     else:
-                                        print 'b111'
+                                        # print 'b111'
                                         simulatedPl = pyAli.simulatedShape
                                         cutterList.extend(simulatedPl)
 
                             else:
-                                print 'b12'
+                                # print 'b12'
                                 simulatedPl = pyAli.simulatedShape
                                 cutterList.extend(simulatedPl)
 

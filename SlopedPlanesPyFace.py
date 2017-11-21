@@ -223,7 +223,7 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
             numWire = pyWire.numWire
-            print'###### numWire ', numWire
+            # print'###### numWire ', numWire
             ref = False     # the second plane of a reflex corner
 
             lenWire = len(pyWire.planes)
@@ -233,7 +233,7 @@ class _PyFace(_Py):
 
             for pyPlane in pyPlaneList:
                 numGeom = pyPlane.numGeom
-                print'### numGeom ', numGeom
+                # print'### numGeom ', numGeom
 
                 if not pyPlane.geomAligned:     # has not shape
 
@@ -253,13 +253,13 @@ class _PyFace(_Py):
                                 pyReflex = _PyReflex()
 
                     if ref:
-                        print'ref'
+                        # print'ref'
                         forwardLine = self.forBack(pyPlane, 'backward')
                         ref = False
 
                         if resetFace:
                             if pyPlane.geomAligned:
-                                print'ref reset'
+                                # print'ref reset'
 
                                 self.seatReflex(pyWire, pyReflex,
                                                 pyPlane, 'backward')
@@ -276,18 +276,18 @@ class _PyFace(_Py):
                     if ((numWire == 0 and corner == 'reflex') or
                        (numWire > 0 and corner == 'convex')):
                         # does look for alignaments
-                        print'1'
+                        # print'1'
 
                         forward = pyPlane.forward
                         section = forward.section(shapeGeomFace, _Py.tolerance)
 
                         if section.Edges:
-                            print'11'
+                            # print'11'
 
                             numEdge = -1
                             for edge in section.Edges:
                                 numEdge += 1
-                                print'111'
+                                # print'111'
 
                                 edgeStart = edge.firstVertex(True).Point
                                 point = self.roundVector(edgeStart)
@@ -298,14 +298,14 @@ class _PyFace(_Py):
                                 pyPl = pyW.planes[nGeom]
                                 if pyPl.geomAligned:
                                     # has a shape
-                                    print'1111'
+                                    # print'1111'
                                     edgeEnd = edge.lastVertex(True).Point
                                     distStart = edgeStart.sub(lineEnd).Length
                                     distEnd = edgeEnd.sub(lineEnd).Length
 
                                     if distStart < distEnd:
                                         # aligment or falseAlignment
-                                        print'11111'
+                                        # print'11111'
 
                                         if numEdge == 0:
                                             pyAlign =\
@@ -318,7 +318,7 @@ class _PyFace(_Py):
 
                                         if fAng == sAng:
                                             # alignment
-                                            print'111111'
+                                            # print'111111'
                                             pyPl.geomAligned = None
                                             pyPl.angle = [numWire, numGeom]
 
@@ -336,7 +336,7 @@ class _PyFace(_Py):
 
                                         else:
                                             # falseAlignment
-                                            print'111112'
+                                            # print'111112'
                                             if numEdge > 0:
                                                 pyAlign =\
                                                     self.doAlignment(pyPlane)
@@ -354,22 +354,22 @@ class _PyFace(_Py):
 
                                         if pyAli:
                                             if pyAli.falsify:
-                                                print'break'
+                                                # print'break'
                                                 break
 
                                         if pyAlign.falsify:
-                                            print'break'
+                                            # print'break'
                                             break
 
                                     else:
                                         # no alignment no falseAlignment
                                         # confrontation directions
-                                        print'11112'
+                                        # print'11112'
                                         if corner == 'reflex':
-                                            print'111121'
+                                            # print'111121'
                                             ref = True
                                             if resetFace:
-                                                print'1111211'
+                                                # print'1111211'
                                                 pyReflex =\
                                                     self.doReflex(pyWire,
                                                                   pyPlane)
@@ -378,14 +378,14 @@ class _PyFace(_Py):
                                 else:
                                     # hasn't a shape
                                     # prepares the next chop
-                                    print'1112'
+                                    # print'1112'
                                     if pyPl.numWire == pyPlane.numWire:
                                         ref = True
                                     pyReflex = _PyReflex()
 
                             else:
                                 # finishes alignment
-                                print'end'
+                                # print'end'
                                 if corner == 'reflex':
                                     if resetFace:
                                         self.seatReflex(pyWire, pyReflex,
@@ -393,13 +393,13 @@ class _PyFace(_Py):
 
                         else:
                             # no alignment
-                            print'12'
+                            # print'12'
                             if corner == 'reflex':
                                 # exterior wire reflex
-                                print'121'
+                                # print'121'
                                 ref = True
                                 if resetFace:
-                                    print'1211'
+                                    # print'1211'
                                     pyReflex =\
                                         self.doReflex(pyWire, pyPlane)
 
@@ -407,19 +407,19 @@ class _PyFace(_Py):
                         # doesn't look for alignments
                         # exterior wires convex
                         # interior wires reflex
-                        print'2'
+                        # print'2'
                         if corner == 'reflex':
                             # interior wire reflex
-                            print'21'
+                            # print'21'
                             if not pyPlane.choped:
-                                print'211'
+                                # print'211'
                                 num = self.sliceIndex(numGeom+1, lenWire)
                                 pyNextPlane = pyPlaneList[num]
                                 if not pyNextPlane.choped:      # is not an alignament
-                                    print'2111'
+                                    # print'2111'
                                     ref = True
                                     if resetFace:
-                                        print'21111'
+                                        # print'21111'
                                         pyReflex =\
                                             self.doReflex(pyWire, pyPlane)
 
@@ -524,46 +524,46 @@ class _PyFace(_Py):
 
         edge = False
 
-        print[v.Point for v in section.Vertexes]
+        # print[v.Point for v in section.Vertexes]
 
         if section.Edges:
-            print'a'
+            # print'a'
             edge = True
             if direction == 'forward':
-                print'aa'
+                # print'aa'
                 vertex = section.Edges[0].Vertexes[0]
             else:
-                print'aaa'
+                # print'aaa'
                 vertex = section.Edges[-1].Vertexes[1]
 
         elif len(section.Vertexes) != lenWire:
-            print'b'
+            # print'b'
             vertex = section.Vertexes[1]
 
         else:
-            print'c'
+            # print'c'
             if pyPlane.aligned:
-                print'cc'
+                # print'cc'
                 if pyPlane.shape:
-                    print 'cc1'
+                    # print 'cc1'
                     lineEndPoint = pyPlane.geomAligned.EndPoint
                     if section.Vertexes[0].Point == lineEndPoint:
-                        print 'cc11'
+                        # print 'cc11'
                         return
                     else:
-                        print 'cc12'
+                        # print 'cc12'
                         vertex = section.Vertexes[1]
                 else:
-                    print 'cc2'
+                    # print 'cc2'
                     return
             elif pyPlane.choped:
-                print 'ccc'
+                # print 'ccc'
                 vertex = section.Vertexes[1]
             else:
-                print'cccc'
+                # print'cccc'
                 vertex = section.Vertexes[1]
 
-        print vertex.Point
+        # print vertex.Point
 
         nGeom =\
             self.findRear(pyWire, pyPlane, vertex, direction, edge)
@@ -587,7 +587,7 @@ class _PyFace(_Py):
         section = vertex.section(shapeGeomWire, _Py.tolerance)
 
         if len(section.Vertexes) > lenWire:
-            print 'a'
+            # print 'a'
             nGeom = -1
             for shape in shapeGeomWire:
                 nGeom += 1
@@ -596,7 +596,7 @@ class _PyFace(_Py):
                     break
 
         else:
-            print 'b'
+            # print 'b'
             coord = pyWire.coordinates
             nGeom = coord.index(self.roundVector(vertex.Point))
             if direction == 'backward':
@@ -604,10 +604,10 @@ class _PyFace(_Py):
 
         if edge:
             if direction == 'backward':
-                print 'c'
+                # print 'c'
                 nGeom = self.sliceIndex(nGeom+1, lenWire)
             else:
-                print 'd'
+                # print 'd'
                 nGeom = self.sliceIndex(nGeom-1, lenWire)
 
         pyPlane.addValue('rear', nGeom, direction)
@@ -696,10 +696,10 @@ class _PyFace(_Py):
             pass
 
         forwardLine = self.makeGeom(geom, startParam, endParam)
-        print'forwardLine ', forwardLine
+        # print'forwardLine ', forwardLine
         forwardLineShape = forwardLine.toShape()
         backwardLine = self.makeGeom(gg, sParam, eParam)
-        print'backwardLine ', backwardLine
+        # print'backwardLine ', backwardLine
         backwardLineShape = backwardLine.toShape()
 
         if direction == "forward":
@@ -1008,14 +1008,14 @@ class _PyFace(_Py):
                 base = pyAlign.base.shape
                 if base not in cutterList:
                     cutterList.append(base)
-                    print 'a', pyAlign.base.numGeom
+                    # print 'a', pyAlign.base.numGeom
 
             for pyPlane in pyAlign.aligns:
                 plane = pyPlane.shape
                 if plane:
                     if plane not in cutterList:
                         cutterList.append(plane)
-                        print 'b', pyPlane.numGeom
+                        # print 'b', pyPlane.numGeom
 
             for [pyChopOne, pyChopTwo] in pyAlign.chops:
 
@@ -1023,13 +1023,13 @@ class _PyFace(_Py):
                     chopOne = pyChopOne.shape
                     if chopOne not in cutterList:
                         cutterList.append(chopOne)
-                        print 'c', pyChopOne.numGeom
+                        # print 'c', pyChopOne.numGeom
 
                 if pyChopTwo.geomAligned:
                     chopTwo = pyChopTwo.shape
                     if chopTwo not in cutterList:
                         cutterList.append(chopTwo)
-                        print 'd', pyChopTwo.numGeom
+                        # print 'd', pyChopTwo.numGeom
 
         if cutterList:
 
@@ -1037,7 +1037,7 @@ class _PyFace(_Py):
                 for pyPlane in pyWire.planes:
                     plane = pyPlane.shape
                     if plane:
-                        print 'numGeom', pyPlane.numGeom
+                        # print 'numGeom', pyPlane.numGeom
 
                         if pyPlane.choped or pyPlane.aligned:
                             cutterList.remove(plane)
