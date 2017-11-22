@@ -258,35 +258,6 @@ class _PyAlignment(_Py):
 
         falsify = self.falsify
 
-        '''for chop in self.chops:
-
-            [pyOne, pyTwo] = chop
-
-            # print 'pyOne ', pyOne.numGeom
-            # print 'pyTwo ', pyTwo.numGeom
-
-            if not falsify:
-
-                enormousShapeOne = pyOne.enormousShape
-                enormousShapeTwo = pyTwo.enormousShape
-
-                shapeOne = pyOne.shape.copy()
-                cutterList = [enormousShapeTwo]
-                gS = pyOne.geomShape
-                ffOne = self.cutting(shapeOne, cutterList, gS)
-
-                shapeTwo = pyTwo.shape.copy()
-                cutterList = [enormousShapeOne]
-                gS = pyTwo.geomShape
-                ffTwo = self.cutting(shapeTwo, cutterList, gS)
-
-            else:
-
-                ffOne = pyOne.enormousShape
-                ffTwo = pyTwo.enormousShape
-
-            '''
-
         simulatedChop = self.simulatedChop
 
         numChop = -1
