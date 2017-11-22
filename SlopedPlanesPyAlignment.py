@@ -212,6 +212,8 @@ class _PyAlignment(_Py):
                 enormousShapeOne = pyOne.enormousShape
                 enormousShapeTwo = pyTwo.enormousShape
 
+                #if pyOne.numWire == pyTwo.numWire:
+
                 shapeOne = pyOne.shape.copy()
                 cutterList = [enormousShapeTwo]
                 gS = pyOne.geomShape
@@ -221,6 +223,11 @@ class _PyAlignment(_Py):
                 cutterList = [enormousShapeOne]
                 gS = pyTwo.geomShape
                 ffTwo = self.cutting(shapeTwo, cutterList, gS)
+
+                # else:
+
+                    # ffOne = pyOne.enormousShape
+                    # ffTwo = pyTwo.enormousShape
 
             else:
 
@@ -539,32 +546,34 @@ class _PyAlignment(_Py):
 
     def aligning(self):
 
-        ''''''
+        '''aligning(self)
+        '''
 
-        # print 'base ', (self.base.numWire, self.base.numGeom)
-        # print 'base shape ', self.base.shape
-        # print 'aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
-        # print 'chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
-        # for [x, y] in self.chops]
+        print '### base ', (self.base.numWire, self.base.numGeom)
+        print '### base shape ', self.base.shape
+        print '### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
+        print '### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
+                             for [x, y] in self.chops]
+
+        pyWireList = _Py.pyFace.wires
 
         pyBase = self.base
-
         enormousBase = pyBase.enormousShape
-
         aligns = self.aligns
-
         rangoChopList = self.rango
-        pyWireList = _Py.pyFace.wires
 
         pyCont = aligns[0]
         cont = pyCont.shape
         enormousCont = pyCont.enormousShape
 
-        chopList = []
+        # elaborates the chops
 
+        chopList = []
         numChop = -1
         for [pyOne, pyTwo] in self.chops:
             numChop += 1
+
+            # introduces the rangoChop and rango
 
             rangoChop = rangoChopList[numChop]
 
@@ -579,7 +588,7 @@ class _PyAlignment(_Py):
                     if not pyPl.aligned:
                         pl = pyPl.shape
                         cutList.append(pl)
-                        # print 'rangoChop ', nn
+                        print 'rangoChop ', nn
                     else:
                         pass  # ???
                 else:
@@ -594,7 +603,7 @@ class _PyAlignment(_Py):
                         if not pyPl.aligned:
                             rangoPlane = pyPl.shape
                             oneList.append(rangoPlane)
-                            # print 'rango ', nn
+                            print 'rango ', nn
 
             nW = pyTwo.numWire
             pyW = pyWireList[nW]
@@ -609,8 +618,9 @@ class _PyAlignment(_Py):
                         if not pyPl.aligned:
                             rangoPlane = pyPl.shape
                             twoList.append(rangoPlane)
-                            # print 'rango ', nn
+                            print 'rango ', nn
 
+            # prepared for planes between the rears of the chops ?
             '''nW1 = pyOne.numWire
             pyW = pyWireList[nW1]
             pyPlaneList = pyW.planes
@@ -662,6 +672,8 @@ class _PyAlignment(_Py):
                 pyW = pyWireList[nW]
                 pyPlaneList = pyW.planes
 
+                # introduces the rears
+
                 rear = pyPlane.rear
                 for nG in rear:
                     pyPl = pyPlaneList[nG]
@@ -673,6 +685,8 @@ class _PyAlignment(_Py):
 
                 cutterList.extend(cutList)
 
+                # TODO join
+
                 if self.falsify:
                     cutterList.extend(oneList)
                     cutterList.extend(twoList)
@@ -680,11 +694,11 @@ class _PyAlignment(_Py):
                 else:
                     if num == 0:
                         cutterList.extend(oneList)
+                        cutterList.extend(twoList)
                         # # cutterList.extend(rearOneList)
-                        cutterList.extend(twoList)
                     else:
-                        cutterList.extend(oneList)
                         cutterList.extend(twoList)
+                        cutterList.extend(oneList)
                         # # cutterList.extend(rearTwoList)
 
                 if cutterList:
@@ -693,9 +707,13 @@ class _PyAlignment(_Py):
                     plane = self.cutting(plane, cutterList, gS)
                     pyPlane.shape = plane
 
+            # twin
+
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
+
+                print '# pyPlane ', pyPlane.numGeom
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
@@ -711,7 +729,9 @@ class _PyAlignment(_Py):
                 gS = [pyOne, pyTwo][num].geomShape
                 planeCopy = planeCopy.cut(cList, _Py.tolerance)
 
-                for ff in planeCopy.Faces:
+                print planeCopy.Faces
+
+                '''for ff in planeCopy.Faces:
                     section = ff.section([gS], _Py.tolerance)
                     if not section.Edges:
                         sect = ff.section([_Py.face], _Py.tolerance)
@@ -719,7 +739,20 @@ class _PyAlignment(_Py):
                             planeCopy = ff
                             plane = self.cutting(plane, [planeCopy], gS)
                             pyPlane.shape = plane
-                            break
+                            break'''
+
+                cutterList = []
+
+                for ff in planeCopy.Faces:
+                    section = ff.section([gS], _Py.tolerance)
+                    if not section.Edges:
+                        sect = ff.section([_Py.face], _Py.tolerance)
+                        if sect.Edges:
+                            cutterList.append(ff)
+
+                if cutterList:
+                    plane = self.cutting(plane, cutterList, gS)
+                    pyPlane.shape = plane
 
             shapeOne = pyOne.shape
             shapeTwo = pyTwo.shape
@@ -735,6 +768,8 @@ class _PyAlignment(_Py):
             pyTwo.shape = ff
 
             chopList.append([pyOne, pyTwo])
+
+        # elaborates the alignments
 
         if not self.falsify:
 

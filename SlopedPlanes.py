@@ -421,7 +421,7 @@ class _SlopedPlanes(_Py):
                 planeFaceList.append(upFace)
 
                 # the Up System break the interior wires numeration
-                # first give the angles and later apply Up
+                # first give the angles and later apply Up. SOLVED?
 
             if slopedPlanes.Down:
                 face = faceList[numFace]
