@@ -103,9 +103,27 @@ class _Py(object):
         pyAlignList = _Py.pyFace.alignments
         for pyAlign in pyAlignList:
             if pyAlign.base == pyPlane:
-                return pyAlign
+                if not pyAlign.falsify:
+                    return pyAlign
 
         return None
+
+    def selectAllAlignmentBase(self, nWire, nGeom):
+
+        ''''''
+
+        pyWireList = _Py.pyFace.wires
+        pyWire = pyWireList[nWire]
+        pyPlaneList = pyWire.planes
+        pyPlane = pyPlaneList[nGeom]
+
+        pyAlignList = _Py.pyFace.alignments
+        pyAliList = []
+        for pyAlign in pyAlignList:
+            if pyAlign.base == pyPlane:
+                pyAliList.append(pyAlign)
+
+        return pyAliList
 
     def selectAllAlignment(self, nWire, nGeom):
 

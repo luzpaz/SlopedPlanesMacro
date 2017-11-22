@@ -549,11 +549,11 @@ class _PyAlignment(_Py):
         '''aligning(self)
         '''
 
-        print '### base ', (self.base.numWire, self.base.numGeom)
-        print '### base shape ', self.base.shape
-        print '### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
-        print '### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
-                             for [x, y] in self.chops]
+        # print '### base ', (self.base.numWire, self.base.numGeom)
+        # print '### base shape ', self.base.shape
+        # print '### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
+        # print '### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)]
+        # for [x, y] in self.chops]
 
         pyWireList = _Py.pyFace.wires
 
@@ -588,7 +588,7 @@ class _PyAlignment(_Py):
                     if not pyPl.aligned:
                         pl = pyPl.shape
                         cutList.append(pl)
-                        print 'rangoChop ', nn
+                        # print 'rangoChop ', nn
                     else:
                         pass  # ???
                 else:
@@ -603,7 +603,7 @@ class _PyAlignment(_Py):
                         if not pyPl.aligned:
                             rangoPlane = pyPl.shape
                             oneList.append(rangoPlane)
-                            print 'rango ', nn
+                            # print 'rango ', nn
 
             nW = pyTwo.numWire
             pyW = pyWireList[nW]
@@ -618,9 +618,9 @@ class _PyAlignment(_Py):
                         if not pyPl.aligned:
                             rangoPlane = pyPl.shape
                             twoList.append(rangoPlane)
-                            print 'rango ', nn
+                            # print 'rango ', nn
 
-            # prepared for planes between the rears of the chops ?
+            # prepared for planes between the rears of the chops ? is this necessary ?
             '''nW1 = pyOne.numWire
             pyW = pyWireList[nW1]
             pyPlaneList = pyW.planes
@@ -713,7 +713,7 @@ class _PyAlignment(_Py):
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
 
-                print '# pyPlane ', pyPlane.numGeom
+                # print '# pyPlane ', pyPlane.numGeom
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
@@ -729,7 +729,7 @@ class _PyAlignment(_Py):
                 gS = [pyOne, pyTwo][num].geomShape
                 planeCopy = planeCopy.cut(cList, _Py.tolerance)
 
-                print planeCopy.Faces
+                # print planeCopy.Faces
 
                 '''for ff in planeCopy.Faces:
                     section = ff.section([gS], _Py.tolerance)
