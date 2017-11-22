@@ -258,7 +258,7 @@ class _PyAlignment(_Py):
 
         falsify = self.falsify
 
-        for chop in self.chops:
+        '''for chop in self.chops:
 
             [pyOne, pyTwo] = chop
 
@@ -284,6 +284,16 @@ class _PyAlignment(_Py):
 
                 ffOne = pyOne.enormousShape
                 ffTwo = pyTwo.enormousShape
+
+            '''
+
+        simulatedChop = self.simulatedChop
+
+        numChop = -1
+        for chop in self.chops:
+            numChop += 1
+
+            [ffOne, ffTwo] = simulatedChop[numChop]
 
             enormShape = ffOne
 
