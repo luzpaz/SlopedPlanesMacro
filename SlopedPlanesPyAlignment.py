@@ -43,7 +43,8 @@ class _PyAlignment(_Py):
         self.chops = []
         self.rango = []
         self.falsify = False
-        self.simulatedAlignment = None
+        self.simulatedAlignment = []
+        self.simulatedChop = []
         self.prior = None
         self.later = None
 
@@ -132,6 +133,20 @@ class _PyAlignment(_Py):
         self._simulatedAlignment = simulatedAlignment
 
     @property
+    def simulatedChop(self):
+
+        ''''''
+
+        return self._simulatedChop
+
+    @simulatedChop.setter
+    def simulatedChop(self, simulatedChop):
+
+        ''''''
+
+        self._simulatedChop = simulatedChop
+
+    @property
     def prior(self):
 
         ''''''
@@ -180,6 +195,12 @@ class _PyAlignment(_Py):
             if not self.base.shape:
                 virtualBase = self.base.virtualizing()
                 self.base = virtualBase
+
+    def simulatingChop(self):
+
+        ''''''
+
+        pass
 
     def trimming(self):
 
