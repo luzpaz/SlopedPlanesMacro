@@ -829,6 +829,9 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.virtualizing()
 
+        for pyAlign in self.alignments:
+            pyAlign.simulatingChop()
+
     def trimming(self):
 
         '''trimming(self)

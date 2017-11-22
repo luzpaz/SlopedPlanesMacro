@@ -200,7 +200,36 @@ class _PyAlignment(_Py):
 
         ''''''
 
-        pass
+        falsify = self.falsify
+        simulatedChop = []
+
+        for chop in self.chops:
+
+            [pyOne, pyTwo] = chop
+
+            if not falsify:
+
+                enormousShapeOne = pyOne.enormousShape
+                enormousShapeTwo = pyTwo.enormousShape
+
+                shapeOne = pyOne.shape.copy()
+                cutterList = [enormousShapeTwo]
+                gS = pyOne.geomShape
+                ffOne = self.cutting(shapeOne, cutterList, gS)
+
+                shapeTwo = pyTwo.shape.copy()
+                cutterList = [enormousShapeOne]
+                gS = pyTwo.geomShape
+                ffTwo = self.cutting(shapeTwo, cutterList, gS)
+
+            else:
+
+                ffOne = pyOne.enormousShape
+                ffTwo = pyTwo.enormousShape
+
+            simulatedChop.append([ffOne, ffTwo])
+
+        self.simulatedChop = simulatedChop
 
     def trimming(self):
 
