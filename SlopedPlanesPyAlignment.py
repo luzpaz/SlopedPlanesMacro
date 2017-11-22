@@ -244,7 +244,7 @@ class _PyAlignment(_Py):
         The alignment blocks the progress
         of the planes in its front and laterals'''
 
-        print '### base ', (self.base.numWire, self.base.numGeom)
+        # print '### base ', (self.base.numWire, self.base.numGeom)
 
         pyWireList = _Py.pyFace.wires
 
@@ -277,7 +277,7 @@ class _PyAlignment(_Py):
 
             for pyPlane in chop:
 
-                print '# chop ', pyPlane.numGeom
+                # print '# chop ', pyPlane.numGeom
 
                 enShape = pyPlane.enormousShape
 
@@ -286,23 +286,23 @@ class _PyAlignment(_Py):
                     pyWire = pyWireList[numWire]
                     pyPlaneList = pyWire.planes
 
-                    print 'rango ', pyPlane.rango
+                    # print 'rango ', pyPlane.rango
                     brea = False
                     for ran in pyPlane.rango:
                         for nG in ran:
                             pyPl = pyPlaneList[nG]
                             if not pyPl.aligned:
 
-                                print 'pyPl ', pyPl.numGeom
+                                # print 'pyPl ', pyPl.numGeom
 
                                 if not falsify:
-                                    print 'a'
+                                    # print 'a'
                                     cList = [enormShape]
                                     if not brea:
-                                        print 'aa'
+                                        # print 'aa'
                                         cList.append(enormousShape)
                                 else:
-                                    print 'b'
+                                    # print 'b'
                                     cList = [enormShape]
 
                                 pyPl.trimming(enShape, cList)

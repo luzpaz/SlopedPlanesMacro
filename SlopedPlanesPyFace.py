@@ -349,7 +349,6 @@ class _PyFace(_Py):
                                                                pyW, pyPl)
 
                                         if pyPl.numWire == pyPlane.numWire:
-                                            print 'here?'
                                             ref = True
 
                                         pyReflex = _PyReflex()
