@@ -971,7 +971,7 @@ class _PyFace(_Py):
                                             break
                                 else:
                                     # print 'D'
-                                    totalList.extend(pyAlign.simulatedShape)
+                                    totalList.extend(pyAlign.simulatedAlignment)
 
                         if totalList:
                             gS = pyPlane.geomShape
