@@ -410,7 +410,7 @@ class _PyAlignment(_Py):
         pyBase = self.base
         base = pyBase.shape.copy()
         enormousBase = pyBase.enormousShape
-        # print(pyBase.numWire, pyBase.numGeom)
+        print(pyBase.numWire, pyBase.numGeom)
 
         chops = self.chops
         rango = self.rango
@@ -525,14 +525,30 @@ class _PyAlignment(_Py):
 
         else:
 
+            base = [base]
+
+            # cambiar a angulos
+            pyAli = self.selectAlignmentBase(pyBase.numWire, pyBase.numGeom)
+            if pyAli:
+                print 'a'
+                base = pyAli.simulatedAlignment
+
             pyCont = self.aligns[0]
             cont = pyCont.shape.copy()
-            pyLater = self.later
-            bigLater = pyLater.bigShape
-            gS = pyCont.geomShape
-            cont = self.cutting(cont, [bigLater], gS)
 
-            shapeList = [base, cont]
+            pyAli = self.selectAlignmentBase(pyCont.numWire, pyCont.numGeom)
+            if pyAli:
+                print 'aa'
+                cont = pyAli.simulatedAlignment
+            else:
+                print 'bb'
+                pyLater = self.later
+                bigLater = pyLater.bigShape
+                gS = pyCont.geomShape
+                cont = self.cutting(cont, [bigLater], gS)
+                cont = [cont]
+
+            shapeList = cont + base
 
         self.simulatedAlignment = shapeList
 

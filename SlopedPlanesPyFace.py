@@ -436,7 +436,7 @@ class _PyFace(_Py):
 
         self.removeExcessReflex()
 
-        # self.printSummary()
+        self.printSummary()
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
