@@ -32,7 +32,7 @@ __url__ = "http://www.freecadweb.org"
 
 class _PyAlignment(_Py):
 
-    ''''''
+    '''The complementary python object class for alignments'''
 
     def __init__(self):
 

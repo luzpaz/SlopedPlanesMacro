@@ -32,7 +32,7 @@ __url__ = "http://www.freecadweb.org"
 
 class _PyWire(_Py):
 
-    ''''''
+    '''The complementary python object class for wires'''
 
     def __init__(self, numWire):
 
@@ -227,7 +227,8 @@ class _PyWire(_Py):
 
     def priorLater(self):
 
-        ''''''
+        '''priorLater(self)
+        '''
 
         pyPlaneList = self.planes
         lenWire = len(pyPlaneList)
@@ -301,7 +302,8 @@ class _PyWire(_Py):
 
     def simulating(self):
 
-        ''''''
+        '''simulating(self)
+        '''
 
         for pyReflex in self.reflexs:
             pyReflex.virtualizing()
@@ -311,7 +313,8 @@ class _PyWire(_Py):
 
     def reflexing(self):
 
-        ''''''
+        '''reflexing(self)
+        '''
 
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
@@ -327,14 +330,16 @@ class _PyWire(_Py):
 
     def reviewing(self):
 
-        ''''''
+        '''reviewing(self)
+        '''
 
         for pyReflex in self.reflexs:
             pyReflex.reviewing()
 
     def clasifyReflexPlanes(self):
 
-        ''''''
+        '''clasifyReflexPlanes(self)
+        '''
 
         solved, unsolved = [], []
 
@@ -351,7 +356,8 @@ class _PyWire(_Py):
 
     def reSolveReflexs(self, solved=[], unsolved=[], counter=0):
 
-        ''''''
+        '''reSolveReflexs(self, solved=[], unsolved=[], counter=0)
+        '''
 
         # print 'solved ', [p.numGeom for p in solved]
         # print 'unsolved ', [p.numGeom for p in unsolved]
@@ -387,7 +393,8 @@ class _PyWire(_Py):
 
     def betweenReflexs(self):
 
-        ''''''
+        '''betweenReflexs(self)
+        '''
 
         pyReflexList = self.reflexs
         lenR = len(pyReflexList)
@@ -424,7 +431,8 @@ class _PyWire(_Py):
 
     def rearing(self):
 
-        ''''''
+        '''rearing(self)
+        '''
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self)
@@ -435,13 +443,12 @@ class _PyWire(_Py):
         '''
 
         for pyPlane in self.planes:
-            # no reflexed and choped. Yes aligned
             if not (pyPlane.reflexed and not pyPlane.aligned):
-                print pyPlane.numGeom
-                print pyPlane.reflexed
-                print pyPlane.choped
-                print pyPlane.aligned
+                # no reflexed and no choped. Yes aligned
+                # print pyPlane.numGeom
+                # print pyPlane.reflexed
+                # print pyPlane.choped
+                # print pyPlane.aligned
                 if pyPlane.shape:
-                    print 'ordinaries ', pyPlane.numGeom
+                    # print 'ordinaries ', pyPlane.numGeom
                     pyPlane.ordinaries(self)
-

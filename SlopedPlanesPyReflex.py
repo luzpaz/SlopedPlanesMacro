@@ -33,7 +33,7 @@ __url__ = "http://www.freecadweb.org"
 
 class _PyReflex(_Py):
 
-    ''''''
+    '''The complementary python object class for reflex corners'''
 
     def __init__(self):
 
@@ -462,6 +462,8 @@ class _PyReflex(_Py):
                         aa = aa.removeShape([ff])
                         under.append(ff)
                         ### break
+
+            # TODO refact
 
             if under:
                 for ff in aa.Faces:
