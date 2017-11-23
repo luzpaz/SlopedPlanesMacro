@@ -49,6 +49,7 @@ class _PyFace(_Py):
         self.wires = []
         self.alignments = []
         self.reset = False
+        self.shapeGeom = []
 
     @property
     def numFace(self):
@@ -105,6 +106,20 @@ class _PyFace(_Py):
         ''''''
 
         self._reset = reset
+
+    @property
+    def shapeGeom(self):
+
+        ''''''
+
+        return self._shapeGeom
+
+    @shapeGeom.setter
+    def shapeGeom(self, shapeGeom):
+
+        ''''''
+
+        self._shapeGeom = shapeGeom
 
     def __getstate__(self):
 
@@ -213,13 +228,10 @@ class _PyFace(_Py):
         resetFace = self.reset
         if resetFace:
             for pyWire in pyWireList:
-                pyWire.reflexs = []
+                pyWire.reflexs = []     # reset reflexs
 
         self.alignments = []    # always reset alignments
-
-        shapeGeomFace = []      # alignaments between wires
-        for pyWire in pyWireList:
-            shapeGeomFace.extend(pyWire.shapeGeom)
+        shapeGeomFace = self.shapeGeom
 
         for pyWire in pyWireList:
             numWire = pyWire.numWire

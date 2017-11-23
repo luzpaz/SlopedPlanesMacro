@@ -73,7 +73,7 @@ class _SlopedPlanes(_Py):
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
         The Proxy stores:
-        State, Type, and the complementary python objects'''
+        State, Type, and the complementary python objects (Pyth)'''
 
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "SlopedPlanes")
@@ -239,7 +239,7 @@ class _SlopedPlanes(_Py):
 
             pyWireListOld = pyFace.wires
             pyWireListNew = []
-
+            geomShapeFace = []
             numWire = -1
             for wire in wireList:
                 numWire += 1
@@ -262,7 +262,6 @@ class _SlopedPlanes(_Py):
                     pyWireListNew.append(pyWire)
                     pyWire.reset = True
                     pyFace.reset = True
-
                 pyWire.coordinates = coo
 
                 falseFace = falseFaceList[numWire]
@@ -294,7 +293,9 @@ class _SlopedPlanes(_Py):
 
                 pyWire.planes = pyPlaneListNew
                 pyWire.shapeGeom = geomShapeWire
+                geomShapeFace.extend(geomShapeWire)
 
+            pyFace.shapeGeom = geomShapeFace
             pyFace.wires = pyWireListNew
 
             pyFace.parsing()
@@ -346,7 +347,8 @@ class _SlopedPlanes(_Py):
                     angle = pyPlane.angle
 
                     # some figures break the planes numeration
-                    '''print 'numGeom ', numAngle
+                    '''
+                    print 'numGeom ', numAngle
                     plane = pyPlane.shape
                     gS = pyPlane.geomShape
                     print (gS.firstVertex(True).Point,
@@ -360,6 +362,7 @@ class _SlopedPlanes(_Py):
                     else:
                         print 'no plane'
                     '''
+                    # TODO solution at task panel
 
                     if [numWire, numAngle] not in originList:
 
@@ -436,7 +439,6 @@ class _SlopedPlanes(_Py):
                 planeFaceList.extend(mirror.Faces)
 
             for plane in planeFaceList:
-                # if plane:   # only for develop. CLEAN
                 plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
                              degrees(sketchAngle))
                 plane.translate(sketchBase)
@@ -513,6 +515,7 @@ class _SlopedPlanes(_Py):
             dct = pyFace.__dict__.copy()
             wires, alignments = pyFace.__getstate__()
             dct['_wires'], dct['_alignments'] = wires, alignments
+            dct['_shapeGeom'] = []
             pyth.append(dct)
         state['Pyth'] = pyth
 
