@@ -436,6 +436,7 @@ class _SlopedPlanes(_Py):
                 planeFaceList.extend(mirror.Faces)
 
             for plane in planeFaceList:
+                # if plane:   # only for develop. CLEAN
                 plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
                              degrees(sketchAngle))
                 plane.translate(sketchBase)
