@@ -495,7 +495,8 @@ class _SlopedPlanes(_Py):
 
     def overWritePyProp(self, prop, value):
 
-        ''''''
+        '''overWritePyProp(self, prop, value)
+        '''
 
         for pyFace in self.Pyth:
             for pyWire in pyFace.wires:

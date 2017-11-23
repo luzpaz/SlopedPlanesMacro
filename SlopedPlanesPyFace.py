@@ -226,6 +226,7 @@ class _PyFace(_Py):
         pyWireList = self.wires
 
         resetFace = self.reset
+
         if resetFace:
             for pyWire in pyWireList:
                 pyWire.reflexs = []     # reset reflexs
@@ -288,7 +289,7 @@ class _PyFace(_Py):
 
                     if ((numWire == 0 and corner == 'reflex') or
                        (numWire > 0 and corner == 'convex')):
-                        # does look for alignaments
+                        # does look for alignments
                         # print '1'
 
                         forward = pyPlane.forward
@@ -366,7 +367,6 @@ class _PyFace(_Py):
                                         pyReflex = _PyReflex()
 
                                         if pyAli:
-                                            #if pyAli.falsify:
                                             # print 'break'
                                             break
 
@@ -375,7 +375,7 @@ class _PyFace(_Py):
                                             break
 
                                     else:
-                                        # no alignment no falseAlignment
+                                        # no alignment, no falseAlignment
                                         # confrontation directions
                                         # print '11112'
                                         if corner == 'reflex':
@@ -428,7 +428,7 @@ class _PyFace(_Py):
                                 # print '211'
                                 num = self.sliceIndex(numGeom+1, lenWire)
                                 pyNextPlane = pyPlaneList[num]
-                                if not pyNextPlane.choped:      # is not an alignament
+                                if not pyNextPlane.choped:    # is not an alignament
                                     # print '2111'
                                     ref = True
                                     if resetFace:
@@ -448,13 +448,15 @@ class _PyFace(_Py):
 
         self.removeExcessReflex()
 
-        self.printSummary()
+        # self.printSummary()
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
         '''seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl)
-        pyPlane is the base plane
-        pyPl is the aligned plane
+        pyAlign is the alignment.
+        pyPlane is the base plane. pyWire is its wire
+        pyPl is the continued plane. pyW is its wire
+        If pyAlign finds other alignment return it, pyAli, or return None
         '''
 
         numWire = pyWire.numWire
@@ -464,69 +466,67 @@ class _PyFace(_Py):
         nGeom = pyPl.numGeom
         # print  'pyPl ', (nWire, nGeom)
 
-        aL = pyAlign.aligns
-        cL = pyAlign.chops
+        alignList = pyAlign.aligns
+        chopList = pyAlign.chops
 
         jumpChop = False
         if pyAlign.falsify:
             if pyPlane.aligned:
-
                 pyA = self.selectAlignmentBase(numWire, numGeom)
 
                 if pyA:
+                    # a falseAlignment where base plane is an alignment
                     jumpChop = True
                     pp = pyA.aligns[-1]
-                    numC = pp.numWire
-                    pyWW = self.wires[numC]
-                    lenWire = len(pyWW.planes)
-                    chopOne = self.sliceIndex(pp.numGeom+1, lenWire)
+                    numWireChopOne = pp.numWire
+                    pyw = self.wires[numWireChopOne]
+                    lenWire = len(pyw.planes)
+                    numGeomChopOne = self.sliceIndex(pp.numGeom+1, lenWire)
 
         if not jumpChop:
 
             lenWire = len(pyWire.planes)
-            if aL:
-                num = aL[-1].numGeom
-                chopOne = self.sliceIndex(num+1, lenWire)
-                numC = aL[-1].numWire
+            if alignList:
+                num = alignList[-1].numGeom
+                numGeomChopOne = self.sliceIndex(num+1, lenWire)
+                numWireChopOne = alignList[-1].numWire
             else:
-                chopOne = self.sliceIndex(numGeom+1, lenWire)
-                numC = numWire
+                numGeomChopOne = self.sliceIndex(numGeom+1, lenWire)
+                numWireChopOne = numWire
 
-        aL.append(pyPl)
+        alignList.append(pyPl)
 
         if pyAlign.falsify:
             pyAli = None
         else:
             pyAli = self.selectAlignmentBase(nWire, nGeom)
             if pyAli:
-                # print  'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
-                # print  pyAli.falsify
+                # pyAlign finds an alignment pyAli
                 if not pyAli.falsify:
                     bL = pyAli.aligns
-                    aL.extend(bL)
+                    alignList.extend(bL)
                     for b in bL:
                         b.angle = [numWire, numGeom]
 
         pyWireList = self.wires
         if numWire == nWire:
-            chopTwo = self.sliceIndex(nGeom-1, lenWire)
+            numGeomChopTwo = self.sliceIndex(nGeom-1, lenWire)
         else:
             lenW = len(pyWireList[nWire].planes)
-            chopTwo = self.sliceIndex(nGeom-1, lenW)
+            numGeomChopTwo = self.sliceIndex(nGeom-1, lenW)
 
-        pyOne = self.selectPlane(numC, chopOne)
-        pyOne.reflexed = True
-        pyOne.choped = True
-        pyTwo = self.selectPlane(nWire, chopTwo)
-        pyTwo.reflexed = True
-        pyTwo.choped = True
-        cL.append([pyOne, pyTwo])
+        pyOne = self.selectPlane(numWireChopOne, numGeomChopOne)
+        pyTwo = self.selectPlane(nWire, numGeomChopTwo)
+        chopList.append([pyOne, pyTwo])
 
         if pyAli:
             if not pyAli.falsify:
                 dL = pyAli.chops
-                cL.extend(dL)
-                self.removeAlignment(pyAli)
+                chopList.extend(dL)
+                self.removeAlignment(pyAli)     # joined in one alignment
+
+        pyAlign.aligns = alignList
+        pyAlign.chops = chopList
 
         pyPlane.reflexed = True
         pyPlane.aligned = True
@@ -535,8 +535,10 @@ class _PyFace(_Py):
         if not pyAlign.falsify:
             pyPl.shape = None
 
-        pyAlign.aligns = aL
-        pyAlign.chops = cL
+        pyOne.reflexed = True
+        pyOne.choped = True
+        pyTwo.reflexed = True
+        pyTwo.choped = True
 
         return pyAli
 
