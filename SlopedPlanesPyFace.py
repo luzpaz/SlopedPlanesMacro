@@ -472,12 +472,12 @@ class _PyFace(_Py):
         jumpChop = False
         if pyAlign.falsify:
             if pyPlane.aligned:
-                pyA = self.selectAlignmentBase(numWire, numGeom)
+                pyAliBase = self.selectAlignmentBase(numWire, numGeom)
 
-                if pyA:
-                    # a falseAlignment where base plane is an alignment
+                if pyAliBase:
+                    # a falseAlignment where base plane is an alignment, pyAliBase
                     jumpChop = True
-                    pp = pyA.aligns[-1]
+                    pp = pyAliBase.aligns[-1]
                     numWireChopOne = pp.numWire
                     pyw = self.wires[numWireChopOne]
                     lenWire = len(pyw.planes)
@@ -501,7 +501,7 @@ class _PyFace(_Py):
         else:
             pyAli = self.selectAlignmentBase(nWire, nGeom)
             if pyAli:
-                # pyAlign finds an alignment pyAli
+                # pyAlign finds an alignment, pyAli
                 if not pyAli.falsify:
                     bL = pyAli.aligns
                     alignList.extend(bL)
@@ -771,7 +771,8 @@ class _PyFace(_Py):
 
     def priorLaterAlignments(self):
 
-        ''''''
+        '''priorLaterAlignments(self)
+        '''
 
         pyWireList = self.wires
 
