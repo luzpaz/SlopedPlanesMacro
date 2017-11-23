@@ -527,10 +527,11 @@ class _PyAlignment(_Py):
 
             base = [base]
 
-            # cambiar a angulos
-            pyAli = self.selectAlignmentBase(pyBase.numWire, pyBase.numGeom)
-            if pyAli:
+            if isinstance(pyBase.angle, list):
+
                 print 'a'
+                [alfa, beta] = pyBase.angle
+                pyAli = self.selectAlignmentBase(alfa, beta)
                 base = pyAli.simulatedAlignment
 
             pyCont = self.aligns[0]
