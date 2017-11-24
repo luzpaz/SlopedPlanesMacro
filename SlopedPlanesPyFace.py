@@ -925,6 +925,11 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.preReflexs()
 
+        for pyWire in self.wires:
+            for pyReflex in pyWire.reflexs:
+                pyReflex.simulating(force=True)
+        # ¿tengo que repetir los choped?
+
     def reflexing(self):
 
         '''reflexing(self)

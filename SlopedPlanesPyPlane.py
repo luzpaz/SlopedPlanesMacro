@@ -553,14 +553,23 @@ class _PyPlane(_Py):
         bigShape = self.cutting(bigShape, [enormousShape], gS)
         self.bigShape = bigShape
 
-    def simulating(self, enormousShape):
+    def simulating(self, enormousShape, force=False):
 
         ''''''
 
-        try:
-            plCopy = self.simulatedShape.copy()
-        except AttributeError:
+        # quitar force
+
+        if force:
+
             plCopy = self.shape.copy()
+            # el force que introduje por preReflexs no hace nada
+
+        else:
+
+            try:
+                plCopy = self.simulatedShape.copy()
+            except AttributeError:
+                plCopy = self.shape.copy()
 
         gS = self.geomShape
         plCopy = self.cutting(plCopy, [enormousShape], gS)

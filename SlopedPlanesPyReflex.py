@@ -79,7 +79,7 @@ class _PyReflex(_Py):
         pyOppR = pyOppReflex.virtualizing()
         self.planes = [pyR, pyOppR]
 
-    def simulating(self):
+    def simulating(self, force=False):
 
         ''''''
 
@@ -88,8 +88,8 @@ class _PyReflex(_Py):
         enormousR = pyR.enormousShape
         enormousOppR = pyOppR.enormousShape
 
-        pyR.simulating(enormousOppR)
-        pyOppR.simulating(enormousR)
+        pyR.simulating(enormousOppR, force)
+        pyOppR.simulating(enormousR, force)
 
     def preOrdinaries(self):
 
@@ -104,8 +104,8 @@ class _PyReflex(_Py):
                 for nG in ran:
                     pyPl = self.selectPlane(pyPlane.numWire, nG)
                     if pyPl.reflexed:
-                        pl = pyPl.simulatedShape
-                        if pl:
+                        if not pyPl.choped:
+                            pl = pyPl.simulatedShape
                             reflexList.append(pl)
                     else:
                         pl = pyPl.shape
@@ -131,6 +131,56 @@ class _PyReflex(_Py):
     def preReflexs(self):
 
         ''''''
+
+        # no hace efecto. Ni aun repitiendo el simulating.
+
+        print[p.numGeom for p in self.planes]
+
+        ordinarieList = []
+        pyOrdinarieList = []
+        for pyPlane in self.planes:
+            print pyPlane.numGeom
+            rango = pyPlane.rango
+            print rango
+            for ran in rango:
+                for nG in ran:
+                    pyPl = self.selectPlane(pyPlane.numWire, nG)
+                    if not pyPl.reflexed:
+                        pl = pyPl.bigShape
+                        ordinarieList.append(pl)
+                        pyOrdinarieList. append(pyPl.numGeom)
+
+        print 'ordinarieList ', pyOrdinarieList
+
+        for pyPlane in self.planes:
+            print pyPlane.numGeom
+            rango = pyPlane.rango
+            print rango
+            for ran in rango:
+                for nG in ran:
+                    pyPl = self.selectPlane(pyPlane.numWire, nG)
+                    if pyPl.reflexed:
+                        rangoPre = pyPl.rango
+                        rangoP = []
+                        for rr in rangoPre:
+                            for r in rr:
+                                rangoP.append(r)
+                        print 'rangoP ', rangoP
+                        cutterList = []
+                        num = -1
+                        for nn in pyOrdinarieList:
+                            num += 1
+                            if nn not in rangoP:
+                                cutterList.append(ordinarieList[num])
+
+                        if cutterList:
+
+                            print cutterList
+
+                            plane = pyPl.shape
+                            gS = pyPl.geomShape
+                            plane = self.cutting(plane, cutterList, gS)
+                            pyPl.shape = plane
 
         pass
 
@@ -363,7 +413,9 @@ class _PyReflex(_Py):
 
                 if kind != 'rangoCorner':
 
-                    pl = pyPl.shape.copy()
+                    # # OJO
+                    # pl = pyPl.shape.copy()
+                    pl = pyPl.simulatedShape
                     gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
                     pyR.addLink('divide', pl)
@@ -384,6 +436,8 @@ class _PyReflex(_Py):
 
                 if kind == 'rangoCorner':
                     # print 'Corner'
+                    # # OJO
+                    # pl = pyPl.shape.copy()
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
 
                 pyR.addLink('cutter', pl)
