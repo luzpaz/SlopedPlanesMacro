@@ -346,7 +346,7 @@ class _SlopedPlanes(_Py):
                     numAngle = pyPlane.numGeom
                     angle = pyPlane.angle
 
-                    # some figures break the planes numeration
+                    # some figures (a few of them) break the planes numeration
                     '''
                     print 'numGeom ', numAngle
                     plane = pyPlane.shape

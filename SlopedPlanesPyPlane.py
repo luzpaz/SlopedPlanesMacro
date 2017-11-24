@@ -490,38 +490,6 @@ class _PyPlane(_Py):
 
         return plane
 
-    def trimming(self, enormousShape, enormShape=None):
-
-        ''''''
-
-        shape = self.shape
-        bigShape = self.bigShape
-        gS = self.geomShape
-
-        if enormShape:
-            cutterList = enormShape
-        else:
-            cutterList = [enormousShape]
-
-        shape = self.cutting(shape, cutterList, gS)
-        self.shape = shape
-
-        bigShape = self.cutting(bigShape, [enormousShape], gS)
-        self.bigShape = bigShape
-
-    def simulating(self, enormousShape):
-
-        ''''''
-
-        try:
-            plCopy = self.simulatedShape.copy()
-        except AttributeError:
-            plCopy = self.shape.copy()
-
-        gS = self.geomShape
-        plCopy = self.cutting(plCopy, [enormousShape], gS)
-        self.simulatedShape = plCopy
-
     def virtualizing(self):
 
         ''''''
@@ -565,6 +533,110 @@ class _PyPlane(_Py):
         else:
 
             return self
+
+    def trimming(self, enormousShape, enormShape=None):
+
+        ''''''
+
+        shape = self.shape
+        bigShape = self.bigShape
+        gS = self.geomShape
+
+        if enormShape:
+            cutterList = enormShape
+        else:
+            cutterList = [enormousShape]
+
+        shape = self.cutting(shape, cutterList, gS)
+        self.shape = shape
+
+        bigShape = self.cutting(bigShape, [enormousShape], gS)
+        self.bigShape = bigShape
+
+    def simulating(self, enormousShape):
+
+        ''''''
+
+        try:
+            plCopy = self.simulatedShape.copy()
+        except AttributeError:
+            plCopy = self.shape.copy()
+
+        gS = self.geomShape
+        plCopy = self.cutting(plCopy, [enormousShape], gS)
+        self.simulatedShape = plCopy
+
+    def preOrdinaries(self):
+
+        ''''''
+
+        pass
+
+    def isUnsolved(self):
+
+        ''''''
+
+        self.unsolved = []
+
+        if self.aligned:
+            self.unsolved = []
+            return []
+
+        forward = self.forward
+        backward = self.backward
+        plane = self.shape
+
+        section = plane.section([forward], _Py.tolerance)
+        if section.Edges:
+            self.addValue('unsolved', 'forward', 'forward')
+        section = plane.section([backward], _Py.tolerance)
+        if section.Edges:
+            self.addValue('unsolved', 'backward', 'backward')
+
+        return self.unsolved
+
+    def rearing(self, pyWire, pyReflex):
+
+        ''''''
+
+        # print 'numGeom ', self.numGeom
+
+        rear = self.rear
+
+        # print 'rear ', rear
+
+        plane = self.shape
+        pyPlaneList = pyWire.planes
+
+        twinReflex = pyReflex.planes
+        ind = twinReflex.index(self)
+        if ind == 0:
+            pyOppPlane = twinReflex[1]
+        else:
+            pyOppPlane = twinReflex[0]
+        oppPlane = pyOppPlane.shape
+
+        # print 'numGeom ', pyOppPlane.numGeom
+
+        if self.choped:
+            if pyOppPlane.aligned:
+                # print 'a'
+                rear = [rear[1]]
+            else:
+                # print 'b'
+                rear = [rear[0]]
+
+        for numG in rear:
+            pyPl = pyPlaneList[numG]
+            if not (pyPl.aligned or pyPl.choped):
+                pl = pyPl.shape
+                if isinstance(pl, Part.Compound):
+                    # TODO necesita un nivel mas de seleccion
+                    pass
+                else:
+                    gS = pyPl.geomShape
+                    pl = self.cutting(pl, [plane, oppPlane], gS)
+                    pyPl.shape = pl
 
     def ordinaries(self, pyWire):
 
@@ -661,72 +733,6 @@ class _PyPlane(_Py):
             gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)
             self.shape = plane
-
-    def isUnsolved(self):
-
-        ''''''
-
-        self.unsolved = []
-
-        if self.aligned:
-            self.unsolved = []
-            return []
-
-        forward = self.forward
-        backward = self.backward
-        plane = self.shape
-
-        section = plane.section([forward], _Py.tolerance)
-        if section.Edges:
-            self.addValue('unsolved', 'forward', 'forward')
-        section = plane.section([backward], _Py.tolerance)
-        if section.Edges:
-            self.addValue('unsolved', 'backward', 'backward')
-
-        return self.unsolved
-
-    def rearing(self, pyWire, pyReflex):
-
-        ''''''
-
-        # print 'numGeom ', self.numGeom
-
-        rear = self.rear
-
-        # print 'rear ', rear
-
-        plane = self.shape
-        pyPlaneList = pyWire.planes
-
-        twinReflex = pyReflex.planes
-        ind = twinReflex.index(self)
-        if ind == 0:
-            pyOppPlane = twinReflex[1]
-        else:
-            pyOppPlane = twinReflex[0]
-        oppPlane = pyOppPlane.shape
-
-        # print 'numGeom ', pyOppPlane.numGeom
-
-        if self.choped:
-            if pyOppPlane.aligned:
-                # print 'a'
-                rear = [rear[1]]
-            else:
-                # print 'b'
-                rear = [rear[0]]
-
-        for numG in rear:
-            pyPl = pyPlaneList[numG]
-            if not (pyPl.aligned or pyPl.choped):
-                pl = pyPl.shape
-                if isinstance(pl, Part.Compound):
-                    # TODO necesita un nivel mas de seleccion
-                    pass
-                else:
-                    gS = pyPl.geomShape
-                    pl = self.cutting(pl, [plane, oppPlane], gS)
-                    pyPl.shape = pl
 
     def rangging(self, pyWire, direction):
 

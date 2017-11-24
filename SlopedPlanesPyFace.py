@@ -914,7 +914,8 @@ class _PyFace(_Py):
 
         ''''''
 
-        pass
+        for pyWire in self.wires:
+            pyWire.preOrdinaries()
 
     def reflexing(self):
 

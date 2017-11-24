@@ -70,6 +70,15 @@ class _PyReflex(_Py):
 
         self._rango = rango
 
+    def virtualizing(self):
+
+        ''''''
+
+        [pyReflex, pyOppReflex] = self.planes
+        pyR = pyReflex.virtualizing()
+        pyOppR = pyOppReflex.virtualizing()
+        self.planes = [pyR, pyOppR]
+
     def simulating(self):
 
         ''''''
@@ -82,14 +91,12 @@ class _PyReflex(_Py):
         pyR.simulating(enormousOppR)
         pyOppR.simulating(enormousR)
 
-    def virtualizing(self):
+    def preOrdinaries(self):
 
         ''''''
 
-        [pyReflex, pyOppReflex] = self.planes
-        pyR = pyReflex.virtualizing()
-        pyOppR = pyOppReflex.virtualizing()
-        self.planes = [pyR, pyOppR]
+        for pyPlane in self.planes:
+            pyPlane.preOrdinaries()
 
     def reflexing(self, pyWire):
 
