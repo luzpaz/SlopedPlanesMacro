@@ -312,7 +312,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.simulating()
 
-            # pyFace.preOrdinaries()
+            pyFace.preOrdinaries()
 
             pyFace.reflexing()
 
@@ -445,7 +445,7 @@ class _SlopedPlanes(_Py):
 
             figList.append(planeFaceList)
 
-        # makes a shell for every planes list, compunds them, and end
+        # makes a shell for every planes list, compunds them, and the end
 
         shellList = []
         for planeList in figList:

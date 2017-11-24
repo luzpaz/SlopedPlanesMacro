@@ -910,6 +910,12 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.simulating()
 
+    def preOrdinaries(self):
+
+        ''''''
+
+        pass
+
     def reflexing(self):
 
         '''reflexing(self)
