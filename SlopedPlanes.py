@@ -314,6 +314,8 @@ class _SlopedPlanes(_Py):
 
             pyFace.preOrdinaries()
 
+            pyFace.preReflexs()
+
             pyFace.reflexing()
 
             pyFace.reviewing()

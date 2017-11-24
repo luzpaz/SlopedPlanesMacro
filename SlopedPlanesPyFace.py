@@ -918,6 +918,13 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.preOrdinaries()
 
+    def preReflexs(self):
+
+        ''''''
+
+        for pyWire in self.wires:
+            pyWire.preReflexs()
+
     def reflexing(self):
 
         '''reflexing(self)

@@ -318,6 +318,13 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.preOrdinaries()
 
+    def preReflexs(self):
+
+        ''''''
+
+        for pyReflex in self.reflexs:
+            pyReflex.preReflexs()
+
     def reflexing(self):
 
         '''reflexing(self)

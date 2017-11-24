@@ -128,6 +128,12 @@ class _PyReflex(_Py):
                     ordinarieList.insert(num, pop)
                     pyPl.shape = pop
 
+    def preReflexs(self):
+
+        ''''''
+
+        pass
+
     def reflexing(self, pyWire):
 
         ''''''
