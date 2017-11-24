@@ -133,6 +133,7 @@ class _PyFace(_Py):
             dct['_coordinates'] = [[v.x, v.y, v.z] for v in wire.coordinates]
             dct['_shapeGeom'] = []
 
+            # TODO covierte los rangos de numeros a planos y cuando serializes revierte. Links
             planeList = []
             for plane in wire.planes:
                 dd = plane.__dict__.copy()

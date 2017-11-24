@@ -96,7 +96,37 @@ class _PyReflex(_Py):
         ''''''
 
         for pyPlane in self.planes:
-            pyPlane.preOrdinaries()
+            rango = pyPlane.rango
+            ordinarieList = []
+            pyOrdinarieList = []
+            reflexList = []
+            for ran in rango:
+                for nG in ran:
+                    pyPl = self.selectPlane(pyPlane.numWire, nG)
+                    if pyPl.reflexed:
+                        pl = pyPl.simulatedShape
+                        if pl:
+                            reflexList.append(pl)
+                    else:
+                        pl = pyPl.shape
+                        ordinarieList.append(pl)
+                        pyOrdinarieList.append(pyPl)
+
+            # print pyPlane.numGeom
+            # print ordinarieList
+            # print pyOrdinarieList
+            # print reflexList
+
+            if len(ordinarieList) > 1:
+                num = -1
+                for pyPl in pyOrdinarieList:
+                    num += 1
+                    pop = ordinarieList.pop(num)
+                    gS = pyPl.geomShape
+                    cutterList = ordinarieList + reflexList
+                    pop = self.cutting(pop, cutterList, gS)
+                    ordinarieList.insert(num, pop)
+                    pyPl.shape = pop
 
     def reflexing(self, pyWire):
 

@@ -566,12 +566,6 @@ class _PyPlane(_Py):
         plCopy = self.cutting(plCopy, [enormousShape], gS)
         self.simulatedShape = plCopy
 
-    def preOrdinaries(self):
-
-        ''''''
-
-        pass
-
     def isUnsolved(self):
 
         ''''''
