@@ -93,7 +93,7 @@ class _PyReflex(_Py):
         pyR.simulating(enormousOppR, force)
         pyOppR.simulating(enormousR, force)
 
-    def preOrdinaries(self):
+    def preOrdinaries(self, reflexList):
 
         '''preOrdinaries(self)
         '''
@@ -105,7 +105,20 @@ class _PyReflex(_Py):
             reflexList = []
             for ran in rango:
                 for nG in ran:
-                    pyPl = self.selectPlane(pyPlane.numWire, nG)
+                    if nG in reflexList:
+                        pyPl = self.selectReflexPlane(pyPlane.numWire, nG)
+                        if not pyPl.choped:
+                            pl = pyPl.simulatedShape
+                            reflexList.append(pl)
+                    else:
+                        pyPl = self.selectPlane(pyPlane.numWire, nG)
+                        if not pyPl.choped:
+                            pl = pyPl.shape
+                            ordinarieList.append(pl)
+                            pyOrdinarieList.append(pyPl)
+
+                    '''pyPl = self.selectPlane(pyPlane.numWire, nG)
+
                     if pyPl.reflexed:
                         if not pyPl.choped:
                             pl = pyPl.simulatedShape
@@ -113,12 +126,12 @@ class _PyReflex(_Py):
                     else:
                         pl = pyPl.shape
                         ordinarieList.append(pl)
-                        pyOrdinarieList.append(pyPl)
+                        pyOrdinarieList.append(pyPl)'''
 
-            # print pyPlane.numGeom
-            # print ordinarieList
-            # print pyOrdinarieList
-            # print reflexList
+            print pyPlane.numGeom
+            print ordinarieList
+            print pyOrdinarieList
+            print reflexList
 
             if len(ordinarieList) > 1:
                 num = -1

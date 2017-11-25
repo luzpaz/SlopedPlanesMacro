@@ -239,64 +239,64 @@ class _PyWire(_Py):
                 shape = pyPlane.shape
 
                 numGeom = pyPlane.numGeom
-                # print'numGeom ', numGeom
+                print 'numGeom ', numGeom
 
                 prior = self.sliceIndex(numGeom-1, lenWire)
-                # pyPrior = pyPlaneList[prior]
                 later = self.sliceIndex(numGeom+1, lenWire)
-                # pyLater = pyPlaneList[later]
 
                 pyPrior = self.selectBasePlane(numWire, prior)
                 pyLater = self.selectBasePlane(numWire, later)
                 bigPrior = pyPrior.bigShape
                 bigLater = pyLater.bigShape
 
-                # print'prior ', (pyPrior.numWire, pyPrior.numGeom)
-                # print'later ', (pyLater.numWire, pyLater.numGeom)
+                print'prior ', (pyPrior.numWire, pyPrior.numGeom)
+                print'later ', (pyLater.numWire, pyLater.numGeom)
 
                 gS = pyPlane.geomShape
                 cutterList = []
 
                 if pyPlane.arrow:
-                    # print'A'
+                    print'A'
 
                     if not pyPrior.reflexed:
-                        # print'1'
+                        print'1'
                         cutterList.append(bigPrior)
 
                     if not pyLater.reflexed:
-                        # print'2'
+                        print'2'
                         cutterList.append(bigLater)
 
                 elif pyPlane.reflexed:
-                    # print'B'
+                    print'B'
 
                     if not pyPrior.reflexed:
-                        # print'1'
+                        print'1'
                         cutterList.append(bigPrior)
                     elif not (pyPrior.choped or pyPrior.aligned):
                         pyR = self.selectReflex(self.numWire,
                                                   pyPlane.numGeom,
                                                   pyPrior.numGeom)
                         if not pyR:
+                            print '11'
                             cutterList.append(bigPrior)
 
                     if not pyLater.reflexed:
-                        # print'2'
+                        print'2'
                         cutterList.append(bigLater)
                     elif not (pyLater.choped or pyLater.aligned):
                         pyR = self.selectReflex(self.numWire,
                                                   pyPlane.numGeom,
                                                   pyLater.numGeom)
                         if not pyR:
+                            print '21'
                             cutterList.append(bigLater)
 
                 else:
-                    # print'C'
+                    print'C'
                     cutterList = [bigPrior, bigLater]
 
                 if cutterList:
-                    # print'D'
+                    print'D'
                     shape = self.cutting(shape, cutterList, gS)
                     pyPlane.shape = shape
 
@@ -316,8 +316,13 @@ class _PyWire(_Py):
         '''preOrdinaries(self)
         '''
 
+        reflexList = []     # attribute
         for pyReflex in self.reflexs:
-            pyReflex.preOrdinaries()
+            [pyR, pyOppR] = pyReflex.planes
+            reflexList.extend([pyR.numGeom, pyOppR.numGeom])
+
+        for pyReflex in self.reflexs:
+            pyReflex.preOrdinaries(reflexList)
 
     def preReflexs(self):
 

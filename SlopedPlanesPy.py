@@ -152,6 +152,19 @@ class _Py(object):
 
         return None
 
+    def selectReflexPlane(self, numWire, numGeom):
+
+        ''''''
+
+        pyRList = self.selectAllReflex(numWire, numGeom)
+
+        for pyReflex in pyRList:
+            for pyPlane in pyReflex.planes:
+                if pyPlane.numGeom == numGeom:
+                    return pyPlane
+
+        return None
+
     def selectAllReflex(self, numWire, numGeom):
 
         ''''''

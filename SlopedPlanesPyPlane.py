@@ -657,14 +657,20 @@ class _PyPlane(_Py):
         cutterList = []
         for pyPl in pyPlaneList:
             if pyPl.numGeom != numGeom:
-                # print 'numGeom ', pyPl.numGeom
-                if pyPl.reflexed and not pyPl.choped:
-                    # print 'b'
-                    pl = pyPl.shape
-                    if pl:
-                        # print 'b1'
+                pl = pyPl.shape
+                if pl:
+                    # print 'numGeom ', pyPl.numGeom
+
+                    '''if not pyPl.reflexed:
+                        # print 'a'
+                        cutterList.append(pl)'''
+
+                    # elif not pyPl.choped:
+                    if not pyPl.choped:
+                        # print 'b'
 
                         if pyPl.aligned:
+                            # print 'b1'
 
                             pyAli =\
                                 self.selectAlignment(pyPl.numWire,
@@ -731,6 +737,7 @@ class _PyPlane(_Py):
                                 cutterList.extend(simulatedPl)
 
                         else:
+                            # print 'b2'
                             cutterList.append(pl)
 
         if cutterList:
