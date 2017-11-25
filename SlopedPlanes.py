@@ -364,7 +364,7 @@ class _SlopedPlanes(_Py):
                     else:
                         print 'no plane'
                     '''
-                    # TODO solution at task panel
+                    # TODO "solution" at task panel
 
                     if [numWire, numAngle] not in originList:
 

@@ -342,6 +342,10 @@ class _PyReflex(_Py):
             nGeom = oppRear[0]
 
         pyOppRear = pyWire.planes[nGeom]
+
+        '''if not pyOppRear.reflexed:
+            return'''
+
         oppRearPl = pyOppRear.shape.copy()
         pyR.addLink('cutter', oppRearPl)
         pyOppR.addLink('oppCutter', oppRearPl)
@@ -541,6 +545,25 @@ class _PyReflex(_Py):
                 oppRear = pyOppR.cutter[1]
             else:
                 oppRear = pyOppR.cutter[0]
+
+        '''numRear = pyR.rear[0]
+        pyRear = self.selectPlane(numWire, numRear)
+        rear = pyRear.shape
+
+        if len(pyOppR.rear) == 1:
+            numOppRear = pyOppR.rear[0]
+        else:
+            if direction == 'forward':
+                numOppRear = pyOppR.rear[1]
+            else:
+                numOppRear = pyOppR.rear[0]
+
+        pyOppRear = self.selectPlane(numWire, numOppRear)
+        oppRear = pyOppRear.shape
+
+        numFirstRangoCorner = pyR.rango[0][0]
+        pyFirstRangoCorner = self.selectPlane(numWire, numFirstRangoCorner)
+        firstRangoCorner = pyFirstRangoCorner.shape'''
 
         if aa.Faces:
 

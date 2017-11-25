@@ -653,23 +653,33 @@ class _PyPlane(_Py):
         for pyPl in pyPlaneList:
             if pyPl.numGeom != numGeom:
                 # print 'numGeom ', pyPl.numGeom
-                if not (pyPl.choped and not pyPl.aligned):
+                # # OJO
+                # if not (pyPl.choped and not pyPl.aligned):
+
+                '''if not pyPl.reflexed:
+                    pass
+
+                elif not (pyPl.choped and not pyPl.aligned):'''
+
+                if pyPl.reflexed and not pyPl.choped:
+
                     pl = pyPl.shape
 
-                    if not pyPl.aligned:
+                    '''if not pyPl.aligned:
                         # print 'a'
                         cutterList.append(pl)
 
-                    else:
-                        # print 'b'
-                        if pl:
-                            # print 'b1'
+                    else:'''
+                    # print 'b'
+                    if pl:
+                        # print 'b1'
+
+                        if pyPl.aligned:
 
                             pyAli =\
                                 self.selectAlignment(pyPl.numWire,
                                                      pyPl.numGeom)
                             # print (pyAli.base.numWire, pyAli.base.numGeom)
-
 
                             if self.aligned:
                                 # print 'b11'
@@ -729,6 +739,9 @@ class _PyPlane(_Py):
                                 # print 'b12'
                                 simulatedPl = pyAli.simulatedAlignment
                                 cutterList.extend(simulatedPl)
+
+                        else:
+                            cutterList.append(pl)
 
         if cutterList:
             # print 'cutterList ', self.numGeom
