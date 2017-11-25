@@ -458,7 +458,7 @@ class _PyFace(_Py):
                 pyAliBase = self.selectAlignmentBase(numWire, numGeom)
 
                 if pyAliBase:
-                    # a falseAlignment where base plane is an alignment, pyAliBase
+                    # a falseAlignment where base plane is aligned, pyAliBase
                     jumpChop = True
                     pp = pyAliBase.aligns[-1]
                     numWireChopOne = pp.numWire
@@ -506,7 +506,7 @@ class _PyFace(_Py):
             if not pyAli.falsify:
                 dL = pyAli.chops
                 chopList.extend(dL)
-                self.removeAlignment(pyAli)     # joined in one alignment
+                self.removeAlignment(pyAli)  # joined in one alignment
 
         pyAlign.aligns = alignList
         pyAlign.chops = chopList
@@ -895,14 +895,16 @@ class _PyFace(_Py):
 
     def preOrdinaries(self):
 
-        ''''''
+        '''preOrdinaries(self)
+        '''
 
         for pyWire in self.wires:
             pyWire.preOrdinaries()
 
     def preReflexs(self):
 
-        ''''''
+        '''preReflexs(self)
+        '''
 
         for pyWire in self.wires:
             pyWire.preReflexs()
@@ -930,11 +932,8 @@ class _PyFace(_Py):
             if len(pyWire.reflexs) > 1:
 
                 pyWire.reviewing()
-
                 solved, unsolved = pyWire.clasifyReflexPlanes()
-
                 pyWire.reSolveReflexs(solved, unsolved)
-
                 pyWire.betweenReflexs()
 
     def rearing(self):
@@ -1084,7 +1083,6 @@ class _PyFace(_Py):
                             cutterList.remove(plane)
 
                         gS = pyPlane.geomShape
-
                         plane = self.cutting(plane, cutterList, gS)
                         pyPlane.shape = plane
 

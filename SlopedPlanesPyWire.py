@@ -313,14 +313,16 @@ class _PyWire(_Py):
 
     def preOrdinaries(self):
 
-        ''''''
+        '''preOrdinaries(self)
+        '''
 
         for pyReflex in self.reflexs:
             pyReflex.preOrdinaries()
 
     def preReflexs(self):
 
-        ''''''
+        '''preReflexs(self)
+        '''
 
         for pyReflex in self.reflexs:
             pyReflex.preReflexs()
@@ -458,7 +460,7 @@ class _PyWire(_Py):
 
         for pyPlane in self.planes:
             if not (pyPlane.reflexed and not pyPlane.aligned):
-                # no reflexed and no choped. Yes aligned
+                # no reflexed and no choped. Yes ordinarie and aligned
                 # print pyPlane.numGeom
                 # print pyPlane.reflexed
                 # print pyPlane.choped
