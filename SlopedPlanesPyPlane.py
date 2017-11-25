@@ -418,7 +418,8 @@ class _PyPlane(_Py):
 
     def planning(self, pyWire):
 
-        ''''''
+        '''planning(self, pyWire)
+        '''
 
         coordinates = pyWire.coordinates
         numGeom = self.numGeom
@@ -460,7 +461,8 @@ class _PyPlane(_Py):
 
     def doPlane(self, direction, geom, firstParam, lastParam, scale):
 
-        ''''''
+        '''doPlane(self, direction, geom, firstParam, lastParam, scale)
+        '''
 
         leftScale = self.width[0] * scale
         rightScale = self.width[1] * scale
@@ -492,7 +494,8 @@ class _PyPlane(_Py):
 
     def virtualizing(self):
 
-        ''''''
+        '''virtualizing(self)
+        '''
 
         if self.aligned:
 
@@ -536,7 +539,8 @@ class _PyPlane(_Py):
 
     def trimming(self, enormousShape, enormShape=None):
 
-        ''''''
+        '''trimming(self, enormousShape, enormShape=None)
+        '''
 
         shape = self.shape
         bigShape = self.bigShape
@@ -555,14 +559,12 @@ class _PyPlane(_Py):
 
     def simulating(self, enormousShape, force=False):
 
-        ''''''
-
-        # quitar force
+        '''simulating(self, enormousShape, force=False)
+        '''
 
         if force:
 
             plCopy = self.shape.copy()
-            # el force que introduje por preReflexs no hace nada
 
         else:
 
@@ -577,7 +579,8 @@ class _PyPlane(_Py):
 
     def isUnsolved(self):
 
-        ''''''
+        '''isUnsolved(self)
+        '''
 
         self.unsolved = []
 
@@ -600,7 +603,8 @@ class _PyPlane(_Py):
 
     def rearing(self, pyWire, pyReflex):
 
-        ''''''
+        '''rearing(self, pyWire, pyReflex)
+        '''
 
         # print 'numGeom ', self.numGeom
 
@@ -643,7 +647,8 @@ class _PyPlane(_Py):
 
     def ordinaries(self, pyWire):
 
-        ''''''
+        '''ordinaries(self, pyWire)
+        '''
 
         pyPlaneList = pyWire.planes
 
@@ -653,24 +658,9 @@ class _PyPlane(_Py):
         for pyPl in pyPlaneList:
             if pyPl.numGeom != numGeom:
                 # print 'numGeom ', pyPl.numGeom
-                # # OJO
-                # if not (pyPl.choped and not pyPl.aligned):
-
-                '''if not pyPl.reflexed:
-                    pass
-
-                elif not (pyPl.choped and not pyPl.aligned):'''
-
                 if pyPl.reflexed and not pyPl.choped:
-
-                    pl = pyPl.shape
-
-                    '''if not pyPl.aligned:
-                        # print 'a'
-                        cutterList.append(pl)
-
-                    else:'''
                     # print 'b'
+                    pl = pyPl.shape
                     if pl:
                         # print 'b1'
 
@@ -744,7 +734,6 @@ class _PyPlane(_Py):
                             cutterList.append(pl)
 
         if cutterList:
-            # print 'cutterList ', self.numGeom
             plane = self.shape
             gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)
@@ -752,7 +741,8 @@ class _PyPlane(_Py):
 
     def rangging(self, pyWire, direction):
 
-        ''''''
+        '''rangging(self, pyWire, direction)
+        '''
 
         numGeom = self.numGeom
 

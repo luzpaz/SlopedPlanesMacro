@@ -72,7 +72,8 @@ class _PyReflex(_Py):
 
     def virtualizing(self):
 
-        ''''''
+        '''virtualizing(self)
+        '''
 
         [pyReflex, pyOppReflex] = self.planes
         pyR = pyReflex.virtualizing()
@@ -81,7 +82,8 @@ class _PyReflex(_Py):
 
     def simulating(self, force=False):
 
-        ''''''
+        '''simulating(self, force=False)
+        '''
 
         [pyR, pyOppR] = self.planes
 
@@ -93,7 +95,8 @@ class _PyReflex(_Py):
 
     def preOrdinaries(self):
 
-        ''''''
+        '''preOrdinaries(self)
+        '''
 
         for pyPlane in self.planes:
             rango = pyPlane.rango
@@ -132,16 +135,14 @@ class _PyReflex(_Py):
 
         ''''''
 
-        # no hace efecto. Ni aun repitiendo el simulating.
-
-        print[p.numGeom for p in self.planes]
+        # print[p.numGeom for p in self.planes]
 
         ordinarieList = []
         pyOrdinarieList = []
         for pyPlane in self.planes:
-            print pyPlane.numGeom
+            # print pyPlane.numGeom
             rango = pyPlane.rango
-            print rango
+            # print rango
             for ran in rango:
                 for nG in ran:
                     pyPl = self.selectPlane(pyPlane.numWire, nG)
@@ -150,12 +151,12 @@ class _PyReflex(_Py):
                         ordinarieList.append(pl)
                         pyOrdinarieList. append(pyPl.numGeom)
 
-        print 'ordinarieList ', pyOrdinarieList
+        # print 'ordinarieList ', pyOrdinarieList
 
         for pyPlane in self.planes:
-            print pyPlane.numGeom
+            # print pyPlane.numGeom
             rango = pyPlane.rango
-            print rango
+            # print rango
             for ran in rango:
                 for nG in ran:
                     pyPl = self.selectPlane(pyPlane.numWire, nG)
@@ -165,7 +166,7 @@ class _PyReflex(_Py):
                         for rr in rangoPre:
                             for r in rr:
                                 rangoP.append(r)
-                        print 'rangoP ', rangoP
+                        # print 'rangoP ', rangoP
                         cutterList = []
                         num = -1
                         for nn in pyOrdinarieList:
@@ -174,9 +175,6 @@ class _PyReflex(_Py):
                                 cutterList.append(ordinarieList[num])
 
                         if cutterList:
-
-                            print cutterList
-
                             plane = pyPl.shape
                             gS = pyPl.geomShape
                             plane = self.cutting(plane, cutterList, gS)
@@ -186,7 +184,8 @@ class _PyReflex(_Py):
 
     def reflexing(self, pyWire):
 
-        ''''''
+        '''reflexing(self, pyWire)
+        '''
 
         pyPlaneList = self.planes
 
@@ -210,7 +209,8 @@ class _PyReflex(_Py):
 
     def twin(self, pyWire, pyR, pyOppR, direction):
 
-        ''''''
+        '''twin(self, pyWire, pyR, pyOppR, direction)
+        '''
 
         reflexEnormous = pyR.enormousShape.copy()
         pyOppR.addLink('oppCutter', reflexEnormous)
@@ -334,7 +334,9 @@ class _PyReflex(_Py):
     def processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR,
                        oppReflexEnormous):
 
-        ''''''
+        '''processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR,
+                          oppReflexEnormous)
+        '''
 
         if direction == "forward":
             nGeom = oppRear[1]
@@ -342,9 +344,6 @@ class _PyReflex(_Py):
             nGeom = oppRear[0]
 
         pyOppRear = pyWire.planes[nGeom]
-
-        '''if not pyOppRear.reflexed:
-            return'''
 
         oppRearPl = pyOppRear.shape.copy()
         pyR.addLink('cutter', oppRearPl)
@@ -380,7 +379,8 @@ class _PyReflex(_Py):
 
     def processRango(self, pyWire, pyR, pyOppR, nn, kind):
 
-        ''''''
+        '''processRango(self, pyWire, pyR, pyOppR, nn, kind)
+        '''
 
         nWire = pyWire.numWire
         oppReflexEnormous = pyOppR.enormousShape
@@ -417,8 +417,6 @@ class _PyReflex(_Py):
 
                 if kind != 'rangoCorner':
 
-                    # # OJO
-                    # pl = pyPl.shape.copy()
                     pl = pyPl.simulatedShape
                     gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
@@ -439,9 +437,6 @@ class _PyReflex(_Py):
                     pl = self.cutting(pl, pyR.enormousShape, gS)
 
                 if kind == 'rangoCorner':
-                    # print 'Corner'
-                    # # OJO
-                    # pl = pyPl.shape.copy()
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
 
                 pyR.addLink('cutter', pl)
@@ -463,7 +458,8 @@ class _PyReflex(_Py):
 
     def solveReflex(self):
 
-        ''''''
+        '''solveReflex(self)
+        '''
 
         [pyR, pyOppR] = self.planes
         # print(pyR.numGeom, pyOppR.numGeom)
@@ -484,7 +480,9 @@ class _PyReflex(_Py):
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
 
-        ''''''
+        '''processReflex(self, reflex, oppReflex, pyR, pyOppR,
+                         direction)
+        '''
 
         numWire = pyR.numWire
 
@@ -624,7 +622,8 @@ class _PyReflex(_Py):
 
     def rearReflex(self, pyWire):
 
-        ''''''
+        '''rearReflex(self, pyWire)
+        '''
 
         pyPlaneList = pyWire.planes
 
@@ -645,7 +644,8 @@ class _PyReflex(_Py):
 
     def compounding(self):
 
-        ''''''
+        '''compounding(self)
+        '''
 
         [pyR, pyOppR] = self.planes
 
@@ -682,14 +682,16 @@ class _PyReflex(_Py):
 
     def reviewing(self):
 
-        ''''''
+        '''reviewing(self)
+        '''
 
         for pyPlane in self.planes:
             pyPlane.isUnsolved()
 
     def rearing(self, pyWire):
 
-        ''''''
+        '''rearing(self, pyWire)
+        '''
 
         for pyPlane in self.planes:
             if not pyPlane.reflexed:
@@ -697,7 +699,8 @@ class _PyReflex(_Py):
 
     def rangging(self, pyWire):
 
-        ''''''
+        '''rangging(self, pyWire)
+        '''
 
         lenWire = len(pyWire.planes)
 
