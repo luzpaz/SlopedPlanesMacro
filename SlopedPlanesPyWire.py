@@ -236,10 +236,13 @@ class _PyWire(_Py):
         for pyPlane in pyPlaneList:
 
             if not pyPlane.aligned:
-                shape = pyPlane.shape
+                plane = pyPlane.shape
 
                 numGeom = pyPlane.numGeom
                 print 'numGeom ', numGeom
+                print 'reflexed ', pyPlane.reflexed
+                print 'choped ', pyPlane.choped
+                print 'arrow ', pyPlane.arrow
 
                 prior = self.sliceIndex(numGeom-1, lenWire)
                 later = self.sliceIndex(numGeom+1, lenWire)
@@ -297,8 +300,8 @@ class _PyWire(_Py):
 
                 if cutterList:
                     print'D'
-                    shape = self.cutting(shape, cutterList, gS)
-                    pyPlane.shape = shape
+                    plane = self.cutting(plane, cutterList, gS)
+                    pyPlane.shape = plane
 
     def simulating(self):
 

@@ -285,6 +285,8 @@ class _SlopedPlanes(_Py):
                         pyPlane = _PyPlane(numWire, numGeom)
                         pyPlaneListNew.append(pyPlane)
 
+                    # TODO  hay algo que no va bien con el reset
+
                     pyPlane.geom = geom    # quitar / no quitar
                     gS = geom.toShape()
                     pyPlane.geomShape = gS

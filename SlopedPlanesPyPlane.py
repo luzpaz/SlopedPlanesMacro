@@ -62,8 +62,8 @@ class _PyPlane(_Py):
         self.oppCutter = []
         self.divide = []
         self.compound = None
-        self.forward = None
-        self.backward = None
+        self.forward = []
+        self.backward = []
         self.unsolved = []
 
     @property

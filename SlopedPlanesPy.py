@@ -242,15 +242,17 @@ class _Py(object):
                 print 'rangoInter ', pyReflex.rango
                 print 'planes ', pyReflex.planes
                 for pyPlane in pyReflex.planes:
-                    print pyPlane.numGeom,\
-                        pyPlane.rear,\
-                        pyPlane.rango,\
-                        (pyPlane.forward.FirstParameter,
-                         pyPlane.forward.LastParameter),\
-                        (self.roundVector(pyPlane.forward.firstVertex(True).Point),
-                         self.roundVector(pyPlane.forward.lastVertex(True).Point)),\
-                        (self.roundVector(pyPlane.backward.firstVertex(True).Point),
-                         self.roundVector(pyPlane.backward.lastVertex(True).Point))
+                    print 'numGeom ', pyPlane.numGeom
+                    print 'rear ', pyPlane.rear
+                    print 'rango ', pyPlane.rango
+                    forward = pyPlane.forward
+                    print 'forward ',\
+                        (self.roundVector(forward.firstVertex(True).Point),
+                         self.roundVector(forward.lastVertex(True).Point))
+                    backward = pyPlane.backward
+                    print 'backward ',\
+                        (self.roundVector(backward.firstVertex(True).Point),
+                         self.roundVector(backward.lastVertex(True).Point))
 
         print '********* alignments ', _Py.pyFace.alignments
         for pyAlignment in _Py.pyFace.alignments:
@@ -279,11 +281,11 @@ class _Py(object):
 
             print '*** aligns ', [x.numGeom for x in pyAlignment.aligns]
             for align in pyAlignment.aligns:
-                print(align.numWire, align.numGeom),\
-                    align.rear,\
-                    align.rango,\
-                    align.geom,\
-                    align.geomAligned
+                print(align.numWire, align.numGeom)
+                print 'rear ', align.rear
+                print 'rango ', align.rango
+                print 'geom ', align.geom
+                print 'geomAligned ', align.geomAligned
 
         print '###############################################################'
 
