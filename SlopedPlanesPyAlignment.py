@@ -335,7 +335,7 @@ class _PyAlignment(_Py):
             print '2'
             cutterList.append(bigLater)
 
-        if not pyPrior.reflexed:
+        if not pyPrior.reflexed or pyPrior.choped or pyPrior.aligned:
             print 'a'
 
             gS = pyPrior.geomShape
@@ -343,17 +343,17 @@ class _PyAlignment(_Py):
 
             pyPrior.shape = prior
 
-        if not pyLater.reflexed:
+        if not pyLater.reflexed or pyPrior.choped or pyPrior.aligned:
             print 'b'
 
             if not self.falsify:
-                print 'bb'
+                print 'b1'
 
                 gS = pyLater.geomShape
                 later = self.cutting(later, [bigBase], gS)
 
             else:
-                print 'bbb'
+                print 'b11'
 
                 gS = pyLater.geomShape
                 later = self.cutting(later, [bigCont], gS)
