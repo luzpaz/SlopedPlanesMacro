@@ -972,9 +972,9 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.ordinaries()
 
-    def between(self):
+    def betweenWires(self):
 
-        '''between(self)
+        '''betweenWires(self)
         '''
 
         pyWireList = self.wires[:]
@@ -1067,14 +1067,14 @@ class _PyFace(_Py):
                 base = pyAlign.base.shape
                 if base not in cutterList:
                     cutterList.append(base)
-                    # print 'a', pyAlign.base.numGeom
+                    print 'a', pyAlign.base.numGeom
 
             for pyPlane in pyAlign.aligns:
                 plane = pyPlane.shape
                 if plane:
                     if plane not in cutterList:
                         cutterList.append(plane)
-                        # print 'b', pyPlane.numGeom
+                        print 'b', pyPlane.numGeom
 
             for [pyChopOne, pyChopTwo] in pyAlign.chops:
 
@@ -1082,13 +1082,13 @@ class _PyFace(_Py):
                     chopOne = pyChopOne.shape
                     if chopOne not in cutterList:
                         cutterList.append(chopOne)
-                        # print 'c', pyChopOne.numGeom
+                        print 'c', pyChopOne.numGeom
 
                 if pyChopTwo.geomAligned:
                     chopTwo = pyChopTwo.shape
                     if chopTwo not in cutterList:
                         cutterList.append(chopTwo)
-                        # print 'd', pyChopTwo.numGeom
+                        print 'd', pyChopTwo.numGeom
 
         if cutterList:
 
@@ -1096,7 +1096,7 @@ class _PyFace(_Py):
                 for pyPlane in pyWire.planes:
                     plane = pyPlane.shape
                     if plane:
-                        # print 'numGeom', pyPlane.numGeom
+                        print 'numGeom', pyPlane.numGeom
 
                         if pyPlane.choped or pyPlane.aligned:
                             cutterList.remove(plane)
