@@ -318,6 +318,8 @@ class _SlopedPlanes(_Py):
 
             pyFace.preReflexs()
 
+            # pyFace.reVirtualizing()
+
             pyFace.reflexing()
 
             pyFace.reviewing()

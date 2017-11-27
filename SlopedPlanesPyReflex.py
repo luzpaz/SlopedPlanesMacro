@@ -99,39 +99,36 @@ class _PyReflex(_Py):
         '''
 
         for pyPlane in self.planes:
+            # if not pyPlane.aligned:
+            print '###### pyPlane ', pyPlane.numGeom
             rango = pyPlane.rango
             ordinarieList = []
             pyOrdinarieList = []
-            reflexList = []
+            refList = []
             for ran in rango:
                 for nG in ran:
+                    print 'nG ', nG
                     if nG in reflexList:
+                        print 'a'
                         pyPl = self.selectReflexPlane(pyPlane.numWire, nG)
                         if not pyPl.choped:
+                            print 'aa'
                             pl = pyPl.simulatedShape
-                            reflexList.append(pl)
+                            refList.append(pl)
                     else:
+                        print 'b'
                         pyPl = self.selectPlane(pyPlane.numWire, nG)
                         if not pyPl.choped:
+                            print 'bb'
                             pl = pyPl.shape
-                            ordinarieList.append(pl)
-                            pyOrdinarieList.append(pyPl)
-
-                    '''pyPl = self.selectPlane(pyPlane.numWire, nG)
-
-                    if pyPl.reflexed:
-                        if not pyPl.choped:
-                            pl = pyPl.simulatedShape
-                            reflexList.append(pl)
-                    else:
-                        pl = pyPl.shape
-                        ordinarieList.append(pl)
-                        pyOrdinarieList.append(pyPl)'''
+                            if pl:
+                                ordinarieList.append(pl)
+                                pyOrdinarieList.append(pyPl)
 
             print pyPlane.numGeom
-            print ordinarieList
-            print pyOrdinarieList
-            print reflexList
+            print 'ordinarieList ', ordinarieList
+            print 'pyOrdinarieList ', [p.numGeom for p in pyOrdinarieList]
+            print refList
 
             if len(ordinarieList) > 1:
                 num = -1
@@ -139,7 +136,7 @@ class _PyReflex(_Py):
                     num += 1
                     pop = ordinarieList.pop(num)
                     gS = pyPl.geomShape
-                    cutterList = ordinarieList + reflexList
+                    cutterList = ordinarieList + refList
                     pop = self.cutting(pop, cutterList, gS)
                     ordinarieList.insert(num, pop)
                     pyPl.shape = pop
@@ -148,14 +145,14 @@ class _PyReflex(_Py):
 
         ''''''
 
-        # print[p.numGeom for p in self.planes]
+        print[p.numGeom for p in self.planes]
 
         ordinarieList = []
         pyOrdinarieList = []
         for pyPlane in self.planes:
-            # print pyPlane.numGeom
+            print pyPlane.numGeom
             rango = pyPlane.rango
-            # print rango
+            print rango
             for ran in rango:
                 for nG in ran:
                     pyPl = self.selectPlane(pyPlane.numWire, nG)
@@ -164,34 +161,36 @@ class _PyReflex(_Py):
                         ordinarieList.append(pl)
                         pyOrdinarieList. append(pyPl.numGeom)
 
-        # print 'ordinarieList ', pyOrdinarieList
+        print 'ordinarieList ', pyOrdinarieList
 
         for pyPlane in self.planes:
-            # print pyPlane.numGeom
+            print pyPlane.numGeom
             rango = pyPlane.rango
-            # print rango
+            print rango
             for ran in rango:
                 for nG in ran:
                     pyPl = self.selectPlane(pyPlane.numWire, nG)
                     if pyPl.reflexed:
-                        rangoPre = pyPl.rango
-                        rangoP = []
-                        for rr in rangoPre:
-                            for r in rr:
-                                rangoP.append(r)
-                        # print 'rangoP ', rangoP
-                        cutterList = []
-                        num = -1
-                        for nn in pyOrdinarieList:
-                            num += 1
-                            if nn not in rangoP:
-                                cutterList.append(ordinarieList[num])
+                        plane = pyPl.shape
+                        if plane:
+                            rangoPre = pyPl.rango
+                            rangoP = []
+                            for rr in rangoPre:
+                                for r in rr:
+                                    rangoP.append(r)
+                            print 'rangoP ', rangoP
+                            cutterList = []
+                            num = -1
+                            for nn in pyOrdinarieList:
+                                num += 1
+                                if nn not in rangoP:
+                                    cutterList.append(ordinarieList[num])
 
-                        if cutterList:
-                            plane = pyPl.shape
-                            gS = pyPl.geomShape
-                            plane = self.cutting(plane, cutterList, gS)
-                            pyPl.shape = plane
+                            if cutterList:
+                                # plane = pyPl.shape
+                                gS = pyPl.geomShape
+                                plane = self.cutting(plane, cutterList, gS)
+                                pyPl.shape = plane
 
         pass
 

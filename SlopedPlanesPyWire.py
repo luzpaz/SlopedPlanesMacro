@@ -324,6 +324,8 @@ class _PyWire(_Py):
             [pyR, pyOppR] = pyReflex.planes
             reflexList.extend([pyR.numGeom, pyOppR.numGeom])
 
+        print 'reflexList ', reflexList
+
         for pyReflex in self.reflexs:
             pyReflex.preOrdinaries(reflexList)
 
