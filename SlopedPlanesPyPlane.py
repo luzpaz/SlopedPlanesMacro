@@ -659,25 +659,25 @@ class _PyPlane(_Py):
             if pyPl.numGeom != numGeom:
                 pl = pyPl.shape
                 if pl:
-                    print 'numGeom ', pyPl.numGeom
+                    # print 'numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
-                        print 'b1'
+                        # print 'b1'
 
                         pyAli =\
                             self.selectAlignment(pyPl.numWire,
                                                  pyPl.numGeom)
-                        print (pyAli.base.numWire, pyAli.base.numGeom)
+                        # print (pyAli.base.numWire, pyAli.base.numGeom)
 
                         if self.aligned:
-                            print 'b11'
+                            # print 'b11'
 
                             # TODO refact
 
                             pyAlign =\
                                 self.selectAlignment(self.numWire,
                                                      self.numGeom)
-                            print (pyAlign.base.numWire, pyAlign.base.numGeom)
+                            # print (pyAlign.base.numWire, pyAlign.base.numGeom)
 
                             if pyAli.base.angle == [pyAlign.base.numWire,
                                                     pyAlign.base.numGeom]:
@@ -719,21 +719,21 @@ class _PyPlane(_Py):
                                         break
 
                                 else:
-                                    print 'b111'
+                                    # print 'b111'
                                     simulatedPl = pyAli.simulatedAlignment
                                     cutterList.extend(simulatedPl)
 
                         else:
-                            print 'b12'
+                            # print 'b12'
                             simulatedPl = pyAli.simulatedAlignment
                             cutterList.extend(simulatedPl)
 
                     elif not pyPl.choped:
-                        print 'b2'
+                        # print 'b2'
                         cutterList.append(pl)
 
         if cutterList:
-            print 'cutterList ', cutterList
+            # print 'cutterList ', cutterList
             plane = self.shape
             gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)

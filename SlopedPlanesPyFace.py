@@ -128,15 +128,15 @@ class _PyFace(_Py):
         '''
 
         wireList = []
-        for wire in self.wires:
-            dct = wire.__dict__.copy()
-            dct['_coordinates'] = [[v.x, v.y, v.z] for v in wire.coordinates]
+        for pyWire in self.wires:
+            dct = pyWire.__dict__.copy()
+            dct['_coordinates'] = [[v.x, v.y, v.z] for v in pyWire.coordinates]
             dct['_shapeGeom'] = []
 
             # TODO covierte los rangos de numeros a planos y cuando serializes revierte
             planeList = []
-            for plane in wire.planes:
-                dd = plane.__dict__.copy()
+            for pyPlane in pyWire.planes:
+                dd = pyPlane.__dict__.copy()
 
                 dd['_shape'] = None
                 dd['_bigShape'] = None
@@ -152,14 +152,17 @@ class _PyFace(_Py):
                 dd['_simulatedShape'] = None
                 dd['_compound'] = None
 
+                '''dd['_forward'] = [pyPlane.forward.exportBrepToString()]
+                dd['_backward'] = [pyPlane.backward.exportBrepToString()]'''
+
                 planeList.append(dd)
             dct['_planes'] = planeList
 
             reflexList = []
-            for reflex in wire.reflexs:
-                dd = reflex.__dict__.copy()
-                planes = [[plane.numWire, plane.numGeom]
-                          for plane in reflex.planes]
+            for pyReflex in pyWire.reflexs:
+                dd = pyReflex.__dict__.copy()
+                planes = [[pyPlane.numWire,  pyPlane.numGeom]
+                          for pyPlane in pyReflex.planes]
                 dd['_planes'] = planes
                 reflexList.append(dd)
             dct['_reflexs'] = reflexList
@@ -167,9 +170,9 @@ class _PyFace(_Py):
             wireList.append(dct)
 
         alignList = []
-        for align in self.alignments:
+        for pyAlign in self.alignments:
             dct = {}
-            alignList.append(dct)
+            alignList.append(dct)       # ESTO TIENE QUE CAMBIAR
 
         return wireList, alignList
 
@@ -183,39 +186,43 @@ class _PyFace(_Py):
         numWire = -1
         for dct in wires:
             numWire += 1
-            wire = _PyWire(numWire)
+            pyWire = _PyWire(numWire)
 
             planeList = []
             numGeom = -1
             for dd in dct['_planes']:
                 numGeom += 1
-                plane = _PyPlane(numWire, numGeom)
-                plane.__dict__ = dd
-                planeList.append(plane)
+                pyPlane = _PyPlane(numWire, numGeom)
+                '''ff = dd['_forward']
+                dd['_forward'] = [Part.Shape().importBrepFromString(ff)]
+                bb = dd['_backward']
+                dd['backward'] = [Part.Shape().importBrepFromString(bb)]'''
+                pyPlane.__dict__ = dd
+                planeList.append(pyPlane)
             dct['_planes'] = planeList
 
             reflexList = []
             for dd in dct['_reflexs']:
-                reflex = _PyReflex()
+                pyReflex = _PyReflex()
                 for [numWire, numGeom] in dd['_planes']:
-                    plane = planeList[numGeom]
-                    reflex.addLink('planes', plane)
-                dd['_planes'] = reflex.planes
-                reflex.__dict__ = dd
-                reflexList.append(reflex)
+                    pyPlane = planeList[numGeom]
+                    pyReflex.addLink('planes', pyPlane)
+                dd['_planes'] = pyReflex.planes
+                pyReflex.__dict__ = dd
+                reflexList.append(pyReflex)
             dct['_reflexs'] = reflexList
 
             coord = dct['_coordinates']
             coordinates = [FreeCAD.Vector(v) for v in coord]
             dct['_coordinates'] = coordinates
 
-            wire.__dict__ = dct
-            wireList.append(wire)
+            pyWire.__dict__ = dct
+            wireList.append(pyWire)
 
         alignList = []
         for dct in alignments:
-            alignment = _PyAlignment()
-            alignList.append(alignment)
+            pyAlignment = _PyAlignment()
+            alignList.append(pyAlignment)
 
         return wireList, alignList
 
@@ -258,11 +265,15 @@ class _PyFace(_Py):
                     # print 'corner ', corner
                     eje = nextEje
 
-                    if resetFace:
-                        if ref:
+                    #if resetFace:
+                    if ref:
+                        self.forBack(pyPrePlane, 'forward')  # TODO serializar
+                        self.forBack(pyPlane, 'backward')
+                        # if ref:
+                        if resetFace:
                             # print 'ref'
-                            self.forBack(pyPrePlane, 'forward')
-                            self.forBack(pyPlane, 'backward')
+                            # self.forBack(pyPrePlane, 'forward')
+                            # self.forBack(pyPlane, 'backward')
                             forward = pyPlane.forward
                             section = forward.section(shapeGeomFace,
                                                       _Py.tolerance)
@@ -300,6 +311,7 @@ class _PyFace(_Py):
                         # the reflex for rear and
                         # the convex for alignments
                         # the exterior wires rear and alignaments with reflex
+                        # if resetFace: TODO serializar
                         self.forBack(pyPlane, 'forward')
 
                     if ((numWire == 0 and corner == 'reflex') or
@@ -402,6 +414,8 @@ class _PyFace(_Py):
 
                             else:
                                 # print 'end alignment'
+                                self.forBack(pyPl, 'forward') # TODO serializar
+                                self.forBack(pyNextPlane, 'backward')
                                 if resetFace:
                                     pyEnd = pyAlign.aligns[-1]
                                     if not pyEnd.rear:
@@ -413,8 +427,8 @@ class _PyFace(_Py):
                                         corner = self.convexReflex(jj, nnjj, numWire)
                                         if corner == 'reflex':
                                             # print 'reflex'
-                                            self.forBack(pyPl, 'forward')
-                                            self.forBack(pyNextPlane, 'backward')
+                                            # self.forBack(pyPl, 'forward')
+                                            # self.forBack(pyNextPlane, 'backward')
                                             self.findRear(pyWire, pyPl, 'forward')
                                             self.findRear(pyWire, pyNextPlane, 'backward')
                                             self.doReflex(pyWire, pyPl, pyNextPlane)
@@ -1067,14 +1081,14 @@ class _PyFace(_Py):
                 base = pyAlign.base.shape
                 if base not in cutterList:
                     cutterList.append(base)
-                    print 'a', pyAlign.base.numGeom
+                    # print 'a', pyAlign.base.numGeom
 
             for pyPlane in pyAlign.aligns:
                 plane = pyPlane.shape
                 if plane:
                     if plane not in cutterList:
                         cutterList.append(plane)
-                        print 'b', pyPlane.numGeom
+                        # print 'b', pyPlane.numGeom
 
             for [pyChopOne, pyChopTwo] in pyAlign.chops:
 
@@ -1082,13 +1096,13 @@ class _PyFace(_Py):
                     chopOne = pyChopOne.shape
                     if chopOne not in cutterList:
                         cutterList.append(chopOne)
-                        print 'c', pyChopOne.numGeom
+                        # print 'c', pyChopOne.numGeom
 
                 if pyChopTwo.geomAligned:
                     chopTwo = pyChopTwo.shape
                     if chopTwo not in cutterList:
                         cutterList.append(chopTwo)
-                        print 'd', pyChopTwo.numGeom
+                        # print 'd', pyChopTwo.numGeom
 
         if cutterList:
 
@@ -1096,7 +1110,7 @@ class _PyFace(_Py):
                 for pyPlane in pyWire.planes:
                     plane = pyPlane.shape
                     if plane:
-                        print 'numGeom', pyPlane.numGeom
+                        # print 'numGeom', pyPlane.numGeom
 
                         if pyPlane.choped or pyPlane.aligned:
                             cutterList.remove(plane)

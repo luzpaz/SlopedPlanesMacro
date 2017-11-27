@@ -184,6 +184,7 @@ class _SlopedPlanes(_Py):
         numFace = -1
         for face in faceList:
             numFace += 1
+            print '######### numFace ', numFace
 
             # elaborates complementary python objects of a face
 
@@ -243,21 +244,26 @@ class _SlopedPlanes(_Py):
             numWire = -1
             for wire in wireList:
                 numWire += 1
+                print '###### numWire ', numWire
                 coo = coordinates[numWire]
                 brea = False
                 for pyWire in pyWireListOld:
                     oldCoo = pyWire.coordinates
                     if oldCoo[0] == coo[0]:
+                        print 'a'
                         brea = True
                         if oldCoo != coo:
+                            print 'b'
                             pyFace.reset = True
                             if len(oldCoo) != len(coo):
+                                print 'c'
                                 pyWire.reset = True
                         if brea:
                             pyWireListNew.append(pyWire)
                             pyWire.numWire = numWire
                             break
                 else:
+                    print 'd'
                     pyWire = _PyWire(numWire)
                     pyWireListNew.append(pyWire)
                     pyWire.reset = True
@@ -273,15 +279,28 @@ class _SlopedPlanes(_Py):
                 numGeom = -1
                 for geom in geomWire:
                     numGeom += 1
+                    print '### numGeom ', numGeom
                     try:
                         pyPlane = pyPlaneListOld[numGeom]
                         pyPlaneListNew.append(pyPlane)
                         pyPlane.numGeom = numGeom
+                        print '1'
                         if pyWire.reset:
+                            print '11'
                             pyPlane.angle = slope
                             pyPlane.width = [width, width]
                             pyPlane.length = length
+                        if pyFace.reset:
+                            print '111'
+                            pyPlane.rear = []
+                            pyPlane.rango = []
+                            pyPlane.aligned = False
+                            pyPlane.arrow = False
+                            pyPlane.choped = False
+                            pyPlane.unsolved = False
+                            pyPlane.reflexed = False
                     except IndexError:
+                        print '2'
                         pyPlane = _PyPlane(numWire, numGeom)
                         pyPlaneListNew.append(pyPlane)
 

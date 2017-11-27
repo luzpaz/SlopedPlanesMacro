@@ -239,10 +239,10 @@ class _PyWire(_Py):
                 plane = pyPlane.shape
 
                 numGeom = pyPlane.numGeom
-                print 'numGeom ', numGeom
-                print 'reflexed ', pyPlane.reflexed
-                print 'choped ', pyPlane.choped
-                print 'arrow ', pyPlane.arrow
+                # print 'numGeom ', numGeom
+                # print 'reflexed ', pyPlane.reflexed
+                # print 'choped ', pyPlane.choped
+                # print 'arrow ', pyPlane.arrow
 
                 prior = self.sliceIndex(numGeom-1, lenWire)
                 later = self.sliceIndex(numGeom+1, lenWire)
@@ -252,54 +252,54 @@ class _PyWire(_Py):
                 bigPrior = pyPrior.bigShape
                 bigLater = pyLater.bigShape
 
-                print'prior ', (pyPrior.numWire, pyPrior.numGeom)
-                print'later ', (pyLater.numWire, pyLater.numGeom)
+                # print'prior ', (pyPrior.numWire, pyPrior.numGeom)
+                # print'later ', (pyLater.numWire, pyLater.numGeom)
 
                 gS = pyPlane.geomShape
                 cutterList = []
 
                 if pyPlane.arrow:
-                    print'A'
+                    # print'A'
 
                     if not pyPrior.reflexed:
-                        print'1'
+                        # print'1'
                         cutterList.append(bigPrior)
 
                     if not pyLater.reflexed:
-                        print'2'
+                        # print'2'
                         cutterList.append(bigLater)
 
                 elif pyPlane.reflexed:
-                    print'B'
+                    # print'B'
 
                     if not pyPrior.reflexed:
-                        print'1'
+                        # print'1'
                         cutterList.append(bigPrior)
                     elif not (pyPrior.choped or pyPrior.aligned):
                         pyR = self.selectReflex(self.numWire,
                                                   pyPlane.numGeom,
                                                   pyPrior.numGeom)
                         if not pyR:
-                            print '11'
+                            # print '11'
                             cutterList.append(bigPrior)
 
                     if not pyLater.reflexed:
-                        print'2'
+                        # print'2'
                         cutterList.append(bigLater)
                     elif not (pyLater.choped or pyLater.aligned):
                         pyR = self.selectReflex(self.numWire,
                                                   pyPlane.numGeom,
                                                   pyLater.numGeom)
                         if not pyR:
-                            print '21'
+                            # print '21'
                             cutterList.append(bigLater)
 
                 else:
-                    print'C'
+                    # print'C'
                     cutterList = [bigPrior, bigLater]
 
                 if cutterList:
-                    print'D'
+                    # print'D'
                     plane = self.cutting(plane, cutterList, gS)
                     pyPlane.shape = plane
 
@@ -324,7 +324,7 @@ class _PyWire(_Py):
             [pyR, pyOppR] = pyReflex.planes
             reflexList.extend([pyR.numGeom, pyOppR.numGeom])
 
-        print 'reflexList ', reflexList
+        # print 'reflexList ', reflexList
 
         for pyReflex in self.reflexs:
             pyReflex.preOrdinaries(reflexList)
@@ -471,10 +471,10 @@ class _PyWire(_Py):
         for pyPlane in self.planes:
             if not (pyPlane.reflexed and not pyPlane.aligned):
                 # no reflexed and no choped. Yes ordinarie and aligned
-                print pyPlane.numGeom
-                print pyPlane.reflexed
-                print pyPlane.choped
-                print pyPlane.aligned
+                # print pyPlane.numGeom
+                # print pyPlane.reflexed
+                # print pyPlane.choped
+                # print pyPlane.aligned
                 if pyPlane.shape:
-                    print '############### ordinaries ', pyPlane.numGeom
+                    # print '############### ordinaries ', pyPlane.numGeom
                     pyPlane.ordinaries(self)
