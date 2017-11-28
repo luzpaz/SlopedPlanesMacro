@@ -153,7 +153,7 @@ class _SlopedPlanes(_Py):
             _Py.upPlane = upPlane
 
         if self.OnChanged:
-            # print 'A'
+            print 'A'
 
             # gathers the exterior wires. Lower Left criteria
 
@@ -184,7 +184,7 @@ class _SlopedPlanes(_Py):
             _Py.faceList = faceList
 
         else:
-            # print 'B'
+            print 'B'
 
             faceList = _Py.faceList
 
@@ -590,7 +590,7 @@ class _SlopedPlanes(_Py):
 
         self.State = True
         self.OnChanged = True
-
+        _Py.faceList = []
 
 class _ViewProvider_SlopedPlanes():
 
