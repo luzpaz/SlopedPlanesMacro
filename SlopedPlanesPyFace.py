@@ -147,8 +147,6 @@ class _PyFace(_Py):
                 dd['_cutter'] = []
                 dd['_oppCutter'] = []
                 dd['_divide'] = []
-                # dd['_forward'] = []
-                # dd['_backward'] = []
                 dd['_simulatedShape'] = None
                 dd['_compound'] = None
 
@@ -194,12 +192,16 @@ class _PyFace(_Py):
             for dd in dct['_planes']:
                 numGeom += 1
                 pyPlane = _PyPlane(numWire, numGeom)
-                if dd['_forward']:
-                    ff = dd['_forward']
-                    dd['_forward'] = Part.Shape().importBrepFromString(ff)
-                    bb = dd['_backward']
-                    dd['backward'] = Part.Shape().importBrepFromString(bb)
                 pyPlane.__dict__ = dd
+
+                if dd['_forward']:
+                    forwardShape = Part.Shape()
+                    forwardShape.importBrepFromString(dd['_forward'])
+                    pyPlane.forward = forwardShape.Edges[0]
+                    backwardShape = Part.Shape()
+                    backwardShape.importBrepFromString(dd['_backward'])
+                    pyPlane.backward = backwardShape.Edges[0]
+
                 planeList.append(pyPlane)
             dct['_planes'] = planeList
 
@@ -267,16 +269,12 @@ class _PyFace(_Py):
                     print 'corner ', corner
                     eje = nextEje
 
-                    #if resetFace:
-                    if ref:
-                        print 'ref'
-                        self.forBack(pyPrePlane, 'forward')  # TODO serializar
-                        self.forBack(pyPlane, 'backward')
-                        # if ref:
-                        if resetFace:
+                    if resetFace:
+                        if ref:
                             # print 'ref'
                             # self.forBack(pyPrePlane, 'forward')
-                            # self.forBack(pyPlane, 'backward')
+                            print 'forBack backward'
+                            self.forBack(pyPlane, 'backward')
                             forward = pyPlane.forward
                             section = forward.section(shapeGeomFace,
                                                       _Py.tolerance)
@@ -306,18 +304,18 @@ class _PyFace(_Py):
                                 self.findRear(pyWire, pyPlane, 'backward')
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
 
-                            # ref = False
-                        ref = False
+                            ref = False
 
-                    if corner == 'reflex' or numWire > 0:
-                        # print '0'
-                        # the interior wires always need forwardLine
-                        # the reflex for rear and
-                        # the convex for alignments
-                        # the exterior wires rear and alignaments with reflex
-                        # if resetFace: TODO serializar
-                        print 'forBack forward'
-                        self.forBack(pyPlane, 'forward')
+
+                    if resetFace:
+                        if corner == 'reflex' or numWire > 0:
+                            # print '0'
+                            # the interior wires always need forwardLine
+                            # the reflex for rear and
+                            # the convex for alignments
+                            # the exterior wires rear and alignaments with reflex
+                            print 'forBack forward'
+                            self.forBack(pyPlane, 'forward')
 
                     if ((numWire == 0 and corner == 'reflex') or
                        (numWire > 0 and corner == 'convex')):
@@ -419,8 +417,6 @@ class _PyFace(_Py):
 
                             else:
                                 # print 'end alignment'
-                                self.forBack(pyPl, 'forward') # TODO serializar
-                                self.forBack(pyNextPlane, 'backward')
                                 if resetFace:
                                     pyEnd = pyAlign.aligns[-1]
                                     if not pyEnd.rear:
@@ -441,15 +437,13 @@ class _PyFace(_Py):
 
                         else:
                             # print '12'  # no alignment
-                            #if resetFace:
-                            if ref:
+                            if resetFace:
                                 # print '121'
                                 if corner == 'reflex':
                                     # print '1211'  # exterior wire reflexed
                                     if not pyPlane.choped:
                                         # print '12111'
-                                        # if ref:
-                                        if resetFace:
+                                        if ref:
                                             # print 'ref'
 
                                             pyPlane.addValue('forward',
@@ -463,8 +457,8 @@ class _PyFace(_Py):
                                             self.doReflex(pyWire, pyPrePlane,
                                                           pyPlane)
 
-                                        # ref = True
-                                ref = True
+                                        ref = True
+
 
                     else:
                         # print '2'  # does not look for alignments
