@@ -258,7 +258,7 @@ class _PyFace(_Py):
 
             for pyPlane in pyPlaneList:
                 numGeom = pyPlane.numGeom
-                print '### numGeom ', numGeom, ' angle ', pyPlane.angle
+                # print '### numGeom ', numGeom, ' angle ', pyPlane.angle
 
                 if not pyPlane.geomAligned:
                     eje = coord[numGeom+2].sub(coord[numGeom+1])
@@ -266,14 +266,14 @@ class _PyFace(_Py):
                 else:
                     nextEje = coord[numGeom+2].sub(coord[numGeom+1])
                     corner = self.convexReflex(eje, nextEje, numWire)
-                    print 'corner ', corner
+                    # print 'corner ', corner
                     eje = nextEje
 
                     if resetFace:
                         if ref:
                             # print 'ref'
                             # self.forBack(pyPrePlane, 'forward')
-                            print 'forBack backward'
+                            # print 'forBack backward'
                             self.forBack(pyPlane, 'backward')
                             forward = pyPlane.forward
                             section = forward.section(shapeGeomFace,
@@ -314,7 +314,7 @@ class _PyFace(_Py):
                             # the reflex for rear and
                             # the convex for alignments
                             # the exterior wires rear and alignaments with reflex
-                            print 'forBack forward'
+                            # print 'forBack forward'
                             self.forBack(pyPlane, 'forward')
 
                     if ((numWire == 0 and corner == 'reflex') or
@@ -493,7 +493,7 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-        self.printSummary()
+        # self.printSummary()
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 

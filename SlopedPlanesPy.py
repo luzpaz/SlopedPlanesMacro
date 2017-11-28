@@ -44,6 +44,7 @@ class _Py(object):
     reverse = False
     size = 0
     normal = 0
+    faceList = []
     face = None
     pyFace = None
     slopedPlanes = None
