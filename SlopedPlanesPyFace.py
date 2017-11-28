@@ -493,7 +493,7 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-        # self.printSummary()
+        self.printSummary()
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 

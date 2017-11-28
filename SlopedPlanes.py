@@ -153,7 +153,7 @@ class _SlopedPlanes(_Py):
             _Py.upPlane = upPlane
 
         if self.OnChanged:
-            print 'HELLO'
+            # print 'A'
 
             # gathers the exterior wires. Lower Left criteria
 
@@ -184,6 +184,7 @@ class _SlopedPlanes(_Py):
             _Py.faceList = faceList
 
         else:
+            # print 'B'
 
             faceList = _Py.faceList
 
@@ -195,13 +196,13 @@ class _SlopedPlanes(_Py):
             numFace += 1
             # print '######### numFace ', numFace
 
+            size = face.BoundBox.DiagonalLength
+            _Py.size = size
+            _Py.face = face
+
             if self.OnChanged:
                 # elaborates complementary python objects of a face
-                print 'GOOD BYE'
-
-                size = face.BoundBox.DiagonalLength
-                _Py.size = size
-                _Py.face = face
+                # print 'AA'
 
                 coordinates = coordinatesOuterOrdered[numFace]
                 for pyFace in pyFaceListOld:
@@ -315,7 +316,7 @@ class _SlopedPlanes(_Py):
                             pyPlane = _PyPlane(numWire, numGeom)
                             pyPlaneListNew.append(pyPlane)
 
-                        pyPlane.geom = geom    # quitar / no quitar
+                        pyPlane.geom = geom
                         gS = geom.toShape()
                         pyPlane.geomShape = gS
                         geomShapeWire.append(gS)
@@ -329,7 +330,10 @@ class _SlopedPlanes(_Py):
                 pyFace.wires = pyWireListNew
 
             else:
+                # print 'BB'
+
                 pyFace = self.Pyth[numFace]
+                _Py.pyFace = pyFace
 
             pyFace.parsing()
 
@@ -544,7 +548,8 @@ class _SlopedPlanes(_Py):
                 for pyPlane in pyWire.planes:
                     setattr(pyPlane, prop, value)
 
-        self.OnChanged = False
+        if self.faceList:
+            self.OnChanged = False
 
     def __getstate__(self):
 

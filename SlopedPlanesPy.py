@@ -23,6 +23,7 @@
 
 
 from math import degrees
+import json
 import FreeCAD
 import Part
 
