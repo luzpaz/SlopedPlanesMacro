@@ -51,6 +51,27 @@ class _Py(object):
     slopedPlanes = None
     upPlane = None
 
+    def getstate(self):
+
+        ''''''
+
+        fList = []
+        for face in _Py.faceList:
+            string = face.exportBrepToString()
+            fList.append(string)
+
+        return fList
+
+    def setstate(self, fList):
+
+        faceList = []
+        for string in fList:
+            shape = Part.Shape()
+            shape.importBrepFromString(string)
+            faceList.append(shape.Faces[0])
+
+        _Py.faceList = faceList
+
     def addLink(self, prop, obj):
 
         ''''''
@@ -561,5 +582,17 @@ class _Py(object):
 
         else:
             pass
+
+        return geom
+
+    def deGeom(self):
+
+        ''''''
+
+        geomAligned = self.geomAligned.Edges[0]
+        curve = geomAligned.Curve
+        startParam = geomAligned.parameterAt(geomAligned.firstVertex(True))
+        endParam = geomAligned.parameterAt(geomAligned.lastVertex(True))
+        geom = self.makeGeom(curve, startParam, endParam)
 
         return geom

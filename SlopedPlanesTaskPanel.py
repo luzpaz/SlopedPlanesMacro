@@ -23,7 +23,6 @@
 
 
 import FreeCAD
-from SlopedPlanesPy import _Py
 
 if FreeCAD.GuiUp:
     import FreeCADGui
@@ -380,8 +379,7 @@ class _TaskPanel_SlopedPlanes():
                 num = len(shell.Faces) - value - lenFace
                 # print 'num ', num
 
-        if _Py.faceList:
-            slopedPlanes.Proxy.OnChanged = False
+        slopedPlanes.Proxy.OnChanged = False
 
         slopedPlanes.touch()
         FreeCAD.ActiveDocument.recompute()

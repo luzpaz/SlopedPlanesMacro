@@ -65,6 +65,7 @@ class _PyPlane(_Py):
         self.forward = None
         self.backward = None
         self.unsolved = []
+        self.virtualized = False
 
     @property
     def numWire(self):
@@ -416,6 +417,20 @@ class _PyPlane(_Py):
 
         self._unsolved = unsolved
 
+    @property
+    def virtualized(self):
+
+        ''''''
+
+        return self._virtualized
+
+    @virtualized.setter
+    def virtualized(self, virtualized):
+
+        ''''''
+
+        self._virtualized = virtualized
+
     def planning(self, pyWire):
 
         '''planning(self, pyWire)
@@ -423,7 +438,7 @@ class _PyPlane(_Py):
 
         coordinates = pyWire.coordinates
         numGeom = self.numGeom
-        geom = self.geomAligned
+        geom = self.deGeom()
         eje = coordinates[numGeom+1].sub(coordinates[numGeom])
         direction = self.rotateVector(eje, _Py.normal, 90)
         angle = self.angle

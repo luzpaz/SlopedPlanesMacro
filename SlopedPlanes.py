@@ -320,7 +320,7 @@ class _SlopedPlanes(_Py):
                         gS = geom.toShape()
                         pyPlane.geomShape = gS
                         geomShapeWire.append(gS)
-                        pyPlane.geomAligned = geom
+                        pyPlane.geomAligned = geom.toShape()
 
                     pyWire.planes = pyPlaneListNew
                     pyWire.shapeGeom = geomShapeWire
@@ -334,6 +334,11 @@ class _SlopedPlanes(_Py):
 
                 pyFace = self.Pyth[numFace]
                 _Py.pyFace = pyFace
+
+                if pyFace.alignments:
+                    for pyWire in pyFace.wires:
+                        for pyPlane in pyWire.planes:
+                            pyPlane.geomAligned = pyPlane.geomShape
 
             pyFace.parsing()
 
@@ -548,8 +553,7 @@ class _SlopedPlanes(_Py):
                 for pyPlane in pyWire.planes:
                     setattr(pyPlane, prop, value)
 
-        if self.faceList:
-            self.OnChanged = False
+        self.OnChanged = False
 
     def __getstate__(self):
 
@@ -563,10 +567,12 @@ class _SlopedPlanes(_Py):
         for pyFace in self.Pyth:
             dct = pyFace.__dict__.copy()
             wires, alignments = pyFace.__getstate__()
-            dct['_wires'], dct['_alignments'] = wires, alignments
             dct['_shapeGeom'] = []
+            dct['_wires'], dct['_alignments'] = wires, alignments
             pyth.append(dct)
         state['Pyth'] = pyth
+
+        state['_faceList'] = self.getstate()
 
         return state
 
@@ -589,8 +595,9 @@ class _SlopedPlanes(_Py):
         self.Pyth = pyth
 
         self.State = True
-        self.OnChanged = True
-        _Py.faceList = []
+
+        self.setstate(state['_faceList'])
+
 
 class _ViewProvider_SlopedPlanes():
 
