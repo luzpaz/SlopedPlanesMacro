@@ -147,13 +147,14 @@ class _PyFace(_Py):
                 dd['_cutter'] = []
                 dd['_oppCutter'] = []
                 dd['_divide'] = []
-                dd['_forward'] = []
-                dd['_backward'] = []
+                # dd['_forward'] = []
+                # dd['_backward'] = []
                 dd['_simulatedShape'] = None
                 dd['_compound'] = None
 
-                '''dd['_forward'] = [pyPlane.forward.exportBrepToString()]
-                dd['_backward'] = [pyPlane.backward.exportBrepToString()]'''
+                if pyPlane.forward:
+                    dd['_forward'] = pyPlane.forward.exportBrepToString()
+                    dd['_backward'] = pyPlane.backward.exportBrepToString()
 
                 planeList.append(dd)
             dct['_planes'] = planeList
@@ -193,10 +194,11 @@ class _PyFace(_Py):
             for dd in dct['_planes']:
                 numGeom += 1
                 pyPlane = _PyPlane(numWire, numGeom)
-                '''ff = dd['_forward']
-                dd['_forward'] = [Part.Shape().importBrepFromString(ff)]
-                bb = dd['_backward']
-                dd['backward'] = [Part.Shape().importBrepFromString(bb)]'''
+                if dd['_forward']:
+                    ff = dd['_forward']
+                    dd['_forward'] = Part.Shape().importBrepFromString(ff)
+                    bb = dd['_backward']
+                    dd['backward'] = Part.Shape().importBrepFromString(bb)
                 pyPlane.__dict__ = dd
                 planeList.append(pyPlane)
             dct['_planes'] = planeList
@@ -254,7 +256,7 @@ class _PyFace(_Py):
 
             for pyPlane in pyPlaneList:
                 numGeom = pyPlane.numGeom
-                # print '### numGeom ', numGeom, ' angle ', pyPlane.angle
+                print '### numGeom ', numGeom, ' angle ', pyPlane.angle
 
                 if not pyPlane.geomAligned:
                     eje = coord[numGeom+2].sub(coord[numGeom+1])
@@ -262,11 +264,12 @@ class _PyFace(_Py):
                 else:
                     nextEje = coord[numGeom+2].sub(coord[numGeom+1])
                     corner = self.convexReflex(eje, nextEje, numWire)
-                    # print 'corner ', corner
+                    print 'corner ', corner
                     eje = nextEje
 
                     #if resetFace:
                     if ref:
+                        print 'ref'
                         self.forBack(pyPrePlane, 'forward')  # TODO serializar
                         self.forBack(pyPlane, 'backward')
                         # if ref:
@@ -303,7 +306,8 @@ class _PyFace(_Py):
                                 self.findRear(pyWire, pyPlane, 'backward')
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
 
-                            ref = False
+                            # ref = False
+                        ref = False
 
                     if corner == 'reflex' or numWire > 0:
                         # print '0'
@@ -312,6 +316,7 @@ class _PyFace(_Py):
                         # the convex for alignments
                         # the exterior wires rear and alignaments with reflex
                         # if resetFace: TODO serializar
+                        print 'forBack forward'
                         self.forBack(pyPlane, 'forward')
 
                     if ((numWire == 0 and corner == 'reflex') or
@@ -436,13 +441,15 @@ class _PyFace(_Py):
 
                         else:
                             # print '12'  # no alignment
-                            if resetFace:
+                            #if resetFace:
+                            if ref:
                                 # print '121'
                                 if corner == 'reflex':
                                     # print '1211'  # exterior wire reflexed
                                     if not pyPlane.choped:
                                         # print '12111'
-                                        if ref:
+                                        # if ref:
+                                        if resetFace:
                                             # print 'ref'
 
                                             pyPlane.addValue('forward',
@@ -456,7 +463,8 @@ class _PyFace(_Py):
                                             self.doReflex(pyWire, pyPrePlane,
                                                           pyPlane)
 
-                                        ref = True
+                                        # ref = True
+                                ref = True
 
                     else:
                         # print '2'  # does not look for alignments

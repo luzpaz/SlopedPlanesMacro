@@ -184,7 +184,7 @@ class _SlopedPlanes(_Py):
         numFace = -1
         for face in faceList:
             numFace += 1
-            print '######### numFace ', numFace
+            # print '######### numFace ', numFace
 
             # elaborates complementary python objects of a face
 
@@ -244,26 +244,26 @@ class _SlopedPlanes(_Py):
             numWire = -1
             for wire in wireList:
                 numWire += 1
-                print '###### numWire ', numWire
+                # print '###### numWire ', numWire
                 coo = coordinates[numWire]
                 brea = False
                 for pyWire in pyWireListOld:
                     oldCoo = pyWire.coordinates
                     if oldCoo[0] == coo[0]:
-                        print 'a'
+                        # print 'a'
                         brea = True
                         if oldCoo != coo:
-                            print 'b'
+                            # print 'b'
                             pyFace.reset = True
                             if len(oldCoo) != len(coo):
-                                print 'c'
+                                # print 'c'
                                 pyWire.reset = True
                         if brea:
                             pyWireListNew.append(pyWire)
                             pyWire.numWire = numWire
                             break
                 else:
-                    print 'd'
+                    # print 'd'
                     pyWire = _PyWire(numWire)
                     pyWireListNew.append(pyWire)
                     pyWire.reset = True
@@ -279,19 +279,19 @@ class _SlopedPlanes(_Py):
                 numGeom = -1
                 for geom in geomWire:
                     numGeom += 1
-                    print '### numGeom ', numGeom
+                    # print '### numGeom ', numGeom
                     try:
                         pyPlane = pyPlaneListOld[numGeom]
                         pyPlaneListNew.append(pyPlane)
                         pyPlane.numGeom = numGeom
-                        print '1'
+                        # print '1'
                         if pyWire.reset:
-                            print '11'
+                            # print '11'
                             pyPlane.angle = slope
                             pyPlane.width = [width, width]
                             pyPlane.length = length
                         if pyFace.reset:
-                            print '111'
+                            # print '111'
                             pyPlane.rear = []
                             pyPlane.rango = []
                             pyPlane.aligned = False
@@ -300,11 +300,9 @@ class _SlopedPlanes(_Py):
                             pyPlane.unsolved = False
                             pyPlane.reflexed = False
                     except IndexError:
-                        print '2'
+                        # print '2'
                         pyPlane = _PyPlane(numWire, numGeom)
                         pyPlaneListNew.append(pyPlane)
-
-                    # TODO  hay algo que no va bien con el reset
 
                     pyPlane.geom = geom    # quitar / no quitar
                     gS = geom.toShape()
@@ -373,19 +371,19 @@ class _SlopedPlanes(_Py):
 
                     # some figures (a few of them) break the planes numeration
                     '''
-                    print 'numGeom ', numAngle
+                    # print 'numGeom ', numAngle
                     plane = pyPlane.shape
                     gS = pyPlane.geomShape
-                    print (gS.firstVertex(True).Point,
+                    # print (gS.firstVertex(True).Point,
                            gS.lastVertex(True).Point)
                     if plane:
                         section = plane.section(gS)
                         if section.Edges:
-                            print 'okey'
+                            # print 'okey'
                         else:
-                            print 'bad'
+                            # print 'bad'
                     else:
-                        print 'no plane'
+                        # print 'no plane'
                     '''
                     # TODO "solution" at task panel
 
