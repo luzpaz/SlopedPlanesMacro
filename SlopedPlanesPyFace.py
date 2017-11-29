@@ -148,6 +148,7 @@ class _PyFace(_Py):
                 dd['_compound'] = None
 
                 dd['_seedShape'] = None
+                dd['_seedBigShape'] = None
 
                 if serialize:
 

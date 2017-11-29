@@ -68,6 +68,7 @@ class _PyPlane(_Py):
         self.virtualized = False
         self.control = [numGeom]
         self.seedShape = None
+        self.seedBigShape = None
 
     @property
     def numWire(self):
@@ -109,9 +110,12 @@ class _PyPlane(_Py):
 
         ''''''
 
-        oldAngle = self.angle
-        if oldAngle != angle:
-            self.seedShape = None
+        try:
+            oldAngle = self.angle
+            if oldAngle != angle:
+                self.seedShape = None
+        except AttributeError:
+            pass
 
         self._angle = angle
 
@@ -127,6 +131,13 @@ class _PyPlane(_Py):
 
         ''''''
 
+        try:
+            oldWidth = self.width
+            if oldWidth != width:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
         self._width = width
 
     @property
@@ -140,6 +151,13 @@ class _PyPlane(_Py):
     def length(self, length):
 
         ''''''
+
+        try:
+            oldLength = self.length
+            if oldLength != length:
+                self.seedShape = None
+        except AttributeError:
+            pass
 
         self._length = length
 
@@ -465,45 +483,72 @@ class _PyPlane(_Py):
 
         self._seedShape = seedShape
 
+    @property
+    def seedBigShape(self):
+
+        ''''''
+
+        return self._seedBigShape
+
+    @seedBigShape.setter
+    def seedBigShape(self, seedBigShape):
+
+        ''''''
+
+        self._seedBigShape = seedBigShape
+
     def planning(self, pyWire):
 
         '''planning(self, pyWire)
         '''
 
-        coordinates = pyWire.coordinates
         numGeom = self.numGeom
-        geom = self.deGeom()
-        eje = coordinates[numGeom+1].sub(coordinates[numGeom])
-        direction = self.rotateVector(eje, _Py.normal, 90)
-        angle = self.angle
-        if _Py.reverse:
-            angle = angle * -1
-        direction = self.rotateVector(direction, eje, angle)
-        direction.normalize()
 
-        firstParam = geom.FirstParameter
-        lastParam = geom.LastParameter
+        if self.seedShape:
+            print 'seed'
 
-        scale = 1
-        plane =\
-            self.doPlane(direction, geom, firstParam,
-                         lastParam, scale)
-        self.shape = plane
+            self.shape = self.seedShape
+            self.bigShape = self.seedBigShape
 
-        scale = 10
-        bigPlane =\
-            self.doPlane(direction, geom, firstParam,
-                         lastParam, scale)
-        self.bigShape = bigPlane
+        else:
+            print 'no seed'
 
-        if self.reflexed:
+            coordinates = pyWire.coordinates
+            geom = self.deGeom()
+            eje = coordinates[numGeom+1].sub(coordinates[numGeom])
+            direction = self.rotateVector(eje, _Py.normal, 90)
+            angle = self.angle
+            if _Py.reverse:
+                angle = angle * -1
+            direction = self.rotateVector(direction, eje, angle)
+            direction.normalize()
 
-            scale = 100
-            enormousPlane =\
+            firstParam = geom.FirstParameter
+            lastParam = geom.LastParameter
+
+            scale = 1
+            plane =\
                 self.doPlane(direction, geom, firstParam,
                              lastParam, scale)
-            self.enormousShape = enormousPlane
+            self.shape = plane
+            self.seedShape = plane
 
+            scale = 10
+            bigPlane =\
+                self.doPlane(direction, geom, firstParam,
+                             lastParam, scale)
+            self.bigShape = bigPlane
+            self.seedBigShape = bigPlane
+
+            if self.reflexed:
+
+                scale = 100
+                enormousPlane =\
+                    self.doPlane(direction, geom, firstParam,
+                                 lastParam, scale)
+                self.enormousShape = enormousPlane
+
+        if self.reflexed:
             self.simulatedShape = None
             self.divide = []
             self.compound = None
