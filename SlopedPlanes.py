@@ -141,13 +141,6 @@ class _SlopedPlanes(_Py):
         width = slopedPlanes.FactorWidth
         length = slopedPlanes.FactorLength
 
-        faceMaker = slopedPlanes.FaceMaker
-        face = Part.makeFace(shape, faceMaker)
-
-        fList = face.Faces
-        normal = self.faceNormal(fList[0])
-        _Py.normal = normal
-
         # prepares a giant plane
         up = slopedPlanes.Up
         if up:
@@ -162,6 +155,13 @@ class _SlopedPlanes(_Py):
 
         if self.OnChanged:
             print 'A'
+
+            faceMaker = slopedPlanes.FaceMaker
+            face = Part.makeFace(shape, faceMaker)
+
+            fList = face.Faces
+            normal = self.faceNormal(fList[0])
+            _Py.normal = normal
 
             # gathers the exterior wires. Lower Left criteria
 
@@ -580,7 +580,7 @@ class _SlopedPlanes(_Py):
         serialize = self.Serialize
 
         if serialize:
-            state['_faceList'] = self.getstate()
+            state['_faceList'], state['_normal'] = self.getstate()
 
         pyth = []
         for pyFace in self.Pyth:
@@ -605,7 +605,7 @@ class _SlopedPlanes(_Py):
         serialize = state['Serialize']
 
         if serialize:
-            self.setstate(state['_faceList'])
+            self.setstate(state['_faceList'], state['_normal'])
 
         pyth = []
         numFace = -1

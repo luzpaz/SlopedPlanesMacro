@@ -23,7 +23,6 @@
 
 
 from math import degrees
-import json
 import FreeCAD
 import Part
 
@@ -60,9 +59,12 @@ class _Py(object):
             string = face.exportBrepToString()
             fList.append(string)
 
-        return fList
+        normal = _Py.normal
+        normal = [normal.x, normal.y, normal.z]
 
-    def setstate(self, fList):
+        return fList, normal
+
+    def setstate(self, fList, normal):
 
         faceList = []
         for string in fList:
@@ -70,7 +72,10 @@ class _Py(object):
             shape.importBrepFromString(string)
             faceList.append(shape.Faces[0])
 
+        normal = FreeCAD.Vector(normal[0], normal[1], normal[2])
+
         _Py.faceList = faceList
+        _Py.normal = normal
 
     def addLink(self, prop, obj):
 
