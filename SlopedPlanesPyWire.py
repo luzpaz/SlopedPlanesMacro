@@ -325,40 +325,12 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.simulating()
 
-    def preOrdinaries(self):
-
-        '''preOrdinaries(self)
-        '''
-
-        reflexList = []     # attribute
-        for pyReflex in self.reflexs:
-            [pyR, pyOppR] = pyReflex.planes
-            reflexList.extend([pyR.numGeom, pyOppR.numGeom])
-
-        # print 'reflexList ', reflexList
-
-        for pyReflex in self.reflexs:
-            pyReflex.preOrdinaries(reflexList)
-
-    def preReflexs(self):
-
-        '''preReflexs(self)
-        '''
-
-        for pyReflex in self.reflexs:
-            pyReflex.preReflexs()
-
     def preProcess(self):
 
         ''''''
 
-        for pyPlane in self.planes:
-            ordinar = pyPlane.ordinar
-            if ordinar:
-                plane = pyPlane.shape
-                gS = pyPlane.geomShape
-                plane = self.cutting(plane, ordinar, gS)
-                pyPlane.shape = plane
+        for pyReflex in self.reflexs:
+            pyReflex.preProcess(self)
 
     def reflexing(self):
 

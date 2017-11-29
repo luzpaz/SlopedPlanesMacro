@@ -93,109 +93,58 @@ class _PyReflex(_Py):
         pyR.simulating(enormousOppR, force)
         pyOppR.simulating(enormousR, force)
 
-    def preOrdinaries(self, reflexList):
-
-        '''preOrdinaries(self)
-        '''
-
-        for pyPlane in self.planes:
-            # if not pyPlane.aligned:
-            # print '###### pyPlane ', pyPlane.numGeom
-            rango = pyPlane.rango
-            ordinarieList = []
-            pyOrdinarieList = []
-            refList = []
-            for ran in rango:
-                for nG in ran:
-                    # print 'nG ', nG
-                    if nG in reflexList:
-                        # print 'a'
-                        pyPl = self.selectReflexPlane(pyPlane.numWire, nG)
-                        if not pyPl.choped:
-                            # print 'aa'
-                            pl = pyPl.simulatedShape
-                            refList.append(pl)
-                    else:
-                        # print 'b'
-                        pyPl = self.selectPlane(pyPlane.numWire, nG)
-                        if not pyPl.choped:
-                            # print 'bb'
-                            pl = pyPl.shape
-                            if pl:
-                                ordinarieList.append(pl)
-                                pyOrdinarieList.append(pyPl)
-
-            # print pyPlane.numGeom
-            # print 'ordinarieList ', ordinarieList
-            # print 'pyOrdinarieList ', [p.numGeom for p in pyOrdinarieList]
-            # print refList
-
-            if len(ordinarieList) > 1:
-                num = -1
-                for pyPl in pyOrdinarieList:
-                    num += 1
-                    pop = ordinarieList.pop(num)
-                    ## gS = pyPl.geomShape
-                    cutterList = ordinarieList + refList
-                    ordinar = pyPl.ordinar
-                    ordinar.extend(cutterList)
-                    pyPl.ordinar = ordinar
-                    ## pop = self.cutting(pop, cutterList, gS)
-                    ordinarieList.insert(num, pop)
-                    ## pyPl.shape = pop
-
-    def preReflexs(self):
+    def preProcess(self, pyWire):
 
         ''''''
 
-        # print[p.numGeom for p in self.planes]
+        pyPlaneList = pyWire.planes
 
-        ordinarieList = []
-        pyOrdinarieList = []
-        for pyPlane in self.planes:
-            # print pyPlane.numGeom
-            rango = pyPlane.rango
-            # print rango
+        for pyReflexPlane in self.planes:
+            rango = pyReflexPlane.rango
+            pyRan = []
             for ran in rango:
                 for nG in ran:
-                    pyPl = self.selectPlane(pyPlane.numWire, nG)
-                    if not pyPl.reflexed:
-                        pl = pyPl.bigShape
-                        ordinarieList.append(pl)
-                        pyOrdinarieList. append(pyPl.numGeom)
+                    pyPl = pyPlaneList[nG]
+                    pyRan.append(pyPl)
 
-        # print 'ordinarieList ', pyOrdinarieList
+            cutterList = []
+            for pyPlane in pyRan:
 
-        for pyPlane in self.planes:
-            # print pyPlane.numGeom
-            rango = pyPlane.rango
-            # print rango
-            for ran in rango:
-                for nG in ran:
-                    pyPl = self.selectPlane(pyPlane.numWire, nG)
-                    if pyPl.reflexed:
-                        plane = pyPl.shape
-                        if plane:
-                            rangoPre = pyPl.rango
-                            rangoP = []
-                            for rr in rangoPre:
-                                for r in rr:
-                                    rangoP.append(r)
-                            # print 'rangoP ', rangoP
-                            cutterList = []
-                            num = -1
-                            for nn in pyOrdinarieList:
-                                num += 1
-                                if nn not in rangoP:
-                                    cutterList.append(ordinarieList[num])
+                if not pyPlane.choped:
 
-                            if cutterList:
-                                ## gS = pyPl.geomShape
-                                ## plane = self.cutting(plane, cutterList, gS)
-                                ## pyPl.shape = plane
-                                ordinar = pyPl.ordinar
-                                ordinar.extend(cutterList)
-                                pyPl.ordinar = ordinar
+                    control = pyPlane.control
+                    rangoPost = pyPlane.rango
+                    total = control + rangoPost
+                    num = -1
+                    for ran in rango:
+                        for nG in ran:
+                            num += 1
+                            if nG not in total:
+                                pyPl = pyRan[num]
+
+                                if not pyPl.reflexed:
+                                    cutterList.append(pyPl.shape)
+                                    pyPlane.addValue('control', nG)
+
+                                elif pyPl.choped:
+                                    pass
+
+                                elif pyPl.aligned:
+                                    pass
+                                    # TODO
+
+                                else:
+                                    if not pyPlane.reflexed or pyPlane.aligned:
+                                        cutterList.append(pyPl.simulatedShape)
+                                    else:
+                                        pass
+                                        # TODO
+
+                    if cutterList:
+                        pyPlane.control = control
+                        plane = pyPlane.shape
+                        gS = pyPlane.geomShape
+                        plane = self.cutting(plane, cutterList, gS)
 
     def reflexing(self, pyWire):
 

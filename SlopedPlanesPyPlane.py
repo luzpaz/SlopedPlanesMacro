@@ -66,8 +66,7 @@ class _PyPlane(_Py):
         self.backward = None
         self.unsolved = []
         self.virtualized = False
-        self.ordinar = []
-        self.control = []
+        self.control = [numGeom]
 
     @property
     def numWire(self):
@@ -434,20 +433,6 @@ class _PyPlane(_Py):
         self._virtualized = virtualized
 
     @property
-    def ordinar(self):
-
-        ''''''
-
-        return self._ordinar
-
-    @ordinar.setter
-    def ordinar(self, ordinar):
-
-        ''''''
-
-        self._ordinar = ordinar
-
-    @property
     def control(self):
 
         ''''''
@@ -504,8 +489,7 @@ class _PyPlane(_Py):
             self.divide = []
             self.compound = None
 
-        self.ordinar = []
-        self.control = []
+        self.control = [numGeom]
 
     def doPlane(self, direction, geom, firstParam, lastParam, scale):
 

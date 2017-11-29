@@ -146,7 +146,6 @@ class _PyFace(_Py):
                 dd['_divide'] = []
                 dd['_simulatedShape'] = None
                 dd['_compound'] = None
-                dd['_ordinar'] = []
 
                 geom = pyPlane.geomShape.exportBrepToString()
                 dd['_geomShape'] = geom
@@ -961,27 +960,8 @@ class _PyFace(_Py):
 
         ''''''
 
-        self.preOrdinaries()
-        self.preReflexs()
-
         for pyWire in self.wires:
             pyWire.preProcess()
-
-    def preOrdinaries(self):
-
-        '''preOrdinaries(self)
-        '''
-
-        for pyWire in self.wires:
-            pyWire.preOrdinaries()
-
-    def preReflexs(self):
-
-        '''preReflexs(self)
-        '''
-
-        for pyWire in self.wires:
-            pyWire.preReflexs()
 
     def reSimulating(self):
 
