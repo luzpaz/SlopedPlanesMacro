@@ -504,6 +504,9 @@ class _PyPlane(_Py):
             self.divide = []
             self.compound = None
 
+        self.ordinaries = []
+        self.control = []
+
     def doPlane(self, direction, geom, firstParam, lastParam, scale):
 
         '''doPlane(self, direction, geom, firstParam, lastParam, scale)
