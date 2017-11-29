@@ -800,9 +800,10 @@ class _PyAlignment(_Py):
                     ff = self.selectFace(base.Faces, gS)
                     pyBase.shape = ff
 
-                    gS = pyTwo.geomShape
-                    shapeTwo = self.cutting(shapeTwo, [ff], gS)
-                    pyTwo.shape = shapeTwo
+                    if not pyTwo.virtualized:
+                        gS = pyTwo.geomShape
+                        shapeTwo = self.cutting(shapeTwo, [ff], gS)
+                        pyTwo.shape = shapeTwo
 
                     gS = pyCont.geomShape
                     ff = self.selectFace(base.Faces, gS)
@@ -816,9 +817,10 @@ class _PyAlignment(_Py):
 
                     pyCont.angle = pyBase.angle
 
-                    gS = pyOne.geomShape
-                    shapeOne = self.cutting(shapeOne, [ff], gS)
-                    pyOne.shape = shapeOne
+                    if not pyOne.virtualized:
+                        gS = pyOne.geomShape
+                        shapeOne = self.cutting(shapeOne, [ff], gS)
+                        pyOne.shape = shapeOne
 
                     pyBase = aligns[numChop]
 

@@ -562,6 +562,7 @@ class _PyPlane(_Py):
             pyPlane.bigShape = big
             pyPlane.enormousShape = enormous
             pyPlane.angle = self.angle
+            pyPlane.virtualized = True
 
             return pyPlane
 
