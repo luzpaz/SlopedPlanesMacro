@@ -110,9 +110,11 @@ class _PyReflex(_Py):
 
             cList = []
             for pyPlane in pyRan:
+                plane = pyPlane.shape
 
-                if not pyPlane.choped:
+                if not pyPlane.choped and plane:
 
+                    print '### numGeom ', pyPlane.numGeom
                     control = pyPlane.control
                     rangoPost = pyPlane.rango
                     total = control + rangoPost
@@ -124,23 +126,32 @@ class _PyReflex(_Py):
                                 pyPl = pyRan[num]
 
                                 if not pyPl.reflexed:
+                                    print 'a'
                                     cList.append(pyPl.shape)
                                     pyPlane.addValue('control', nG)
+                                    print pyPl.shape
 
                                 elif pyPl.choped:
+                                    print 'b'
                                     pass
 
                                 elif pyPl.aligned:
+                                    print 'c'
                                     pyAli =\
                                         self.selectAlignment(numWire,
                                                              pyPl.numGeom)
                                     if pyAli:
-                                        cList.append(pyAli.simulatedShape)
+                                        cList.extend(pyAli.simulatedAlignment)
+                                        print pyAli.simulatedAlignment
 
                                 else:
+                                    print 'd'
                                     if not pyPlane.reflexed or pyPlane.aligned:
+                                        print 'dd'
                                         cList.append(pyPl.simulatedShape)
+                                        print pyPl.simulatedShape
                                     else:
+                                        print 'ddd'
                                         pyReflexList =\
                                             self.selectAllReflex(numWire,
                                                                  pyPl.numGeom)
@@ -151,10 +162,10 @@ class _PyReflex(_Py):
                                                 break
                                         else:
                                             cList.append(pyPl.simulatedShape)
+                                            print pyPl.simulatedShape
 
                     if cList:
                         pyPlane.control = control
-                        plane = pyPlane.shape
                         gS = pyPlane.geomShape
                         plane = self.cutting(plane, cList, gS)
 

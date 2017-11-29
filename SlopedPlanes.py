@@ -97,6 +97,8 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
                                  "SlopedPlanes")
+        slopedPlanes.addProperty("App::PropertyBool", "Serialize",
+                                 "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanes")
 
@@ -111,10 +113,12 @@ class _SlopedPlanes(_Py):
                                   "Part::FaceMakerSimple",
                                   "Part::FaceMakerCheese"]
         slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
+        slopedPlanes.Serialize = True
 
         slopedPlanes.Proxy = self
         self.Type = "SlopedPlanes"
         self.Pyth = []
+        self.Serialize = slopedPlanes.Serialize
 
     def execute(self, slopedPlanes):
 
@@ -150,6 +154,11 @@ class _SlopedPlanes(_Py):
             upPlane = Part.makePlane(1e6, 1e6, FreeCAD.Vector(-1e3, -1e3, 0))
             upPlane.translate(FreeCAD.Vector(0, 0, 1)*up)
             _Py.upPlane = upPlane
+
+        serialize = slopedPlanes.Serialize
+
+        if not serialize:
+            self.OnChanged = True
 
         if self.OnChanged:
             print 'A'
@@ -215,6 +224,9 @@ class _SlopedPlanes(_Py):
                     pyFaceListNew.append(pyFace)
 
                 _Py.pyFace = pyFace
+
+                if not serialize:
+                    pyFace.reset = True
 
                 # gathers the interior wires. Upper Left criteria
 
@@ -560,16 +572,22 @@ class _SlopedPlanes(_Py):
 
         state['Type'] = self.Type
 
-        pyth = []
-        for pyFace in self.Pyth:
-            dct = pyFace.__dict__.copy()
-            wires, alignments = pyFace.__getstate__()
-            dct['_shapeGeom'] = []
-            dct['_wires'], dct['_alignments'] = wires, alignments
-            pyth.append(dct)
-        state['Pyth'] = pyth
+        serialize = self.Serialize
 
-        state['_faceList'] = self.getstate()
+        if serialize:
+
+            pyth = []
+            for pyFace in self.Pyth:
+                dct = pyFace.__dict__.copy()
+                wires, alignments = pyFace.__getstate__()
+                dct['_shapeGeom'] = []
+                dct['_wires'], dct['_alignments'] = wires, alignments
+                pyth.append(dct)
+            state['Pyth'] = pyth
+
+            state['_faceList'] = self.getstate()
+
+        state['Serialize'] = serialize
 
         return state
 
@@ -579,21 +597,37 @@ class _SlopedPlanes(_Py):
 
         self.Type = state['Type']
 
-        pyth = []
-        numFace = -1
-        for dct in state['Pyth']:
-            numFace += 1
-            pyFace = _PyFace(numFace)
-            wires, alignments = dct['_wires'], dct['_alignments']
-            wires, alignments = pyFace.__setstate__(wires, alignments)
-            dct['_wires'], dct['_alignments'] = wires, alignments
-            pyFace.__dict__ = dct
-            pyth.append(pyFace)
-        self.Pyth = pyth
+        serialize = state['Serialize']
+
+        if serialize:
+
+            pyth = []
+            numFace = -1
+            for dct in state['Pyth']:
+                numFace += 1
+                pyFace = _PyFace(numFace)
+                wires, alignments = dct['_wires'], dct['_alignments']
+                wires, alignments = pyFace.__setstate__(wires, alignments)
+                dct['_wires'], dct['_alignments'] = wires, alignments
+                pyFace.__dict__ = dct
+                pyth.append(pyFace)
+            self.Pyth = pyth
+
+            self.setstate(state['_faceList'])
+
+        else:
+
+            self.Pyth = []
+
+        self.Serialize = serialize
 
         self.State = True
 
-        self.setstate(state['_faceList'])
+    def attach(self, slopedPlanes):
+
+        ''''''
+
+        self.Serialize = slopedPlanes.Serialize
 
 
 class _ViewProvider_SlopedPlanes():
