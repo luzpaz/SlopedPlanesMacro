@@ -67,6 +67,7 @@ class _PyPlane(_Py):
         self.unsolved = []
         self.virtualized = False
         self.control = [numGeom]
+        self.seedShape = None
 
     @property
     def numWire(self):
@@ -445,6 +446,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._control = control
+
+    @property
+    def seedShape(self):
+
+        ''''''
+
+        return self._seedShape
+
+    @seedShape.setter
+    def seedShape(self, seedShape):
+
+        ''''''
+
+        self._seedShape = seedShape
 
     def planning(self, pyWire):
 
