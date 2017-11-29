@@ -579,17 +579,16 @@ class _SlopedPlanes(_Py):
         serialize = self.Serialize
 
         if serialize:
-
-            pyth = []
-            for pyFace in self.Pyth:
-                dct = pyFace.__dict__.copy()
-                wires, alignments = pyFace.__getstate__()
-                dct['_shapeGeom'] = []
-                dct['_wires'], dct['_alignments'] = wires, alignments
-                pyth.append(dct)
-            state['Pyth'] = pyth
-
             state['_faceList'] = self.getstate()
+
+        pyth = []
+        for pyFace in self.Pyth:
+            dct = pyFace.__dict__.copy()
+            wires, alignments = pyFace.__getstate__(serialize)
+            dct['_shapeGeom'] = []
+            dct['_wires'], dct['_alignments'] = wires, alignments
+            pyth.append(dct)
+        state['Pyth'] = pyth
 
         state['Serialize'] = serialize
         print '__getState__', state['Serialize']
@@ -603,25 +602,22 @@ class _SlopedPlanes(_Py):
         self.Type = state['Type']
 
         serialize = state['Serialize']
+
         if serialize:
-
-            pyth = []
-            numFace = -1
-            for dct in state['Pyth']:
-                numFace += 1
-                pyFace = _PyFace(numFace)
-                wires, alignments = dct['_wires'], dct['_alignments']
-                wires, alignments = pyFace.__setstate__(wires, alignments)
-                dct['_wires'], dct['_alignments'] = wires, alignments
-                pyFace.__dict__ = dct
-                pyth.append(pyFace)
-            self.Pyth = pyth
-
             self.setstate(state['_faceList'])
 
-        else:
-
-            self.Pyth = []
+        pyth = []
+        numFace = -1
+        for dct in state['Pyth']:
+            numFace += 1
+            pyFace = _PyFace(numFace)
+            wires, alignments = dct['_wires'], dct['_alignments']
+            wires, alignments = pyFace.__setstate__(wires, alignments,
+                                                    serialize)
+            dct['_wires'], dct['_alignments'] = wires, alignments
+            pyFace.__dict__ = dct
+            pyth.append(pyFace)
+        self.Pyth = pyth
 
         self.Serialize = serialize
         print '__setstate__', self.Serialize

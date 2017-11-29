@@ -121,7 +121,7 @@ class _PyFace(_Py):
 
         self._shapeGeom = shapeGeom
 
-    def __getstate__(self):
+    def __getstate__(self, serialize):
 
         '''__getstate__(self)
         Serializes the complementary python objects
@@ -147,15 +147,23 @@ class _PyFace(_Py):
                 dd['_simulatedShape'] = None
                 dd['_compound'] = None
 
-                geom = pyPlane.geomShape.exportBrepToString()
-                dd['_geomShape'] = geom
+                if serialize:
 
-                if pyPlane.geomAligned:
-                    dd['_geomAligned'] = geom
+                    geom = pyPlane.geomShape.exportBrepToString()
+                    dd['_geomShape'] = geom
 
-                if pyPlane.forward:
-                    dd['_forward'] = pyPlane.forward.exportBrepToString()
-                    dd['_backward'] = pyPlane.backward.exportBrepToString()
+                    if pyPlane.geomAligned:
+                        dd['_geomAligned'] = geom
+
+                    if pyPlane.forward:
+                        dd['_forward'] = pyPlane.forward.exportBrepToString()
+                        dd['_backward'] = pyPlane.backward.exportBrepToString()
+
+                else:
+                    dd['_geomShape'] = None
+                    dd['_geomAligned'] = None
+                    dd['_forward'] = None
+                    dd['_backward'] = None
 
                 planeList.append(dd)
             dct['_planes'] = planeList
@@ -178,7 +186,7 @@ class _PyFace(_Py):
 
         return wireList, alignList
 
-    def __setstate__(self, wires, alignments):
+    def __setstate__(self, wires, alignments, serialize):
 
         '''__setstate__(self, wires, alignments)
         Deserializes the complementary python objects
@@ -199,26 +207,28 @@ class _PyFace(_Py):
                 pyPlane = _PyPlane(numWire, numGeom)
                 pyPlane.__dict__ = dd
 
-                if dd['_forward']:
-                    forwardShape = Part.Shape()
-                    forwardShape.importBrepFromString(dd['_forward'])
-                    pyPlane.forward = forwardShape.Edges[0]
-                    backwardShape = Part.Shape()
-                    backwardShape.importBrepFromString(dd['_backward'])
-                    pyPlane.backward = backwardShape.Edges[0]
+                if serialize:
 
-                geomShape = Part.Shape()
-                geomShape.importBrepFromString(dd['_geomShape'])
-                pyPlane.geomShape = geomShape
+                    if dd['_forward']:
+                        forwardShape = Part.Shape()
+                        forwardShape.importBrepFromString(dd['_forward'])
+                        pyPlane.forward = forwardShape.Edges[0]
+                        backwardShape = Part.Shape()
+                        backwardShape.importBrepFromString(dd['_backward'])
+                        pyPlane.backward = backwardShape.Edges[0]
 
-                if dd['_geomAligned']:
-                    geomAligned = Part.Shape()
-                    geomAligned.importBrepFromString(dd['_geomAligned'])
-                    pyPlane.geomAligned = geomAligned
-                else:
-                    dd['_geomAligned'] = geomShape
+                    geomShape = Part.Shape()
+                    geomShape.importBrepFromString(dd['_geomShape'])
+                    pyPlane.geomShape = geomShape
 
-                geomShapeWire.append(geomShape)
+                    if dd['_geomAligned']:
+                        geomAligned = Part.Shape()
+                        geomAligned.importBrepFromString(dd['_geomAligned'])
+                        pyPlane.geomAligned = geomAligned
+                    else:
+                        dd['_geomAligned'] = geomShape
+
+                    geomShapeWire.append(geomShape)
 
                 planeList.append(pyPlane)
             dct['_planes'] = planeList
@@ -242,8 +252,9 @@ class _PyFace(_Py):
 
             wireList.append(pyWire)
 
-            pyWire.shapeGeom = geomShapeWire
-            geomShapeFace.extend(geomShapeWire)
+            if serialize:
+                pyWire.shapeGeom = geomShapeWire
+                geomShapeFace.extend(geomShapeWire)
 
         self.shapeGeom = geomShapeFace
 
