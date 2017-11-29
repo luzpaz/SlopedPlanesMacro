@@ -118,7 +118,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.Proxy = self
         self.Type = "SlopedPlanes"
         self.Pyth = []
-        self.Serialize = slopedPlanes.Serialize
+        self.Serialize = True
 
     def execute(self, slopedPlanes):
 
@@ -528,6 +528,10 @@ class _SlopedPlanes(_Py):
         '''onChanged(self, slopedPlanes, prop)
         '''
 
+        if prop == 'Serialize':
+
+            self.Serialize = slopedPlanes.Serialize
+
         if self.State:
             return
 
@@ -588,6 +592,7 @@ class _SlopedPlanes(_Py):
             state['_faceList'] = self.getstate()
 
         state['Serialize'] = serialize
+        print '__getState__', state['Serialize']
 
         return state
 
@@ -598,7 +603,6 @@ class _SlopedPlanes(_Py):
         self.Type = state['Type']
 
         serialize = state['Serialize']
-
         if serialize:
 
             pyth = []
@@ -620,14 +624,11 @@ class _SlopedPlanes(_Py):
             self.Pyth = []
 
         self.Serialize = serialize
+        print '__setstate__', self.Serialize
 
         self.State = True
 
-    def attach(self, slopedPlanes):
-
-        ''''''
-
-        self.Serialize = slopedPlanes.Serialize
+        self.OnChanged = False
 
 
 class _ViewProvider_SlopedPlanes():

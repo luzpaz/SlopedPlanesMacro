@@ -42,7 +42,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print '__init__'
+        # print '__init__'
 
         self.updating = False
 
@@ -76,7 +76,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print 'retranslateUi'
+        # print 'retranslateUi'
 
         taskPanel.setWindowTitle("SlopedPlanes")
         self.title.setText("SlopedPlanes parameters")
@@ -107,7 +107,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print 'getStandardButtons'
+        # print 'getStandardButtons'
 
         return int(QtGui.QDialogButtonBox.Apply |
                    QtGui.QDialogButtonBox.Close |
@@ -117,7 +117,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print 'clicked'
+        # print 'clicked'
 
         if button == QtGui.QDialogButtonBox.Apply:
 
@@ -130,7 +130,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print 'reject'
+        # print 'reject'
 
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
@@ -140,7 +140,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print 'accept'
+        # print 'accept'
 
         self.resetObject()
         FreeCAD.ActiveDocument.recompute()
@@ -151,7 +151,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print 'edit'
+        # print 'edit'
 
         if not self.updating:
             self.resetObject()
@@ -160,7 +160,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print 'update'
+        # print 'update'
 
         self.updating = True
         self.tree.clear()
@@ -275,7 +275,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print 'resetObject'
+        # print 'resetObject'
 
         slopedPlanes = self.obj
 
