@@ -98,6 +98,7 @@ class _PyReflex(_Py):
         ''''''
 
         pyPlaneList = pyWire.planes
+        numWire = pyWire.numWire
 
         for pyReflexPlane in self.planes:
             rango = pyReflexPlane.rango
@@ -107,7 +108,7 @@ class _PyReflex(_Py):
                     pyPl = pyPlaneList[nG]
                     pyRan.append(pyPl)
 
-            cutterList = []
+            cList = []
             for pyPlane in pyRan:
 
                 if not pyPlane.choped:
@@ -123,28 +124,39 @@ class _PyReflex(_Py):
                                 pyPl = pyRan[num]
 
                                 if not pyPl.reflexed:
-                                    cutterList.append(pyPl.shape)
+                                    cList.append(pyPl.shape)
                                     pyPlane.addValue('control', nG)
 
                                 elif pyPl.choped:
                                     pass
 
                                 elif pyPl.aligned:
-                                    pass
-                                    # TODO
+                                    pyAli =\
+                                        self.selectAlignment(numWire,
+                                                             pyPl.numGeom)
+                                    if pyAli:
+                                        cList.append(pyAli.simulatedShape)
 
                                 else:
                                     if not pyPlane.reflexed or pyPlane.aligned:
-                                        cutterList.append(pyPl.simulatedShape)
+                                        cList.append(pyPl.simulatedShape)
                                     else:
-                                        pass
-                                        # TODO
+                                        pyReflexList =\
+                                            self.selectAllReflex(numWire,
+                                                                 pyPl.numGeom)
+                                        for pyReflex in pyReflexList:
+                                            [pyOne, pyTwo] = pyReflex.planes
+                                            if pyPlane.numGeom in\
+                                               [pyOne.numGeom, pyTwo.numGeom]:
+                                                break
+                                        else:
+                                            cList.append(pyPl.simulatedShape)
 
-                    if cutterList:
+                    if cList:
                         pyPlane.control = control
                         plane = pyPlane.shape
                         gS = pyPlane.geomShape
-                        plane = self.cutting(plane, cutterList, gS)
+                        plane = self.cutting(plane, cList, gS)
 
     def reflexing(self, pyWire):
 
