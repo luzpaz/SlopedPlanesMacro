@@ -528,11 +528,8 @@ class _SlopedPlanes(_Py):
         '''onChanged(self, slopedPlanes, prop)
         '''
 
-        if prop == 'Serialize':
-
-            self.Serialize = slopedPlanes.Serialize
-
         if self.State:
+
             return
 
         if prop == "Slope":
@@ -555,6 +552,10 @@ class _SlopedPlanes(_Py):
             value = (width, width)
             prop = "width"
             self.overWritePyProp(prop, value)
+
+        elif prop == 'Serialize':
+
+            self.Serialize = slopedPlanes.Serialize
 
     def overWritePyProp(self, prop, value):
 
