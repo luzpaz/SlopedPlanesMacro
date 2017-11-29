@@ -223,13 +223,6 @@ class _PyFace(_Py):
                     geomShape.importBrepFromString(dd['_geomShape'])
                     pyPlane.geomShape = geomShape
 
-                    if dd['_geomAligned']:
-                        geomAligned = Part.Shape()
-                        geomAligned.importBrepFromString(dd['_geomAligned'])
-                        pyPlane.geomAligned = geomAligned
-                    else:
-                        dd['_geomAligned'] = geomShape
-
                     geomShapeWire.append(geomShape)
 
                 planeList.append(pyPlane)
