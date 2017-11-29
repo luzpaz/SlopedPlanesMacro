@@ -240,7 +240,8 @@ class _PyAlignment(_Py):
 
         # print '### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
-        enormousShape = self.base.enormousShape
+        pyBase = self.base
+        enormousShape = pyBase.enormousShape
         numWire = self.base.numWire
         pyWire = pyWireList[numWire]
         rango = self.rango
@@ -252,6 +253,7 @@ class _PyAlignment(_Py):
                 if not pyPl.aligned:
 
                     pyPl.trimming(enormousShape)
+                    pyPl.addValue('control', pyBase.numGeom)
 
         falsify = self.falsify
         simulatedChop = self.simulatedChop
@@ -290,12 +292,14 @@ class _PyAlignment(_Py):
                                     if not brea:
                                         # print 'aa'
                                         cList.append(enormousShape)
+                                        pyPl.addValue('control', pyBase.numGeom)
 
                                 else:
                                     # print 'b'
                                     cList = [enormShape]
 
                                 pyPl.trimming(enShape, cList)
+                                pyPl.addValue('control', pyPlane.numGeom)
 
                 enormShape = ffTwo
 
@@ -329,17 +333,20 @@ class _PyAlignment(_Py):
            (pyPrior.choped and not pyPrior.aligned)):
             # print '1'
             cutterList.append(bigPrior)
+            pyBase.addValue('control', pyPrior.numGeom)
 
         if ((not pyLater.reflexed) or
            (pyLater.choped and not pyLater.aligned)):
             # print '2'
             cutterList.append(bigLater)
+            pyBase.addValue('control', pyLater.numGeom)
 
         if not pyPrior.reflexed or pyPrior.choped or pyPrior.aligned:
             # print 'a'
 
             gS = pyPrior.geomShape
             prior = self.cutting(prior, [bigBase], gS)
+            pyPrior.addValue('control', pyBase.numGeom)
 
             pyPrior.shape = prior
 
@@ -351,12 +358,14 @@ class _PyAlignment(_Py):
 
                 gS = pyLater.geomShape
                 later = self.cutting(later, [bigBase], gS)
+                pyLater.addValue('control', pyBase.numGeom)
 
             else:
                 # print 'b11'
 
                 gS = pyLater.geomShape
                 later = self.cutting(later, [bigCont], gS)
+                pyLater.addValue('control', pyCont.numGeom)
 
             pyLater.shape = later
 
@@ -380,6 +389,8 @@ class _PyAlignment(_Py):
 
             gS = pyBase.geomShape
             base = self.cutting(base, cList, gS)
+            pyBase.addValue('control', pyOne.numGeom)
+
             pyBase.shape = base
 
             cList = [pyTwo.bigShape]
@@ -387,9 +398,13 @@ class _PyAlignment(_Py):
                                                    pyCont.numGeom)
             if len(pyAlignList) == 1:
                 cList.extend(cutterList)
+                pyCont.addValue('control', pyPrior.numGeom)
+                pyBase.addValue('control', pyLater.numGeom)
 
             gS = pyCont.geomShape
             cont = self.cutting(cont, cList, gS)
+            pyCont.addValue('control', pyTwo.numGeom)
+
             pyCont.shape = cont
 
     def simulatingAlignment(self):

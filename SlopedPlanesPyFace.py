@@ -146,6 +146,7 @@ class _PyFace(_Py):
                 dd['_divide'] = []
                 dd['_simulatedShape'] = None
                 dd['_compound'] = None
+                dd['ordinar'] = []
 
                 geom = pyPlane.geomShape.exportBrepToString()
                 dd['_geomShape'] = geom
@@ -452,6 +453,9 @@ class _PyFace(_Py):
                                         corner = self.convexReflex(jj, nnjj, numWire)
                                         if corner == 'reflex':
                                             print 'reflex'
+                                            if not pyPl.forward:
+                                                self.forBack(pyPl, 'forward')
+                                                self.forBack(pyNextPlane, 'backward')
                                             self.findRear(pyWire, pyPl, 'forward')
                                             self.findRear(pyWire, pyNextPlane, 'backward')
                                             self.doReflex(pyWire, pyPl, pyNextPlane)
@@ -967,11 +971,9 @@ class _PyFace(_Py):
 
     def reSimulating(self):
 
-        # ¿es esto necesario?
         for pyWire in self.wires:
             for pyReflex in pyWire.reflexs:
                 pyReflex.simulating(force=True)
-        # ¿tengo que repetir también los choped?
 
     def reflexing(self):
 

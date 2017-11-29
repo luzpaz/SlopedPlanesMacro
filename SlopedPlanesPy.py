@@ -83,7 +83,7 @@ class _Py(object):
             linkList.append(obj)
         setattr(self, prop, linkList)
 
-    def addValue(self, prop, value, direction):
+    def addValue(self, prop, value, direction='forward'):
 
         ''''''
 

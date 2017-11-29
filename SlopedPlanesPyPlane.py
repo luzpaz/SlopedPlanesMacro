@@ -66,7 +66,7 @@ class _PyPlane(_Py):
         self.backward = None
         self.unsolved = []
         self.virtualized = False
-        self.ordinaries = []
+        self.ordinar = []
         self.control = []
 
     @property
@@ -434,18 +434,18 @@ class _PyPlane(_Py):
         self._virtualized = virtualized
 
     @property
-    def ordinaries(self):
+    def ordinar(self):
 
         ''''''
 
-        return self._ordinaries
+        return self._ordinar
 
-    @ordinaries.setter
-    def ordinaries(self, ordinaries):
+    @ordinar.setter
+    def ordinar(self, ordinar):
 
         ''''''
 
-        self._ordinaries = ordinaries
+        self._ordinar = ordinar
 
     @property
     def control(self):
@@ -504,7 +504,7 @@ class _PyPlane(_Py):
             self.divide = []
             self.compound = None
 
-        self.ordinaries = []
+        self.ordinar = []
         self.control = []
 
     def doPlane(self, direction, geom, firstParam, lastParam, scale):
