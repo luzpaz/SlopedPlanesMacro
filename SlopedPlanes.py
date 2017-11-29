@@ -347,10 +347,9 @@ class _SlopedPlanes(_Py):
                 pyFace = self.Pyth[numFace]
                 _Py.pyFace = pyFace
 
-                if pyFace.alignments:
-                    for pyWire in pyFace.wires:
-                        for pyPlane in pyWire.planes:
-                            pyPlane.geomAligned = pyPlane.geomShape
+                for pyWire in pyFace.wires:
+                    for pyPlane in pyWire.planes:
+                        pyPlane.geomAligned = pyPlane.geomShape
 
             pyFace.parsing()
 
