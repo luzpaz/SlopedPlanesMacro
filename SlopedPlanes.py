@@ -624,7 +624,7 @@ class _SlopedPlanes(_Py):
 
         self.State = True
 
-        self.OnChanged = False
+        self.OnChanged = True
 
 
 class _ViewProvider_SlopedPlanes():
