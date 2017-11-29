@@ -135,11 +135,14 @@ class _PyReflex(_Py):
                 for pyPl in pyOrdinarieList:
                     num += 1
                     pop = ordinarieList.pop(num)
-                    gS = pyPl.geomShape
+                    ## gS = pyPl.geomShape
                     cutterList = ordinarieList + refList
-                    pop = self.cutting(pop, cutterList, gS)
+                    ordinar = pyPl.ordinar
+                    ordinar.extend(cutterList)
+                    pyPl.ordinar = ordinar
+                    ## pop = self.cutting(pop, cutterList, gS)
                     ordinarieList.insert(num, pop)
-                    pyPl.shape = pop
+                    ## pyPl.shape = pop
 
     def preReflexs(self):
 
@@ -187,12 +190,12 @@ class _PyReflex(_Py):
                                     cutterList.append(ordinarieList[num])
 
                             if cutterList:
-                                # plane = pyPl.shape
-                                gS = pyPl.geomShape
-                                plane = self.cutting(plane, cutterList, gS)
-                                pyPl.shape = plane
-
-        pass
+                                ## gS = pyPl.geomShape
+                                ## plane = self.cutting(plane, cutterList, gS)
+                                ## pyPl.shape = plane
+                                ordinar = pyPl.ordinar
+                                ordinar.extend(cutterList)
+                                pyPl.ordinar = ordinar
 
     def reflexing(self, pyWire):
 

@@ -348,6 +348,18 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.preReflexs()
 
+    def preProcess(self):
+
+        ''''''
+
+        for pyPlane in self.planes:
+            ordinar = pyPlane.ordinar
+            if ordinar:
+                plane = pyPlane.shape
+                gS = pyPlane.geomShape
+                plane = self.cutting(plane, ordinar, gS)
+                pyPlane.shape = plane
+
     def reflexing(self):
 
         '''reflexing(self)
