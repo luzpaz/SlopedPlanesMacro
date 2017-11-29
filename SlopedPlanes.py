@@ -145,7 +145,6 @@ class _SlopedPlanes(_Py):
         _Py.normal = normal
 
         # prepares a giant plane
-
         up = slopedPlanes.Up
         if up:
             upPlane = Part.makePlane(1e6, 1e6, FreeCAD.Vector(-1e3, -1e3, 0))
@@ -354,9 +353,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.simulating()
 
-            pyFace.preOrdinaries()
-
-            pyFace.preReflexs()
+            pyFace.preProcess()
 
             pyFace.reSimulating()
 
