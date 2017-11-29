@@ -109,6 +109,10 @@ class _PyPlane(_Py):
 
         ''''''
 
+        oldAngle = self.angle
+        if oldAngle != angle:
+            self.seedShape = None
+
         self._angle = angle
 
     @property

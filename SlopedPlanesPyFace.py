@@ -147,6 +147,8 @@ class _PyFace(_Py):
                 dd['_simulatedShape'] = None
                 dd['_compound'] = None
 
+                dd['_seedShape'] = None
+
                 if serialize:
 
                     geom = pyPlane.geomShape.exportBrepToString()

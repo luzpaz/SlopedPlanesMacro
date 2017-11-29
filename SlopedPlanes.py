@@ -322,6 +322,7 @@ class _SlopedPlanes(_Py):
                                 pyPlane.choped = False
                                 pyPlane.unsolved = []
                                 pyPlane.reflexed = False
+                                pyPlane.seedShape = None
                         except IndexError:
                             # print '2'
                             pyPlane = _PyPlane(numWire, numGeom)
