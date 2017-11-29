@@ -147,6 +147,8 @@ class _PyFace(_Py):
                 dd['_simulatedShape'] = None
                 dd['_compound'] = None
 
+                dd['_geomAligned'] = None
+
                 dd['_seedShape'] = None
                 dd['_seedBigShape'] = None
 
@@ -154,9 +156,6 @@ class _PyFace(_Py):
 
                     geom = pyPlane.geomShape.exportBrepToString()
                     dd['_geomShape'] = geom
-
-                    if pyPlane.geomAligned:
-                        dd['_geomAligned'] = geom
 
                     if pyPlane.forward:
                         dd['_forward'] = pyPlane.forward.exportBrepToString()
