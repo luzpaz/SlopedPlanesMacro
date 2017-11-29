@@ -66,6 +66,8 @@ class _PyPlane(_Py):
         self.backward = None
         self.unsolved = []
         self.virtualized = False
+        self.ordinaries = []
+        self.control = []
 
     @property
     def numWire(self):
@@ -430,6 +432,34 @@ class _PyPlane(_Py):
         ''''''
 
         self._virtualized = virtualized
+
+    @property
+    def ordinaries(self):
+
+        ''''''
+
+        return self._ordinaries
+
+    @ordinaries.setter
+    def ordinaries(self, ordinaries):
+
+        ''''''
+
+        self._ordinaries = ordinaries
+
+    @property
+    def control(self):
+
+        ''''''
+
+        return self._control
+
+    @control.setter
+    def control(self, control):
+
+        ''''''
+
+        self._control = control
 
     def planning(self, pyWire):
 
