@@ -164,6 +164,10 @@ class _PyReflex(_Py):
                                             cList.append(pyPl.simulatedShape)
                                             print pyPl.simulatedShape
 
+                            else:
+                                if nG in rangoPost:
+                                    control.append(nG)
+
                     if cList:
                         pyPlane.control = control
                         gS = pyPlane.geomShape
