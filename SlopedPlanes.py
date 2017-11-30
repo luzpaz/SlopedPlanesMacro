@@ -618,9 +618,10 @@ class _SlopedPlanes(_Py):
             numFace += 1
             pyFace = _PyFace(numFace)
             wires, alignments = dct['_wires'], dct['_alignments']
-            wires, alignments = pyFace.__setstate__(wires, alignments,
-                                                    serialize)
-            dct['_wires'], dct['_alignments'] = wires, alignments
+            wires, alignments, geomShapeFace =\
+                pyFace.__setstate__(wires, alignments, serialize)
+            dct['_wires'], dct['_alignments'], dct['_shapeGeom'] =\
+                wires, alignments, geomShapeFace
             pyFace.__dict__ = dct
             pyth.append(pyFace)
         self.Pyth = pyth
@@ -637,6 +638,7 @@ class _SlopedPlanes(_Py):
         # a continuacion se cambia la geometría es necesario otro recompute
 
         self.Restoring = False
+
 
 class _ViewProvider_SlopedPlanes():
 

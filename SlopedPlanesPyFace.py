@@ -245,20 +245,19 @@ class _PyFace(_Py):
 
             pyWire.__dict__ = dct
 
-            wireList.append(pyWire)
-
             if serialize:
+                print 'geomShapeWire ', geomShapeWire
                 pyWire.shapeGeom = geomShapeWire
                 geomShapeFace.extend(geomShapeWire)
 
-        self.shapeGeom = geomShapeFace
+            wireList.append(pyWire)
 
         alignList = []
         for dct in alignments:
             pyAlignment = _PyAlignment()
             alignList.append(pyAlignment)
 
-        return wireList, alignList
+        return wireList, alignList, geomShapeFace
 
     def parsing(self):
 
@@ -266,6 +265,7 @@ class _PyFace(_Py):
         Splits the face finding its reflex corners and alignments'''
 
         resetFace = self.reset
+
         if not resetFace and not self.alignments:
             return
 
@@ -351,6 +351,9 @@ class _PyFace(_Py):
 
                         forward = pyPlane.forward
                         section = forward.section(shapeGeomFace, _Py.tolerance)
+                        print shapeGeomFace
+                        print forward
+                        print section
 
                         if section.Edges:
                             print '11 possible alignament'
