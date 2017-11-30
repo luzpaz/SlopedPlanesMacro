@@ -892,7 +892,7 @@ class _PyPlane(_Py):
                     ran = range(nGeom+1, numGeom-1)
 
             rango.append(ran)
-            rangoConsolidate.extend(rango)
+            rangoConsolidate.extend(ran)
 
         elif lenRear == 2:
             [nGeom1, nGeom2] = rear

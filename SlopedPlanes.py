@@ -73,7 +73,8 @@ class _SlopedPlanes(_Py):
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
         The Proxy stores:
-        State, OnChanged, Type, and the complementary python objects (Pyth)'''
+        the flags State, OnChanged, Type, Serialize, Restoring and Load,
+        and the complementary python objects into the list Pyth'''
 
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "SlopedPlanes")
@@ -102,9 +103,6 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanes")
 
-        self.State = False
-        self.OnChanged = True
-
         slopedPlanes.Slope = 45.0
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
@@ -116,12 +114,14 @@ class _SlopedPlanes(_Py):
         slopedPlanes.Serialize = True
 
         slopedPlanes.Proxy = self
-        self.Type = "SlopedPlanes"
+
         self.Pyth = []
+        self.Type = "SlopedPlanes"
         self.Serialize = True
         self.Restoring = False
-
         self.Load = False
+        self.State = False
+        self.OnChanged = True
 
     def execute(self, slopedPlanes):
 
@@ -154,6 +154,7 @@ class _SlopedPlanes(_Py):
         serialize = slopedPlanes.Serialize
 
         if (not serialize and self.Load) or self.Restoring:
+            print 'OnChanged'
             self.OnChanged = True
 
         if self.OnChanged:
@@ -596,7 +597,8 @@ class _SlopedPlanes(_Py):
             dct = pyFace.__dict__.copy()
             wires, alignments = pyFace.__getstate__(serialize)
             dct['_shapeGeom'] = []
-            dct['_wires'], dct['_alignments'] = wires, alignments
+            dct['_wires'] = wires
+            dct['_alignments'] = alignments
             pyth.append(dct)
         state['Pyth'] = pyth
 
@@ -621,11 +623,13 @@ class _SlopedPlanes(_Py):
         for dct in state['Pyth']:
             numFace += 1
             pyFace = _PyFace(numFace)
-            wires, alignments = dct['_wires'], dct['_alignments']
+            wires = dct['_wires']
+            alignments = dct['_alignments']
             wires, alignments, geomShapeFace =\
                 pyFace.__setstate__(wires, alignments, serialize)
-            dct['_wires'], dct['_alignments'], dct['_shapeGeom'] =\
-                wires, alignments, geomShapeFace
+            dct['_wires'] = wires
+            dct['_alignments'] = alignments
+            dct['_shapeGeom'] = geomShapeFace
             pyFace.__dict__ = dct
             pyth.append(pyFace)
         self.Pyth = pyth
