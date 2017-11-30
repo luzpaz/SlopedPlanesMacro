@@ -389,6 +389,7 @@ class _SlopedPlanes(_Py):
         else:
             pyFaceListNew = self.Pyth
         self.OnChanged = True
+        self.Restoring = False
 
         # elaborates a list of planes for every face
 
