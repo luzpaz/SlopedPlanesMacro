@@ -102,17 +102,12 @@ class _PyReflex(_Py):
 
         for pyReflexPlane in self.planes:
             print '###### pyReflexPlane ', pyReflexPlane.numGeom
-            rango = pyReflexPlane.rango
+            rango = pyReflexPlane.rangoConsolidate
             print rango
             pyRan = []
-            for ran in rango:
-                for nG in ran:
-                    pyPl = pyPlaneList[nG]
-                    pyRan.append(pyPl)
-            print pyRan
-
-            # TODO los rangos los tienes que tener en una única lista y como propiedad
-            # rangoConsolidate
+            for nG in rango:
+                pyPl = pyPlaneList[nG]
+                pyRan.append(pyPl)
 
             cList = []
             for pyPlane in pyRan:
@@ -122,67 +117,61 @@ class _PyReflex(_Py):
 
                     print '### numGeom ', pyPlane.numGeom
                     control = pyPlane.control
-                    rangoPost = pyPlane.rango
-                    rangoP = []
-                    for ran in rango:
-                        for nG in ran:
-                            rangoP.append(nG)
-                    # TODO rangoConsolidate
-
-                    total = control + rangoP
-                    print total
+                    print 'control ', control
+                    rangoPost = pyPlane.rangoConsolidate
+                    total = control + rangoPost
+                    print 'total ', total
                     num = -1
-                    for ran in rango:
-                        for nG in ran:
-                            num += 1
-                            if nG not in total:
-                                pyPl = pyRan[num]
+                    for nG in rango:
+                        num += 1
+                        if nG not in total:
+                            pyPl = pyRan[num]
+                            nGeom = pyPl.nGeom
 
-                                if not pyPl.reflexed:
-                                    print 'a'
-                                    cList.append(pyPl.shape)
-                                    pyPlane.addValue('control', nG)
-                                    print pyPl.shape
+                            if not pyPl.reflexed:
+                                print 'a'
+                                cList.append(pyPl.shape)
+                                control.append(nG)
+                                print pyPl.shape
 
-                                elif pyPl.choped:
-                                    print 'b'
-                                    pass
+                            elif pyPl.choped:
+                                print 'b'
+                                pass
 
-                                elif pyPl.aligned:
-                                    print 'c'
-                                    pyAli =\
-                                        self.selectAlignment(numWire,
-                                                             pyPl.numGeom)
-                                    if pyAli:
-                                        cList.extend(pyAli.simulatedAlignment)
-                                        print pyAli.simulatedAlignment
-
-                                else:
-                                    print 'd'
-                                    if not pyPlane.reflexed or pyPlane.aligned:
-                                        print 'dd'
-                                        cList.append(pyPl.simulatedShape)
-                                        print pyPl.simulatedShape
-                                    else:
-                                        print 'ddd'
-                                        pyReflexList =\
-                                            self.selectAllReflex(numWire,
-                                                                 pyPl.numGeom)
-                                        for pyReflex in pyReflexList:
-                                            [pyOne, pyTwo] = pyReflex.planes
-                                            if pyPlane.numGeom in\
-                                               [pyOne.numGeom, pyTwo.numGeom]:
-                                                break
-                                        else:
-                                            cList.append(pyPl.simulatedShape)
-                                            print pyPl.simulatedShape
+                            elif pyPl.aligned:
+                                print 'c'
+                                pyAli =\
+                                    self.selectAlignment(numWire, nGeom)
+                                if pyAli:
+                                    cList.extend(pyAli.simulatedAlignment)
+                                    print pyAli.simulatedAlignment
 
                             else:
-                                if nG in rangoPost:
-                                    control.append(nG)
+                                print 'd'
+                                if not pyPlane.reflexed or pyPlane.aligned:
+                                    print 'dd'
+                                    cList.append(pyPl.simulatedShape)
+                                    print pyPl.simulatedShape
+                                else:
+                                    print 'ddd'
+                                    pyReflexList =\
+                                        self.selectAllReflex(numWire, nGeom)
+                                    for pyReflex in pyReflexList:
+                                        [pyOne, pyTwo] = pyReflex.planes
+                                        if pyPlane.numGeom in\
+                                           [pyOne.numGeom, pyTwo.numGeom]:
+                                            break
+                                    else:
+                                        cList.append(pyPl.simulatedShape)
+                                        print pyPl.simulatedShape
+
+                        else:
+                            if nG in rangoPost:
+                                control.append(nG)
 
                     if cList:
                         pyPlane.control = control
+                        print 'control ', control
                         gS = pyPlane.geomShape
                         plane = self.cutting(plane, cList, gS)
 
