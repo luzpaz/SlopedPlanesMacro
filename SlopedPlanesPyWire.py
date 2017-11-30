@@ -267,7 +267,7 @@ class _PyWire(_Py):
                 plane = pyPlane.shape
 
                 numGeom = pyPlane.numGeom
-                # print 'numGeom ', numGeom
+                print '### numGeom ', numGeom
                 # print 'reflexed ', pyPlane.reflexed
                 # print 'choped ', pyPlane.choped
                 # print 'arrow ', pyPlane.arrow
@@ -338,6 +338,8 @@ class _PyWire(_Py):
                     # print'D'
                     plane = self.cutting(plane, cutterList, gS)
                     pyPlane.shape = plane
+
+            print 'control priorLater', pyPlane.control
 
     def simulating(self):
 
