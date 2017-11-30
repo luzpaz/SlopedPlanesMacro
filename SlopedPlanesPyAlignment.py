@@ -42,6 +42,7 @@ class _PyAlignment(_Py):
         self.aligns = []
         self.chops = []
         self.rango = []
+        self.rangoConsolidate = []
         self.falsify = False
         self.simulatedAlignment = []
         self.simulatedChop = []
@@ -103,6 +104,20 @@ class _PyAlignment(_Py):
         ''''''
 
         self._rango = rango
+
+    @property
+    def rangoConsolidate(self):
+
+        ''''''
+
+        return self._rangoConsolidate
+
+    @rangoConsolidate.setter
+    def rangoConsolidate(self, rangoConsolidate):
+
+        ''''''
+
+        self._rangoConsolidate = rangoConsolidate
 
     @property
     def falsify(self):
@@ -244,16 +259,15 @@ class _PyAlignment(_Py):
         enormousShape = pyBase.enormousShape
         numWire = self.base.numWire
         pyWire = pyWireList[numWire]
-        rango = self.rango
         # print 'rango ', rango
         pyPlaneList = pyWire.planes
-        for ran in rango:
-            for nG in ran:
-                pyPl = pyPlaneList[nG]
-                if not pyPl.aligned:
 
-                    pyPl.trimming(enormousShape)
-                    pyPl.addValue('control', pyBase.numGeom)
+        for nG in self.rangoConsolidate:
+            pyPl = pyPlaneList[nG]
+            if not pyPl.aligned:
+
+                pyPl.trimming(enormousShape)
+                pyPl.addValue('control', pyBase.numGeom)
 
         falsify = self.falsify
         simulatedChop = self.simulatedChop
@@ -276,30 +290,29 @@ class _PyAlignment(_Py):
 
                     # print 'rango ', pyPlane.rango
                     brea = False
-                    for ran in pyPlane.rango:
-                        for nG in ran:
-                            pyPl = pyPlaneList[nG]
+                    for nG in pyPlane.rangoConsolidate:
+                        pyPl = pyPlaneList[nG]
 
-                            if pyPl.reflexed:
-                                brea = True
+                        if pyPl.reflexed:
+                            brea = True
+
+                        else:
+                            # print 'pyPl ', pyPl.numGeom
+
+                            if not falsify:
+                                # print 'a'
+                                cList = [enormShape]
+                                if not brea:
+                                    # print 'aa'
+                                    cList.append(enormousShape)
+                                    pyPl.addValue('control', pyBase.numGeom)
 
                             else:
-                                # print 'pyPl ', pyPl.numGeom
+                                # print 'b'
+                                cList = [enormShape]
 
-                                if not falsify:
-                                    # print 'a'
-                                    cList = [enormShape]
-                                    if not brea:
-                                        # print 'aa'
-                                        cList.append(enormousShape)
-                                        pyPl.addValue('control', pyBase.numGeom)
-
-                                else:
-                                    # print 'b'
-                                    cList = [enormShape]
-
-                                pyPl.trimming(enShape, cList)
-                                pyPl.addValue('control', pyPlane.numGeom)
+                            pyPl.trimming(enShape, cList)
+                            pyPl.addValue('control', pyPlane.numGeom)
 
                 enormShape = ffTwo
 
@@ -881,6 +894,8 @@ class _PyAlignment(_Py):
 
         pyWireList = _Py.pyFace.wires
 
+        rango = []
+
         for [pyPlane, pyPl] in self.chops:
             [(w1, g1), (w2, g2)] =\
                 [(pyPlane.numWire, pyPlane.numGeom),
@@ -896,8 +911,11 @@ class _PyAlignment(_Py):
                 else:
                     ran = range(g1+1, g2)
                 rangoChop = ran
+                rango.extend(ran)
 
             else:
                 rangoChop = []
 
             self.addValue('rango', rangoChop, 'backward')
+
+        self.rangoConsolidate = rango
