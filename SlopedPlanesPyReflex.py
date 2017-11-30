@@ -517,21 +517,7 @@ class _PyReflex(_Py):
         forward = pyR.forward
         backward = pyR.backward
 
-        rear = pyR.cutter[0]
-        if len(pyOppR.rear) == 1:
-            oppRear = pyOppR.cutter[0]
-            try:
-                firstRangoCorner = pyR.cutter[2]
-            except IndexError:
-                pass
-        else:
-            firstRangoCorner = pyR.cutter[3]
-            if direction == 'forward':
-                oppRear = pyOppR.cutter[1]
-            else:
-                oppRear = pyOppR.cutter[0]
-
-        '''numRear = pyR.rear[0]
+        numRear = pyR.rear[0]
         pyRear = self.selectPlane(numWire, numRear)
         rear = pyRear.shape
 
@@ -548,7 +534,7 @@ class _PyReflex(_Py):
 
         numFirstRangoCorner = pyR.rango[0][0]
         pyFirstRangoCorner = self.selectPlane(numWire, numFirstRangoCorner)
-        firstRangoCorner = pyFirstRangoCorner.shape'''
+        firstRangoCorner = pyFirstRangoCorner.shape
 
         if aa.Faces:
 
