@@ -689,7 +689,8 @@ class _PyReflex(_Py):
         '''
 
         for pyPlane in self.planes:
-            pyPlane.isUnsolved()
+            if not pyPlane.virtualized:
+                pyPlane.isUnsolved()
 
     def rearing(self, pyWire):
 
@@ -697,8 +698,9 @@ class _PyReflex(_Py):
         '''
 
         for pyPlane in self.planes:
-            if not pyPlane.reflexed:
-                pyPlane.rearing(pyWire, self)
+            if not pyPlane.virtualized:
+                if not pyPlane.reflexed:
+                    pyPlane.rearing(pyWire, self)
 
     def rangging(self, pyWire):
 
