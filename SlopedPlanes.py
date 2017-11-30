@@ -628,8 +628,8 @@ class _SlopedPlanes(_Py):
         # self.OnChanged = True
         # no valdría la pena serializar geomShape
         self.OnChanged = False
-        # si despues de abrir el archivo se cambia la geometría,
-        # es necesario otro recompute
+        # con Serialize True, si tras abrir el archivo
+        # a continuacion se cambia la geometría es necesario otro recompute
 
 
 class _ViewProvider_SlopedPlanes():
