@@ -246,7 +246,6 @@ class _PyFace(_Py):
             pyWire.__dict__ = dct
 
             if serialize:
-                print 'geomShapeWire ', geomShapeWire
                 pyWire.shapeGeom = geomShapeWire
                 geomShapeFace.extend(geomShapeWire)
 
@@ -351,9 +350,6 @@ class _PyFace(_Py):
 
                         forward = pyPlane.forward
                         section = forward.section(shapeGeomFace, _Py.tolerance)
-                        print shapeGeomFace
-                        print forward
-                        print section
 
                         if section.Edges:
                             print '11 possible alignament'
