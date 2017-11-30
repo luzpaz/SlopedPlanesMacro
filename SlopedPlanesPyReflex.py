@@ -471,13 +471,25 @@ class _PyReflex(_Py):
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        self.processReflex(reflex, oppReflex,
-                           pyR, pyOppR,
-                           'forward')
+        if not pyR.virtualized:
 
-        self.processReflex(oppReflex, reflex,
-                           pyOppR, pyR,
-                           'backward')
+            self.processReflex(reflex, oppReflex,
+                               pyR, pyOppR,
+                               'forward')
+
+        else:
+
+            pyR.compound = Part.Compound([])
+
+        if not pyOppR.virtualized:
+
+            self.processReflex(oppReflex, reflex,
+                               pyOppR, pyR,
+                               'backward')
+
+        else:
+
+            pyOppR.compound = Part.Compound([])
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
@@ -616,19 +628,20 @@ class _PyReflex(_Py):
         pyPlaneList = pyWire.planes
 
         for pyPlane in self.planes:
-            if len(pyPlane.compound.Faces) > 1:
-                rear = pyPlane.rear
-                for nGeom in rear:
-                    pyRear = pyPlaneList[nGeom]
-                    if pyRear.reflexed:
-                        # print 'rearReflex'
-                        # print pyRear.numGeom
-                        rearPl = pyRear.compound
-                        gS = pyRear.geomShape
-                        rearPl = self.cutting(rearPl, [pyPlane.compound], gS)
-                        pyRear.compound = rearPl
+            if not pyPlane.virtualized:
+                if len(pyPlane.compound.Faces) > 1:
+                    rear = pyPlane.rear
+                    for nGeom in rear:
+                        pyRear = pyPlaneList[nGeom]
+                        if pyRear.reflexed:
+                            # print 'rearReflex'
+                            # print pyRear.numGeom
+                            rearPl = pyRear.compound
+                            gS = pyRear.geomShape
+                            rearPl = self.cutting(rearPl, [pyPlane.compound], gS)
+                            pyRear.compound = rearPl
 
-                        # TODO aplica tambien al oppReflex de rearPl
+                            # TODO aplica tambien al oppReflex de rearPl
 
     def compounding(self):
 
@@ -652,14 +665,16 @@ class _PyReflex(_Py):
             gS = pyOppR.geomShape
             compoundB = self.cutting(compoundB, [compoundA], gS)
 
-        elif lenA == 1 and lenB == 1:
+        elif lenA <= 1 and lenB <= 1:
             # print 'C'
             # TODO make copy
-            gS = pyR.geomShape
-            compoundA = self.cutting(compoundA, [compoundB], gS)
+            if not pyR.virtualized:
+                gS = pyR.geomShape
+                compoundA = self.cutting(compoundA, [compoundB], gS)
 
-            gS = pyOppR.geomShape
-            compoundB = self.cutting(compoundB, [compoundA], gS)
+            if not pyOppR.virtualized:
+                gS = pyOppR.geomShape
+                compoundB = self.cutting(compoundB, [compoundA], gS)
 
         else:
             # print 'D'

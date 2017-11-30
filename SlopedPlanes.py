@@ -74,7 +74,7 @@ class _SlopedPlanes(_Py):
         Initializes the properties of the SlopedPlanes object and its Proxy.
         The Proxy stores:
         the flags State, OnChanged, Type, Serialize, Restoring and Load,
-        and the complementary python objects into the list Pyth'''
+        and the complementary python objects (Pyth)'''
 
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "SlopedPlanes")
