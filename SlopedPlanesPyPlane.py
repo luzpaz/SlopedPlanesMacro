@@ -765,6 +765,7 @@ class _PyPlane(_Py):
         pyPlaneList = pyWire.planes
 
         numGeom = self.numGeom
+        control = self.control
 
         cutterList = []
         for pyPl in pyPlaneList:

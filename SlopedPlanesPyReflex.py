@@ -471,25 +471,14 @@ class _PyReflex(_Py):
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        if not pyR.virtualized:
 
-            self.processReflex(reflex, oppReflex,
-                               pyR, pyOppR,
-                               'forward')
+        self.processReflex(reflex, oppReflex,
+                           pyR, pyOppR,
+                           'forward')
 
-        else:
-
-            pyR.compound = Part.Compound([])
-
-        if not pyOppR.virtualized:
-
-            self.processReflex(oppReflex, reflex,
-                               pyOppR, pyR,
-                               'backward')
-
-        else:
-
-            pyOppR.compound = Part.Compound([])
+        self.processReflex(oppReflex, reflex,
+                           pyOppR, pyR,
+                           'backward')
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
@@ -668,13 +657,11 @@ class _PyReflex(_Py):
         elif lenA <= 1 and lenB <= 1:
             # print 'C'
             # TODO make copy
-            if not pyR.virtualized:
-                gS = pyR.geomShape
-                compoundA = self.cutting(compoundA, [compoundB], gS)
+            gS = pyR.geomShape
+            compoundA = self.cutting(compoundA, [compoundB], gS)
 
-            if not pyOppR.virtualized:
-                gS = pyOppR.geomShape
-                compoundB = self.cutting(compoundB, [compoundA], gS)
+            gS = pyOppR.geomShape
+            compoundB = self.cutting(compoundB, [compoundA], gS)
 
         else:
             # print 'D'
@@ -689,8 +676,7 @@ class _PyReflex(_Py):
         '''
 
         for pyPlane in self.planes:
-            if not pyPlane.virtualized:
-                pyPlane.isUnsolved()
+            pyPlane.isUnsolved()
 
     def rearing(self, pyWire):
 
@@ -698,9 +684,8 @@ class _PyReflex(_Py):
         '''
 
         for pyPlane in self.planes:
-            if not pyPlane.virtualized:
-                if not pyPlane.reflexed:
-                    pyPlane.rearing(pyWire, self)
+            if not pyPlane.reflexed:
+                pyPlane.rearing(pyWire, self)
 
     def rangging(self, pyWire):
 
