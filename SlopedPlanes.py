@@ -121,6 +121,8 @@ class _SlopedPlanes(_Py):
         self.Serialize = True
         self.Restoring = False
 
+        self.Load = False
+
     def execute(self, slopedPlanes):
 
         '''execute(self, slopedPlanes)
@@ -151,7 +153,7 @@ class _SlopedPlanes(_Py):
 
         serialize = slopedPlanes.Serialize
 
-        if not serialize or self.Restoring:
+        if (not serialize and self.Load) or self.Restoring:
             self.OnChanged = True
 
         if self.OnChanged:
@@ -226,7 +228,7 @@ class _SlopedPlanes(_Py):
 
                 _Py.pyFace = pyFace
 
-                if not serialize or self.Restoring:
+                if (not serialize and self.Load) or self.Restoring:
                     pyFace.reset = True
 
                 # gathers the interior wires. Upper Left criteria
@@ -390,6 +392,7 @@ class _SlopedPlanes(_Py):
             pyFaceListNew = self.Pyth
         self.OnChanged = True
         self.Restoring = False
+        self.Load = False
 
         # elaborates a list of planes for every face
 
@@ -638,6 +641,8 @@ class _SlopedPlanes(_Py):
         # a continuacion se cambia la geometría es necesario otro recompute
 
         self.Restoring = False
+
+        self.Load = True
 
 
 class _ViewProvider_SlopedPlanes():
