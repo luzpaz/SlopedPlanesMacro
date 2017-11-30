@@ -47,6 +47,7 @@ class _PyPlane(_Py):
         self.length = 2
         self.rear = []
         self.rango = []
+        self.rangoConsolidate = []
         self.reflexed = False
         self.aligned = False
         self.choped = False
@@ -188,6 +189,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._rango = rango
+
+    @property
+    def rangoConsolidate(self):
+
+        ''''''
+
+        return self._rangoConsolidate
+
+    @rangoConsolidate.setter
+    def rangoConsolidate(self, rangoConsolidate):
+
+        ''''''
+
+        self._rangoConsolidate = rangoConsolidate
 
     @property
     def reflexed(self):
@@ -848,6 +863,7 @@ class _PyPlane(_Py):
         lenRear = len(rear)
 
         rango = []
+        rangoConsolidate = []
 
         if lenRear == 1:
 
@@ -876,6 +892,7 @@ class _PyPlane(_Py):
                     ran = range(nGeom+1, numGeom-1)
 
             rango.append(ran)
+            rangoConsolidate.extend(rango)
 
         elif lenRear == 2:
             [nGeom1, nGeom2] = rear
@@ -905,5 +922,7 @@ class _PyPlane(_Py):
                         ran = range(nG+1, numGeom-1)
 
                 rango.append(ran)
+                rangoConsolidate.extend(ran)
 
         self.rango = rango
+        self.rangoConsolidate = rangoConsolidate

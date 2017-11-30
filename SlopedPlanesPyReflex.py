@@ -101,12 +101,18 @@ class _PyReflex(_Py):
         numWire = pyWire.numWire
 
         for pyReflexPlane in self.planes:
+            print '###### pyReflexPlane ', pyReflexPlane.numGeom
             rango = pyReflexPlane.rango
+            print rango
             pyRan = []
             for ran in rango:
                 for nG in ran:
                     pyPl = pyPlaneList[nG]
                     pyRan.append(pyPl)
+            print pyRan
+
+            # TODO los rangos los tienes que tener en una única lista y como propiedad
+            # rangoConsolidate
 
             cList = []
             for pyPlane in pyRan:
@@ -117,7 +123,14 @@ class _PyReflex(_Py):
                     print '### numGeom ', pyPlane.numGeom
                     control = pyPlane.control
                     rangoPost = pyPlane.rango
-                    total = control + rangoPost
+                    rangoP = []
+                    for ran in rango:
+                        for nG in ran:
+                            rangoP.append(nG)
+                    # TODO rangoConsolidate
+
+                    total = control + rangoP
+                    print total
                     num = -1
                     for ran in rango:
                         for nG in ran:
@@ -203,6 +216,11 @@ class _PyReflex(_Py):
         '''twin(self, pyWire, pyR, pyOppR, direction)
         '''
 
+        control = pyR.control
+
+        print 'pyR.numGeom ', pyR.numGeom
+        print control
+
         reflexEnormous = pyR.enormousShape.copy()
         pyOppR.addLink('oppCutter', reflexEnormous)
 
@@ -219,72 +237,86 @@ class _PyReflex(_Py):
         rear = pyR.rear
 
         for nGeom in rear:
-            rearPyPl = pyPlaneList[nGeom]
 
-            if rearPyPl.aligned:
-                # print 'a'
-                pyAlign = self.selectAlignment(numWire, nGeom)
-                rearPl = pyAlign.simulatedAlignment
-                pyOppR.addLink('oppCutter', rearPl)
-                pyR.addLink('cutter', rearPl)
-                # print 'included rear simulated', (rearPl, numWire, nGeom)
+            if nGeom not in control:
 
-            elif rearPyPl.choped:
-                # print 'b'
-                rearPl = rearPyPl.simulatedShape
-                pyR.addLink('cutter', rearPl)
-                pyOppR.addLink('oppCutter', rearPl)
-                # print 'included rear simulated ', (rearPl, numWire, nGeom)
+                rearPyPl = pyPlaneList[nGeom]
+    
+                if rearPyPl.aligned:
+                    # print 'a'
+                    pyAlign = self.selectAlignment(numWire, nGeom)
+                    rearPl = pyAlign.simulatedAlignment
+                    pyOppR.addLink('oppCutter', rearPl)
+                    pyR.addLink('cutter', rearPl)
+                    # print 'included rear simulated', (rearPl, numWire, nGeom)
+    
+                elif rearPyPl.choped:
+                    # print 'b'
+                    rearPl = rearPyPl.simulatedShape
+                    pyR.addLink('cutter', rearPl)
+                    pyOppR.addLink('oppCutter', rearPl)
+                    # print 'included rear simulated ', (rearPl, numWire, nGeom)
+    
+                elif rearPyPl.reflexed:
+                    # print 'c'
+                    rearPl = rearPyPl.simulatedShape
+                    pyOppR.addLink('oppCutter', rearPl)
+                    pyR.addLink('cutter', rearPl)
+                    # print 'included rear simulated', (rearPl, numWire, nGeom)
+    
+                else:
+                    # print 'd'
+                    rearPl = rearPyPl.shape
+                    pyR.addLink('cutter', rearPl)
+                    pyOppR.addLink('oppCutter', rearPl)
+                    # print 'included rear ', (rearPl, numWire, nGeom)
+                    # # control.append(nGeom)
 
-            elif rearPyPl.reflexed:
-                # print 'c'
-                rearPl = rearPyPl.simulatedShape
-                pyOppR.addLink('oppCutter', rearPl)
-                pyR.addLink('cutter', rearPl)
-                # print 'included rear simulated', (rearPl, numWire, nGeom)
-
-            else:
-                # print 'd'
-                rearPl = rearPyPl.shape
-                pyR.addLink('cutter', rearPl)
-                pyOppR.addLink('oppCutter', rearPl)
-                # print 'included rear ', (rearPl, numWire, nGeom)
+        pyR.control = control
 
         oppRear = pyOppR.rear
 
         if len(oppRear) == 1:
 
             nGeom = oppRear[0]
-            pyOppRear = pyPlaneList[nGeom]
 
-            if pyOppRear.aligned:
-                # print 'a'
-                pyAlign = self.selectAlignment(numWire, nGeom)
-                oppRearPl = pyAlign.simulatedAlignment
-                pyOppR.addLink('oppCutter', oppRearPl)
-                pyR.addLink('cutter', oppRearPl)
-                # print 'included oppRear simulated', (rearPl, numWire, nGeom)
+            control = pyR.control
 
-            elif pyOppRear.choped:
-                # print 'b'
-                oppRearPl = pyOppRear.simulatedShape
-                pyR.addLink('cutter', oppRearPl)
-                pyOppR.addLink('oppCutter', oppRearPl)
-                # print 'included oppRear simulated', (oppRearPl, numWire, nGeom)
+            if nGeom not in control:
 
-            elif pyOppRear.reflexed:
-                # print 'c'
-                oppRearPl = pyOppRear.simulatedShape
-                pyR.addLink('cutter', oppRearPl)
-                pyOppR.addLink('oppCutter', oppRearPl)
-                # print 'included oppRear simulated ', (oppRearPl, numWire, nGeom)
+                pyOppRear = pyPlaneList[nGeom]
 
-            else:
-                # print 'd'
-                oppRearPl = pyOppRear.shape
-                pyR.addLink('cutter', oppRearPl)
-                pyOppR.addLink('oppCutter', oppRearPl)
-                # print 'included oppRear ', (oppRearPl, numWire, nGeom)
+                if pyOppRear.aligned:
+                    # print 'a'
+                    pyAlign = self.selectAlignment(numWire, nGeom)
+                    oppRearPl = pyAlign.simulatedAlignment
+                    pyOppR.addLink('oppCutter', oppRearPl)
+                    pyR.addLink('cutter', oppRearPl)
+                    # print 'included oppRear simulated', (rearPl, numWire, nGeom)
+
+                elif pyOppRear.choped:
+                    # print 'b'
+                    oppRearPl = pyOppRear.simulatedShape
+                    pyR.addLink('cutter', oppRearPl)
+                    pyOppR.addLink('oppCutter', oppRearPl)
+                    # print 'included oppRear simulated', (oppRearPl, numWire, nGeom)
+
+                elif pyOppRear.reflexed:
+                    # print 'c'
+                    oppRearPl = pyOppRear.simulatedShape
+                    pyR.addLink('cutter', oppRearPl)
+                    pyOppR.addLink('oppCutter', oppRearPl)
+                    # print 'included oppRear simulated ', (oppRearPl, numWire, nGeom)
+
+                else:
+                    # print 'd'
+                    oppRearPl = pyOppRear.shape
+                    pyR.addLink('cutter', oppRearPl)
+                    pyOppR.addLink('oppCutter', oppRearPl)
+                    # print 'included oppRear ', (oppRearPl, numWire, nGeom)
+                    # # control.append(nGeom)
+
+            pyR.control = control
 
         elif len(oppRear) == 2:
 
@@ -329,10 +361,14 @@ class _PyReflex(_Py):
                           oppReflexEnormous)
         '''
 
+        control = pyR.control
+
         if direction == "forward":
             nGeom = oppRear[1]
         else:
             nGeom = oppRear[0]
+
+        # if nGeom not in control:
 
         pyOppRear = pyWire.planes[nGeom]
 
@@ -340,11 +376,14 @@ class _PyReflex(_Py):
         pyR.addLink('cutter', oppRearPl)
         pyOppR.addLink('oppCutter', oppRearPl)
         # print 'included oppRear ', (oppRearPl, nWire, nGeom)
+        # control.append(nGeom)
 
         if direction == "forward":
             nGeom = oppRear[0]
         else:
             nGeom = oppRear[1]
+
+        # if nGeom not in control:
 
         pyOppRear = pyWire.planes[nGeom]
         oppRearPl = pyOppRear.shape.copy()
@@ -367,6 +406,8 @@ class _PyReflex(_Py):
                 pyOppR.addLink('oppCutter', ff)
                 # print 'included oppRear rectified ', (oppRearPl, nWire, nGeom)
                 break
+
+        pyR.control = control
 
     def processRango(self, pyWire, pyR, pyOppR, nn, kind):
 

@@ -320,6 +320,7 @@ class _SlopedPlanes(_Py):
                                 # print '111'
                                 pyPlane.rear = []
                                 pyPlane.rango = []
+                                pyPlane.rangoConsolidate = []
                                 pyPlane.aligned = False
                                 pyPlane.arrow = False
                                 pyPlane.choped = False

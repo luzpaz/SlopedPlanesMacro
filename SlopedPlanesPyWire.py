@@ -157,7 +157,7 @@ class _PyWire(_Py):
 
         for pyReflex in self.reflexs:
             for pyPlane in pyReflex.planes:
-                # print 'cutter ', pyPlane.numGeom
+                print '###### cutter ', pyPlane.numGeom
 
                 angle = pyPlane.angle
                 numWire = pyPlane.numWire
@@ -170,21 +170,25 @@ class _PyWire(_Py):
                 pyPlaneList = self.planes
                 for ran in rango:
                     for nG in ran:
-                        # print 'cutted ', nG
+                        print '### cutted ', nG
                         pyPl = pyPlaneList[nG]
+                        # TODO rangoConsolidate
 
                         # TODO pyPl numWire and angle
 
                         if not pyPl.reflexed:
+                            print 'a'
 
                             pyPl.trimming(enormousShape)
                             pyPl.addValue('control', pyPlane.numGeom)
 
                         elif pyPl.aligned:
+                            print 'b'
 
                             pass
 
                         else:
+                            print 'c'
 
                             forward = pyPlane.forward
                             gS = pyPlane.geomShape
@@ -195,10 +199,12 @@ class _PyWire(_Py):
                             if (not section.Edges and
                                len(section.Vertexes) == 1):
 
+                                print 'cc'
                                 section = forw.section(section.Vertexes,
                                                        _Py.tolerance)
 
                                 if not section.Vertexes:
+                                    print 'ccc'
 
                                     procc = True
 
@@ -207,6 +213,8 @@ class _PyWire(_Py):
                                     pyRList =\
                                         self.selectAllReflex(nWire,
                                                              nGeom)
+
+                                    print pyRList
 
                                     for pyR in pyRList:
                                         if not procc:
@@ -223,10 +231,12 @@ class _PyWire(_Py):
                                                     break
 
                                     if procc:
-                                        # print 'procc'
+                                        print 'procc'
                                         pyPl.trimming(enormousShape)
                                         pyPl.addValue('control',
                                                       pyPlane.numGeom)
+
+                        print pyPl.control
 
     def priorLater(self):
 
