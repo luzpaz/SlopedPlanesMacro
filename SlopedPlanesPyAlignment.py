@@ -858,17 +858,21 @@ class _PyAlignment(_Py):
             base = self.cutting(base, cutterList, gS)
             pyBase.shape = base
 
-            gS = pyTwo.geomShape
-            shapeTwo = self.cutting(shapeTwo, [base, cont, shapeOne], gS)
-            pyTwo.shape = shapeTwo
+            if not pyTwo.virtualized:
+
+                gS = pyTwo.geomShape
+                shapeTwo = self.cutting(shapeTwo, [base, cont, shapeOne], gS)
+                pyTwo.shape = shapeTwo
 
             gS = pyCont.geomShape
             cont = self.cutting(cont, cutterList, gS)
             pyCont.shape = cont
 
-            gS = pyOne.geomShape
-            shapeOne = self.cutting(shapeOne, [cont, base, shapeTwo], gS)
-            pyOne.shape = shapeOne
+            if not pyOne.virtualized:
+
+                gS = pyOne.geomShape
+                shapeOne = self.cutting(shapeOne, [cont, base, shapeTwo], gS)
+                pyOne.shape = shapeOne
 
     def rangging(self):
 
