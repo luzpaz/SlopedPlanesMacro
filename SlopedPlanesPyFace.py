@@ -178,8 +178,6 @@ class _PyFace(_Py):
 
                 planeList.append(dd)
             dct['_planes'] = planeList
-            # TODO probar compilando un Wire
-            # si no acelera poner Serialize False de inicio
 
             if serialize:
                 ww = Part.Wire(edgeList)
@@ -979,12 +977,12 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.priorLater()
 
-        print '###### priorLater alignments'
+        # print '###### priorLater alignments'
 
-        for pyWire in self.wires:
+        '''for pyWire in self.wires:
             print 'wire ', pyWire.numWire
             for pyPlane in pyWire.planes:
-                print pyPlane.numGeom, pyPlane.control
+                print pyPlane.numGeom, pyPlane.control'''
 
     def simulating(self):
 

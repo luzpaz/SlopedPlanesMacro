@@ -74,7 +74,8 @@ class _SlopedPlanes(_Py):
         Initializes the properties of the SlopedPlanes object and its Proxy.
         The Proxy stores:
         the flags State, OnChanged, Type, Serialize, Restoring and Load,
-        and the complementary python objects (Pyth)'''
+        the complementary python objects (Pyth)
+        and a list of faces (faceList)'''
 
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "SlopedPlanes")
@@ -115,6 +116,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.Proxy = self
 
         self.Pyth = []
+        self.faceList = []
         self.Type = "SlopedPlanes"
         self.Serialize = True
         self.Restoring = False
@@ -134,6 +136,13 @@ class _SlopedPlanes(_Py):
         sketchAxis = sketch.Placement.Rotation.Axis
         sketchAngle = sketch.Placement.Rotation.Angle
         shape.Placement = FreeCAD.Placement()
+
+        faceMaker = slopedPlanes.FaceMaker
+        face = Part.makeFace(shape, faceMaker)
+
+        fList = face.Faces
+        normal = self.faceNormal(fList[0])
+        _Py.normal = normal
 
         _Py.tolerance = slopedPlanes.Tolerance
         _Py.reverse = slopedPlanes.Reverse
@@ -156,18 +165,11 @@ class _SlopedPlanes(_Py):
         pyth = self.Pyth
 
         if (not serialize and load) or restoring:
-            # print 'OnChanged'
+            print 'OnChanged'
             onChanged = True
 
         if onChanged:
-            # print 'A'
-
-            faceMaker = slopedPlanes.FaceMaker
-            face = Part.makeFace(shape, faceMaker)
-
-            fList = face.Faces
-            normal = self.faceNormal(fList[0])
-            _Py.normal = normal
+            print 'A'
 
             # gathers the exterior wires. Lower Left criteria
 
@@ -195,12 +197,12 @@ class _SlopedPlanes(_Py):
                 pop = fFaceOuter.pop(index)
                 falseFaceOuter.append(pop)
 
-            _Py.faceList = faceList
+            self.faceList = faceList
 
         else:
-            # print 'B'
+            print 'B'
 
-            faceList = _Py.faceList
+            faceList = self.faceList
 
         # procedees face by face and stores them into the Proxy
         pyFaceListOld = pyth
@@ -208,7 +210,7 @@ class _SlopedPlanes(_Py):
         numFace = -1
         for face in faceList:
             numFace += 1
-            # print '######### numFace ', numFace
+            print '######### numFace ', numFace
 
             size = face.BoundBox.DiagonalLength
             _Py.size = size
@@ -216,7 +218,7 @@ class _SlopedPlanes(_Py):
 
             if onChanged:
                 # elaborates complementary python objects of a face
-                # print 'AA'
+                print 'AA'
 
                 coordinates = coordinatesOuterOrdered[numFace]
                 for pyFace in pyFaceListOld:
@@ -273,26 +275,26 @@ class _SlopedPlanes(_Py):
                 numWire = -1
                 for wire in wireList:
                     numWire += 1
-                    # print '###### numWire ', numWire
+                    print '###### numWire ', numWire
                     coo = coordinates[numWire]
                     brea = False
                     for pyWire in pyWireListOld:
                         oldCoo = pyWire.coordinates
                         if oldCoo[0] == coo[0]:
-                            # print 'a'
+                            print 'a'
                             brea = True
                             if oldCoo != coo:
-                                # print 'b'
+                                print 'b'
                                 pyFace.reset = True
                                 if len(oldCoo) != len(coo):
-                                    # print 'c'
+                                    print 'c'
                                     pyWire.reset = True
                             if brea:
                                 pyWireListNew.append(pyWire)
                                 pyWire.numWire = numWire
                                 break
                     else:
-                        # print 'd'
+                        print 'd'
                         pyWire = _PyWire(numWire)
                         pyWireListNew.append(pyWire)
                         pyWire.reset = True
@@ -308,19 +310,19 @@ class _SlopedPlanes(_Py):
                     numGeom = -1
                     for geom in geomWire:
                         numGeom += 1
-                        # print '### numGeom ', numGeom
+                        print '### numGeom ', numGeom
                         try:
                             pyPlane = pyPlaneListOld[numGeom]
                             pyPlaneListNew.append(pyPlane)
                             pyPlane.numGeom = numGeom
-                            # print '1'
+                            print '1'
                             if pyWire.reset:
-                                # print '11'
+                                print '11'
                                 pyPlane.angle = slope
                                 pyPlane.width = [width, width]
                                 pyPlane.length = length
                             if pyFace.reset:
-                                # print '111'
+                                print '111'
                                 pyPlane.rear = []
                                 pyPlane.rango = []
                                 pyPlane.rangoConsolidate = []
@@ -331,7 +333,7 @@ class _SlopedPlanes(_Py):
                                 pyPlane.reflexed = False
                                 pyPlane.seedShape = None
                         except IndexError:
-                            # print '2'
+                            print '2'
                             pyPlane = _PyPlane(numWire, numGeom)
                             pyPlaneListNew.append(pyPlane)
 
@@ -349,7 +351,7 @@ class _SlopedPlanes(_Py):
                 pyFace.wires = pyWireListNew
 
             else:
-                # print 'BB'
+                print 'BB'
 
                 pyFace = pyth[numFace]
                 _Py.pyFace = pyFace
@@ -391,9 +393,12 @@ class _SlopedPlanes(_Py):
             pyFace.ending()
 
         if onChanged:
+            print 'AAA'
             self.Pyth = pyFaceListNew
         else:
+            print 'BBB'
             pyFaceListNew = self.Pyth
+
         self.OnChanged = True
         self.Restoring = False
         self.Load = False
@@ -585,7 +590,7 @@ class _SlopedPlanes(_Py):
         serialize = self.Serialize
 
         if serialize:
-            state['_faceList'], state['_normal'] = self.getstate()
+            state['_faceList'] = self.getstate(self.faceList)
 
         pyth = []
         for pyFace in self.Pyth:
@@ -611,7 +616,8 @@ class _SlopedPlanes(_Py):
         serialize = state['Serialize']
 
         if serialize:
-            self.setstate(state['_faceList'], state['_normal'])
+            faceList = self.setstate(state['_faceList'])
+            self.faceList = faceList
 
         pyth = []
         numFace = -1

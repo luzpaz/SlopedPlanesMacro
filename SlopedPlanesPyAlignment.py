@@ -253,7 +253,7 @@ class _PyAlignment(_Py):
         The alignment blocks the progress
         of the planes in its front and laterals'''
 
-        print '###### trimming alignments'
+        # print '###### trimming alignments'
 
         # TODO incluir en control rangoChop vs rango
 
@@ -320,10 +320,10 @@ class _PyAlignment(_Py):
 
                 enormShape = ffTwo
 
-        for pyWire in pyWireList:
+        '''for pyWire in pyWireList:
             print 'wire ', pyWire.numWire
             for pyPlane in pyWire.planes:
-                print pyPlane.numGeom, pyPlane.control
+                print pyPlane.numGeom, pyPlane.control'''
 
     def priorLater(self):
 

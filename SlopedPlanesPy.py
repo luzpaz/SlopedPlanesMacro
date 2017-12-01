@@ -44,27 +44,23 @@ class _Py(object):
     reverse = False
     size = 0
     normal = 0
-    faceList = []
     face = None
     pyFace = None
     slopedPlanes = None
     upPlane = None
 
-    def getstate(self):
+    def getstate(self, faceList):
 
         ''''''
 
         fList = []
-        for face in _Py.faceList:
+        for face in faceList:
             string = face.exportBrepToString()
             fList.append(string)
 
-        normal = _Py.normal
-        normal = [normal.x, normal.y, normal.z]
+        return fList
 
-        return fList, normal
-
-    def setstate(self, fList, normal):
+    def setstate(self, fList):
 
         faceList = []
         for string in fList:
@@ -72,10 +68,7 @@ class _Py(object):
             shape.importBrepFromString(string)
             faceList.append(shape.Faces[0])
 
-        normal = FreeCAD.Vector(normal[0], normal[1], normal[2])
-
-        _Py.faceList = faceList
-        _Py.normal = normal
+        return faceList
 
     def addLink(self, prop, obj):
 

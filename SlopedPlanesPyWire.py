@@ -155,7 +155,7 @@ class _PyWire(_Py):
         The reflex corners act like a dam
         blocking the progress of others planes'''
 
-        print '###### trimming reflexs numWire ', self.numWire
+        # print '###### trimming reflexs numWire ', self.numWire
 
         for pyReflex in self.reflexs:
             num = -1
@@ -255,15 +255,15 @@ class _PyWire(_Py):
                                         pyPl.trimming(enormousShape)
                                         pyPl.addValue('control', numGeom)
 
-        for pyPlane in self.planes:
-            print pyPlane.numGeom, pyPlane.control
+        '''for pyPlane in self.planes:
+            print pyPlane.numGeom, pyPlane.control'''
 
     def priorLater(self):
 
         '''priorLater(self)
         '''
 
-        print '###### priorLater wire ', self.numWire
+        # print '###### priorLater wire ', self.numWire
 
         pyPlaneList = self.planes
         lenWire = len(pyPlaneList)
@@ -348,8 +348,8 @@ class _PyWire(_Py):
 
             # print 'control priorLater', pyPlane.control
 
-        for pyPlane in self.planes:
-            print pyPlane.numGeom, pyPlane.control
+        '''for pyPlane in self.planes:
+            print pyPlane.numGeom, pyPlane.control'''
 
     def simulating(self):
 
@@ -366,40 +366,40 @@ class _PyWire(_Py):
 
         ''''''
 
-        print '###### preProcess wire ', self.numWire
+        # print '###### preProcess wire ', self.numWire
 
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
 
-        for pyPlane in self.planes:
-            print pyPlane.numGeom, pyPlane.control
+        '''for pyPlane in self.planes:
+            print pyPlane.numGeom, pyPlane.control'''
 
     def reflexing(self):
 
         '''reflexing(self)
         '''
 
-        print '###### reflexing wire ', self.numWire
+        # print '###### reflexing wire ', self.numWire
 
-        print '### reflexing'
+        # print '### reflexing'
 
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
 
-        for pyPlane in self.planes:
-            print pyPlane.numGeom, pyPlane.control
+        '''for pyPlane in self.planes:
+            print pyPlane.numGeom, pyPlane.control'''
 
-        print '### solveReflex'
+        # print '### solveReflex'
 
         for pyReflex in self.reflexs:
             pyReflex.solveReflex()
 
-        print '### rearReflex'
+        # print '### rearReflex'
 
         for pyReflex in self.reflexs:
             pyReflex.rearReflex(self)
 
-        print '### compounding'
+        # print '### compounding'
 
         for pyReflex in self.reflexs:
             pyReflex.compounding()
