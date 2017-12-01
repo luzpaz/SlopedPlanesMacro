@@ -776,12 +776,11 @@ class _PyPlane(_Py):
 
         pyPlaneList = pyWire.planes
 
-        numGeom = self.numGeom
-        ## control = self.control
+        control = self.control
 
         cutterList = []
         for pyPl in pyPlaneList:
-            if pyPl.numGeom != numGeom:
+            if pyPl.numGeom not in control:
                 pl = pyPl.shape
                 if pl:
                     # print 'numGeom ', pyPl.numGeom
