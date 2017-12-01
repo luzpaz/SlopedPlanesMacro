@@ -319,29 +319,27 @@ class _PyReflex(_Py):
                 self.processOppRear(oppRear, direction, pyWire, pyR,
                                     pyOppR, oppReflexEnormous)
 
-        rangoCorner = pyR.rango
+        rangoCorner = pyR.rangoConsolidate
 
-        for ran in rangoCorner:
-            for nn in ran:
+        for nn in rangoCorner:
+            if nn not in control:
                 if nn not in oppRear:
 
-                    self.processRango(pyWire, pyR, pyOppR,
-                                      nn, 'rangoCorner')
+                    self.processRango(pyWire, pyR, pyOppR, nn, 'rangoCorner')
 
-        rangoNext = pyOppR.rango
+        rangoNext = pyOppR.rangoConsolidate
 
         if len(rear) == 1:
-            for ran in rangoNext:
-                for nn in ran:
+            for nn in rangoNext:
+                if nn not in control:
 
-                    self.processRango(pyWire, pyR, pyOppR,
-                                      nn, 'rangoNext')
+                    self.processRango(pyWire, pyR, pyOppR, nn, 'rangoNext')
 
         rangoInter = self.rango
         for nn in rangoInter:
+            if nn not in control:
 
-            self.processRango(pyWire, pyR, pyOppR, nn,
-                              'rangoInter')
+                self.processRango(pyWire, pyR, pyOppR, nn,  'rangoInter')
 
     def processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR,
                        oppReflexEnormous):
@@ -350,45 +348,50 @@ class _PyReflex(_Py):
                           oppReflexEnormous)
         '''
 
+        control = pyR.control
 
         if direction == "forward":
             nGeom = oppRear[1]
         else:
             nGeom = oppRear[0]
 
-        pyOppRear = pyWire.planes[nGeom]
+        if nGeom not in control:
 
-        oppRearPl = pyOppRear.shape.copy()
-        pyR.addLink('cutter', oppRearPl)
-        pyOppR.addLink('oppCutter', oppRearPl)
-        # print 'included oppRear ', (oppRearPl, nWire, nGeom)
+            pyOppRear = pyWire.planes[nGeom]
+
+            oppRearPl = pyOppRear.shape.copy()
+            pyR.addLink('cutter', oppRearPl)
+            pyOppR.addLink('oppCutter', oppRearPl)
+            # print 'included oppRear ', (oppRearPl, nWire, nGeom)
 
         if direction == "forward":
             nGeom = oppRear[0]
         else:
             nGeom = oppRear[1]
 
-        pyOppRear = pyWire.planes[nGeom]
-        oppRearPl = pyOppRear.shape.copy()
-        oppRearPl = oppRearPl.cut([oppReflexEnormous], _Py.tolerance)
+        if nGeom not in control:
 
-        pointWire = pyWire.coordinates
+            pyOppRear = pyWire.planes[nGeom]
+            oppRearPl = pyOppRear.shape.copy()
+            oppRearPl = oppRearPl.cut([oppReflexEnormous], _Py.tolerance)
 
-        if direction == "forward":
-            point = pointWire[nGeom+1]
-        else:
-            point = pointWire[nGeom]
+            pointWire = pyWire.coordinates
 
-        # print 'point ', point
-        vertex = Part.Vertex(point)
+            if direction == "forward":
+                point = pointWire[nGeom+1]
+            else:
+                point = pointWire[nGeom]
 
-        for ff in oppRearPl.Faces:
-            section = vertex.section([ff], _Py.tolerance)
-            if section.Vertexes:
-                pyR.addLink('cutter', ff)
-                pyOppR.addLink('oppCutter', ff)
-                # print 'included oppRear rectified ', (oppRearPl, nWire, nGeom)
-                break
+            # print 'point ', point
+            vertex = Part.Vertex(point)
+
+            for ff in oppRearPl.Faces:
+                section = vertex.section([ff], _Py.tolerance)
+                if section.Vertexes:
+                    pyR.addLink('cutter', ff)
+                    pyOppR.addLink('oppCutter', ff)
+                    # print 'included oppRear rectified ', (oppRearPl, nWire, nGeom)
+                    break
 
     def processRango(self, pyWire, pyR, pyOppR, nn, kind):
 
@@ -481,7 +484,6 @@ class _PyReflex(_Py):
 
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
-
 
         self.processReflex(reflex, oppReflex,
                            pyR, pyOppR,
