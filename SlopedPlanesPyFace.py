@@ -133,6 +133,10 @@ class _PyFace(_Py):
             dct['_coordinates'] = [[v.x, v.y, v.z] for v in pyWire.coordinates]
             dct['_shapeGeom'] = []
 
+            if serialize:
+                edgeList = []
+                forBack = []
+
             planeList = []
             for pyPlane in pyWire.planes:
                 dd = pyPlane.__dict__.copy()
@@ -154,12 +158,17 @@ class _PyFace(_Py):
 
                 if serialize:
 
-                    geom = pyPlane.geomShape.exportBrepToString()
-                    dd['_geomShape'] = geom
+                    '''geom = pyPlane.geomShape.exportBrepToString()
+                    dd['_geomShape'] = geom'''
+                    edgeList.append(pyPlane.geomShape)
+                    dd['_geomShape'] = None
 
                     if pyPlane.forward:
-                        dd['_forward'] = pyPlane.forward.exportBrepToString()
-                        dd['_backward'] = pyPlane.backward.exportBrepToString()
+                        forBack.extend([pyPlane.forward, pyPlane.backward])
+                        '''dd['_forward'] = pyPlane.forward.exportBrepToString()
+                        dd['_backward'] = pyPlane.backward.exportBrepToString()'''
+                        dd['_forward'] = 'forward'
+                        dd['_backward'] = 'backward'
 
                 else:
                     dd['_geomShape'] = None
@@ -171,6 +180,13 @@ class _PyFace(_Py):
             dct['_planes'] = planeList
             # TODO probar compilando un Wire
             # si no acelera poner Serialize False de inicio
+
+            if serialize:
+                ww = Part.Wire(edgeList)
+                dct['_shapeGeom'] = ww.exportBrepToString()
+
+                fb = Part.Compound(forBack)
+                dct['_forBack'] = fb.exportBrepToString()
 
             reflexList = []
             for pyReflex in pyWire.reflexs:
@@ -205,7 +221,18 @@ class _PyFace(_Py):
 
             planeList = []
             numGeom = -1
+            nf = -1
             geomShapeWire = []
+
+            if serialize:
+                edgeList = Part.Shape()
+                edgeList.importBrepFromString(dct['_shapeGeom'])
+                edgeList = edgeList.Edges
+
+                forBack = Part.Shape()
+                forBack.importBrepFromString(dct['_forBack'])
+                forBack = forBack.Edges
+
             for dd in dct['_planes']:
                 numGeom += 1
                 pyPlane = _PyPlane(numWire, numGeom)
@@ -214,15 +241,23 @@ class _PyFace(_Py):
                 if serialize:
 
                     if dd['_forward']:
-                        forwardShape = Part.Shape()
+                        nf += 2
+
+                        '''forwardShape = Part.Shape()
                         forwardShape.importBrepFromString(dd['_forward'])
                         pyPlane.forward = forwardShape.Edges[0]
                         backwardShape = Part.Shape()
                         backwardShape.importBrepFromString(dd['_backward'])
-                        pyPlane.backward = backwardShape.Edges[0]
+                        pyPlane.backward = backwardShape.Edges[0]'''
 
-                    geomShape = Part.Shape()
-                    geomShape.importBrepFromString(dd['_geomShape'])
+                        pyPlane.forward = forBack[nf-1]
+                        pyPlane.backward = forBack[nf]
+
+                    '''geomShape = Part.Shape()
+                    geomShape.importBrepFromString(dd['_geomShape'])'''
+
+                    geomShape = edgeList[numGeom]
+
                     pyPlane.geomShape = geomShape
 
                     geomShapeWire.append(geomShape)
