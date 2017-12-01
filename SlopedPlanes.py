@@ -98,7 +98,7 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyBool", "Serialize",
+        slopedPlanes.addProperty("App::PropertyPythonObject", "Serialize",
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanes")
