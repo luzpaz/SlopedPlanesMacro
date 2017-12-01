@@ -747,15 +747,27 @@ class _PyPlane(_Py):
 
         for numG in rear:
             pyPl = pyPlaneList[numG]
+            control = pyPl.control
+            cList = []
+            if self.numGeom not in control:
+                cList.append(plane)
+                control.append(self.numGeom)
+            if pyOppPlane.numGeom not in control:
+                cList.append(oppPlane)
+                control.append(pyOppPlane.numGeom)
+
             if not (pyPl.aligned or pyPl.choped):
                 pl = pyPl.shape
+
                 if isinstance(pl, Part.Compound):
                     # TODO necesita un nivel mas de seleccion
                     pass
                 else:
                     gS = pyPl.geomShape
-                    pl = self.cutting(pl, [plane, oppPlane], gS)
+                    pl = self.cutting(pl, cList, gS)
                     pyPl.shape = pl
+
+            pyPl.control = control
 
     def ordinaries(self, pyWire):
 
