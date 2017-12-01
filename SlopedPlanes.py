@@ -98,8 +98,6 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyPythonObject", "Serialize",
-                                 "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanes")
 
@@ -113,7 +111,6 @@ class _SlopedPlanes(_Py):
                                   "Part::FaceMakerSimple",
                                   "Part::FaceMakerCheese"]
         slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
-        slopedPlanes.Serialize = True
 
         slopedPlanes.Proxy = self
 
@@ -152,7 +149,7 @@ class _SlopedPlanes(_Py):
             upPlane.translate(FreeCAD.Vector(0, 0, 1)*up)
             _Py.upPlane = upPlane
 
-        serialize = slopedPlanes.Serialize
+        serialize = self.Serialize
         load = self.Load
         restoring = self.Restoring
         onChanged = self.OnChanged
@@ -564,13 +561,6 @@ class _SlopedPlanes(_Py):
             value = (width, width)
             prop = "width"
             self.overWritePyProp(prop, value)
-
-        elif prop == 'Serialize':
-
-            self.Serialize = slopedPlanes.Serialize
-
-            if self.Serialize:
-                self.Restoring = True
 
     def overWritePyProp(self, prop, value):
 
