@@ -253,6 +253,8 @@ class _PyAlignment(_Py):
         The alignment blocks the progress
         of the planes in its front and laterals'''
 
+        print '###### trimming alignments'
+
         # print '### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
@@ -316,6 +318,11 @@ class _PyAlignment(_Py):
 
                 enormShape = ffTwo
 
+        for pyWire in pyWireList:
+            print 'wire ', pyWire.numWire
+            for pyPlane in pyWire.planes:
+                print pyPlane.numGeom, pyPlane.control
+
     def priorLater(self):
 
         '''priorLater(self)
@@ -357,28 +364,37 @@ class _PyAlignment(_Py):
         if not pyPrior.reflexed or pyPrior.choped or pyPrior.aligned:
             # print 'a'
 
-            gS = pyPrior.geomShape
-            prior = self.cutting(prior, [bigBase], gS)
-            pyPrior.addValue('control', pyBase.numGeom)
+            contr = pyPrior.control
+            if pyBase.numGeom not in contr:
+
+                gS = pyPrior.geomShape
+                prior = self.cutting(prior, [bigBase], gS)
+                pyPrior.addValue('control', pyBase.numGeom)
 
             pyPrior.shape = prior
 
         if not pyLater.reflexed or pyPrior.choped or pyPrior.aligned:
             # print 'b'
 
+            contr = pyLater.control
+
             if not self.falsify:
                 # print 'b1'
 
-                gS = pyLater.geomShape
-                later = self.cutting(later, [bigBase], gS)
-                pyLater.addValue('control', pyBase.numGeom)
+                if pyBase.numGeom not in contr:
+
+                    gS = pyLater.geomShape
+                    later = self.cutting(later, [bigBase], gS)
+                    pyLater.addValue('control', pyBase.numGeom)
 
             else:
                 # print 'b11'
 
-                gS = pyLater.geomShape
-                later = self.cutting(later, [bigCont], gS)
-                pyLater.addValue('control', pyCont.numGeom)
+                if pyCont.numGeom not in contr:
+
+                    gS = pyLater.geomShape
+                    later = self.cutting(later, [bigCont], gS)
+                    pyLater.addValue('control', pyCont.numGeom)
 
             pyLater.shape = later
 

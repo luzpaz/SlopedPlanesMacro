@@ -155,11 +155,13 @@ class _PyWire(_Py):
         The reflex corners act like a dam
         blocking the progress of others planes'''
 
+        print '###### trimming reflexs numWire ', self.numWire
+
         for pyReflex in self.reflexs:
             num = -1
             for pyPlane in pyReflex.planes:
                 num += 1
-                print '###### cutter ', pyPlane.numGeom
+                # print '###### cutter ', pyPlane.numGeom
 
                 angle = pyPlane.angle
                 numWire = pyPlane.numWire
@@ -170,11 +172,11 @@ class _PyWire(_Py):
                 numGeom = pyPlane.numGeom
 
                 rangoConsolidate = pyPlane.rangoConsolidate
-                print rangoConsolidate
+                # print rangoConsolidate
                 enormousShape = pyPlane.enormousShape
                 pyPlaneList = self.planes
                 for nG in rangoConsolidate:
-                    print '### cutted ', nG
+                    # print '### cutted ', nG
                     pyPl = pyPlaneList[nG]
 
                     # TODO pyPl numWire and angle
@@ -182,18 +184,18 @@ class _PyWire(_Py):
                     if numGeom not in pyPl.control:
 
                         if not pyPl.reflexed:
-                            print 'a'
+                            # print 'a'
 
                             pyPl.trimming(enormousShape)
                             pyPl.addValue('control', pyPlane.numGeom)
 
                         elif pyPl.aligned:
-                            print 'b'
+                            # print 'b'
 
                             pass
 
                         else:
-                            print 'c'
+                            # print 'c'
 
                             if len(pyPlane.rango) == 1:
                                 forward = pyPlane.forward
@@ -213,14 +215,14 @@ class _PyWire(_Py):
 
                             if (not section.Edges and
                                len(section.Vertexes) == 2):
-                                print 'cc'
+                                # print 'cc'
 
                                 section = forw.section(section.Vertexes,
                                                        _Py.tolerance)
                                 # esto podria cambiar
 
                                 if not section.Vertexes:
-                                    print 'ccc'
+                                    # print 'ccc'
 
                                     procc = True
 
@@ -229,34 +231,39 @@ class _PyWire(_Py):
                                     pyRList =\
                                         self.selectAllReflex(nWire, nGeom)
 
-                                    print pyRList
+                                    # print pyRList
 
                                     for pyR in pyRList:
-                                        print '1'
+                                        # print '1'
                                         if not procc:
                                             break
                                         for pyP in pyR.planes:
-                                            print '2'
-                                            print 'pyP.numGeom ', pyP.numGeom
+                                            # print '2'
+                                            # print 'pyP.numGeom ', pyP.numGeom
                                             if pyP != pyPl:
-                                                print '3'
+                                                # print '3'
                                                 ff = pyP.forward
                                                 section =\
                                                     ff.section([forward],
                                                                _Py.tolerance)
                                                 if section.Vertexes:
-                                                    print '4'
+                                                    # print '4'
                                                     procc = False
                                                     break
                                     if procc:
-                                        print 'procc'
+                                        # print 'procc'
                                         pyPl.trimming(enormousShape)
                                         pyPl.addValue('control', numGeom)
+
+        for pyPlane in self.planes:
+            print pyPlane.numGeom, pyPlane.control
 
     def priorLater(self):
 
         '''priorLater(self)
         '''
+
+        print '###### priorLater wire ', self.numWire
 
         pyPlaneList = self.planes
         lenWire = len(pyPlaneList)
@@ -267,7 +274,7 @@ class _PyWire(_Py):
                 plane = pyPlane.shape
 
                 numGeom = pyPlane.numGeom
-                print '### numGeom ', numGeom
+                # print '### numGeom ', numGeom
                 # print 'reflexed ', pyPlane.reflexed
                 # print 'choped ', pyPlane.choped
                 # print 'arrow ', pyPlane.arrow
@@ -339,7 +346,10 @@ class _PyWire(_Py):
                     plane = self.cutting(plane, cutterList, gS)
                     pyPlane.shape = plane
 
-            print 'control priorLater', pyPlane.control
+            # print 'control priorLater', pyPlane.control
+
+        for pyPlane in self.planes:
+            print pyPlane.numGeom, pyPlane.control
 
     def simulating(self):
 
@@ -356,22 +366,40 @@ class _PyWire(_Py):
 
         ''''''
 
+        print '###### preProcess wire ', self.numWire
+
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
+
+        for pyPlane in self.planes:
+            print pyPlane.numGeom, pyPlane.control
 
     def reflexing(self):
 
         '''reflexing(self)
         '''
 
+        print '###### reflexing wire ', self.numWire
+
+        print '### reflexing'
+
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
+
+        for pyPlane in self.planes:
+            print pyPlane.numGeom, pyPlane.control
+
+        print '### solveReflex'
 
         for pyReflex in self.reflexs:
             pyReflex.solveReflex()
 
+        print '### rearReflex'
+
         for pyReflex in self.reflexs:
             pyReflex.rearReflex(self)
+
+        print '### compounding'
 
         for pyReflex in self.reflexs:
             pyReflex.compounding()

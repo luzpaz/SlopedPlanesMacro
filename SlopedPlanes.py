@@ -159,11 +159,11 @@ class _SlopedPlanes(_Py):
         pyth = self.Pyth
 
         if (not serialize and load) or restoring:
-            print 'OnChanged'
+            # print 'OnChanged'
             onChanged = True
 
         if onChanged:
-            print 'A'
+            # print 'A'
 
             faceMaker = slopedPlanes.FaceMaker
             face = Part.makeFace(shape, faceMaker)
@@ -201,7 +201,7 @@ class _SlopedPlanes(_Py):
             _Py.faceList = faceList
 
         else:
-            print 'B'
+            # print 'B'
 
             faceList = _Py.faceList
 
@@ -219,7 +219,7 @@ class _SlopedPlanes(_Py):
 
             if onChanged:
                 # elaborates complementary python objects of a face
-                print 'AA'
+                # print 'AA'
 
                 coordinates = coordinatesOuterOrdered[numFace]
                 for pyFace in pyFaceListOld:
@@ -352,7 +352,7 @@ class _SlopedPlanes(_Py):
                 pyFace.wires = pyWireListNew
 
             else:
-                print 'BB'
+                # print 'BB'
 
                 pyFace = pyth[numFace]
                 _Py.pyFace = pyFace
@@ -608,7 +608,7 @@ class _SlopedPlanes(_Py):
         state['Pyth'] = pyth
 
         state['Serialize'] = serialize
-        print '__getState__', state['Serialize']
+        # print '__getState__', state['Serialize']
 
         return state
 
@@ -640,7 +640,7 @@ class _SlopedPlanes(_Py):
         self.Pyth = pyth
 
         self.Serialize = serialize
-        print '__setstate__', self.Serialize
+        # print '__setstate__', self.Serialize
 
         self.State = True
 
