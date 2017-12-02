@@ -85,6 +85,8 @@ class _Py(object):
 
         ''''''
 
+        # hacer que no se repitan valores
+
         valueList = getattr(self, prop)
         if direction == 'forward':
             valueList.insert(0, value)

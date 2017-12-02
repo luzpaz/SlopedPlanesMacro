@@ -307,12 +307,10 @@ class _PyFace(_Py):
         pyWireList = self.wires
 
         if resetFace:
-
             for pyWire in pyWireList:
                 pyWire.reflexs = []  # reset reflexs
 
-        else:
-
+        elif self.alignments and _Py.slopedPlanes.Proxy.Load is False:
             for pyWire in pyWireList:
                 for pyReflex in pyWire.reflexs:
                     planeList = []

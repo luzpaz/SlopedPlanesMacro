@@ -266,12 +266,16 @@ class _PyAlignment(_Py):
         # print 'rango ', rango
         pyPlaneList = pyWire.planes
 
+        rangoChop = []
         for nG in self.rangoConsolidate:
             pyPl = pyPlaneList[nG]
             if not pyPl.aligned:
-
+                rangoChop.append(pyPl)
                 pyPl.trimming(enormousShape)
                 pyPl.addValue('control', pyBase.numGeom)
+            else:
+                pass
+                # ???
 
         falsify = self.falsify
         simulatedChop = self.simulatedChop
@@ -287,36 +291,40 @@ class _PyAlignment(_Py):
                 # print '# chop ', pyPlane.numGeom
                 enShape = pyPlane.enormousShape
 
-                if enShape:
-                    numWire = pyPlane.numWire
-                    pyWire = pyWireList[numWire]
-                    pyPlaneList = pyWire.planes
+                # ## if enShape:            QUITAR
+                numWire = pyPlane.numWire
+                pyWire = pyWireList[numWire]
+                pyPlaneList = pyWire.planes
 
-                    # print 'rango ', pyPlane.rango
-                    brea = False
-                    for nG in pyPlane.rangoConsolidate:
-                        pyPl = pyPlaneList[nG]
+                # print 'rango ', pyPlane.rango
+                brea = False
+                for nG in pyPlane.rangoConsolidate:
+                    pyPl = pyPlaneList[nG]
 
-                        if pyPl.reflexed:
-                            brea = True
+                    if pyPl.reflexed:
+                        brea = True
+
+                    else:
+                        # print 'pyPl ', pyPl.numGeom
+
+                        if not falsify:
+                            # print 'a'
+                            cList = [enormShape]
+                            if not brea:
+                                # print 'aa'
+                                cList.append(enormousShape)
+                                pyPl.addValue('control', pyBase.numGeom)
 
                         else:
-                            # print 'pyPl ', pyPl.numGeom
+                            # print 'b'
+                            cList = [enormShape]
 
-                            if not falsify:
-                                # print 'a'
-                                cList = [enormShape]
-                                if not brea:
-                                    # print 'aa'
-                                    cList.append(enormousShape)
-                                    pyPl.addValue('control', pyBase.numGeom)
+                        pyPl.trimming(enShape, cList)
+                        pyPl.addValue('control', pyPlane.numGeom)
 
-                            else:
-                                # print 'b'
-                                cList = [enormShape]
-
-                            pyPl.trimming(enShape, cList)
-                            pyPl.addValue('control', pyPlane.numGeom)
+                    for pyC in rangoChop:
+                        pyPl.addValue('control', pyC.numGeom)
+                        pyC.addValue('control', nG)
 
                 enormShape = ffTwo
 
