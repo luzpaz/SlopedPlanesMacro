@@ -539,6 +539,8 @@ class _PyReflex(_Py):
 
         aa = aa.cut(cList+[bb], _Py.tolerance)
 
+        bList = aa.Faces[:]
+
         aList = []
         gS = pyR.geomShape
         AA = self.selectFace(aa.Faces, gS)
@@ -582,6 +584,8 @@ class _PyReflex(_Py):
                         print 'cc'
                         aa = aa.removeShape([ff])
                         under.append(ff)
+
+            print under
 
             if under:
                 for ff in aa.Faces:
@@ -629,11 +633,16 @@ class _PyReflex(_Py):
                                 print 'd'
                                 aList.append(ff)'''
 
+        aList = bList
+        print aList
+
         compound = Part.makeCompound(aList)
         if pyR.compound:
             compound = Part.makeCompound([compound, pyR.compound])
         else:
             pyR.compound = compound
+
+        pyR.shape = compound
 
     def rearReflex(self, pyWire):
 
