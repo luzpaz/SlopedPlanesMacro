@@ -520,13 +520,13 @@ class _PyPlane(_Py):
         numGeom = self.numGeom
 
         if self.seedShape:
-            # print 'seed'
+            print 'seed'
 
-            self.shape = self.seedShape
-            self.bigShape = self.seedBigShape
+            self.shape = self.seedShape.copy()
+            self.bigShape = self.seedBigShape.copy()
 
         else:
-            # print 'no seed'
+            print 'no seed'
 
             coordinates = pyWire.coordinates
             geom = self.deGeom()
@@ -546,14 +546,14 @@ class _PyPlane(_Py):
                 self.doPlane(direction, geom, firstParam,
                              lastParam, scale)
             self.shape = plane
-            self.seedShape = plane
+            self.seedShape = plane.copy()
 
             scale = 10
             bigPlane =\
                 self.doPlane(direction, geom, firstParam,
                              lastParam, scale)
             self.bigShape = bigPlane
-            self.seedBigShape = bigPlane
+            self.seedBigShape = bigPlane.copy()
 
             if self.reflexed:
 
@@ -567,6 +567,8 @@ class _PyPlane(_Py):
             self.simulatedShape = None
             self.divide = []
             self.compound = None
+            # self.cutter = []
+            # self.oppCutter = []
 
         self.control = [numGeom]
 

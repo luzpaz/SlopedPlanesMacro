@@ -299,14 +299,29 @@ class _PyFace(_Py):
         Splits the face finding its reflex corners and alignments'''
 
         resetFace = self.reset
+        print 'resetFace ', resetFace
 
         if not resetFace and not self.alignments:
             return
 
         pyWireList = self.wires
+
         if resetFace:
+
             for pyWire in pyWireList:
                 pyWire.reflexs = []  # reset reflexs
+
+        else:
+
+            for pyWire in pyWireList:
+                for pyReflex in pyWire.reflexs:
+                    planeList = []
+                    for pyPlane in pyReflex.planes:
+                        if pyPlane.aligned:
+                            pyPlane = self.selectBasePlane(pyPlane.numWire,
+                                                           pyPlane.numGeom)
+                        planeList.append(pyPlane)
+                    pyReflex.planes = planeList
 
         self.alignments = []  # always reset alignments
         shapeGeomFace = self.shapeGeom
