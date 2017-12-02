@@ -197,14 +197,14 @@ class _PyReflex(_Py):
         pyOppR.oppCutter, pyOppR.cutter = [], []
 
         direction = "forward"
-        # print '### direction ', direction
-        # print(pyR.numGeom, pyOppR.numGeom)
+        print '### direction ', direction
+        print(pyR.numGeom, pyOppR.numGeom)
 
         self.twin(pyWire, pyR, pyOppR, direction)
 
         direction = "backward"
-        # print '### direction ', direction
-        # print(pyOppR.numGeom, pyR.numGeom)
+        print '### direction ', direction
+        print(pyOppR.numGeom, pyR.numGeom)
 
         self.twin(pyWire, pyOppR, pyR, direction)
 
@@ -213,7 +213,7 @@ class _PyReflex(_Py):
         '''twin(self, pyWire, pyR, pyOppR, direction)
         '''
 
-        # print '# twin pyR.numGeom ', pyR.numGeom
+        print '# twin pyR.numGeom ', pyR.numGeom
 
         reflexEnormous = pyR.enormousShape.copy()
         pyOppR.addLink('oppCutter', reflexEnormous)
@@ -433,11 +433,12 @@ class _PyReflex(_Py):
 
                 if kind != 'rangoCorner':
 
-                    pl = pyPl.simulatedShape
+                    ## pl = pyPl.simulatedShape ???
+                    pl = pyPl.shape.copy()
                     gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
                     pyR.addLink('divide', pl)
-                    # print 'included rango divide', (pl, nWire, nn)
+                    print 'included rango divide', (pl, nWire, nn)
 
             else:
 
@@ -510,7 +511,8 @@ class _PyReflex(_Py):
         divide = pyR.divide
         print 'divide ', divide
 
-        bb = bb.cut(pyOppR.oppCutter + divide, _Py.tolerance)
+        # OJO quite divide de aqui
+        bb = bb.cut(pyOppR.oppCutter, _Py.tolerance)
         gS = pyOppR.geomShape
         if len(pyOppR.rear) == 1:
             if numWire == 0:
@@ -537,9 +539,10 @@ class _PyReflex(_Py):
         if pyR.aligned:
             cList = []
 
-        aa = aa.cut(cList+[bb], _Py.tolerance)
+        # MUCHISIMO CUIDADO. HE INTRODUCIDO DIVIDE AQUI Y ANTES NO ESTABA
+        aa = aa.cut(cList+[bb]+divide, _Py.tolerance)
 
-        bList = aa.Faces[:]
+        # bList = aa.Faces[:]
 
         aList = []
         gS = pyR.geomShape
@@ -617,32 +620,18 @@ class _PyReflex(_Py):
                                                 print 'h'
                                                 aList.append(ff)
 
-            '''if under:
-                for ff in aa.Faces:
-                    print 'a'
-                    section = ff.section([_Py.face, AA, forward, backward,
-                                          oppRear], _Py.tolerance)
-                    if not section.Edges:
-                        print 'b'
-                        section = ff.section(under + [rear], _Py.tolerance)
-                        if section.Edges:
-                            print 'c'
-                            section = ff.section([firstRangoCorner],
-                                                 _Py.tolerance)
-                            if section.Vertexes:
-                                print 'd'
-                                aList.append(ff)'''
-
-        aList = bList
-        print aList
+        # aList = bList
+        # print aList
 
         compound = Part.makeCompound(aList)
+        # print len(compound.Faces)
         if pyR.compound:
             compound = Part.makeCompound([compound, pyR.compound])
         else:
             pyR.compound = compound
 
-        pyR.shape = compound
+        ### pyR.shape = compound
+        # print len(pyR.shape.Faces)
 
     def rearReflex(self, pyWire):
 

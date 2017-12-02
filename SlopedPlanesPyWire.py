@@ -393,21 +393,21 @@ class _PyWire(_Py):
 
         for pyReflex in self.reflexs:
 
-            [pyR, pyOppR] = pyReflex.planes
+            '''[pyR, pyOppR] = pyReflex.planes
             if [pyR.numGeom, pyOppR.numGeom] == [1, 2]:
-                pyReflex.solveReflex()
+                pyReflex.solveReflex()'''
 
-            # pyReflex.solveReflex()
+            pyReflex.solveReflex()
 
         # print '### rearReflex'
 
-        # for pyReflex in self.reflexs:
-            # pyReflex.rearReflex(self)
+        for pyReflex in self.reflexs:
+            pyReflex.rearReflex(self)
 
         # print '### compounding'
 
-        # for pyReflex in self.reflexs:
-            # pyReflex.compounding()
+        for pyReflex in self.reflexs:
+            pyReflex.compounding()
 
     def reviewing(self):
 
