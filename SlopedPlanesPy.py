@@ -204,15 +204,7 @@ class _Py(object):
 
         ''''''
 
-        pyWireList = _Py.pyFace.wires
-        for wire in pyWireList:
-            if wire.numWire == numWire:
-                pyPlaneList = wire.planes
-                for plane in pyPlaneList:
-                    if plane.numGeom == numGeom:
-                        return plane
-
-        return None
+        return _Py.pyFace.wires[numWire].planes[numGeom]
 
     def selectBasePlane(self, numWire, numGeom):
 

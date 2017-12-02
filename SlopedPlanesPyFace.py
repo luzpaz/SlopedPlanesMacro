@@ -318,8 +318,8 @@ class _PyFace(_Py):
                     planeList = []
                     for pyPlane in pyReflex.planes:
                         if pyPlane.aligned:
-                            pyPlane = self.selectBasePlane(pyPlane.numWire,
-                                                           pyPlane.numGeom)
+                            pyPlane = self.selectPlane(pyPlane.numWire,
+                                                       pyPlane.numGeom)
                         planeList.append(pyPlane)
                     pyReflex.planes = planeList
 
