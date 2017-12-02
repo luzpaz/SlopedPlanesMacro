@@ -299,7 +299,6 @@ class _PyFace(_Py):
         Splits the face finding its reflex corners and alignments'''
 
         resetFace = self.reset
-        print 'resetFace ', resetFace
 
         if not resetFace and not self.alignments:
             return
@@ -572,7 +571,7 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-        self.printSummary()
+        # self.printSummary()
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 

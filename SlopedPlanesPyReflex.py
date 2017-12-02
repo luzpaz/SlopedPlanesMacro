@@ -477,8 +477,10 @@ class _PyReflex(_Py):
         '''solveReflex(self)
         '''
 
+        print '### solveReflexs'
+
         [pyR, pyOppR] = self.planes
-        # print(pyR.numGeom, pyOppR.numGeom)
+        print(pyR.numGeom, pyOppR.numGeom)
 
         self.planes = [pyR, pyOppR]
 
@@ -506,6 +508,7 @@ class _PyReflex(_Py):
         bb = oppReflex.copy()
 
         divide = pyR.divide
+        print 'divide ', divide
 
         bb = bb.cut(pyOppR.oppCutter + divide, _Py.tolerance)
         gS = pyOppR.geomShape
@@ -519,18 +522,17 @@ class _PyReflex(_Py):
                 vertex = pyOppR.forward.firstVertex(True)
             else:
                 vertex = pyOppR.backward.firstVertex(True)
-        # print vertex.Point
+        print vertex.Point
 
         for ff in bb.Faces:
             section = ff.section([gS], _Py.tolerance)
             if section.Edges:
                 section = ff.section([vertex], _Py.tolerance)
                 if section.Vertexes:
+                    print 'break'
                     bb = ff
-                    # print 'a'
                     break
 
-        # OJO
         cList = pyR.cutter
         if pyR.aligned:
             cList = []
@@ -557,11 +559,10 @@ class _PyReflex(_Py):
                 numOppRear = pyOppR.rear[1]
             else:
                 numOppRear = pyOppR.rear[0]
-
         pyOppRear = self.selectPlane(numWire, numOppRear)
         oppRear = pyOppRear.shape
 
-        numFirstRangoCorner = pyR.rango[0][0]
+        numFirstRangoCorner = pyR.rangoConsolidate[0]
         pyFirstRangoCorner = self.selectPlane(numWire, numFirstRangoCorner)
         firstRangoCorner = pyFirstRangoCorner.shape
 
@@ -572,49 +573,61 @@ class _PyReflex(_Py):
 
             under = []
             for ff in aa.Faces:
-                # print 'aa'
+                print 'aa'
                 section = ff.section([_Py.face], _Py.tolerance)
                 if section.Edges:
-                    # print 'bb'
+                    print 'bb'
                     section = ff.section([rear], _Py.tolerance)
                     if section.Edges:
-                        # print 'cc'
+                        print 'cc'
                         aa = aa.removeShape([ff])
                         under.append(ff)
-                        ### break
-
-            # TODO refact
 
             if under:
                 for ff in aa.Faces:
-                    # print 'a'
+                    print 'a'
                     section = ff.section([_Py.face], _Py.tolerance)
                     if not section.Edges:
-                        # print 'b'
+                        print 'b'
                         section = ff.section(under, _Py.tolerance)
                         if section.Edges:
-                            # print 'c'
+                            print 'c'
                             section = ff.section([AA], _Py.tolerance)
                             if not section.Edges:
-                                # print 'd'
+                                print 'd'
                                 section = ff.section([forward, backward],
                                                      _Py.tolerance)
                                 if not section.Edges:
-                                    # print 'e'
+                                    print 'e'
                                     section = ff.section([rear], _Py.tolerance)
                                     if section.Edges:
-                                        # print 'f'
+                                        print 'f'
                                         section = ff.section([oppRear],
                                                              _Py.tolerance)
                                         if not section.Edges:
-                                            # print 'g'
+                                            print 'g'
                                             section =\
                                                 ff.section([firstRangoCorner],
                                                            _Py.tolerance)
                                             if section.Vertexes:
-                                                # print 'h'
+                                                print 'h'
                                                 aList.append(ff)
-                                                break
+
+            '''if under:
+                for ff in aa.Faces:
+                    print 'a'
+                    section = ff.section([_Py.face, AA, forward, backward,
+                                          oppRear], _Py.tolerance)
+                    if not section.Edges:
+                        print 'b'
+                        section = ff.section(under + [rear], _Py.tolerance)
+                        if section.Edges:
+                            print 'c'
+                            section = ff.section([firstRangoCorner],
+                                                 _Py.tolerance)
+                            if section.Vertexes:
+                                print 'd'
+                                aList.append(ff)'''
 
         compound = Part.makeCompound(aList)
         if pyR.compound:

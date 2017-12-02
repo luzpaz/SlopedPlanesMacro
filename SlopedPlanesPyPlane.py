@@ -520,13 +520,13 @@ class _PyPlane(_Py):
         numGeom = self.numGeom
 
         if self.seedShape:
-            print 'seed'
+            # print 'seed'
 
             self.shape = self.seedShape.copy()
             self.bigShape = self.seedBigShape.copy()
 
         else:
-            print 'no seed'
+            # print 'no seed'
 
             coordinates = pyWire.coordinates
             geom = self.deGeom()

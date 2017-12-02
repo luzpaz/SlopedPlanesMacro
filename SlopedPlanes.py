@@ -168,7 +168,7 @@ class _SlopedPlanes(_Py):
             onChanged = True
 
         if onChanged:
-            print 'A'
+            # print 'A'
 
             # gathers the exterior wires. Lower Left criteria
 
@@ -203,7 +203,7 @@ class _SlopedPlanes(_Py):
             length = slopedPlanes.FactorLength
 
         else:
-            print 'B'
+            # print 'B'
 
             faceList = self.faceList
 
@@ -221,7 +221,7 @@ class _SlopedPlanes(_Py):
 
             if onChanged:
                 # elaborates complementary python objects of a face
-                print 'AA'
+                # print 'AA'
 
                 coordinates = coordinatesOuterOrdered[numFace]
                 for pyFace in pyFaceListOld:
@@ -354,7 +354,7 @@ class _SlopedPlanes(_Py):
                 pyFace.wires = pyWireListNew
 
             else:
-                print 'BB'
+                # print 'BB'
 
                 pyFace = pyth[numFace]
                 _Py.pyFace = pyFace
@@ -383,7 +383,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.reflexing()
 
-            pyFace.reviewing()
+            '''pyFace.reviewing()
 
             pyFace.rearing()
 
@@ -393,13 +393,13 @@ class _SlopedPlanes(_Py):
 
             pyFace.aligning()
 
-            pyFace.ending()
+            pyFace.ending()'''
 
         if onChanged:
-            print 'AAA'
+            # print 'AAA'
             self.Pyth = pyFaceListNew
         else:
-            print 'BBB'
+            # print 'BBB'
             pyFaceListNew = self.Pyth
 
         self.OnChanged = True
@@ -545,13 +545,9 @@ class _SlopedPlanes(_Py):
         '''onChanged(self, slopedPlanes, prop)
         '''
 
-        print 'onChaged'
-
         if self.State:
 
             return
-
-        print 'continue'
 
         if prop == "Slope":
 
