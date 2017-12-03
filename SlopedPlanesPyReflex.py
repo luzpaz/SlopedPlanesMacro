@@ -505,29 +505,10 @@ class _PyReflex(_Py):
         aa = reflex.copy()
         bb = oppReflex.copy()
 
-        bb = bb.cut(pyOppR.oppCutter, _Py.tolerance)
         gS = pyOppR.geomShape
-        if len(pyOppR.rear) == 1:
-            if numWire == 0:
-                vertex = pyOppR.forward.firstVertex(True)
-            else:
-                vertex = pyOppR.backward.firstVertex(True)
-        else:
-            if direction == 'backward':
-                vertex = pyOppR.forward.firstVertex(True)
-            else:
-                vertex = pyOppR.backward.firstVertex(True)
-        print vertex.Point
+        bb = self.cutting(bb, pyOppR.oppCutter, gS)
 
-        for ff in bb.Faces:
-            section = ff.section([gS], _Py.tolerance)
-            if section.Edges:
-                section = ff.section([vertex], _Py.tolerance)
-                if section.Vertexes:
-                    print 'break'
-                    bb = ff
-                    break
-
+        # ???
         cList = pyR.cutter
         if pyR.aligned:
             cList = []
