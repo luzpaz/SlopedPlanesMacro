@@ -538,10 +538,6 @@ class _PyReflex(_Py):
         pyOppRear = self.selectPlane(numWire, numOppRear)
         oppRear = pyOppRear.shape
 
-        numFirstRangoCorner = pyR.rangoConsolidate[0]
-        pyFirstRangoCorner = self.selectPlane(numWire, numFirstRangoCorner)
-        firstRangoCorner = pyFirstRangoCorner.shape
-
         if aa.Faces:
 
             oppReflexEnormous = pyOppR.enormousShape
@@ -562,34 +558,46 @@ class _PyReflex(_Py):
             print under
 
             if under:
-                for ff in aa.Faces:
-                    print 'a'
-                    section = ff.section([_Py.face], _Py.tolerance)
-                    if not section.Edges:
-                        print 'b'
-                        section = ff.section(under, _Py.tolerance)
-                        if section.Edges:
-                            print 'c'
-                            section = ff.section([AA], _Py.tolerance)
-                            if not section.Edges:
-                                print 'd'
-                                section = ff.section([forward, backward],
-                                                     _Py.tolerance)
+
+                try:
+                    numFirstRangoCorner = pyR.rangoConsolidate[0]
+                except IndexError:
+                    pass
+                else:
+                    pyFirstRangoCorner =\
+                        self.selectPlane(numWire, numFirstRangoCorner)
+                    fRC = pyFirstRangoCorner.shape
+
+                    for ff in aa.Faces:
+                        print 'a'
+                        section = ff.section([_Py.face], _Py.tolerance)
+                        if not section.Vertexes:
+                            print 'b'
+                            section = ff.section(under, _Py.tolerance)
+                            if section.Edges:
+                                print 'c'
+                                section = ff.section([AA], _Py.tolerance)
                                 if not section.Edges:
-                                    print 'e'
-                                    section = ff.section([rear], _Py.tolerance)
-                                    if section.Edges:
-                                        print 'f'
-                                        section = ff.section([oppRear],
+                                    print 'd'
+                                    section = ff.section([forward, backward],
+                                                         _Py.tolerance)
+                                    if not section.Edges:
+                                        print 'e'
+                                        section = ff.section([rear],
                                                              _Py.tolerance)
-                                        if not section.Edges:
-                                            print 'g'
-                                            section =\
-                                                ff.section([firstRangoCorner],
-                                                           _Py.tolerance)
-                                            if section.Vertexes:
-                                                print 'h'
-                                                aList.append(ff)
+                                        if section.Edges:
+                                            print 'f'
+                                            section = ff.section([oppRear],
+                                                                 _Py.tolerance)
+                                            if not section.Edges:
+                                                print 'g'  # llevar al primero?
+                                                section =\
+                                                    ff.section([fRC],
+                                                               _Py.tolerance)
+                                                if section.Vertexes:
+                                                    print 'h'
+                                                    aList.append(ff)
+                                                    break
 
         compound = Part.makeCompound(aList)
         if pyR.compound:
