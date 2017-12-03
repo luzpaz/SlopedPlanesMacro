@@ -61,7 +61,6 @@ class _PyPlane(_Py):
         self.simulatedShape = None
         self.cutter = []
         self.oppCutter = []
-        self.divide = []
         self.compound = None
         self.forward = None
         self.backward = None
@@ -387,20 +386,6 @@ class _PyPlane(_Py):
         self._oppCutter = oppCutter
 
     @property
-    def divide(self):
-
-        ''''''
-
-        return self._divide
-
-    @divide.setter
-    def divide(self, divide):
-
-        ''''''
-
-        self._divide = divide
-
-    @property
     def compound(self):
 
         ''''''
@@ -565,10 +550,9 @@ class _PyPlane(_Py):
 
         if self.reflexed:
             self.simulatedShape = None
-            self.divide = []
             self.compound = None
-            # self.cutter = []
-            # self.oppCutter = []
+            self.cutter = []
+            self.oppCutter = []
 
         self.control = [numGeom]
 

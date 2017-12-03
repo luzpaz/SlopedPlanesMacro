@@ -383,7 +383,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.reflexing()
 
-            '''pyFace.reviewing()
+            pyFace.reviewing()
 
             pyFace.rearing()
 
@@ -393,7 +393,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.aligning()
 
-            pyFace.ending()'''
+            pyFace.ending()
 
         if onChanged:
             # print 'AAA'

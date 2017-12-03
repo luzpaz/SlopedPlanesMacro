@@ -193,9 +193,6 @@ class _PyReflex(_Py):
         pyR = pyPlaneList[0]
         pyOppR = pyPlaneList[1]
 
-        pyR.oppCutter, pyR.cutter = [], []
-        pyOppR.oppCutter, pyOppR.cutter = [], []
-
         direction = "forward"
         print '### direction ', direction
         print(pyR.numGeom, pyOppR.numGeom)
@@ -437,8 +434,8 @@ class _PyReflex(_Py):
                     pl = pyPl.shape.copy()
                     gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
-                    pyR.addLink('divide', pl)
-                    print 'included rango divide', (pl, nWire, nn)
+                    pyR.addLink('cutter', pl)
+                    print 'included rango', (pl, nWire, nn)
 
             else:
 
@@ -508,10 +505,6 @@ class _PyReflex(_Py):
         aa = reflex.copy()
         bb = oppReflex.copy()
 
-        divide = pyR.divide
-        print 'divide ', divide
-
-        # OJO quite divide de aqui
         bb = bb.cut(pyOppR.oppCutter, _Py.tolerance)
         gS = pyOppR.geomShape
         if len(pyOppR.rear) == 1:
@@ -539,10 +532,7 @@ class _PyReflex(_Py):
         if pyR.aligned:
             cList = []
 
-        # MUCHISIMO CUIDADO. HE INTRODUCIDO DIVIDE AQUI Y ANTES NO ESTABA
-        aa = aa.cut(cList+[bb]+divide, _Py.tolerance)
-
-        # bList = aa.Faces[:]
+        aa = aa.cut(cList+[bb], _Py.tolerance)
 
         aList = []
         gS = pyR.geomShape
@@ -574,7 +564,7 @@ class _PyReflex(_Py):
         if aa.Faces:
 
             oppReflexEnormous = pyOppR.enormousShape
-            aa = aa.cut(divide + [oppReflexEnormous], _Py.tolerance)
+            aa = aa.cut([oppReflexEnormous], _Py.tolerance)
 
             under = []
             for ff in aa.Faces:
@@ -620,18 +610,11 @@ class _PyReflex(_Py):
                                                 print 'h'
                                                 aList.append(ff)
 
-        # aList = bList
-        # print aList
-
         compound = Part.makeCompound(aList)
-        # print len(compound.Faces)
         if pyR.compound:
             compound = Part.makeCompound([compound, pyR.compound])
         else:
             pyR.compound = compound
-
-        ### pyR.shape = compound
-        # print len(pyR.shape.Faces)
 
     def rearReflex(self, pyWire):
 
