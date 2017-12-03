@@ -434,8 +434,8 @@ class _PyReflex(_Py):
                     pl = pyPl.shape.copy()
                     gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
-                    pyR.addLink('cutter', pl)
-                    print 'included rango', (pl, nWire, nn)
+                    pyR.addLink('divide', pl)
+                    print 'included rango divide', (pl, nWire, nn)
 
             else:
 
@@ -505,8 +505,33 @@ class _PyReflex(_Py):
         aa = reflex.copy()
         bb = oppReflex.copy()
 
+        divide = pyR.divide
+
+        '''gS = pyOppR.geomShape
+        bb = self.cutting(bb, pyOppR.oppCutter, gS)'''
+
+        bb = bb.cut(divide+pyOppR.oppCutter, _Py.tolerance)
         gS = pyOppR.geomShape
-        bb = self.cutting(bb, pyOppR.oppCutter, gS)
+        if len(pyOppR.rear) == 1:
+            if numWire == 0:
+                vertex = pyOppR.forward.firstVertex(True)
+            else:
+                vertex = pyOppR.backward.firstVertex(True)
+        else:
+            if direction == 'backward':
+                vertex = pyOppR.forward.firstVertex(True)
+            else:
+                vertex = pyOppR.backward.firstVertex(True)
+        print vertex.Point
+
+        for ff in bb.Faces:
+            section = ff.section([gS], _Py.tolerance)
+            if section.Edges:
+                section = ff.section([vertex], _Py.tolerance)
+                if section.Vertexes:
+                    print 'break'
+                    bb = ff
+                    break
 
         # ???
         cList = pyR.cutter
@@ -541,7 +566,7 @@ class _PyReflex(_Py):
         if aa.Faces:
 
             oppReflexEnormous = pyOppR.enormousShape
-            aa = aa.cut([oppReflexEnormous], _Py.tolerance)
+            aa = aa.cut(divide+[oppReflexEnormous], _Py.tolerance)
 
             under = []
             for ff in aa.Faces:
@@ -604,6 +629,8 @@ class _PyReflex(_Py):
             compound = Part.makeCompound([compound, pyR.compound])
         else:
             pyR.compound = compound
+
+        # pyR.shape = compound
 
     def rearReflex(self, pyWire):
 
