@@ -237,33 +237,33 @@ class _PyReflex(_Py):
                 rearPyPl = pyPlaneList[nGeom]
 
                 if rearPyPl.aligned:
-                    # print 'a'
+                    print 'a'
                     pyAlign = self.selectAlignment(numWire, nGeom)
                     rearPl = pyAlign.simulatedAlignment
                     pyOppR.addLink('oppCutter', rearPl)
                     pyR.addLink('cutter', rearPl)
-                    # print 'included rear simulated', (rearPl, numWire, nGeom)
+                    print 'included rear simulated', (rearPl, numWire, nGeom)
 
                 elif rearPyPl.choped:
-                    # print 'b'
+                    print 'b'
                     rearPl = rearPyPl.simulatedShape
                     pyR.addLink('cutter', rearPl)
                     pyOppR.addLink('oppCutter', rearPl)
-                    # print 'included rear simulated ', (rearPl, numWire, nGeom)
+                    print 'included rear simulated ', (rearPl, numWire, nGeom)
 
                 elif rearPyPl.reflexed:
-                    # print 'c'
+                    print 'c'
                     rearPl = rearPyPl.simulatedShape
                     pyOppR.addLink('oppCutter', rearPl)
                     pyR.addLink('cutter', rearPl)
-                    # print 'included rear simulated', (rearPl, numWire, nGeom)
+                    print 'included rear simulated', (rearPl, numWire, nGeom)
 
                 else:
-                    # print 'd'
+                    print 'd'
                     rearPl = rearPyPl.shape
                     pyR.addLink('cutter', rearPl)
                     pyOppR.addLink('oppCutter', rearPl)
-                    # print 'included rear ', (rearPl, numWire, nGeom)
+                    print 'included rear ', (rearPl, numWire, nGeom)
 
         oppRear = pyOppR.rear
 
@@ -276,33 +276,33 @@ class _PyReflex(_Py):
                 pyOppRear = pyPlaneList[nGeom]
 
                 if pyOppRear.aligned:
-                    # print 'a'
+                    print 'a'
                     pyAlign = self.selectAlignment(numWire, nGeom)
                     oppRearPl = pyAlign.simulatedAlignment
                     pyOppR.addLink('oppCutter', oppRearPl)
                     pyR.addLink('cutter', oppRearPl)
-                    # print 'included oppRear simulated', (rearPl, numWire, nGeom)
+                    print 'included oppRear simulated', (rearPl, numWire, nGeom)
 
                 elif pyOppRear.choped:
-                    # print 'b'
+                    print 'b'
                     oppRearPl = pyOppRear.simulatedShape
                     pyR.addLink('cutter', oppRearPl)
                     pyOppR.addLink('oppCutter', oppRearPl)
-                    # print 'included oppRear simulated', (oppRearPl, numWire, nGeom)
+                    print 'included oppRear simulated', (oppRearPl, numWire, nGeom)
 
                 elif pyOppRear.reflexed:
-                    # print 'c'
+                    print 'c'
                     oppRearPl = pyOppRear.simulatedShape
                     pyR.addLink('cutter', oppRearPl)
                     pyOppR.addLink('oppCutter', oppRearPl)
-                    # print 'included oppRear simulated ', (oppRearPl, numWire, nGeom)
+                    print 'included oppRear simulated ', (oppRearPl, numWire, nGeom)
 
                 else:
-                    # print 'd'
+                    print 'd'
                     oppRearPl = pyOppRear.shape
                     pyR.addLink('cutter', oppRearPl)
                     pyOppR.addLink('oppCutter', oppRearPl)
-                    # print 'included oppRear ', (oppRearPl, numWire, nGeom)
+                    print 'included oppRear ', (oppRearPl, numWire, nGeom)
 
         elif len(oppRear) == 2:
 
@@ -400,35 +400,37 @@ class _PyReflex(_Py):
         pyPl = pyWire.planes[nn]
 
         if pyPl.aligned:
-            # print 'A'
+            print 'A'
             pyAlign = self.selectAlignment(nWire, nn)
             pl = pyAlign.simulatedAlignment
             pyR.addLink('cutter', pl)
             pyOppR.addLink('oppCutter', pl)
-            # print 'included rango simulated ', (pl, nWire, nn)
+            print 'included rango simulated ', (pl, nWire, nn)
 
         elif pyPl.choped:
-            # print 'B'
+            print 'B'
             pl = pyPl.simulatedShape
             pyR.addLink('cutter', pl)
             pyOppR.addLink('oppCutter', pl)
-            # print 'included rango simulated', (pl, nWire, nn)
+            print 'included rango simulated', (pl, nWire, nn)
 
         elif pyPl.reflexed:
-            # print 'C'
+            print 'C'
 
             forward = pyR.forward
             forw = pyPl.forward
             section = forward.section([forw], _Py.tolerance)
 
             if pyOppR.numGeom in pyPl.rear:
+                print 'C1'
 
                 pl = pyPl.simulatedShape
                 pyR.addLink('cutter', pl)
                 pyOppR.addLink('oppCutter', pl)
-                # print 'included rango simulated ', (pl, nWire, nn)
+                print 'included rango simulated ', (pl, nWire, nn)
 
                 if kind != 'rangoCorner':
+                    print 'C11'
 
                     ## pl = pyPl.simulatedShape ???
                     pl = pyPl.shape.copy()
@@ -438,6 +440,7 @@ class _PyReflex(_Py):
                     print 'included rango divide', (pl, nWire, nn)
 
             else:
+                print 'C2'
 
                 pl = pyPl.simulatedShape
                 gS = pyPl.geomShape
@@ -455,20 +458,20 @@ class _PyReflex(_Py):
 
                 pyR.addLink('cutter', pl)
                 pyOppR.addLink('oppCutter', pl)
-                # print 'included rango simulated ', (pl, nWire, nn)
+                print 'included rango simulated ', (pl, nWire, nn)
 
         else:
-            # print 'D'
+            print 'D'
             pl = pyPl.shape.copy()
 
             if kind == 'rangoCorner':
-                # print 'rangoCorner'
+                print 'rangoCorner'
                 gS = pyPl.geomShape
                 pl = self.cutting(pl, [oppReflexEnormous], gS)
 
             pyR.addLink('cutter', pl)
             pyOppR.addLink('oppCutter', pl)
-            # print 'included rango ', (pl, nWire, nn)
+            print 'included rango ', (pl, nWire, nn)
 
     def solveReflex(self):
 
@@ -478,17 +481,18 @@ class _PyReflex(_Py):
         print '### solveReflexs'
 
         [pyR, pyOppR] = self.planes
-        print(pyR.numGeom, pyOppR.numGeom)
+
 
         self.planes = [pyR, pyOppR]
 
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
+        print(pyR.numGeom, pyOppR.numGeom)
         self.processReflex(reflex, oppReflex,
                            pyR, pyOppR,
                            'forward')
-
+        print(pyOppR.numGeom, pyR.numGeom)
         self.processReflex(oppReflex, reflex,
                            pyOppR, pyR,
                            'backward')
@@ -538,13 +542,17 @@ class _PyReflex(_Py):
         if pyR.aligned:
             cList = []
 
-        aa = aa.cut(cList+[bb], _Py.tolerance)
+        aa = aa.cut(cList+[bb]+divide, _Py.tolerance)
+
+        print aa.Faces
 
         aList = []
         gS = pyR.geomShape
         AA = self.selectFace(aa.Faces, gS)
         aList.append(AA)
         aa = aa.removeShape([AA])
+
+        print aList
 
         forward = pyR.forward
         backward = pyR.backward
@@ -566,7 +574,7 @@ class _PyReflex(_Py):
         if aa.Faces:
 
             oppReflexEnormous = pyOppR.enormousShape
-            aa = aa.cut(divide+[oppReflexEnormous], _Py.tolerance)
+            aa = aa.cut([oppReflexEnormous], _Py.tolerance)
 
             under = []
             for ff in aa.Faces:
@@ -605,7 +613,7 @@ class _PyReflex(_Py):
                                 if not section.Edges:
                                     print 'd'
                                     section = ff.section([forward, backward],
-                                                         _Py.tolerance)
+                                                         _Py.tolerance)     # creo que puedo quitar forward ya que antes comprobe con _Py.face
                                     if not section.Edges:
                                         print 'e'
                                         section = ff.section([rear],
@@ -630,7 +638,9 @@ class _PyReflex(_Py):
         else:
             pyR.compound = compound
 
-        # pyR.shape = compound
+        ###
+        pyR.compound = compound
+        pyR.shape = compound
 
     def rearReflex(self, pyWire):
 
@@ -640,45 +650,92 @@ class _PyReflex(_Py):
         pyPlaneList = pyWire.planes
 
         for pyPlane in self.planes:
-            if not pyPlane.virtualized:
-                if len(pyPlane.compound.Faces) > 1:
-                    rear = pyPlane.rear
-                    for nGeom in rear:
-                        pyRear = pyPlaneList[nGeom]
-                        if pyRear.reflexed:
-                            # print 'rearReflex'
-                            # print pyRear.numGeom
-                            rearPl = pyRear.compound
-                            gS = pyRear.geomShape
-                            rearPl = self.cutting(rearPl, [pyPlane.compound], gS)
-                            pyRear.compound = rearPl
+            if len(pyPlane.compound.Faces) > 1:
+                print 'pyPlane multifaces ', pyPlane.numGeom, pyPlane.compound.Faces
+                rear = pyPlane.rear
+                for nGeom in rear:
+                    pyRear = pyPlaneList[nGeom]
+                    if pyRear.reflexed:
+                        print 'rearReflex ', pyRear.numGeom
+                        rearPl = pyRear.compound
+                        # print rearPl.Faces
+                        gS = pyRear.geomShape
+                        rearPl = rearPl.cut([pyPlane.compound], _Py.tolerance)
+                        # print rearPl.Faces
 
-                            # TODO aplica tambien al oppReflex de rearPl
+                        aList = []
+                        AA = self.selectFace(rearPl.Faces, gS)
+                        aList.append(AA)
+                        rearPl = rearPl.removeShape([AA])
 
-    def compounding(self):
+                        backward = pyRear.backward
+                        print backward
+                        print(backward.firstVertex().Point,
+                              backward.lastVertex().Point)
 
-        '''compounding(self)
-        '''
+                        if rearPl.Faces:
+                            #print rearPl.Faces
+
+                            pyReflex = self.selectAllReflex(pyRear.numWire,
+                                                            pyRear.numGeom)
+
+                            print pyReflex
+
+                            for pyPl in pyReflex[0].planes:     # TODO corregir esto y los metodos select
+                                if (pyRear.numWire, pyRear.numGeom) !=\
+                                   (pyPl.numWire, pyPl.numGeom):
+                                       enormous = pyPl.enormousShape
+                                       print (pyPl.numWire, pyPl.numGeom)
+                                       break
+
+                            rearPl = rearPl.cut([enormous], _Py.tolerance)
+                            print rearPl.Faces
+                            for ff in rearPl.Faces:
+                                print 'aaa'
+                                section = ff.section([_Py.face, backward],
+                                                     _Py.tolerance)
+                                if not section.Edges:
+                                    print 'bbb'
+                                    aList.append(ff)
+
+                        rearPl = Part.makeCompound(aList)
+
+                        pyRear.compound = rearPl
+
+                        ###
+                        pyRear.shape = pyRear.compound
+
+                        # TODO aplica tambien al oppReflex de rearPl ???
+
+        # podría ser necesario crear una lista con todos los casos e ir incluyendo los nuevos multifaces que se generen
+
+
+    '''def compounding(self):
+
+        compounding(self)
+        
 
         [pyR, pyOppR] = self.planes
 
         compoundA = pyR.compound
         compoundB = pyOppR.compound
         lenA = len(compoundA.Faces)
+        print 'lenA ', lenA
         lenB = len(compoundB.Faces)
+        print 'lenB ', lenB
 
         if lenB > 1 and lenA == 1:
-            # print 'A'
+            print 'A'
             gS = pyR.geomShape
             compoundA = self.cutting(compoundA, [compoundB], gS)
 
         elif lenA > 1 and lenB == 1:
-            # print 'B'
+            print 'B'
             gS = pyOppR.geomShape
             compoundB = self.cutting(compoundB, [compoundA], gS)
 
         elif lenA <= 1 and lenB <= 1:
-            # print 'C'
+            print 'C'
             # TODO make copy
             gS = pyR.geomShape
             compoundA = self.cutting(compoundA, [compoundB], gS)
@@ -687,11 +744,11 @@ class _PyReflex(_Py):
             compoundB = self.cutting(compoundB, [compoundA], gS)
 
         else:
-            # print 'D'
+            print 'D'
             pass
 
         pyR.shape = compoundA
-        pyOppR.shape = compoundB
+        pyOppR.shape = compoundB'''
 
     def reviewing(self):
 

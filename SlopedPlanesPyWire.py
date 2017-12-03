@@ -406,8 +406,8 @@ class _PyWire(_Py):
 
         # print '### compounding'
 
-        for pyReflex in self.reflexs:
-            pyReflex.compounding()
+        '''for pyReflex in self.reflexs:
+            pyReflex.compounding()'''
 
     def reviewing(self):
 
@@ -440,33 +440,36 @@ class _PyWire(_Py):
         '''reSolveReflexs(self, solved=[], unsolved=[], counter=0)
         '''
 
-        # print 'solved ', [p.numGeom for p in solved]
-        # print 'unsolved ', [p.numGeom for p in unsolved]
+        print 'solved ', [p.numGeom for p in solved]
+        print 'unsolved ', [p.numGeom for p in unsolved]
 
-        if counter > len(solved) + len(unsolved):
+        if counter > 2 * (len(solved) + len(unsolved)):
             return
 
         cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
 
         for pyPlane in unsolved[:]:
-            # print 'a', pyPlane.numGeom
+            print 'a', pyPlane.numGeom, pyPlane.shape.Faces
             plane = pyPlane.shape
             gS = pyPlane.geomShape
 
+            ##plane = plane.cut(cutterList, _Py.tolerance)
+
             plane = self.cutting(plane, cutterList, gS)
+
             pyPlane.shape = plane
 
             if pyPlane.isUnsolved():
-                # print 'aa'
+                print 'aa'
                 pass
 
             else:
-                # print 'ab'
+                print 'ab'
                 unsolved.remove(pyPlane)
                 solved.append(pyPlane)
 
         if not unsolved:
-            # print 'return'
+            print 'return'
             return
 
         counter += 1

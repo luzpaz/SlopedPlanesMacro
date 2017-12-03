@@ -1048,7 +1048,7 @@ class _PyFace(_Py):
                 pyWire.reviewing()
                 solved, unsolved = pyWire.clasifyReflexPlanes()
                 pyWire.reSolveReflexs(solved, unsolved)
-                pyWire.betweenReflexs()
+                # pyWire.betweenReflexs()
 
     def rearing(self):
 
