@@ -404,11 +404,6 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.rearReflex(self)
 
-        # print '### compounding'
-
-        '''for pyReflex in self.reflexs:
-            pyReflex.compounding()'''
-
     def reviewing(self):
 
         '''reviewing(self)

@@ -633,13 +633,6 @@ class _PyReflex(_Py):
                                                     break
 
         compound = Part.makeCompound(aList)
-        if pyR.compound:
-            compound = Part.makeCompound([compound, pyR.compound])
-        else:
-            pyR.compound = compound
-
-        ###
-        pyR.compound = compound
         pyR.shape = compound
 
     def rearReflex(self, pyWire):
@@ -650,105 +643,49 @@ class _PyReflex(_Py):
         pyPlaneList = pyWire.planes
 
         for pyPlane in self.planes:
-            if len(pyPlane.compound.Faces) > 1:
-                print 'pyPlane multifaces ', pyPlane.numGeom, pyPlane.compound.Faces
-                rear = pyPlane.rear
-                for nGeom in rear:
-                    pyRear = pyPlaneList[nGeom]
-                    if pyRear.reflexed:
-                        print 'rearReflex ', pyRear.numGeom
-                        rearPl = pyRear.compound
+            print 'pyPlane ', pyPlane.numGeom, pyPlane.shape.Faces
+            rear = pyPlane.rear
+            for nGeom in rear:
+                pyRear = pyPlaneList[nGeom]
+                if pyRear.reflexed:
+                    print 'rearReflex ', pyRear.numGeom
+                    rearPl = pyRear.shape
+                    # print rearPl.Faces
+                    gS = pyRear.geomShape
+                    rearPl = rearPl.cut([pyPlane.shape], _Py.tolerance)
+                    # print rearPl.Faces
+
+                    aList = []
+                    AA = self.selectFace(rearPl.Faces, gS)
+                    aList.append(AA)
+                    rearPl = rearPl.removeShape([AA])
+
+                    backward = pyRear.backward
+
+                    if rearPl.Faces:
+                        #print rearPl.Faces
+
+                        pyReflex = self.selectAllReflex(pyRear.numWire,
+                                                        pyRear.numGeom)
+
+                        for pyPl in pyReflex[0].planes:     # TODO corregir esto y los metodos select
+                            if (pyRear.numWire, pyRear.numGeom) !=\
+                               (pyPl.numWire, pyPl.numGeom):
+                                   enormous = pyPl.enormousShape
+                                   break
+
+                        rearPl = rearPl.cut([enormous], _Py.tolerance)
                         # print rearPl.Faces
-                        gS = pyRear.geomShape
-                        rearPl = rearPl.cut([pyPlane.compound], _Py.tolerance)
-                        # print rearPl.Faces
+                        for ff in rearPl.Faces:
+                            print 'aaa'
+                            section = ff.section([_Py.face, backward],
+                                                 _Py.tolerance)
+                            if not section.Edges:
+                                print 'bbb'
+                                aList.append(ff)
 
-                        aList = []
-                        AA = self.selectFace(rearPl.Faces, gS)
-                        aList.append(AA)
-                        rearPl = rearPl.removeShape([AA])
-
-                        backward = pyRear.backward
-                        print backward
-                        print(backward.firstVertex().Point,
-                              backward.lastVertex().Point)
-
-                        if rearPl.Faces:
-                            #print rearPl.Faces
-
-                            pyReflex = self.selectAllReflex(pyRear.numWire,
-                                                            pyRear.numGeom)
-
-                            print pyReflex
-
-                            for pyPl in pyReflex[0].planes:     # TODO corregir esto y los metodos select
-                                if (pyRear.numWire, pyRear.numGeom) !=\
-                                   (pyPl.numWire, pyPl.numGeom):
-                                       enormous = pyPl.enormousShape
-                                       print (pyPl.numWire, pyPl.numGeom)
-                                       break
-
-                            rearPl = rearPl.cut([enormous], _Py.tolerance)
-                            print rearPl.Faces
-                            for ff in rearPl.Faces:
-                                print 'aaa'
-                                section = ff.section([_Py.face, backward],
-                                                     _Py.tolerance)
-                                if not section.Edges:
-                                    print 'bbb'
-                                    aList.append(ff)
-
-                        rearPl = Part.makeCompound(aList)
-
-                        pyRear.compound = rearPl
-
-                        ###
-                        pyRear.shape = pyRear.compound
-
-                        # TODO aplica tambien al oppReflex de rearPl ???
-
-        # podría ser necesario crear una lista con todos los casos e ir incluyendo los nuevos multifaces que se generen
-
-
-    '''def compounding(self):
-
-        compounding(self)
-        
-
-        [pyR, pyOppR] = self.planes
-
-        compoundA = pyR.compound
-        compoundB = pyOppR.compound
-        lenA = len(compoundA.Faces)
-        print 'lenA ', lenA
-        lenB = len(compoundB.Faces)
-        print 'lenB ', lenB
-
-        if lenB > 1 and lenA == 1:
-            print 'A'
-            gS = pyR.geomShape
-            compoundA = self.cutting(compoundA, [compoundB], gS)
-
-        elif lenA > 1 and lenB == 1:
-            print 'B'
-            gS = pyOppR.geomShape
-            compoundB = self.cutting(compoundB, [compoundA], gS)
-
-        elif lenA <= 1 and lenB <= 1:
-            print 'C'
-            # TODO make copy
-            gS = pyR.geomShape
-            compoundA = self.cutting(compoundA, [compoundB], gS)
-
-            gS = pyOppR.geomShape
-            compoundB = self.cutting(compoundB, [compoundA], gS)
-
-        else:
-            print 'D'
-            pass
-
-        pyR.shape = compoundA
-        pyOppR.shape = compoundB'''
+                    rearPl = Part.makeCompound(aList)
+                    pyRear.shape = rearPl
 
     def reviewing(self):
 
