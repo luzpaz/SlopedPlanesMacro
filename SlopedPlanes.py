@@ -136,6 +136,7 @@ class _SlopedPlanes(_Py):
 
         faceMaker = slopedPlanes.FaceMaker
         face = Part.makeFace(shape, faceMaker)
+        # TODO bajar a 'A'
 
         fList = face.Faces
         normal = self.faceNormal(fList[0])
