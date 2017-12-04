@@ -152,14 +152,7 @@ class _SlopedPlanes(_Py):
             upPlane.translate(FreeCAD.Vector(0, 0, 1)*up)
             _Py.upPlane = upPlane
 
-        serialize = self.Serialize
         onChanged = self.OnChanged
-        pyth = self.Pyth
-        state = self.State
-
-        if not serialize and state:
-            # print 'OnChanged'
-            onChanged = True
 
         if onChanged:
             print 'A'
@@ -202,7 +195,7 @@ class _SlopedPlanes(_Py):
             faceList = self.faceList
 
         # procedees face by face and stores them into the Proxy
-        pyFaceListOld = pyth
+        pyFaceListOld = self.Pyth
         pyFaceListNew = []
         numFace = -1
         for face in faceList:
@@ -229,9 +222,6 @@ class _SlopedPlanes(_Py):
                     pyFaceListNew.append(pyFace)
 
                 _Py.pyFace = pyFace
-
-                if not serialize and state:
-                    pyFace.reset = True
 
                 # gathers the interior wires. Upper Left criteria
 
