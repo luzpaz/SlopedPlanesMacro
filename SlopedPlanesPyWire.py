@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+import Part
 from SlopedPlanesPy import _Py
 
 
@@ -383,15 +384,13 @@ class _PyWire(_Py):
             pyReflex.solveReflex()
 
         for pyReflex in self.reflexs:
-            pyReflex.rearReflex(self)
-
-    def reviewing(self):
-
-        '''reviewing(self)
-        '''
+            pyReflex.reviewing()
 
         for pyReflex in self.reflexs:
-            pyReflex.reviewing()
+            pyReflex.rearReflex(self)
+
+        solved, unsolved = self.clasifyReflexPlanes()
+        self.reSolveReflexs(solved, unsolved)
 
     def clasifyReflexPlanes(self):
 
@@ -416,23 +415,36 @@ class _PyWire(_Py):
         '''reSolveReflexs(self, solved=[], unsolved=[], counter=0)
         '''
 
-        # print 'solved ', [p.numGeom for p in solved]
-        # print 'unsolved ', [p.numGeom for p in unsolved]
+        print 'solved ', [p.numGeom for p in solved]
+        print 'unsolved ', [p.numGeom for p in unsolved]
 
-        if counter > 2 * (len(solved) + len(unsolved)):
+        if counter > len(solved) + len(unsolved):
             return
 
         cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
 
         for pyPlane in unsolved[:]:
-            # print 'a', pyPlane.numGeom, pyPlane.shape.Faces
+            print 'a', pyPlane.numGeom, pyPlane.shape.Faces
             plane = pyPlane.shape
             gS = pyPlane.geomShape
+            plane = plane.cut(cutterList, _Py.tolerance)
 
-            ##plane = plane.cut(cutterList, _Py.tolerance)
+            aList = []
+            AA = self.selectFace(plane.Faces, gS)
+            aList.append(AA)
+            plane = plane.removeShape([AA])
 
-            plane = self.cutting(plane, cutterList, gS)
+            backward = pyPlane.backward
+            if plane.Faces:
+                for ff in plane.Faces:
+                    section = ff.section([backward, _Py.face], _Py.tolerance)
+                    if section.Edges:
+                        plane = plane.removeShape([ff])
 
+            if plane.Faces:
+                aList.extend(plane.Faces)
+
+            plane = Part.makeCompound(aList)
             pyPlane.shape = plane
 
             if pyPlane.isUnsolved():
@@ -450,44 +462,6 @@ class _PyWire(_Py):
 
         counter += 1
         self.reSolveReflexs(solved, unsolved, counter)
-
-    def betweenReflexs(self):
-
-        '''betweenReflexs(self)
-        '''
-
-        pyReflexList = self.reflexs
-        lenR = len(pyReflexList)
-        num = -1
-        for pyReflex in pyReflexList:
-            num += 1
-            cutterList = []
-            prior = self.sliceIndex(num-1, lenR)
-            later = self.sliceIndex(num+1, lenR)
-            if prior != num:
-                pyPriorReflex = pyReflexList[prior]
-                cutterList.append(pyPriorReflex)
-            if later != num and later != prior:
-                pyLaterReflex = pyReflexList[later]
-                cutterList.append(pyLaterReflex)
-
-            for pyPlane in pyReflex.planes:
-
-                if not pyPlane.aligned:
-
-                    plane = pyPlane.shape
-
-                    if len(plane.Faces) == 1:
-
-                        cutList = []
-                        for pyR in cutterList:
-                            for pyPl in pyR.planes:
-                                if pyPl != pyPlane:
-                                    cutList.append(pyPl.shape)
-
-                        gS = pyPlane.geomShape
-                        plane = self.cutting(plane, cutList, gS)
-                        pyPlane.shape = plane
 
     def rearing(self):
 

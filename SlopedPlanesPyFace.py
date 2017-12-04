@@ -1021,19 +1021,6 @@ class _PyFace(_Py):
             if pyWire.reflexs:
                 pyWire.reflexing()
 
-    def reviewing(self):
-
-        '''reviewing(self)
-        '''
-
-        for pyWire in self.wires:
-            if len(pyWire.reflexs) > 1:
-
-                pyWire.reviewing()
-                solved, unsolved = pyWire.clasifyReflexPlanes()
-                pyWire.reSolveReflexs(solved, unsolved)
-                pyWire.betweenReflexs()
-
     def rearing(self):
 
         '''rearing(self)

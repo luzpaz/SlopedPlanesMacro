@@ -152,6 +152,7 @@ class _SlopedPlanes(_Py):
             upPlane = Part.makePlane(1e6, 1e6, FreeCAD.Vector(-1e3, -1e3, 0))
             upPlane.translate(FreeCAD.Vector(0, 0, 1)*up)
             _Py.upPlane = upPlane
+            # lo puedo hacer cara por cara con boundBox. SOBRA
 
         onChanged = self.OnChanged
         if not self.faceList:
@@ -370,9 +371,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.reflexing()
 
-            pyFace.reviewing()
-
-            pyFace.rearing()
+            '''pyFace.rearing()
 
             pyFace.ordinaries()
 
@@ -380,7 +379,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.aligning()
 
-            pyFace.ending()
+            pyFace.ending()'''
 
         if onChanged:
             # print 'AAA'
