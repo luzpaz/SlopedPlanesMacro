@@ -164,17 +164,6 @@ class _PyReflex(_Py):
                                         cList.append(pyPl.simulatedShape)
                                         print pyPl.simulatedShape
 
-                        '''else:
-                            if nG not in rangoPost:
-                                print 'aa'
-                                control.append(nG)  # ESTA INCORPORANDO VALORES SIN HACER pyPlane.control = control
-
-                                print(nG, pyPlane.numGeom)
-                                pyPl = pyPlaneList[nG]
-                                contr = pyPl.control
-                                contr.append(pyPlane.numGeom)
-                                pyPl.control = contr'''
-
                 if cList:
                     print 'cList', cList, pyPlane.numGeom
                     gS = pyPlane.geomShape

@@ -383,14 +383,14 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex()
 
-        '''for pyReflex in self.reflexs:
-            pyReflex.reviewing()'''
+        for pyReflex in self.reflexs:
+            pyReflex.reviewing()
 
-        '''for pyReflex in self.reflexs:
-            pyReflex.rearReflex(self)'''
+        for pyReflex in self.reflexs:
+            pyReflex.rearReflex(self)
 
-        '''solved, unsolved = self.clasifyReflexPlanes()
-        self.reSolveReflexs(solved, unsolved)'''
+        solved, unsolved = self.clasifyReflexPlanes()
+        self.reSolveReflexs(solved, unsolved)
 
     def clasifyReflexPlanes(self):
 
@@ -435,9 +435,10 @@ class _PyWire(_Py):
             plane = plane.removeShape([AA])
 
             backward = pyPlane.backward
+            forward = pyPlane.forward
             if plane.Faces:
                 for ff in plane.Faces:
-                    section = ff.section([backward, _Py.face], _Py.tolerance)
+                    section = ff.section([backward, forward], _Py.tolerance)
                     if section.Edges:
                         plane = plane.removeShape([ff])
 
