@@ -436,8 +436,10 @@ class _PyReflex(_Py):
                     pl = pyPl.shape.copy()
                     gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
-                    pyR.addLink('divide', pl)
-                    print 'included rango divide', (pl, nWire, nn)
+                    # pyR.addLink('divide', pl)
+                    pyR.addLink('cutter', pl)
+                    pyOppR.addLink('oppCutter', pl)
+                    print 'included rango', (pl, nWire, nn)
 
             else:
                 print 'C2'
@@ -505,16 +507,10 @@ class _PyReflex(_Py):
         '''
 
         numWire = pyR.numWire
-
         aa = reflex.copy()
         bb = oppReflex.copy()
 
-        divide = pyR.divide
-
-        '''gS = pyOppR.geomShape
-        bb = self.cutting(bb, pyOppR.oppCutter, gS)'''
-
-        bb = bb.cut(divide+pyOppR.oppCutter, _Py.tolerance)
+        bb = bb.cut(pyOppR.oppCutter, _Py.tolerance)
         gS = pyOppR.geomShape
         if len(pyOppR.rear) == 1:
             if numWire == 0:
@@ -537,12 +533,13 @@ class _PyReflex(_Py):
                     bb = ff
                     break
 
-        # ???
         cList = pyR.cutter
         if pyR.aligned:
             cList = []
 
-        aa = aa.cut(cList+[bb]+divide, _Py.tolerance)
+        cList.append(bb)
+
+        aa = aa.cut(cList, _Py.tolerance)
 
         print aa.Faces
 

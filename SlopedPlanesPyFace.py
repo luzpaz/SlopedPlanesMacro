@@ -147,9 +147,7 @@ class _PyFace(_Py):
                 dd['_geom'] = None
                 dd['_cutter'] = []
                 dd['_oppCutter'] = []
-                dd['_divide'] = []
                 dd['_simulatedShape'] = None
-                dd['_compound'] = None
 
                 dd['_geomAligned'] = None
 
