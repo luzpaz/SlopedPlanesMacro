@@ -73,7 +73,7 @@ class _SlopedPlanes(_Py):
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
         The Proxy stores:
-        the flags State, OnChanged, Type, Serialize, Restoring and Load,
+        the flags State, OnChanged, Type, and Serialize,
         the complementary python objects (Pyth)
         and a list of faces (faceList)'''
 
@@ -102,7 +102,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanes")
 
-        self.State = False
+        self.State = True
 
         slopedPlanes.Slope = 45.0
         slopedPlanes.FactorWidth = 1
@@ -119,8 +119,6 @@ class _SlopedPlanes(_Py):
         self.faceList = []
         self.Type = "SlopedPlanes"
         self.Serialize = True
-        self.Restoring = False
-        self.Load = False
         self.OnChanged = True
 
     def execute(self, slopedPlanes):
@@ -139,15 +137,12 @@ class _SlopedPlanes(_Py):
         faceMaker = slopedPlanes.FaceMaker
         face = Part.makeFace(shape, faceMaker)
 
-        # TODO comprobar que no ha cambiado la geometria. Si ha cambiado OnChanged and Restoring True
-
         fList = face.Faces
         normal = self.faceNormal(fList[0])
         _Py.normal = normal  # tal y como lo he hecho la normal siempre es la misma. SOBRA
 
         _Py.tolerance = slopedPlanes.Tolerance
         _Py.reverse = slopedPlanes.Reverse
-
         _Py.slopedPlanes = slopedPlanes
 
         # prepares a giant plane
@@ -158,17 +153,16 @@ class _SlopedPlanes(_Py):
             _Py.upPlane = upPlane
 
         serialize = self.Serialize
-        load = self.Load
-        restoring = self.Restoring
         onChanged = self.OnChanged
         pyth = self.Pyth
+        state = self.State
 
-        if (not serialize and load) or restoring:
+        if not serialize and state:
             # print 'OnChanged'
             onChanged = True
 
         if onChanged:
-            # print 'A'
+            print 'A'
 
             # gathers the exterior wires. Lower Left criteria
 
@@ -203,7 +197,7 @@ class _SlopedPlanes(_Py):
             length = slopedPlanes.FactorLength
 
         else:
-            # print 'B'
+            print 'B'
 
             faceList = self.faceList
 
@@ -236,7 +230,7 @@ class _SlopedPlanes(_Py):
 
                 _Py.pyFace = pyFace
 
-                if (not serialize and load) or restoring:
+                if not serialize and state:
                     pyFace.reset = True
 
                 # gathers the interior wires. Upper Left criteria
@@ -403,8 +397,6 @@ class _SlopedPlanes(_Py):
             pyFaceListNew = self.Pyth
 
         self.OnChanged = True
-        self.Restoring = False
-        self.Load = False
 
         # elaborates a list of planes for every face
 
@@ -591,6 +583,7 @@ class _SlopedPlanes(_Py):
         state['Type'] = self.Type
 
         serialize = self.Serialize
+        state['Serialize'] = serialize
 
         if serialize:
             state['_faceList'] = self.getstate(self.faceList)
@@ -604,9 +597,6 @@ class _SlopedPlanes(_Py):
             dct['_alignments'] = alignments
             pyth.append(dct)
         state['Pyth'] = pyth
-
-        state['Serialize'] = serialize
-        # print '__getState__', state['Serialize']
 
         return state
 
@@ -639,19 +629,8 @@ class _SlopedPlanes(_Py):
         self.Pyth = pyth
 
         self.Serialize = serialize
-        # print '__setstate__', self.Serialize
-
         self.State = True
-
-        # self.OnChanged = True
-        # no valdría la pena serializar geomShape
-        self.OnChanged = False
-        # con Serialize True, si tras abrir el archivo
-        # a continuacion se cambia la geometría es necesario otro recompute
-
-        self.Restoring = False
-
-        self.Load = True
+        self.OnChanged = True
 
 
 class _ViewProvider_SlopedPlanes():

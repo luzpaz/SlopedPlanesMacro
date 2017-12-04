@@ -424,6 +424,8 @@ class _PyReflex(_Py):
             if pyOppR.numGeom in pyPl.rear:
                 print 'C1'
 
+                # dos veces ???
+
                 pl = pyPl.simulatedShape
                 pyR.addLink('cutter', pl)
                 pyOppR.addLink('oppCutter', pl)
@@ -433,7 +435,7 @@ class _PyReflex(_Py):
                     print 'C11'
 
                     ## pl = pyPl.simulatedShape ???
-                    pl = pyPl.shape.copy()
+                    pl = pyPl.shape.copy()  # ???
                     gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
                     # pyR.addLink('divide', pl)

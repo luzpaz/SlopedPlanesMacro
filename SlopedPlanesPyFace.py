@@ -156,15 +156,11 @@ class _PyFace(_Py):
 
                 if serialize:
 
-                    '''geom = pyPlane.geomShape.exportBrepToString()
-                    dd['_geomShape'] = geom'''
                     edgeList.append(pyPlane.geomShape)
                     dd['_geomShape'] = None
 
                     if pyPlane.forward:
                         forBack.extend([pyPlane.forward, pyPlane.backward])
-                        '''dd['_forward'] = pyPlane.forward.exportBrepToString()
-                        dd['_backward'] = pyPlane.backward.exportBrepToString()'''
                         dd['_forward'] = 'forward'
                         dd['_backward'] = 'backward'
 
@@ -239,18 +235,8 @@ class _PyFace(_Py):
                     if dd['_forward']:
                         nf += 2
 
-                        '''forwardShape = Part.Shape()
-                        forwardShape.importBrepFromString(dd['_forward'])
-                        pyPlane.forward = forwardShape.Edges[0]
-                        backwardShape = Part.Shape()
-                        backwardShape.importBrepFromString(dd['_backward'])
-                        pyPlane.backward = backwardShape.Edges[0]'''
-
                         pyPlane.forward = forBack[nf-1]
                         pyPlane.backward = forBack[nf]
-
-                    '''geomShape = Part.Shape()
-                    geomShape.importBrepFromString(dd['_geomShape'])'''
 
                     geomShape = edgeList[numGeom]
 
