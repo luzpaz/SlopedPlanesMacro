@@ -153,6 +153,8 @@ class _SlopedPlanes(_Py):
             _Py.upPlane = upPlane
 
         onChanged = self.OnChanged
+        if not self.faceList:
+            onChanged = True
 
         if onChanged:
             print 'A'
@@ -340,7 +342,7 @@ class _SlopedPlanes(_Py):
             else:
                 # print 'BB'
 
-                pyFace = pyth[numFace]
+                pyFace = self.Pyth[numFace]
                 _Py.pyFace = pyFace
 
                 for pyWire in pyFace.wires:
@@ -577,6 +579,8 @@ class _SlopedPlanes(_Py):
 
         if serialize:
             state['_faceList'] = self.getstate(self.faceList)
+        else:
+            state['_faceList'] = []
 
         pyth = []
         for pyFace in self.Pyth:
@@ -598,9 +602,8 @@ class _SlopedPlanes(_Py):
 
         serialize = state['Serialize']
 
-        if serialize:
-            faceList = self.setstate(state['_faceList'])
-            self.faceList = faceList
+        faceList = self.setstate(state['_faceList'])
+        self.faceList = faceList
 
         pyth = []
         numFace = -1
