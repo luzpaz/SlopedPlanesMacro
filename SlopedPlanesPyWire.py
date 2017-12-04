@@ -346,8 +346,6 @@ class _PyWire(_Py):
                     plane = self.cutting(plane, cutterList, gS)
                     pyPlane.shape = plane
 
-            # print 'control priorLater', pyPlane.control
-
         '''for pyPlane in self.planes:
             print pyPlane.numGeom, pyPlane.control'''
 
@@ -371,9 +369,6 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
 
-        '''for pyPlane in self.planes:
-            print pyPlane.numGeom, pyPlane.control'''
-
     def reflexing(self):
 
         '''reflexing(self)
@@ -381,25 +376,11 @@ class _PyWire(_Py):
 
         # print '###### reflexing wire ', self.numWire
 
-        # print '### reflexing'
-
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
 
-        '''for pyPlane in self.planes:
-            print pyPlane.numGeom, pyPlane.control'''
-
-        # print '### solveReflex'
-
         for pyReflex in self.reflexs:
-
-            '''[pyR, pyOppR] = pyReflex.planes
-            if [pyR.numGeom, pyOppR.numGeom] == [1, 2]:
-                pyReflex.solveReflex()'''
-
             pyReflex.solveReflex()
-
-        # print '### rearReflex'
 
         for pyReflex in self.reflexs:
             pyReflex.rearReflex(self)
@@ -435,8 +416,8 @@ class _PyWire(_Py):
         '''reSolveReflexs(self, solved=[], unsolved=[], counter=0)
         '''
 
-        print 'solved ', [p.numGeom for p in solved]
-        print 'unsolved ', [p.numGeom for p in unsolved]
+        # print 'solved ', [p.numGeom for p in solved]
+        # print 'unsolved ', [p.numGeom for p in unsolved]
 
         if counter > 2 * (len(solved) + len(unsolved)):
             return
@@ -444,7 +425,7 @@ class _PyWire(_Py):
         cutterList = [pyPl.shape for pyPl in solved]  # if not pyPl.aligned
 
         for pyPlane in unsolved[:]:
-            print 'a', pyPlane.numGeom, pyPlane.shape.Faces
+            # print 'a', pyPlane.numGeom, pyPlane.shape.Faces
             plane = pyPlane.shape
             gS = pyPlane.geomShape
 
@@ -455,16 +436,16 @@ class _PyWire(_Py):
             pyPlane.shape = plane
 
             if pyPlane.isUnsolved():
-                print 'aa'
+                # print 'aa'
                 pass
 
             else:
-                print 'ab'
+                # print 'ab'
                 unsolved.remove(pyPlane)
                 solved.append(pyPlane)
 
         if not unsolved:
-            print 'return'
+            # print 'return'
             return
 
         counter += 1

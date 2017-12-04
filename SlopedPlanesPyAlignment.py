@@ -255,8 +255,6 @@ class _PyAlignment(_Py):
 
         # print '###### trimming alignments'
 
-        # TODO incluir en control rangoChop vs rango
-
         # print '### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
