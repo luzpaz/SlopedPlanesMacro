@@ -347,8 +347,8 @@ class _PyWire(_Py):
                     plane = self.cutting(plane, cutterList, gS)
                     pyPlane.shape = plane
 
-        '''for pyPlane in self.planes:
-            print pyPlane.numGeom, pyPlane.control'''
+        for pyPlane in self.planes:
+            print pyPlane.numGeom, pyPlane.control
 
     def simulating(self):
 
@@ -383,14 +383,14 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex()
 
-        for pyReflex in self.reflexs:
-            pyReflex.reviewing()
+        '''for pyReflex in self.reflexs:
+            pyReflex.reviewing()'''
 
-        for pyReflex in self.reflexs:
-            pyReflex.rearReflex(self)
+        '''for pyReflex in self.reflexs:
+            pyReflex.rearReflex(self)'''
 
-        solved, unsolved = self.clasifyReflexPlanes()
-        self.reSolveReflexs(solved, unsolved)
+        '''solved, unsolved = self.clasifyReflexPlanes()
+        self.reSolveReflexs(solved, unsolved)'''
 
     def clasifyReflexPlanes(self):
 
