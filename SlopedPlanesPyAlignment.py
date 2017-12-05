@@ -337,7 +337,7 @@ class _PyAlignment(_Py):
         '''
 
         pyBase = self.base
-        # print 'base ', pyBase.numGeom
+        print '### base ', pyBase.numGeom
 
         base = pyBase.shape
         bigBase = pyBase.bigShape
@@ -348,8 +348,8 @@ class _PyAlignment(_Py):
 
         pyPrior = self.prior
         pyLater = self.later
-        # print 'pyPrior ', pyPrior.numGeom
-        # print 'pyLater ', pyLater.numGeom
+        print 'pyPrior ', pyPrior.numGeom
+        print 'pyLater ', pyLater.numGeom
         prior = pyPrior.shape
         later = pyLater.shape
         bigPrior = pyPrior.bigShape
@@ -359,18 +359,18 @@ class _PyAlignment(_Py):
 
         if ((not pyPrior.reflexed) or
            (pyPrior.choped and not pyPrior.aligned)):
-            # print '1'
+            print '1'
             cutterList.append(bigPrior)
             pyBase.addValue('control', pyPrior.numGeom)
 
         if ((not pyLater.reflexed) or
            (pyLater.choped and not pyLater.aligned)):
-            # print '2'
+            print '2'
             cutterList.append(bigLater)
             pyBase.addValue('control', pyLater.numGeom)
 
-        if not pyPrior.reflexed or pyPrior.choped or pyPrior.aligned:
-            # print 'a'
+        if not (pyPrior.reflexed or pyPrior.choped or pyPrior.aligned):
+            print 'a'
 
             contr = pyPrior.control
             if pyBase.numGeom not in contr:
@@ -381,13 +381,13 @@ class _PyAlignment(_Py):
 
             pyPrior.shape = prior
 
-        if not pyLater.reflexed or pyPrior.choped or pyPrior.aligned:
-            # print 'b'
+        if not (pyLater.reflexed or pyLater.choped or pyLater.aligned):
+            print 'b'
 
             contr = pyLater.control
 
             if not self.falsify:
-                # print 'b1'
+                print 'b1'
 
                 if pyBase.numGeom not in contr:
 
@@ -396,7 +396,7 @@ class _PyAlignment(_Py):
                     pyLater.addValue('control', pyBase.numGeom)
 
             else:
-                # print 'b11'
+                print 'b11'
 
                 if pyCont.numGeom not in contr:
 
@@ -407,20 +407,20 @@ class _PyAlignment(_Py):
             pyLater.shape = later
 
         if not self.falsify:
-            # print 'A'
+            print 'A'
 
             if cutterList:
-                # print '3'
+                print '3'
                 gS = pyBase.geomShape
                 base = self.cutting(base, cutterList, gS)
                 pyBase.shape = base
 
         else:
-            # print 'B'
+            print 'B'
 
             [pyOne, pyTwo] = self.chops[0]
-            # print 'pyOne ', pyOne.numGeom
-            # print 'pyTwo ', pyTwo.numGeom
+            print 'pyOne ', pyOne.numGeom
+            print 'pyTwo ', pyTwo.numGeom
 
             cList = [pyOne.bigShape] + cutterList
 

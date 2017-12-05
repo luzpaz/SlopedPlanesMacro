@@ -338,6 +338,8 @@ class _PyReflex(_Py):
                           oppReflexEnormous)
         '''
 
+        nWire = pyWire.numWire
+
         control = pyR.control
 
         if direction == "forward":
