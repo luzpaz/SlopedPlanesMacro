@@ -410,7 +410,7 @@ class _PyFace(_Py):
                                 distStart = edgeStart.sub(lineEnd).Length
                                 distEnd = edgeEnd.sub(lineEnd).Length
 
-                                if distStart < distEnd:
+                                if distStart < distEnd:  # TODO revisar
                                     print '1111 aligment'
 
                                     point = self.roundVector(edgeStart)

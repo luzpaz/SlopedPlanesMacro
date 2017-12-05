@@ -695,45 +695,46 @@ class _PyReflex(_Py):
         for pyPlane in self.planes:
             print 'pyPlane ', pyPlane.numGeom, pyPlane.shape.Faces
             # if len(pyPlane.shape.Faces) > 1:
-            rear = pyPlane.rear
-            for nGeom in rear:
-                pyRear = pyPlaneList[nGeom]
-                if pyRear.reflexed:
-                    print 'rearReflex ', pyRear.numGeom
-                    rearPl = pyRear.shape
-                    gS = pyRear.geomShape
-                    rearPl = rearPl.cut([pyPlane.shape], _Py.tolerance)
+            if not pyPlane.aligned:
+                rear = pyPlane.rear
+                for nGeom in rear:
+                    pyRear = pyPlaneList[nGeom]
+                    if pyRear.reflexed:
+                        print 'rearReflex ', pyRear.numGeom
+                        rearPl = pyRear.shape
+                        gS = pyRear.geomShape
+                        rearPl = rearPl.cut([pyPlane.shape], _Py.tolerance)
 
-                    aList = []
-                    AA = self.selectFace(rearPl.Faces, gS)
-                    aList.append(AA)
-                    rearPl = rearPl.removeShape([AA])
+                        aList = []
+                        AA = self.selectFace(rearPl.Faces, gS)
+                        aList.append(AA)
+                        rearPl = rearPl.removeShape([AA])
 
-                    backward = pyRear.backward
-                    forward = pyRear.forward
+                        backward = pyRear.backward
+                        forward = pyRear.forward
 
-                    if rearPl.Faces:
+                        if rearPl.Faces:
 
-                        pyReflex = self.selectAllReflex(pyRear.numWire,
-                                                        pyRear.numGeom)
+                            pyReflex = self.selectAllReflex(pyRear.numWire,
+                                                            pyRear.numGeom)
 
-                        for pyPl in pyReflex[0].planes:     # TODO corregir esto y los metodos select
-                            if (pyRear.numWire, pyRear.numGeom) !=\
-                               (pyPl.numWire, pyPl.numGeom):
-                                   enormous = pyPl.enormousShape
-                                   break
+                            for pyPl in pyReflex[0].planes:     # TODO corregir esto y los metodos select
+                                if (pyRear.numWire, pyRear.numGeom) !=\
+                                   (pyPl.numWire, pyPl.numGeom):
+                                       enormous = pyPl.enormousShape
+                                       break
 
-                        rearPl = rearPl.cut([enormous], _Py.tolerance)
-                        for ff in rearPl.Faces:
-                            print 'aaa'
-                            section = ff.section([forward, backward],
-                                                 _Py.tolerance)
-                            if not section.Edges:
-                                print 'bbb'
-                                aList.append(ff)
+                            rearPl = rearPl.cut([enormous], _Py.tolerance)
+                            for ff in rearPl.Faces:
+                                print 'aaa'
+                                section = ff.section([forward, backward],
+                                                     _Py.tolerance)
+                                if not section.Edges:
+                                    print 'bbb'
+                                    aList.append(ff)
 
-                    rearPl = Part.makeCompound(aList)
-                    pyRear.shape = rearPl
+                        rearPl = Part.makeCompound(aList)
+                        pyRear.shape = rearPl
 
         for pyPlane in self.planes:
             pyPlane.isUnsolved()
