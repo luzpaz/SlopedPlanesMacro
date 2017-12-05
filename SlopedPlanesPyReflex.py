@@ -417,9 +417,29 @@ class _PyReflex(_Py):
         elif pyPl.reflexed:
             print 'C'
 
-            forward = pyR.forward
+            '''forward = pyR.forward
             forw = pyPl.forward
-            section = forward.section([forw], _Py.tolerance)
+            section = forward.section([forw], _Py.tolerance)'''
+
+            '''if pyR.numGeom in pyPl.rear:
+                print 'C0'
+
+                pl = pyPl.simulatedShape
+                pyR.addLink('cutter', pl)
+                # pyOppR.addLink('oppCutter', pl)
+                print 'included rango simulated ', (pl, nWire, nn)
+
+                if kind != 'rangoCorner':
+                    print 'C11'
+
+                    ## pl = pyPl.simulatedShape ???
+                    pl = pyPl.shape.copy()  # ???
+                    gS = pyPl.geomShape
+                    pl = self.cutting(pl, [oppReflexEnormous], gS)
+                    # pyR.addLink('divide', pl)
+                    pyR.addLink('cutter', pl)
+                    pyOppR.addLink('oppCutter', pl)
+                    print 'included rango', (pl, nWire, nn)'''
 
             if pyOppR.numGeom in pyPl.rear:
                 print 'C1'
@@ -513,37 +533,25 @@ class _PyReflex(_Py):
         bb = oppReflex.copy()
 
         bb = bb.cut(pyOppR.oppCutter, _Py.tolerance)
+        print 'bb.Faces ', bb.Faces
         gS = pyOppR.geomShape
-        if len(pyOppR.rear) == 1:
-            if numWire == 0:
-                vertex = pyOppR.forward.firstVertex(True)
-            else:
-                vertex = pyOppR.backward.firstVertex(True)
-        else:
-            if direction == 'backward':
-                vertex = pyOppR.forward.firstVertex(True)
-            else:
-                vertex = pyOppR.backward.firstVertex(True)
-        print vertex.Point
 
+        bList = []
         for ff in bb.Faces:
             section = ff.section([gS], _Py.tolerance)
             if section.Edges:
-                section = ff.section([vertex], _Py.tolerance)
-                if section.Vertexes:
-                    print 'break'
-                    bb = ff
-                    break
+                bList.append(ff)
 
         cList = pyR.cutter
         if pyR.aligned:
             cList = []
 
-        cList.append(bb)
+        # cList.append(bb)
+        cList.extend(bList)
 
         aa = aa.cut(cList, _Py.tolerance)
 
-        print aa.Faces
+        print 'aa.Faces ', aa.Faces
 
         aList = []
         gS = pyR.geomShape
