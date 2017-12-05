@@ -97,6 +97,8 @@ class _PyReflex(_Py):
 
         ''''''
 
+        print '############ preProcess'
+
         pyPlaneList = pyWire.planes
         numWire = pyWire.numWire
 
@@ -176,6 +178,9 @@ class _PyReflex(_Py):
 
         '''reflexing(self, pyWire)
         '''
+
+        print '############ reflexing'
+
 
         pyPlaneList = self.planes
 
@@ -572,7 +577,8 @@ class _PyReflex(_Py):
             for ff in aa.Faces:
                 print 'aa'
                 section = ff.section([_Py.face], _Py.tolerance)
-                if section.Edges:
+                # if section.Edges_
+                if section.Vertexes:
                     print 'bb'
                     section = ff.section([rear], _Py.tolerance)
                     if section.Edges:
@@ -580,7 +586,7 @@ class _PyReflex(_Py):
                         aa = aa.removeShape([ff])
                         under.append(ff)
 
-            print under
+            print 'under ', under
 
             if under:
 
@@ -689,6 +695,9 @@ class _PyReflex(_Py):
 
         '''rearReflex(self, pyWire)
         '''
+
+        print '###### rearReflex'
+
 
         pyPlaneList = pyWire.planes
 

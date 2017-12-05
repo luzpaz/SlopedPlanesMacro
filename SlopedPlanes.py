@@ -159,7 +159,7 @@ class _SlopedPlanes(_Py):
             onChanged = True
 
         if onChanged:
-            print 'A'
+            # print 'A'
 
             # gathers the exterior wires. Lower Left criteria
 
@@ -194,7 +194,7 @@ class _SlopedPlanes(_Py):
             length = slopedPlanes.FactorLength
 
         else:
-            print 'B'
+            # print 'B'
 
             faceList = self.faceList
 
@@ -371,7 +371,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.reflexing()
 
-            pyFace.rearing()
+            '''pyFace.rearing()
 
             pyFace.ordinaries()
 
@@ -379,7 +379,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.aligning()
 
-            pyFace.ending()
+            pyFace.ending()'''
 
         if onChanged:
             # print 'AAA'
