@@ -380,14 +380,14 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex()
 
-        for pyReflex in self.reflexs:
+        '''for pyReflex in self.reflexs:
             pyReflex.reviewing()
 
         for pyReflex in self.reflexs:
             pyReflex.rearReflex(self)
 
         solved, unsolved = self.clasifyReflexPlanes()
-        self.reSolveReflexs(solved, unsolved)
+        self.reSolveReflexs(solved, unsolved)'''
 
     def clasifyReflexPlanes(self):
 
