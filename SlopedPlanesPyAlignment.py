@@ -262,7 +262,7 @@ class _PyAlignment(_Py):
         # print 'rango ', rango
         pyPlaneList = pyWire.planes
 
-        rangoChop = []
+        '''rangoChop = []
         for nG in self.rangoConsolidate:
             pyPl = pyPlaneList[nG]
             if not pyPl.aligned:
@@ -271,7 +271,7 @@ class _PyAlignment(_Py):
                 pyPl.addValue('control', pyBase.numGeom)
             else:
                 pass
-                # ???
+                # ???'''
 
         falsify = self.falsify
         simulatedChop = self.simulatedChop
@@ -287,7 +287,7 @@ class _PyAlignment(_Py):
                 # print '# chop ', pyPlane.numGeom
                 enShape = pyPlane.enormousShape
 
-                # ## if enShape:            QUITAR
+                # ## if enShape:            QUITAR ???
                 numWire = pyPlane.numWire
                 pyWire = pyWireList[numWire]
                 pyPlaneList = pyWire.planes
@@ -318,7 +318,9 @@ class _PyAlignment(_Py):
                         pyPl.trimming(enShape, cList)
                         pyPl.addValue('control', pyPlane.numGeom)
 
-                    for pyC in rangoChop:
+                    # for pyC in rangoChop:
+                    for numChop in self.rangoConsolidate:
+                        pyC = pyPlaneList[nG]
                         pyPl.addValue('control', pyC.numGeom)
                         pyC.addValue('control', nG)
 
@@ -632,6 +634,8 @@ class _PyAlignment(_Py):
             pyW = pyWireList[nW]
             pyPlaneList = pyW.planes
 
+            # TODO utilizar rangoConsolidate
+
             cutList = []
             for nn in rangoChop:
                 pyPl = pyPlaneList[nn]
@@ -692,8 +696,6 @@ class _PyAlignment(_Py):
                 cutterList.extend(cutList)
                 cutterList.extend(oneList)
                 cutterList.extend(twoList)
-                # # cutterList.extend(rearOneList)
-                # # cutterList.extend(rearTwoList)
 
                 if cutterList:
                     plane = pyPlane.shape
