@@ -247,6 +247,8 @@ class _Py(object):
 
         ''''''
 
+        print '###############################################################'
+
         print '********* wires ', _Py.pyFace.wires
         for pyWire in _Py.pyFace.wires:
 
@@ -338,11 +340,20 @@ class _Py(object):
         if pyPlane.aligned:
             pass
 
-    def printControl(self):
+    def printControl(self, text):
 
         ''''''
 
-        pass
+        print '###############################################################'
+
+        print text
+
+        for pyWire in _Py.pyFace.wires:
+            print 'wire ', pyWire.numWire
+            for pyPlane in pyWire.planes:
+                print pyPlane.numGeom, pyPlane.control
+
+        print '###############################################################'
 
     def roundVector(self, vector):
 

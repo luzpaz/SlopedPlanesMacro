@@ -975,12 +975,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.trimming()
 
-        print 'trimming'
-        for pyWire in self.wires:
-            print 'wire ', pyWire.numWire
-            for pyPlane in pyWire.planes:
-                print pyPlane.numGeom, pyPlane.control
-        print '############'
+        self.printControl('trimming')
 
     def priorLater(self):
 
@@ -993,12 +988,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.priorLater()
 
-        print 'priorLater'
-        for pyWire in self.wires:
-            print 'wire ', pyWire.numWire
-            for pyPlane in pyWire.planes:
-                print pyPlane.numGeom, pyPlane.control
-        print '############'
+        self.printControl('priorLater')
 
     def simulating(self):
 
@@ -1026,12 +1016,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.preProcess()
 
-        print 'preProcess'
-        for pyWire in self.wires:
-            print 'wire ', pyWire.numWire
-            for pyPlane in pyWire.planes:
-                print pyPlane.numGeom, pyPlane.control
-        print '############'
+        self.printControl('preProcess')
 
     def reSimulating(self):
 
@@ -1048,12 +1033,7 @@ class _PyFace(_Py):
             if pyWire.reflexs:
                 pyWire.reflexing()
 
-        print 'reflexing'
-        for pyWire in self.wires:
-            print 'wire ', pyWire.numWire
-            for pyPlane in pyWire.planes:
-                print pyPlane.numGeom, pyPlane.control
-        print '############'
+        self.printControl('reflexing')
 
     def rearing(self):
 
@@ -1064,6 +1044,8 @@ class _PyFace(_Py):
             if pyWire.reflexs:
                 pyWire.rearing()
 
+        self.printControl('rearing')
+
     def ordinaries(self):
 
         '''ordinaries(self)
@@ -1071,6 +1053,8 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.ordinaries()
+
+        self.printControl('ordinaries')
 
     def betweenWires(self):
 
@@ -1152,6 +1136,8 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
+        self.printControl('aligning')
+
     def ending(self):
 
         '''ending(self)
@@ -1207,3 +1193,5 @@ class _PyFace(_Py):
 
                         if pyPlane.choped or pyPlane.aligned:
                             cutterList.append(plane)
+
+        self.printControl('ending')

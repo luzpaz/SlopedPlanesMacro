@@ -432,11 +432,12 @@ class _SlopedPlanes(_Py):
                             plane = pyPlane.shape
 
                             if isinstance(plane, Part.Compound):
-                                # print 'compound'
+                                # print 'a1'
                                 planeWireList.append(plane.Faces[0])
                                 secondaries.extend(plane.Faces[1:])
 
                             else:
+                                # print 'a2'
                                 planeWireList.append(plane)
 
                         else:
@@ -448,17 +449,20 @@ class _SlopedPlanes(_Py):
                                 originList.append([alfa, beta])
 
                                 if alfa == numWire:
+                                    # print 'b1'
                                     if beta > numAngle:
                                         pyPl = pyFace.selectPlane(alfa, beta)
                                         pl = pyPl.shape
                                         planeWireList.append(pl)
 
                                 elif alfa > numWire:
+                                    # print 'b2'
                                     pyPl = pyFace.selectPlane(alfa, beta)
                                     pl = pyPl.shape
                                     planeWireList.append(pl)
 
                                 elif alfa < numWire:
+                                    # print 'b3'
                                     pass
 
                 if up:
