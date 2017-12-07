@@ -442,8 +442,8 @@ class _PyReflex(_Py):
                     pl = pyPl.shape.copy()
                     gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
-                    pyR.addLink('cutter', pl)
                     pyOppR.addLink('oppCutter', pl)
+                    pyR.addLink('cutter', pl)
 
                 pl = pyPl.simulatedShape
                 pyR.addLink('cutter', pl)
@@ -502,14 +502,14 @@ class _PyReflex(_Py):
         print 'bb.Faces ', bb.Faces
         gS = pyOppR.geomShape
 
-        '''bList = []
+        bList = []
         for ff in bb.Faces:
             section = ff.section([gS], _Py.tolerance)
             if section.Edges:
                 bList.append(ff)
-        print 'bList ', bList'''
+        print 'bList ', bList
 
-        if len(pyOppR.rear) == 1:
+        '''if len(pyOppR.rear) == 1:
             if numWire == 0:
                 vertex = pyOppR.forward.firstVertex(True)
             else:
@@ -528,14 +528,14 @@ class _PyReflex(_Py):
                 if section.Vertexes:
                     print 'break'
                     bb = ff
-                    break
+                    break'''
 
         cList = pyR.cutter
         if pyR.aligned:
             cList = []
 
-        cList.append(bb)
-        # cList.extend(bList)      # me esta ampliando la propiedad sin hacer pyR.cutter = cList
+        # cList.append(bb)
+        cList.extend(bList)      # me esta ampliando la propiedad sin hacer pyR.cutter = cList
 
         aa = aa.cut(cList, _Py.tolerance)
 

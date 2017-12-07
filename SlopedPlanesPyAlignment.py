@@ -672,46 +672,6 @@ class _PyAlignment(_Py):
                             twoList.append(rangoPlane)
                             # print 'rango ', nn
 
-            # prepared for planes between the rears of the chops ? is this necessary ?
-            '''nW1 = pyOne.numWire
-            pyW = pyWireList[nW1]
-            pyPlaneList = pyW.planes
-
-            rearOneList = []
-            rearOne = pyOne.rear
-            for nG in rearOne:
-                pyPl = pyPlaneList[nG]
-                if not pyPl.choped:
-                    if not pyPl.aligned:
-                        rearPlane = pyPl.shape
-                        rearOneList.append(rearPlane)
-                        # print 'rearPlane ', nG
-
-            nW2 = pyTwo.numWire
-            pyW = pyWireList[nW2]
-            pyPlaneList = pyW.planes
-
-            rearTwoList = []
-            rearTwo = pyTwo.rear
-            for nG in rearTwo:
-                pyPl = pyPlaneList[nG]
-                if not pyPl.choped:
-                    if not pyPl.aligned:
-                        rearPlane = pyPl.shape
-                        rearTwoList.append(rearPlane)
-                        # print 'rearPlane ', nG
-
-            if nW1 == nW2:
-                if rearOne[-1] != rearTwo[0]:
-                    rearRango = range(rearTwo[0]+1, rearOne[-1])
-                    for nG in rearRango:
-                        pyPl = pyPlaneList[nG]
-                        if not pyPl.choped:
-                            if not pyPl.aligned:
-                                rearPlane = pyPl.shape
-                                rearTwoList.append(rearPlane)
-                                rearOneList.append(rearPlane)'''
-
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
