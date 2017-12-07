@@ -341,8 +341,8 @@ class _PyAlignment(_Py):
 
         pyPrior = self.prior
         pyLater = self.later
-        # print 'pyPrior ', pyPrior.numGeom
-        # print 'pyLater ', pyLater.numGeom
+        # print 'pyPrior ', (pyPrior.numWire, pyPrior.numGeom)
+        # print 'pyLater ', (pyLater.numWire, pyLater.numGeom)
         prior = pyPrior.shape
         later = pyLater.shape
         bigPrior = pyPrior.bigShape
@@ -362,7 +362,8 @@ class _PyAlignment(_Py):
             cutterList.append(bigLater)
             pyBase.addValue('control', pyLater.numGeom)
 
-        if not (pyPrior.reflexed or pyPrior.choped or pyPrior.aligned):
+        # if not (pyPrior.reflexed or pyPrior.choped or pyPrior.aligned):
+        if not pyPrior.reflexed or pyPrior.choped or pyPrior.aligned:
             # print 'a'
 
             contr = pyPrior.control
@@ -374,7 +375,8 @@ class _PyAlignment(_Py):
 
             pyPrior.shape = prior
 
-        if not (pyLater.reflexed or pyLater.choped or pyLater.aligned):
+        # if not (pyLater.reflexed or pyLater.choped or pyLater.aligned):
+        if not pyLater.reflexed or pyLater.choped or pyLater.aligned:
             # print 'b'
 
             contr = pyLater.control
@@ -412,8 +414,8 @@ class _PyAlignment(_Py):
             # print 'B'
 
             [pyOne, pyTwo] = self.chops[0]
-            # print 'pyOne ', pyOne.numGeom
-            # print 'pyTwo ', pyTwo.numGeom
+            # print 'pyOne ', (pyOne.numWire, pyOne.numGeom)
+            # print 'pyTwo ', (pyTwo.numWire, pyTwo.numGeom)
 
             cList = [pyOne.bigShape] + cutterList
 
