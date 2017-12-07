@@ -944,12 +944,29 @@ class _PyFace(_Py):
 
         if _Py.slopedPlanes.Up:
 
+            planeList = []
+            for pyWire in self.wires:
+                for pyPlane in pyWire.planes:
+                    plane = pyPlane.shape
+                    if plane:
+                        planeList.append(plane)
+
+            compound = Part.makeCompound(planeList)
+            boundBox = compound.BoundBox
+            diaLen = boundBox.DiagonalLength
+            center = boundBox.Center
+            upPlane = Part.makePlane(diaLen, diaLen, center.sub(FreeCAD.Vector(diaLen/2, diaLen/2, center.z)))
+            upPlane.Placement.Base.z = _Py.slopedPlanes.Up
+            upList = _Py.upList
+            upList.append(upPlane)
+            _Py.upList = upList
+
             for pyWire in self.wires:
                 for pyPlane in pyWire.planes:
                     plane = pyPlane.shape
                     if plane:
                         gS = pyPlane.geomShape
-                        plane = self.cutting(plane, [_Py.upPlane], gS)
+                        plane = self.cutting(plane, [upPlane], gS)
                         pyPlane.shape = plane
 
     def virtualizing(self):

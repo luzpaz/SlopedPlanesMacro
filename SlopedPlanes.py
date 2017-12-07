@@ -132,27 +132,11 @@ class _SlopedPlanes(_Py):
         sketchAxis = sketch.Placement.Rotation.Axis
         sketchAngle = sketch.Placement.Rotation.Angle
         shape.Placement = FreeCAD.Placement()
-        # TODO probar el attacher
-
-        faceMaker = slopedPlanes.FaceMaker
-        face = Part.makeFace(shape, faceMaker)
-        # TODO bajar a 'A'
-
-        fList = face.Faces
-        normal = self.faceNormal(fList[0])
-        _Py.normal = normal  # tal y como lo he hecho la normal siempre es la misma. SOBRA
 
         _Py.tolerance = slopedPlanes.Tolerance
         _Py.reverse = slopedPlanes.Reverse
         _Py.slopedPlanes = slopedPlanes
-
-        # prepares a giant plane
-        up = slopedPlanes.Up
-        if up:
-            upPlane = Part.makePlane(1e6, 1e6, FreeCAD.Vector(-1e3, -1e3, 0))
-            upPlane.translate(FreeCAD.Vector(0, 0, 1)*up)
-            _Py.upPlane = upPlane
-            # lo puedo hacer cara por cara con boundBox. SOBRA
+        _Py.upList = []
 
         onChanged = self.OnChanged
         if not self.faceList:
@@ -160,6 +144,10 @@ class _SlopedPlanes(_Py):
 
         if onChanged:
             # print 'A'
+
+            faceMaker = slopedPlanes.FaceMaker
+            face = Part.makeFace(shape, faceMaker)
+            fList = face.Faces
 
             # gathers the exterior wires. Lower Left criteria
 
@@ -465,15 +453,10 @@ class _SlopedPlanes(_Py):
                                     # print 'b3'
                                     pass
 
-                if up:
-                    upPlaneCopy = upPlane.copy()
+                if slopedPlanes.Up:
+                    upPlaneCopy = _Py.upList[pyFace.numFace].copy()
                     cut = upPlaneCopy.cut(planeWireList, _Py.tolerance)
                     edgeList = cut.Edges[4:]
-                    if numWire > 0:     # this doesn't seem to be necessary
-                        for edge in edgeList:
-                            edge.reverse()
-                        edgeList.reverse()
-                        pass
                     wire = Part.Wire(edgeList)
                     wireList.append(wire)
 
@@ -481,11 +464,8 @@ class _SlopedPlanes(_Py):
 
             planeFaceList.extend(secondaries)
 
-            if up:
+            if slopedPlanes.Up:
                 upFace = Part.makeFace(wireList, faceMaker)
-
-                # hay que comprobar para cada interior wire que realmente corta
-                # o diseñar otra solución para evitar open wires. Mirar cut
 
                 planeFaceList.append(upFace)
 

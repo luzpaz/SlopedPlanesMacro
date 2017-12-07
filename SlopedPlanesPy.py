@@ -43,11 +43,11 @@ class _Py(object):
     tolerance = 1e-7
     reverse = False
     size = 0
-    normal = 0
+    normal = FreeCAD.Vector(0, 0, 1)
     face = None
     pyFace = None
     slopedPlanes = None
-    upPlane = None
+    upList = []
 
     def getstate(self, faceList):
 
