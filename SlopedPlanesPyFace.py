@@ -302,7 +302,7 @@ class _PyFace(_Py):
                             pyPlane = self.selectPlane(pyPlane.numWire,
                                                        pyPlane.numGeom)
                         planeList.append(pyPlane)
-                    pyReflex.planes = planeList
+                    pyReflex.planes = planeList  # reset reflexs planes
 
         self.alignments = []  # always reset alignments
         shapeGeomFace = self.shapeGeom
@@ -562,7 +562,6 @@ class _PyFace(_Py):
                 # print[[a.numGeom for a in ali.aligns] for ali in self.alignments]
                 # print[[(a.numGeom, b.numGeom) for [a, b] in ali.chops] for ali in self.alignments]
                 # print '######'
-                
 
             pyWire.reset = False
 
