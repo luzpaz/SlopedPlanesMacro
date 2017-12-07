@@ -259,19 +259,7 @@ class _PyAlignment(_Py):
         enormousShape = pyBase.enormousShape
         numWire = self.base.numWire
         pyWire = pyWireList[numWire]
-        # print 'rango ', rango
         pyPlaneList = pyWire.planes
-
-        '''rangoChop = []
-        for nG in self.rangoConsolidate:
-            pyPl = pyPlaneList[nG]
-            if not pyPl.aligned:
-                rangoChop.append(pyPl)
-                pyPl.trimming(enormousShape)
-                pyPl.addValue('control', pyBase.numGeom)
-            else:
-                pass
-                # ???'''
 
         falsify = self.falsify
         simulatedChop = self.simulatedChop
@@ -287,12 +275,11 @@ class _PyAlignment(_Py):
                 # print '# chop ', pyPlane.numGeom
                 enShape = pyPlane.enormousShape
 
-                # ## if enShape:            QUITAR ???
                 numWire = pyPlane.numWire
                 pyWire = pyWireList[numWire]
                 pyPlaneList = pyWire.planes
 
-                # print 'rango ', pyPlane.rango
+                # print 'rango ', pyPlane.rangoConsolidate
                 brea = False
                 for nG in pyPlane.rangoConsolidate:
                     pyPl = pyPlaneList[nG]
@@ -318,9 +305,8 @@ class _PyAlignment(_Py):
                         pyPl.trimming(enShape, cList)
                         pyPl.addValue('control', pyPlane.numGeom)
 
-                    # for pyC in rangoChop:
-                    for numChop in self.rangoConsolidate:
-                        pyC = pyPlaneList[nG]
+                    for nC in self.rangoConsolidate:
+                        pyC = pyPlaneList[nC]
                         pyPl.addValue('control', pyC.numGeom)
                         pyC.addValue('control', nG)
 
@@ -364,8 +350,7 @@ class _PyAlignment(_Py):
             cutterList.append(bigLater)
             pyBase.addValue('control', pyLater.numGeom)
 
-        # if not (pyPrior.reflexed or pyPrior.choped or pyPrior.aligned):
-        if not pyPrior.reflexed or pyPrior.choped or pyPrior.aligned:
+        if not pyPrior.reflexed or pyPrior.choped:
             # print 'a'
 
             contr = pyPrior.control
@@ -377,8 +362,7 @@ class _PyAlignment(_Py):
 
             pyPrior.shape = prior
 
-        # if not (pyLater.reflexed or pyLater.choped or pyLater.aligned):
-        if not pyLater.reflexed or pyLater.choped or pyLater.aligned:
+        if not pyLater.reflexed or pyLater.choped:
             # print 'b'
 
             contr = pyLater.control
@@ -634,8 +618,6 @@ class _PyAlignment(_Py):
             pyW = pyWireList[nW]
             pyPlaneList = pyW.planes
 
-            # TODO utilizar rangoConsolidate
-
             cutList = []
             for nn in rangoChop:
                 pyPl = pyPlaneList[nn]
@@ -644,6 +626,8 @@ class _PyAlignment(_Py):
                         pl = pyPl.shape
                         cutList.append(pl)
                         # print 'rangoChop ', nn
+
+            # TODO utilizar rangoConsolidate. Refact
 
             oneList = []
             rangoOne = pyOne.rango
