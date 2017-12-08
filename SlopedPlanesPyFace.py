@@ -777,11 +777,7 @@ class _PyFace(_Py):
         '''findAngle(self, nW, nG)
         '''
 
-        pyWireList = self.wires
-
-        pyW = pyWireList[numWire]
-        pyPl = pyW.planes[numGeom]
-        angle = pyPl.angle
+        angle = self.wires[numWire].planes[numGeom].angle
 
         if isinstance(angle, list):
             angle = self.findAngle(angle[0], angle[1])
@@ -958,7 +954,10 @@ class _PyFace(_Py):
             boundBox = compound.BoundBox
             diaLen = boundBox.DiagonalLength
             center = boundBox.Center
-            upPlane = Part.makePlane(diaLen, diaLen, center.sub(FreeCAD.Vector(diaLen/2, diaLen/2, center.z)))
+            upPlane = Part.makePlane(diaLen, diaLen,
+                                     center.sub(FreeCAD.Vector(diaLen/2,
+                                                               diaLen/2,
+                                                               center.z)))
             upPlane.Placement.Base.z = _Py.slopedPlanes.Up
             upList = _Py.upList
             upList.append(upPlane)
@@ -1005,7 +1004,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.priorLater()
 
-        self.printControl('priorLater wires')
+        # self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
