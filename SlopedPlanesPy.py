@@ -159,7 +159,7 @@ class _Py(object):
         select an unique reflex corner in the wire numWire,
         which envolves the planes numGeom and nGeom,
         and return it, or None
-        used in PyWire'''
+        used in PyWire. Y CREO QUE LO QUITARE'''
 
         for pyReflex in _Py.pyFace.wires[numWire].reflexs:
             [pyPlane, pyPl] = pyReflex.planes

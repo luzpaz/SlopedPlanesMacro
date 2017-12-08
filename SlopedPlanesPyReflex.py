@@ -206,9 +206,9 @@ class _PyReflex(_Py):
 
         print '# twin pyR.numGeom ', pyR.numGeom, pyR.control
 
-        reflexEnormous = pyR.enormousShape.copy()
+        # reflexEnormous = pyR.enormousShape
         oppReflexEnormous = pyOppR.enormousShape
-        pyR.addLink('oppCutter', oppReflexEnormous)
+        pyR.addValue('oppCutter', oppReflexEnormous, 'forward')
 
         angle = pyR.angle
         numWire = pyWire.numWire
@@ -416,12 +416,16 @@ class _PyReflex(_Py):
             print 'C'
 
             pl = pyPl.simulatedShape
+            gS = pyPl.geomShape
+            forwar = pyR.forward
+            forw = pyPl.forward
+            section = forwar.section([forw], _Py.tolerance)
+            if section.Vertexes:
+                pl = self.cutting(pl, [reflexEnormous], gS)
 
             if kind == 'rangoCorner':
                 print 'C1'
 
-                pl = pyPl.shape.copy()
-                gS = pyPl.geomShape
                 pl = self.cutting(pl, [oppReflexEnormous], gS)
                 pyR.addLink('cutter', pl)
                 print 'included rango modified', (pl, nWire, nn)
@@ -429,7 +433,6 @@ class _PyReflex(_Py):
             elif kind == 'rangoNext':
                 print 'C2'
 
-                pl = pyPl.simulatedShape
                 pyR.addLink('cutter', pl)
                 pyR.addLink('oppCutter', pl)
                 print 'included rango simulated ', (pl, nWire, nn)
@@ -442,7 +445,7 @@ class _PyReflex(_Py):
                     pl = pyPl.shape.copy()
                     gS = pyPl.geomShape
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
-                    pyOppR.addLink('oppCutter', pl)
+                    pyOppR.addValue('oppCutter', pl, 'backward')
                     pyR.addLink('cutter', pl)
 
                 pl = pyPl.simulatedShape
@@ -509,32 +512,10 @@ class _PyReflex(_Py):
                 bList.append(ff)
         print 'bList ', bList
 
-        '''if len(pyOppR.rear) == 1:
-            if numWire == 0:
-                vertex = pyOppR.forward.firstVertex(True)
-            else:
-                vertex = pyOppR.backward.firstVertex(True)
-        else:
-            if direction == 'backward':
-                vertex = pyOppR.forward.firstVertex(True)
-            else:
-                vertex = pyOppR.backward.firstVertex(True)
-        print vertex.Point
-
-        for ff in bb.Faces:
-            section = ff.section([gS], _Py.tolerance)
-            if section.Edges:
-                section = ff.section([vertex], _Py.tolerance)
-                if section.Vertexes:
-                    print 'break'
-                    bb = ff
-                    break'''
-
         cList = pyR.cutter
         if pyR.aligned:
             cList = []
 
-        # cList.append(bb)
         cList.extend(bList)      # me esta ampliando la propiedad sin hacer pyR.cutter = cList
 
         aa = aa.cut(cList, _Py.tolerance)
@@ -626,6 +607,8 @@ class _PyReflex(_Py):
                                                     print 'h'
                                                     aList.append(ff)
                                                     break
+
+        # aList = aa.Faces
 
         compound = Part.makeCompound(aList)
         pyR.shape = compound
