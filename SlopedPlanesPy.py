@@ -155,10 +155,13 @@ class _Py(object):
 
     def selectReflex(self, numWire, numGeom, nGeom):
 
-        ''''''
+        '''selectReflex(self, numWire, numGeom, nGeom)
+        select an unique reflex corner in the wire numWire,
+        which envolves the planes numGeom and nGeom,
+        and return it, or None
+        used in PyWire'''
 
-        pyReflexList = _Py.pyFace.wires[numWire].reflexs
-        for pyReflex in pyReflexList:
+        for pyReflex in _Py.pyFace.wires[numWire].reflexs:
             [pyPlane, pyPl] = pyReflex.planes
             [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
             if [nn, mm] == [numGeom, nGeom] or [nn, mm] == [nGeom, numGeom]:
@@ -166,26 +169,16 @@ class _Py(object):
 
         return None
 
-    def selectReflexPlane(self, numWire, numGeom):
-
-        ''''''
-
-        pyRList = self.selectAllReflex(numWire, numGeom)
-
-        for pyReflex in pyRList:
-            for pyPlane in pyReflex.planes:
-                if pyPlane.numGeom == numGeom:
-                    return pyPlane
-
-        return None
-
     def selectAllReflex(self, numWire, numGeom):
 
-        ''''''
+        '''selectAllReflex(self, numWire, numGeom)
+        select all reflex corner (cero, one or two) in the wire numWire,
+        which envolve the plane numGeom,
+        and return it
+        used in PyWire and PyReflex'''
 
         pyRList = []
-        pyReflexList = _Py.pyFace.wires[numWire].reflexs
-        for pyReflex in pyReflexList:
+        for pyReflex in _Py.pyFace.wires[numWire].reflexs:
             [pyPlane, pyPl] = pyReflex.planes
             [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
             if numGeom in [nn, mm]:
@@ -195,13 +188,15 @@ class _Py(object):
 
     def selectPlane(self, numWire, numGeom):
 
-        ''''''
+        '''selectPlane(self, numWire, numGeom)
+        '''
 
         return _Py.pyFace.wires[numWire].planes[numGeom]
 
     def selectBasePlane(self, numWire, numGeom):
 
-        ''''''
+        '''selectBasePlane(self, numWire, numGeom)
+        '''
 
         pyWireList = _Py.pyFace.wires
         pyWire = pyWireList[numWire]
@@ -216,7 +211,8 @@ class _Py(object):
 
     def cutting(self, cutted, cutter, geomShape):
 
-        ''''''
+        '''cutting(self, cutted, cutter, geomShape)
+        '''
 
         cutted = cutted.cut(cutter, _Py.tolerance)
         cutted = self.selectFace(cutted.Faces, geomShape)
@@ -225,7 +221,8 @@ class _Py(object):
 
     def selectFace(self, faceList, geomShape):
 
-        ''''''
+        '''selectFace(self, faceList, geomShape)
+        '''
 
         for face in faceList:
             section = face.section([geomShape], _Py.tolerance)
