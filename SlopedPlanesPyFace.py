@@ -995,7 +995,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.trimming()
 
-        self.printControl('trimming')
+        # self.printControl('trimming')
 
     def priorLater(self):
 
@@ -1010,7 +1010,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.priorLater()
 
-        self.printControl('priorLater alignments')
+        # self.printControl('priorLater alignments')
 
     def simulating(self):
 
@@ -1038,7 +1038,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.preProcess()
 
-        self.printControl('preProcess')
+        # self.printControl('preProcess')
 
     def reSimulating(self):
 
@@ -1055,7 +1055,7 @@ class _PyFace(_Py):
             if pyWire.reflexs:
                 pyWire.reflexing()
 
-        self.printControl('reflexing')
+        # self.printControl('reflexing')
 
     def rearing(self):
 
@@ -1066,7 +1066,7 @@ class _PyFace(_Py):
             if pyWire.reflexs:
                 pyWire.rearing()
 
-        self.printControl('rearing')
+        # self.printControl('rearing')
 
     def ordinaries(self):
 
@@ -1076,7 +1076,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.ordinaries()
 
-        self.printControl('ordinaries')
+        # self.printControl('ordinaries')
 
     def betweenWires(self):
 
@@ -1158,7 +1158,7 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
-        self.printControl('aligning')
+        # self.printControl('aligning')
 
     def ending(self):
 
@@ -1216,4 +1216,4 @@ class _PyFace(_Py):
                         if pyPlane.choped or pyPlane.aligned:
                             cutterList.append(plane)
 
-        self.printControl('ending')
+        # self.printControl('ending')

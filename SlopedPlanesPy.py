@@ -94,14 +94,18 @@ class _Py(object):
             valueList.append(value)
         setattr(self, prop, valueList)
 
-    def selectAlignment(self, nWire, nGeom):
+    def selectAlignment(self, numWire, numGeom):
 
-        ''''''
+        '''selectAlignment(self, numWire, numGeom)
+        select an unique alignment which includes the plane (numWire, numGeom)
+        as base plane or in its aligned planes
+        and return it, or None
+        used in PyPlane and PyReflex'''
 
         pyWireList = _Py.pyFace.wires
-        pyWire = pyWireList[nWire]
+        pyWire = pyWireList[numWire]
         pyPlaneList = pyWire.planes
-        pyPlane = pyPlaneList[nGeom]
+        pyPlane = pyPlaneList[numGeom]
 
         pyAlignList = _Py.pyFace.alignments
         for pyAlign in pyAlignList:
@@ -114,50 +118,37 @@ class _Py(object):
 
         return None
 
-    def selectAlignmentBase(self, nWire, nGeom):
+    def selectAlignmentBase(self, numWire, numGeom):
 
-        ''''''
+        '''selectAlignmentBase(self, numWire, numGeom)
+        select an unique alignment which base plane is (numWire, numGeom),
+        and it is not a false alignment,
+        and return it, or None
+        used in PyFace and PyAlignment'''
 
-        pyWireList = _Py.pyFace.wires
-        pyWire = pyWireList[nWire]
-        pyPlaneList = pyWire.planes
-        pyPlane = pyPlaneList[nGeom]
+        pyPlane = self.selectPlane(numWire, numGeom)
 
-        pyAlignList = _Py.pyFace.alignments
-        for pyAlign in pyAlignList:
+        for pyAlign in _Py.pyFace.alignments:
             if pyAlign.base == pyPlane:
                 if not pyAlign.falsify:
                     return pyAlign
 
         return None
 
-    def selectAllAlignmentBase(self, nWire, nGeom):
+    def selectAllAlignment(self, numWire, numGeom):
 
-        ''''''
-
-        pyWireList = _Py.pyFace.wires
-        pyWire = pyWireList[nWire]
-        pyPlaneList = pyWire.planes
-        pyPlane = pyPlaneList[nGeom]
-
-        pyAlignList = _Py.pyFace.alignments
-        pyAliList = []
-        for pyAlign in pyAlignList:
-            if pyAlign.base == pyPlane:
-                pyAliList.append(pyAlign)
-
-        return pyAliList
-
-    def selectAllAlignment(self, nWire, nGeom):
-
-        ''''''
+        '''selectAllAlignment(self, numWire, numGeom)
+        select all alignment which the plane (numWire, numGeom)
+        is in their chops, and return them
+        used in PyAlignment'''
 
         pyAlignList = []
 
         for pyAlign in _Py.pyFace.alignments:
             for chop in pyAlign.chops:
                 for pyPlane in chop:
-                    if pyPlane.numWire == nWire and pyPlane.numGeom == nGeom:
+                    if pyPlane.numWire == numWire and\
+                       pyPlane.numGeom == numGeom:
                         pyAlignList.append(pyAlign)
 
         return pyAlignList
