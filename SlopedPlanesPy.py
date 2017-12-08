@@ -198,10 +198,7 @@ class _Py(object):
         '''selectBasePlane(self, numWire, numGeom)
         '''
 
-        pyWireList = _Py.pyFace.wires
-        pyWire = pyWireList[numWire]
-        pyPlaneList = pyWire.planes
-        pyPlane = pyPlaneList[numGeom]
+        pyPlane = self.selectPlane(numWire, numGeom)
 
         if not pyPlane.geomAligned:
             [nW, nG] = pyPlane.angle
@@ -233,7 +230,7 @@ class _Py(object):
 
     def printSummary(self):
 
-        ''''''
+        '''printSummary(self)'''
 
         print '###############################################################'
 
@@ -296,7 +293,7 @@ class _Py(object):
 
     def printAssociatedShapes(self, numWire, numGeom):
 
-        ''''''
+        '''printAssociatedShapes(self, numWire, numGeom)'''
 
         sketch = self.slopedPlanes.Base
         placement = sketch.Placement
@@ -330,7 +327,7 @@ class _Py(object):
 
     def printControl(self, text):
 
-        ''''''
+        '''printControl(self, text)'''
 
         print '###############################################################'
 
