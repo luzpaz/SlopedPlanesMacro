@@ -336,10 +336,12 @@ class _PyFace(_Py):
 
                     if resetFace:
 
-                        if [numWire, numGeom] in refList:  # hacerlo con un try
-                            ref = True
+                        try:
                             index = refList.index([numWire, numGeom])
+                            ref = True
                             pyPrePlane = preList[index]
+                        except ValueError:
+                            pass
 
                         if ref:
                             # print 'ref'
