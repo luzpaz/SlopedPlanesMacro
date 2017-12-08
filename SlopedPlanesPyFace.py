@@ -336,9 +336,9 @@ class _PyFace(_Py):
 
                     if resetFace:
 
-                        if numGeom in refList:
+                        if [numWire, numGeom] in refList:  # hacerlo con un try
                             ref = True
-                            index = refList.index(numGeom)
+                            index = refList.index([numWire, numGeom])
                             pyPrePlane = preList[index]
 
                         if ref:
@@ -494,25 +494,26 @@ class _PyFace(_Py):
                                 if resetFace:
 
                                     pyEnd = pyAlign.aligns[-1]
-                                    if pyEnd.numWire == numWire:
-                                        if not pyEnd.rear:
-                                            nn = pyPl.numGeom
-                                            num = self.sliceIndex(nn+1, lenWire)
-                                            pyNextPlane = pyPlaneList[num]
-                                            jj = coord[num].sub(coord[nn])
-                                            nnjj = coord[num+1].sub(coord[num])
-                                            corner = self.convexReflex(jj, nnjj,
-                                                                       numWire)
+                                    if not pyEnd.rear:
+                                        nn = pyPl.numGeom
+                                        lenW = len(pyW.planes)
+                                        num = self.sliceIndex(nn+1, lenW)
+                                        pyNextPlane = pyW.planes[num]
+                                        coo = pyW.coordinates
+                                        jj = coo[num].sub(coo[nn])
+                                        nnjj = coo[num+1].sub(coo[num])
+                                        corner = self.convexReflex(jj, nnjj,
+                                                                   pyW.numWire)
 
-                                            if corner == 'reflex':
-                                                # print 'reflex'
-                                                if not pyPl.forward:
-                                                    refList.append(pyNextPlane.numGeom)
-                                                    # print 'refList ', refList
-                                                    preList.append(pyPlane)
-                                                    # print preList
+                                        if corner == 'reflex':
+                                            # print 'reflex'
+                                            if not pyPl.forward:
+                                                refList.append([pyNextPlane.numWire,pyNextPlane.numGeom])
+                                                # print 'refList ', refList
+                                                preList.append(pyPlane)
+                                                # print preList
 
-                                            ref = False
+                                        ref = False
 
                         else:
                             # print '12 no alignment'
