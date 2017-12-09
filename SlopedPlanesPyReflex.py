@@ -419,9 +419,24 @@ class _PyReflex(_Py):
             gS = pyPl.geomShape
             forwar = pyR.forward
             forw = pyPl.forward
+            fo = pyOppR.forward
+
             section = forwar.section([forw], _Py.tolerance)
+            sect = fo.section([forw], _Py.tolerance)
+            se = pyPl.geomShape.section([pyR.geomShape], _Py.tolerance)
+
             if section.Vertexes:
+                print 'section vertexes'
                 pl = self.cutting(pl, [reflexEnormous], gS)
+
+            elif sect.Vertexes:
+                print 'sect vertexes'
+                pl = pyPl.shape.copy()
+                pl = self.cutting(pl, [reflexEnormous], gS)
+
+            elif se.Vertexes:
+                print 'se vertexes'
+                pl = self.cutting(pl, [oppReflexEnormous], gS)
 
             if kind == 'rangoCorner':
                 print 'C1'
