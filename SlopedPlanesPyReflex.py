@@ -386,6 +386,95 @@ class _PyReflex(_Py):
                     print 'included oppRear rectified ', (oppRearPl, nWire, nGeom)
                     break
 
+    def processRangoTwo(self, pyWire, pyR, pyOppR, nn, kind):
+
+        ''''''
+
+        numWire = pyWire.numWire
+        pyPl = pyWire.planes[nn]
+
+        if pyPl.aligned:
+            print 'A'
+            pyAlign = self.selectAlignment(numWire, nn)
+            pl = pyAlign.simulatedAlignment
+            pyR.addLink('cutter', pl)
+            if kind == 'rangoNext':
+                pyR.addLink('oppCutter', pl)
+            print 'included rango simulated ', (pl, numWire, nn)
+
+        elif pyPl.choped:
+            print 'B'
+            pl = pyPl.simulatedShape
+            pyR.addLink('cutter', pl)
+            if kind == 'rangoNext':
+                pyR.addLink('oppCutter', pl)
+            print 'included rango simulated', (pl, numWire, nn)
+
+        elif pyPl.reflexed:
+            print 'C'
+
+
+            pyReflexList = self.selectAllReflex(numWire, nn)
+            
+
+            oppReflexEnormous = pyOppR.enormousShape
+            reflexEnormous = pyR.enormousShape
+
+            rear = pyPl.rear
+            rRear = pyR.rear
+            oppRRear = pyOppR.rear
+
+            forward = pyR.forward
+            backward = pyR.backward
+            forwa = pyOppR.forward
+            backwa = pyOppR.backward
+            fo = pyPl.forward
+            ba = pyPl.backward
+
+            if pyR.numGeom in rear:
+                pass
+            elif pyOppR.numGeom in rear:
+                pass
+
+            if fo.section([forward], _Py.tolerance).Vertexes:
+                pass
+            if fo.section([forwa], _Py.tolerance).Vertexes:
+                pass
+
+            if len(rRear) > 1:
+                if fo.section([backward], _Py.tolerance).Vertexes:
+                    pass
+            if len(oppRRear) > 1:
+                if fo.section([backwa], _Py.tolerance).Vertexes:
+                    pass
+            if len(rear) > 1:
+                if ba.section([forward], _Py.tolerance).Vertexes:
+                    pass
+                if ba.section([forwa], _Py.tolerance).Vertexes:
+                    pass
+
+        else:
+            print 'D'
+            pl = pyPl.shape.copy()
+
+            if kind == 'rangoCorner':
+                print 'D1'
+                gS = pyPl.geomShape
+                pl = self.cutting(pl, [oppReflexEnormous], gS)
+
+            pyR.addLink('cutter', pl)
+            if kind == 'rangoNext':
+                pyR.addLink('oppCutter', pl)
+            print 'included rango ', (pl, numWire, nn)
+
+    def processRangoThree(self, pyWire, pyR, pyOppR, nn, kind):
+
+        ''''''
+
+        pass
+
+
+
     def processRango(self, pyWire, pyR, pyOppR, nn, kind):
 
         '''processRango(self, pyWire, pyR, pyOppR, nn, kind)
@@ -505,6 +594,15 @@ class _PyReflex(_Py):
         self.processReflex(oppReflex, reflex,
                            pyOppR, pyR,
                            'backward')
+
+    def processReflexTwo(self, reflex, oppReflex, pyR, pyOppR,
+                      direction):
+
+        '''processReflex(self, reflex, oppReflex, pyR, pyOppR,
+                         direction)
+        '''
+
+        pass
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
