@@ -228,6 +228,7 @@ class _PyReflex(_Py):
             if nGeom not in control:
 
                 rearPyPl = pyPlaneList[nGeom]
+                gS = rearPyPl.geomShape
 
                 if rearPyPl.aligned:
                     print 'a'
@@ -431,7 +432,7 @@ class _PyReflex(_Py):
 
             elif sect.Vertexes:
                 print 'sect vertexes'
-                pl = pyPl.shape.copy()
+                # pl = pyPl.shape.copy()    # uhm!
                 pl = self.cutting(pl, [reflexEnormous], gS)
 
             elif se.Vertexes:
