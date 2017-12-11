@@ -206,10 +206,7 @@ class _PyReflex(_Py):
 
         print '# twin pyR.numGeom ', pyR.numGeom, pyR.control
 
-        # reflexEnormous = pyR.enormousShape
         oppReflexEnormous = pyOppR.enormousShape
-        pyR.addValue('oppCutter', oppReflexEnormous, 'forward')
-        ### OJO para los metodos TWO
         pyR.addValue('cutter', oppReflexEnormous, 'forward')
 
         angle = pyR.angle
@@ -271,29 +268,25 @@ class _PyReflex(_Py):
                     print 'a'
                     pyAlign = self.selectAlignment(numWire, nGeom)
                     oppRearPl = pyAlign.simulatedAlignment
-                    pyR.addLink('oppCutter', oppRearPl)
                     pyR.addLink('cutter', oppRearPl)
-                    print 'included oppRear simulated', (rearPl, numWire, nGeom)
+                    print 'included oppRear simulated', (oppRearPl, numWire, nGeom)
 
                 elif pyOppRear.choped:
                     print 'b'
                     oppRearPl = pyOppRear.simulatedShape
                     pyR.addLink('cutter', oppRearPl)
-                    pyR.addLink('oppCutter', oppRearPl)
                     print 'included oppRear simulated', (oppRearPl, numWire, nGeom)
 
                 elif pyOppRear.reflexed:
                     print 'c'
                     oppRearPl = pyOppRear.simulatedShape
                     pyR.addLink('cutter', oppRearPl)
-                    pyR.addLink('oppCutter', oppRearPl)
                     print 'included oppRear simulated ', (oppRearPl, numWire, nGeom)
 
                 else:
                     print 'd'
                     oppRearPl = pyOppRear.shape.copy()
                     pyR.addLink('cutter', oppRearPl)
-                    pyR.addLink('oppCutter', oppRearPl)
                     print 'included oppRear ', (oppRearPl, numWire, nGeom)
 
         elif len(oppRear) == 2:
@@ -315,7 +308,7 @@ class _PyReflex(_Py):
             if nn not in control:
                 if nn not in oppRear:
 
-                    self.processRangoTwo(pyWire, pyR, pyOppR, nn, 'rangoCorner')
+                    self.processRango(pyWire, pyR, pyOppR, nn, 'rangoCorner')
 
         rangoNext = pyOppR.rangoConsolidate
         print 'rangoNext ', rangoNext
@@ -324,7 +317,7 @@ class _PyReflex(_Py):
             for nn in rangoNext:
                 if nn not in control:
 
-                    self.processRangoTwo(pyWire, pyR, pyOppR, nn, 'rangoNext')
+                    self.processRango(pyWire, pyR, pyOppR, nn, 'rangoNext')
 
         rangoInter = self.rango
         print 'rangoInter ', rangoInter
@@ -332,7 +325,7 @@ class _PyReflex(_Py):
         for nn in rangoInter:
             if nn not in control:
 
-                self.processRangoTwo(pyWire, pyR, pyOppR, nn,  'rangoInter')
+                self.processRango(pyWire, pyR, pyOppR, nn,  'rangoInter')
 
     def processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR,
                        oppReflexEnormous):
@@ -356,7 +349,6 @@ class _PyReflex(_Py):
 
             oppRearPl = pyOppRear.shape.copy()
             pyR.addLink('cutter', oppRearPl)
-            pyR.addLink('oppCutter', oppRearPl)
             print 'included oppRear ', (oppRearPl, nWire, nGeom)
 
         if direction == "forward":
@@ -384,11 +376,10 @@ class _PyReflex(_Py):
                 section = vertex.section([ff], _Py.tolerance)
                 if section.Vertexes:
                     pyR.addLink('cutter', ff)
-                    pyR.addLink('oppCutter', ff)
                     print 'included oppRear rectified ', (oppRearPl, nWire, nGeom)
                     break
 
-    def processRangoTwo(self, pyWire, pyR, pyOppR, nn, kind):
+    def processRango(self, pyWire, pyR, pyOppR, nn, kind):
 
         ''''''
 
@@ -402,16 +393,12 @@ class _PyReflex(_Py):
             pyAlign = self.selectAlignment(numWire, nn)
             pl = pyAlign.simulatedAlignment
             pyR.addLink('cutter', pl)
-            if kind == 'rangoNext':
-                pyR.addLink('oppCutter', pl)
             print 'included rango simulated ', (pl, numWire, nn)
 
         elif pyPl.choped:
             print 'B'
             pl = pyPl.simulatedShape
             pyR.addLink('cutter', pl)
-            if kind == 'rangoNext':
-                pyR.addLink('oppCutter', pl)
             print 'included rango simulated', (pl, numWire, nn)
 
         elif pyPl.reflexed:
@@ -467,8 +454,6 @@ class _PyReflex(_Py):
                 pl = self.cutting(pl, [oppReflexEnormous], gS)
 
             pyR.addLink('cutter', pl)
-            if kind == 'rangoNext':
-                pyR.addLink('oppCutter', pl)
             print 'included rango ', (pl, numWire, nn)
 
     def solveReflex(self):
@@ -504,7 +489,6 @@ class _PyReflex(_Py):
 
         numWire = pyR.numWire
         aa = reflex.copy()
-        bb = oppReflex.copy()
 
         print pyR.cutter
         print[p.Area for p in pyR.cutter]
