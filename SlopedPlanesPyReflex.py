@@ -209,6 +209,8 @@ class _PyReflex(_Py):
         # reflexEnormous = pyR.enormousShape
         oppReflexEnormous = pyOppR.enormousShape
         pyR.addValue('oppCutter', oppReflexEnormous, 'forward')
+        ### OJO para los metodos TWO
+        pyR.addValue('cutter', oppReflexEnormous, 'forward')
 
         angle = pyR.angle
         numWire = pyWire.numWire
@@ -313,7 +315,8 @@ class _PyReflex(_Py):
             if nn not in control:
                 if nn not in oppRear:
 
-                    self.processRango(pyWire, pyR, pyOppR, nn, 'rangoCorner')
+                    # self.processRango(pyWire, pyR, pyOppR, nn, 'rangoCorner')
+                    self.processRangoTwo(pyWire, pyR, pyOppR, nn, 'rangoCorner')
 
         rangoNext = pyOppR.rangoConsolidate
         print 'rangoNext ', rangoNext
@@ -322,7 +325,8 @@ class _PyReflex(_Py):
             for nn in rangoNext:
                 if nn not in control:
 
-                    self.processRango(pyWire, pyR, pyOppR, nn, 'rangoNext')
+                    # self.processRango(pyWire, pyR, pyOppR, nn, 'rangoNext')
+                    self.processRangoTwo(pyWire, pyR, pyOppR, nn, 'rangoNext')
 
         rangoInter = self.rango
         print 'rangoInter ', rangoInter
@@ -330,7 +334,8 @@ class _PyReflex(_Py):
         for nn in rangoInter:
             if nn not in control:
 
-                self.processRango(pyWire, pyR, pyOppR, nn,  'rangoInter')
+                # self.processRango(pyWire, pyR, pyOppR, nn,  'rangoInter')
+                self.processRangoTwo(pyWire, pyR, pyOppR, nn,  'rangoInter')
 
     def processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR,
                        oppReflexEnormous):
@@ -393,6 +398,8 @@ class _PyReflex(_Py):
         numWire = pyWire.numWire
         pyPl = pyWire.planes[nn]
 
+        oppReflexEnormous = pyOppR.enormousShape
+
         if pyPl.aligned:
             print 'A'
             pyAlign = self.selectAlignment(numWire, nn)
@@ -414,7 +421,7 @@ class _PyReflex(_Py):
             print 'C'
 
 
-            pyReflexList = self.selectAllReflex(numWire, nn)
+            '''pyReflexList = self.selectAllReflex(numWire, nn)
             
 
             oppReflexEnormous = pyOppR.enormousShape
@@ -451,7 +458,7 @@ class _PyReflex(_Py):
                 if ba.section([forward], _Py.tolerance).Vertexes:
                     pass
                 if ba.section([forwa], _Py.tolerance).Vertexes:
-                    pass
+                    pass'''
 
         else:
             print 'D'
@@ -466,14 +473,6 @@ class _PyReflex(_Py):
             if kind == 'rangoNext':
                 pyR.addLink('oppCutter', pl)
             print 'included rango ', (pl, numWire, nn)
-
-    def processRangoThree(self, pyWire, pyR, pyOppR, nn, kind):
-
-        ''''''
-
-        pass
-
-
 
     def processRango(self, pyWire, pyR, pyOppR, nn, kind):
 
@@ -587,13 +586,21 @@ class _PyReflex(_Py):
         oppReflex = pyOppR.shape.copy()
 
         print(pyR.numGeom, pyOppR.numGeom)
-        self.processReflex(reflex, oppReflex,
+        ### OJO 
+        self.processReflexTwo(reflex, oppReflex,
+                              pyR, pyOppR,
+                              'forward')
+        '''self.processReflex(reflex, oppReflex,
                            pyR, pyOppR,
-                           'forward')
+                           'forward')'''
         print(pyOppR.numGeom, pyR.numGeom)
-        self.processReflex(oppReflex, reflex,
+        ### OJO
+        self.processReflexTwo(oppReflex, reflex,
+                              pyOppR, pyR,
+                              'backward')
+        '''self.processReflex(oppReflex, reflex,
                            pyOppR, pyR,
-                           'backward')
+                           'backward')'''
 
     def processReflexTwo(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
@@ -602,7 +609,51 @@ class _PyReflex(_Py):
                          direction)
         '''
 
-        pass
+        numWire = pyR.numWire
+        aa = reflex.copy()
+        bb = oppReflex.copy()
+
+        print pyR.cutter
+        print[p.Area for p in pyR.cutter]
+
+        aa = aa.cut(pyR.cutter, _Py.tolerance)
+        print aa.Faces
+        gS = pyR.geomShape
+
+        cutterList = []
+        for ff in aa.Faces:
+            section = ff.section([gS], _Py.tolerance)
+            if not section.Edges:
+                sect = ff.section([_Py.face], _Py.tolerance)
+                if sect.Vertexes:
+                    cutterList.append(ff)
+
+        reflex = reflex.cut(cutterList, _Py.tolerance)
+
+        if len(pyOppR.rear) == 1:
+            numOppRear = pyOppR.rear[0]
+        else:
+            if direction == 'forward':
+                numOppRear = pyOppR.rear[1]
+            else:
+                numOppRear = pyOppR.rear[0]
+        pyOppRear = self.selectPlane(numWire, numOppRear)
+        oppRear = pyOppRear.shape
+
+        aList = []
+        for ff in reflex.Faces:
+            section = ff.section([oppRear], _Py.tolerance)
+            if section.Edges:
+                reflex = reflex.removeShape([ff])
+            else:
+                section = ff.section([gS], _Py.tolerance)
+                if section.Edges:
+                    aList.insert(0, ff)
+                else:
+                    aList.append(ff)
+
+        compound = Part.makeCompound(aList)
+        pyR.shape = compound
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
