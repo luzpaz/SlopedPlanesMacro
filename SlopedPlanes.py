@@ -308,7 +308,6 @@ class _SlopedPlanes(_Py):
                                 pyPlane.aligned = False
                                 pyPlane.arrow = False
                                 pyPlane.choped = False
-                                pyPlane.unsolved = []
                                 pyPlane.reflexed = False
                                 pyPlane.seedShape = None
                         except IndexError:

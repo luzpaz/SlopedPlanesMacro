@@ -60,10 +60,8 @@ class _PyPlane(_Py):
         self.enormousShape = None
         self.simulatedShape = None
         self.cutter = []
-        self.oppCutter = []
         self.forward = None
         self.backward = None
-        self.unsolved = []
         self.virtualized = False
         self.control = [numGeom]
         self.seedShape = None
@@ -371,20 +369,6 @@ class _PyPlane(_Py):
         self._cutter = cutter
 
     @property
-    def oppCutter(self):
-
-        ''''''
-
-        return self._oppCutter
-
-    @oppCutter.setter
-    def oppCutter(self, oppCutter):
-
-        ''''''
-
-        self._oppCutter = oppCutter
-
-    @property
     def forward(self):
 
         ''''''
@@ -411,20 +395,6 @@ class _PyPlane(_Py):
         ''''''
 
         self._backward = backward
-
-    @property
-    def unsolved(self):
-
-        ''''''
-
-        return self._unsolved
-
-    @unsolved.setter
-    def unsolved(self, unsolved):
-
-        ''''''
-
-        self._unsolved = unsolved
 
     @property
     def virtualized(self):
@@ -536,7 +506,6 @@ class _PyPlane(_Py):
         if self.reflexed:
             self.simulatedShape = None
             self.cutter = []
-            self.oppCutter = []
 
         self.control = [numGeom]
 
@@ -658,30 +627,6 @@ class _PyPlane(_Py):
         gS = self.geomShape
         plCopy = self.cutting(plCopy, [enormousShape], gS)
         self.simulatedShape = plCopy
-
-    def isUnsolved(self):
-
-        '''isUnsolved(self)
-        '''
-
-        self.unsolved = []
-
-        if self.aligned:
-            self.unsolved = []
-            return []
-
-        forward = self.forward
-        backward = self.backward
-        plane = self.shape
-
-        section = plane.section([forward], _Py.tolerance)
-        if section.Edges:
-            self.addValue('unsolved', 'forward', 'forward')
-        section = plane.section([backward], _Py.tolerance)
-        if section.Edges:
-            self.addValue('unsolved', 'backward', 'backward')
-
-        return self.unsolved
 
     def rearing(self, pyWire, pyReflex):
 
