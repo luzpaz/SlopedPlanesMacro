@@ -306,14 +306,6 @@ class _Py(object):
             Part.show(simulatedShape, 'simulatedShape ' +
                       str(numWire)+' '+str(numGeom))
 
-        oppCutter = pyPlane.oppCutter
-        if oppCutter:
-            print oppCutter
-
-            compound = Part.makeCompound(oppCutter[1:])
-            compound.Placement = placement
-            Part.show(compound, 'oppCutter '+str(numWire)+' '+str(numGeom))
-
         cutter = pyPlane.cutter
         if cutter:
             print cutter

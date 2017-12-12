@@ -386,8 +386,10 @@ class _PyReflex(_Py):
 
         numWire = pyWire.numWire
         pyPl = pyWire.planes[nn]
+        gS = pyPl.geomShape
 
         oppReflexEnormous = pyOppR.enormousShape
+        reflexEnormous = pyR.enormousShape
 
         if pyPl.aligned:
             print 'A'
@@ -404,7 +406,59 @@ class _PyReflex(_Py):
 
         elif pyPl.reflexed:
             print 'C'
-            pl = pyPl.simulatedShape
+            pl = pyPl.shape.copy()
+            # pl = pyPl.simulatedShape.copy()
+
+            pyReflexList = self.selectAllReflex(numWire, nn)
+            rear = pyPl.rear
+            rRear = pyR.rear
+            oppRRear = pyOppR.rear
+            forward = pyR.forward
+            backward = pyR.backward
+            forwa = pyOppR.forward
+            backwa = pyOppR.backward
+            fo = pyPl.forward
+            ba = pyPl.backward
+
+            if pyR.numGeom in rear:
+                print '1'
+                pl = pyPl.simulatedShape.copy()
+
+            elif forward.section([fo], _Py.tolerance).Vertexes:
+                print '3'
+                pl = pyPl.shape.copy()
+                pl = self.cutting(pl, [reflexEnormous], gS)
+
+            else:
+                for pyReflex in pyReflexList:
+                    for pyPlane in pyReflex.planes:
+                        if pyPlane != pyPl:
+                            if forward.section([pyPlane.forward], _Py.tolerance).Vertexes:
+                                print '4'
+                                pl = pyPl.shape.copy()
+                                pl = self.cutting(pl, [oppReflexEnormous], gS)
+                                break
+
+            '''if pyR.numGeom in rear:
+                pass
+            elif pyOppR.numGeom in rear:
+                pass
+            if fo.section([forward], _Py.tolerance).Vertexes:
+                pass
+            if fo.section([forwa], _Py.tolerance).Vertexes:
+                pass
+            if len(rRear) > 1:
+                if fo.section([backward], _Py.tolerance).Vertexes:
+                    pass
+            if len(oppRRear) > 1:
+                if fo.section([backwa], _Py.tolerance).Vertexes:
+                    pass
+            if len(rear) > 1:
+                if ba.section([forward], _Py.tolerance).Vertexes:
+                    pass
+                if ba.section([forwa], _Py.tolerance).Vertexes:
+                    pass'''
+
             pyR.addLink('cutter', pl)
             print 'included rango simulated', (pl, numWire, nn)
 
@@ -414,7 +468,6 @@ class _PyReflex(_Py):
 
             if kind == 'rangoCorner':
                 print 'D1'
-                gS = pyPl.geomShape
                 pl = self.cutting(pl, [oppReflexEnormous], gS)
 
             pyR.addLink('cutter', pl)
@@ -513,16 +566,6 @@ class _PyReflex(_Py):
 
         reflex = reflex.cut(pyR.cutter, _Py.tolerance)
 
-        if len(pyOppR.rear) == 1:
-            numOppRear = pyOppR.rear[0]
-        else:
-            if direction == 'forward':
-                numOppRear = pyOppR.rear[1]
-            else:
-                numOppRear = pyOppR.rear[0]
-        pyOppRear = self.selectPlane(numWire, numOppRear)
-        oppRear = pyOppRear.shape
-
         print 'reflex.Faces ', reflex.Faces
 
         aList = []
@@ -535,14 +578,33 @@ class _PyReflex(_Py):
 
         print 'aList ', aList
 
+        cornerList = [self.selectPlane(numWire, n).shape for n in pyR.rangoConsolidate]
+
         bList = []
         for ff in reflex.Faces:
             section = ff.section(aList, _Py.tolerance)
             if not section.Edges:
-                section = ff.section([oppRear], _Py.tolerance)
-                if not section.Edges:
-                    if section.Vertexes:
-                        bList.append(ff)
+                section = ff.section(cornerList, _Py.tolerance)
+                if section.Edges:
+                    common = ff.common([pyR.simulatedShape], _Py.tolerance)
+                    if not common.Faces:
+                        section = ff.section([pyOppR.simulatedShape], _Py.tolerance)
+                        if section.Vertexes:
+
+                            if len(pyOppR.rear) == 1:
+                                numOppRear = pyOppR.rear[0]
+                            else:
+                                if direction == 'forward':
+                                    numOppRear = pyOppR.rear[1]
+                                else:
+                                    numOppRear = pyOppR.rear[0]
+                            pyOppRear = self.selectPlane(numWire, numOppRear)
+                            oppRear = pyOppRear.shape
+
+                            section = ff.section([oppRear], _Py.tolerance)
+                            if not section.Edges:
+                                if section.Vertexes:
+                                    bList.append(ff)
 
         print 'bList ', bList
 
