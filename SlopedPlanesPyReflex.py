@@ -191,13 +191,15 @@ class _PyReflex(_Py):
         # print '### direction ', direction
         # print(pyR.numGeom, pyOppR.numGeom)
 
-        self.twin(pyWire, pyR, pyOppR, direction)
+        if not pyR.cutter:
+            self.twin(pyWire, pyR, pyOppR, direction)
 
         direction = "backward"
         # print '### direction ', direction
         # print(pyOppR.numGeom, pyR.numGeom)
 
-        self.twin(pyWire, pyOppR, pyR, direction)
+        if not pyOppR.cutter:
+            self.twin(pyWire, pyOppR, pyR, direction)
 
     def twin(self, pyWire, pyR, pyOppR, direction):
 
@@ -427,7 +429,6 @@ class _PyReflex(_Py):
 
         [pyR, pyOppR] = self.planes
 
-
         self.planes = [pyR, pyOppR]
 
         reflex = pyR.shape.copy()
@@ -442,6 +443,42 @@ class _PyReflex(_Py):
                            pyOppR, pyR,
                            'backward')
 
+        reflex = pyR.shape.copy()
+        oppReflex = pyOppR.shape.copy()
+
+        reflex = reflex.cut([oppReflex], _Py.tolerance)
+        oppReflex = oppReflex.cut([reflex], _Py.tolerance)
+
+        if len(pyR.shape.Faces) > 1:
+            print 'aa1'
+            aList = []
+            for ff in pyR.shape.Faces:
+                ff = ff.cut([oppReflex], _Py.tolerance)
+                aList.append(ff.Faces[0])
+            compound = Part.Compound(aList)
+            pyR.shape = compound
+
+        else:
+            print 'aa2'
+            gS = pyR.geomShape
+            reflex = self.cutting(reflex, [oppReflex], gS)
+            pyR.shape = reflex
+
+        if len(pyOppR.shape.Faces) > 1:
+            print 'aa1'
+            aList = []
+            for ff in pyOppR.shape.Faces:
+                ff = ff.cut([reflex], _Py.tolerance)
+                aList.append(ff.Faces[0])
+            compound = Part.Compound(aList)
+            pyOppR.shape = compound
+
+        else:
+            print 'aa2'
+            gS = pyOppR.geomShape
+            oppReflex = self.cutting(oppReflex, [reflex], gS)
+            pyOppR.shape = oppReflex
+
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
 
@@ -449,16 +486,15 @@ class _PyReflex(_Py):
                          direction)
         '''
 
-        # TODO hacerlo en un unico viaje
-
         numWire = pyR.numWire
         aa = reflex.copy()
 
         cList = [pyOppR.enormousShape]
         cList.extend(pyR.cutter)
+        print 'pyR.cutter ', pyR.cutter, len(pyR.cutter)
 
         aa = aa.cut(cList, _Py.tolerance)
-        print aa.Faces
+        print 'aa.Faces ', aa.Faces
         gS = pyR.geomShape
 
         cutterList = []
