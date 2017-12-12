@@ -311,27 +311,11 @@ class _PyWire(_Py):
                         print'1'
                         cutterList.append(bigPrior)
                         pyPlane.addValue('control', prior)
-                    '''elif not (pyPrior.choped or pyPrior.aligned):
-                        pyR = self.selectReflex(self.numWire,
-                                                pyPlane.numGeom,
-                                                pyPrior.numGeom)
-                        if not pyR:
-                            print '11'
-                            cutterList.append(bigPrior)
-                            pyPlane.addValue('control', prior)'''
 
                     if not pyLater.reflexed:
                         print'2'
                         cutterList.append(bigLater)
                         pyPlane.addValue('control', later)
-                    '''elif not (pyLater.choped or pyLater.aligned):
-                        pyR = self.selectReflex(self.numWire,
-                                                pyPlane.numGeom,
-                                                pyLater.numGeom)
-                        if not pyR:
-                            print '21'
-                            cutterList.append(bigLater)
-                            pyPlane.addValue('control', later)'''
 
                 else:
                     print'C'

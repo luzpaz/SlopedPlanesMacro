@@ -406,47 +406,6 @@ class _PyReflex(_Py):
             pyR.addLink('cutter', pl)
             print 'included rango simulated', (pl, numWire, nn)
 
-
-
-            '''pyReflexList = self.selectAllReflex(numWire, nn)
-            
-
-            oppReflexEnormous = pyOppR.enormousShape
-            reflexEnormous = pyR.enormousShape
-
-            rear = pyPl.rear
-            rRear = pyR.rear
-            oppRRear = pyOppR.rear
-
-            forward = pyR.forward
-            backward = pyR.backward
-            forwa = pyOppR.forward
-            backwa = pyOppR.backward
-            fo = pyPl.forward
-            ba = pyPl.backward
-
-            if pyR.numGeom in rear:
-                pass
-            elif pyOppR.numGeom in rear:
-                pass
-
-            if fo.section([forward], _Py.tolerance).Vertexes:
-                pass
-            if fo.section([forwa], _Py.tolerance).Vertexes:
-                pass
-
-            if len(rRear) > 1:
-                if fo.section([backward], _Py.tolerance).Vertexes:
-                    pass
-            if len(oppRRear) > 1:
-                if fo.section([backwa], _Py.tolerance).Vertexes:
-                    pass
-            if len(rear) > 1:
-                if ba.section([forward], _Py.tolerance).Vertexes:
-                    pass
-                if ba.section([forwa], _Py.tolerance).Vertexes:
-                    pass'''
-
         else:
             print 'D'
             pl = pyPl.shape.copy()
@@ -507,6 +466,7 @@ class _PyReflex(_Py):
             section = ff.section([gS], _Py.tolerance)
             if not section.Edges:
                 sect = ff.section([_Py.face], _Py.tolerance)
+                # if sect.Edges
                 if sect.Vertexes:
                     cutterList.append(ff)
 
@@ -537,13 +497,18 @@ class _PyReflex(_Py):
                 reflex = reflex.removeShape([ff])
                 break
 
+        print 'aList ', aList
+
         bList = []
         for ff in reflex.Faces:
             section = ff.section(aList, _Py.tolerance)
             if not section.Edges:
                 section = ff.section([oppRear], _Py.tolerance)
                 if not section.Edges:
-                    bList.append(ff)
+                    if section.Vertexes:
+                        bList.append(ff)
+
+        print 'bList ', bList
 
         aList.extend(bList)
         print 'aList ', aList

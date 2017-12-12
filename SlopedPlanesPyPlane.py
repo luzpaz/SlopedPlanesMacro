@@ -633,11 +633,11 @@ class _PyPlane(_Py):
         '''rearing(self, pyWire, pyReflex)
         '''
 
-        # print 'numGeom ', self.numGeom
+        print 'self.numGeom ', self.numGeom
 
         rear = self.rear
 
-        # print 'rear ', rear
+        print 'rear ', rear
 
         plane = self.shape
         pyPlaneList = pyWire.planes
@@ -650,17 +650,18 @@ class _PyPlane(_Py):
             pyOppPlane = twinReflex[0]
         oppPlane = pyOppPlane.shape
 
-        # print 'numGeom ', pyOppPlane.numGeom
+        print 'pyOppPlane.numGeom ', pyOppPlane.numGeom
 
         if self.choped:
             if pyOppPlane.aligned:
-                # print 'a'
+                print 'a'
                 rear = [rear[1]]
             else:
-                # print 'b'
+                print 'b'
                 rear = [rear[0]]
 
         for numG in rear:
+            print 'numG ', numG
             pyPl = pyPlaneList[numG]
             control = pyPl.control
             cList = []
@@ -671,18 +672,32 @@ class _PyPlane(_Py):
                 cList.append(oppPlane)
                 control.append(pyOppPlane.numGeom)
 
-            if not (pyPl.aligned or pyPl.choped):
-                pl = pyPl.shape
+            if cList:
 
-                if isinstance(pl, Part.Compound):
-                    # TODO necesita un nivel mas de seleccion
-                    pass
-                else:
-                    gS = pyPl.geomShape
-                    pl = self.cutting(pl, cList, gS)
-                    pyPl.shape = pl
+                if not (pyPl.aligned or pyPl.choped):
+                    pl = pyPl.shape
+                    if isinstance(pl, Part.Compound):
+                        print 'aa'
+                        if len(pl.Faces) > 1:
+                            print 'aa1'
+                            aList = []
+                            for ff in pl.Faces:
+                                ff = ff.cut(cList, _Py.tolerance)
+                                aList.append(ff.Faces[0])
+                            compound = Part.Compound(aList)
+                            pyPl.shape = compound
+                        else:
+                            print 'aa2'
+                            gS = pyPl.geomShape
+                            pl = self.cutting(pl, cList, gS)
+                            pyPl.shape = pl
+                    else:
+                        print 'bb'
+                        gS = pyPl.geomShape
+                        pl = self.cutting(pl, cList, gS)
+                        pyPl.shape = pl
 
-            pyPl.control = control
+                pyPl.control = control
 
     def ordinaries(self, pyWire):
 
