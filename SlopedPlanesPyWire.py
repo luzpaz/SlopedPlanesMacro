@@ -339,21 +339,18 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.simulating()
 
-    def preProcess(self):
-
-        ''''''
-
-        # print '###### preProcess wire ', self.numWire
-
-        for pyReflex in self.reflexs:
-            pyReflex.preProcess(self)
-
     def reflexing(self):
 
         '''reflexing(self)
         '''
 
         # print '###### reflexing wire ', self.numWire
+
+        for pyReflex in self.reflexs:
+            pyReflex.preProcess(self)
+
+        '''for pyReflex in self.reflexs:
+            pyReflex.simulating(force=True)'''
 
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)

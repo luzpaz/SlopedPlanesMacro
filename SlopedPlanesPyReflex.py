@@ -429,6 +429,11 @@ class _PyReflex(_Py):
                 pl = pyPl.shape.copy()
                 pl = self.cutting(pl, [reflexEnormous], gS)
 
+            elif forwa.section([fo], _Py.tolerance).Vertexes:
+                print '4'
+                pl = pyPl.simulatedShape.copy()
+                pl = self.cutting(pl, [oppReflexEnormous], gS)
+
             else:
                 for pyReflex in pyReflexList:
                     for pyPlane in pyReflex.planes:
@@ -578,7 +583,8 @@ class _PyReflex(_Py):
 
         print 'aList ', aList
 
-        cornerList = [self.selectPlane(numWire, n).shape for n in pyR.rangoConsolidate]
+        cornerList = [self.selectPlane(numWire, n).shape
+                      for n in pyR.rangoConsolidate]
 
         bList = []
         for ff in reflex.Faces:

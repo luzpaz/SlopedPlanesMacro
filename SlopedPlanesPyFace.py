@@ -1029,21 +1029,6 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.simulating()
 
-    def preProcess(self):
-
-        ''''''
-
-        for pyWire in self.wires:
-            pyWire.preProcess()
-
-        self.printControl('preProcess')
-
-    def reSimulating(self):
-
-        for pyWire in self.wires:
-            for pyReflex in pyWire.reflexs:
-                pyReflex.simulating(force=True)
-
     def reflexing(self):
 
         '''reflexing(self)

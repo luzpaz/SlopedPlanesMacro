@@ -352,10 +352,6 @@ class _SlopedPlanes(_Py):
 
             pyFace.simulating()
 
-            pyFace.preProcess()
-
-            # pyFace.reSimulating()
-
             pyFace.reflexing()
 
             '''pyFace.rearing()
@@ -606,12 +602,12 @@ class _SlopedPlanes(_Py):
 
         self.Serialize = serialize
         self.State = True
-        self.OnChanged = True
 
-        '''if serialize:
+        if serialize:
             self.OnChanged = False
         else:
-            self.OnChanged = True'''
+            self.OnChanged = True
+
 
 class _ViewProvider_SlopedPlanes():
 
