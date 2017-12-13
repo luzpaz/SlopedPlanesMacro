@@ -441,16 +441,21 @@ class _PyReflex(_Py):
 
             elif pyPl.numGeom in rRango:
                 print '4'
-                pl = pyPl.shape.copy()
+                
 
-                if forward.section([fo], _Py.tolerance).Vertexes:
+                if forward.section([gS], _Py.tolerance).Vertexes:
                     print '41'
-                    cList = [reflexEnormous]
-                else:
+                    pl = pyPl.simulatedShape.copy()
+                elif forward.section([fo], _Py.tolerance).Vertexes:
                     print '42'
+                    pl = pyPl.shape.copy()
+                    cList = [reflexEnormous]
+                    pl = self.cutting(pl, cList , gS)
+                else:
+                    print '43'
+                    pl = pyPl.shape.copy()
                     cList = [oppReflexEnormous]
-
-                pl = self.cutting(pl,cList , gS)
+                    pl = self.cutting(pl, cList , gS)
 
             elif pyPl.numGeom in oppRRear:
                 print '5'
@@ -459,6 +464,10 @@ class _PyReflex(_Py):
             elif pyPl.numGeom in oppRRango:
                 print '6'
                 pl = pyPl.shape.copy()
+                if forwa.section([gS], _Py.tolerance).Vertexes:
+                    print '61'
+                    pl = pyPl.simulatedShape.copy()
+
 
             pyR.addLink('cutter', pl)
             print 'included rango simulated', (pl, numWire, nn)

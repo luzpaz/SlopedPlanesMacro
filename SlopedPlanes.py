@@ -360,8 +360,6 @@ class _SlopedPlanes(_Py):
 
             pyFace.aligning()
 
-            pyFace.ending()
-
         if onChanged:
             # print 'AAA'
             self.Pyth = pyFaceListNew

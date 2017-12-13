@@ -1132,11 +1132,6 @@ class _PyFace(_Py):
 
         # self.printControl('aligning')
 
-    def ending(self):
-
-        '''ending(self)
-        '''
-
         pyAlignList = self.alignments
 
         cutterList = []
