@@ -406,13 +406,20 @@ class _PyReflex(_Py):
 
         elif pyPl.reflexed:
             print 'C'
-            pl = pyPl.shape.copy()
-            # pl = pyPl.simulatedShape.copy()
+            # pl = pyPl.shape.copy()
+            pl = pyPl.simulatedShape.copy()
 
             pyReflexList = self.selectAllReflex(numWire, nn)
+
             rear = pyPl.rear
+            rango = pyPl.rangoConsolidate
+
             rRear = pyR.rear
+            rRango = pyR.rangoConsolidate
+
             oppRRear = pyOppR.rear
+            oppRRango = pyOppR.rangoConsolidate
+
             forward = pyR.forward
             backward = pyR.backward
             forwa = pyOppR.forward
@@ -422,47 +429,36 @@ class _PyReflex(_Py):
 
             if pyR.numGeom in rear:
                 print '1'
-                pl = pyPl.simulatedShape.copy()
+                
 
-            elif forward.section([fo], _Py.tolerance).Vertexes:
-                print '3'
-                pl = pyPl.shape.copy()
-                pl = self.cutting(pl, [reflexEnormous], gS)
-
-            elif forwa.section([fo], _Py.tolerance).Vertexes:
-                print '4'
-                pl = pyPl.simulatedShape.copy()
-                pl = self.cutting(pl, [oppReflexEnormous], gS)
-
-            else:
-                for pyReflex in pyReflexList:
-                    for pyPlane in pyReflex.planes:
-                        if pyPlane != pyPl:
-                            if forward.section([pyPlane.forward], _Py.tolerance).Vertexes:
-                                print '4'
-                                pl = pyPl.shape.copy()
-                                pl = self.cutting(pl, [oppReflexEnormous], gS)
-                                break
-
-            '''if pyR.numGeom in rear:
-                pass
             elif pyOppR.numGeom in rear:
-                pass
-            if fo.section([forward], _Py.tolerance).Vertexes:
-                pass
-            if fo.section([forwa], _Py.tolerance).Vertexes:
-                pass
-            if len(rRear) > 1:
-                if fo.section([backward], _Py.tolerance).Vertexes:
-                    pass
-            if len(oppRRear) > 1:
-                if fo.section([backwa], _Py.tolerance).Vertexes:
-                    pass
-            if len(rear) > 1:
-                if ba.section([forward], _Py.tolerance).Vertexes:
-                    pass
-                if ba.section([forwa], _Py.tolerance).Vertexes:
-                    pass'''
+                print '2'
+                
+
+            elif pyPl.numGeom in rRear:
+                print '3'
+                
+
+            elif pyPl.numGeom in rRango:
+                print '4'
+                pl = pyPl.shape.copy()
+
+                if forward.section([fo], _Py.tolerance).Vertexes:
+                    print '41'
+                    cList = [reflexEnormous]
+                else:
+                    print '42'
+                    cList = [oppReflexEnormous]
+
+                pl = self.cutting(pl,cList , gS)
+
+            elif pyPl.numGeom in oppRRear:
+                print '5'
+                
+
+            elif pyPl.numGeom in oppRRango:
+                print '6'
+                pl = pyPl.shape.copy()
 
             pyR.addLink('cutter', pl)
             print 'included rango simulated', (pl, numWire, nn)

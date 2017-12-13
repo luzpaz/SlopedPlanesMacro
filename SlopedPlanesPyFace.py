@@ -1040,17 +1040,6 @@ class _PyFace(_Py):
 
         self.printControl('reflexing')
 
-    def rearing(self):
-
-        '''rearing(self)
-        '''
-
-        for pyWire in self.wires:
-            if pyWire.reflexs:
-                pyWire.rearing()
-
-        # self.printControl('rearing')
-
     def ordinaries(self):
 
         '''ordinaries(self)

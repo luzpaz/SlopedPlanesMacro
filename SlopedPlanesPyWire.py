@@ -358,11 +358,6 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex()
 
-    def rearing(self):
-
-        '''rearing(self)
-        '''
-
         for pyReflex in self.reflexs:
             pyReflex.rearing(self)
 
