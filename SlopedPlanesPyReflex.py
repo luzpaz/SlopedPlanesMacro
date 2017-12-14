@@ -526,7 +526,7 @@ class _PyReflex(_Py):
                            pyOppR, pyR,
                            'backward')
 
-        if len(pyR.shape.Faces) > 1:
+        '''if len(pyR.shape.Faces) > 1:
             print 'A ', pyR.numGeom
             cList = []
             for ff in pyR.shape.Faces[1:]:
@@ -554,7 +554,7 @@ class _PyReflex(_Py):
                 compound = Part.makeCompound(cList)
             else:
                 compound = Part.makeCompound([pyOppR.shape.Faces[0]])
-            pyOppR.shape = compound
+            pyOppR.shape = compound'''
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
@@ -623,7 +623,6 @@ class _PyReflex(_Py):
                                           for n in pyR.rangoConsolidate]
                             section = ff.section(cornerList, _Py.tolerance)
                             if section.Edges:
-
                                 bList.append(ff)
                                 # break
 

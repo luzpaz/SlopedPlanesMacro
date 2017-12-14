@@ -44,7 +44,7 @@ class _PyWire(_Py):
         self.planes = []
         self.coordinates = []
         self.shapeGeom = []
-        self.reset = False
+        self.reset = True
 
     @property
     def numWire(self):
@@ -358,11 +358,11 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex()
 
-        for pyReflex in self.reflexs:
+        '''for pyReflex in self.reflexs:
             pyReflex.postProcess(self)
 
         for pyReflex in self.reflexs:
-            pyReflex.rearing(self)
+            pyReflex.rearing(self)'''
 
     def ordinaries(self):
 

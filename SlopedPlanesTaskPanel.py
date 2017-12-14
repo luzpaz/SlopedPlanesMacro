@@ -93,7 +93,7 @@ class _TaskPanel_SlopedPlanes():
 
         # print 'isAllowedAlterSelection'
 
-        return True
+        return False
 
     def isAllowedAlterView(self):
 

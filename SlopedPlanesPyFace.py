@@ -48,7 +48,7 @@ class _PyFace(_Py):
         self.numFace = numFace
         self.wires = []
         self.alignments = []
-        self.reset = False
+        self.reset = True
         self.shapeGeom = []
 
     @property
@@ -565,6 +565,8 @@ class _PyFace(_Py):
                 # print '######'
 
             pyWire.reset = False
+
+        self.reset = False
 
         self.priorLaterAlignments()
 
