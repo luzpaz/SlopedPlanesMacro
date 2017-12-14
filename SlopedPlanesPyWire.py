@@ -358,8 +358,11 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex()
 
-        '''for pyReflex in self.reflexs:
-            pyReflex.rearing(self)'''
+        for pyReflex in self.reflexs:
+            pyReflex.postProcess(self)
+
+        for pyReflex in self.reflexs:
+            pyReflex.rearing(self)
 
     def ordinaries(self):
 

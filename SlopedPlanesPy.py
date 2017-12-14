@@ -303,8 +303,7 @@ class _Py(object):
         simulatedShape = pyPlane.simulatedShape
         if simulatedShape:
             simulatedShape.Placement = placement
-            Part.show(simulatedShape, 'simulatedShape ' +
-                      str(numWire)+' '+str(numGeom))
+            Part.show(simulatedShape, self.slopedPlanes.Name+' simulatedShape '+str(numWire)+' '+str(numGeom))
 
         cutter = pyPlane.cutter
         if cutter:
@@ -312,7 +311,7 @@ class _Py(object):
 
             compound = Part.makeCompound(cutter)
             compound.Placement = placement
-            Part.show(compound, 'cutter '+str(numWire)+' '+str(numGeom))
+            Part.show(compound, self.slopedPlanes.Name+' cutter '+str(numWire)+' '+str(numGeom))
 
         if pyPlane.aligned:
             pass
