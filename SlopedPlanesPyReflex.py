@@ -508,42 +508,6 @@ class _PyReflex(_Py):
                            pyOppR, pyR,
                            'backward')
 
-        '''reflex = pyR.shape.copy()
-        oppReflex = pyOppR.shape.copy()
-
-        reflex = reflex.cut([oppReflex], _Py.tolerance)
-        oppReflex = oppReflex.cut([reflex], _Py.tolerance)
-
-        if len(pyR.shape.Faces) > 1:
-            print 'aa1'
-            aList = []
-            for ff in pyR.shape.Faces:
-                ff = ff.cut([oppReflex], _Py.tolerance)
-                aList.append(ff.Faces[0])
-            compound = Part.Compound(aList)
-            pyR.shape = compound
-
-        else:
-            print 'aa2'
-            gS = pyR.geomShape
-            reflex = self.cutting(reflex, [oppReflex], gS)
-            pyR.shape = reflex
-
-        if len(pyOppR.shape.Faces) > 1:
-            print 'aa1'
-            aList = []
-            for ff in pyOppR.shape.Faces:
-                ff = ff.cut([reflex], _Py.tolerance)
-                aList.append(ff.Faces[0])
-            compound = Part.Compound(aList)
-            pyOppR.shape = compound
-
-        else:
-            print 'aa2'
-            gS = pyOppR.geomShape
-            oppReflex = self.cutting(oppReflex, [reflex], gS)
-            pyOppR.shape = oppReflex'''
-
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
 
@@ -577,10 +541,6 @@ class _PyReflex(_Py):
             reflex = reflex.cut(cutterList, _Py.tolerance)
             print 'reflex.Faces ', reflex.Faces
 
-        '''aa = reflex.copy()
-        aa = aa.cut(pyR.cutter, _Py.tolerance)
-        print 'aa.Faces ', aa.Faces'''
-
         reflex = reflex.cut(pyR.cutter, _Py.tolerance)
         print 'reflex.Faces ', reflex.Faces
 
@@ -594,9 +554,6 @@ class _PyReflex(_Py):
                 break
 
         print 'aList ', aList
-
-        '''aa = reflex.copy()
-        aa = aa.cut([pyOppR.enormousShape], _Py.tolerance)'''
 
         if reflex.Faces:
             reflex = reflex.cut([pyOppR.enormousShape], _Py.tolerance)
