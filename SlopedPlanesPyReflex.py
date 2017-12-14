@@ -410,6 +410,7 @@ class _PyReflex(_Py):
             pl = pyPl.simulatedShape.copy()
 
             pyReflexList = self.selectAllReflex(numWire, nn)
+            print pyReflexList
 
             rear = pyPl.rear
             rango = pyPl.rangoConsolidate
@@ -429,19 +430,19 @@ class _PyReflex(_Py):
 
             if pyR.numGeom in rear:
                 print '1'
-                
+                pl = pyPl.simulatedShape.copy()
 
             elif pyOppR.numGeom in rear:
                 print '2'
-                
+                pl = pyPl.simulatedShape.copy()
 
             elif pyPl.numGeom in rRear:
                 print '3'
-                
+                pl = pyPl.simulatedShape.copy()
 
             elif pyPl.numGeom in rRango:
                 print '4'
-                
+                pl = pyPl.simulatedShape.copy()
 
                 if forward.section([gS], _Py.tolerance).Vertexes:
                     print '41'
@@ -468,7 +469,7 @@ class _PyReflex(_Py):
 
             elif pyPl.numGeom in oppRRear:
                 print '5'
-                
+                pl = pyPl.simulatedShape.copy()
 
             elif pyPl.numGeom in oppRRango:
                 print '6'
@@ -479,6 +480,14 @@ class _PyReflex(_Py):
                     print '62'
                     pl = pyPl.shape.copy()
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
+
+            for pyReflex in pyReflexList:
+                for pyPlane in pyReflex.planes:
+                    if pyPlane != pyPl:
+                        if pyR.numGeom in pyPlane.rear:
+                            pl = pyPl.simulatedShape.copy()
+                            print '7'
+                            break
 
             pyR.addLink('cutter', pl)
             print 'included rango simulated', (pl, numWire, nn)
@@ -516,6 +525,36 @@ class _PyReflex(_Py):
         self.processReflex(oppReflex, reflex,
                            pyOppR, pyR,
                            'backward')
+
+        if len(pyR.shape.Faces) > 1:
+            print 'A ', pyR.numGeom
+            cList = []
+            for ff in pyR.shape.Faces[1:]:
+                section = ff.section([pyOppR.shape], _Py.tolerance)
+                if section.Edges:
+                    cList.append(ff)
+            print cList
+            if cList:
+                cList.insert(0, pyR.shape.Faces[0])
+                compound = Part.makeCompound(cList)
+            else:
+                compound = Part.makeCompound([pyR.shape.Faces[0]])
+            pyR.shape = compound
+
+        if len(pyOppR.shape.Faces) > 1:
+            print 'B ', pyOppR.numGeom
+            cList = []
+            for ff in pyOppR.shape.Faces[1:]:
+                section = ff.section([pyR.shape], _Py.tolerance)
+                if section.Edges:
+                    cList.append(ff)
+            print cList
+            if cList:
+                cList.insert(0, pyOppR.shape.Faces[0])
+                compound = Part.makeCompound(cList)
+            else:
+                compound = Part.makeCompound([pyOppR.shape.Faces[0]])
+            pyOppR.shape = compound
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
@@ -584,6 +623,7 @@ class _PyReflex(_Py):
                                           for n in pyR.rangoConsolidate]
                             section = ff.section(cornerList, _Py.tolerance)
                             if section.Edges:
+
                                 bList.append(ff)
                                 # break
 
