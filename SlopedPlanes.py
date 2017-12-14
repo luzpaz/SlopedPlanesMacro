@@ -338,27 +338,27 @@ class _SlopedPlanes(_Py):
                     for pyPlane in pyWire.planes:
                         pyPlane.geomAligned = pyPlane.geomShape
 
-            pyFace.parsing()
+            pyFace.parsing()        #
 
-            pyFace.planning()
+            pyFace.planning()       #
 
-            pyFace.upping()
+            pyFace.upping()         #
 
-            pyFace.virtualizing()
+            pyFace.virtualizing()   #
 
-            pyFace.trimming()
+            pyFace.trimming()       #
 
-            pyFace.priorLater()
+            pyFace.priorLater()     #
 
-            pyFace.simulating()
+            pyFace.simulating()     #
 
-            pyFace.reflexing()
+            pyFace.reflexing()      #
 
-            pyFace.ordinaries()
+            # pyFace.ordinaries()     #
 
-            pyFace.betweenWires()
+            pyFace.betweenWires()   #
 
-            pyFace.aligning()
+            pyFace.aligning()       #
 
         if onChanged:
             # print 'AAA'
@@ -373,6 +373,7 @@ class _SlopedPlanes(_Py):
 
         figList = []
         for pyFace in pyFaceListNew:
+            numFace = pyFace.numFace
             secondaries = []
             planeFaceList = []
             originList = []
@@ -445,7 +446,7 @@ class _SlopedPlanes(_Py):
                                     pass
 
                 if slopedPlanes.Up:
-                    upPlaneCopy = _Py.upList[pyFace.numFace].copy()
+                    upPlaneCopy = _Py.upList[numFace].copy()
                     cut = upPlaneCopy.cut(planeWireList, _Py.tolerance)
                     edgeList = cut.Edges[4:]
                     wire = Part.Wire(edgeList)

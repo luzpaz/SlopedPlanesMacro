@@ -317,8 +317,7 @@ class _PyFace(_Py):
             pyPrePlane = None  # the first corner always convex
             pyPlaneList = pyWire.planes
 
-            refList = []
-            preList = []
+            refList, preList = [], []
 
             for pyPlane in pyPlaneList:
                 numGeom = pyPlane.numGeom
@@ -381,7 +380,6 @@ class _PyFace(_Py):
 
                             ref = False
 
-                    if resetFace:
                         if corner == 'reflex' or numWire > 0:
                             # print '0'
                             # interior wires always need forwardLine
