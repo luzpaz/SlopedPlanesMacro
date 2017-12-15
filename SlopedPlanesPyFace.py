@@ -566,8 +566,6 @@ class _PyFace(_Py):
 
             pyWire.reset = False
 
-        self.reset = False
-
         self.priorLaterAlignments()
 
         self.printSummary()
