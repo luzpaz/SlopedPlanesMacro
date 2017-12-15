@@ -633,6 +633,8 @@ class _PyPlane(_Py):
         '''rearing(self, pyWire, pyReflex)
         '''
 
+        print '### rearing'
+
         print 'self.numGeom ', self.numGeom
 
         rear = self.rear
@@ -664,18 +666,24 @@ class _PyPlane(_Py):
             print 'numG ', numG
             pyPl = pyPlaneList[numG]
             control = pyPl.control
+
             cList = []
             if self.numGeom not in control:
                 cList.append(plane)
+                print 'included ', self.numGeom
                 control.append(self.numGeom)
             if pyOppPlane.numGeom not in control:
                 cList.append(oppPlane)
+                print 'included ', pyOppPlane.numGeom
                 control.append(pyOppPlane.numGeom)
+
+            print cList
 
             if cList:
 
                 if not (pyPl.aligned or pyPl.choped):
                     pl = pyPl.shape
+
                     if isinstance(pl, Part.Compound):
                         print 'aa'
 
@@ -688,9 +696,11 @@ class _PyPlane(_Py):
                                 section = ff.section([gS], _Py.tolerance)
                                 ff = ff.cut(cList, _Py.tolerance)
                                 if section.Edges:
+                                    print 'aa11'
                                     ff = self.selectFace(ff.Faces, gS)
                                     aList.append(ff)
                                 else:
+                                    print 'aa12'
                                     aList.append(ff.Faces[0])
                             compound = Part.Compound(aList)
                             pyPl.shape = compound

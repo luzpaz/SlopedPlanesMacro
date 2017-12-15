@@ -365,6 +365,9 @@ class _PyWire(_Py):
             pyReflex.postProcessTwo(self)
 
         for pyReflex in self.reflexs:
+            pyReflex.postProcessThree(self)
+
+        for pyReflex in self.reflexs:
             pyReflex.rearing(self)
 
     def ordinaries(self):

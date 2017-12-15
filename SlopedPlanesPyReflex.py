@@ -695,6 +695,26 @@ class _PyReflex(_Py):
                     pyRef.shape = pl
             pyOppRef = self.planes[0]
 
+    def postProcessThree(self, pyWire):
+
+        ''''''
+
+        print '############ postProcessThree'
+
+        [pyR, pyOppR] = self.planes
+
+        if len(pyR.shape.Faces) == 1 and len(pyOppR.shape.Faces) == 1:
+
+            plane = pyR.shape
+            oppPlane = pyOppR.shape
+
+            plane = plane.cut([oppPlane], _Py.tolerance)
+            compound = Part.makeCompound(plane.Faces)
+            pyR.shape = compound
+            oppPlane = oppPlane.cut([plane], _Py.tolerance)
+            compound = Part.makeCompound(oppPlane.Faces)
+            pyOppR.shape = compound
+
     def rearing(self, pyWire):
 
         '''rearing(self, pyWire)
