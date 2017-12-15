@@ -434,7 +434,6 @@ class _PyReflex(_Py):
 
             elif pyOppR.numGeom in rear:
                 print '2'
-                ### HOY
 
                 pl = pyPl.shape.copy()
                 cList = [oppReflexEnormous]
@@ -534,46 +533,6 @@ class _PyReflex(_Py):
                            pyOppR, pyR,
                            'backward')
 
-        '''if len(pyR.shape.Faces) > 1:
-            print 'A ', pyR.numGeom
-
-            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyR.numGeom]
-            comp = Part.makeCompound(dList)
-
-            cList = []
-            for ff in pyR.shape.Faces[1:]:
-                section = ff.section([comp], _Py.tolerance)
-                if len(section.Edges) == len(ff.Edges):
-                    cList.append(ff)
-
-            print cList
-            if cList:
-                cList.insert(0, pyR.shape.Faces[0])
-                compound = Part.makeCompound(cList)
-            else:
-                compound = Part.makeCompound([pyR.shape.Faces[0]])
-            pyR.shape = compound
-
-        if len(pyOppR.shape.Faces) > 1:
-            print 'B ', pyOppR.numGeom
-
-            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyOppR.numGeom]
-            comp = Part.makeCompound(dList)
-
-            cList = []
-            for ff in pyOppR.shape.Faces[1:]:
-                section = ff.section([comp], _Py.tolerance)
-                if len(section.Edges) == len(ff.Edges):
-                    cList.append(ff)
-
-            print cList
-            if cList:
-                cList.insert(0, pyOppR.shape.Faces[0])
-                compound = Part.makeCompound(cList)
-            else:
-                compound = Part.makeCompound([pyOppR.shape.Faces[0]])
-            pyOppR.shape = compound'''
-
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction):
 
@@ -590,7 +549,9 @@ class _PyReflex(_Py):
         print 'pyR.cutter ', pyR.cutter, len(pyR.cutter)
 
         aa = aa.cut(cList, _Py.tolerance)
-        print 'aa.Faces ', aa.Faces
+        print 'aa.Faces ', aa.Faces, len(aa.Faces)
+        print[p.Area for p in aa.Faces]
+        print[p.section([_Py.face], _Py.tolerance).Edges for p in aa.Faces]
         gS = pyR.geomShape
 
         cutterList = []
@@ -601,14 +562,14 @@ class _PyReflex(_Py):
                 if sect.Vertexes:
                     cutterList.append(ff)
 
-        print 'cutterList ', cutterList
+        print 'cutterList ', cutterList, len(cutterList)
 
         if cutterList:
             reflex = reflex.cut(cutterList, _Py.tolerance)
-            print 'reflex.Faces ', reflex.Faces
+            print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
         reflex = reflex.cut(pyR.cutter, _Py.tolerance)
-        print 'reflex.Faces ', reflex.Faces
+        print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
         aList = []
         for ff in reflex.Faces:
@@ -618,38 +579,33 @@ class _PyReflex(_Py):
                 reflex = reflex.removeShape([ff])
                 break
 
-        print 'aList ', aList
+        print 'aList ', aList, len(aList)
 
         comp = Part.makeCompound(cList)
 
         if reflex.Faces:
             reflex = reflex.cut([pyOppR.enormousShape], _Py.tolerance)
-            print 'reflex.Faces ', reflex.Faces
+            print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
         bList = []
         for ff in reflex.Faces:
+            print 'a', ff.Area
             section = ff.section([comp], _Py.tolerance)
-            if len(ff.Edges) == len(section.Edges):
+            if len(section.Edges) >= len(ff.Edges):
+                print 'b'
                 section = ff.section(aList, _Py.tolerance)
                 if not section.Edges:
+                    print 'c'
                     common = ff.common([pyR.simulatedShape], _Py.tolerance)
                     if not common.Faces:
-                        section = ff.section([pyOppR.simulatedShape],
-                                             _Py.tolerance)
-                        if section.Vertexes:
-                            cornerList = [self.selectPlane(numWire, n).shape
-                                          for n in pyR.rangoConsolidate]
-                            section = ff.section(cornerList, _Py.tolerance)
-                            if section.Edges:
-                                bList.append(ff)
-                                # break
+                        print 'd'
+                        bList.append(ff)
+                        # break
 
         print 'bList ', bList
 
         aList.extend(bList)
         print 'aList ', aList
-
-        # aList = reflex.Faces
 
         compound = Part.makeCompound(aList)
         pyR.shape = compound
