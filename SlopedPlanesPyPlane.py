@@ -678,19 +678,29 @@ class _PyPlane(_Py):
                     pl = pyPl.shape
                     if isinstance(pl, Part.Compound):
                         print 'aa'
+
                         if len(pl.Faces) > 1:
                             print 'aa1'
+
+                            gS = pyPl.geomShape
                             aList = []
                             for ff in pl.Faces:
+                                section = ff.section([gS], _Py.tolerance)
                                 ff = ff.cut(cList, _Py.tolerance)
-                                aList.append(ff.Faces[0])
+                                if section.Edges:
+                                    ff = self.selectFace(ff.Faces, gS)
+                                    aList.append(ff)
+                                else:
+                                    aList.append(ff.Faces[0])
                             compound = Part.Compound(aList)
                             pyPl.shape = compound
+
                         else:
                             print 'aa2'
                             gS = pyPl.geomShape
                             pl = self.cutting(pl, cList, gS)
                             pyPl.shape = pl
+
                     else:
                         print 'bb'
                         gS = pyPl.geomShape

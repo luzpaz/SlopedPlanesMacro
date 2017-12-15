@@ -591,6 +591,7 @@ class _PyReflex(_Py):
         for ff in reflex.Faces:
             print 'a', ff.Area
             section = ff.section([comp], _Py.tolerance)
+            # ==
             if len(section.Edges) >= len(ff.Edges):
                 print 'b'
                 section = ff.section(aList, _Py.tolerance)
