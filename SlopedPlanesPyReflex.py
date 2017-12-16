@@ -103,7 +103,7 @@ class _PyReflex(_Py):
         numWire = pyWire.numWire
 
         for pyReflexPlane in self.planes:
-            print '# pyReflexPlane ', pyReflexPlane.numGeom, pyReflexPlane.control
+            print '###### pyReflexPlane ', pyReflexPlane.numGeom, pyReflexPlane.control
             rango = pyReflexPlane.rangoConsolidate
             print rango
             pyRan = []
@@ -114,9 +114,9 @@ class _PyReflex(_Py):
             for pyPlane in pyRan:
                 cList = []
                 plane = pyPlane.shape
-                if not pyPlane.choped and plane:
+                if not pyPlane.choped and not pyPlane.aligned:
 
-                    print 'pyPlane.numGeom ', pyPlane.numGeom
+                    print '### pyPlane.numGeom ', pyPlane.numGeom
                     control = pyPlane.control
                     print 'control ', control
                     rangoPost = pyPlane.rangoConsolidate
@@ -127,7 +127,7 @@ class _PyReflex(_Py):
                         num += 1
                         if nG not in total:
                             pyPl = pyRan[num]
-                            print 'pyPl.numGeom ', nG
+                            print '# pyPl.numGeom ', nG
 
                             if not pyPl.reflexed:
                                 print 'a'
@@ -627,7 +627,7 @@ class _PyReflex(_Py):
         if len(pyR.shape.Faces) > 1:
             print 'A ', pyR.numGeom
 
-            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyR.numGeom]
+            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyR.numGeom and pyPlane.shape]
             comp = Part.makeCompound(dList)
 
             cList = []
@@ -647,7 +647,7 @@ class _PyReflex(_Py):
         if len(pyOppR.shape.Faces) > 1:
             print 'B ', pyOppR.numGeom
 
-            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyOppR.numGeom]
+            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyOppR.numGeom and pyPlane.shape]
             comp = Part.makeCompound(dList)
 
             cList = []
@@ -687,8 +687,7 @@ class _PyReflex(_Py):
                 pyRan = []
                 for nG in total:
                     pyPl = pyPlaneList[nG]
-                    if pyPl.reflexed:
-                        # quitar choped y aligned
+                    if pyPl.reflexed and not pyPl.aligned and not pyPl.choped:
                         pyRan.append(pyPl.shape)
 
                 print 'pyRan ', pyRan
@@ -714,7 +713,7 @@ class _PyReflex(_Py):
             oppPlane = pyOppR.shape
 
             plane = plane.cut([oppPlane], _Py.tolerance)
-            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyR.numGeom]
+            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyR.numGeom and pyPlane.shape]
             comp = Part.makeCompound(dList)
             gS = pyR.geomShape
 
@@ -735,7 +734,7 @@ class _PyReflex(_Py):
             pyR.shape = compound
 
             oppPlane = oppPlane.cut([plane], _Py.tolerance)
-            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyOppR.numGeom]
+            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyOppR.numGeom and pyPlane.shape]
             comp = Part.makeCompound(dList)
             gS = pyOppR.geomShape
 

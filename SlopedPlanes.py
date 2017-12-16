@@ -392,19 +392,19 @@ class _SlopedPlanes(_Py):
 
                     # some figures (a few of them) break the planes numeration
                     '''
-                    # print 'numGeom ', numAngle
+                    print 'numGeom ', numAngle
                     plane = pyPlane.shape
                     gS = pyPlane.geomShape
-                    # print (gS.firstVertex(True).Point,
+                    print (gS.firstVertex(True).Point,
                            gS.lastVertex(True).Point)
                     if plane:
                         section = plane.section(gS)
                         if section.Edges:
-                            # print 'okey'
+                            print 'okey'
                         else:
-                            # print 'bad'
+                            print 'bad'
                     else:
-                        # print 'no plane'
+                        print 'no plane'
                     '''
                     # TODO "solution" at task panel
 
