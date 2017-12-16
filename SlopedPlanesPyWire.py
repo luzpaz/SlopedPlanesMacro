@@ -359,7 +359,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
 
-        '''for pyReflex in self.reflexs:
+        for pyReflex in self.reflexs:
             pyReflex.postProcessOne(self)
 
         for pyReflex in self.reflexs:
@@ -369,7 +369,7 @@ class _PyWire(_Py):
             pyReflex.postProcessThree(self)
 
         for pyReflex in self.reflexs:
-            pyReflex.rearing(self)'''
+            pyReflex.rearing(self)
 
     def ordinaries(self):
 

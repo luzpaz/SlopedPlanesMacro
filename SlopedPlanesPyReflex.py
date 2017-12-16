@@ -540,7 +540,6 @@ class _PyReflex(_Py):
                          direction)
         '''
 
-        numWire = pyR.numWire
         aa = reflex.copy()
 
         cList = [pyOppR.enormousShape]
@@ -558,9 +557,13 @@ class _PyReflex(_Py):
         for ff in aa.Faces:
             section = ff.section([gS], _Py.tolerance)
             if not section.Edges:
-                sect = ff.section([_Py.face], _Py.tolerance)
-                if sect.Vertexes:
+                section = ff.section([_Py.face], _Py.tolerance)
+                if section.Edges:
                     cutterList.append(ff)
+                elif section.Vertexes:
+                    section = ff.section([pyOppR.shape])
+                    if section.Edges:
+                        cutterList.append(ff)
 
         print 'cutterList ', cutterList, len(cutterList)
 
@@ -607,6 +610,8 @@ class _PyReflex(_Py):
 
         aList.extend(bList)
         print 'aList ', aList
+
+        # aList = aa.Faces
 
         compound = Part.makeCompound(aList)
         pyR.shape = compound
@@ -711,16 +716,20 @@ class _PyReflex(_Py):
             plane = plane.cut([oppPlane], _Py.tolerance)
             dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyR.numGeom]
             comp = Part.makeCompound(dList)
+            gS = pyR.geomShape
 
-            cList = [plane.Faces[0]]
-            for ff in plane.Faces[1:]:
+            cList = []
+            for ff in plane.Faces:
                 print 'a'
                 print len(ff.Edges)
-                section = ff.section([comp], _Py.tolerance)
-                print len(section.Edges)
-                if len(section.Edges) >= len(ff.Edges):
-                    print 'aa'
+                if ff.section([gS], _Py.tolerance).Edges:
                     cList.append(ff)
+                else:
+                    section = ff.section([comp], _Py.tolerance)
+                    print len(section.Edges)
+                    if len(section.Edges) >= len(ff.Edges):
+                        print 'aa'
+                        cList.append(ff)
 
             compound = Part.makeCompound(cList)
             pyR.shape = compound
@@ -728,16 +737,20 @@ class _PyReflex(_Py):
             oppPlane = oppPlane.cut([plane], _Py.tolerance)
             dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyOppR.numGeom]
             comp = Part.makeCompound(dList)
+            gS = pyOppR.geomShape
 
-            cList = [oppPlane.Faces[0]]
-            for ff in oppPlane.Faces[1:]:
+            cList = []
+            for ff in oppPlane.Faces:
                 print 'a'
                 print len(ff.Edges)
-                section = ff.section([comp], _Py.tolerance)
-                print len(section.Edges)
-                if len(section.Edges) >= len(ff.Edges):
-                    print 'aa'
+                if ff.section([gS], _Py.tolerance).Edges:
                     cList.append(ff)
+                else:
+                    section = ff.section([comp], _Py.tolerance)
+                    print len(section.Edges)
+                    if len(section.Edges) >= len(ff.Edges):
+                        print 'aa'
+                        cList.append(ff)
 
             compound = Part.makeCompound(cList)
             pyOppR.shape = compound
