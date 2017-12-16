@@ -709,10 +709,37 @@ class _PyReflex(_Py):
             oppPlane = pyOppR.shape
 
             plane = plane.cut([oppPlane], _Py.tolerance)
-            compound = Part.makeCompound(plane.Faces)
+            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyR.numGeom]
+            comp = Part.makeCompound(dList)
+
+            cList = [plane.Faces[0]]
+            for ff in plane.Faces[1:]:
+                print 'a'
+                print len(ff.Edges)
+                section = ff.section([comp], _Py.tolerance)
+                print len(section.Edges)
+                if len(section.Edges) >= len(ff.Edges):
+                    print 'aa'
+                    cList.append(ff)
+
+            compound = Part.makeCompound(cList)
             pyR.shape = compound
+
             oppPlane = oppPlane.cut([plane], _Py.tolerance)
-            compound = Part.makeCompound(oppPlane.Faces)
+            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyOppR.numGeom]
+            comp = Part.makeCompound(dList)
+
+            cList = [oppPlane.Faces[0]]
+            for ff in oppPlane.Faces[1:]:
+                print 'a'
+                print len(ff.Edges)
+                section = ff.section([comp], _Py.tolerance)
+                print len(section.Edges)
+                if len(section.Edges) >= len(ff.Edges):
+                    print 'aa'
+                    cList.append(ff)
+
+            compound = Part.makeCompound(cList)
             pyOppR.shape = compound
 
     def rearing(self, pyWire):
