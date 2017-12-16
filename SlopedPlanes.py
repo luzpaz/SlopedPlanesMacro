@@ -139,7 +139,7 @@ class _SlopedPlanes(_Py):
         _Py.reverse = slopedPlanes.Reverse
         _Py.slopedPlanes = slopedPlanes
         _Py.upList = []
-
+        print _Py.reverse
         onChanged = self.OnChanged
         if not self.faceList:
             onChanged = True
@@ -497,7 +497,12 @@ class _SlopedPlanes(_Py):
 
         if slopedPlanes.Thickness:
             normal = self.faceNormal(self.faceList[0])
+            if slopedPlanes.Reverse:
+                normal = normal * -1
             endShape = endShape.extrude(slopedPlanes.Thickness*normal)
+
+            # the Thickness System breaks the faces numeration
+            # first give the angles and later apply Thickness
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
@@ -534,6 +539,12 @@ class _SlopedPlanes(_Py):
             width = slopedPlanes.FactorWidth
             value = (width, width)
             prop = "width"
+            self.overWritePyProp(prop, value)
+
+        elif prop == "Reverse":
+
+            value = None
+            prop = "seedShape"
             self.overWritePyProp(prop, value)
 
     def overWritePyProp(self, prop, value):
