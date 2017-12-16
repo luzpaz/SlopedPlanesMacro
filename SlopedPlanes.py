@@ -111,6 +111,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.Slope = 45.0
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
+        slopedPlanes.OverHang = 0
         slopedPlanes.Up = 0
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
@@ -184,6 +185,7 @@ class _SlopedPlanes(_Py):
             slope = slopedPlanes.Slope
             width = slopedPlanes.FactorWidth
             length = slopedPlanes.FactorLength
+            overHang = slopedPlanes.Overhang
 
         else:
             # print 'B'
@@ -304,6 +306,7 @@ class _SlopedPlanes(_Py):
                                 pyPlane.angle = slope
                                 pyPlane.width = [width, width]
                                 pyPlane.length = length
+                                pyPlane.overhang = 
                             if pyFace.reset:
                                 # print '111'
                                 pyPlane.rear = []
@@ -541,6 +544,13 @@ class _SlopedPlanes(_Py):
             width = slopedPlanes.FactorWidth
             value = (width, width)
             prop = "width"
+            self.overWritePyProp(prop, value)
+
+        elif prop == "Overhang":
+
+            overHang = slopedPlanes.Overhang
+            value = overhang
+            prop = "overhang"
             self.overWritePyProp(prop, value)
 
         elif prop == "Reverse":

@@ -350,9 +350,6 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
 
-        '''for pyReflex in self.reflexs:
-            pyReflex.simulating(force=True)'''
-
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
 

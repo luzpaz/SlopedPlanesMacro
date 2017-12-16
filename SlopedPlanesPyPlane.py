@@ -45,6 +45,7 @@ class _PyPlane(_Py):
         self.angle = 45.0
         self.width = (1, 1)
         self.length = 2
+        self.overhang = 0
         self.rear = []
         self.rango = []
         self.rangoConsolidate = []
@@ -157,6 +158,27 @@ class _PyPlane(_Py):
             pass
 
         self._length = length
+
+    @property
+    def overhang(self):
+
+        ''''''
+
+        return self._overhang
+
+    @overhang.setter
+    def overhang(self, overhang):
+
+        ''''''
+
+        try:
+            oldOverhang = self.overhang
+            if oldOverhang != overhang:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
+        self._overhang = overhang
 
     @property
     def rear(self):
@@ -608,21 +630,15 @@ class _PyPlane(_Py):
         bigShape = self.cutting(bigShape, [enormousShape], gS)
         self.bigShape = bigShape
 
-    def simulating(self, enormousShape, force=False):
+    def simulating(self, enormousShape):
 
         '''simulating(self, enormousShape, force=False)
         '''
 
-        if force:
-
+        try:
+            plCopy = self.simulatedShape.copy()
+        except AttributeError:
             plCopy = self.shape.copy()
-
-        else:
-
-            try:
-                plCopy = self.simulatedShape.copy()
-            except AttributeError:
-                plCopy = self.shape.copy()
 
         gS = self.geomShape
         plCopy = self.cutting(plCopy, [enormousShape], gS)
