@@ -93,6 +93,8 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "Thickness",
                                  "SlopedPlanes")
+        slopedPlanes.addProperty("App::PropertyFloat", "OverHang",
+                                 "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "Slope",
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
@@ -446,6 +448,9 @@ class _SlopedPlanes(_Py):
                                 elif alfa < numWire:
                                     # print 'b3'
                                     pass
+
+                if slopedPlanes.Overhang:
+                    pass
 
                 if slopedPlanes.Up:
                     upPlaneCopy = _Py.upList[numFace].copy()
