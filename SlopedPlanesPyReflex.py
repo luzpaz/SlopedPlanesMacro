@@ -543,8 +543,8 @@ class _PyReflex(_Py):
         aa = reflex.copy()
 
         cList = [pyOppR.enormousShape]
-        # if not pyR.aligned:
-        cList.extend(pyR.cutter)
+        if not pyR.aligned:
+            cList.extend(pyR.cutter)
         print 'pyR.cutter ', pyR.cutter, len(pyR.cutter)
 
         aa = aa.cut(cList, _Py.tolerance)

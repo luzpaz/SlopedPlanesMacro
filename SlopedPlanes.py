@@ -449,9 +449,6 @@ class _SlopedPlanes(_Py):
                                     # print 'b3'
                                     pass
 
-                if slopedPlanes.Overhang:
-                    pass
-
                 if slopedPlanes.Up:
                     upPlaneCopy = _Py.upList[numFace].copy()
                     cut = upPlaneCopy.cut(planeWireList, _Py.tolerance)
