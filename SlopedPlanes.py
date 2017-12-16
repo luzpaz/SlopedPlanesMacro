@@ -91,6 +91,8 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "Up",
                                  "SlopedPlanes")
+        slopedPlanes.addProperty("App::PropertyFloat", "Thickness",
+                                 "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "Slope",
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
@@ -318,8 +320,8 @@ class _SlopedPlanes(_Py):
                         pyPlane.geom = geom
                         gS = geom.toShape()
                         pyPlane.geomShape = gS
+                        pyPlane.geomAligned = gS
                         geomShapeWire.append(gS)
-                        pyPlane.geomAligned = geom.toShape()
 
                     pyWire.planes = pyPlaneListNew
                     pyWire.shapeGeom = geomShapeWire
@@ -492,6 +494,10 @@ class _SlopedPlanes(_Py):
 
         if not slopedPlanes.Complement:
             endShape.complement()
+
+        if slopedPlanes.Thickness:
+            normal = self.faceNormal(self.faceList[0])
+            endShape = endShape.extrude(slopedPlanes.Thickness*normal)
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
