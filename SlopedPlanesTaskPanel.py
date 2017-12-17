@@ -42,8 +42,6 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        # print '__init__'
-
         self.updating = False
 
         self.obj = None
@@ -57,13 +55,15 @@ class _TaskPanel_SlopedPlanes():
         self.tree = QtGui.QTreeWidget(self.form)
         self.grid.addWidget(self.tree, 1, 0, 1, 2)
 
-        # self.tree.setColumnCount(5)
+        self.advancedOptions = QtGui.QCheckBox(self.form)
+        self.advancedOptions.setObjectName("advancedOptions")
+        self.grid.addWidget(self.advancedOptions, 3, 0, 1, 1)
+        self.advancedOptions.setText("advancedOptions")
+        self.advancedOptions.clicked.connect(self.advanced)
+
         self.tree.setColumnCount(2)
         self.tree.header().resizeSection(0, 60)
-        self.tree.header().resizeSection(1, 30)
-        # self.tree.header().resizeSection(2, 90)
-        # self.tree.header().resizeSection(3, 90)
-        # self.tree.header().resizeSection(4, 90)
+        self.tree.header().resizeSection(1, 60)
 
         QtCore.QObject.connect(self.tree,
                                QtCore.SIGNAL("itemChanged(QTreeWidgetItem *,\
@@ -76,22 +76,22 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        # print 'retranslateUi'
-
         taskPanel.setWindowTitle("SlopedPlanes")
         self.title.setText("SlopedPlanes parameters")
-        # TODO extensible
-        self.tree.setHeaderLabels([("Face"),
-                                   ("Angle")])
-        # ("Length"),
-        # ("Left Width"),
-        # ("Right Width")])
+
+        if self.advancedOptions.isChecked():
+            self.tree.setHeaderLabels([("Face"),
+                                       ("Angle"),
+                                       ("Length"),
+                                       ("Left Width"),
+                                       ("Right Width")])
+        else:
+            self.tree.setHeaderLabels([("Face"),
+                                       ("Angle")])
 
     def isAllowedAlterSelection(self):
 
         ''''''
-
-        # print 'isAllowedAlterSelection'
 
         return False
 
@@ -99,15 +99,11 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        # print 'isAllowedAlterView'
-
         return True
 
     def getStandardButtons(self):
 
         ''''''
-
-        # print 'getStandardButtons'
 
         return int(QtGui.QDialogButtonBox.Apply |
                    QtGui.QDialogButtonBox.Close |
@@ -117,20 +113,15 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        # print 'clicked'
-
         if button == QtGui.QDialogButtonBox.Apply:
 
             placement = self.obj.Placement
             self.resetObject()
-            # self.obj.Proxy.execute(self.obj)
             self.obj.Placement = placement
 
     def reject(self):
 
         ''''''
-
-        # print 'reject'
 
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
@@ -139,8 +130,6 @@ class _TaskPanel_SlopedPlanes():
     def accept(self):
 
         ''''''
-
-        # print 'accept'
 
         self.resetObject()
         FreeCAD.ActiveDocument.recompute()
@@ -151,16 +140,31 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        # print 'edit'
-
         if not self.updating:
             self.resetObject()
+
+    def advanced(self):
+
+        ''''''
+
+        if self.advancedOptions.isChecked():
+            self.tree.setColumnCount(5)
+            self.tree.header().resizeSection(0, 60)
+            self.tree.header().resizeSection(1, 90)
+            self.tree.header().resizeSection(2, 90)
+            self.tree.header().resizeSection(3, 90)
+            self.tree.header().resizeSection(4, 90)
+
+        else:
+            self.tree.setColumnCount(2)
+            self.tree.header().resizeSection(0, 60)
+            self.tree.header().resizeSection(1, 60)
+
+        self.update()
 
     def update(self):
 
         ''''''
-
-        # print 'update'
 
         self.updating = True
         self.tree.clear()
@@ -244,21 +248,24 @@ class _TaskPanel_SlopedPlanes():
                             doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                             doubleSpinBox.setMaximum(1000.00)
                             doubleSpinBox.setValue(angle)
+                            doubleSpinBox.setFixedWidth(90)
                             self.tree.setItemWidget(item, 1, doubleSpinBox)
 
-                            '''doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                            doubleSpinBox.setValue(pyPlane.length)
-                            self.tree.setItemWidget(item, 2, doubleSpinBox)
+                            if self.advancedOptions.isChecked():
 
-                            width = pyPlane.width
+                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setValue(pyPlane.length)
+                                self.tree.setItemWidget(item, 2, doubleSpinBox)
 
-                            doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                            doubleSpinBox.setValue(width[0])
-                            self.tree.setItemWidget(item, 3, doubleSpinBox)
+                                width = pyPlane.width
 
-                            doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                            doubleSpinBox.setValue(width[1])
-                            self.tree.setItemWidget(item, 4, doubleSpinBox)'''
+                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setValue(width[0])
+                                self.tree.setItemWidget(item, 3, doubleSpinBox)
+
+                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setValue(width[1])
+                                self.tree.setItemWidget(item, 4, doubleSpinBox)
 
                 value = 0
                 if upFace:
@@ -274,8 +281,6 @@ class _TaskPanel_SlopedPlanes():
     def resetObject(self, remove=None):
 
         ''''''
-
-        # print 'resetObject'
 
         slopedPlanes = self.obj
 
@@ -359,17 +364,19 @@ class _TaskPanel_SlopedPlanes():
                         # print 'value ', value
                         pyPlane.angle = value
 
-                        '''doubleSpinBox = self.tree.itemWidget(it, 2)
-                        length = doubleSpinBox.value()
-                        pyPlane.length = length
+                        if self.advancedOptions.isChecked():
 
-                        doubleSpinBox = self.tree.itemWidget(it, 3)
-                        left = doubleSpinBox.value()
+                            doubleSpinBox = self.tree.itemWidget(it, 2)
+                            length = doubleSpinBox.value()
+                            pyPlane.length = length
 
-                        doubleSpinBox = self.tree.itemWidget(it, 4)
-                        right = doubleSpinBox.value()
+                            doubleSpinBox = self.tree.itemWidget(it, 3)
+                            left = doubleSpinBox.value()
 
-                        pyPlane.width = [left, right]'''
+                            doubleSpinBox = self.tree.itemWidget(it, 4)
+                            right = doubleSpinBox.value()
+
+                            pyPlane.width = [left, right]
 
                 value = 0
                 if upFace:

@@ -253,7 +253,7 @@ class _PyAlignment(_Py):
         The alignment blocks the progress
         of the planes in its front and laterals'''
 
-        print '### base ', (self.base.numWire, self.base.numGeom)
+        # print '### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         enormousShape = pyBase.enormousShape
@@ -272,14 +272,14 @@ class _PyAlignment(_Py):
             enormShape = ffOne
 
             for pyPlane in chop:
-                print '# chop ', pyPlane.numGeom
+                # print '# chop ', pyPlane.numGeom
                 enShape = pyPlane.enormousShape
 
                 numWire = pyPlane.numWire
                 pyWire = pyWireList[numWire]
                 pyPlaneList = pyWire.planes
 
-                print 'rango ', pyPlane.rangoConsolidate
+                # print 'rango ', pyPlane.rangoConsolidate
                 brea = False
                 for nG in pyPlane.rangoConsolidate:
                     pyPl = pyPlaneList[nG]
@@ -288,20 +288,20 @@ class _PyAlignment(_Py):
                         brea = True
 
                     else:
-                        print 'pyPl ', pyPl.numGeom
+                        # print 'pyPl ', pyPl.numGeom
 
                         if not falsify:
-                            print 'a'
+                            # print 'a'
                             cList = [enormShape]
                             if not brea:
-                                print 'aa'
+                                # print 'aa'
                                 if not pyPl.numGeom in pyBase.rear:  # numWire?
-                                    print 'aaa'
+                                    # print 'aaa'
                                     cList.append(enormousShape)
                                     pyPl.addValue('control', pyBase.numGeom)
 
                         else:
-                            print 'b'
+                            # print 'b'
                             cList = [enormShape]
 
                         pyPl.trimming(enShape, cList)
