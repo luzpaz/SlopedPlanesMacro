@@ -83,6 +83,7 @@ class _TaskPanel_SlopedPlanes():
             self.tree.setHeaderLabels([("Face"),
                                        ("Angle"),
                                        ("Length"),
+                                       ("Overhang"),
                                        ("Left Width"),
                                        ("Right Width")])
         else:
@@ -148,12 +149,13 @@ class _TaskPanel_SlopedPlanes():
         ''''''
 
         if self.advancedOptions.isChecked():
-            self.tree.setColumnCount(5)
+            self.tree.setColumnCount(6)
             self.tree.header().resizeSection(0, 60)
             self.tree.header().resizeSection(1, 90)
             self.tree.header().resizeSection(2, 90)
             self.tree.header().resizeSection(3, 90)
             self.tree.header().resizeSection(4, 90)
+            self.tree.header().resizeSection(5, 90)
 
         else:
             self.tree.setColumnCount(2)
@@ -257,15 +259,19 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setValue(pyPlane.length)
                                 self.tree.setItemWidget(item, 2, doubleSpinBox)
 
+                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setValue(pyPlane.overhang)
+                                self.tree.setItemWidget(item, 3, doubleSpinBox)
+
                                 width = pyPlane.width
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setValue(width[0])
-                                self.tree.setItemWidget(item, 3, doubleSpinBox)
+                                self.tree.setItemWidget(item, 4, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setValue(width[1])
-                                self.tree.setItemWidget(item, 4, doubleSpinBox)
+                                self.tree.setItemWidget(item, 5, doubleSpinBox)
 
                 value = 0
                 if upFace:
@@ -371,9 +377,13 @@ class _TaskPanel_SlopedPlanes():
                             pyPlane.length = length
 
                             doubleSpinBox = self.tree.itemWidget(it, 3)
-                            left = doubleSpinBox.value()
+                            overhang = doubleSpinBox.value()
+                            pyPlane.overhang = overhang
 
                             doubleSpinBox = self.tree.itemWidget(it, 4)
+                            left = doubleSpinBox.value()
+
+                            doubleSpinBox = self.tree.itemWidget(it, 5)
                             right = doubleSpinBox.value()
 
                             pyPlane.width = [left, right]
