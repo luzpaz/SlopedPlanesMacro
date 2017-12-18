@@ -548,7 +548,7 @@ class _SlopedPlanes(_Py):
 
         elif prop == "Overhang":
 
-            overHang = slopedPlanes.Overhang
+            overhang = slopedPlanes.Overhang
             value = overhang
             prop = "overhang"
             self.overWritePyProp(prop, value)

@@ -503,16 +503,22 @@ class _PyPlane(_Py):
             firstParam = geom.FirstParameter
             lastParam = geom.LastParameter
 
+            geomCopy = geom.copy()
+            geomCopy.translate(-1*self.overhang*direction)
+
             scale = 1
             plane =\
-                self.doPlane(direction, geom, firstParam,
+                self.doPlane(direction, geomCopy, firstParam,
                              lastParam, scale)
             self.shape = plane
             self.seedShape = plane.copy()
 
+            geomCopy = geom.copy()
+            geomCopy.translate(-1*_Py.size*direction)
+
             scale = 10
             bigPlane =\
-                self.doPlane(direction, geom, firstParam,
+                self.doPlane(direction, geomCopy, firstParam,
                              lastParam, scale)
             self.bigShape = bigPlane
             self.seedBigShape = bigPlane.copy()
@@ -521,7 +527,7 @@ class _PyPlane(_Py):
 
                 scale = 100
                 enormousPlane =\
-                    self.doPlane(direction, geom, firstParam,
+                    self.doPlane(direction, geomCopy, firstParam,
                                  lastParam, scale)
                 self.enormousShape = enormousPlane
 
