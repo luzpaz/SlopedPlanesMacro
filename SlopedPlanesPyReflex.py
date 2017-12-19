@@ -90,8 +90,8 @@ class _PyReflex(_Py):
         enormousR = pyR.enormousShape
         enormousOppR = pyOppR.enormousShape
 
-        pyR.simulating(enormousOppR, force)
-        pyOppR.simulating(enormousR, force)
+        pyR.simulating(enormousOppR)
+        pyOppR.simulating(enormousR)
 
     def preProcess(self, pyWire):
 
