@@ -655,13 +655,13 @@ class _PyPlane(_Py):
         '''rearing(self, pyWire, pyReflex)
         '''
 
-        # print '### rearing'
+        print'### rearing'
 
-        # print 'self.numGeom ', self.numGeom
+        print'self.numGeom ', self.numGeom
 
         rear = self.rear
 
-        # print 'rear ', rear
+        print'rear ', rear
 
         plane = self.shape
         pyPlaneList = pyWire.planes
@@ -674,32 +674,32 @@ class _PyPlane(_Py):
             pyOppPlane = twinReflex[0]
         oppPlane = pyOppPlane.shape
 
-        # print 'pyOppPlane.numGeom ', pyOppPlane.numGeom
+        print'pyOppPlane.numGeom ', pyOppPlane.numGeom
 
         if self.choped:
             if pyOppPlane.aligned:
-                # print 'a'
+                print'a'
                 rear = [rear[1]]
             else:
-                # print 'b'
+                print'b'
                 rear = [rear[0]]
 
         for numG in rear:
-            # print 'numG ', numG
+            print'numG ', numG
             pyPl = pyPlaneList[numG]
             control = pyPl.control
 
             cList = []
             if self.numGeom not in control:
                 cList.append(plane)
-                # print 'included ', self.numGeom
+                print'included ', self.numGeom
                 control.append(self.numGeom)
             if pyOppPlane.numGeom not in control:
                 cList.append(oppPlane)
-                # print 'included ', pyOppPlane.numGeom
+                print'included ', pyOppPlane.numGeom
                 control.append(pyOppPlane.numGeom)
 
-            # print cList
+            print cList
 
             if cList:
 
@@ -707,10 +707,10 @@ class _PyPlane(_Py):
                     pl = pyPl.shape
 
                     if isinstance(pl, Part.Compound):
-                        # print 'aa'
+                        print'aa'
 
                         if len(pl.Faces) > 1:
-                            # print 'aa1'
+                            print'aa1'
 
                             gS = pyPl.geomShape
                             aList = []
@@ -718,23 +718,26 @@ class _PyPlane(_Py):
                                 section = ff.section([gS], _Py.tolerance)
                                 ff = ff.cut(cList, _Py.tolerance)
                                 if section.Edges:
-                                    # print 'aa11'
+                                    print'aa11'
                                     ff = self.selectFace(ff.Faces, gS)
                                     aList.append(ff)
                                 else:
-                                    # print 'aa12'
+                                    print'aa12'
                                     aList.append(ff.Faces[0])
                             compound = Part.Compound(aList)
                             pyPl.shape = compound
 
                         else:
-                            # print 'aa2'
+                            print'aa2'
                             gS = pyPl.geomShape
                             pl = self.cutting(pl, cList, gS)
-                            pyPl.shape = pl
+                            ##pl = pl.cut(cList, _Py.tolerance)
+                            compound = Part.Compound([pl])
+                            pyPl.shape = compound
+                            #pyPl.shape = pl
 
                     else:
-                        # print 'bb'
+                        print'bb'
                         gS = pyPl.geomShape
                         pl = self.cutting(pl, cList, gS)
                         pyPl.shape = pl
