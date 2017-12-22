@@ -22,7 +22,6 @@
 # *****************************************************************************
 
 
-import Part
 from SlopedPlanesPy import _Py
 
 
@@ -134,7 +133,7 @@ class _PyWire(_Py):
 
         '''planning(self):
         Transfers to PyPlane
-        Arranges the reflex and plane ranges
+        Arranges the reflex and its planes ranges
         '''
 
         for pyPlane in self.planes:
@@ -209,17 +208,7 @@ class _PyWire(_Py):
 
                             forward = pyPlane.forward
                             gS = pyPl.geomShape
-                            forw = pyPl.forward  # esto podria cambiar
-                            backw = pyPl.backward  # esto podria cambiar
-                            '''
-                            section =\
-                                forward.section([forw, backw, gS],
-                                                _Py.tolerance)
-
-                            if (not section.Edges and
-                               len(section.Vertexes) == 2):
-                                # print 'cc'
-                            '''
+                            forw = pyPl.forward
 
                             section =\
                                 forward.section([forw, gS],
@@ -228,16 +217,6 @@ class _PyWire(_Py):
                             if (not section.Edges and
                                len(section.Vertexes) == 1):
                                 # print 'cc'
-
-                                '''print section.Vertexes
-                                section = forw.section(section.Vertexes,
-                                                       _Py.tolerance)
-                                # esto podria cambiar
-                                # print section.Vertexes
-
-                                if not section.Vertexes:
-                                    # print 'ccc'
-                                '''
 
                                 procc = True
 
