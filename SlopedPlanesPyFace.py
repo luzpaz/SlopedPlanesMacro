@@ -50,6 +50,7 @@ class _PyFace(_Py):
         self.alignments = []
         self.reset = True
         self.shapeGeom = []
+        self.size = 0
 
     @property
     def numFace(self):
@@ -120,6 +121,20 @@ class _PyFace(_Py):
         ''''''
 
         self._shapeGeom = shapeGeom
+
+    @property
+    def size(self):
+
+        ''''''
+
+        return self._size
+
+    @size.setter
+    def size(self, size):
+
+        ''''''
+
+        self._size = size
 
     def __getstate__(self, serialize):
 

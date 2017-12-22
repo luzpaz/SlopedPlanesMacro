@@ -43,8 +43,10 @@ class _PyPlane(_Py):
         self.numWire = numWire
         self.numGeom = numGeom
         self.angle = 45.0
-        self.width = (1, 1)
-        self.length = 2
+        size = _Py.size
+        self.rightWidth = size
+        self.leftWidth = size
+        self.length = 2 * size
         self.overhang = 0
         self.rear = []
         self.rango = []
@@ -118,25 +120,46 @@ class _PyPlane(_Py):
         self._angle = angle
 
     @property
-    def width(self):
+    def rightWidth(self):
 
         ''''''
 
-        return self._width
+        return self._rightWidth
 
-    @width.setter
-    def width(self, width):
+    @rightWidth.setter
+    def rightWidth(self, width):
 
         ''''''
 
         try:
-            oldWidth = self.width
+            oldWidth = self.rightWidth
             if oldWidth != width:
                 self.seedShape = None
         except AttributeError:
             pass
 
-        self._width = width
+        self._rightWidth = width
+
+    @property
+    def leftWidth(self):
+
+        ''''''
+
+        return self._leftWidth
+
+    @leftWidth.setter
+    def leftWidth(self, width):
+
+        ''''''
+
+        try:
+            oldWidth = self.leftWidth
+            if oldWidth != width:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
+        self._leftWidth = width
 
     @property
     def length(self):
@@ -542,14 +565,14 @@ class _PyPlane(_Py):
         '''doPlane(self, direction, geom, firstParam, lastParam, scale)
         '''
 
-        leftScale = self.width[0] * scale
-        rightScale = self.width[1] * scale
+        leftScale = self.leftWidth * scale
+        rightScale = self.rightWidth * scale
         upScale = self.length * scale
 
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola)):
-            startParam = firstParam - leftScale * _Py.size
-            endParam = lastParam + rightScale * _Py.size
+            startParam = firstParam - leftScale  # * _Py.size
+            endParam = lastParam + rightScale  # * _Py.size
 
         elif isinstance(geom, (Part.ArcOfCircle,
                                Part.ArcOfEllipse)):
@@ -566,7 +589,7 @@ class _PyPlane(_Py):
             pass
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
-        plane = extendGeom.toShape().extrude(direction*upScale*_Py.size)
+        plane = extendGeom.toShape().extrude(direction*upScale)  # *_Py.size)
 
         return plane
 

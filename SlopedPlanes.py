@@ -89,13 +89,13 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyBool", "Down",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyFloat", "Up",
+        slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyFloat", "Thickness",
+        slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyFloat", "Overhang",
+        slopedPlanes.addProperty("App::PropertyLength", "Overhang",
                                  "SlopedPlanes")
-        slopedPlanes.addProperty("App::PropertyFloat", "Slope",
+        slopedPlanes.addProperty("App::PropertyAngle", "Slope",
                                  "SlopedPlanes")
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
                                  "SlopedPlanes")
@@ -182,11 +182,6 @@ class _SlopedPlanes(_Py):
 
             self.faceList = faceList
 
-            slope = slopedPlanes.Slope
-            width = slopedPlanes.FactorWidth
-            length = slopedPlanes.FactorLength
-            overhang = slopedPlanes.Overhang
-
         else:
             # print 'B'
 
@@ -220,6 +215,7 @@ class _SlopedPlanes(_Py):
                     pyFaceListNew.append(pyFace)
 
                 _Py.pyFace = pyFace
+                pyFace.size = size
 
                 # gathers the interior wires. Upper Left criteria
 
@@ -303,10 +299,11 @@ class _SlopedPlanes(_Py):
                             # print '1'
                             if pyWire.reset:
                                 # print '11'
-                                pyPlane.angle = slope
-                                pyPlane.width = [width, width]
-                                pyPlane.length = length
-                                pyPlane.overhang = overhang
+                                pyPlane.angle = 45
+                                pyPlane.rightWidth = size
+                                pyPlane.leftWidth = size
+                                pyPlane.length = 2 * size
+                                pyPlane.overhang = 0
                             if pyFace.reset:
                                 # print '111'
                                 pyPlane.rear = []
@@ -504,7 +501,7 @@ class _SlopedPlanes(_Py):
             normal = self.faceNormal(self.faceList[0])
             if slopedPlanes.Reverse:
                 normal = normal * -1
-            endShape = endShape.extrude(slopedPlanes.Thickness*normal)
+            endShape = endShape.extrude(slopedPlanes.Thickness.Value*normal)
 
             # the Thickness System breaks the faces numeration
             # first give the angles and later apply Thickness
@@ -528,7 +525,7 @@ class _SlopedPlanes(_Py):
         if prop == "Slope":
 
             slope = slopedPlanes.Slope
-            value = slope
+            value = slope.Value
             prop = "angle"
             self.overWritePyProp(prop, value)
 
@@ -542,14 +539,16 @@ class _SlopedPlanes(_Py):
         elif prop == "FactorWidth":
 
             width = slopedPlanes.FactorWidth
-            value = (width, width)
-            prop = "width"
+            value = width
+            prop = "rightWidth"
+            self.overWritePyProp(prop, value)
+            prop = "leftWidth"
             self.overWritePyProp(prop, value)
 
         elif prop == "Overhang":
 
             overhang = slopedPlanes.Overhang
-            value = overhang
+            value = overhang.Value
             prop = "overhang"
             self.overWritePyProp(prop, value)
 
@@ -565,9 +564,16 @@ class _SlopedPlanes(_Py):
         '''
 
         for pyFace in self.Pyth:
+
+            size = pyFace.size
+            if prop in ["length", "leftWidth", "rigthWidth"]:
+                newValue = value * size
+            else:
+                newValue = value
+
             for pyWire in pyFace.wires:
                 for pyPlane in pyWire.planes:
-                    setattr(pyPlane, prop, value)
+                    setattr(pyPlane, prop, newValue)
 
         self.OnChanged = False
 
