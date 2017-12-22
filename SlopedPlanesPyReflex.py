@@ -132,7 +132,7 @@ class _PyReflex(_Py):
                             if not pyPl.reflexed:
                                 # print 'a'
                                 cList.append(pyPl.shape)
-                                control.append(nG)  # ESTA INCORPORANDO VALORES SIN HACER pyPlane.control = control
+                                control.append(nG)
                                 # print pyPl.shape
 
                             elif pyPl.choped:
@@ -227,7 +227,6 @@ class _PyReflex(_Py):
             if nGeom not in control:
 
                 rearPyPl = pyPlaneList[nGeom]
-                gS = rearPyPl.geomShape
 
                 if rearPyPl.aligned:
                     # print 'a'
@@ -336,18 +335,14 @@ class _PyReflex(_Py):
                           oppReflexEnormous)
         '''
 
-        nWire = pyWire.numWire
-
-        # TODO refact
-
-        control = pyR.control       # sobra?
+        control = pyR.control
 
         if direction == "forward":
             nGeom = oppRear[1]
         else:
             nGeom = oppRear[0]
 
-        if nGeom not in control:     # sobra?
+        if nGeom not in control:
 
             pyOppRear = pyWire.planes[nGeom]
 
@@ -361,7 +356,7 @@ class _PyReflex(_Py):
         else:
             nGeom = oppRear[1]
 
-        if nGeom not in control:     # sobra?
+        if nGeom not in control:
             pyOppRear = pyWire.planes[nGeom]
             oppRearPl = pyOppRear.shape.copy()
             oppRearPl = oppRearPl.cut([oppReflexEnormous], _Py.tolerance)
@@ -420,18 +415,14 @@ class _PyReflex(_Py):
             rear = pyPl.rear
             rango = pyPl.rangoConsolidate
 
-            rRear = pyR.rear
             rRango = pyR.rangoConsolidate
 
             oppRRear = pyOppR.rear
             oppRRango = pyOppR.rangoConsolidate
 
             forward = pyR.forward
-            backward = pyR.backward
             forwa = pyOppR.forward
-            backwa = pyOppR.backward
             fo = pyPl.forward
-            ba = pyPl.backward
 
             if pyR.numGeom in rear:
                 # print '1'
@@ -630,12 +621,10 @@ class _PyReflex(_Py):
     def postProcessOne(self, pyWire):
 
         '''postProcessOne(self, pyWire)
-        cleans the eaves with multiple face
+        cleans the eaves with multiple faces
         '''
 
         # print '############ postProcessOne'
-
-        # TODO refact
 
         [pyR, pyOppR] = self.planes
 
@@ -647,8 +636,12 @@ class _PyReflex(_Py):
 
             cList = []
             for ff in pyR.shape.Faces[1:]:
+                # print 'a'
+                # print len(ff.Edges)
                 section = ff.section([comp], _Py.tolerance)
+                # print len(section.Edges)
                 if len(section.Edges) >= len(ff.Edges):
+                    # print 'aa'
                     cList.append(ff)
 
             # print cList
@@ -699,10 +692,7 @@ class _PyReflex(_Py):
             oppPlane = pyOppR.shape.copy()
 
             plane = plane.cut([oppPlane], _Py.tolerance)
-            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyR.numGeom and pyPlane.shape]
-            comp = Part.makeCompound(dList)
             gS = pyR.geomShape
-
 
             cList = []
             for ff in plane.Faces:
@@ -723,6 +713,8 @@ class _PyReflex(_Py):
                         cList.append(ff)
                 else:
                     # print 'b'
+                    dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyR.numGeom and pyPlane.shape]
+                    comp = Part.makeCompound(dList)
                     section = ff.section([comp], _Py.tolerance)
                     # print len(section.Edges)
                     if len(section.Edges) >= len(ff.Edges):
@@ -743,10 +735,7 @@ class _PyReflex(_Py):
                 compound = Part.makeCompound(cList)
                 pyR.shape = compound
 
-
             oppPlane = oppPlane.cut([plane], _Py.tolerance)
-            dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyOppR.numGeom and pyPlane.shape]
-            comp = Part.makeCompound(dList)
             gS = pyOppR.geomShape
 
             cList = []
@@ -768,6 +757,8 @@ class _PyReflex(_Py):
                         cList.append(ff)
                 else:
                     # print 'b'
+                    dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyOppR.numGeom and pyPlane.shape]
+                    comp = Part.makeCompound(dList)
                     section = ff.section([comp], _Py.tolerance)
                     # print len(section.Edges)
                     if len(section.Edges) >= len(ff.Edges):
@@ -842,7 +833,6 @@ class _PyReflex(_Py):
         '''
 
         for pyPlane in self.planes:
-            # if not pyPlane.reflexed:
             if not pyPlane.choped and not pyPlane.aligned:
                 pyPlane.rearing(pyWire, self)
 
