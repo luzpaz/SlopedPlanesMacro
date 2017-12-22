@@ -363,7 +363,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
 
-        self.printControl('preProcess')
+        # self.printControl('preProcess')
 
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
@@ -371,22 +371,22 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
 
-        self.printControl('solveReflex')
+        # self.printControl('solveReflex')
 
         for pyReflex in self.reflexs:
             pyReflex.postProcessOne(self)
 
-        self.printControl('postProcessOne')
+        # self.printControl('postProcessOne')
 
         for pyReflex in self.reflexs:
             pyReflex.postProcessThree(self)
 
-        self.printControl('postProcessThree')
+        # self.printControl('postProcessThree')
 
         for pyReflex in self.reflexs:
             pyReflex.postProcessFour(self)
 
-        self.printControl('postProcessFour')
+        # self.printControl('postProcessFour')
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self)

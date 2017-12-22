@@ -110,10 +110,8 @@ class _Py(object):
         pyAlignList = _Py.pyFace.alignments
         for pyAlign in pyAlignList:
             if pyAlign.base == pyPlane:
-                # print 'a'
                 return pyAlign
             elif pyPlane in pyAlign.aligns:
-                # print 'b'
                 return pyAlign
 
         return None
@@ -152,22 +150,6 @@ class _Py(object):
                         pyAlignList.append(pyAlign)
 
         return pyAlignList
-
-    def selectReflex(self, numWire, numGeom, nGeom):
-
-        '''selectReflex(self, numWire, numGeom, nGeom)
-        select an unique reflex corner in the wire numWire,
-        which envolves the planes numGeom and nGeom,
-        and return it, or None
-        used in PyWire. Y CREO QUE LO QUITARE'''
-
-        for pyReflex in _Py.pyFace.wires[numWire].reflexs:
-            [pyPlane, pyPl] = pyReflex.planes
-            [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
-            if [nn, mm] == [numGeom, nGeom] or [nn, mm] == [nGeom, numGeom]:
-                return pyReflex
-
-        return None
 
     def selectAllReflex(self, numWire, numGeom):
 
