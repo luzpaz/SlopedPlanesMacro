@@ -965,7 +965,12 @@ class _PyFace(_Py):
                                      center.sub(FreeCAD.Vector(diaLen/2,
                                                                diaLen/2,
                                                                center.z)))
-            upPlane.Placement.Base.z = _Py.slopedPlanes.Up
+
+            up = _Py.slopedPlanes.Up
+            if _Py.reverse:
+                up = -1 * up
+            upPlane.Placement.Base.z = up
+
             upList = _Py.upList
             upList.append(upPlane)
             _Py.upList = upList

@@ -143,6 +143,8 @@ class _SlopedPlanes(_Py):
         _Py.slopedPlanes = slopedPlanes
         _Py.upList = []
 
+        faceMaker = slopedPlanes.FaceMaker
+
         onChanged = self.OnChanged
         if not self.faceList:
             onChanged = True
@@ -150,7 +152,6 @@ class _SlopedPlanes(_Py):
         if onChanged:
             # print 'A'
 
-            faceMaker = slopedPlanes.FaceMaker
             face = Part.makeFace(shape, faceMaker)
             fList = face.Faces
 
