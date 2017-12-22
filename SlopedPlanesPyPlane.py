@@ -638,7 +638,7 @@ class _PyPlane(_Py):
 
     def simulating(self, enormousShape):
 
-        '''simulating(self, enormousShape, force=False)
+        '''simulating(self, enormousShape)
         '''
 
         try:
@@ -731,10 +731,8 @@ class _PyPlane(_Py):
                             # print 'aa2'
                             gS = pyPl.geomShape
                             pl = self.cutting(pl, cList, gS)
-                            ##pl = pl.cut(cList, _Py.tolerance)
                             compound = Part.Compound([pl])
                             pyPl.shape = compound
-                            #pyPl.shape = pl
 
                     else:
                         # print 'bb'
@@ -771,8 +769,6 @@ class _PyPlane(_Py):
                         if self.aligned:
                             # print 'b11'
 
-                            # TODO refact
-
                             pyAlign =\
                                 self.selectAlignment(self.numWire,
                                                      self.numGeom)
@@ -806,7 +802,8 @@ class _PyPlane(_Py):
                                     if pl in chop:
                                         break
 
-                                    elif (pyAli.base.numWire, pyAli.base.numGeom) in chop:
+                                    elif (pyAli.base.numWire,
+                                          pyAli.base.numGeom) in chop:
                                         break
 
                                     elif (self.numWire, self.numGeom) in ali:
@@ -814,6 +811,7 @@ class _PyPlane(_Py):
 
                                     elif chop[0] in ali or chop[1] in ali:
                                         break
+
                                     elif chop[0] in ch or chop[1] in ch:
                                         break
 
