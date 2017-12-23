@@ -565,14 +565,32 @@ class _PyPlane(_Py):
         '''doPlane(self, direction, geom, firstParam, lastParam, scale)
         '''
 
+        size = _Py.size
+        width = size
+        length = 2 * size
+
         leftScale = self.leftWidth * scale
         rightScale = self.rightWidth * scale
         upScale = self.length * scale
 
+        if not upScale:
+            upScale = 2 * size * scale
+
+        if scale > 1:
+
+            if self.leftWidth < width:
+                leftScale = width * scale
+
+            if self.rightWidth < width:
+                rightScale = width * scale
+
+            if self.length < length:
+                upScale = length * scale
+
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola)):
-            startParam = firstParam - leftScale  # * _Py.size
-            endParam = lastParam + rightScale  # * _Py.size
+            startParam = firstParam - leftScale
+            endParam = lastParam + rightScale
 
         elif isinstance(geom, (Part.ArcOfCircle,
                                Part.ArcOfEllipse)):
@@ -589,7 +607,7 @@ class _PyPlane(_Py):
             pass
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
-        plane = extendGeom.toShape().extrude(direction*upScale)  # *_Py.size)
+        plane = extendGeom.toShape().extrude(direction*upScale)
 
         return plane
 

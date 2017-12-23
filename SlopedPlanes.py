@@ -409,46 +409,49 @@ class _SlopedPlanes(_Py):
                     '''
                     # TODO "solution" at task panel
 
-                    if [numWire, numAngle] not in originList:
+                    if pyPlane.length:
 
-                        if isinstance(angle, float):
-                            # print 'a'
+                        if [numWire, numAngle] not in originList:
 
-                            plane = pyPlane.shape
+                            if isinstance(angle, float):
+                                # print 'a'
 
-                            if isinstance(plane, Part.Compound):
-                                # print 'a1'
-                                planeWireList.append(plane.Faces[0])
-                                secondaries.extend(plane.Faces[1:])
+                                plane = pyPlane.shape
+
+                                if isinstance(plane, Part.Compound):
+                                    # print 'a1'
+                                    planeWireList.append(plane.Faces[0])
+                                    secondaries.extend(plane.Faces[1:])
+
+                                else:
+                                    # print 'a2'
+                                    planeWireList.append(plane)
 
                             else:
-                                # print 'a2'
-                                planeWireList.append(plane)
+                                # print 'b'
 
-                        else:
-                            # print 'b'
+                                alfa, beta = angle[0], angle[1]
 
-                            alfa, beta = angle[0], angle[1]
+                                if [alfa, beta] not in originList:
+                                    originList.append([alfa, beta])
 
-                            if [alfa, beta] not in originList:
-                                originList.append([alfa, beta])
+                                    if alfa == numWire:
+                                        # print 'b1'
+                                        if beta > numAngle:
+                                            pyPl =\
+                                                pyFace.selectPlane(alfa, beta)
+                                            pl = pyPl.shape
+                                            planeWireList.append(pl)
 
-                                if alfa == numWire:
-                                    # print 'b1'
-                                    if beta > numAngle:
+                                    elif alfa > numWire:
+                                        # print 'b2'
                                         pyPl = pyFace.selectPlane(alfa, beta)
                                         pl = pyPl.shape
                                         planeWireList.append(pl)
 
-                                elif alfa > numWire:
-                                    # print 'b2'
-                                    pyPl = pyFace.selectPlane(alfa, beta)
-                                    pl = pyPl.shape
-                                    planeWireList.append(pl)
-
-                                elif alfa < numWire:
-                                    # print 'b3'
-                                    pass
+                                    elif alfa < numWire:
+                                        # print 'b3'
+                                        pass
 
                 if slopedPlanes.Up:
                     upPlaneCopy = _Py.upList[numFace].copy()
@@ -534,6 +537,8 @@ class _SlopedPlanes(_Py):
 
             length = slopedPlanes.FactorLength
             value = length
+            if not value:
+                value = 2
             prop = "length"
             self.overWritePyProp(prop, value)
 
@@ -541,9 +546,7 @@ class _SlopedPlanes(_Py):
 
             width = slopedPlanes.FactorWidth
             value = width
-            prop = "rightWidth"
-            self.overWritePyProp(prop, value)
-            prop = "leftWidth"
+            prop = "width"
             self.overWritePyProp(prop, value)
 
         elif prop == "Overhang":
@@ -567,14 +570,24 @@ class _SlopedPlanes(_Py):
         for pyFace in self.Pyth:
 
             size = pyFace.size
-            if prop in ["length", "leftWidth", "rigthWidth"]:
+
+            if prop in ["length", "width"]:
                 newValue = value * size
             else:
                 newValue = value
 
-            for pyWire in pyFace.wires:
-                for pyPlane in pyWire.planes:
-                    setattr(pyPlane, prop, newValue)
+            if prop == "width":
+
+                for pyWire in pyFace.wires:
+                    for pyPlane in pyWire.planes:
+                        setattr(pyPlane, "leftWidth", newValue)
+                        setattr(pyPlane, "rightWidth", newValue)
+
+            else:
+
+                for pyWire in pyFace.wires:
+                    for pyPlane in pyWire.planes:
+                        setattr(pyPlane, prop, newValue)
 
         self.OnChanged = False
 
