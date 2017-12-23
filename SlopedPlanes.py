@@ -537,8 +537,6 @@ class _SlopedPlanes(_Py):
 
             length = slopedPlanes.FactorLength
             value = length
-            if not value:
-                value = 2
             prop = "length"
             self.overWritePyProp(prop, value)
 
