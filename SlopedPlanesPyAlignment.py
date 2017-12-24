@@ -339,22 +339,28 @@ class _PyAlignment(_Py):
             # al finalizar el alineado
             # el trimming de rangoChop lo quite por la cruz con los rangoChop acostados
 
-            rearTwo = pyTwo.rear[0]
-            rearOne =pyOne.rear[0]
+            if pyTwo.numWire == 0 and pyOne.numWire == 0:
+                rearTwo = pyTwo.rear[0]
+                rearOne =pyOne.rear[0]
 
-            rang =\
-                self.rang((pyTwo.numWire, rearTwo),
-                          (pyOne.numWire, rearOne))
+                rang =\
+                    self.rang((pyTwo.numWire, rearTwo),
+                              (pyOne.numWire, rearOne))
 
-            rang = rang + [rearTwo, rearOne]
+                rang = rang + [rearTwo, rearOne]
+
+            else:
+                rang = []
+
             rearRango.append(rang)
 
             for rr in rang:
                 pyPl = pyPlaneList[rr]
                 for nn in rChop[numChop]:
                     pyP = pyPlaneList[nn]
-                    pyP.control.append(rr)
-                    pyPl.control.append(nn)
+                    if not pyP.reflexed:
+                        pyP.control.append(rr)
+                        pyPl.control.append(nn)
 
         self.rearRango = rearRango
 

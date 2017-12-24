@@ -1211,19 +1211,28 @@ class _PyFace(_Py):
             for chop in pyAlign.chops:
                 numChop += 1
                 rearRan = rearRango[numChop]
+                print 'rearRan ', rearRan
                 ran = rango[numChop]
+                print 'ran ', ran
                 for nn in ran:
+                    print '### nn ', nn
                     pyPlane = pyPlaneList[nn]
                     gS = pyPlane.geomShape
                     for mm in rearRan:
-                        pyPl = pyPlaneList[mm]
-                        pl = pyPl.shape
-                        plane = pyPlane.shape
+                        if mm != nn:
+                            print '### mm ', mm
+                            pyPl = pyPlaneList[mm]
+                            pl = pyPl.shape
+                            print pl
+                            plane = pyPlane.shape
+                            print plane
 
-                        pl = self.cutting(pl, [plane], pyPl.geomShape)
-                        pyPl.shape = pl
+                            if pl and plane:
 
-                        plane = self.cutting(plane, [pl], gS)
-                        pyPlane.shape = plane
+                                pl = self.cutting(pl, [plane], pyPl.geomShape)
+                                pyPl.shape = pl
+
+                                plane = self.cutting(plane, [pl], gS)
+                                pyPlane.shape = plane
 
         # self.printControl('moreEnding')
