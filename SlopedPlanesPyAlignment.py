@@ -43,6 +43,7 @@ class _PyAlignment(_Py):
         self.chops = []
         self.rango = []
         self.rangoConsolidate = []
+        self.rearRango = []
         self.falsify = False
         self.simulatedAlignment = []
         self.simulatedChop = []
@@ -118,6 +119,20 @@ class _PyAlignment(_Py):
         ''''''
 
         self._rangoConsolidate = rangoConsolidate
+
+    @property
+    def rearRango(self):
+
+        ''''''
+
+        return self._rearRango
+
+    @rearRango.setter
+    def rearRango(self, rearRango):
+
+        ''''''
+
+        self._rearRango = rearRango
 
     @property
     def falsify(self):
@@ -256,69 +271,95 @@ class _PyAlignment(_Py):
         The alignment blocks the progress
         of the planes in its front and laterals'''
 
-        # print '### base ', (self.base.numWire, self.base.numGeom)
+        # # solo los chops exteriores tienen rango y rangoChop
+
+        print '###### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         numGeom = pyBase.numGeom
         enormousShape = pyBase.enormousShape
-        numWire = self.base.numWire
-        pyWire = pyWireList[numWire]
+        pyWire = pyWireList[0]
         pyPlaneList = pyWire.planes
+
+        rangoChop = self.rangoConsolidate
+        rChop = self.rango
 
         falsify = self.falsify
         simulatedChop = self.simulatedChop
         numChop = -1
+
+        rearRango = []
+
         for chop in self.chops:
             numChop += 1
+
+            [pyOne, pyTwo] = chop
 
             [ffOne, ffTwo] = simulatedChop[numChop]
 
             enormShape = ffOne
 
             for pyPlane in chop:
-                # print '# chop ', pyPlane.numGeom
+                print '### chop ', pyPlane.numGeom
                 enShape = pyPlane.enormousShape
                 nGeom = pyPlane.numGeom
 
-                nWire = pyPlane.numWire
-                pyWire = pyWireList[nWire]
-                pyPlaneList = pyWire.planes
-
-                # print 'rango ', pyPlane.rangoConsolidate
-                brea = False
+                print 'rango ', pyPlane.rangoConsolidate
                 for nG in pyPlane.rangoConsolidate:
-                    pyPl = pyPlaneList[nG]
-                    control = pyPl.control
+                    if nG not in rangoChop:
 
-                    if pyPl.reflexed:
-                        brea = True
+                        pyPl = pyPlaneList[nG]
 
-                    else:
-                        # print 'pyPl ', pyPl.numGeom
+                        if not pyPl.reflexed:
+                            control = pyPl.control
+                            print '# nG ', nG
 
-                        if falsify:
-                            # print 'a'
-                            cList = [enormShape]
+                            if falsify:
+                                print 'a'
+                                cList = [enormShape]
 
-                        else:
-                            # print 'b'
-                            cList = [enormShape]
-                            if not brea:
-                                # print 'bb'
-                                if not pyPl.numGeom in pyBase.rear:  # TODO revisar numWire? numWire == nWire and
-                                    # print 'bbb'
-                                    cList.append(enormousShape)
-                                    control.append(numGeom)
+                            else:
+                                print 'b'
+                                cList = [enormShape]
+                                if not pyPl.numGeom in pyBase.rear:
+                                    print 'bb'
+                                    if numGeom not in control:
+                                        cList.append(enormousShape)
+                                        control.append(numGeom)     # la base
 
-                        pyPl.trimming(enShape, cList)
-                        control.append(nGeom)
-
-                    for nC in self.rangoConsolidate:
-                        pyC = pyPlaneList[nC]
-                        control.append(nC)
-                        pyC.control.append(nG)
+                            pyPl.trimming(enShape, cList)
+                            control.append(nGeom)       # el chop
 
                 enormShape = ffTwo
+
+            # dado que hemos eliminado el trimming de rangoChop con la alineacion
+            # los planos de rangoChop no deben cortar a las traseras
+            # y a los planos entre traseras de cada chop.
+            # pero es provisional porque se deben ejecutar estos cortes 
+            # al finalizar el alineado
+            # el trimming de rangoChop lo quite por la cruz con los rangoChop acostados
+
+            rearTwo = pyTwo.rear[0]
+            rearOne =pyOne.rear[0]
+
+            rang =\
+                self.rang((pyTwo.numWire, rearTwo),
+                          (pyOne.numWire, rearOne))
+
+            rang = rang + [rearTwo, rearOne]
+            rearRango.append(rang)
+
+            for rr in rang:
+                pyPl = pyPlaneList[rr]
+                for nn in rChop[numChop]:
+                    pyP = pyPlaneList[nn]
+                    pyP.control.append(rr)
+                    pyPl.control.append(nn)
+
+        self.rearRango = rearRango
+
+        # se podría ampliar el control con rangoChop y evitar más cortes innecesarios
+        # rangoChop = self.rango
 
     def priorLater(self):
 
@@ -510,21 +551,6 @@ class _PyAlignment(_Py):
                 chopTwoCopy = self.cutting(chopTwoCopy, cutList, gS)
 
                 chopList.extend([chopOneCopy, chopTwoCopy])
-
-                # dado que hemos eliminado el trimming de rangoChop con la alineacion
-                # los planos de rangoChop no deben cortar con las traseras
-                # y los planos entre traseras de cada chop. Esto es tambien un ahorro.
-
-                rang =\
-                    self.rang((pyTwo.numWire, pyTwo.rear[0]),
-                              (pyOne.numWire, pyOne.rear[0]))
-
-                for rr in rang + [pyTwo.rear[0]] + [pyOne.rear[0]]:
-                    pyPl = pyPlaneList[rr]
-                    for nn in rChop:
-                        pyP = pyPlaneList[nn]
-                        pyP.control.append(rr)
-                        pyPl.control.append(nn)
 
             lenChops = len(chops)
             num = lenChops / 2
@@ -916,6 +942,8 @@ class _PyAlignment(_Py):
     def rang(self, (w1, g1), (w2, g2)):
 
         ''''''
+
+        # parece que puedo eliminar esta funcion
 
         pyWireList = _Py.pyFace.wires
 

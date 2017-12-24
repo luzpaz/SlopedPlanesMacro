@@ -994,6 +994,8 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingChop()
 
+        self.printControl('virtualizing')
+
     def trimming(self):
 
         '''trimming(self)
@@ -1003,12 +1005,12 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.trimming()
 
-        # self.printControl('trimming reflexs')
+        self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()
 
-        # self.printControl('trimming alignments')
+        self.printControl('trimming alignments')
 
     def priorLater(self):
 
@@ -1018,12 +1020,12 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.priorLater()
 
-        # self.printControl('priorLater wires')
+        self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
 
-        # self.printControl('priorLater alignments')
+        self.printControl('priorLater alignments')
 
     def simulating(self):
 
@@ -1053,7 +1055,7 @@ class _PyFace(_Py):
             if pyWire.reflexs:
                 pyWire.reflexing()
 
-        # self.printControl('reflexing')
+        self.printControl('reflexing')
 
     def ordinaries(self):
 
@@ -1063,7 +1065,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.ordinaries()
 
-        # self.printControl('ordinaries')
+        self.printControl('ordinaries')
 
     def betweenWires(self):
 
@@ -1199,3 +1201,29 @@ class _PyFace(_Py):
                             cutterList.append(plane)
 
         # self.printControl('ending')
+
+        pyPlaneList = _Py.pyFace.wires[0].planes
+
+        for pyAlign in pyAlignList:
+            numChop = -1
+            rearRango = pyAlign.rearRango
+            rango = pyAlign.rango
+            for chop in pyAlign.chops:
+                numChop += 1
+                rearRan = rearRango[numChop]
+                ran = rango[numChop]
+                for nn in ran:
+                    pyPlane = pyPlaneList[nn]
+                    gS = pyPlane.geomShape
+                    for mm in rearRan:
+                        pyPl = pyPlaneList[mm]
+                        pl = pyPl.shape
+                        plane = pyPlane.shape
+
+                        pl = self.cutting(pl, [plane], pyPl.geomShape)
+                        pyPl.shape = pl
+
+                        plane = self.cutting(plane, [pl], gS)
+                        pyPlane.shape = plane
+
+        # self.printControl('moreEnding')

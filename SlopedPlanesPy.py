@@ -100,7 +100,7 @@ class _Py(object):
         select an unique alignment which includes the plane (numWire, numGeom)
         as base plane or in its aligned planes
         and return it, or None
-        used in PyPlane and PyReflex'''
+        used in Py, PyPlane and PyReflex'''
 
         pyWireList = _Py.pyFace.wires
         pyWire = pyWireList[numWire]
@@ -296,7 +296,12 @@ class _Py(object):
             Part.show(compound, self.slopedPlanes.Name+' cutter '+str(numWire)+' '+str(numGeom))
 
         if pyPlane.aligned:
-            pass
+            pyAli = self.selectAlignment(numWire, numGeom)
+            print pyAli
+
+            compound = Part.makeCompound(pyAli.simulatedAlignment)
+            compound.Placement = placement
+            Part.show(compound, self.slopedPlanes.Name+' simulatedAlignment '+str(numWire)+' '+str(numGeom))
 
     def printControl(self, text):
 

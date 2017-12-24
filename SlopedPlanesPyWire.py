@@ -137,6 +137,7 @@ class _PyWire(_Py):
         '''
 
         for pyPlane in self.planes:
+            pyPlane.control = [pyPlane.numGeom]
             if pyPlane.geomAligned:
                 pyPlane.planning(self)
 
@@ -383,5 +384,5 @@ class _PyWire(_Py):
                 # print pyPlane.choped
                 # print pyPlane.aligned
                 if pyPlane.shape:
-                    # print '############### ordinaries ', pyPlane.numGeom
+                    print '############### ordinaries ', pyPlane.numGeom
                     pyPlane.ordinaries(self)

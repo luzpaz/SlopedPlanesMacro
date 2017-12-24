@@ -558,8 +558,6 @@ class _PyPlane(_Py):
             self.simulatedShape = None
             self.cutter = []
 
-        self.control = [numGeom]
-
     def doPlane(self, direction, geom, firstParam, lastParam, scale):
 
         '''doPlane(self, direction, geom, firstParam, lastParam, scale)
@@ -869,6 +867,7 @@ class _PyPlane(_Py):
                     elif not pyPl.choped:
                         # print 'b2'
                         cutterList.append(pl)
+                        control.append(pyPl.numGeom)
 
         if cutterList:
             # print 'cutterList ', cutterList
