@@ -151,11 +151,11 @@ class _TaskPanel_SlopedPlanes():
         if self.advancedOptions.isChecked():
             self.tree.setColumnCount(6)
             self.tree.header().resizeSection(0, 60)
-            self.tree.header().resizeSection(1, 90)
-            self.tree.header().resizeSection(2, 90)
-            self.tree.header().resizeSection(3, 90)
-            self.tree.header().resizeSection(4, 90)
-            self.tree.header().resizeSection(5, 90)
+            self.tree.header().resizeSection(1, 120)
+            self.tree.header().resizeSection(2, 120)
+            self.tree.header().resizeSection(3, 120)
+            self.tree.header().resizeSection(4, 120)
+            self.tree.header().resizeSection(5, 120)
 
         else:
             self.tree.setColumnCount(2)
@@ -184,6 +184,7 @@ class _TaskPanel_SlopedPlanes():
                 originList = []
                 pyWireList = pyFace.wires
                 numFace = pyFace.numFace
+                size = pyFace.size
                 # print '### numFace ', numFace
                 shell = compound.Shells[numFace]
                 numSlope += num
@@ -249,26 +250,40 @@ class _TaskPanel_SlopedPlanes():
 
                             doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                             doubleSpinBox.setMaximum(1000.00)
+                            doubleSpinBox.setMinimum(-1000.00)
                             doubleSpinBox.setValue(angle)
-                            doubleSpinBox.setFixedWidth(90)
+                            deg = u"\u00b0"
+                            doubleSpinBox.setSuffix(" "+deg)
                             self.tree.setItemWidget(item, 1, doubleSpinBox)
 
                             if self.advancedOptions.isChecked():
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setMaximum(2000*size)
+                                doubleSpinBox.setMinimum(-2000*size)
                                 doubleSpinBox.setValue(pyPlane.length)
+                                doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 2, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setMaximum(1000*size)
+                                doubleSpinBox.setMinimum(-1000*size)
                                 doubleSpinBox.setValue(pyPlane.overhang)
+                                doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 3, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setMaximum(1000*size)
+                                doubleSpinBox.setMinimum(-1000*size)
                                 doubleSpinBox.setValue(pyPlane.leftWidth)
+                                doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 4, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setMaximum(1000*size)
+                                doubleSpinBox.setMinimum(-1000*size)
                                 doubleSpinBox.setValue(pyPlane.rightWidth)
+                                doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 5, doubleSpinBox)
 
                 value = 0

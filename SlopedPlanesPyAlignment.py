@@ -511,6 +511,21 @@ class _PyAlignment(_Py):
 
                 chopList.extend([chopOneCopy, chopTwoCopy])
 
+                # dado que hemos eliminado el trimming de rangoChop con la alineacion
+                # los planos de rangoChop no deben cortar con las traseras
+                # y los planos entre traseras de cada chop. Esto es tambien un ahorro.
+
+                rang =\
+                    self.rang((pyTwo.numWire, pyTwo.rear[0]),
+                              (pyOne.numWire, pyOne.rear[0]))
+
+                for rr in rang + [pyTwo.rear[0]] + [pyOne.rear[0]]:
+                    pyPl = pyPlaneList[rr]
+                    for nn in rChop:
+                        pyP = pyPlaneList[nn]
+                        pyP.control.append(rr)
+                        pyPl.control.append(nn)
+
             lenChops = len(chops)
             num = lenChops / 2
             rest = lenChops % 2
@@ -874,7 +889,7 @@ class _PyAlignment(_Py):
                 [(pyPlane.numWire, pyPlane.numGeom),
                  (pyPl.numWire, pyPl.numGeom)]
 
-            if w1 == w2:
+            '''if w1 == w2:
                 pyWire = pyWireList[w1]
                 lenWire = len(pyWire.planes)
                 if g1 > g2:
@@ -887,8 +902,35 @@ class _PyAlignment(_Py):
                 rango.extend(ran)
 
             else:
-                rangoChop = []
+                rangoChop = []'''
+
+            rangoChop = self.rang((w1, g1), (w2, g2))
+
+            if rangoChop:
+                rango.extend(rangoChop)
 
             self.addValue('rango', rangoChop, 'backward')
 
         self.rangoConsolidate = rango
+
+    def rang(self, (w1, g1), (w2, g2)):
+
+        ''''''
+
+        pyWireList = _Py.pyFace.wires
+
+        if w1 == w2:
+            pyWire = pyWireList[w1]
+            lenWire = len(pyWire.planes)
+            if g1 > g2:
+                ranA = range(g1+1, lenWire)
+                ranB = range(0, g2)
+                ran = ranA + ranB
+            else:
+                ran = range(g1+1, g2)
+            rangoChop = ran
+
+        else:
+            rangoChop = []
+
+        return rangoChop
