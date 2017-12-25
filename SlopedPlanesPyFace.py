@@ -1182,23 +1182,39 @@ class _PyFace(_Py):
                         cutterList.append(chopTwo)
                         # print 'd', pyChopTwo.numGeom
 
+        print cutterList
+
         if cutterList:
 
             for pyWire in self.wires:
                 for pyPlane in pyWire.planes:
                     plane = pyPlane.shape
                     if plane:
-                        # print 'numGeom', pyPlane.numGeom
+                        print 'numGeom', pyPlane.numGeom
 
                         if pyPlane.choped or pyPlane.aligned:
                             cutterList.remove(plane)
 
-                        gS = pyPlane.geomShape
-                        plane = self.cutting(plane, cutterList, gS)
-                        pyPlane.shape = plane
+                            if pyPlane.choped:
+                                fList = []
+                                for ff in plane.Faces:
+                                    ff = ff.cut(cutterList, _Py.tolerance)
+                                    fList.append(ff.Faces[0])
 
-                        if pyPlane.choped or pyPlane.aligned:
+                                plane = Part.makeCompound(fList)
+                                pyPlane.shape = plane
+
+                            else:
+                                gS = pyPlane.geomShape
+                                plane = self.cutting(plane, cutterList, gS)
+                                pyPlane.shape = plane
+
                             cutterList.append(plane)
+
+                        else:
+                            gS = pyPlane.geomShape
+                            plane = self.cutting(plane, cutterList, gS)
+                            pyPlane.shape = plane
 
         # self.printControl('ending')
 

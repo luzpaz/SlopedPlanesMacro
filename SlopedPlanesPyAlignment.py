@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+import Part
 from SlopedPlanesPy import _Py
 
 
@@ -283,6 +284,17 @@ class _PyAlignment(_Py):
 
         rangoChop = self.rangoConsolidate
         rChop = self.rango
+
+        # recovers the trimming of rangoChop for bigPlane (no for plane)
+        # esto debe permitir obtener dos caras por chop en el alineado
+
+        for nG in rangoChop:
+            pyPl = pyPlaneList[nG]
+            if not pyPl.aligned:
+                pl = pyPl.bigShape
+                gS = pyPl.geomShape
+                pl = self.cutting(pl, [enormousShape], gS)
+                pyPl.bigShape = pl
 
         falsify = self.falsify
         simulatedChop = self.simulatedChop
@@ -731,7 +743,7 @@ class _PyAlignment(_Py):
 
                 cutterList.extend(cutList)
                 cutterList.extend(oneList)
-                cutterList.extend(twoList)
+                cutterList.extend(twoList)  # uhf!  # probar a quitar
 
                 if cutterList:
                     plane = pyPlane.shape
@@ -740,13 +752,11 @@ class _PyAlignment(_Py):
                     pyPlane.shape = plane
 
             # twin
-            # TODO varias caras por arista
 
-            num = -1
+            # oppPlane = pyTwo.shape
             for pyPlane in [pyOne, pyTwo]:
-                num += 1
 
-                # print '# pyPlane ', pyPlane.numGeom
+                print '# pyPlane ', pyPlane.numGeom
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
@@ -759,32 +769,61 @@ class _PyAlignment(_Py):
                     else:
                         cList = [enormousCont]
 
-                gS = [pyOne, pyTwo][num].geomShape
+                '''cList.append(oppPlane)
+                oppPlane = pyOne.shape.copy()'''
+
+                gS = pyPlane.geomShape
                 planeCopy = planeCopy.cut(cList, _Py.tolerance)
-                cutterList = []
+                print 'planeCopy.Faces ', planeCopy.Faces
+
+                #comp = Part.makeCompound(planeCopy.Faces)
+                #pyPlane.shape = comp
+
+                forward = pyPlane.forward
+                print forward
+                backward = pyPlane.backward
+                print backward
+
+                fList = []
                 for ff in planeCopy.Faces:
-                    section = ff.section([gS], _Py.tolerance)
-                    if not section.Edges:
-                        sect = ff.section([_Py.face], _Py.tolerance)
-                        if sect.Edges:
-                            cutterList.append(ff)
+                    print '0'
+                    if ff.section([gS], _Py.tolerance).Edges:
+                        print 'a'
+                        fList.insert(0, ff)
+                    elif ff.section([_Py.face], _Py.tolerance).Edges:
+                        print 'b'
+                        pass
+                    elif ff.section([forward, backward], _Py.tolerance).Edges:
+                        print 'c'
+                        pass
+                    else:
+                        print 'd'
+                        fList.append(ff)
 
-                if cutterList:
-                    plane = self.cutting(plane, cutterList, gS)
-                    pyPlane.shape = plane
+                print fList
+                comp = Part.makeCompound(fList)
+                pyPlane.shape = comp
 
-            shapeOne = pyOne.shape
-            shapeTwo = pyTwo.shape
+            shapeOne = pyOne.shape.copy()
+            shapeTwo = pyTwo.shape.copy()
 
-            cutterList = [shapeTwo]
-            gS = pyOne.geomShape
-            ff = self.cutting(shapeOne, cutterList, gS)
-            pyOne.shape = ff
+            fList = []
+            for ff in shapeOne.Faces:
+                ff = ff.cut([shapeTwo], _Py.tolerance)
+                fList.append(ff.Faces[0])
 
-            cutterList = [shapeOne]
-            gS = pyTwo.geomShape
-            ff = self.cutting(shapeTwo, cutterList, gS)
-            pyTwo.shape = ff
+            print 'fList ', fList
+            compound = Part.makeCompound(fList)
+            pyOne.shape = compound
+
+            fList = []
+            for ff in shapeTwo.Faces:
+                ff = ff.cut([shapeOne], _Py.tolerance)
+                fList.append(ff.Faces[0])
+
+            print 'fList ', fList
+            compound = Part.makeCompound(fList)
+            pyTwo.shape = compound
 
             chopList.append([pyOne, pyTwo])
 
@@ -854,24 +893,39 @@ class _PyAlignment(_Py):
                 base = pyBase.shape
                 base = base.cut(cutterList, _Py.tolerance)
 
-                if len(base.Faces) == 2:
-                    # print 'a'
+                number = 2
+                if len(shapeOne.Faces) > 1:
+                    number += 1
+                if len(shapeTwo.Faces) > 1:
+                    number += 1
+
+                if len(base.Faces) == number:
+                    print 'a'
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
                     pyBase.shape = base
 
                 else:
-                    # print 'b'
+                    print 'b'
 
                     gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
                     pyBase.shape = ff
 
                     if not pyTwo.virtualized:
-                        gS = pyTwo.geomShape
+                        fList = []
+                        for f in shapeTwo.Faces:
+                            f = f.cut([ff], _Py.tolerance)
+                            fList.append(f.Faces[0])
+
+                        print 'fList ', fList
+                        compound = Part.makeCompound(fList)
+                        pyTwo.shape = compound
+
+                        '''gS = pyTwo.geomShape
                         shapeTwo = self.cutting(shapeTwo, [ff], gS)
-                        pyTwo.shape = shapeTwo
+                        pyTwo.shape = shapeTwo'''
 
                     gS = pyCont.geomShape
                     ff = self.selectFace(base.Faces, gS)
@@ -886,9 +940,18 @@ class _PyAlignment(_Py):
                     pyCont.angle = pyBase.angle
 
                     if not pyOne.virtualized:
-                        gS = pyOne.geomShape
+                        fList = []
+                        for f in shapeOne.Faces:
+                            f = f.cut([ff], _Py.tolerance)
+                            fList.append(f.Faces[0])
+
+                        print 'fList ', fList
+                        compound = Part.makeCompound(fList)
+                        pyOne.shape = compound
+
+                        '''gS = pyOne.geomShape
                         shapeOne = self.cutting(shapeOne, [ff], gS)
-                        pyOne.shape = shapeOne
+                        pyOne.shape = shapeOne'''
 
                     pyBase = aligns[numChop]
 
