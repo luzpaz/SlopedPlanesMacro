@@ -81,34 +81,61 @@ class _SlopedPlanes(_Py):
         the complementary python objects (Pyth)
         and a list of faces produced by the Base sketch (faceList)'''
 
+        doc = "The sketch or Dwire in which the slopedPlanes is based"
         slopedPlanes.addProperty("App::PropertyLink", "Base",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = "Computes de complement of the orientation of the slopedPlanes"
         slopedPlanes.addProperty("App::PropertyBool", "Complement",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyBool", "Reverse",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyBool", "Mirror",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyBool", "Solid",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyBool", "Down",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyLength", "Up",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyLength", "Overhang",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyAngle", "Slope",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyFloat", "FactorWidth",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
+
+        doc = ""
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
-                                 "SlopedPlanes")
+                                 "SlopedPlanes", doc)
 
         self.State = True
 
