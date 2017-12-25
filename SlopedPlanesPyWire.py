@@ -384,5 +384,5 @@ class _PyWire(_Py):
                 # print pyPlane.choped
                 # print pyPlane.aligned
                 if pyPlane.shape:
-                    print '############### ordinaries ', pyPlane.numGeom
+                    # print '############### ordinaries ', pyPlane.numGeom
                     pyPlane.ordinaries(self)

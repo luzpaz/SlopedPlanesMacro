@@ -994,7 +994,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingChop()
 
-        self.printControl('virtualizing')
+        # self.printControl('virtualizing')
 
     def trimming(self):
 
@@ -1005,12 +1005,12 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.trimming()
 
-        self.printControl('trimming reflexs')
+        # self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()
 
-        self.printControl('trimming alignments')
+        # self.printControl('trimming alignments')
 
     def priorLater(self):
 
@@ -1020,12 +1020,12 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.priorLater()
 
-        self.printControl('priorLater wires')
+        # self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
 
-        self.printControl('priorLater alignments')
+        # self.printControl('priorLater alignments')
 
     def simulating(self):
 
@@ -1055,7 +1055,7 @@ class _PyFace(_Py):
             if pyWire.reflexs:
                 pyWire.reflexing()
 
-        self.printControl('reflexing')
+        # self.printControl('reflexing')
 
     def ordinaries(self):
 
@@ -1065,7 +1065,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.ordinaries()
 
-        self.printControl('ordinaries')
+        # self.printControl('ordinaries')
 
     def betweenWires(self):
 
@@ -1128,9 +1128,19 @@ class _PyFace(_Py):
                                     totalList.extend(pyAlign.simulatedAlignment)
 
                         if totalList:
-                            gS = pyPlane.geomShape
-                            plane = self.cutting(plane, totalList, gS)
-                            pyPlane.shape = plane
+
+                            if isinstance(plane, Part.Compound):
+                                fList = []
+                                for ff in plane.Faces:
+                                    ff = ff.cut(totalList, _Py.tolerance)
+                                    fList.append(ff.Faces[0])
+                                compound = Part.makeCompound(fList)
+                                pyPlane.shape = compound
+
+                            else:
+                                gS = pyPlane.geomShape
+                                plane = self.cutting(plane, totalList, gS)
+                                pyPlane.shape = plane
 
     def aligning(self):
 
@@ -1182,7 +1192,7 @@ class _PyFace(_Py):
                         cutterList.append(chopTwo)
                         # print 'd', pyChopTwo.numGeom
 
-        print cutterList
+        # print cutterList
 
         if cutterList:
 
@@ -1190,7 +1200,7 @@ class _PyFace(_Py):
                 for pyPlane in pyWire.planes:
                     plane = pyPlane.shape
                     if plane:
-                        print 'numGeom', pyPlane.numGeom
+                        # print 'numGeom', pyPlane.numGeom
 
                         if pyPlane.choped or pyPlane.aligned:
                             cutterList.remove(plane)
@@ -1227,21 +1237,21 @@ class _PyFace(_Py):
             for chop in pyAlign.chops:
                 numChop += 1
                 rearRan = rearRango[numChop]
-                print 'rearRan ', rearRan
+                # print 'rearRan ', rearRan
                 ran = rango[numChop]
-                print 'ran ', ran
+                # print 'ran ', ran
                 for nn in ran:
-                    print '### nn ', nn
+                    # print '### nn ', nn
                     pyPlane = pyPlaneList[nn]
                     gS = pyPlane.geomShape
                     for mm in rearRan:
                         if mm != nn:
-                            print '### mm ', mm
+                            # print '### mm ', mm
                             pyPl = pyPlaneList[mm]
                             pl = pyPl.shape
-                            print pl
+                            # print pl
                             plane = pyPlane.shape
-                            print plane
+                            # print plane
 
                             if pl and plane:
 

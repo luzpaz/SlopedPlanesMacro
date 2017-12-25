@@ -274,7 +274,7 @@ class _PyAlignment(_Py):
 
         # # solo los chops exteriores tienen rango y rangoChop
 
-        print '###### base ', (self.base.numWire, self.base.numGeom)
+        # print '###### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         numGeom = pyBase.numGeom
@@ -312,11 +312,11 @@ class _PyAlignment(_Py):
             enormShape = ffOne
 
             for pyPlane in chop:
-                print '### chop ', pyPlane.numGeom
+                # print '### chop ', pyPlane.numGeom
                 enShape = pyPlane.enormousShape
                 nGeom = pyPlane.numGeom
 
-                print 'rango ', pyPlane.rangoConsolidate
+                # print 'rango ', pyPlane.rangoConsolidate
                 for nG in pyPlane.rangoConsolidate:
                     if nG not in rangoChop:
 
@@ -324,17 +324,17 @@ class _PyAlignment(_Py):
 
                         if not pyPl.reflexed:
                             control = pyPl.control
-                            print '# nG ', nG
+                            # print '# nG ', nG
 
                             if falsify:
-                                print 'a'
+                                # print 'a'
                                 cList = [enormShape]
 
                             else:
-                                print 'b'
+                                # print 'b'
                                 cList = [enormShape]
                                 if not pyPl.numGeom in pyBase.rear:
-                                    print 'bb'
+                                    # print 'bb'
                                     if numGeom not in control:
                                         cList.append(enormousShape)
                                         control.append(numGeom)     # la base
@@ -753,10 +753,9 @@ class _PyAlignment(_Py):
 
             # twin
 
-            # oppPlane = pyTwo.shape
             for pyPlane in [pyOne, pyTwo]:
 
-                print '# pyPlane ', pyPlane.numGeom
+                # print '# pyPlane ', pyPlane.numGeom
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
@@ -769,38 +768,35 @@ class _PyAlignment(_Py):
                     else:
                         cList = [enormousCont]
 
-                '''cList.append(oppPlane)
-                oppPlane = pyOne.shape.copy()'''
-
                 gS = pyPlane.geomShape
                 planeCopy = planeCopy.cut(cList, _Py.tolerance)
-                print 'planeCopy.Faces ', planeCopy.Faces
+                # print 'planeCopy.Faces ', planeCopy.Faces
 
                 #comp = Part.makeCompound(planeCopy.Faces)
                 #pyPlane.shape = comp
 
                 forward = pyPlane.forward
-                print forward
+                # print forward
                 backward = pyPlane.backward
-                print backward
+                # print backward
 
                 fList = []
                 for ff in planeCopy.Faces:
-                    print '0'
+                    # print '0'
                     if ff.section([gS], _Py.tolerance).Edges:
-                        print 'a'
+                        # print 'a'
                         fList.insert(0, ff)
                     elif ff.section([_Py.face], _Py.tolerance).Edges:
-                        print 'b'
+                        # print 'b'
                         pass
                     elif ff.section([forward, backward], _Py.tolerance).Edges:
-                        print 'c'
+                        # print 'c'
                         pass
                     else:
-                        print 'd'
+                        # print 'd'
                         fList.append(ff)
 
-                print fList
+                # print fList
                 comp = Part.makeCompound(fList)
                 pyPlane.shape = comp
 
@@ -816,7 +812,7 @@ class _PyAlignment(_Py):
                 ff = ff.cut([shapeTwo], _Py.tolerance)
                 fList.append(ff.Faces[0])
 
-            print 'fList ', fList
+            # print 'fList ', fList
             compound = Part.makeCompound(fList)
             pyOne.shape = compound
 
@@ -829,7 +825,7 @@ class _PyAlignment(_Py):
                 ff = ff.cut([shapeOne], _Py.tolerance)
                 fList.append(ff.Faces[0])
 
-            print 'fList ', fList
+            # print 'fList ', fList
             compound = Part.makeCompound(fList)
             pyTwo.shape = compound
 
@@ -908,14 +904,14 @@ class _PyAlignment(_Py):
                     number += 1
 
                 if len(base.Faces) == number:
-                    print 'a'
+                    # print 'a'
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
                     pyBase.shape = base
 
                 else:
-                    print 'b'
+                    # print 'b'
 
                     gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
@@ -927,7 +923,7 @@ class _PyAlignment(_Py):
                             f = f.cut([ff], _Py.tolerance)
                             fList.append(f.Faces[0])
 
-                        print 'fList ', fList
+                        # print 'fList ', fList
                         compound = Part.makeCompound(fList)
                         pyTwo.shape = compound
 
@@ -949,7 +945,7 @@ class _PyAlignment(_Py):
                             f = f.cut([ff], _Py.tolerance)
                             fList.append(f.Faces[0])
 
-                        print 'fList ', fList
+                        # print 'fList ', fList
                         compound = Part.makeCompound(fList)
                         pyOne.shape = compound
 
