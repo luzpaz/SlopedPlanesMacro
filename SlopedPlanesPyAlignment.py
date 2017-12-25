@@ -808,7 +808,11 @@ class _PyAlignment(_Py):
             shapeTwo = pyTwo.shape.copy()
 
             fList = []
-            for ff in shapeOne.Faces:
+            gS = pyOne.geomShape
+            ff = self.cutting(shapeOne.Faces[0], [shapeTwo], gS)
+            fList.append(ff)
+
+            for ff in shapeOne.Faces[1:]:
                 ff = ff.cut([shapeTwo], _Py.tolerance)
                 fList.append(ff.Faces[0])
 
@@ -817,7 +821,11 @@ class _PyAlignment(_Py):
             pyOne.shape = compound
 
             fList = []
-            for ff in shapeTwo.Faces:
+            gS = pyTwo.geomShape
+            ff = self.cutting(shapeTwo.Faces[0], [shapeOne], gS)
+            fList.append(ff)
+
+            for ff in shapeTwo.Faces[1:]:
                 ff = ff.cut([shapeOne], _Py.tolerance)
                 fList.append(ff.Faces[0])
 
@@ -923,10 +931,6 @@ class _PyAlignment(_Py):
                         compound = Part.makeCompound(fList)
                         pyTwo.shape = compound
 
-                        '''gS = pyTwo.geomShape
-                        shapeTwo = self.cutting(shapeTwo, [ff], gS)
-                        pyTwo.shape = shapeTwo'''
-
                     gS = pyCont.geomShape
                     ff = self.selectFace(base.Faces, gS)
                     pyCont.shape = ff
@@ -948,10 +952,6 @@ class _PyAlignment(_Py):
                         print 'fList ', fList
                         compound = Part.makeCompound(fList)
                         pyOne.shape = compound
-
-                        '''gS = pyOne.geomShape
-                        shapeOne = self.cutting(shapeOne, [ff], gS)
-                        pyOne.shape = shapeOne'''
 
                     pyBase = aligns[numChop]
 
