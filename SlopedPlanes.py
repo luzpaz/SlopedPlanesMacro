@@ -357,6 +357,8 @@ class _SlopedPlanes(_Py):
                         pyPlane.geomAligned = gS
                         geomShapeWire.append(gS)
 
+                        pyPlane.control = [numGeom]
+
                     pyWire.planes = pyPlaneListNew
                     pyWire.shapeGeom = geomShapeWire
                     geomShapeFace.extend(geomShapeWire)
@@ -373,6 +375,7 @@ class _SlopedPlanes(_Py):
                 for pyWire in pyFace.wires:
                     for pyPlane in pyWire.planes:
                         pyPlane.geomAligned = pyPlane.geomShape
+                        pyPlane.control = [pyPlane.numGeom]
 
             pyFace.parsing()        #
 

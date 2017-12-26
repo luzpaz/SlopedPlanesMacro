@@ -503,15 +503,19 @@ class _PyPlane(_Py):
         '''
 
         numGeom = self.numGeom
+        print '###### planning ', numGeom
+        print self.leftWidth
+        print self.rightWidth
+        print self.length
 
         if self.seedShape:
-            # print 'seed'
+            print 'seed'
 
             self.shape = self.seedShape.copy()
             self.bigShape = self.seedBigShape.copy()
 
         else:
-            # print 'no seed'
+            print 'no seed'
 
             coordinates = pyWire.coordinates
             geom = self.deGeom()
@@ -529,6 +533,10 @@ class _PyPlane(_Py):
             geomCopy = geom.copy()
             geomCopy.translate(-1*self.overhang*direction)
 
+            print 'geom ', geom
+            print 'geomCopy ', geomCopy
+
+            print '### plane'
             scale = 1
             plane =\
                 self.doPlane(direction, geomCopy, firstParam,
@@ -537,9 +545,14 @@ class _PyPlane(_Py):
             self.seedShape = plane.copy()
 
             geomCopy = geom.copy()
+            print -1*_Py.size*direction
             geomCopy.translate(-1*_Py.size*direction)
 
-            scale = 10
+            print 'geom ', geom
+            print 'geomCopy ', geomCopy
+
+            print '### bigPlane'
+            scale = 100
             bigPlane =\
                 self.doPlane(direction, geomCopy, firstParam,
                              lastParam, scale)
@@ -548,7 +561,8 @@ class _PyPlane(_Py):
 
             if self.reflexed:
 
-                scale = 100
+                print '### enormousPlane'
+                scale = 10000
                 enormousPlane =\
                     self.doPlane(direction, geomCopy, firstParam,
                                  lastParam, scale)
@@ -572,18 +586,27 @@ class _PyPlane(_Py):
         upScale = self.length * scale
 
         if not upScale:
+            print 'up'
             upScale = 2 * size * scale
 
         if scale > 1:
 
             if self.leftWidth < width:
+                print 'left'
                 leftScale = width * scale
 
             if self.rightWidth < width:
+                print 'right'
                 rightScale = width * scale
 
             if self.length < length:
+                print 'length'
                 upScale = length * scale
+
+        print 'leftScale ', leftScale
+        print 'rightSclae ', rightScale
+        print 'upScale ', upScale
+
 
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola)):
@@ -605,6 +628,7 @@ class _PyPlane(_Py):
             pass
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
+        print 'extendGeom ', extendGeom
         plane = extendGeom.toShape().extrude(direction*upScale)
 
         return plane

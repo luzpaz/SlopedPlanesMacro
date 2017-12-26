@@ -785,7 +785,8 @@ class _PyAlignment(_Py):
                         ff = ff.cut(cList, _Py.tolerance)
                         for f in ff.Faces:
                             # print 'bb'
-                            if not f.section([forward, backward], _Py.tolerance).Edges:
+                            if not f.section([forward, backward],
+                                             _Py.tolerance).Edges:
                                 # print 'bbb'
                                 fList.append(f)
                     else:

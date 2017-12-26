@@ -215,6 +215,7 @@ class _PyReflex(_Py):
            (numWire > 0 and angle < 90)):
             # print 'simulated'
             pyR.shape = pyR.simulatedShape
+            # TODO perhaps this could be more elaborated
 
         pyPlaneList = pyWire.planes
 
