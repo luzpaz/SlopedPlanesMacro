@@ -680,6 +680,8 @@ class _PyAlignment(_Py):
 
             rangoChop = rangoChopList[numChop]
 
+            # TODO solo exterior wire
+
             nW = pyOne.numWire
             pyW = pyWireList[nW]
             pyPlaneList = pyW.planes
@@ -693,38 +695,15 @@ class _PyAlignment(_Py):
                         cutList.append(pl)
                         # print 'rangoChop ', nn
 
-            # TODO Refact
-
-            oneList = []
-            rangoOne = pyOne.rangoConsolidate
-            for nn in rangoOne:
-                pyPl = pyPlaneList[nn]
-                if not pyPl.choped:
-                    if not pyPl.aligned:
-                        rangoPlane = pyPl.shape
-                        oneList.append(rangoPlane)
-                        # print 'rango ', nn
-
-            nW = pyTwo.numWire
-            pyW = pyWireList[nW]
-            pyPlaneList = pyW.planes
-
-            twoList = []
-            rangoTwo = pyTwo.rangoConsolidate
-            for nn in rangoTwo:
-                pyPl = pyPlaneList[nn]
-                if not pyPl.choped:
-                    if not pyPl.aligned:
-                        rangoPlane = pyPl.shape
-                        twoList.append(rangoPlane)
-                        # print 'rango ', nn
-
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
                 # print '# chop ', pyPlane.numGeom
 
                 cutterList = []
+                cutterList.extend(cutList)
+
+                # TODO solo exterior wire
 
                 nW = pyPlane.numWire
                 pyW = pyWireList[nW]
@@ -741,9 +720,16 @@ class _PyAlignment(_Py):
                             cutterList.append(rearPlane)
                             # print 'rearPlane ', nG
 
-                cutterList.extend(cutList)
-                cutterList.extend(oneList)
-                cutterList.extend(twoList)  # uhf!  # probar a quitar
+                # introduces the rango
+
+                rango = pyPlane.rangoConsolidate
+                for nn in rango:
+                    pyPl = pyPlaneList[nn]
+                    if not pyPl.choped:
+                        if not pyPl.aligned:
+                            rangoPlane = pyPl.shape
+                            cutterList.append(rangoPlane)
+                            # print 'rango ', nn
 
                 if cutterList:
                     plane = pyPlane.shape
@@ -772,31 +758,41 @@ class _PyAlignment(_Py):
                 planeCopy = planeCopy.cut(cList, _Py.tolerance)
                 # print 'planeCopy.Faces ', planeCopy.Faces
 
-                #comp = Part.makeCompound(planeCopy.Faces)
-                #pyPlane.shape = comp
-
-                forward = pyPlane.forward
-                # print forward
-                backward = pyPlane.backward
-                # print backward
-
                 fList = []
                 for ff in planeCopy.Faces:
                     # print '0'
                     if ff.section([gS], _Py.tolerance).Edges:
                         # print 'a'
-                        fList.insert(0, ff)
+                        pass
                     elif ff.section([_Py.face], _Py.tolerance).Edges:
                         # print 'b'
-                        pass
-                    elif ff.section([forward, backward], _Py.tolerance).Edges:
-                        # print 'c'
-                        pass
-                    else:
-                        # print 'd'
                         fList.append(ff)
 
-                # print fList
+                plane = plane.cut(fList, _Py.tolerance)
+                # print 'plane.Faces ', plane.Faces
+
+                forward = pyPlane.forward
+                backward = pyPlane.backward
+
+                fList = []
+                for ff in plane.Faces:
+                    # print '1'
+                    if ff.section([gS], _Py.tolerance).Edges:
+                        # print 'a'
+                        fList.insert(0, ff)
+                    elif ff.section([forward, backward], _Py.tolerance).Edges:
+                        # print 'b'
+                        ff = ff.cut(cList, _Py.tolerance)
+                        for f in ff.Faces:
+                            # print 'bb'
+                            if not f.section([forward, backward], _Py.tolerance).Edges:
+                                # print 'bbb'
+                                fList.append(f)
+                    else:
+                        # print 'c'
+                        fList.append(ff)
+
+                # print 'fList ', fList
                 comp = Part.makeCompound(fList)
                 pyPlane.shape = comp
 

@@ -81,15 +81,15 @@ class _SlopedPlanes(_Py):
         the complementary python objects (Pyth)
         and a list of faces produced by the Base sketch (faceList)'''
 
-        doc = "The sketch or Dwire in which the slopedPlanes is based"
+        doc = "The sketch or Dwire in which the SlopedPlanes is based"
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "SlopedPlanes", doc)
 
-        doc = "Computes de complement of the orientation of the slopedPlanes"
+        doc = "Computes de complement of the orientation of the SlopedPlanes"
         slopedPlanes.addProperty("App::PropertyBool", "Complement",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Reverses the direction of extrusion of the SlopedPlanes"
         slopedPlanes.addProperty("App::PropertyBool", "Reverse",
                                  "SlopedPlanes", doc)
 
