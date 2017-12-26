@@ -391,22 +391,6 @@ class _PyFace(_Py):
                                 self.findRear(pyWire, pyPlane, 'backward')
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
 
-                                backward = pyPlane.backward
-                                section = backward.section(shapeGeomFace,
-                                                           _Py.tolerance)
-
-                                if section.Edges:
-                                    print 'edges'
-
-                                    edge = section.Edges[0]
-                                    edgeStart = edge.firstVertex(True).Point
-                                    point = self.roundVector(edgeStart)
-                                    index = pyWire.coordinates.index(point)
-                                    nGeom = self.sliceIndex(index-1, lenWire)
-                                    pyPl = pyPlaneList[index]
-                                    pyPl.control.append(numGeom)
-                                    pyPlane.control.append(index)
-
                             ref = False
 
                         if corner == 'reflex' or numWire > 0:
