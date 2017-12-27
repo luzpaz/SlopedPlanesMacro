@@ -155,57 +155,53 @@ class _PyWire(_Py):
         The reflex corners act like a dam
         blocking the progress of others planes'''
 
-        # print '###### trimming reflexs numWire ', self.numWire
+        print '###### trimming reflexs numWire ', self.numWire
 
         for pyReflex in self.reflexs:
             num = -1
             for pyPlane in pyReflex.planes:
                 num += 1
-                # print '###### cutter ', pyPlane.numGeom
+                print '###### cutter ', pyPlane.numGeom
+
+                pyOppPlane = pyReflex.planes[num-1]
 
                 angle = pyPlane.angle
                 numWire = pyPlane.numWire
                 if ((numWire == 0 and angle > 90) or
                    (numWire > 0 and angle < 90)):
-                    return
+                    return    # esto no lo entiendo y debe quedar explicado. Ver processReflex
 
                 numGeom = pyPlane.numGeom
-                backward = pyPlane.backward
 
-                rangoConsolidate = pyPlane.rangoConsolidate
-                # print 'rangoConsolidate ', rangoConsolidate
+                rango = pyPlane.rangoConsolidate
+                print 'rango ', rango
+                oppRango = pyOppPlane.rangoConsolidate
+                print 'oppRango ', oppRango
                 enormousShape = pyPlane.enormousShape
                 pyPlaneList = self.planes
-                for nG in rangoConsolidate:
-                    # print '### cutted ', nG
-                    pyPl = pyPlaneList[nG]
+                for nG in rango:
+                    if nG not in oppRango:
+                        pyPl = pyPlaneList[nG]
 
-                    # TODO pyPl numWire and angle
+                        # TODO pyPl numWire and angle
 
-                    if numGeom not in pyPl.control:
+                        if numGeom not in pyPl.control:
 
-                        section = backward.section([pyPl.geomShape],
-                                                   _Py.tolerance)
-
-                        if section.Edges:
-                            pyPl.control.append(numGeom)
-                            pyPlane.control.append(nG)
-
-                        else:
+                            print '### cutted ', nG
 
                             if not pyPl.reflexed:
-                                # print 'a'
+                                print 'a'
 
                                 pyPl.trimming(enormousShape)
                                 pyPl.addValue('control', pyPlane.numGeom)
 
                             elif pyPl.aligned:
-                                # print 'b'
+                                print 'b'
 
                                 pass
 
                             else:
-                                # print 'c'
+                                print 'c'
 
                                 if len(pyPlane.rango) == 1:
                                     forward = pyPlane.forward
