@@ -600,7 +600,7 @@ class _PyReflex(_Py):
 
         print 'aList ', aList, len(aList)
 
-        comp = Part.makeCompound(cList)
+        # comp = Part.makeCompound(cList)
 
         if reflex.Faces:
             reflex = reflex.cut([pyOppR.enormousShape], _Py.tolerance)
@@ -609,18 +609,18 @@ class _PyReflex(_Py):
         bList = []
         for ff in reflex.Faces:
             print 'a', ff.Area
-            section = ff.section([comp], _Py.tolerance)
+            '''section = ff.section([comp], _Py.tolerance)
             # ==
-            if len(section.Edges) >= len(ff.Edges):
-                print 'b'
-                section = ff.section(aList, _Py.tolerance)
-                if not section.Edges:
-                    print 'c'
-                    common = ff.common([pyR.simulatedShape], _Py.tolerance)
-                    if not common.Faces:
-                        print 'd'
-                        bList.append(ff)
-                        # break
+            if len(section.Edges) >= len(ff.Edges):'''
+            print 'b'
+            section = ff.section(aList, _Py.tolerance)
+            if not section.Edges:
+                print 'c'
+                common = ff.common([pyR.simulatedShape], _Py.tolerance)
+                if not common.Faces:
+                    print 'd'
+                    bList.append(ff)
+                    # break
 
         print 'bList ', bList
 
