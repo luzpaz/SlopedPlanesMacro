@@ -441,12 +441,13 @@ class _PyReflex(_Py):
                 print '4'
                 # pl = pyPl.simulatedShape.copy()
 
-                if forward.section([gS], _Py.tolerance).Vertexes:
+                '''if forward.section([gS], _Py.tolerance).Vertexes:
                     print '41'
                     pass
-                    # pl = pyPl.simulatedShape.copy()
+                    # pl = pyPl.simulatedShape.copy()'''
 
-                elif forward.section([fo], _Py.tolerance).Vertexes:
+                #elif forward.section([fo], _Py.tolerance).Vertexes:
+                if forward.section([fo], _Py.tolerance).Vertexes:
                     print '42'
 
                     if numGeom in rango:

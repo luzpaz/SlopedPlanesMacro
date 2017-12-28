@@ -204,7 +204,6 @@ class _PyWire(_Py):
 
                             else:
                                 # print 'c'
-                                # esto no lo entiendo. Tiene que quedar mejor explicado
 
                                 if len(pyPlane.rango) == 1:
                                     forward = pyPlane.forward
@@ -214,7 +213,6 @@ class _PyWire(_Py):
                                     else:
                                         forward = pyPlane.backward
 
-                                # forward = pyPlane.forward  # ESTO SOBRA
                                 gS = pyPl.geomShape
                                 forw = pyPl.forward
 
@@ -226,9 +224,13 @@ class _PyWire(_Py):
                                    len(section.Vertexes) == 1):
                                     # print 'cc'
 
-                                    procc = True
+                                    pyPl.trimming(enormousShape)
+                                    pyPl.addValue('control', numGeom)
 
-                                    nWire = pyPl.numWire
+                                    '''procc = True
+
+                                    nWire = numWire
+                                    # nWire = pyPl.numWire
                                     nGeom = pyPl.numGeom
                                     pyRList =\
                                         self.selectAllReflex(nWire, nGeom)
@@ -255,7 +257,7 @@ class _PyWire(_Py):
                                     if procc:
                                         # print 'procc'
                                         pyPl.trimming(enormousShape)
-                                        pyPl.addValue('control', numGeom)
+                                        pyPl.addValue('control', numGeom)'''
 
     def priorLater(self):
 
@@ -398,7 +400,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
 
-        self.printControl('preProcess')
+        # self.printControl('preProcess')
 
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
@@ -406,7 +408,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
 
-        self.printControl('solveReflex')
+        # self.printControl('solveReflex')
 
         for pyReflex in self.reflexs:
             pyReflex.postProcessOne(self)
