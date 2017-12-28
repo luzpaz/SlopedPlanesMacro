@@ -224,9 +224,6 @@ class _PyWire(_Py):
                                    len(section.Vertexes) == 1):
                                     # print 'cc'
 
-                                    '''pyPl.trimming(enormousShape)
-                                    pyPl.addValue('control', numGeom)'''
-
                                     procc = True
 
                                     nWire = numWire

@@ -584,25 +584,26 @@ class _PyReflex(_Py):
             reflex = reflex.cut([pyOppR.enormousShape], _Py.tolerance)
             # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
+        corner = [planeList[num].shape for num in pyR.rangoConsolidate]
+
         bList = []
         for ff in reflex.Faces:
             # print 'a'
-
-            corner = [planeList[num].shape for num in pyR.rangoConsolidate]
-
-            # print 'b'
             section = ff.section(aList, _Py.tolerance)
             if not section.Edges:
+                # print 'b'
                 section = ff.section(cutterList, _Py.tolerance)
                 if section.Edges:
+                    # print 'c'
                     section = ff.section(corner, _Py.tolerance)
                     if section.Edges:
+                        # print 'd'
                         section = ff.section([pyR.forward], _Py.tolerance)
                         if not section.Edges:
-                            # print 'c'
+                            # print 'e'
                             section = ff.section([pyR.backward], _Py.tolerance)
                             if not section.Edges:
-                                # print 'd'
+                                # print 'f'
                                 bList.append(ff)
 
         # print 'bList ', bList
@@ -682,9 +683,7 @@ class _PyReflex(_Py):
 
         [pyR, pyOppR] = self.planes
 
-        # if len(pyR.shape.Faces) == 1 and len(pyOppR.shape.Faces) == 1:
-
-            # print(pyR.numGeom, pyOppR.numGeom)
+        # print(pyR.numGeom, pyOppR.numGeom)
 
         plane = pyR.shape.copy()
         oppPlane = pyOppR.shape.copy()
