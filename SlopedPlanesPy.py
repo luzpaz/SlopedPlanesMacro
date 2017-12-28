@@ -168,6 +168,22 @@ class _Py(object):
 
         return pyRList
 
+    def selectReflex(self, numWire, numGeom, nGeom):
+
+        '''selectReflex(self, numWire, numGeom, nGeom)
+        select an unique reflex corner in the wire numWire,
+        which envolves the planes numGeom and nGeom,
+        and return it, or None
+        used in PyWire.'''
+
+        for pyReflex in _Py.pyFace.wires[numWire].reflexs:
+            [pyPlane, pyPl] = pyReflex.planes
+            [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
+            if [nn, mm] == [numGeom, nGeom] or [nn, mm] == [nGeom, numGeom]:
+                return pyReflex
+
+        return None
+
     def selectPlane(self, numWire, numGeom):
 
         '''selectPlane(self, numWire, numGeom)

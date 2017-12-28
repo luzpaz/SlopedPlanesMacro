@@ -346,6 +346,8 @@ class _SlopedPlanes(_Py):
                                 pyPlane.choped = False
                                 pyPlane.reflexed = False
                                 pyPlane.seedShape = None
+                                #pyPlane.prior = None
+                                #pyPlane.later = None
                         except IndexError:
                             # print '2'
                             pyPlane = _PyPlane(numWire, numGeom)
@@ -393,11 +395,11 @@ class _SlopedPlanes(_Py):
 
             pyFace.reflexing()      #
 
-            pyFace.ordinaries()     #
+            '''pyFace.ordinaries()     #
 
             pyFace.betweenWires()   #
 
-            pyFace.aligning()       #
+            pyFace.aligning()       #'''
 
         if onChanged:
             # print 'AAA'

@@ -69,6 +69,8 @@ class _PyPlane(_Py):
         self.control = [numGeom]
         self.seedShape = None
         self.seedBigShape = None
+        #self.prior = None
+        #self.later = None
 
     @property
     def numWire(self):
@@ -496,6 +498,34 @@ class _PyPlane(_Py):
         ''''''
 
         self._seedBigShape = seedBigShape
+
+    '''@property
+    def prior(self):
+
+        ''''''
+
+        return self._prior
+
+    @prior.setter
+    def prior(self, prior):
+
+        ''''''
+
+        self._prior = prior
+
+    @property
+    def later(self):
+
+        ''''''
+
+        return self._later
+
+    @later.setter
+    def later(self, later):
+
+        ''''''
+
+        self._later = later'''
 
     def planning(self, pyWire):
 
