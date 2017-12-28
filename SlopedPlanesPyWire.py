@@ -224,10 +224,10 @@ class _PyWire(_Py):
                                    len(section.Vertexes) == 1):
                                     # print 'cc'
 
-                                    pyPl.trimming(enormousShape)
-                                    pyPl.addValue('control', numGeom)
+                                    '''pyPl.trimming(enormousShape)
+                                    pyPl.addValue('control', numGeom)'''
 
-                                    '''procc = True
+                                    procc = True
 
                                     nWire = numWire
                                     # nWire = pyPl.numWire
@@ -257,7 +257,7 @@ class _PyWire(_Py):
                                     if procc:
                                         # print 'procc'
                                         pyPl.trimming(enormousShape)
-                                        pyPl.addValue('control', numGeom)'''
+                                        pyPl.addValue('control', numGeom)
 
     def priorLater(self):
 
@@ -318,10 +318,10 @@ class _PyWire(_Py):
                         cutterList.append(bigPrior)
                         pyPlane.addValue('control', prior)
 
-                    else:   # prueba de sucesivos
-                        pyR = self.selectReflex(numWire, numGeom, prior)
-                        if not pyR:
-                            # reflex susecivos
+                    else:
+                        pyRPrior = self.selectReflex(numWire, numGeom, prior)
+                        if not pyRPrior:
+                            # print 'reflex susecivos'
                             bPrior = bigPrior.copy()
                             priorGs = pyPrior.geomShape
                             enormous = pyLater.enormousShape
@@ -334,10 +334,10 @@ class _PyWire(_Py):
                         cutterList.append(bigLater)
                         pyPlane.addValue('control', later)
 
-                    else:   # prueba de sucesivos
-                        pyR = self.selectReflex(numWire, numGeom, later)
-                        if not pyR:
-                            # reflex sucesivos
+                    else:
+                        pyRLater = self.selectReflex(numWire, numGeom, later)
+                        if not pyRLater:
+                            # print 'reflex sucesivos'
                             bLater = bigLater.copy()
                             laterGs = pyLater.geomShape
                             enormous = pyPrior.enormousShape
@@ -356,28 +356,17 @@ class _PyWire(_Py):
                     plane = self.cutting(plane, cutterList, gS)
                     pyPlane.shape = plane
 
-                '''LO DESACTIVO PARA HACER UNA PRUEBA CON REFLEX SUCESIVOS
-
-                # adelanta el simulado de reflex, ya que aquí est disponible pyPrior y pyLater
-
                 if pyPlane.reflexed:
-                    if pyPrior.reflexed:   # las escaleras (reflex sucesivos) ¿y la C?
-                        # print '11'
-                        try:
-                            pl = pyPlane.simulatedShape.copy()
-                        except AttributeError:
-                            pl = pyPlane.shape.copy()
-                        # tal vez con enormousPrior
-                        pl = self.cutting(pl, [bigPrior], gS)
-                        pyPlane.simulatedShape = pl
+
+                    if pyPrior.reflexed:   # reflex sucesivos
+                        if not pyRPrior:
+                            enormous = pyLater.enormousShape
+                            pyPrior.simulating(enormous)
+
                     if pyLater.reflexed:
-                        # print '22'
-                        try:
-                            pl = pyPlane.simulatedShape.copy()
-                        except AttributeError:
-                            pl = pyPlane.shape.copy()
-                        pl = self.cutting(pl, [bigLater], gS)
-                        pyPlane.simulatedShape = pl'''
+                        if not pyRLater:
+                            enormous = pyPrior.enormousShape
+                            pyLater.simulating(enormous)
 
     def simulating(self):
 

@@ -299,7 +299,7 @@ class _PyFace(_Py):
         resetFace = self.reset
 
         if not resetFace and not self.alignments:
-            self.printSummary()
+            # self.printSummary()
             return
 
         pyWireList = self.wires
@@ -577,8 +577,7 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-        self.printSummary()
-        self.printControl('parsing')
+        # self.printSummary()
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -1006,7 +1005,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.trimming()
 
-        self.printControl('trimming reflexs')
+        # self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()
@@ -1021,7 +1020,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.priorLater()
 
-        self.printControl('priorLater wires')
+        # self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
