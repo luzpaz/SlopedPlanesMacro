@@ -271,7 +271,7 @@ class _PyAlignment(_Py):
         of the planes in its front and laterals'''
 
         # # los chops exteriores tienen rango y rangoChop
-        # # los chops interiores  no tienen rango
+        # # los chops interiores no tienen rango y si tienen rangoChop
 
         # print '###### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
@@ -968,29 +968,12 @@ class _PyAlignment(_Py):
         '''ranggingChop(self)
         '''
 
-        pyWireList = _Py.pyFace.wires
-
         rango = []
 
         for [pyPlane, pyPl] in self.chops:
             [(w1, g1), (w2, g2)] =\
                 [(pyPlane.numWire, pyPlane.numGeom),
                  (pyPl.numWire, pyPl.numGeom)]
-
-            '''if w1 == w2:
-                pyWire = pyWireList[w1]
-                lenWire = len(pyWire.planes)
-                if g1 > g2:
-                    ranA = range(g1+1, lenWire)
-                    ranB = range(0, g2)
-                    ran = ranA + ranB
-                else:
-                    ran = range(g1+1, g2)
-                rangoChop = ran
-                rango.extend(ran)
-
-            else:
-                rangoChop = []'''
 
             rangoChop = self.rang((w1, g1), (w2, g2))
 

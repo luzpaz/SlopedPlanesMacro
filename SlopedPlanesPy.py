@@ -272,6 +272,7 @@ class _Py(object):
         for pyWire in _Py.pyFace.wires:
 
             print '****** numWire ', pyWire.numWire
+            print '*** coordinates ', pyWire.coordinates
             print '*** reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
 
@@ -445,11 +446,10 @@ class _Py(object):
                             for vector in orientPoint]
         return orientRoundPoint
 
-    def facePoints(self, face):
+    def facePoints(self, face, normal):
 
         ''''''
 
-        normal = self.faceNormal(face)
         wire = face.OuterWire
         orientPoint = self.orientedPoints(wire, normal)
         return orientPoint
@@ -458,9 +458,17 @@ class _Py(object):
 
         ''''''
 
-        coordinates = self.facePoints(face)
-        index = self.lowerLeftPoint(coordinates)
+        # print '_Py.normal ', _Py.normal
+        normal = self.faceNormal(face)
+        # print 'faceData normal ', normal
+        coordinates = self.facePoints(face, normal)
+        if normal == _Py.normal:
+            index = self.lowerLeftPoint(coordinates)
+        else:
+            index = self.upperLeftPoint(coordinates)
         coordinates = coordinates[index:] + coordinates[:index]
+
+        # print coordinates
 
         return coordinates
 

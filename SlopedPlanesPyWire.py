@@ -397,12 +397,12 @@ class _PyWire(_Py):
         self.printControl('solveReflex')
 
         for pyReflex in self.reflexs:
-            pyReflex.postProcessOne(self)
+            pyReflex.postProcessOne(self)       # quitar
 
         # self.printControl('postProcessOne')
 
         for pyReflex in self.reflexs:
-            pyReflex.postProcessThree(self)
+            pyReflex.postProcessThree(self)     # quitar
 
         # self.printControl('postProcessThree')
 
