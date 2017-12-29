@@ -607,7 +607,6 @@ class _PyPlane(_Py):
         # print 'rightSclae ', rightScale
         # print 'upScale ', upScale
 
-
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola)):
             startParam = firstParam - leftScale

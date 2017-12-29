@@ -233,13 +233,17 @@ class _Py(object):
         corner = None
         if cross != origin:
             cross.normalize()
-            if cross == _Py.normal:
-                if numWire == 0:
+
+            if numWire == 0:
+
+                if cross == _Py.normal:
                     corner = 'convex'
                 else:
                     corner = 'reflex'
+
             else:
-                if numWire == 0:
+
+                if cross == _Py.normal:
                     corner = 'reflex'
                 else:
                     corner = 'convex'
@@ -412,7 +416,7 @@ class _Py(object):
         pointList.pop()
         return geometryList
 
-    def orientedVertixes(self, wire):
+    def orientedVertixes(self, wire, normal):
 
         ''''''
 
@@ -424,7 +428,6 @@ class _Py(object):
         wire = Part.Wire(edges)
         face = Part.makeFace(wire, "Part::FaceMakerSimple")
         norm = self.faceNormal(face)
-        normal = _Py.normal
 
         if normal == norm.negative():
             orderVert.reverse()
@@ -432,11 +435,11 @@ class _Py(object):
 
         return orientVert
 
-    def orientedPoints(self, wire):
+    def orientedPoints(self, wire, normal):
 
         ''''''
 
-        orientVert = self.orientedVertixes(wire)
+        orientVert = self.orientedVertixes(wire, normal)
         orientPoint = [vert.Point for vert in orientVert]
         orientRoundPoint = [self.roundVector(vector)
                             for vector in orientPoint]
@@ -446,8 +449,9 @@ class _Py(object):
 
         ''''''
 
+        normal = self.faceNormal(face)
         wire = face.OuterWire
-        orientPoint = self.orientedPoints(wire)
+        orientPoint = self.orientedPoints(wire, normal)
         return orientPoint
 
     def faceDatas(self, face):

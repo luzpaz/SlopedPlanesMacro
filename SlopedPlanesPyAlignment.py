@@ -208,9 +208,7 @@ class _PyAlignment(_Py):
     def virtualizing(self):
 
         '''virtualizing(self)
-        virtualizes the chops and
-        the base of falsify alignnments
-        '''
+        virtualizes the chops and the base of falsify alignnments'''
 
         virtualizedChops = []
         for [pyChopOne, pyChopTwo] in self.chops:
@@ -272,21 +270,20 @@ class _PyAlignment(_Py):
         The alignment blocks the progress
         of the planes in its front and laterals'''
 
-        # # solo los chops exteriores tienen rango y rangoChop
+        # # los chops exteriores tienen rango y rangoChop
+        # # los chops interiores  no tienen rango
 
         # print '###### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         numGeom = pyBase.numGeom
         enormousShape = pyBase.enormousShape
+
         pyWire = pyWireList[0]
         pyPlaneList = pyWire.planes
 
         rangoChop = self.rangoConsolidate
         rChop = self.rango
-
-        # recovers the trimming of rangoChop for bigPlane (no for plane)
-        # esto debe permitir obtener dos caras por chop en el alineado
 
         for nG in rangoChop:
             pyPl = pyPlaneList[nG]
@@ -770,7 +767,8 @@ class _PyAlignment(_Py):
                         # print 'b'
                         fList.append(ff)
 
-                plane = plane.cut(fList, _Py.tolerance)
+                if fList:
+                    plane = plane.cut(fList, _Py.tolerance)
                 # print 'plane.Faces ', plane.Faces
 
                 forward = pyPlane.forward
