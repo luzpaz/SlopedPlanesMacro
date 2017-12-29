@@ -82,58 +82,77 @@ class _SlopedPlanes(_Py):
         and a list of faces produced by the Base sketch (faceList)'''
 
         doc = "The sketch or Dwire in which the SlopedPlanes is based"
+
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "SlopedPlanes", doc)
 
         doc = "Computes de complement of the orientation of the SlopedPlanes"
+
         slopedPlanes.addProperty("App::PropertyBool", "Complement",
                                  "SlopedPlanes", doc)
 
-        doc = "Reverses the direction of extrusion of the SlopedPlanes"
+        doc = "Reverses the angles of the SlopedPlanes"
+
         slopedPlanes.addProperty("App::PropertyBool", "Reverse",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Mirrors the SlopedPlanes with respect its base"
+
         slopedPlanes.addProperty("App::PropertyBool", "Mirror",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Creates a solid out of the SlopedPlanes shells"
+
         slopedPlanes.addProperty("App::PropertyBool", "Solid",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Gives a plane on SlopedPlanes base"
+
         slopedPlanes.addProperty("App::PropertyBool", "Down",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Gives a plane on top of the SlopedPlanes"
+
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanes", doc)
 
         doc = ""
+
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
         doc = ""
+
         slopedPlanes.addProperty("App::PropertyLength", "Overhang",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Applies over all planes angles\
+               To cero the SlopedPlanes hasn't shape""
+
         slopedPlanes.addProperty("App::PropertyAngle", "Slope",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Applies over all planes length, or length of extrusion of the\
+               planes, multiplied by the diagonal of the SlopedPlanes base.\
+               To cero the SlopedPlanes hasn't shape"
+
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Applies over all planes width, left and right, multiplied by\
+               the diagonal of the SlopedPlanes base. To cero the plane width\
+               is equal to the edge length"
+
         slopedPlanes.addProperty("App::PropertyFloat", "FactorWidth",
                                  "SlopedPlanes", doc)
 
         doc = ""
+
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
                                  "SlopedPlanes", doc)
 
         doc = ""
+
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanes", doc)
 
