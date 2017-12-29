@@ -111,7 +111,9 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyBool", "Down",
                                  "SlopedPlanes", doc)
 
-        doc = "Gives a plane on top of the SlopedPlanes"
+        doc = "Gives a plane on top of the SlopedPlanes\
+               the Up could break the interior wires numeration.\
+               First give the angles and later apply Up"
 
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanes", doc)
