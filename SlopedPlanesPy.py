@@ -22,7 +22,6 @@
 # *****************************************************************************
 
 
-from math import degrees
 import FreeCAD
 import Part
 
@@ -226,6 +225,39 @@ class _Py(object):
 
         return None
 
+    def convexReflex(self, eje, nextEje, numWire):
+
+        ''''''
+
+        cross = eje.cross(nextEje)
+        corner = None
+        if cross != origin:
+            cross.normalize()
+            if cross == _Py.normal:
+                if numWire == 0:
+                    corner = 'convex'
+                else:
+                    corner = 'reflex'
+            else:
+                if numWire == 0:
+                    corner = 'reflex'
+                else:
+                    corner = 'convex'
+
+        return corner
+
+    def sliceIndex(self, index, lenWire):
+
+        ''''''
+
+        if index >= lenWire:
+            index = index - lenWire
+
+        elif index < 0:
+            index = index + lenWire
+
+        return index
+
     def printSummary(self):
 
         '''printSummary(self)'''
@@ -380,7 +412,7 @@ class _Py(object):
         pointList.pop()
         return geometryList
 
-    def orientedVertixes(self, wire, normal):
+    def orientedVertixes(self, wire):
 
         ''''''
 
@@ -392,6 +424,7 @@ class _Py(object):
         wire = Part.Wire(edges)
         face = Part.makeFace(wire, "Part::FaceMakerSimple")
         norm = self.faceNormal(face)
+        normal = _Py.normal
 
         if normal == norm.negative():
             orderVert.reverse()
@@ -399,11 +432,11 @@ class _Py(object):
 
         return orientVert
 
-    def orientedPoints(self, wire, normal):
+    def orientedPoints(self, wire):
 
         ''''''
 
-        orientVert = self.orientedVertixes(wire, normal)
+        orientVert = self.orientedVertixes(wire)
         orientPoint = [vert.Point for vert in orientVert]
         orientRoundPoint = [self.roundVector(vector)
                             for vector in orientPoint]
@@ -413,90 +446,49 @@ class _Py(object):
 
         ''''''
 
-        normal = self.faceNormal(face)
         wire = face.OuterWire
-        orientPoint = self.orientedPoints(wire, normal)
+        orientPoint = self.orientedPoints(wire)
         return orientPoint
 
-    def upperLeftPoint(self, localCoordinates):
+    def faceDatas(self, face):
 
         ''''''
 
-        orig = localCoordinates[0]
+        coordinates = self.facePoints(face)
+        index = self.lowerLeftPoint(coordinates)
+        coordinates = coordinates[index:] + coordinates[:index]
+
+        return coordinates
+
+    def upperLeftPoint(self, coordinates):
+
+        ''''''
+
+        orig = coordinates[0]
         n = -1
-        for col in localCoordinates:
+        for col in coordinates:
             n += 1
             if col.y > orig.y:
                 orig = col
             elif col.y == orig.y:
                 if col.x < orig.x:
                     orig = col
-        return localCoordinates.index(orig)
+        return coordinates.index(orig)
 
-    def lowerLeftPoint(self, localCoordinates):
+    def lowerLeftPoint(self, coordinates):
 
         ''''''
 
-        orig = localCoordinates[0]
+        orig = coordinates[0]
         n = -1
-        for col in localCoordinates:
+        for col in coordinates:
             n += 1
             if col.y < orig.y:
                 orig = col
             elif col.y == orig.y:
                 if col.x < orig.x:
                     orig = col
-        return localCoordinates.index(orig)
-
-    def faceDatas(self, face):
-
-        ''''''
-
-        normal = self.faceNormal(face)
-        tilt = normal.getAngle(FreeCAD.Vector(0, 0, 1))
-        tilt = degrees(tilt)
-
-        if tilt == 0:
-            x = FreeCAD.Vector(1, 0, 0)
-            # y = FreeCAD.Vector(0, 1, 0)
-
-        elif tilt == 180:
-            x = FreeCAD.Vector(1, 0, 0)
-            # y = FreeCAD.Vector(0, -1, 0)
-
-        elif tilt == 90:
-            x = self.rotateVector(normal, axisZ, 90)
-            # y = rotateVector(x, normal, 90)
-
-        else:
-            pnorm = normal.projectToPlane(FreeCAD.Vector(0, 0, 0),
-                                          FreeCAD.Vector(0, 0, 1))
-            x = self.rotateVector(pnorm, axisZ, 90)
-            normal = self.faceNormal(face)
-            # y = rotateVector(normal, x, -90)
-
-        normal = self.faceNormal(face)
-        globalCoord = self.facePoints(face)
-
-        angleZ = normal.getAngle(axisZ)
-        angleZ = degrees(angleZ)
-        projection = x.projectToPlane(origin, axisZ)
-        angleX = projection.getAngle(FreeCAD.Vector(1, 0, 0))
-        if projection.y < 0:
-            angleX = -1 * angleX
-        angleX = degrees(angleX)
-        copyFace = face.copy()
-        copyFace.rotate(origin, FreeCAD.Vector(0, 0, -1), angleX)
-        copyFace.rotate(origin, FreeCAD.Vector(-1, 0, 0), angleZ)
-
-        localCoord = self.facePoints(copyFace)
-        index = self.lowerLeftPoint(localCoord)
-        localCoord = localCoord[index:] + localCoord[:index]
-        localCoord = [coord.sub(localCoord[0]) for coord in localCoord]
-        localCoord = [self.roundVector(point) for point in localCoord]
-        globalCoord = globalCoord[index:] + globalCoord[:index]
-
-        return localCoord, globalCoord, angleX, angleZ
+        return coordinates.index(orig)
 
     def arcGeometries(self, face, coordinates):
 
@@ -532,39 +524,6 @@ class _Py(object):
         coordinates.pop()
 
         return geometries
-
-    def convexReflex(self, eje, nextEje, numWire):
-
-        ''''''
-
-        cross = eje.cross(nextEje)
-        corner = None
-        if cross != origin:
-            cross.normalize()
-            if cross == _Py.normal:
-                if numWire == 0:
-                    corner = 'convex'
-                else:
-                    corner = 'reflex'
-            else:
-                if numWire == 0:
-                    corner = 'reflex'
-                else:
-                    corner = 'convex'
-
-        return corner
-
-    def sliceIndex(self, index, lenWire):
-
-        ''''''
-
-        if index >= lenWire:
-            index = index - lenWire
-
-        elif index < 0:
-            index = index + lenWire
-
-        return index
 
     def makeGeom(self, curve, startParam, endParam):
 

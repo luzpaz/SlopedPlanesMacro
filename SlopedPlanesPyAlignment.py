@@ -681,6 +681,8 @@ class _PyAlignment(_Py):
             rangoChop = rangoChopList[numChop]
 
             # TODO solo exterior wire
+            # LOS CHOPS INTERIORES SI QUE PUEDEN TENER RANGOCHOP
+            # LO QUE NO TIENEN ES RANGO
 
             nW = pyOne.numWire
             pyW = pyWireList[nW]

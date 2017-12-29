@@ -129,7 +129,7 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes", doc)
 
         doc = "Applies over all planes angles\
-               To cero the SlopedPlanes hasn't shape""
+               To cero the SlopedPlanes hasn't shape"
 
         slopedPlanes.addProperty("App::PropertyAngle", "Slope",
                                  "SlopedPlanes", doc)
@@ -215,7 +215,7 @@ class _SlopedPlanes(_Py):
                 outerWire = face.OuterWire
                 falseFace = Part.makeFace(outerWire, "Part::FaceMakerSimple")
                 fFaceOuter.append(falseFace)
-                coordinates = self.faceDatas(falseFace)[1]
+                coordinates = self.faceDatas(falseFace)
                 coordinates.extend(coordinates[0:2])
                 coordinatesOuter.append(coordinates)
 
@@ -278,7 +278,7 @@ class _SlopedPlanes(_Py):
                 for wire in wList:
                     falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
                     fFaceList.append(falseFace)
-                    coord = self.faceDatas(falseFace)[1]
+                    coord = self.faceDatas(falseFace)
                     coord.extend(coord[0:2])
                     coordinatesInner.append(coord)
 
@@ -557,7 +557,8 @@ class _SlopedPlanes(_Py):
             endShape.complement()
 
         if slopedPlanes.Thickness:
-            normal = self.faceNormal(self.faceList[0])
+            # normal = self.faceNormal(self.faceList[0])
+            normal = self.faceNormal(faceList[0])
             if slopedPlanes.Reverse:
                 normal = normal * -1
             endShape = endShape.extrude(slopedPlanes.Thickness.Value*normal)
