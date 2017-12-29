@@ -187,14 +187,14 @@ class _PyReflex(_Py):
         pyOppR = pyPlaneList[1]
 
         direction = "forward"
-        # print '### direction ', direction
+        # print '######### direction ', direction
         # print(pyR.numGeom, pyOppR.numGeom)
 
         if not pyR.cutter:      # esto podría cambiar
             self.twin(pyWire, pyR, pyOppR, direction)
 
         direction = "backward"
-        # print '### direction ', direction
+        # print '######### direction ', direction
         # print(pyOppR.numGeom, pyR.numGeom)
 
         if not pyOppR.cutter:      # esto podría cambiar
@@ -205,16 +205,15 @@ class _PyReflex(_Py):
         '''twin(self, pyWire, pyR, pyOppR, direction)
         '''
 
-        # print '# twin pyR.numGeom ', pyR.numGeom, pyR.control
-
         oppReflexEnormous = pyOppR.enormousShape
 
         angle = pyR.angle
         numWire = pyWire.numWire
-        if ((numWire == 0 and angle > 90) or
-           (numWire > 0 and angle < 90)):
-            # print 'simulated'
+        if (numWire == 0 and angle > 90) or (numWire > 0 and angle < 90):
+            print 'simulated'
             pyR.shape = pyR.simulatedShape
+            # pyR.cutter = []
+            # return
             # TODO perhaps this could be more elaborated
 
         pyPlaneList = pyWire.planes
@@ -386,7 +385,6 @@ class _PyReflex(_Py):
         control = pyR.control
 
         numWire = pyWire.numWire
-        lenWire = len(pyWire.planes)
         numGeom = pyR.numGeom
         pyPl = pyWire.planes[nn]
         gS = pyPl.geomShape
@@ -509,7 +507,7 @@ class _PyReflex(_Py):
         '''solveReflex(self)
         '''
 
-        # print '### solveReflexs'
+        print '###### solveReflexs'
 
         [pyR, pyOppR] = self.planes
 
@@ -518,11 +516,11 @@ class _PyReflex(_Py):
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        # print(pyR.numGeom, pyOppR.numGeom)
+        print '### ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflex(reflex, oppReflex,
                            pyR, pyOppR,
                            'forward', pyWire)
-        # print(pyOppR.numGeom, pyR.numGeom)
+        print '### ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflex(oppReflex, reflex,
                            pyOppR, pyR,
                            'backward', pyWire)
@@ -536,16 +534,32 @@ class _PyReflex(_Py):
 
         planeList = pyWire.planes
 
+        if isinstance(reflex, Part.Compound):
+            secondaries = reflex.Faces[1:]
+        else:
+            secondaries = []
+
         aa = reflex.copy()
 
         cList = [pyOppR.enormousShape]
         if not pyR.aligned:
             cList.extend(pyR.cutter)
-        # print 'pyR.cutter ', pyR.cutter, len(pyR.cutter)
+        print 'pyR.cutter ', pyR.cutter, len(pyR.cutter)
 
         aa = aa.cut(cList, _Py.tolerance)
-        # print 'aa.Faces ', aa.Faces, len(aa.Faces)
+        print 'aa.Faces ', aa.Faces, len(aa.Faces)
         gS = pyR.geomShape
+
+        rear = pyR.rear
+        if len(rear) == 1:
+            rr = planeList[rear[0]]
+        else:
+            if direction == 'forward':
+                rr = planeList[rear[0]]
+            else:
+                rr = planeList[rear[1]]
+
+        rrG = rr.geomShape
 
         cutterList = []
         for ff in aa.Faces:
@@ -555,18 +569,18 @@ class _PyReflex(_Py):
                 if section.Edges:
                     cutterList.append(ff)
                 elif section.Vertexes:
-                    section = ff.section([pyOppR.shape])
-                    if section.Edges:
+                    section = ff.section([rrG], _Py.tolerance)
+                    if not section.Vertexes:
                         cutterList.append(ff)
 
-        # print 'cutterList ', cutterList, len(cutterList)
+        print 'cutterList ', cutterList, len(cutterList)
 
         if cutterList:
             reflex = reflex.cut(cutterList, _Py.tolerance)
-            # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
+            print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
         reflex = reflex.cut(pyR.cutter, _Py.tolerance)
-        # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
+        print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
         aList = []
         for ff in reflex.Faces:
@@ -576,40 +590,42 @@ class _PyReflex(_Py):
                 reflex = reflex.removeShape([ff])
                 break
 
-        # print 'aList ', aList, len(aList)
+        print 'aList ', aList, len(aList)
 
         # comp = Part.makeCompound(cList)
 
         if reflex.Faces:
             reflex = reflex.cut([pyOppR.enormousShape], _Py.tolerance)
-            # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
+            print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
+        print[planeList[num] for num in pyR.rangoConsolidate]
         corner = [planeList[num].shape for num in pyR.rangoConsolidate]
 
         bList = []
         for ff in reflex.Faces:
-            # print 'a'
+            print 'a'
             section = ff.section(aList, _Py.tolerance)
             if not section.Edges:
-                # print 'b'
+                print 'b'
                 section = ff.section(cutterList, _Py.tolerance)
                 if section.Edges:
-                    # print 'c'
+                    print 'c'
                     section = ff.section(corner, _Py.tolerance)
                     if section.Edges:
-                        # print 'd'
+                        print 'd'
                         section = ff.section([pyR.forward], _Py.tolerance)
                         if not section.Edges:
-                            # print 'e'
+                            print 'e'
                             section = ff.section([pyR.backward], _Py.tolerance)
                             if not section.Edges:
-                                # print 'f'
+                                print 'f'
                                 bList.append(ff)
 
-        # print 'bList ', bList
+        print 'bList ', bList
 
+        aList.extend(secondaries)
         aList.extend(bList)
-        # print 'aList ', aList
+        print 'aList ', aList
 
         # aList = aa.Faces
 
