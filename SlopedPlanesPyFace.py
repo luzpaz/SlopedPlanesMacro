@@ -946,7 +946,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        self.printSummary()
+        # self.printSummary()
 
     def upping(self):
 
@@ -1163,8 +1163,6 @@ class _PyFace(_Py):
                 pyAlign.aligning()
 
         # self.printControl('aligning')
-
-        pyAlignList = self.alignments
 
         cutterList = []
 

@@ -375,7 +375,7 @@ class _PyAlignment(_Py):
         '''
 
         pyBase = self.base
-        print '### base ', pyBase.numGeom
+        # print '### base ', pyBase.numGeom
 
         base = pyBase.shape
         bigBase = pyBase.bigShape
@@ -386,8 +386,8 @@ class _PyAlignment(_Py):
 
         pyPrior = self.prior
         pyLater = self.later
-        print 'pyPrior ', (pyPrior.numWire, pyPrior.numGeom)
-        print 'pyLater ', (pyLater.numWire, pyLater.numGeom)
+        # print 'pyPrior ', (pyPrior.numWire, pyPrior.numGeom)
+        # print 'pyLater ', (pyLater.numWire, pyLater.numGeom)
         prior = pyPrior.shape
         later = pyLater.shape
         bigPrior = pyPrior.bigShape
@@ -407,19 +407,18 @@ class _PyAlignment(_Py):
             cutterList.append(bigLater)
             pyBase.addValue('control', pyLater.numGeom)
 
+        # cuts pyPrior and pyLater
+
         if not pyPrior.reflexed or pyPrior.choped:
             # print 'a'
 
             if pyPrior.numWire == 0:
 
                 firstChop = self.chops[0][0]
-                print 'firstChop.rango ', firstChop.rango
+                # print 'firstChop.rango ', firstChop.rango
 
                 if firstChop.rango[0]:  # arrow?
-                    ## print 'aa'
-
-                    # contr = pyPrior.control
-                    #if pyBase.numGeom not in contr:
+                    # print 'aa'
 
                     gS = pyPrior.geomShape
                     prior = self.cutting(prior, [bigBase], gS)
@@ -427,7 +426,7 @@ class _PyAlignment(_Py):
 
                     pyPrior.shape = prior
 
-            else:
+            else:   # interior wires always cut pyPrior and pyLater
 
                 gS = pyPrior.geomShape
                 prior = self.cutting(prior, [bigBase], gS)
@@ -441,7 +440,7 @@ class _PyAlignment(_Py):
             if pyLater.numWire == 0:
 
                 lastChop = self.chops[-1][-1]
-                print 'lastChop.rango ', lastChop.rango
+                # print 'lastChop.rango ', lastChop.rango
                 if lastChop.rango[-1]:
                     # print 'bb'
 
@@ -725,6 +724,7 @@ class _PyAlignment(_Py):
             # introduces the rangos and rears
 
             for pyPlane in [pyOne, pyTwo]:
+
                 rango = pyPlane.rangoConsolidate
                 for nn in rango:
                     pyPl = pyPlaneList[nn]
@@ -745,19 +745,9 @@ class _PyAlignment(_Py):
 
             # cuts chops
 
-            if cutList:
-
-                num = -1
-                for pyPlane in [pyOne, pyTwo]:
-                    num += 1
-                    plane = pyPlane.shape
-                    gS = [pyOne, pyTwo][num].geomShape
-                    plane = self.cutting(plane, cutList, gS)
-                    pyPlane.shape = plane
-
-            # twin
-
+            num = -1
             for pyPlane in [pyOne, pyTwo]:
+                num += 1
 
                 # print '# pyPlane ', pyPlane.numGeom
 
@@ -772,8 +762,10 @@ class _PyAlignment(_Py):
                     else:
                         cList = [enormousCont]
 
+                cutterList = cList + cutList
+
                 gS = pyPlane.geomShape
-                planeCopy = planeCopy.cut(cList, _Py.tolerance)
+                planeCopy = planeCopy.cut(cutterList, _Py.tolerance)
                 # print 'planeCopy.Faces ', planeCopy.Faces
 
                 fList = []
@@ -788,18 +780,24 @@ class _PyAlignment(_Py):
 
                 if fList:
                     plane = plane.cut(fList, _Py.tolerance)
+                if cutList:
+                    plane = plane.cut(cutList, _Py.tolerance)
                 # print 'plane.Faces ', plane.Faces
 
                 forward = pyPlane.forward
                 backward = pyPlane.backward
 
-                fList = []
+                aList = []
                 for ff in plane.Faces:
                     # print '1'
                     if ff.section([gS], _Py.tolerance).Edges:
                         # print 'a'
-                        fList.insert(0, ff)
-                    elif ff.section([forward, backward], _Py.tolerance).Edges:
+                        aList.append(ff)
+
+                fList = []
+                for ff in plane.Faces:
+                    # print '2'
+                    if ff.section([forward, backward], _Py.tolerance).Edges:
                         # print 'b'
                         ff = ff.cut(cList, _Py.tolerance)
                         for f in ff.Faces:
@@ -807,14 +805,21 @@ class _PyAlignment(_Py):
                             if not f.section([forward, backward],
                                              _Py.tolerance).Edges:
                                 # print 'bbb'
-                                fList.append(f)
+                                section = f.section(aList, _Py.tolerance)
+                                if not section.Vertexes:
+                                    fList.append(f)
                     else:
                         # print 'c'
-                        fList.append(ff)
+                        section = ff.section(aList, _Py.tolerance)
+                        if not section.Vertexes:
+                            fList.append(ff)
 
-                # print 'fList ', fList
-                comp = Part.makeCompound(fList)
+                aList.extend(fList)
+                # print 'aList ', aList
+                comp = Part.makeCompound(aList)
                 pyPlane.shape = comp
+
+            # twin
 
             shapeOne = pyOne.shape.copy()
             shapeTwo = pyTwo.shape.copy()
@@ -939,8 +944,14 @@ class _PyAlignment(_Py):
                     pyBase.shape = ff
 
                     if not pyTwo.virtualized:
-                        fList = []
-                        for f in shapeTwo.Faces:
+                        # print 'bb'
+                        gS = pyTwo.geomShape
+
+                        f = shapeTwo.Faces[0]
+                        f = self.cutting(f, [ff], gS)
+                        fList = [f]
+
+                        for f in shapeTwo.Faces[1:]:
                             f = f.cut([ff], _Py.tolerance)
                             fList.append(f.Faces[0])
 
@@ -961,8 +972,14 @@ class _PyAlignment(_Py):
                     pyCont.angle = pyBase.angle
 
                     if not pyOne.virtualized:
-                        fList = []
-                        for f in shapeOne.Faces:
+                        # print 'bbb'
+                        gS = pyOne.geomShape
+
+                        f = shapeOne.Faces[0]
+                        f = self.cutting(f, [ff], gS)
+                        fList = [f]
+
+                        for f in shapeOne.Faces[1:]:
                             f = f.cut([ff], _Py.tolerance)
                             fList.append(f.Faces[0])
 
