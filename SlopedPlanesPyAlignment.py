@@ -674,12 +674,13 @@ class _PyAlignment(_Py):
         # elaborates the chops
 
         chopList = []
-        cutList = []
         numChop = -1
         for [pyOne, pyTwo] in self.chops:
             numChop += 1
 
             print[pyOne.numGeom, pyTwo.numGeom]
+
+            cutList = []
 
             # introduces the rangoChop
 
@@ -697,7 +698,7 @@ class _PyAlignment(_Py):
                         cutList.append(pl)
                         print 'rangoChop ', nn
 
-            # introduces the rangos
+            # introduces the rangos and rears
 
             for pyPlane in [pyOne, pyTwo]:
                 rango = pyPlane.rangoConsolidate
@@ -710,9 +711,6 @@ class _PyAlignment(_Py):
                             cutList.append(rangoPlane)
                             print'rango ', nn
 
-            # introduces the rears
-
-            for pyPlane in [pyOne, pyTwo]:
                 rear = pyPlane.rear
                 print 'rear ', rear
                 for nG in rear:
@@ -725,13 +723,15 @@ class _PyAlignment(_Py):
 
             # cuts chops
 
-            num = -1
-            for pyPlane in [pyOne, pyTwo]:
-                num += 1
-                plane = pyPlane.shape
-                gS = [pyOne, pyTwo][num].geomShape
-                plane = self.cutting(plane, cutList, gS)
-                pyPlane.shape = plane
+            if cutList:
+
+                num = -1
+                for pyPlane in [pyOne, pyTwo]:
+                    num += 1
+                    plane = pyPlane.shape
+                    gS = [pyOne, pyTwo][num].geomShape
+                    plane = self.cutting(plane, cutList, gS)
+                    pyPlane.shape = plane
 
             # twin
 
