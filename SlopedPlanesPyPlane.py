@@ -917,7 +917,11 @@ class _PyPlane(_Py):
         rango = []
         rangoConsolidate = []
 
-        if lenRear == 1:
+        if lenRear == 0:
+
+            rango = [[]]
+
+        elif lenRear == 1:
 
             [nGeom] = rear
 

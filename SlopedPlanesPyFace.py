@@ -654,6 +654,7 @@ class _PyFace(_Py):
             if numWireChopOne == 0:
                 self.forBack(pyOne, 'backward')
                 self.findRear(pyWireList[numWireChopOne], pyOne, 'backward')
+
             if nWire == 0:
                 self.forBack(pyTwo, 'forward')
                 self.findRear(pyW, pyTwo, 'forward')
@@ -945,7 +946,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        # self.printSummary()
+        self.printSummary()
 
     def upping(self):
 

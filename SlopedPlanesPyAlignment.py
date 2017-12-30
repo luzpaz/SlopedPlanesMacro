@@ -375,7 +375,7 @@ class _PyAlignment(_Py):
         '''
 
         pyBase = self.base
-        # print '### base ', pyBase.numGeom
+        print '### base ', pyBase.numGeom
 
         base = pyBase.shape
         bigBase = pyBase.bigShape
@@ -386,8 +386,8 @@ class _PyAlignment(_Py):
 
         pyPrior = self.prior
         pyLater = self.later
-        # print 'pyPrior ', (pyPrior.numWire, pyPrior.numGeom)
-        # print 'pyLater ', (pyLater.numWire, pyLater.numGeom)
+        print 'pyPrior ', (pyPrior.numWire, pyPrior.numGeom)
+        print 'pyLater ', (pyLater.numWire, pyLater.numGeom)
         prior = pyPrior.shape
         later = pyLater.shape
         bigPrior = pyPrior.bigShape
@@ -411,6 +411,7 @@ class _PyAlignment(_Py):
             # print 'a'
 
             firstChop = self.chops[0][0]
+            print 'firstChop.rango ', firstChop.rango
 
             if firstChop.rango[0]:  # arrow?
                 ## print 'aa'
@@ -428,6 +429,7 @@ class _PyAlignment(_Py):
             # print 'b'
 
             lastChop = self.chops[-1][-1]
+            print 'lastChop.rango ', lastChop.rango
             if lastChop.rango[-1]:
                 # print 'bb'
 
