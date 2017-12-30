@@ -118,12 +118,12 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Gives a thickness to the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Gives an overhang to all planes of the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyLength", "Overhang",
                                  "SlopedPlanes", doc)
@@ -148,12 +148,12 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyFloat", "FactorWidth",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "Tolerance"
 
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
                                  "SlopedPlanes", doc)
 
-        doc = ""
+        doc = "FaceMaker"
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanes", doc)
