@@ -410,14 +410,16 @@ class _PyAlignment(_Py):
         if not pyPrior.reflexed or pyPrior.choped:
             # print 'a'
 
-            firstChop = self.chops[0][0]
-            print 'firstChop.rango ', firstChop.rango
+            if pyPrior.numWire == 0:
 
-            if firstChop.rango[0]:  # arrow?
-                ## print 'aa'
+                firstChop = self.chops[0][0]
+                print 'firstChop.rango ', firstChop.rango
 
-                contr = pyPrior.control
-                if pyBase.numGeom not in contr:
+                if firstChop.rango[0]:  # arrow?
+                    ## print 'aa'
+
+                    # contr = pyPrior.control
+                    #if pyBase.numGeom not in contr:
 
                     gS = pyPrior.geomShape
                     prior = self.cutting(prior, [bigBase], gS)
@@ -425,33 +427,55 @@ class _PyAlignment(_Py):
 
                     pyPrior.shape = prior
 
+            else:
+
+                gS = pyPrior.geomShape
+                prior = self.cutting(prior, [bigBase], gS)
+                pyPrior.addValue('control', pyBase.numGeom)
+
+                pyPrior.shape = prior
+
         if not pyLater.reflexed or pyLater.choped:
             # print 'b'
 
-            lastChop = self.chops[-1][-1]
-            print 'lastChop.rango ', lastChop.rango
-            if lastChop.rango[-1]:
-                # print 'bb'
+            if pyLater.numWire == 0:
 
-                contr = pyLater.control
+                lastChop = self.chops[-1][-1]
+                print 'lastChop.rango ', lastChop.rango
+                if lastChop.rango[-1]:
+                    # print 'bb'
 
-                if not self.falsify:
-                    # print 'bb1'
-
-                    if pyBase.numGeom not in contr:
+                    if not self.falsify:
+                        # print 'bb1'
 
                         gS = pyLater.geomShape
                         later = self.cutting(later, [bigBase], gS)
                         pyLater.addValue('control', pyBase.numGeom)
 
-                else:
-                    # print 'bb11'
-
-                    if pyCont.numGeom not in contr:
+                    else:
+                        # print 'bb11'
 
                         gS = pyLater.geomShape
                         later = self.cutting(later, [bigCont], gS)
                         pyLater.addValue('control', pyCont.numGeom)
+
+                    pyLater.shape = later
+
+            else:
+
+                if not self.falsify:
+                    # print 'bb1'
+
+                    gS = pyLater.geomShape
+                    later = self.cutting(later, [bigBase], gS)
+                    pyLater.addValue('control', pyBase.numGeom)
+
+                else:
+                    # print 'bb11'
+
+                    gS = pyLater.geomShape
+                    later = self.cutting(later, [bigCont], gS)
+                    pyLater.addValue('control', pyCont.numGeom)
 
                 pyLater.shape = later
 
