@@ -579,7 +579,7 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-        self.printSummary()
+        # self.printSummary()
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -945,7 +945,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        self.printSummary()
+        # self.printSummary()
 
     def upping(self):
 
@@ -1232,12 +1232,13 @@ class _PyFace(_Py):
 
         # self.printControl('ending')
 
-        pyPlaneList = _Py.pyFace.wires[0].planes
+        pyWireList = _Py.pyFace.wires
+        pyPlaneList = pyWireList[0].planes
 
         for pyAlign in pyAlignList:
-            numChop = -1
             rearRango = pyAlign.rearRango
             rango = pyAlign.rango
+            numChop = -1
             for chop in pyAlign.chops:
                 numChop += 1
                 rearRan = rearRango[numChop]
@@ -1246,6 +1247,7 @@ class _PyFace(_Py):
                 # print 'ran ', ran
                 for nn in ran:
                     # print '### nn ', nn
+                    # solo los chops exteriores tienen rear
                     pyPlane = pyPlaneList[nn]
                     gS = pyPlane.geomShape
                     for mm in rearRan:
