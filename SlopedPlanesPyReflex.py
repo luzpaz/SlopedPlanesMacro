@@ -180,24 +180,20 @@ class _PyReflex(_Py):
 
         # print '############ reflexing'
 
-
         pyPlaneList = self.planes
-
         pyR = pyPlaneList[0]
         pyOppR = pyPlaneList[1]
 
         direction = "forward"
         # print '######### direction ', direction
         # print(pyR.numGeom, pyOppR.numGeom)
-
-        if not pyR.cutter:      # esto podría cambiar
+        if not pyR.cutter:
             self.twin(pyWire, pyR, pyOppR, direction)
 
         direction = "backward"
         # print '######### direction ', direction
         # print(pyOppR.numGeom, pyR.numGeom)
-
-        if not pyOppR.cutter:      # esto podría cambiar
+        if not pyOppR.cutter:
             self.twin(pyWire, pyOppR, pyR, direction)
 
     def twin(self, pyWire, pyR, pyOppR, direction):
@@ -210,11 +206,11 @@ class _PyReflex(_Py):
         angle = pyR.angle
         numWire = pyWire.numWire
         if (numWire == 0 and angle > 90) or (numWire > 0 and angle < 90):
-            print 'simulated'
-            pyR.shape = pyR.simulatedShape
-            # pyR.cutter = []
-            # return
-            # TODO perhaps this could be more elaborated
+            # print 'angle>90'
+            pyR.addLink('cutter', oppReflexEnormous)
+            #pyR.shape = pyR.simulatedShape
+            #pyR.cutter = []
+            #return
 
         pyPlaneList = pyWire.planes
 

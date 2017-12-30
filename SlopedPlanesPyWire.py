@@ -165,11 +165,13 @@ class _PyWire(_Py):
 
                 pyOppPlane = pyReflex.planes[num-1]
 
+                numWire = pyPlane.numWire
+
                 angle = pyPlane.angle
                 numWire = pyPlane.numWire
                 if ((numWire == 0 and angle > 90) or
                    (numWire > 0 and angle < 90)):
-                    return    # esto no lo entiendo y debe quedar explicado. Ver processReflex
+                    return
 
                 numGeom = pyPlane.numGeom
 
@@ -185,7 +187,7 @@ class _PyWire(_Py):
                     else:
                         pyPl = pyPlaneList[nG]
 
-                        # TODO pyPl numWire and angle
+                        # TODO pyPl numWire and angle ???
 
                         if numGeom not in pyPl.control:
 
@@ -386,7 +388,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
 
-        self.printControl('preProcess')
+        # self.printControl('preProcess')
 
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
@@ -394,7 +396,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
 
-        self.printControl('solveReflex')
+        # self.printControl('solveReflex')
 
         for pyReflex in self.reflexs:
             pyReflex.postProcessOne(self)       # quitar
