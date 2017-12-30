@@ -258,7 +258,7 @@ class _PyAlignment(_Py):
         # # los chops exteriores tienen rango y rangoChop
         # # los chops interiores no tienen rango y si tienen rangoChop
 
-        # print '###### base ', (self.base.numWire, self.base.numGeom)
+        print '###### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         numGeom = pyBase.numGeom
@@ -298,10 +298,10 @@ class _PyAlignment(_Py):
             enormShape = ffOne
 
             for pyPlane in chop:
-                # print '### chop ', pyPlane.numWire, pyPlane.numGeom
+                print '### chop ', pyPlane.numWire, pyPlane.numGeom
                 enShape = pyPlane.enormousShape
 
-                # print 'rango ', pyPlane.rangoConsolidate
+                print 'rango ', pyPlane.rangoConsolidate
                 for nG in pyPlane.rangoConsolidate:
                     if nG not in rangoChop[numChop]:
 
@@ -310,20 +310,24 @@ class _PyAlignment(_Py):
 
                         if not pyPl.reflexed:
                             control = pyPl.control
-                            # print '# nG ', nG
+                            print '# nG ', nG
 
                             if falsify:
-                                # print 'a'
+                                print 'a'
                                 cList = [enormShape]
 
                             else:
-                                # print 'b'
+                                print 'b'
                                 cList = [enormShape]
-                                if not pyPl.numGeom in pyBase.rear:
-                                    # print 'bb'
-                                    if numGeom not in control:
-                                        cList.append(enormousShape)
-                                        control.append(numGeom)     # la base
+                                if nG not in pyBase.rear:
+                                    print 'bb'
+                                    if nG not in [self.prior.numGeom,
+                                                  self.later.numGeom]:
+                                        print 'bbb'
+                                        if numGeom not in control:
+                                            print 'bbbb'
+                                            cList.append(enormousShape)
+                                            control.append(numGeom)     # la base
 
                             pyPl.trimming(enShape, cList)
                             control.append(pyPlane.numGeom)       # el chop
@@ -426,7 +430,7 @@ class _PyAlignment(_Py):
 
             lastChop = self.chops[-1][-1]
             print lastChop.rango
-            if lastChop.rango[-1]:  # arrow?
+            if lastChop.rango[-1]:
                 print 'bb'
 
                 contr = pyLater.control
@@ -670,9 +674,12 @@ class _PyAlignment(_Py):
         # elaborates the chops
 
         chopList = []
+        cutList = []
         numChop = -1
         for [pyOne, pyTwo] in self.chops:
             numChop += 1
+
+            print[pyOne.numGeom, pyTwo.numGeom]
 
             # introduces the rangoChop
 
@@ -682,50 +689,49 @@ class _PyAlignment(_Py):
             pyW = pyWireList[nW]
             pyPlList = pyW.planes
 
-            cutList = []
             for nn in rangoChop:
                 pyPl = pyPlList[nn]
                 if not pyPl.choped:
                     if not pyPl.aligned:
                         pl = pyPl.shape
                         cutList.append(pl)
-                        # print 'rangoChop ', nn
+                        print 'rangoChop ', nn
 
-            num = -1
+            # introduces the rangos
+
             for pyPlane in [pyOne, pyTwo]:
-                num += 1
-                # print '# chop ', pyPlane.numGeom
-
-                cutterList = []
-                cutterList.extend(cutList)
-
-                # introduces the rears
-
-                rear = pyPlane.rear
-                for nG in rear:
-                    pyPl = pyPlaneList[nG]
-                    if not pyPl.choped:
-                        if not pyPl.aligned:
-                            rearPlane = pyPl.shape
-                            cutterList.append(rearPlane)
-                            # print 'rearPlane ', nG
-
-                # introduces the rango
-
                 rango = pyPlane.rangoConsolidate
+                print 'rango ', rango
                 for nn in rango:
                     pyPl = pyPlaneList[nn]
                     if not pyPl.choped:
                         if not pyPl.aligned:
                             rangoPlane = pyPl.shape
-                            cutterList.append(rangoPlane)
-                            # print 'rango ', nn
+                            cutList.append(rangoPlane)
+                            print'rango ', nn
 
-                if cutterList:
-                    plane = pyPlane.shape
-                    gS = [pyOne, pyTwo][num].geomShape
-                    plane = self.cutting(plane, cutterList, gS)
-                    pyPlane.shape = plane
+            # introduces the rears
+
+            for pyPlane in [pyOne, pyTwo]:
+                rear = pyPlane.rear
+                print 'rear ', rear
+                for nG in rear:
+                    pyPl = pyPlaneList[nG]
+                    if not pyPl.choped:
+                        if not pyPl.aligned:
+                            rearPlane = pyPl.shape
+                            cutList.append(rearPlane)
+                            print'rearPlane ', nG
+
+            # cuts chops
+
+            num = -1
+            for pyPlane in [pyOne, pyTwo]:
+                num += 1
+                plane = pyPlane.shape
+                gS = [pyOne, pyTwo][num].geomShape
+                plane = self.cutting(plane, cutList, gS)
+                pyPlane.shape = plane
 
             # twin
 
