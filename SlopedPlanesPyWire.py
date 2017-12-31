@@ -415,7 +415,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
 
-        self.printControl('preProcess')
+        # self.printControl('preProcess')
 
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
@@ -423,31 +423,22 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
 
-        for pyReflex in self.reflexs:
-            pyReflex.postProcessThree(self)
-
         # self.printControl('solveReflex')
 
         for pyReflex in self.reflexs:
+            pyReflex.postProcess(self)
+
+        '''for pyReflex in self.reflexs:
             pyReflex.rearing(self, False)
 
         for pyReflex in self.reflexs:
-            pyReflex.postProcessOne(self)
+            pyReflex.betweenReflexs(self)
 
-        # self.printControl('postProcessOne')
-
-        '''for pyReflex in self.reflexs:
-            pyReflex.postProcessThree(self)'''
-
-        # self.printControl('postProcessThree')
-
-        for pyReflex in self.reflexs:
-            pyReflex.postProcessFour(self)
-
-        # self.printControl('postProcessFour')
+        # self.printControl('betweenReflexs')
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self, True)
+        # '''
 
     def ordinaries(self):
 
