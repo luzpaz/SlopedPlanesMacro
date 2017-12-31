@@ -251,7 +251,7 @@ class _TaskPanel_SlopedPlanes():
                             item.setText(0, str(numSlope))
 
                             doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                            doubleSpinBox.setToolTip("The angle of the plane")
+                            doubleSpinBox.setToolTip("The angle of the related face")
                             doubleSpinBox.setMaximum(1000.00)
                             doubleSpinBox.setMinimum(-1000.00)
                             doubleSpinBox.setValue(angle)
@@ -262,7 +262,7 @@ class _TaskPanel_SlopedPlanes():
                             if self.advancedOptions.isChecked():
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                                doubleSpinBox.setToolTip("The length of the plane")
+                                doubleSpinBox.setToolTip("The length of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
                                 doubleSpinBox.setValue(pyPlane.length)
@@ -270,7 +270,7 @@ class _TaskPanel_SlopedPlanes():
                                 self.tree.setItemWidget(item, 2, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                                doubleSpinBox.setToolTip("The overhang of the plane")
+                                doubleSpinBox.setToolTip("The overhang of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
                                 doubleSpinBox.setValue(pyPlane.overhang)
@@ -278,7 +278,7 @@ class _TaskPanel_SlopedPlanes():
                                 self.tree.setItemWidget(item, 3, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                                doubleSpinBox.setToolTip("The left width of the plane")
+                                doubleSpinBox.setToolTip("The left width of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
                                 doubleSpinBox.setValue(pyPlane.leftWidth)
@@ -286,7 +286,7 @@ class _TaskPanel_SlopedPlanes():
                                 self.tree.setItemWidget(item, 4, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                                doubleSpinBox.setToolTip("The right width of the plane")
+                                doubleSpinBox.setToolTip("The right width of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
                                 doubleSpinBox.setValue(pyPlane.rightWidth)

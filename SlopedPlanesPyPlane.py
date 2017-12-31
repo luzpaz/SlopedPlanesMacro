@@ -716,7 +716,7 @@ class _PyPlane(_Py):
         plCopy = self.cutting(plCopy, [enormousShape], gS)
         self.simulatedShape = plCopy
 
-    def rearing(self, pyWire, pyReflex):
+    def rearing(self, pyWire, pyReflex, direction, case):
 
         '''rearing(self, pyWire, pyReflex)
         '''
@@ -725,19 +725,17 @@ class _PyPlane(_Py):
 
         # print 'self.numGeom ', self.numGeom
 
-        rear = self.rear
-
-        # print 'rear ', rear
-
         plane = self.shape
+        if plane.section([self.forward, self.backward], _Py.tolerance).Edges:
+            return
+        rear = self.rear
+        # print 'rear ', rear
         pyPlaneList = pyWire.planes
 
-        twinReflex = pyReflex.planes
-        ind = twinReflex.index(self)
-        if ind == 0:
-            pyOppPlane = twinReflex[1]
+        if direction == "forward":
+            pyOppPlane = pyReflex.planes[1]
         else:
-            pyOppPlane = twinReflex[0]
+            pyOppPlane = pyReflex.planes[0]
         oppPlane = pyOppPlane.shape
 
         # print 'pyOppPlane.numGeom ', pyOppPlane.numGeom
@@ -753,24 +751,30 @@ class _PyPlane(_Py):
         for numG in rear:
             # print 'numG ', numG
             pyPl = pyPlaneList[numG]
+            pl = pyPl.shape
             control = pyPl.control
 
-            cList = []
-            if self.numGeom not in control:
-                cList.append(plane)
-                # print 'included ', self.numGeom
-                control.append(self.numGeom)
-            if pyOppPlane.numGeom not in control:
-                cList.append(oppPlane)
-                # print 'included ', pyOppPlane.numGeom
-                control.append(pyOppPlane.numGeom)
+            if case:
+                condition = not (pyPl.aligned or pyPl.choped)
 
-            # print cList
+            else:
+                condition = (pyPl.reflexed and not pyPl.aligned and not pyPl.choped)
 
-            if cList:
+            if condition:
 
-                if not (pyPl.aligned or pyPl.choped):
-                    pl = pyPl.shape
+                cList = []
+                if self.numGeom not in control:
+                    cList.append(plane)
+                    # print 'included ', self.numGeom
+                    control.append(self.numGeom)
+                if pyOppPlane.numGeom not in control:
+                    cList.append(oppPlane)
+                    # print 'included ', pyOppPlane.numGeom
+                    control.append(pyOppPlane.numGeom)
+
+                # print cList
+
+                if cList:
 
                     if isinstance(pl, Part.Compound):
                         # print 'aa'
@@ -806,7 +810,7 @@ class _PyPlane(_Py):
                         pl = self.cutting(pl, cList, gS)
                         pyPl.shape = pl
 
-                pyPl.control = control
+                ##pyPl.control = control
 
     def ordinaries(self, pyWire):
 

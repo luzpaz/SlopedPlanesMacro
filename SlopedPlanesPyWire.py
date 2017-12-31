@@ -383,6 +383,8 @@ class _PyWire(_Py):
         '''reflexing(self)
         '''
 
+        self.printSummary()
+
         # print '###### reflexing wire ', self.numWire
 
         for pyReflex in self.reflexs:
@@ -399,12 +401,15 @@ class _PyWire(_Py):
         # self.printControl('solveReflex')
 
         for pyReflex in self.reflexs:
-            pyReflex.postProcessOne(self)       # quitar
+            pyReflex.rearing(self, False)
+
+        for pyReflex in self.reflexs:
+            pyReflex.postProcessOne(self)
 
         # self.printControl('postProcessOne')
 
         for pyReflex in self.reflexs:
-            pyReflex.postProcessThree(self)     # quitar
+            pyReflex.postProcessThree(self)
 
         # self.printControl('postProcessThree')
 
@@ -414,7 +419,7 @@ class _PyWire(_Py):
         # self.printControl('postProcessFour')
 
         for pyReflex in self.reflexs:
-            pyReflex.rearing(self)
+            pyReflex.rearing(self, True)
 
     def ordinaries(self):
 
