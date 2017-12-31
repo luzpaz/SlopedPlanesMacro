@@ -643,6 +643,7 @@ class _PyPlane(_Py):
             plane = self.shape
             big = self.bigShape
             enormous = self.enormousShape
+            simulated = self.simulatedShape
             geom = self.geom
             geomShape = self.geomShape
             forward = self.forward
@@ -656,6 +657,7 @@ class _PyPlane(_Py):
                 plane = pyPlane.shape
                 big = pyPlane.bigShape
                 enormous = pyPlane.enormousShape
+                simulated = pyPlane.simulatedShape
 
             pyPlane = _PyPlane(numWire, numGeom)
             pyPlane.geomShape = geomShape
@@ -669,6 +671,7 @@ class _PyPlane(_Py):
             pyPlane.shape = plane.copy()
             pyPlane.bigShape = big
             pyPlane.enormousShape = enormous
+            pyPlane.simulatedShape = simulated
             pyPlane.angle = self.angle
             pyPlane.virtualized = True
 
@@ -695,6 +698,18 @@ class _PyPlane(_Py):
         shape = self.cutting(shape, cutterList, gS)
         self.shape = shape
 
+        bigShape = self.cutting(bigShape, [enormousShape], gS)
+        self.bigShape = bigShape
+
+    def trimmingTwo(self, enormousShape):
+
+        '''trimmingTwo(self, enormousShape)
+        '''
+
+        self.simulating(enormousShape)
+
+        bigShape = self.bigShape
+        gS = self.geomShape
         bigShape = self.cutting(bigShape, [enormousShape], gS)
         self.bigShape = bigShape
 

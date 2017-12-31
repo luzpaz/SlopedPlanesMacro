@@ -185,14 +185,14 @@ class _PyReflex(_Py):
         pyOppR = pyPlaneList[1]
 
         direction = "forward"
-        # print '######### direction ', direction
-        # print(pyR.numGeom, pyOppR.numGeom)
+        print '######### direction ', direction
+        print(pyR.numGeom, pyOppR.numGeom)
         if not pyR.cutter:
             self.twin(pyWire, pyR, pyOppR, direction)
 
         direction = "backward"
-        # print '######### direction ', direction
-        # print(pyOppR.numGeom, pyR.numGeom)
+        print '######### direction ', direction
+        print(pyOppR.numGeom, pyR.numGeom)
         if not pyOppR.cutter:
             self.twin(pyWire, pyOppR, pyR, direction)
 
@@ -299,7 +299,7 @@ class _PyReflex(_Py):
                                     pyOppR, oppReflexEnormous)
 
         rangoCorner = pyR.rangoConsolidate
-        # print 'rangoCorner ', rangoCorner
+        print 'rangoCorner ', rangoCorner
 
         for nn in rangoCorner:
             if nn not in control:
@@ -308,7 +308,7 @@ class _PyReflex(_Py):
                     self.processRango(pyWire, pyR, pyOppR, nn, 'rangoCorner')
 
         rangoNext = pyOppR.rangoConsolidate
-        # print 'rangoNext ', rangoNext
+        print 'rangoNext ', rangoNext
 
         if len(rear) == 1:
             for nn in rangoNext:
@@ -317,7 +317,7 @@ class _PyReflex(_Py):
                     self.processRango(pyWire, pyR, pyOppR, nn, 'rangoNext')
 
         rangoInter = self.rango
-        # print 'rangoInter ', rangoInter
+        print 'rangoInter ', rangoInter
 
         for nn in rangoInter:
             if nn not in control:
@@ -402,7 +402,7 @@ class _PyReflex(_Py):
             # print 'included rango simulated', (pl, numWire, nn)
 
         elif pyPl.reflexed:
-            # print 'C'
+            print 'C'
             pl = pyPl.simulatedShape.copy()
 
             rear = pyPl.rear
@@ -416,60 +416,65 @@ class _PyReflex(_Py):
             fo = pyPl.forward
 
             if numGeom in rear:
-                # print '1'
+                print '1'
                 pass
                 # pl = pyPl.simulatedShape.copy()
 
             elif pyOppR.numGeom in rear:
-                # print '2'
+                print '2'
 
                 pl = pyPl.shape.copy()
                 cList = [oppReflexEnormous]
                 pl = self.cutting(pl, cList, gS)
                 pyR.addLink('cutter', pl)
-                # print 'included rango ', (pl, numWire, nn)
+                print 'included rango ', (pl, numWire, nn)
 
                 pl = pyPl.simulatedShape.copy()     # Two faces included
 
             elif nn in rRango:  # rangoCorner
-                # print '4'
+                print '4'
                 # pl = pyPl.simulatedShape.copy()
 
                 if forward.section([fo], _Py.tolerance).Vertexes:
-                    # print '42'
+                    print '42'
 
                     if numGeom in rango:
-                        # print '421'
+                        print '421'
                         if pyR.simulatedShape.section([pyR.backward], _Py.tolerance).Edges:
-                            # print '4211'
-                            pl = pyPl.shape.copy()
+                            print '4211'
+                            '''pl = pyPl.shape.copy()
                             cList = [reflexEnormous]
-                            pl = self.cutting(pl, cList, gS)
+                            pl = self.cutting(pl, cList, gS)'''
+                            pass
                         else:
-                            # print '4212'
+                            print '4212'
                             cList = [reflexEnormous]
                             pl = self.cutting(pl, cList, gS)
 
                     else:
-                        # print '422'
+                        print '422'
                         cList = [reflexEnormous]
                         pl = self.cutting(pl, cList, gS)
 
+                    ## INTRODUCIDO HOY
+                    cList = [oppReflexEnormous]
+                    pl = self.cutting(pl, cList, gS)
+
                 else:
-                    # print '43'
+                    print '43'
                     pl = pyPl.shape.copy()
                     cList = [oppReflexEnormous]
                     pl = self.cutting(pl, cList, gS)
 
             elif nn in oppRRango:  # rangoNext
-                # print '6'
+                print '6'
 
                 if forwa.section([gS], _Py.tolerance).Vertexes:
-                    # print '61'
+                    print '61'
                     pass
                     # pl = pyPl.simulatedShape.copy()
                 else:
-                    # print '62'
+                    print '62'
                     pl = pyPl.shape.copy()
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
 
@@ -480,11 +485,11 @@ class _PyReflex(_Py):
                     if pyPlane != pyPl:
                         if numGeom in pyPlane.rear:
                             pl = pyPl.simulatedShape.copy()
-                            # print '7'
+                            print '7'
                             break
 
             pyR.addLink('cutter', pl)
-            # print 'included rango simulated', (pl, numWire, nn)
+            print 'included rango simulated', (pl, numWire, nn)
 
         else:
             # print 'D'
@@ -597,8 +602,15 @@ class _PyReflex(_Py):
             # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
         # print[planeList[num] for num in pyR.rangoConsolidate]
-        corner = [planeList[num].shape for num in pyR.rangoConsolidate]
-        inter = [planeList[num].shape for num in self.rango]
+        # corner = [planeList[num].shape for num in pyR.rangoConsolidate]
+
+        corner = []
+        for num in pyR.rangoConsolidate:
+            pyPl = planeList[num]
+            if pyPl.reflexed:
+                corner.append(pyPl.simulatedShape)
+            else:
+                corner.append(pyPl.shape)
 
         bList = []
         for ff in reflex.Faces:
@@ -609,8 +621,13 @@ class _PyReflex(_Py):
                 section = ff.section(cutterList, tolerance)
                 if section.Edges:
                     print 'c'
-                    section = ff.section(corner, tolerance)
-                    if section.Edges:
+                    cont = False
+                    for pp in corner:
+                        section = ff.section([pp], tolerance)
+                        if section.Edges:
+                            cont = True
+                            break
+                    if cont:
                         print 'd'
                         section = ff.section([pyR.forward], tolerance)
                         if not section.Edges:
@@ -618,15 +635,7 @@ class _PyReflex(_Py):
                             section = ff.section([pyR.backward], tolerance)
                             if not section.Edges:
                                 print 'f'
-                                if not inter:
-                                    print 'g'
-                                    bList.append(ff)
-                                else:
-                                    print 'gg'
-                                    section = ff.section(inter, tolerance)
-                                    if not section.Edges:
-                                        print 'ggg'
-                                        bList.append(ff)
+                                bList.append(ff)
         print 'bList ', bList
 
         aList.extend(secondaries)
