@@ -747,6 +747,8 @@ class _PyPlane(_Py):
         # print 'rear ', rear
         pyPlaneList = pyWire.planes
 
+        # OPUESTO COMO PARAMETRO
+
         if direction == "forward":
             pyOppPlane = pyReflex.planes[1]
         else:
@@ -755,13 +757,13 @@ class _PyPlane(_Py):
 
         # print 'pyOppPlane.numGeom ', pyOppPlane.numGeom
 
-        if self.choped:
+        '''if self.choped:
             if pyOppPlane.aligned:
                 # print 'a'
                 rear = [rear[1]]
             else:
                 # print 'b'
-                rear = [rear[0]]
+                rear = [rear[0]]'''
 
         for numG in rear:
             # print 'numG ', numG
@@ -782,10 +784,10 @@ class _PyPlane(_Py):
                     cList.append(plane)
                     # print 'included ', self.numGeom
                     control.append(self.numGeom)
-                if pyOppPlane.numGeom not in control:
+                '''if pyOppPlane.numGeom not in control:
                     cList.append(oppPlane)
                     # print 'included ', pyOppPlane.numGeom
-                    control.append(pyOppPlane.numGeom)
+                    control.append(pyOppPlane.numGeom)'''
 
                 # print cList
 
@@ -825,7 +827,22 @@ class _PyPlane(_Py):
                         pl = self.cutting(pl, cList, gS)
                         pyPl.shape = pl
 
-                ##pyPl.control = control
+                    # las introduzco para el caso en que la trasera es reflexed
+                    # podría necesitar un condicional if not case o similar
+
+                    if len(plane.Faces) == 1:
+
+                        gS = self.geomShape
+                        plane = self.cutting(plane, [pyPl.shape], gS)
+                        self.shape = plane
+                        self.control.append(numG)
+
+                    if len(oppPlane.Faces) == 1:
+
+                        gS = pyOppPlane.geomShape
+                        oppPlane = self.cutting(oppPlane, [pyPl.shape], gS)
+                        pyOppPlane.shape = oppPlane
+                        pyOppPlane.control.append(numG)
 
     def ordinaries(self, pyWire):
 

@@ -411,7 +411,23 @@ class _PyReflex(_Py):
             forwa = pyOppR.forward
             fo = pyPl.forward
 
-            if numGeom in rear:
+            pyReflexList = self.selectAllReflex(numWire, nn)
+            ref = False
+            for pyReflex in pyReflexList:
+                for pyPlane in pyReflex.planes:
+                    if pyPlane != pyPl:
+                        if numGeom in pyPlane.rear:
+                            # pl = pyPl.simulatedShape.copy()
+                            print '0'
+                            ref = True
+                            break
+
+            if ref:
+                if kind == 'rangoCorner':   # es esto posible?
+                    print '00'
+                    pl = self.cutting(pl, [oppReflexEnormous], gS)
+
+            elif numGeom in rear:
                 print '1'
                 pass
                 # pl = pyPl.simulatedShape.copy()
@@ -420,12 +436,14 @@ class _PyReflex(_Py):
                 print '2'
 
                 pl = pyPl.shape.copy()
-                cList = [oppReflexEnormous]
-                pl = self.cutting(pl, cList, gS)
+                pl = self.cutting(pl, [oppReflexEnormous], gS)
                 pyR.addLink('cutter', pl)
                 print 'included rango ', (pl, numWire, nn)
 
                 pl = pyPl.simulatedShape.copy()     # Two faces included
+                if kind == 'rangoCorner':
+                    print '22'
+                    pl = self.cutting(pl, [oppReflexEnormous], gS)
 
             elif kind == 'rangoCorner':
                 print '4'
@@ -474,15 +492,20 @@ class _PyReflex(_Py):
                     pl = pyPl.shape.copy()
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
 
-            pyReflexList = self.selectAllReflex(numWire, nn)
+            elif kind == 'rangoInter':
+                print '7'
+                # pl = pyPl.shape.copy()
+                # pl = self.cutting(pl, [oppReflexEnormous], gS)
+
+            '''pyReflexList = self.selectAllReflex(numWire, nn)
 
             for pyReflex in pyReflexList:
                 for pyPlane in pyReflex.planes:
                     if pyPlane != pyPl:
                         if numGeom in pyPlane.rear:
-                            pl = pyPl.simulatedShape.copy()
-                            print '7'
-                            break
+                            # pl = pyPl.simulatedShape.copy()
+                            print '8'
+                            break'''
 
             pyR.addLink('cutter', pl)
             print 'included rango simulated', (pl, numWire, nn)
@@ -656,37 +679,90 @@ class _PyReflex(_Py):
         gS = pyR.geomShape
         oppReflex = pyOppR.shape
 
-        aList = []
+        if not oppReflex.section([pyOppR.forward, pyOppR.backward], _Py.tolerance).Edges:
 
-        ff = reflex.Faces[0]
-        ff = self.cutting(ff, [oppReflex], gS)
-        aList.append(ff)
+            aList = []
 
-        dList = [pyPlane.shape for pyPlane in pyWire.planes if pyPlane.numGeom is not pyR.numGeom and pyPlane.shape]
-        comp = Part.makeCompound(dList)
+            ff = reflex.Faces[0]
+            ff = self.cutting(ff, [oppReflex], gS)
+            aList.append(ff)
 
-        brea = False
-        for ff in reflex.Faces[1:]:
-            if brea:
-                break
-            ff = ff.cut([oppReflex], _Py.tolerance)
-            for f in ff.Faces:
+            if len(reflex.Faces) > 1:
+                dList = [pyPlane.shape for pyPlane in pyWire.planes
+                         if pyPlane.numGeom is not pyR.numGeom and pyPlane.shape]
+                comp = Part.makeCompound(dList)
+
+            brea = False
+            for ff in reflex.Faces[1:]:
                 if brea:
                     break
-                section = f.section([comp], _Py.tolerance)
-                if len(section.Edges) >= len(f.Edges):
-                    aList.append(f)
-                    brea = True
-                    break
+                ff = ff.cut([oppReflex], _Py.tolerance)
+                for f in ff.Faces:
+                    if brea:
+                        break
+                    section = f.section([comp], _Py.tolerance)
+                    if len(section.Edges) >= len(f.Edges):
+                        aList.append(f)
+                        brea = True
+                        break
 
-        compound = Part.makeCompound(aList)
-        pyR.shape = compound
+            compound = Part.makeCompound(aList)
+            pyR.shape = compound
 
     def betweenReflexs(self, pyWire):
 
         ''''''
 
+        planeList = self.planes
+
+        forw = planeList[1].forward
+
+        for pyPl in self.planes:
+            pl = pyPl.shape
+            if len(pl.Faces) == 1:      # ???
+                forward = pyPl.forward
+                cutterList = []
+                for pyReflex in pyWire.reflexs:
+                    if pyReflex != self:
+                        for pyPlane in pyReflex.planes:
+                            if pyPlane not in self.planes:
+
+                                fo = pyPlane.forward
+                                ba = pyPlane.backward
+
+                                section = fo.section([forward], _Py.tolerance)
+                                sect = fo.section([forw], _Py.tolerance)
+
+                                if sect.Vertexes or section.Vertexes:
+
+                                    plane = pyPlane.shape
+
+                                    section =\
+                                        plane.section([fo, ba], _Py.tolerance)
+
+                                    if not section.Edges:
+
+                                        cutterList.append(plane)
+                                        pyPl.control.append(pyPlane.numGeom)
+
+                if cutterList:
+
+                    # print 'b'
+
+                    gS = pyPl.geomShape
+                    ff = pl.Faces[0]
+                    ff = self.cutting(ff, cutterList, gS)
+                    compound = Part.Compound([ff])
+                    pyPl.shape = compound
+
+            forw = planeList[0].forward
+
+    def betweenReflexsOld(self, pyWire):
+
+        ''''''
+
         cutterList = []
+        
         for pyReflex in pyWire.reflexs:
             if pyReflex != self:
                 for pyPlane in pyReflex.planes:

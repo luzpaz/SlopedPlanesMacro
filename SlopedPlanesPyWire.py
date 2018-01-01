@@ -332,10 +332,6 @@ class _PyWire(_Py):
                             pyRPrior = self.selectReflex(numWire, numGeom, prior)
                             if not pyRPrior:
                                 print 'reflex susecivos prior'
-                                '''bPrior = bigPrior.copy()
-                                priorGs = pyPrior.geomShape
-                                enormous = pyLater.enormousShape
-                                bPrior = self.cutting(bPrior, [enormous], priorGs)'''
                                 cutterList.append(bigPrior)
                                 if pyPlane.simulatedShape:
                                     cutList.append(bigPrior)
@@ -352,10 +348,6 @@ class _PyWire(_Py):
                             pyRLater = self.selectReflex(numWire, numGeom, later)
                             if not pyRLater:
                                 print 'reflex sucesivos later'
-                                '''bLater = bigLater.copy()
-                                laterGs = pyLater.geomShape
-                                enormous = pyPrior.enormousShape
-                                bLater = self.cutting(bLater, [enormous], laterGs)'''
                                 cutterList.append(bigLater)
                                 if pyPlane.simulatedShape:
                                     cutList.append(bigLater)
@@ -363,8 +355,10 @@ class _PyWire(_Py):
                 else:
                     print'C'
                     cutterList = [bigPrior, bigLater]
-                    pyPlane.addValue('control', prior)
-                    pyPlane.addValue('control', later)
+                    if not pyPrior.reflexed:
+                        pyPlane.addValue('control', prior)
+                    if not pyLater.reflexed:
+                        pyPlane.addValue('control', later)
 
                 if cutterList:
                     print'D'
@@ -376,21 +370,6 @@ class _PyWire(_Py):
                     simulated = pyPlane.simulatedShape
                     simulated = self.cutting(simulated, cutList, gS)
                     pyPlane.simulatedShape = simulated
-
-                # QUITAR
-                '''if pyPlane.reflexed:
-
-                    if not pyPrior.aligned:
-                        if pyPrior.reflexed:    # reflex sucesivos
-                            if not pyRPrior:
-                                enormous = pyLater.enormousShape
-                                pyPrior.simulating(enormous)
-
-                    if not pyLater.aligned:
-                        if pyLater.reflexed:
-                            if not pyRLater:
-                                enormous = pyPrior.enormousShape
-                                pyLater.simulating(enormous)'''
 
     def simulating(self):
 
@@ -428,7 +407,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.postProcess(self)
 
-        '''for pyReflex in self.reflexs:
+        for pyReflex in self.reflexs:
             pyReflex.rearing(self, False)
 
         for pyReflex in self.reflexs:
@@ -438,7 +417,7 @@ class _PyWire(_Py):
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self, True)
-        # '''
+        #'''
 
     def ordinaries(self):
 

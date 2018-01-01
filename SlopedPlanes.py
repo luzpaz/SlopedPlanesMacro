@@ -414,7 +414,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.reflexing()      #
 
-            '''pyFace.ordinaries()     #
+            pyFace.ordinaries()     #
 
             pyFace.betweenWires()   #
 
