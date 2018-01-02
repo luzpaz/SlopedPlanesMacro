@@ -157,6 +157,9 @@ class _PyWire(_Py):
 
         # print '###### trimming reflexs numWire ', self.numWire
 
+        pyPlaneList = self.planes
+        tolerance = _Py.tolerance
+
         for pyReflex in self.reflexs:
             num = -1
             for pyPlane in pyReflex.planes:
@@ -164,50 +167,45 @@ class _PyWire(_Py):
                 # print '###### cutter ', pyPlane.numGeom
 
                 pyOppPlane = pyReflex.planes[num-1]
-
+                enormousShape = pyPlane.enormousShape
+                numGeom = pyPlane.numGeom
                 numWire = pyPlane.numWire
-
                 angle = pyPlane.angle
-                numWire = pyPlane.numWire
+
                 if ((numWire == 0 and angle > 90) or
                    (numWire > 0 and angle < 90)):
                     return
-
-                numGeom = pyPlane.numGeom
 
                 rango = pyPlane.rangoConsolidate
                 # print 'rango ', rango
                 oppRango = pyOppPlane.rangoConsolidate
                 # print 'oppRango ', oppRango
-                enormousShape = pyPlane.enormousShape
-                pyPlaneList = self.planes
+
                 for nG in rango:
                     if nG in oppRango:
-                        pass  # he intentado ampliar el control pero no me sale 
+                        pass
                     else:
                         pyPl = pyPlaneList[nG]
+                        control = pyPl.control
 
                         # TODO pyPl numWire and angle ???
 
                         if numGeom not in pyPl.control:
-
                             # print '### cutted ', nG
 
                             if not pyPl.reflexed:
                                 # print 'a'
-
                                 pyPl.trimming(enormousShape)
-                                pyPl.addValue('control', pyPlane.numGeom)
+                                control.append(numGeom)
 
                             elif pyPl.aligned:
                                 # print 'b'
-
                                 pass
 
                             else:
                                 # print 'c'
 
-                                if len(pyPlane.rango) == 1:
+                                if len(pyPlane.rear) == 1:
                                     forward = pyPlane.forward
                                 else:
                                     if num == 0:
@@ -217,23 +215,16 @@ class _PyWire(_Py):
 
                                 gS = pyPl.geomShape
                                 forw = pyPl.forward
-
                                 section =\
-                                    forward.section([forw, gS],
-                                                    _Py.tolerance)
+                                    forward.section([forw, gS], tolerance)
 
                                 if (not section.Edges and
                                    len(section.Vertexes) == 1):
-                                    # print 'cc'
+                                    # print 'c1'
 
                                     procc = True
-
-                                    nWire = numWire
-                                    # nWire = pyPl.numWire
-                                    nGeom = pyPl.numGeom
                                     pyRList =\
-                                        self.selectAllReflex(nWire, nGeom)
-
+                                        self.selectAllReflex(numWire, nG)
                                     # print pyRList
 
                                     for pyR in pyRList:
@@ -242,13 +233,12 @@ class _PyWire(_Py):
                                             break
                                         for pyP in pyR.planes:
                                             # print '2'
-                                            # print 'pyP.numGeom ', pyP.numGeom
                                             if pyP != pyPl:
                                                 # print '3'
                                                 ff = pyP.forward
                                                 section =\
                                                     ff.section([forward],
-                                                               _Py.tolerance)
+                                                               tolerance)
                                                 if section.Vertexes:
                                                     # print '4'
                                                     procc = False
@@ -257,14 +247,14 @@ class _PyWire(_Py):
                                     if procc:
                                         # print 'procc'
                                         pyPl.trimming(enormousShape)
-                                        pyPl.addValue('control', numGeom)
+                                        control.append(numGeom)
 
                                     else:
                                         # print 'no procc'
                                         pyPl.trimmingTwo(enormousShape)
 
                                 else:
-                                    # print 'cc'
+                                    # print 'c2'
                                     pyPl.trimmingTwo(enormousShape)
 
     def priorLater(self):
@@ -277,12 +267,13 @@ class _PyWire(_Py):
         pyPlaneList = self.planes
         lenWire = len(pyPlaneList)
         numWire = self.numWire
+
         for pyPlane in pyPlaneList:
-
             if not pyPlane.aligned:
-                plane = pyPlane.shape
 
+                plane = pyPlane.shape
                 numGeom = pyPlane.numGeom
+                control = pyPlane.control
                 # print '### numGeom ', numGeom
                 # print 'reflexed ', pyPlane.reflexed
                 # print 'choped ', pyPlane.choped
@@ -310,12 +301,12 @@ class _PyWire(_Py):
                     if not pyPrior.reflexed:
                         # print'1'
                         cutterList.append(bigPrior)
-                        pyPlane.addValue('control', prior)
+                        control.append(prior)
 
                     if not pyLater.reflexed:
                         # print'2'
                         cutterList.append(bigLater)
-                        pyPlane.addValue('control', later)
+                        control.append(later)
 
                 elif pyPlane.reflexed:
                     # print'B'
@@ -323,13 +314,14 @@ class _PyWire(_Py):
                     if not pyPrior.reflexed:
                         # print'1'
                         cutterList.append(bigPrior)
-                        pyPlane.addValue('control', prior)
+                        control.append(prior)
                         if pyPlane.simulatedShape:
                             cutList.append(bigPrior)
 
                     else:
                         if not pyPrior.aligned:
-                            pyRPrior = self.selectReflex(numWire, numGeom, prior)
+                            pyRPrior =\
+                                self.selectReflex(numWire, numGeom, prior)
                             if not pyRPrior:
                                 # print 'reflex susecivos prior'
                                 cutterList.append(bigPrior)
@@ -339,13 +331,14 @@ class _PyWire(_Py):
                     if not pyLater.reflexed:
                         # print'2'
                         cutterList.append(bigLater)
-                        pyPlane.addValue('control', later)
+                        control.append(later)
                         if pyPlane.simulatedShape:
                             cutList.append(bigLater)
 
                     else:
                         if not pyLater.aligned:
-                            pyRLater = self.selectReflex(numWire, numGeom, later)
+                            pyRLater =\
+                                self.selectReflex(numWire, numGeom, later)
                             if not pyRLater:
                                 # print 'reflex sucesivos later'
                                 cutterList.append(bigLater)
@@ -354,11 +347,12 @@ class _PyWire(_Py):
 
                 else:
                     # print'C'
+
                     cutterList = [bigPrior, bigLater]
                     if not pyPrior.reflexed:
-                        pyPlane.addValue('control', prior)
+                        control.append(prior)
                     if not pyLater.reflexed:
-                        pyPlane.addValue('control', later)
+                        control.append(later)
 
                 if cutterList:
                     # print'D'
@@ -405,19 +399,24 @@ class _PyWire(_Py):
         # self.printControl('solveReflex')
 
         for pyReflex in self.reflexs:
-            pyReflex.reflexingTwo(self)
+            pyReflex.solveReflexTwo(self)
+
+        # self.printControl('postProcess')
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self, False)
 
+        # self.printControl('postProcess')
+
         for pyReflex in self.reflexs:
             pyReflex.postProcess(self)
 
-        # self.printControl('betweenReflexs')
+        # self.printControl('postProcess')
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self, True)
-        #'''
+
+        # '''
 
     def ordinaries(self):
 
