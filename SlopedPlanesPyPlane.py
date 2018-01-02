@@ -736,15 +736,19 @@ class _PyPlane(_Py):
         '''rearing(self, pyWire, pyReflex)
         '''
 
-        print '### rearing'
+        # print '### rearing'
 
-        print 'self.numGeom ', self.numGeom
-
-        plane = self.shape
-        if plane.section([self.forward, self.backward], _Py.tolerance).Edges:
-            return
+        # print 'self.numGeom ', self.numGeom
 
         tolerance = _Py.tolerance
+        plane = self.shape
+        forward = self.forward
+
+        fo = False
+        if plane.section([forward], tolerance).Edges:
+            # print 'fo'
+            fo = True
+
         pyPlaneList = pyWire.planes
 
         if direction == "forward":
@@ -752,7 +756,7 @@ class _PyPlane(_Py):
         else:
             pyOppPlane = pyReflex.planes[0]
         oppPlane = pyOppPlane.shape
-        print 'pyOppPlane.numGeom ', pyOppPlane.numGeom
+        # print 'pyOppPlane.numGeom ', pyOppPlane.numGeom
 
         rear = self.rear
         if self.choped:
@@ -762,12 +766,14 @@ class _PyPlane(_Py):
             else:
                 # print 'b'
                 rear = [rear[0]]
-        print 'rear ', rear
+        # print 'rear ', rear
 
         for numG in rear:
-            print 'numG ', numG
+
             pyPl = pyPlaneList[numG]
+            gS = pyPl.geomShape
             pl = pyPl.shape
+            forw = pyPl.forward
             control = pyPl.control
 
             if case:
@@ -777,75 +783,83 @@ class _PyPlane(_Py):
                 condition = (pyPl.reflexed and not pyPl.aligned and not pyPl.choped)
 
             if condition:
+                # print 'numG ', numG
 
-                cList = []
-                if self.numGeom not in control:
-                    cList.append(plane)
-                    print 'included ', self.numGeom
-                    control.append(self.numGeom)
+                if not fo:
 
-                '''if pyOppPlane.numGeom not in control:
-                    cList.append(oppPlane)
-                    # print 'included ', pyOppPlane.numGeom
-                    control.append(pyOppPlane.numGeom)'''
+                    cList = []
+                    if self.numGeom not in control:
+                        cList.append(plane)
+                        # print 'included ', self.numGeom
+                        control.append(self.numGeom)
 
-                print cList
+                    if pyOppPlane.numGeom not in control:
+                        cList.append(oppPlane)
+                        # print 'included ', pyOppPlane.numGeom
+                        control.append(pyOppPlane.numGeom)
 
-                if cList:
+                    if cList:
+                        # print 'cList ', cList
 
-                    if isinstance(pl, Part.Compound):
-                        print 'aa'
+                        if isinstance(pl, Part.Compound):
+                            # print 'aa'
 
-                        if len(pl.Faces) > 1:
-                            print 'aa1'
-                            # esto esta raro
-                            gS = pyPl.geomShape
-                            aList = []
-                            for ff in pl.Faces:
-                                section = ff.section([gS], tolerance)
-                                ff = ff.cut(cList, tolerance)
-                                ## section = ff.section([gS], _Py.tolerance)
-                                if section.Edges:
-                                    print 'aa11'
-                                    ff = self.selectFace(ff.Faces, gS)
-                                    aList.append(ff)
-                                else:
-                                    print 'aa12'
-                                    aList.append(ff.Faces[0])
-                            compound = Part.Compound(aList)
-                            pyPl.shape = compound
+                            if len(pl.Faces) > 1:
+                                # print 'aa1'
+
+                                aList = []
+                                for ff in pl.Faces:
+                                    section = ff.section([gS], tolerance)
+                                    ff = ff.cut(cList, tolerance)
+                                    if section.Edges:
+                                        # print 'aa11'
+                                        ff = self.selectFace(ff.Faces, gS)
+                                        aList.append(ff)
+                                    else:
+                                        # print 'aa12'
+                                        aList.append(ff.Faces[0])
+
+                                compound = Part.Compound(aList)
+                                pyPl.shape = compound
+
+                            else:
+                                # print 'aa2'
+                                pl = self.cutting(pl, cList, gS)
+                                compound = Part.Compound([pl])
+                                pyPl.shape = compound
 
                         else:
-                            print 'aa2'
-                            gS = pyPl.geomShape
+                            # print 'bb'
                             pl = self.cutting(pl, cList, gS)
-                            compound = Part.Compound([pl])
-                            pyPl.shape = compound
+                            pyPl.shape = pl
 
-                    else:
-                        print 'bb'
-                        gS = pyPl.geomShape
-                        pl = self.cutting(pl, cList, gS)
-                        pyPl.shape = pl
+                        if len(plane.Faces) == 1:
+                            # print 'AA'
 
-                    # las introduzco para el caso en que la trasera es reflexed
-                    # podría necesitar un condicional if not case o similar
+                            gS = self.geomShape
+                            plane = self.cutting(plane, [pl], gS)
+                            compound = Part.Compound([plane])
+                            self.shape = compound
+                            self.control.append(numG)
 
-                    if len(plane.Faces) == 1:
-                        print 'A'
+                        if len(oppPlane.Faces) == 1:
+                            # print 'BB'
 
+                            gS = pyOppPlane.geomShape
+                            oppPlane = self.cutting(oppPlane, [pl], gS)
+                            compound = Part.Compound([oppPlane])
+                            pyOppPlane.shape = compound
+                            pyOppPlane.control.append(numG)
+
+                else:  # if fo
+
+                    if not pl.section([forw], tolerance).Edges:
+                        # print 'fo fo'
                         gS = self.geomShape
-                        plane = self.cutting(plane, [pyPl.shape], gS)
-                        self.shape = plane
+                        plane = self.cutting(plane, [pl], gS)
+                        compound = Part.Compound([plane])
+                        self.shape = compound
                         self.control.append(numG)
-
-                    if len(oppPlane.Faces) == 1:
-                        print 'B'
-
-                        gS = pyOppPlane.geomShape
-                        oppPlane = self.cutting(oppPlane, [pyPl.shape], gS)
-                        pyOppPlane.shape = oppPlane
-                        pyOppPlane.control.append(numG)
 
     def ordinaries(self, pyWire):
 

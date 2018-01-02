@@ -451,6 +451,10 @@ class _PyReflex(_Py):
                 # print '7'
                 pass
 
+            else:
+                #print 'NEW CASE'
+                pass
+
             pyR.addLink('cutter', pl)
             # print 'included rango simulated', (pl, numWire, nn)
 
@@ -630,6 +634,7 @@ class _PyReflex(_Py):
         tolerance = _Py.tolerance
 
         if not oppReflex.section([pyOppR.forward, pyOppR.backward], tolerance).Edges:
+            # print 'A'
 
             aList = []
 
@@ -639,7 +644,8 @@ class _PyReflex(_Py):
 
             if len(reflex.Faces) > 1:
                 dList = [pyPlane.shape for pyPlane in pyWire.planes
-                         if pyPlane.numGeom is not pyR.numGeom and pyPlane.shape]
+                         if pyPlane.numGeom is not pyR.numGeom and
+                         pyPlane.shape]
                 comp = Part.makeCompound(dList)
 
             brea = False
@@ -661,53 +667,68 @@ class _PyReflex(_Py):
 
         else:
             if reflex.section([pyR.forward, pyR.backward], tolerance).Edges:
+                # print 'B'
 
-                # ESTO ES LO QUE HE METIDO HOY
-                # esto esta raro
                 reflex = reflex.cut([oppReflex], tolerance)
-                compound = Part.makeCompound(reflex.Faces)
+                compound = Part.makeCompound([reflex])
                 pyR.shape = compound
+
+            else:
+                pass
+                # print 'C'
 
     def postProcess(self, pyWire):
 
         ''''''
 
+        # print '###### postProcess'
+
         planeList = self.planes
+        tolerance = _Py.tolerance
 
         forw = planeList[1].forward
 
         for pyPl in self.planes:
             pl = pyPl.shape
+
             if len(pl.Faces) == 1:
+                # print '### cutted ', pyPl.numGeom
+
                 forward = pyPl.forward
+                gS = pyPl.geomShape
+
                 cutterList = []
                 for pyReflex in pyWire.reflexs:
                     if pyReflex != self:
                         for pyPlane in pyReflex.planes:
                             if pyPlane not in self.planes:
+                                # print pyPlane.numGeom
 
                                 fo = pyPlane.forward
                                 ba = pyPlane.backward
 
-                                section = fo.section([forward], _Py.tolerance)
-                                sect = fo.section([forw], _Py.tolerance)
+                                section = fo.section([forward], tolerance)
+                                sect = fo.section([forw], tolerance)
 
-                                if sect.Vertexes or section.Vertexes:
+                                if section.Vertexes or sect.Vertexes:
+                                    # print 'a'
 
                                     plane = pyPlane.shape
 
+                                    # subir o invertir
                                     section =\
-                                        plane.section([fo, ba], _Py.tolerance)
+                                        plane.section([fo, ba], tolerance)
 
                                     if not section.Edges:
+                                        # print 'b'
 
                                         cutterList.append(plane)
+                                        # print '# included cutter ', pyPlane.numGeom
                                         pyPl.control.append(pyPlane.numGeom)
 
                 if cutterList:
                     # print 'cutterList', cutterList
 
-                    gS = pyPl.geomShape
                     ff = pl.Faces[0]
                     ff = self.cutting(ff, cutterList, gS)
                     compound = Part.Compound([ff])

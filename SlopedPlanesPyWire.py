@@ -401,12 +401,12 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflexTwo(self)
 
-        # self.printControl('postProcess')
+        # self.printControl('solveReflexTwo')
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self, False)
 
-        # self.printControl('postProcess')
+        # self.printControl('rearing')
 
         for pyReflex in self.reflexs:
             pyReflex.postProcess(self)
