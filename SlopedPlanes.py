@@ -22,7 +22,6 @@
 # *****************************************************************************
 
 
-# import rpdb2
 from os import path
 from math import degrees
 import FreeCAD
@@ -38,9 +37,6 @@ from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
-
-
-# rpdb2.start_embedded_debugger("test")
 
 
 def makeSlopedPlanes(sketch):
@@ -75,9 +71,9 @@ class _SlopedPlanes(_Py):
         The Proxy stores:
         the flags Type, State, OnChanged, and Serialize
         Type:
-        State:
-        OnChanged:
-        Serialize:
+        State: loading
+        OnChanged: faster execute from property and task panels
+        Serialize: Slower loading and faster execute after loading
         the complementary python objects (Pyth)
         and a list of faces produced by the Base sketch (faceList)'''
 

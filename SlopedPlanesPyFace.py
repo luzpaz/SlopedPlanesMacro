@@ -1080,6 +1080,8 @@ class _PyFace(_Py):
         pyWireList = self.wires[:]
         if len(pyWireList) > 1:
 
+            tolerance = _Py.tolerance
+
             numWire = -1
             for pyWire in pyWireList:
                 numWire += 1
@@ -1111,21 +1113,22 @@ class _PyFace(_Py):
                     plane = pyPlane.shape
                     if plane:
                         # print 'numGeom ', pyPlane.numGeom
+                        gS = pyPlane.geomShape
                         totalList = cutterList[:]
                         if aliList:
                             cont = True
                             # print 'aliList ', aliList
                             for pyAlign in aliList:
                                 for chop in pyAlign.chops:
-                                    # print 'A'
+                                    # print 'aa'
                                     if not cont:
                                         break
                                     for pyPl in chop:
-                                        # print 'B'
+                                        # print 'bb'
                                         if ((pyPl.numWire, pyPl.numGeom) ==
                                             (pyPlane.numWire,
                                              pyPlane.numGeom)):
-                                            # print 'C'
+                                            # print 'cc'
                                             cont = False
                                             break
                                 else:
@@ -1135,15 +1138,36 @@ class _PyFace(_Py):
                         if totalList:
 
                             if isinstance(plane, Part.Compound):
-                                fList = []
-                                for ff in plane.Faces:
-                                    ff = ff.cut(totalList, _Py.tolerance)
-                                    fList.append(ff.Faces[0])
-                                compound = Part.makeCompound(fList)
-                                pyPlane.shape = compound
+                                # print 'A'
+
+                                if len(plane.Faces) > 1:
+                                    # print 'A1'
+
+                                    fList = []
+                                    for ff in plane.Faces:
+                                        ff = ff.cut(totalList, tolerance)
+                                        fList.append(ff.Faces[0])
+                                    compound = Part.makeCompound(fList)
+                                    pyPlane.shape = compound
+
+                                else:
+                                    # print 'A2'
+
+                                    plane = plane.cut(totalList, tolerance)
+                                    fList = []
+                                    ff = self.cutting(plane, totalList, gS)
+                                    fList.append(ff)
+                                    plane = plane.removeShape([ff])
+                                    for ff in plane.Faces:
+                                        section = ff.section(fList, tolerance)
+                                        if not section.Edges:
+                                            fList.append(ff)
+                                            break
+                                    compound = Part.makeCompound(fList)
+                                    pyPlane.shape = compound
 
                             else:
-                                gS = pyPlane.geomShape
+                                # print 'B'
                                 plane = self.cutting(plane, totalList, gS)
                                 pyPlane.shape = plane
 
