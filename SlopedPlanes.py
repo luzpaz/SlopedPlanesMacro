@@ -37,7 +37,10 @@ from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
-__doc__ = ""
+__doc__ = '''Requieres a sketch or DWire as base.
+             The base must support the FaceMaker.
+             The angles correspond to the faces of the SlopedPlane's shape.'''
+
 
 def makeSlopedPlanes(sketch):
 
@@ -69,12 +72,14 @@ class _SlopedPlanes(_Py):
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
         The Proxy stores:
-        1º) the four flags Type, State, OnChanged, and Serialize
+
+        - the four flags
             Type: object recognition
             State: indicates the loading file
             OnChanged: faster execute from property and task panels
             Serialize: Slower loading file and faster execute with State = True
-        2º) the two lists Pyth and faceList:
+
+        - the two lists:
             Pyth: the complementary python objects
             faceList: faces produced by the base'''
 
@@ -108,15 +113,15 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyBool", "Down",
                                  "SlopedPlanes", doc)
 
-        doc = "Gives a plane on top of the SlopedPlanes\
-               the Up could break the interior wires numeration.\
-               First give the angles and later apply Up"
+        doc = '''Gives a plane on top of the SlopedPlanes.
+The Up could break the interior wires numeration.
+First give the angles and later apply Up.'''
 
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanes", doc)
 
-        doc = "Gives a thickness to the SlopedPlanes\
-               First give the angles and later apply thickness"
+        doc = '''Gives a thickness to the SlopedPlanes.
+First give the angles and later apply thickness.'''
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
@@ -126,22 +131,22 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Overhang",
                                  "SlopedPlanes", doc)
 
-        doc = "Applies over all planes angles\
-               To cero the SlopedPlanes hasn't shape"
+        doc = '''Applies over all planes angles.
+To cero the SlopedPlanes hasn't shape'''
 
         slopedPlanes.addProperty("App::PropertyAngle", "Slope",
                                  "SlopedPlanes", doc)
 
-        doc = "Applies over all planes length, or length of extrusion of the\
-               planes, multiplied by the diagonal of the SlopedPlanes base.\
-               To cero the SlopedPlanes hasn't shape"
+        doc = '''Applies over all planes length, or length of extrusion of the
+planes, multiplied by the diagonal of the SlopedPlanes base.
+To cero the SlopedPlanes hasn't shape'''
 
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
                                  "SlopedPlanes", doc)
 
-        doc = "Applies over all planes width, left and right, multiplied by\
-               the diagonal of the SlopedPlanes base. To cero the plane width\
-               is equal to the related edge length of the base"
+        doc = '''Applies over all planes width, left and right, multiplied by
+the diagonal of the SlopedPlanes base. To cero the plane width
+is equal to the related edge length of the base'''
 
         slopedPlanes.addProperty("App::PropertyFloat", "FactorWidth",
                                  "SlopedPlanes", doc)
