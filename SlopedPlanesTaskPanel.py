@@ -50,17 +50,13 @@ class _TaskPanel_SlopedPlanes():
         self.grid = QtGui.QGridLayout(self.form)
         self.grid.setObjectName("grid")
         self.title = QtGui.QLabel(self.form)
-        self.title.setToolTip("Sloped Planes")
         self.grid.addWidget(self.title, 0, 0, 1, 2)
-
         self.tree = QtGui.QTreeWidget(self.form)
         self.grid.addWidget(self.tree, 1, 0, 1, 2)
 
         self.advancedOptions = QtGui.QCheckBox(self.form)
-        self.advancedOptions.setToolTip("Advanced options")
-        self.advancedOptions.setObjectName("advanced_options")
+        self.advancedOptions.setObjectName("AdvancedOptions")
         self.grid.addWidget(self.advancedOptions, 3, 0, 1, 1)
-        self.advancedOptions.setText("advanced_options")
         self.advancedOptions.clicked.connect(self.advanced)
 
         self.tree.setColumnCount(2)
@@ -80,6 +76,15 @@ class _TaskPanel_SlopedPlanes():
 
         taskPanel.setWindowTitle("SlopedPlanes")
         self.title.setText("SlopedPlanes parameters")
+        titleToolTip = '''The angles correspond with the faces of the SlopedPlanes. The numeration start
+at the LowerLeft corner and increase counter clockwise for exterior wires, and
+at the UpperLeft corner and increase clocwise for the interior wires.'''
+        self.title.setToolTip(titleToolTip)
+
+        self.advancedOptions.setText("Advanced Options")
+        advancedOptionsToolTip = '''More parameters to control the faces of the SlopedPlanes.
+Remember to apply the modifications before to pop down the advaced options window, or loose the changes'''
+        self.advancedOptions.setToolTip(advancedOptionsToolTip)
 
         if self.advancedOptions.isChecked():
             self.tree.setHeaderLabels([("Face"),
