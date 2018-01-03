@@ -381,7 +381,7 @@ class _PyWire(_Py):
         '''reflexing(self)
         '''
 
-        # self.printSummary()
+        self.printSummary()
 
         # print '###### reflexing wire ', self.numWire
 

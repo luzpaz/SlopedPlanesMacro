@@ -1015,7 +1015,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.trimming()
 
-        # self.printControl('trimming alignments')
+        self.printControl('trimming alignments')
 
     def priorLater(self):
 
@@ -1030,7 +1030,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.priorLater()
 
-        # self.printControl('priorLater alignments')
+        self.printControl('priorLater alignments')
 
     def simulating(self):
 
@@ -1070,7 +1070,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             pyWire.ordinaries()
 
-        # self.printControl('ordinaries')
+        self.printControl('ordinaries')
 
     def betweenWires(self):
 
@@ -1194,7 +1194,7 @@ class _PyFace(_Py):
         '''aligning(self)
         '''
 
-        # self.printSummary()
+        self.printSummary()
 
         pyAlignList = self.alignments
 
@@ -1206,7 +1206,7 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
-        # self.printControl('aligning')
+        self.printControl('aligning')
 
         cutterList = []
 

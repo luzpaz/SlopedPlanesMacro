@@ -258,11 +258,14 @@ class _PyAlignment(_Py):
         # # los chops exteriores tienen rango y rangoChop
         # # los chops interiores no tienen rango y si tienen rangoChop
 
-        # print '###### base ', (self.base.numWire, self.base.numGeom)
+        print '###### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         numGeom = pyBase.numGeom
         enormousShape = pyBase.enormousShape
+
+        lastAli = self.aligns[-1]
+        lastAliRear = lastAli.rear
 
         pyWire = pyWireList[0]
         pyPlaneList = pyWire.planes
@@ -301,31 +304,33 @@ class _PyAlignment(_Py):
                 # print '### chop ', pyPlane.numWire, pyPlane.numGeom
                 enShape = pyPlane.enormousShape
 
-                # print 'rango ', pyPlane.rangoConsolidate
+                print 'rango ', pyPlane.rangoConsolidate
                 for nG in pyPlane.rangoConsolidate:
-                    if nG not in rangoChop[numChop]:
+                    if nG not in rangoChop[numChop] and nG not in lastAliRear:
 
                         # solo los chops del wire exterior tienen rango
                         pyPl = pyPlaneList[nG]
 
-                        if not pyPl.reflexed:
+                        # if not pyPl.reflexed:
+                        if not pyPl.aligned and not pyPl.choped:
+
                             control = pyPl.control
-                            # print '# nG ', nG
+                            print '# nG ', nG
 
                             if falsify:
                                 # print 'a'
                                 cList = [enormShape]
 
                             else:
-                                # print 'b'
+                                print 'b'
                                 cList = [enormShape]
                                 if nG not in pyBase.rear:
-                                    # print 'bb'
+                                    print 'bb'
                                     if nG not in [self.prior.numGeom,
                                                   self.later.numGeom]:
-                                        # print 'bbb'
+                                        print 'bbb'
                                         if numGeom not in control:
-                                            # print 'bbbb'
+                                            print 'bbbb'
                                             cList.append(enormousShape)
                                             control.append(numGeom)     # la base
 

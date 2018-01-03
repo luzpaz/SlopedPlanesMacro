@@ -145,8 +145,8 @@ To cero the SlopedPlanes hasn't shape'''
                                  "SlopedPlanes", doc)
 
         doc = '''Applies over all planes width, left and right, multiplied by
-the diagonal of the SlopedPlanes base. To cero the plane width
-is equal to the related edge length of the base'''
+the diagonal of the SlopedPlanes base.
+To cero the plane width is equal to the related edge length of the base'''
 
         slopedPlanes.addProperty("App::PropertyFloat", "FactorWidth",
                                  "SlopedPlanes", doc)
