@@ -24,7 +24,7 @@
 
 import Part
 from SlopedPlanesPy import _Py
-
+from SlopedPlanesPyPlane import _PyPlane
 
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
@@ -754,7 +754,7 @@ class _PyAlignment(_Py):
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
 
-                # print '# pyPlane ', pyPlane.numGeom
+                print '# pyPlane ', pyPlane.numGeom
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
@@ -771,56 +771,79 @@ class _PyAlignment(_Py):
 
                 gS = pyPlane.geomShape
                 planeCopy = planeCopy.cut(cutterList, _Py.tolerance)
-                # print 'planeCopy.Faces ', planeCopy.Faces
+                print 'planeCopy.Faces ', planeCopy.Faces
 
                 fList = []
                 for ff in planeCopy.Faces:
-                    # print '0'
+                    print '0'
                     if ff.section([gS], _Py.tolerance).Edges:
-                        # print 'a'
+                        print 'a'
                         pass
                     elif ff.section([_Py.face], _Py.tolerance).Edges:
-                        # print 'b'
+                        print 'b'
                         fList.append(ff)
 
                 if fList:
                     plane = plane.cut(fList, _Py.tolerance)
+
                 if cutList:
+
+                    pyOppPlane = [pyOne, pyTwo][num-1]
+                    if pyPlane.numWire == 0 and pyOppPlane.numWire != 0:
+                        if not rangoChop:
+                            falsePlane = _PyPlane(0, pyPlane.numGeom)
+                            falsePlane.rear = pyPlane.rear
+                            print falsePlane.numWire
+                            print falsePlane.numGeom
+                            print falsePlane.rear
+                            pyWire = pyWireList[0]
+                            falsePlane.rangging(pyWire, 'backward')
+                            rr = falsePlane.rangoConsolidate
+                            print rr
+
+                            for nn in rr:
+                                pyPl = pyPlaneList[nn]
+                                if not pyPl.choped:
+                                    if not pyPl.aligned:
+                                        pl = pyPl.shape
+                                        cutList.append(pl)
+                                        print 'rr ', nn
+
                     plane = plane.cut(cutList, _Py.tolerance)
-                # print 'plane.Faces ', plane.Faces
+                print 'plane.Faces ', plane.Faces
 
                 forward = pyPlane.forward
                 backward = pyPlane.backward
 
                 aList = []
                 for ff in plane.Faces:
-                    # print '1'
+                    print '1'
                     if ff.section([gS], _Py.tolerance).Edges:
-                        # print 'a'
+                        print 'a'
                         aList.append(ff)
 
                 fList = []
                 for ff in plane.Faces:
-                    # print '2'
+                    print '2'
                     if ff.section([forward, backward], _Py.tolerance).Edges:
-                        # print 'b'
+                        print 'b'
                         ff = ff.cut(cList, _Py.tolerance)
                         for f in ff.Faces:
-                            # print 'bb'
+                            print 'bb'
                             if not f.section([forward, backward],
                                              _Py.tolerance).Edges:
-                                # print 'bbb'
+                                print 'bbb'
                                 section = f.section(aList, _Py.tolerance)
                                 if not section.Vertexes:
                                     fList.append(f)
                     else:
-                        # print 'c'
+                        print 'c'
                         section = ff.section(aList, _Py.tolerance)
                         if not section.Vertexes:
                             fList.append(ff)
 
                 aList.extend(fList)
-                # print 'aList ', aList
+                print 'aList ', aList
                 comp = Part.makeCompound(aList)
                 pyPlane.shape = comp
 
