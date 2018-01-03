@@ -37,7 +37,7 @@ from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
-
+__doc__ = ""
 
 def makeSlopedPlanes(sketch):
 
@@ -69,13 +69,14 @@ class _SlopedPlanes(_Py):
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
         The Proxy stores:
-        the flags Type, State, OnChanged, and Serialize
-        Type:
-        State: loading
-        OnChanged: faster execute from property and task panels
-        Serialize: Slower loading and faster execute after loading
-        the complementary python objects (Pyth)
-        and a list of faces produced by the Base sketch (faceList)'''
+        1º) the four flags Type, State, OnChanged, and Serialize
+            Type: object recognition
+            State: indicates the loading file
+            OnChanged: faster execute from property and task panels
+            Serialize: Slower loading file and faster execute with State = True
+        2º) the two lists Pyth and faceList:
+            Pyth: the complementary python objects
+            faceList: faces produced by the base'''
 
         doc = "The sketch or Dwire in which the SlopedPlanes is based"
 

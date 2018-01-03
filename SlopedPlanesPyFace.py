@@ -1281,11 +1281,13 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             rearRango = pyAlign.rearRango
             rango = pyAlign.rango
+
             numChop = -1
             for chop in pyAlign.chops:
                 numChop += 1
                 rearRan = rearRango[numChop]
                 # print 'rearRan ', rearRan
+
                 ran = rango[numChop]
                 # print 'ran ', ran
                 for nn in ran:
@@ -1293,6 +1295,7 @@ class _PyFace(_Py):
                     # solo los chops exteriores tienen rear
                     pyPlane = pyPlaneList[nn]
                     gS = pyPlane.geomShape
+
                     for mm in rearRan:
                         if mm != nn:
                             # print '### mm ', mm
