@@ -114,7 +114,8 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanes", doc)
 
-        doc = "Gives a thickness to the SlopedPlanes"
+        doc = "Gives a thickness to the SlopedPlanes\
+               First give the angles and later apply thickness"
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
@@ -458,7 +459,6 @@ class _SlopedPlanes(_Py):
                     else:
                         print 'no plane'
                     '''
-                    # TODO "solution" at task panel
 
                     if pyPlane.length:
 
