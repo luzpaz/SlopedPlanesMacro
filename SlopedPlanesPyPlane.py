@@ -793,51 +793,51 @@ class _PyPlane(_Py):
                         cList = []
                         if self.numGeom not in control:
                             cList.append(plane)
-                            # print 'included ', self.numGeom
+                            print 'included ', self.numGeom
                             control.append(self.numGeom)
     
                         if pyOppPlane.numGeom not in control:
                             cList.append(oppPlane)
-                            # print 'included ', pyOppPlane.numGeom
+                            print 'included ', pyOppPlane.numGeom
                             control.append(pyOppPlane.numGeom)
     
                         if cList:
-                            # print 'cList ', cList
+                            print 'cList ', cList
     
                             if isinstance(pl, Part.Compound):
-                                # print 'aa'
+                                print 'aa'
     
                                 if len(pl.Faces) > 1:
-                                    # print 'aa1'
+                                    print 'aa1'
     
                                     aList = []
                                     for ff in pl.Faces:
                                         section = ff.section([gS], tolerance)
                                         ff = ff.cut(cList, tolerance)
                                         if section.Edges:
-                                            # print 'aa11'
+                                            print 'aa11'
                                             ff = self.selectFace(ff.Faces, gS)
                                             aList.append(ff)
                                         else:
-                                            # print 'aa12'
+                                            print 'aa12'
                                             aList.append(ff.Faces[0])
     
                                     compound = Part.Compound(aList)
                                     pyPl.shape = compound
     
                                 else:
-                                    # print 'aa2'
+                                    print 'aa2'
                                     pl = self.cutting(pl, cList, gS)
                                     compound = Part.Compound([pl])
                                     pyPl.shape = compound
     
                             else:
-                                # print 'bb'
+                                print 'bb'
                                 pl = self.cutting(pl, cList, gS)
                                 pyPl.shape = pl
     
                             if len(plane.Faces) == 1:
-                                # print 'AA'
+                                print 'AA'
     
                                 gS = self.geomShape
                                 plane = self.cutting(plane, [pl], gS)
@@ -846,7 +846,7 @@ class _PyPlane(_Py):
                                 self.control.append(numG)
     
                             if len(oppPlane.Faces) == 1:
-                                # print 'BB'
+                                print 'BB'
     
                                 gS = pyOppPlane.geomShape
                                 oppPlane = self.cutting(oppPlane, [pl], gS)
@@ -856,16 +856,23 @@ class _PyPlane(_Py):
     
                     else:  # if fo
                         if pyPl.reflexed:
+                            print 'fo1'
                             if not pl.section([forw], tolerance).Edges:
-                                # print 'fo fo'
+                                print 'fo11'
                                 gS = self.geomShape
                                 plane = self.cutting(plane, [pl], gS)
                                 compound = Part.Compound([plane])
                                 self.shape = compound
                                 self.control.append(numG)
                         else:
+                            print 'fo2'
                             pass
 
+                            gS = self.geomShape
+                            enormous = pyOppPlane.enormousShape
+                            plane = self.cutting(plane, [enormous], gS)
+                            compound = Part.Compound([plane])
+                            self.shape = compound
 
     def ordinaries(self, pyWire):
 

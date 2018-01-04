@@ -296,12 +296,13 @@ class _PyAlignment(_Py):
             numChop += 1
 
             [pyOne, pyTwo] = chop
-            [ffOne, ffTwo] = simulatedChop[numChop]
+            #[ffOne, ffTwo] = simulatedChop[numChop]
 
-            enormShape = ffOne
+            #enormShape = ffOne
+            enormShape = pyOne.enormousShape
 
             for pyPlane in chop:
-                # print '### chop ', pyPlane.numWire, pyPlane.numGeom
+                print '### chop ', pyPlane.numWire, pyPlane.numGeom
                 enShape = pyPlane.enormousShape
 
                 print 'rango ', pyPlane.rangoConsolidate
@@ -337,7 +338,8 @@ class _PyAlignment(_Py):
                             pyPl.trimming(enShape, cList)
                             control.append(pyPlane.numGeom)       # el chop
 
-                enormShape = ffTwo
+                #enormShape = ffTwo
+                enormShape = pyTwo.enormousShape
 
             # los planos de rangoChop no deben cortar a las traseras
             # y a los planos entre traseras de cada chop.
