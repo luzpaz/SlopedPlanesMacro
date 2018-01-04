@@ -870,7 +870,8 @@ class _PyPlane(_Py):
                                 self.control.append(numG)
                         else:
                             print 'fo2'
-                            if not self.choped:
+                            # if not self.choped:
+                            if not self.choped and not self.aligned:
                                 print 'fo21'
                                 gS = self.geomShape
                                 enormous = pyOppPlane.enormousShape  # MUCHO OJO

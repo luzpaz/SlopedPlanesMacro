@@ -1224,14 +1224,15 @@ class _PyFace(_Py):
                 base = pyAlign.base.shape
                 if base not in cutterList:
                     cutterList.append(base)
-                    # print 'a', pyAlign.base.numGeom
+                    print 'a', pyAlign.base.numGeom
 
             for pyPlane in pyAlign.aligns:
+                # if pyPlane.geomAligned:
                 plane = pyPlane.shape
                 if plane:
                     if plane not in cutterList:
                         cutterList.append(plane)
-                        # print 'b', pyPlane.numGeom
+                        print 'b', pyPlane.numGeom
 
             for [pyChopOne, pyChopTwo] in pyAlign.chops:
 
@@ -1239,15 +1240,15 @@ class _PyFace(_Py):
                     chopOne = pyChopOne.shape
                     if chopOne not in cutterList:
                         cutterList.append(chopOne)
-                        # print 'c', pyChopOne.numGeom
+                        print 'c', pyChopOne.numGeom
 
                 if pyChopTwo.geomAligned:
                     chopTwo = pyChopTwo.shape
                     if chopTwo not in cutterList:
                         cutterList.append(chopTwo)
-                        # print 'd', pyChopTwo.numGeom
+                        print 'd', pyChopTwo.numGeom
 
-        # print cutterList
+        print cutterList
 
         if cutterList:
 
@@ -1255,12 +1256,17 @@ class _PyFace(_Py):
                 for pyPlane in pyWire.planes:
                     plane = pyPlane.shape
                     if plane:
-                        # print 'numGeom', pyPlane.numGeom
+
+                        print 'numGeom', pyPlane.numGeom
+
+                        print cutterList
 
                         if pyPlane.choped or pyPlane.aligned:
+                            print '1'
                             cutterList.remove(plane)
 
                             if pyPlane.choped:
+                                print '11'
                                 fList = []
                                 for ff in plane.Faces:
                                     ff = ff.cut(cutterList, _Py.tolerance)
@@ -1270,6 +1276,7 @@ class _PyFace(_Py):
                                 pyPlane.shape = plane
 
                             else:
+                                print '12'
                                 gS = pyPlane.geomShape
                                 plane = self.cutting(plane, cutterList, gS)
                                 pyPlane.shape = plane
@@ -1277,6 +1284,7 @@ class _PyFace(_Py):
                             cutterList.append(plane)
 
                         else:
+                            print '2'
                             gS = pyPlane.geomShape
                             plane = self.cutting(plane, cutterList, gS)
                             pyPlane.shape = plane
@@ -1322,3 +1330,4 @@ class _PyFace(_Py):
                                 pyPlane.shape = plane
 
         # self.printControl('moreEnding')
+        # '''
