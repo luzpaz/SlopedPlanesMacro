@@ -563,58 +563,60 @@ class _PyReflex(_Py):
 
         # comp = Part.makeCompound(cList)
 
-        if reflex.Faces:
-            reflex = reflex.cut([pyOppR.enormousShape], tolerance)
-            # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
+        if not rr.aligned:
 
-        # print[planeList[num] for num in pyR.rangoConsolidate]
-        # corner = [planeList[num].shape for num in pyR.rangoConsolidate]
+            if reflex.Faces:
+                reflex = reflex.cut([pyOppR.enormousShape], tolerance)
+                # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
-        corner = []
-        for num in pyR.rangoConsolidate:
-            print 'num ', num
-            pyPl = planeList[num]
-            if pyPl.aligned:
-                print 'a'
-                pyAlign = self.selectAlignment(pyPl.numWire, num)
-                corner.extend(pyAlign.simulatedAlignment)
-                print pyAlign.simulatedAlignment
-            elif pyPl.reflexed:
-                print 'b'
-                corner.append(pyPl.simulatedShape)
-                print pyPl.simulatedShape
-            else:
-                print 'c'
-                corner.append(pyPl.shape)
-                print pyPl.shape
+            # print[planeList[num] for num in pyR.rangoConsolidate]
+            # corner = [planeList[num].shape for num in pyR.rangoConsolidate]
 
-        bList = []
-        for ff in reflex.Faces:
-            # print 'a'
-            section = ff.section(aList, tolerance)
-            if not section.Edges:
-                # print 'b'
-                section = ff.section(cutterList, tolerance)
-                if section.Edges:
-                    # print 'c'
-                    section = ff.section([pyR.forward], tolerance)
-                    if not section.Edges:
-                        # print 'd'
-                        section = ff.section([pyR.backward], tolerance)
+            corner = []
+            for num in pyR.rangoConsolidate:
+                print 'num ', num
+                pyPl = planeList[num]
+                if pyPl.aligned:
+                    print 'a'
+                    pyAlign = self.selectAlignment(pyPl.numWire, num)
+                    corner.extend(pyAlign.simulatedAlignment)
+                    print pyAlign.simulatedAlignment
+                elif pyPl.reflexed:
+                    print 'b'
+                    corner.append(pyPl.simulatedShape)
+                    print pyPl.simulatedShape
+                else:
+                    print 'c'
+                    corner.append(pyPl.shape)
+                    print pyPl.shape
+
+            bList = []
+            for ff in reflex.Faces:
+                # print 'a'
+                section = ff.section(aList, tolerance)
+                if not section.Edges:
+                    # print 'b'
+                    section = ff.section(cutterList, tolerance)
+                    if section.Edges:
+                        # print 'c'
+                        section = ff.section([pyR.forward], tolerance)
                         if not section.Edges:
-                            # print 'e'
-                            for pp in corner:
-                                section = ff.section([pp], tolerance)
-                                if section.Edges:
-                                    # print 'f'
-                                    bList.append(ff)
-                                    break
+                            # print 'd'
+                            section = ff.section([pyR.backward], tolerance)
+                            if not section.Edges:
+                                # print 'e'
+                                for pp in corner:
+                                    section = ff.section([pp], tolerance)
+                                    if section.Edges:
+                                        # print 'f'
+                                        bList.append(ff)
+                                        break
 
-        # print 'bList ', bList
+            print 'bList ', bList
 
-        aList.extend(secondaries)
-        aList.extend(bList)
-        # print 'aList ', aList
+            aList.extend(secondaries)
+            aList.extend(bList)
+            print 'aList ', aList
 
         # aList = aa.Faces
 
