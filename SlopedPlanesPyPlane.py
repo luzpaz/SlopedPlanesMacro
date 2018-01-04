@@ -650,6 +650,8 @@ class _PyPlane(_Py):
             backward = self.backward
             rear = self.rear
             rango = self.rango
+            rangoConsolidate = self.rangoConsolidate
+            angle = self.angle
 
             if not plane:
                 (nWire, nGeom) = self.angle
@@ -658,6 +660,7 @@ class _PyPlane(_Py):
                 big = pyPlane.bigShape
                 enormous = pyPlane.enormousShape
                 simulated = pyPlane.simulatedShape
+                angle = pyPlane.angle
 
             pyPlane = _PyPlane(numWire, numGeom)
             pyPlane.geomShape = geomShape
@@ -666,13 +669,14 @@ class _PyPlane(_Py):
             pyPlane.backward = backward
             pyPlane.rear = rear
             pyPlane.rango = rango
+            pyPlane.rangoConsolidate = rangoConsolidate
             pyPlane.aligned = True
             pyPlane.reflexed = True
             pyPlane.shape = plane.copy()
             pyPlane.bigShape = big
             pyPlane.enormousShape = enormous
             pyPlane.simulatedShape = simulated
-            pyPlane.angle = self.angle
+            pyPlane.angle = angle
             pyPlane.virtualized = True
 
             return pyPlane
@@ -866,13 +870,13 @@ class _PyPlane(_Py):
                                 self.control.append(numG)
                         else:
                             print 'fo2'
-                            pass
-
-                            gS = self.geomShape
-                            enormous = pyOppPlane.enormousShape
-                            plane = self.cutting(plane, [enormous], gS)
-                            compound = Part.Compound([plane])
-                            self.shape = compound
+                            if not self.choped:
+                                print 'fo21'
+                                gS = self.geomShape
+                                enormous = pyOppPlane.enormousShape  # MUCHO OJO
+                                plane = self.cutting(plane, [enormous], gS)
+                                compound = Part.Compound([plane])
+                                self.shape = compound
 
     def ordinaries(self, pyWire):
 

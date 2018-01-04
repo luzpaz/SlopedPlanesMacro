@@ -164,16 +164,18 @@ class _PyWire(_Py):
             num = -1
             for pyPlane in pyReflex.planes:
                 num += 1
-                print '###### cutter ', pyPlane.numGeom
+                print '###### cutter ', pyPlane.numGeom, pyPlane.virtualized
 
                 pyOppPlane = pyReflex.planes[num-1]
                 enormousShape = pyPlane.enormousShape
                 numGeom = pyPlane.numGeom
                 numWire = pyPlane.numWire
                 angle = pyPlane.angle
+                print 'angle ', angle
 
                 if ((numWire == 0 and angle > 90) or
                    (numWire > 0 and angle < 90)):
+                    print 'return'
                     return
 
                 rango = pyPlane.rangoConsolidate
@@ -370,8 +372,9 @@ class _PyWire(_Py):
         '''simulating(self)
         '''
 
-        for pyReflex in self.reflexs:
-            pyReflex.virtualizing()
+        # TODO ver como adelantar el virtualizado de reflexs
+        '''for pyReflex in self.reflexs:
+            pyReflex.virtualizing()'''
 
         for pyReflex in self.reflexs:
             pyReflex.simulating()
