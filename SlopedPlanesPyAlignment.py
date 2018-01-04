@@ -288,7 +288,7 @@ class _PyAlignment(_Py):
                     pyPl.bigShape = bPl
 
         falsify = self.falsify
-        simulatedChop = self.simulatedChop
+        # simulatedChop = self.simulatedChop
 
         rearRango = []
         numChop = -1
@@ -349,29 +349,39 @@ class _PyAlignment(_Py):
             # solo los chops exteriores tienen rear
 
             if pyTwo.numWire == 0 and pyOne.numWire == 0:
+
                 rearTwo = pyTwo.rear[0]
-                rearOne =pyOne.rear[0]
+                print 'rearTwo ', rearTwo
+                rearOne =pyOne.rear[-1]
+                print 'rearOne ', rearOne
 
                 rang =\
                     self.rang((pyTwo.numWire, rearTwo),
                               (pyOne.numWire, rearOne))
 
-                rang = rang + [rearTwo, rearOne]
+                rang.append(rearOne)
+                if rearOne is not rearTwo:
+                    rang.append(rearTwo)
 
             else:
                 rang = []
 
+            print 'rang ', rang
+
             rearRango.append(rang)
 
             for rr in rang:
+                print 'rr ', rr
                 pyPl = pyPlaneList[rr]
                 for nn in rangoChop[numChop]:
                     pyP = pyPlaneList[nn]
                     if not pyP.reflexed:
+                        print 'nn ', nn
                         pyP.control.append(rr)
                         pyPl.control.append(nn)
 
         self.rearRango = rearRango
+        print 'rearRango ', rearRango
 
         # se podría ampliar el control con rangoChop y evitar más cortes innecesarios
         # rangoChop = self.rango

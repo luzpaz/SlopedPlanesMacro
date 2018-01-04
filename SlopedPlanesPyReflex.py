@@ -766,7 +766,8 @@ class _PyReflex(_Py):
 
         direction = "forward"
         for pyPlane in self.planes:
-            if not pyPlane.choped and not pyPlane.aligned:
+            # if not pyPlane.choped and not pyPlane.aligned:
+            if not pyPlane.aligned:
                 pyPlane.rearing(pyWire, self, direction, case)
             direction = "backward"
 
