@@ -572,11 +572,21 @@ class _PyReflex(_Py):
 
         corner = []
         for num in pyR.rangoConsolidate:
+            print 'num ', num
             pyPl = planeList[num]
-            if pyPl.reflexed:
+            if pyPl.aligned:
+                print 'a'
+                pyAlign = self.selectAlignment(pyPl.numWire, num)
+                corner.extend(pyAlign.simulatedAlignment)
+                print pyAlign.simulatedAlignment
+            elif pyPl.reflexed:
+                print 'b'
                 corner.append(pyPl.simulatedShape)
+                print pyPl.simulatedShape
             else:
+                print 'c'
                 corner.append(pyPl.shape)
+                print pyPl.shape
 
         bList = []
         for ff in reflex.Faces:
@@ -673,7 +683,15 @@ class _PyReflex(_Py):
                 print 'B'
 
                 reflex = reflex.cut([oppReflex], tolerance)
-                compound = Part.makeCompound([reflex])
+                gS = pyR.geomShape
+                ff = self.selectFace(reflex.Faces, gS)
+                fList = [ff]
+                reflex = reflex.removeShape([ff])
+                for ff in reflex.Faces:
+                    section = ff.section([pyR.forward, pyR.backward], tolerance)
+                    if not section.Edges:
+                        fList.append(ff)
+                compound = Part.makeCompound(fList)
                 pyR.shape = compound
 
             else:

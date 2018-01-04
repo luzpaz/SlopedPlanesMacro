@@ -790,6 +790,8 @@ class _PyAlignment(_Py):
 
                     pyOppPlane = [pyOne, pyTwo][num-1]
                     if pyPlane.numWire == 0 and pyOppPlane.numWire != 0:
+                        # debería ser mas selectivo ya que prodrian haber otros chops en el wire exterior
+                        # puedes comprobarlo con self.aligns
                         if not rangoChop:
                             falsePlane = _PyPlane(0, pyPlane.numGeom)
                             falsePlane.rear = pyPlane.rear
