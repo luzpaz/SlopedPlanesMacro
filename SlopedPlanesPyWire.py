@@ -149,6 +149,13 @@ class _PyWire(_Py):
                     pyPlane.rangging(self, direction)
                     direction = "backward"
 
+    def virtualizing(self):
+
+        ''''''
+
+        for pyReflex in self.reflexs:
+            pyReflex.virtualizing()
+
     def trimming(self):
 
         '''trimming(self)
@@ -371,10 +378,6 @@ class _PyWire(_Py):
 
         '''simulating(self)
         '''
-
-        # TODO ver como adelantar el virtualizado de reflexs
-        '''for pyReflex in self.reflexs:
-            pyReflex.virtualizing()'''
 
         for pyReflex in self.reflexs:
             pyReflex.simulating()

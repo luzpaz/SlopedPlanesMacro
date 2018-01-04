@@ -997,15 +997,8 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.virtualizing()
 
-        # TODO esto retrasarlo ya que no lo estan usando en trimming alignment
-        for pyAlign in self.alignments:
-            pyAlign.simulatingChop()
-
-        # TODO ver como adelantar el virtualizado de reflexs
-        # afecta a trimming y priorLater
         for pyWire in self.wires:
-            for pyReflex in pyWire.reflexs:
-                pyReflex.virtualizing()
+            pyWire.virtualizing()
 
         # self.printControl('virtualizing')
 
@@ -1044,6 +1037,9 @@ class _PyFace(_Py):
 
         '''simulating(self)
         '''
+
+        for pyAlign in self.alignments:
+            pyAlign.simulatingChop()
 
         for pyAlign in self.alignments:
             if not pyAlign.falsify:

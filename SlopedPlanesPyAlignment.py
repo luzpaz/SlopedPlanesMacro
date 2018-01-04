@@ -288,7 +288,6 @@ class _PyAlignment(_Py):
                     pyPl.bigShape = bPl
 
         falsify = self.falsify
-        # simulatedChop = self.simulatedChop
 
         rearRango = []
         numChop = -1
@@ -296,9 +295,7 @@ class _PyAlignment(_Py):
             numChop += 1
 
             [pyOne, pyTwo] = chop
-            #[ffOne, ffTwo] = simulatedChop[numChop]
 
-            #enormShape = ffOne
             enormShape = pyOne.enormousShape
 
             for pyPlane in chop:
@@ -307,7 +304,6 @@ class _PyAlignment(_Py):
 
                 print 'rango ', pyPlane.rangoConsolidate
                 for nG in pyPlane.rangoConsolidate:
-                    # if nG not in rangoChop[numChop] and nG not in lastAliRear:
                     if nG not in rangoChop[numChop]:
 
                         # solo los chops del wire exterior tienen rango
@@ -340,7 +336,6 @@ class _PyAlignment(_Py):
                             pyPl.trimming(enShape, cList)
                             control.append(pyPlane.numGeom)       # el chop
 
-                #enormShape = ffTwo
                 enormShape = pyTwo.enormousShape
 
             # los planos de rangoChop no deben cortar a las traseras
