@@ -696,6 +696,8 @@ class _PyAlignment(_Py):
         # print '### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
         # print '### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
 
+        tolerance = _Py.tolerance
+
         pyWireList = _Py.pyFace.wires
         pyPlaneList = pyWireList[0].planes
 
@@ -718,6 +720,7 @@ class _PyAlignment(_Py):
             # print[pyOne.numGeom, pyTwo.numGeom]
 
             cutList = []
+            rC = []  # podría ser necesario diferenciado para cada chop
 
             # introduces the rangoChop
 
@@ -733,13 +736,11 @@ class _PyAlignment(_Py):
                     if not pyPl.aligned:
                         pl = pyPl.shape
                         cutList.append(pl)
-                        # print 'rangoChop ', nn
+                        print 'rangoChop ', nn
 
             # introduces the rangos and rears
 
             for pyPlane in [pyOne, pyTwo]:
-
-                rC = []  # podría ser necesario diferenciado para cada chop
                 rango = pyPlane.rangoConsolidate
                 for nn in rango:
                     pyPl = pyPlaneList[nn]
@@ -748,8 +749,7 @@ class _PyAlignment(_Py):
                             rangoPlane = pyPl.shape
                             cutList.append(rangoPlane)
                             rC.append(rangoPlane)
-                            # print'rango ', nn
-                rC = Part.makeCompound(rC)
+                            print'rango ', nn
 
                 rear = pyPlane.rear
                 for nG in rear:
@@ -757,8 +757,11 @@ class _PyAlignment(_Py):
                     if not pyPl.choped:
                         if not pyPl.aligned:
                             rearPlane = pyPl.shape
-                            cutList.append(rearPlane)
-                            # print'rearPlane ', nG
+                            if rearPlane not in cutList:
+                                cutList.append(rearPlane)
+                                print'rearPlane ', nG
+
+            rC = Part.makeCompound(rC)
 
             # cuts chops
 
@@ -766,7 +769,7 @@ class _PyAlignment(_Py):
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
 
-                # print '# pyPlane ', pyPlane.numGeom
+                print '# pyPlane ', pyPlane.numGeom
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
@@ -782,28 +785,28 @@ class _PyAlignment(_Py):
                 cutterList = cList + cutList
 
                 gS = pyPlane.geomShape
-                planeCopy = planeCopy.cut(cutterList, _Py.tolerance)
-                # print 'planeCopy.Faces ', planeCopy.Faces
+                planeCopy = planeCopy.cut(cutterList, tolerance)
+                print 'planeCopy.Faces ', planeCopy.Faces
 
                 fList = []
                 for ff in planeCopy.Faces:
-                    # print '0'
-                    if ff.section([gS], _Py.tolerance).Edges:
-                        # print 'a'
-                        pass
-                    elif ff.section([_Py.face], _Py.tolerance).Edges:
-                        # print 'b'
-                        fList.append(ff)
+                    section = ff.section([gS], tolerance)
+                    if not section.Edges:
+                        section = ff.section([_Py.face], tolerance)
+                        if section.Edges:
+                            fList.append(ff)
+
+                planeCopy = plane.copy()
 
                 if fList:
-                    plane = plane.cut(fList, _Py.tolerance)
+                    planeCopy = planeCopy.cut(fList, tolerance)
 
                 if cutList:
 
                     pyOppPlane = [pyOne, pyTwo][num-1]
                     if pyPlane.numWire == 0 and pyOppPlane.numWire != 0:
                         # debería ser mas selectivo ya que prodrian haber otros chops en el wire exterior
-                        # puedes comprobarlo con self.aligns
+                        # puedes comprobarlo con self.aligns o con self.rango
                         if not rangoChop:
                             falsePlane = _PyPlane(0, pyPlane.numGeom)
                             falsePlane.rear = pyPlane.rear
@@ -823,46 +826,42 @@ class _PyAlignment(_Py):
                                         cutList.append(pl)
                                         # print 'rr ', nn
 
-                    plane = plane.cut(cutList, _Py.tolerance)
-                # print 'plane.Faces ', plane.Faces
+                    planeCopy = planeCopy.cut(cutList, tolerance)
+
+                print 'planeCopy.Faces ', planeCopy.Faces
+
+                aList = []
+                for ff in planeCopy.Faces:
+                    print '1'
+                    section = ff.section([gS], tolerance)
+                    if section.Edges:
+                        print '11'
+                        aList.append(ff)
+                        planeCopy = planeCopy.removeShape([ff])
+                        break
+
+                planeCopy = planeCopy.cut(cList, tolerance)
 
                 forward = pyPlane.forward
                 backward = pyPlane.backward
 
-                aList = []
-                for ff in plane.Faces:
-                    # print '1'
-                    if ff.section([gS], _Py.tolerance).Edges:
-                        # print '11'
-                        aList.append(ff)
-
-                fList = []
-                for ff in plane.Faces:
-                    # print '2'
-                    if ff.section([forward, backward], _Py.tolerance).Edges:
-                        # print '21'
-                        ff = ff.cut(cList, _Py.tolerance)
-                        for f in ff.Faces:
-                            # print '211'
-                            if not f.section([forward, backward],
-                                             _Py.tolerance).Edges:
-                                # print '2111'
-                                section = f.section(aList, _Py.tolerance)
-                                if not section.Vertexes:
-                                    # print '21111'
-                                    section = f.section(rC, _Py.tolerance)
-                                    if section.Edges:
-                                        # print '211111'
-                                        fList.append(f)
-                    else:
-                        # print '22'
-                        section = ff.section(aList, _Py.tolerance)
+                ffList = []
+                for ff in planeCopy.Faces:
+                    print '2'
+                    section = ff.section([forward, backward], tolerance)
+                    if not section.Edges:
+                        print '21'
+                        section = ff.section(aList, tolerance)
                         if not section.Vertexes:
-                            # print '221'
-                            fList.append(ff)
+                            print '211'
+                            section = ff.section([rC], tolerance)
+                            if section.Edges:
+                                print '2111'
+                                ffList.append(ff)
+                                break
 
-                aList.extend(fList)
-                # print 'aList ', aList
+                aList.extend(ffList)
+                print 'aList ', aList
                 comp = Part.makeCompound(aList)
                 pyPlane.shape = comp
 
@@ -880,7 +879,7 @@ class _PyAlignment(_Py):
                 ff = ff.cut([shapeTwo], _Py.tolerance)
                 fList.append(ff.Faces[0])
 
-            # print 'fList ', fList
+            print 'fList ', fList
             compound = Part.makeCompound(fList)
             pyOne.shape = compound
 
@@ -893,7 +892,7 @@ class _PyAlignment(_Py):
                 ff = ff.cut([shapeOne], _Py.tolerance)
                 fList.append(ff.Faces[0])
 
-            # print 'fList ', fList
+            print 'fList ', fList
             compound = Part.makeCompound(fList)
             pyTwo.shape = compound
 
@@ -970,21 +969,23 @@ class _PyAlignment(_Py):
                 base = pyBase.shape
                 base = base.cut(cutterList, _Py.tolerance)
 
+                print 'base.Faces ', base.Faces
+
                 number = 2
-                if len(shapeOne.Faces) > 1:
-                    number += 1
-                if len(shapeTwo.Faces) > 1:
+                if len(shapeOne.Faces) > 1 or len(shapeTwo.Faces) > 1:
                     number += 1
 
+                print 'number ', number
+
                 if len(base.Faces) == number:
-                    # print 'a'
+                    print 'a'
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
                     pyBase.shape = base
 
                 else:
-                    # print 'b'
+                    print 'b'
 
                     gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
