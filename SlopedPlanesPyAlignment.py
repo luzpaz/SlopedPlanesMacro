@@ -1060,6 +1060,44 @@ class _PyAlignment(_Py):
 
                     pyBase = aligns[numChop]
 
+    def end(self, pyPlaneList):
+
+        ''''''
+
+        rearRango = self.rearRango
+        rango = self.rango
+
+        numChop = -1
+        for chop in self.chops:
+            numChop += 1
+            rearRan = rearRango[numChop]
+            # print 'rearRan ', rearRan
+
+            ran = rango[numChop]
+            # print 'ran ', ran
+            for nn in ran:
+                # print '### nn ', nn
+                # solo los chops exteriores tienen rear
+                pyPlane = pyPlaneList[nn]
+                gS = pyPlane.geomShape
+
+                for mm in rearRan:
+                    if mm != nn:
+                        # print '### mm ', mm
+                        pyPl = pyPlaneList[mm]
+                        pl = pyPl.shape
+                        # print pl
+                        plane = pyPlane.shape
+                        # print plane
+
+                        if pl and plane:
+
+                            pl = self.cutting(pl, [plane], pyPl.geomShape)
+                            pyPl.shape = pl
+
+                            plane = self.cutting(plane, [pl], gS)
+                            pyPlane.shape = plane
+
     def rangging(self):
 
         '''rangging(self)

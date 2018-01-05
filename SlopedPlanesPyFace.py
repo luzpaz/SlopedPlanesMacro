@@ -1198,8 +1198,6 @@ class _PyFace(_Py):
         '''aligning(self)
         '''
 
-        # self.printSummary()
-
         pyAlignList = self.alignments
 
         for pyAlign in pyAlignList:
@@ -1210,7 +1208,13 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
-        # self.printControl('aligning')
+        self.end()
+
+    def end(self):
+
+        ''''''
+
+        pyAlignList = self.alignments
 
         cutterList = []
 
@@ -1287,45 +1291,8 @@ class _PyFace(_Py):
                             plane = self.cutting(plane, cutterList, gS)
                             pyPlane.shape = plane
 
-        # self.printControl('ending')
-
         pyWireList = _Py.pyFace.wires
         pyPlaneList = pyWireList[0].planes
 
         for pyAlign in pyAlignList:
-            rearRango = pyAlign.rearRango
-            rango = pyAlign.rango
-
-            numChop = -1
-            for chop in pyAlign.chops:
-                numChop += 1
-                rearRan = rearRango[numChop]
-                # print 'rearRan ', rearRan
-
-                ran = rango[numChop]
-                # print 'ran ', ran
-                for nn in ran:
-                    # print '### nn ', nn
-                    # solo los chops exteriores tienen rear
-                    pyPlane = pyPlaneList[nn]
-                    gS = pyPlane.geomShape
-
-                    for mm in rearRan:
-                        if mm != nn:
-                            # print '### mm ', mm
-                            pyPl = pyPlaneList[mm]
-                            pl = pyPl.shape
-                            # print pl
-                            plane = pyPlane.shape
-                            # print plane
-
-                            if pl and plane:
-
-                                pl = self.cutting(pl, [plane], pyPl.geomShape)
-                                pyPl.shape = pl
-
-                                plane = self.cutting(plane, [pl], gS)
-                                pyPlane.shape = plane
-
-        # self.printControl('moreEnding')
-        # '''
+            pyAlign.end(pyPlaneList)
