@@ -255,10 +255,7 @@ class _PyAlignment(_Py):
         The alignment blocks the progress
         of the planes in its front and laterals'''
 
-        # # los chops exteriores tienen rango y rangoChop
-        # # los chops interiores no tienen rango y si tienen rangoChop
-
-        print '###### base ', (self.base.numWire, self.base.numGeom)
+        # print '###### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         numGeom = pyBase.numGeom
@@ -277,7 +274,6 @@ class _PyAlignment(_Py):
         for rr in rangoChop:
             numChop += 1
             for nG in rr:
-                # solo hay rangoChop si los dos chops pertenecen al mismo wire
                 pyW = pyWireList[chops[numChop][0].numWire]
                 pyPlList = pyW.planes
                 pyPl = pyPlList[nG]
@@ -299,10 +295,10 @@ class _PyAlignment(_Py):
             num = -1
             for pyPlane in chop:
                 num += 1
-                print '### chop ', pyPlane.numWire, pyPlane.numGeom, pyPlane.virtualized, pyPlane.geomAligned
+                # print '### chop ', pyPlane.numWire, pyPlane.numGeom
+                enShape = pyPlane.enormousShape
 
                 cont = True
-
                 if num == 0:
                     if pyPlane.virtualized:
                         if not pyPlane.geomAligned:
@@ -311,30 +307,20 @@ class _PyAlignment(_Py):
                     if pyPlane.virtualized:
                         if pyPlane.geomAligned:
                             cont = False
+                #print 'cont ', cont
 
-                print 'cont ', cont
-
-                enShape = pyPlane.enormousShape
-
-                print 'rango ', pyPlane.rangoConsolidate
+                # print 'rango ', pyPlane.rangoConsolidate
                 for nG in pyPlane.rangoConsolidate:
                     if nG not in rangoChop[numChop]:
-
-                        # solo los chops del wire exterior tienen rango
                         pyPl = pyPlaneList[nG]
-
-                        # if not pyPl.reflexed:
                         if not pyPl.aligned and not pyPl.choped:
-
                             control = pyPl.control
                             # print '# nG ', nG
 
                             cList = [enShape]
-
                             if falsify:
                                 # print 'a'
                                 pass
-
                             else:
                                 # print 'b'
                                 if nG not in pyBase.rear:
@@ -350,20 +336,13 @@ class _PyAlignment(_Py):
                                                 control.append(numGeom)     # la base
 
                             if cont:
-
+                                # print 'cont '
                                 pyPl.trimming(enShape, cList)
                                 control.append(pyPlane.numGeom)       # el chop
 
                             else:
-
+                                # print 'no cont'
                                 pyPl.trimmingTwo(enShape)
-
-            # los planos de rangoChop no deben cortar a las traseras
-            # y a los planos entre traseras de cada chop.
-            # se deben ejecutar estos cortes al finalizar el alineado
-            # el trimming de rangoChop lo quite por la cruz con los rangoChop acostados
-
-            # solo los chops exteriores tienen rear
 
             if pyTwo.numWire == 0 and pyOne.numWire == 0:
 
@@ -382,7 +361,6 @@ class _PyAlignment(_Py):
 
             else:
                 rang = []
-
             # print 'rang ', rang
 
             rearRango.append(rang)
@@ -409,7 +387,7 @@ class _PyAlignment(_Py):
         '''
 
         pyBase = self.base
-        # print '### base ', pyBase.numGeom
+        # print '###### base ', (pyBase.numWire, pyBase.numGeom)
 
         base = pyBase.shape
         bigBase = pyBase.bigShape
@@ -557,7 +535,7 @@ class _PyAlignment(_Py):
 
         pyBase = self.base
         base = pyBase.shape.copy()
-        # print(pyBase.numWire, pyBase.numGeom)
+        # print '###### base ', (pyBase.numWire, pyBase.numGeom)
 
         if self.falsify:
 
@@ -595,10 +573,7 @@ class _PyAlignment(_Py):
             rango = self.rango
 
             simulatedChopList = self.simulatedChop
-
             pyPlaneList = _Py.pyFace.wires[0].planes
-            # solamente los alineamientos exclusivamente exteriores tiene rangoChop,
-            # y solo los chops exteriores tienen rango
 
             chopList = []
             numChop = -1
@@ -711,10 +686,10 @@ class _PyAlignment(_Py):
         '''aligning(self)
         '''
 
-        # print '### base ', (self.base.numWire, self.base.numGeom)
-        # print '### base shape ', self.base.shape
-        # print '### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
-        # print '### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
+        # print '###### base ', (self.base.numWire, self.base.numGeom)
+        # print '###### base shape ', self.base.shape
+        # print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
+        # print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
 
         tolerance = _Py.tolerance
 
@@ -830,9 +805,6 @@ class _PyAlignment(_Py):
                         if not rangoChop:
                             falsePlane = _PyPlane(0, pyPlane.numGeom)
                             falsePlane.rear = pyPlane.rear
-                            # print falsePlane.numWire
-                            # print falsePlane.numGeom
-                            # print falsePlane.rear
                             pyWire = pyWireList[0]
                             falsePlane.rangging(pyWire, 'backward')
                             rr = falsePlane.rangoConsolidate
@@ -847,7 +819,6 @@ class _PyAlignment(_Py):
                                         # print 'rr ', nn
 
                     planeCopy = planeCopy.cut(cutList, tolerance)
-
                 # print 'planeCopy.Faces ', planeCopy.Faces
 
                 aList = []
@@ -859,7 +830,6 @@ class _PyAlignment(_Py):
                         aList.append(ff)
                         planeCopy = planeCopy.removeShape([ff])
                         break
-
                 # print 'planeCopy.Faces ', planeCopy.Faces
 
                 if planeCopy.Faces:
@@ -991,13 +961,11 @@ class _PyAlignment(_Py):
 
                 base = pyBase.shape
                 base = base.cut(cutterList, _Py.tolerance)
-
                 # print 'base.Faces ', base.Faces
 
                 number = 2
                 if len(shapeOne.Faces) > 1 or len(shapeTwo.Faces) > 1:
                     number += 1
-
                 # print 'number ', number
 
                 if len(base.Faces) == number:

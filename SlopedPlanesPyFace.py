@@ -296,6 +296,8 @@ class _PyFace(_Py):
         '''parsing(self)
         Splits the face finding its reflex corners and alignments'''
 
+        # print '######### parsing'
+
         resetFace = self.reset
 
         if not resetFace and not self.alignments:
@@ -937,6 +939,8 @@ class _PyFace(_Py):
         Arranges the alignment ranges
         Rearmes tha face reset system'''
 
+        # print '######### planning'
+
         for pyWire in self.wires:
             pyWire.planning()
 
@@ -947,12 +951,12 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        # self.printSummary()
-
     def upping(self):
 
         '''upping(self)
         '''
+
+        # print '######### upping'
 
         if _Py.slopedPlanes.Up:
 
@@ -994,6 +998,8 @@ class _PyFace(_Py):
         '''virtualizing(self)
         '''
 
+        # print '######### virtualizing'
+
         for pyAlign in self.alignments:
             pyAlign.virtualizing()
 
@@ -1007,6 +1013,8 @@ class _PyFace(_Py):
         '''trimming(self)
         Transfers to PyWire and PyAlignment
         '''
+
+        # print '######### trimming'
 
         for pyWire in self.wires:
             pyWire.trimming()
@@ -1023,20 +1031,22 @@ class _PyFace(_Py):
         '''priorLater(self)
         '''
 
+        # print '######### priorLater'
+
         for pyWire in self.wires:
             pyWire.priorLater()
-
         # self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
-
         # self.printControl('priorLater alignments')
 
     def simulating(self):
 
         '''simulating(self)
         '''
+
+        # print '######### simulating'
 
         for pyAlign in self.alignments:
             pyAlign.simulatingChop()
@@ -1060,30 +1070,28 @@ class _PyFace(_Py):
         '''reflexing(self)
         '''
 
+        # print '######### reflexing'
+
         for pyWire in self.wires:
             if pyWire.reflexs:
                 pyWire.reflexing()
-
-        # self.printControl('reflexing')
 
     def ordinaries(self):
 
         '''ordinaries(self)
         '''
 
+        # print '######### ordinaries'
+
         for pyWire in self.wires:
             pyWire.ordinaries()
-
-        # self.printControl('ordinaries')
 
     def betweenWires(self):
 
         '''betweenWires(self)
         '''
 
-        # print '###### betweenWires'
-
-        # self.printSummary()
+        # print '######### betweenWires'
 
         pyWireList = self.wires[:]
         if len(pyWireList) > 1:
@@ -1154,7 +1162,7 @@ class _PyFace(_Py):
 
                                 else:
                                     if cont:
-                                        # print 'D'
+                                        # print 'cont'
                                         totalList.extend(pyAlign.simulatedAlignment)
 
                         if totalList:
@@ -1198,6 +1206,8 @@ class _PyFace(_Py):
         '''aligning(self)
         '''
 
+        # print '######### aligning'
+
         pyAlignList = self.alignments
 
         for pyAlign in pyAlignList:
@@ -1217,7 +1227,6 @@ class _PyFace(_Py):
         pyAlignList = self.alignments
 
         cutterList = []
-
         for pyAlign in pyAlignList:
 
             if isinstance(pyAlign.base.angle, float):
@@ -1227,7 +1236,6 @@ class _PyFace(_Py):
                     # print 'a', pyAlign.base.numGeom
 
             for pyPlane in pyAlign.aligns:
-                # if pyPlane.geomAligned:
                 plane = pyPlane.shape
                 if plane:
                     if plane not in cutterList:
@@ -1235,33 +1243,26 @@ class _PyFace(_Py):
                         # print 'b', pyPlane.numGeom
 
             for [pyChopOne, pyChopTwo] in pyAlign.chops:
-
-                #if pyChopOne.geomAligned:
                 if not pyChopOne.virtualized:
                     chopOne = pyChopOne.shape
                     if chopOne not in cutterList:
                         cutterList.append(chopOne)
                         # print 'c', pyChopOne.numGeom
 
-                # if pyChopTwo.geomAligned:
                 if not pyChopTwo.virtualized:
                     chopTwo = pyChopTwo.shape
                     if chopTwo not in cutterList:
                         cutterList.append(chopTwo)
                         # print 'd', pyChopTwo.numGeom
 
-        # print cutterList
-
         if cutterList:
+            # print cutterList
 
             for pyWire in self.wires:
                 for pyPlane in pyWire.planes:
                     plane = pyPlane.shape
                     if plane:
-
                         # print 'numGeom', pyPlane.numGeom
-
-                        # print cutterList
 
                         if pyPlane.choped or pyPlane.aligned:
                             # print '1'
@@ -1291,7 +1292,7 @@ class _PyFace(_Py):
                             plane = self.cutting(plane, cutterList, gS)
                             pyPlane.shape = plane
 
-        pyWireList = _Py.pyFace.wires
+        pyWireList = self.wires
         pyPlaneList = pyWireList[0].planes
 
         for pyAlign in pyAlignList:

@@ -503,10 +503,7 @@ class _PyPlane(_Py):
         '''
 
         numGeom = self.numGeom
-        # print '###### planning ', numGeom
-        # print self.leftWidth
-        # print self.rightWidth
-        # print self.length
+        # print '# planning ', numGeom
 
         if self.seedShape:
             # print 'seed'
@@ -533,10 +530,6 @@ class _PyPlane(_Py):
             geomCopy = geom.copy()
             geomCopy.translate(-1*self.overhang*direction)
 
-            # print 'geom ', geom
-            # print 'geomCopy ', geomCopy
-
-            # print '### plane'
             scale = 1
             plane =\
                 self.doPlane(direction, geomCopy, firstParam,
@@ -545,13 +538,8 @@ class _PyPlane(_Py):
             self.seedShape = plane.copy()
 
             geomCopy = geom.copy()
-            # print -1*_Py.size*direction
             geomCopy.translate(-1*_Py.size*direction)
 
-            # print 'geom ', geom
-            # print 'geomCopy ', geomCopy
-
-            # print '### bigPlane'
             scale = 100
             bigPlane =\
                 self.doPlane(direction, geomCopy, firstParam,
@@ -561,7 +549,6 @@ class _PyPlane(_Py):
 
             if self.reflexed:
 
-                # print '### enormousPlane'
                 scale = 10000
                 enormousPlane =\
                     self.doPlane(direction, geomCopy, firstParam,
@@ -602,10 +589,6 @@ class _PyPlane(_Py):
             if self.length < length:
                 # print 'length'
                 upScale = length * scale
-
-        # print 'leftScale ', leftScale
-        # print 'rightSclae ', rightScale
-        # print 'upScale ', upScale
 
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola)):
@@ -724,7 +707,7 @@ class _PyPlane(_Py):
         '''simulating(self, enormousShape)
         '''
 
-        # print 'simulating ', self.numGeom
+        # print '# simulating ', self.numGeom
 
         try:
             plCopy = self.simulatedShape.copy()
@@ -742,9 +725,7 @@ class _PyPlane(_Py):
         '''rearing(self, pyWire, pyReflex)
         '''
 
-        # print '### rearing'
-
-        # print 'self.numGeom ', self.numGeom
+        # print '# rearing ', (self.numWire, self.numGeom)
 
         tolerance = _Py.tolerance
         plane = self.shape
@@ -784,38 +765,38 @@ class _PyPlane(_Py):
                 pl = pyPl.shape
                 forw = pyPl.forward
                 control = pyPl.control
-    
+
                 if case:
                     condition = not (pyPl.aligned or pyPl.choped)
-    
+
                 else:
                     condition = (pyPl.reflexed and not pyPl.aligned and not pyPl.choped)
-    
+
                 if condition:
                     # print 'numG ', numG
-    
+
                     if not fo:
-    
+
                         cList = []
                         if self.numGeom not in control:
                             cList.append(plane)
                             # print 'included ', self.numGeom
                             control.append(self.numGeom)
-    
+
                         if pyOppPlane.numGeom not in control:
                             cList.append(oppPlane)
                             # print 'included ', pyOppPlane.numGeom
                             control.append(pyOppPlane.numGeom)
-    
+
                         if cList:
                             # print 'cList ', cList
-    
+
                             if isinstance(pl, Part.Compound):
                                 # print 'aa'
-    
+
                                 if len(pl.Faces) > 1:
                                     # print 'aa1'
-    
+
                                     aList = []
                                     for ff in pl.Faces:
                                         section = ff.section([gS], tolerance)
@@ -827,39 +808,39 @@ class _PyPlane(_Py):
                                         else:
                                             # print 'aa12'
                                             aList.append(ff.Faces[0])
-    
+
                                     compound = Part.Compound(aList)
                                     pyPl.shape = compound
-    
+
                                 else:
                                     # print 'aa2'
                                     pl = self.cutting(pl, cList, gS)
                                     compound = Part.Compound([pl])
                                     pyPl.shape = compound
-    
+
                             else:
                                 # print 'bb'
                                 pl = self.cutting(pl, cList, gS)
                                 pyPl.shape = pl
-    
+
                             if len(plane.Faces) == 1:
                                 # print 'AA'
-    
+
                                 gS = self.geomShape
                                 plane = self.cutting(plane, [pl], gS)
                                 compound = Part.Compound([plane])
                                 self.shape = compound
                                 self.control.append(numG)
-    
+
                             if len(oppPlane.Faces) == 1:
                                 # print 'BB'
-    
+
                                 gS = pyOppPlane.geomShape
                                 oppPlane = self.cutting(oppPlane, [pl], gS)
                                 compound = Part.Compound([oppPlane])
                                 pyOppPlane.shape = compound
                                 pyOppPlane.control.append(numG)
-    
+
                     else:  # if fo
                         if pyPl.reflexed:
                             # print 'fo1'

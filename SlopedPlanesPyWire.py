@@ -171,7 +171,7 @@ class _PyWire(_Py):
             num = -1
             for pyPlane in pyReflex.planes:
                 num += 1
-                # print '###### cutter ', pyPlane.numGeom, pyPlane.virtualized
+                # print '### cutter ', pyPlane.numGeom, pyPlane.virtualized
 
                 pyOppPlane = pyReflex.planes[num-1]
                 enormousShape = pyPlane.enormousShape
@@ -200,7 +200,7 @@ class _PyWire(_Py):
                         # TODO pyPl numWire and angle ???
 
                         if numGeom not in pyPl.control:
-                            # print '### cutted ', nG
+                            # print '# cutted ', nG
 
                             if not pyPl.reflexed:
                                 # print 'a'
@@ -284,9 +284,6 @@ class _PyWire(_Py):
                 numGeom = pyPlane.numGeom
                 control = pyPlane.control
                 # print '### numGeom ', numGeom
-                # print 'reflexed ', pyPlane.reflexed
-                # print 'choped ', pyPlane.choped
-                # print 'arrow ', pyPlane.arrow
 
                 prior = self.sliceIndex(numGeom-1, lenWire)
                 later = self.sliceIndex(numGeom+1, lenWire)
@@ -387,14 +384,10 @@ class _PyWire(_Py):
         '''reflexing(self)
         '''
 
-        # self.printSummary()
-
         # print '###### reflexing wire ', self.numWire
 
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
-
-        # self.printControl('preProcess')
 
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
@@ -402,22 +395,14 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
 
-        # self.printControl('solveReflex')
-
         for pyReflex in self.reflexs:
             pyReflex.solveReflexTwo(self)
-
-        # self.printControl('solveReflexTwo')
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self, False)
 
-        # self.printControl('rearing')
-
         for pyReflex in self.reflexs:
             pyReflex.postProcess(self)
-
-        # self.printControl('postProcess')
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self, True)
@@ -431,11 +416,6 @@ class _PyWire(_Py):
 
         for pyPlane in self.planes:
             if not (pyPlane.reflexed and not pyPlane.aligned):
-                # no reflexed and no choped. Yes ordinarie and aligned
-                # print pyPlane.numGeom
-                # print pyPlane.reflexed
-                # print pyPlane.choped
-                # print pyPlane.aligned
                 if pyPlane.shape:
-                    # print '############### ordinaries ', pyPlane.numGeom
+                    # print '#### ordinaries ', pyPlane.numGeom
                     pyPlane.ordinaries(self)
