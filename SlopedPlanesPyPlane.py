@@ -645,6 +645,7 @@ class _PyPlane(_Py):
             enormous = self.enormousShape
             simulated = self.simulatedShape
             geom = self.geom
+            geomAligned = self.geomAligned
             geomShape = self.geomShape
             forward = self.forward
             backward = self.backward
@@ -654,7 +655,7 @@ class _PyPlane(_Py):
             angle = self.angle
 
             if not plane:
-                (nWire, nGeom) = self.angle
+                (nWire, nGeom) = angle
                 pyPlane = self.selectPlane(nWire, nGeom)
                 plane = pyPlane.shape
                 big = pyPlane.bigShape
@@ -665,6 +666,7 @@ class _PyPlane(_Py):
             pyPlane = _PyPlane(numWire, numGeom)
             pyPlane.geomShape = geomShape
             pyPlane.geom = geom
+            pyPlane.geomAligned = geomAligned
             pyPlane.forward = forward
             pyPlane.backward = backward
             pyPlane.rear = rear

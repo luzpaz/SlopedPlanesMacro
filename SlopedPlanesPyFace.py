@@ -1232,13 +1232,15 @@ class _PyFace(_Py):
 
             for [pyChopOne, pyChopTwo] in pyAlign.chops:
 
-                if pyChopOne.geomAligned:
+                #if pyChopOne.geomAligned:
+                if not pyChopOne.virtualized:
                     chopOne = pyChopOne.shape
                     if chopOne not in cutterList:
                         cutterList.append(chopOne)
                         # print 'c', pyChopOne.numGeom
 
-                if pyChopTwo.geomAligned:
+                # if pyChopTwo.geomAligned:
+                if not pyChopTwo.virtualized:
                     chopTwo = pyChopTwo.shape
                     if chopTwo not in cutterList:
                         cutterList.append(chopTwo)

@@ -258,7 +258,7 @@ class _PyAlignment(_Py):
         # # los chops exteriores tienen rango y rangoChop
         # # los chops interiores no tienen rango y si tienen rangoChop
 
-        # print '###### base ', (self.base.numWire, self.base.numGeom)
+        print '###### base ', (self.base.numWire, self.base.numGeom)
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         numGeom = pyBase.numGeom
@@ -296,13 +296,27 @@ class _PyAlignment(_Py):
 
             [pyOne, pyTwo] = chop
 
-            enormShape = pyOne.enormousShape
-
+            num = -1
             for pyPlane in chop:
-                # print '### chop ', pyPlane.numWire, pyPlane.numGeom
+                num += 1
+                print '### chop ', pyPlane.numWire, pyPlane.numGeom, pyPlane.virtualized, pyPlane.geomAligned
+
+                cont = True
+
+                if num == 0:
+                    if pyPlane.virtualized:
+                        if not pyPlane.geomAligned:
+                            cont = False
+                else:
+                    if pyPlane.virtualized:
+                        if pyPlane.geomAligned:
+                            cont = False
+
+                print 'cont ', cont
+
                 enShape = pyPlane.enormousShape
 
-                # print 'rango ', pyPlane.rangoConsolidate
+                print 'rango ', pyPlane.rangoConsolidate
                 for nG in pyPlane.rangoConsolidate:
                     if nG not in rangoChop[numChop]:
 
@@ -315,13 +329,14 @@ class _PyAlignment(_Py):
                             control = pyPl.control
                             # print '# nG ', nG
 
+                            cList = [enShape]
+
                             if falsify:
                                 # print 'a'
-                                cList = [enormShape]
+                                pass
 
                             else:
                                 # print 'b'
-                                cList = [enormShape]
                                 if nG not in pyBase.rear:
                                     # print 'bb'
                                     if nG not in [self.prior.numGeom,
@@ -331,12 +346,17 @@ class _PyAlignment(_Py):
                                         if numGeom not in control:
                                             # print 'bbbb'
                                             cList.append(enormousShape)
-                                            control.append(numGeom)     # la base
+                                            if cont:
+                                                control.append(numGeom)     # la base
 
-                            pyPl.trimming(enShape, cList)
-                            control.append(pyPlane.numGeom)       # el chop
+                            if cont:
 
-                enormShape = pyTwo.enormousShape
+                                pyPl.trimming(enShape, cList)
+                                control.append(pyPlane.numGeom)       # el chop
+
+                            else:
+
+                                pyPl.trimmingTwo(enShape)
 
             # los planos de rangoChop no deben cortar a las traseras
             # y a los planos entre traseras de cada chop.
