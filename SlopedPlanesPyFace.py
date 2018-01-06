@@ -1047,7 +1047,7 @@ class _PyFace(_Py):
         '''simulating(self)
         '''
 
-        print '######### simulating'
+        # print '######### simulating'
 
         for pyAlign in self.alignments:
             pyAlign.simulatingChop()
@@ -1082,7 +1082,7 @@ class _PyFace(_Py):
         '''ordinaries(self)
         '''
 
-        print '######### ordinaries'
+        # print '######### ordinaries'
 
         for pyWire in self.wires:
             pyWire.ordinaries()
