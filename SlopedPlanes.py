@@ -37,6 +37,7 @@ from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
+__version__ = ""
 __doc__ = '''Requieres a sketch or DWire as base.
              The base must support the FaceMaker.
              The angles correspond to the faces of the SlopedPlane's shape.'''

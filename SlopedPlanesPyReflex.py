@@ -29,6 +29,7 @@ from SlopedPlanesPy import _Py
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
+__version__ = ""
 
 
 class _PyReflex(_Py):

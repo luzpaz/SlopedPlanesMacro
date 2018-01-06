@@ -35,6 +35,7 @@ from SlopedPlanesPyPlane import _PyPlane
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
+__version__ = ""
 
 
 class _PyFace(_Py):
