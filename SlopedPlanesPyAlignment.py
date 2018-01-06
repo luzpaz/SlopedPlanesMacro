@@ -651,14 +651,13 @@ class _PyAlignment(_Py):
 
             cutterList = chopList + cutList
 
-            # it's yet included in rango
-            '''limitList = []
+            limitList = []
             pyPrior = self.prior
             pyLater = self.later
             bigPrior = pyPrior.bigShape
             bigLater = pyLater.bigShape
             limitList.extend([bigPrior, bigLater])
-            cutterList.extend(limitList)'''
+            cutterList.extend(limitList)
 
             geomList = [pyP.geomShape for pyP in self.aligns]
             geomList.insert(0, pyBase.geomShape)
