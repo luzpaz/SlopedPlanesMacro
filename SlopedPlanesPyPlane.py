@@ -876,10 +876,10 @@ class _PyPlane(_Py):
             if pyPl.numGeom not in control:
                 pl = pyPl.shape
                 if pl:
-                    # print 'numGeom ', pyPl.numGeom
+                    print 'numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
-                        # print 'b1'
+                        print 'b1'
 
                         pyAli =\
                             self.selectAlignment(pyPl.numWire,
@@ -887,7 +887,7 @@ class _PyPlane(_Py):
                         # print (pyAli.base.numWire, pyAli.base.numGeom)
 
                         if self.aligned:
-                            # print 'b11'
+                            print 'b11'
 
                             pyAlign =\
                                 self.selectAlignment(self.numWire,
@@ -936,22 +936,22 @@ class _PyPlane(_Py):
                                         break
 
                                 else:
-                                    # print 'b111'
+                                    print 'b111'
                                     simulatedPl = pyAli.simulatedAlignment
                                     cutterList.extend(simulatedPl)
 
                         else:
-                            # print 'b12'
+                            print 'b12'
                             simulatedPl = pyAli.simulatedAlignment
                             cutterList.extend(simulatedPl)
 
                     elif not pyPl.choped:
-                        # print 'b2'
+                        print 'b2'
                         cutterList.append(pl)
                         control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList
+            print 'cutterList ', cutterList
             plane = self.shape
             gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)
