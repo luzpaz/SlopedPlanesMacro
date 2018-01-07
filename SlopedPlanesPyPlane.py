@@ -927,8 +927,18 @@ class _PyPlane(_Py):
 
                     elif pyPl.aligned:
                         print 'b'
-                        plSimulated = pyAli.simulatedAlignment
-                        cutterList.extend(plSimulated)
+                        if self.aligned:
+                            print 'b1'
+                            if self not in pyAli.aligns:
+                                print 'b11'
+                                if pyPl not in pyAlign.aligns:
+                                    print 'b111'
+                                    plSimulated = pyAli.simulatedAlignment
+                                    cutterList.extend(plSimulated)
+                        else:
+                            print 'b2'
+                            plSimulated = pyAli.simulatedAlignment
+                            cutterList.extend(plSimulated)
 
                     else:
                         print 'c'
@@ -955,6 +965,7 @@ class _PyPlane(_Py):
             gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)
             self.shape = plane
+            print 'plane ', plane
 
     def ordinariesOld(self, pyWire):
 
