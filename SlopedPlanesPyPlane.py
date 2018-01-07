@@ -872,10 +872,10 @@ class _PyPlane(_Py):
         control = self.control
 
         if self.aligned:
-            print 'self.aligned'
+            # print 'self.aligned'
 
             pyAlign = self.selectAlignment(self.numWire, self.numGeom)
-            print(pyAlign.base.numWire, pyAlign.base.numGeom)
+            # print(pyAlign.base.numWire, pyAlign.base.numGeom)
 
             rangoChop = pyAlign.rango
             rConsol = []
@@ -887,85 +887,85 @@ class _PyPlane(_Py):
             if pyPl.numGeom not in control:
                 pl = pyPl.shape
                 if pl:
-                    print '# numGeom ', pyPl.numGeom
+                    # print '# numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
-                        print 'pyPl.aligned'
+                        # print 'pyPl.aligned'
                         pyAli = self.selectAlignment(pyPl.numWire, pyPl.numGeom)
-                        print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                        # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
 
                     if pyPl.choped:
-                        print 'a'
+                        # print 'a'
 
                         if self.aligned:
-                            print 'a1'
+                            # print 'a1'
 
                             if pyPl.aligned:
-                                print 'a11'
+                                # print 'a11'
 
                                 section =\
                                     pyPl.geomAligned.section(self.geomAligned)
                                 if not section.Vertexes:
-                                    print 'a111'
+                                    # print 'a111'
                                     plSimulated = pyAli.simulatedAlignment
                                     cutterList.extend(plSimulated)
 
                             else:
-                                print 'a12'
+                                # print 'a12'
                                 pass
 
                         else:
-                            print 'a2'
+                            # print 'a2'
                             if pyPl.aligned:
-                                print 'a21'
+                                # print 'a21'
                                 plSimulated = pyAli.simulatedAlignment
                                 cutterList.extend(plSimulated)
                             else:
-                                print 'a22'
+                                # print 'a22'
                                 plSimulated = pyPl.simulatedShape
                                 cutterList.append(plSimulated)
 
                     elif pyPl.aligned:
-                        print 'b'
+                        # print 'b'
                         if self.aligned:
-                            print 'b1'
+                            # print 'b1'
                             if self not in pyAli.aligns:
-                                print 'b11'
+                                # print 'b11'
                                 if pyPl not in pyAlign.aligns:
-                                    print 'b111'
+                                    # print 'b111'
                                     plSimulated = pyAli.simulatedAlignment
                                     cutterList.extend(plSimulated)
                         else:
-                            print 'b2'
+                            # print 'b2'
                             plSimulated = pyAli.simulatedAlignment
                             cutterList.extend(plSimulated)
 
                     else:
-                        print 'c'
+                        # print 'c'
                         pass
 
                         if self.aligned:
-                            print 'c1'
+                            # print 'c1'
 
                             if pyPl.numGeom not in rConsol:
-                                print 'c11'
+                                # print 'c11'
 
                                 cutterList.append(pl)
                                 control.append(pyPl.numGeom)
 
                         else:
-                            print 'c2'
+                            # print 'c2'
 
                             cutterList.append(pl)
                             control.append(pyPl.numGeom)
 
         if cutterList:
-            print 'cutterList ', cutterList
+            # print 'cutterList ', cutterList
             plane = self.shape
             gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)
             self.shape = plane
-            print 'plane ', plane
+            # print 'plane ', plane
 
     def rangging(self, pyWire, direction):
 
