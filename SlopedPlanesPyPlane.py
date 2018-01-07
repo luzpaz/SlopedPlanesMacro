@@ -869,6 +869,99 @@ class _PyPlane(_Py):
         '''
 
         pyPlaneList = pyWire.planes
+        control = self.control
+
+        if self.aligned:
+            print 'self.aligned'
+
+            pyAlign = self.selectAlignment(self.numWire, self.numGeom)
+            print(pyAlign.base.numWire, pyAlign.base.numGeom)
+
+            rangoChop = pyAlign.rango
+            rConsol = []
+            for rr in rangoChop:
+                rConsol.extend(rr)
+
+        cutterList = []
+        for pyPl in pyPlaneList:
+            if pyPl.numGeom not in control:
+                pl = pyPl.shape
+                if pl:
+                    print '# numGeom ', pyPl.numGeom
+
+                    if pyPl.aligned:
+                        print 'pyPl.aligned'
+                        pyAli = self.selectAlignment(pyPl.numWire, pyPl.numGeom)
+                        print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+
+                    if pyPl.choped:
+                        print 'a'
+
+                        if self.aligned:
+                            print 'a1'
+
+                            if pyPl.aligned:
+                                print 'a11'
+
+                                section =\
+                                    pyPl.geomAligned.section(self.geomAligned)
+                                if not section.Vertexes:
+                                    print 'a111'
+                                    plSimulated = pyAli.simulatedAlignment
+                                    cutterList.extend(plSimulated)
+
+                            else:
+                                print 'a12'
+                                pass
+
+                        else:
+                            print 'a2'
+                            if pyPl.aligned:
+                                print 'a21'
+                                plSimulated = pyAli.simulatedAlignment
+                                cutterList.extend(plSimulated)
+                            else:
+                                print 'a22'
+                                plSimulated = pyPl.simulatedShape
+                                cutterList.append(plSimulated)
+
+                    elif pyPl.aligned:
+                        print 'b'
+                        plSimulated = pyAli.simulatedAlignment
+                        cutterList.extend(plSimulated)
+
+                    else:
+                        print 'c'
+                        pass
+
+                        if self.aligned:
+                            print 'c1'
+
+                            if pyPl.numGeom not in rConsol:
+                                print 'c11'
+
+                                cutterList.append(pl)
+                                control.append(pyPl.numGeom)
+
+                        else:
+                            print 'c2'
+
+                            cutterList.append(pl)
+                            control.append(pyPl.numGeom)
+
+        if cutterList:
+            print 'cutterList ', cutterList
+            plane = self.shape
+            gS = self.geomShape
+            plane = self.cutting(plane, cutterList, gS)
+            self.shape = plane
+
+    def ordinariesOld(self, pyWire):
+
+        '''ordinaries(self, pyWire)
+        '''
+
+        pyPlaneList = pyWire.planes
 
         control = self.control
 
@@ -877,23 +970,23 @@ class _PyPlane(_Py):
             if pyPl.numGeom not in control:
                 pl = pyPl.shape
                 if pl:
-                    # print 'numGeom ', pyPl.numGeom
+                    print '# numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
-                        # print 'b1'
+                        print 'b1'
 
                         pyAli =\
                             self.selectAlignment(pyPl.numWire,
                                                  pyPl.numGeom)
-                        # print (pyAli.base.numWire, pyAli.base.numGeom)
+                        print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
 
                         if self.aligned:
-                            # print 'b11'
+                            print 'b11'
 
                             pyAlign =\
                                 self.selectAlignment(self.numWire,
                                                      self.numGeom)
-                            # print (pyAlign.base.numWire, pyAlign.base.numGeom)
+                            print (pyAlign.base.numWire, pyAlign.base.numGeom)
 
                             if pyAli.base.angle == [pyAlign.base.numWire,
                                                     pyAlign.base.numGeom]:
@@ -937,22 +1030,22 @@ class _PyPlane(_Py):
                                         break
 
                                 else:
-                                    # print 'b111'
+                                    print 'b111'
                                     simulatedPl = pyAli.simulatedAlignment
                                     cutterList.extend(simulatedPl)
 
                         else:
-                            # print 'b12'
+                            print 'b12'
                             simulatedPl = pyAli.simulatedAlignment
                             cutterList.extend(simulatedPl)
 
                     elif not pyPl.choped:
-                        # print 'b2'
+                        print 'b2'
                         cutterList.append(pl)
                         control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList
+            print 'cutterList ', cutterList
             plane = self.shape
             gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)
