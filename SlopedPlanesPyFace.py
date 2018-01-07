@@ -1015,7 +1015,7 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment
         '''
 
-        self.printSummary()
+        # self.printSummary()
 
         # print '######### trimming'
 
@@ -1082,7 +1082,7 @@ class _PyFace(_Py):
         '''ordinaries(self)
         '''
 
-        # print '######### ordinaries'
+        print '######### ordinaries'
 
         for pyWire in self.wires:
             pyWire.ordinaries()

@@ -525,6 +525,8 @@ class _PyAlignment(_Py):
         base = pyBase.shape.copy()
         # print '###### base ', (pyBase.numWire, pyBase.numGeom)
 
+        pyPlaneList = _Py.pyFace.wires[0].planes
+
         if self.falsify:
 
             base = [base]
@@ -558,9 +560,7 @@ class _PyAlignment(_Py):
 
             enormousBase = pyBase.enormousShape
             chops = self.chops
-
             simulatedChopList = self.simulatedChop
-            pyPlaneList = _Py.pyFace.wires[0].planes
 
             chopList = []
             numChop = -1
