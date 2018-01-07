@@ -703,9 +703,13 @@ class _PyAlignment(_Py):
                             cutList.append(pl)
                             # print 'rango nn ', nn'''
 
-            rearLeft = pyLeft.rear[-1]
-            rearRight = pyRight.rear[0]
-            rear = [rearLeft, rearRight]
+            rear = []
+            if pyLeft.numWire == 0:
+                rearLeft = pyLeft.rear[-1]
+                rear.append(rearLeft)
+            if pyRight.numWire == 0:
+                rearRight = pyRight.rear[0]
+                rear.append(rearRight)
 
             for nn in rear:
                 pyPl = pyPlaneList[nn]
@@ -1145,13 +1149,15 @@ class _PyAlignment(_Py):
                     cutterList.append(pl)
             print 'cutterList ', cutterList
 
-            for nn in rChop:
-                pyPlane = pyPlaneList[nn]
-                plane = pyPlane.shape
-                if plane:
-                    print 'nn ', nn
-                    plane = self.cutting(plane, cutterList, pyPlane.geomShape)
-                    pyPlane.shape = plane
+            if cutterList:
+
+                for nn in rChop:
+                    pyPlane = pyPlaneList[nn]
+                    plane = pyPlane.shape
+                    if plane:
+                        print 'nn ', nn
+                        plane = self.cutting(plane, cutterList, pyPlane.geomShape)
+                        pyPlane.shape = plane
 
     def endOld(self, pyPlaneList):
 
