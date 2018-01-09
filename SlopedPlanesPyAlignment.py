@@ -204,7 +204,7 @@ class _PyAlignment(_Py):
         The alignment blocks the progress
         of the planes in its front and laterals'''
 
-        # print '###### trimming base ', (self.base.numWire, self.base.numGeom)
+        print '###### trimming base ', (self.base.numWire, self.base.numGeom)
 
         pyBase = self.base
         numGeom = pyBase.numGeom
@@ -239,6 +239,7 @@ class _PyAlignment(_Py):
             for rC in copyRangoChop:
                 restList.extend(rC)
 
+            # rango
             totalRango = []
             num = -1
             for pyPlane in chops[numChop]:
@@ -276,7 +277,7 @@ class _PyAlignment(_Py):
 
             copyRangoChop.insert(numChop, pop)
 
-            # TODO [pyOne, pyTwo] don cut other chops
+            # TODO [pyOne, pyTwo] dont cut with other chops
 
             # the two rangos don't cut between them and rChop
             for nG in rRangoOne:
@@ -390,7 +391,7 @@ class _PyAlignment(_Py):
         '''
 
         pyBase = self.base
-        # print '###### priorLater base ', (pyBase.numWire, pyBase.numGeom)
+        print '###### priorLater base ', (pyBase.numWire, pyBase.numGeom)
 
         numGeom = pyBase.numGeom
         base = pyBase.shape
@@ -403,8 +404,8 @@ class _PyAlignment(_Py):
 
         pyPrior = self.prior
         pyLater = self.later
-        # print 'pyPrior ', (pyPrior.numWire, pyPrior.numGeom)
-        # print 'pyLater ', (pyLater.numWire, pyLater.numGeom)
+        print 'pyPrior ', (pyPrior.numWire, pyPrior.numGeom)
+        print 'pyLater ', (pyLater.numWire, pyLater.numGeom)
         prior = pyPrior.shape
         later = pyLater.shape
         pr = pyPrior.numGeom
@@ -415,8 +416,6 @@ class _PyAlignment(_Py):
         control = pyBase.control
 
         cutterList = []
-
-        # podria ser mas fino con los falsos alieamientos, cutList. Con dos listas
 
         if ((not pyPrior.reflexed) or
            (pyPrior.choped and not pyPrior.aligned)):
@@ -430,9 +429,10 @@ class _PyAlignment(_Py):
            (pyLater.choped and not pyLater.aligned)):
             # print '2'
             cutterList.append(bigLater)
-            if not pyBase.choped:
-                # print '21'
-                control.append(lat)
+            if not self.falsify:
+                if not pyBase.choped:
+                    # print '21'
+                    control.append(lat)
 
         if not self.falsify:
             # print 'A'
@@ -450,25 +450,20 @@ class _PyAlignment(_Py):
             # print 'pyOne ', (pyOne.numWire, pyOne.numGeom)
             # print 'pyTwo ', (pyTwo.numWire, pyTwo.numGeom)
 
-            cList = [pyOne.bigShape] + cutterList
+            cList = [pyOne.bigShape, bigPrior]
+            control.append(pyOne.numGeom)
 
             gS = pyBase.geomShape
             base = self.cutting(base, cList, gS)
-            control.append(pyOne.numGeom)
 
             pyBase.shape = base
 
-            cList = [pyTwo.bigShape]
-            pyAlignList = self.selectAllAlignment(pyCont.numWire,
-                                                  nGeom)
-            if len(pyAlignList) == 1:
-                cList.extend(cutterList)
-                pyCont.control.append(pr)
-                control.append(lat)
+            cList = [pyTwo.bigShape, bigLater]
+            pyCont.control.append(lat)
+            pyCont.control.append(pyTwo.numGeom)
 
             gS = pyCont.geomShape
             cont = self.cutting(cont, cList, gS)
-            pyCont.control.append(pyTwo.numGeom)
 
             pyCont.shape = cont
 
@@ -588,8 +583,9 @@ class _PyAlignment(_Py):
                         pyTwo.control.append(nn)
 
             # chop is cutted by rangoChop
-            pyOne.simulating(cutList)
-            pyTwo.simulating(cutList)
+            if cutList:
+                pyOne.simulating(cutList)
+                pyTwo.simulating(cutList)
 
             # chop is cutted by base or by continuation and opp chop
 
@@ -806,10 +802,11 @@ class _PyAlignment(_Py):
                 num += 1
                 # print '# pyPlane ', pyPlane.numGeom
 
-                plane = pyPlane.shape
-                gS = pyPlane.geomShape
-                plane = self.cutting(plane, rList, gS)
-                pyPlane.shape = plane
+                if rList:
+                    plane = pyPlane.shape
+                    gS = pyPlane.geomShape
+                    plane = self.cutting(plane, rList, gS)
+                    pyPlane.shape = plane
 
                 cutList = []
                 rC = []
@@ -826,12 +823,15 @@ class _PyAlignment(_Py):
                             # print'rango ', nn
                         else:
                             # print 'a2'
-                            pyAlign = self.selectAlignment(0, nn)
+                            pyAlign = self.selectAlignment(0, nn)   # ???
                             cutList.extend(pyAlign.simulatedAlignment)
                             # print'rango simulated', nn
                     else:
                         # print 'b'
                         pass
+
+                # en arrow el opp chop, el chop tiene que cortar con el rear del opp chop
+                # PRIMERO ARREGLAR ARROW (,)
 
                 pyPl = pyPlaneList[rear]
                 if not pyPl.choped:
@@ -844,7 +844,7 @@ class _PyAlignment(_Py):
                         # print'rearPlane ', rear
                     else:
                         # print 'a2'
-                        pyAlign = self.selectAlignment(0, rear)
+                        pyAlign = self.selectAlignment(0, rear)     # ???
                         cutList.extend(pyAlign.simulatedAlignment)
                         # print'rearPlane simulated ', rear
                 else:

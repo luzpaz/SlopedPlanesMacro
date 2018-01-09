@@ -1026,17 +1026,17 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment
         '''
 
-        # self.printSummary()
+        self.printSummary()
 
         # print '######### trimming'
 
         for pyWire in self.wires:
             pyWire.trimming()
-        # self.printControl('trimming reflexs')
+        self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()
-        # self.printControl('trimming alignments')
+        self.printControl('trimming alignments')
 
     def priorLater(self):
 
@@ -1047,11 +1047,11 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.priorLater()
-        # self.printControl('priorLater wires')
+        self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
-        # self.printControl('priorLater alignments')
+        self.printControl('priorLater alignments')
 
     def simulating(self):
 
