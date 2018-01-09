@@ -877,6 +877,10 @@ class _PyPlane(_Py):
             pyAlign = self.selectAlignment(self.numWire, self.numGeom)
             print(pyAlign.base.numWire, pyAlign.base.numGeom)
 
+            chopList = []
+            for chop in pyAlign.chops:
+                chopList.extend(chop)
+
             rangoChop = pyAlign.rango
             rConsol = []
             for rr in rangoChop:
@@ -912,7 +916,10 @@ class _PyPlane(_Py):
 
                             else:
                                 print 'a12'
-                                pass
+                                # y virtualizado?
+                                if pyPl not in chopList:
+                                    plSimulated = pyPl.simulatedShape
+                                    cutterList.append(plSimulated)
 
                         else:
                             print 'a2'
