@@ -1232,7 +1232,7 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
-        # self.end()
+        self.end()
 
     def end(self):
 
@@ -1312,8 +1312,8 @@ class _PyFace(_Py):
                             plane = self.cutting(plane, cutterList, gS)
                             pyPlane.shape = plane
 
-        '''pyWireList = self.wires
+        pyWireList = self.wires
         pyPlaneList = pyWireList[0].planes
 
         for pyAlign in pyAlignList:
-            pyAlign.end(pyPlaneList)'''
+            pyAlign.end(pyPlaneList)
