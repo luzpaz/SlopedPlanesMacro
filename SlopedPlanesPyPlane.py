@@ -703,7 +703,7 @@ class _PyPlane(_Py):
         bigShape = self.cutting(bigShape, [enormousShape], gS)
         self.bigShape = bigShape
 
-    def simulating(self, enormousShape):
+    def simulating(self, cList):
 
         '''simulating(self, enormousShape)
         '''
@@ -718,7 +718,7 @@ class _PyPlane(_Py):
             plCopy = self.shape.copy()
 
         gS = self.geomShape
-        plCopy = self.cutting(plCopy, [enormousShape], gS)
+        plCopy = self.cutting(plCopy, cList, gS)
         self.simulatedShape = plCopy
 
     def rearing(self, pyWire, pyReflex, direction, case):

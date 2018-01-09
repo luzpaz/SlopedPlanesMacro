@@ -357,6 +357,12 @@ class _Py(object):
             compound.Placement = placement
             Part.show(compound, self.slopedPlanes.Name+' simulatedAlignment '+str(numWire)+' '+str(numGeom))
 
+        if pyPlane.choped:
+
+            compound = Part.makeCompound(pyPlane.simulatedShape)
+            compound.Placement = placement
+            Part.show(compound, self.slopedPlanes.Name+' simulatedShape '+str(numWire)+' '+str(numGeom))
+
     def printControl(self, text):
 
         '''printControl(self, text)'''

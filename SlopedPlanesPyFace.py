@@ -1232,7 +1232,7 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
-        self.end()
+        # self.end()
 
     def end(self):
 
