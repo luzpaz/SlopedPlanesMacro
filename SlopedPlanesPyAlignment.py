@@ -587,20 +587,14 @@ class _PyAlignment(_Py):
                     if nn not in pyTwo.control:
                         pyTwo.control.append(nn)
 
-            # chop is cutted by rangoChop and opp chop
-
-            enormous = pyTwo.enormousShape
-
+            # chop is cutted by rangoChop
             for pyPlane in [pyOne, pyTwo]:
                 plane = pyPlane.shape
                 gS = pyPlane.geomShape
-                cutterList = cutList + [enormous]
-                plane = self.cutting(plane, cutterList, gS)
+                plane = self.cutting(plane, cutList, gS)
                 pyPlane.shape = plane
 
-                enormous = pyOne.enormousShape
-
-            # chop is cutted by base or by continuation
+            # chop is cutted by base or by continuation and opp chop
 
             if falsify:
 
@@ -619,14 +613,16 @@ class _PyAlignment(_Py):
 
             else:
 
+                enormous = pyTwo.enormousShape
                 shapeOne = pyOne.shape.copy()
                 gS = pyOne.geomShape
-                ffOne = self.cutting(shapeOne, [enormousBase], gS)
+                ffOne = self.cutting(shapeOne, [enormousBase, enormous], gS)
                 pyOne.simulating(enormousBase)
 
+                enormous = pyOne.enormousShape
                 shapeTwo = pyTwo.shape.copy()
                 gS = pyTwo.geomShape
-                ffTwo = self.cutting(shapeTwo, [enormousBase], gS)
+                ffTwo = self.cutting(shapeTwo, [enormousBase, enormous], gS)
                 pyTwo.simulating(enormousBase)
 
             simulatedChop.append([ffOne, ffTwo])
@@ -927,6 +923,37 @@ class _PyAlignment(_Py):
                 # print 'aList ', aList
                 comp = Part.makeCompound(aList)
                 pyPlane.shape = comp
+
+            # twin
+
+            shapeOne = pyOne.shape.copy()
+            shapeTwo = pyTwo.shape.copy()
+
+            fList = []
+            gS = pyOne.geomShape
+            ff = self.cutting(shapeOne.Faces[0], [shapeTwo], gS)
+            fList.append(ff)
+
+            for ff in shapeOne.Faces[1:]:
+                ff = ff.cut([shapeTwo], _Py.tolerance)
+                fList.append(ff.Faces[0])
+
+            # print 'fList ', fList
+            compound = Part.makeCompound(fList)
+            pyOne.shape = compound
+
+            fList = []
+            gS = pyTwo.geomShape
+            ff = self.cutting(shapeTwo.Faces[0], [shapeOne], gS)
+            fList.append(ff)
+
+            for ff in shapeTwo.Faces[1:]:
+                ff = ff.cut([shapeOne], _Py.tolerance)
+                fList.append(ff.Faces[0])
+
+            # print 'fList ', fList
+            compound = Part.makeCompound(fList)
+            pyTwo.shape = compound
 
             chopList.append([pyOne, pyTwo])
 
