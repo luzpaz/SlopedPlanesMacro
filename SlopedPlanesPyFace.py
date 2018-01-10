@@ -1025,13 +1025,13 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment
         '''
 
-        self.printSummary()
+        # self.printSummary()
 
         # print '######### trimming'
 
         for pyWire in self.wires:
             pyWire.trimming()
-        self.printControl('trimming reflexs')
+        # self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()
@@ -1046,7 +1046,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.priorLater()
-        self.printControl('priorLater wires')
+        # self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
@@ -1064,8 +1064,7 @@ class _PyFace(_Py):
 
         for pyAlign in self.alignments:
             pyAlign.simulatingChop()
-
-        # self.printControl('simulatingChop')
+        self.printControl('simulatingChop')
 
         for pyAlign in self.alignments:
             if not pyAlign.falsify:
@@ -1074,8 +1073,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             if pyAlign.falsify:
                 pyAlign.simulatingAlignment()
-
-        # self.printControl('simulatingAlignment')
+        self.printControl('simulatingAlignment')
 
     def reflexing(self):
 
@@ -1231,7 +1229,7 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
-        self.end()
+        # self.end()
 
     def end(self):
 

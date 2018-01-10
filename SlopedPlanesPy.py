@@ -303,6 +303,7 @@ class _Py(object):
             print 'rango ',  pyAlignment.base.rango
             print 'geom ', pyAlignment.base.geom
             print 'geomAligned ', pyAlignment.base.geomAligned
+            print 'shape ', pyAlignment.base.shape
             print 'falsify ', pyAlignment.falsify
             print 'rangoChop ', pyAlignment.rango
             print 'prior ', pyAlignment.prior.numGeom
@@ -324,6 +325,7 @@ class _Py(object):
                 print 'rango ', align.rango
                 print 'geom ', align.geom
                 print 'geomAligned ', align.geomAligned
+                print 'shape ', align.shape
 
         print '###############################################################'
 

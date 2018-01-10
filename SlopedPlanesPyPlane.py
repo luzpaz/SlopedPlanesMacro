@@ -777,6 +777,7 @@ class _PyPlane(_Py):
                     # print 'numG ', numG
 
                     if not fo:
+                        # print 'no fo'
 
                         cList = []
                         if self.numGeom not in control:
@@ -842,7 +843,8 @@ class _PyPlane(_Py):
                                 pyOppPlane.shape = compound
                                 pyOppPlane.control.append(numG)
 
-                    else:  # if fo
+                    else:
+                        # print 'fo'
                         if pyPl.reflexed:
                             # print 'fo1'
                             if not pl.section([forw], tolerance).Edges:
@@ -869,110 +871,138 @@ class _PyPlane(_Py):
         '''
 
         pyPlaneList = pyWire.planes
+        numWire = pyWire.numWire
         control = self.control
 
         if self.aligned:
-            # print 'self.aligned'
+            print 'aligned'
 
             pyAlign = self.selectAlignment(self.numWire, self.numGeom)
-            # print(pyAlign.base.numWire, pyAlign.base.numGeom)
+            pyBase = pyAlign.base
+            print 'base ', (pyAlign.base.numWire, pyAlign.base.numGeom)
 
             chopList = []
             for chop in pyAlign.chops:
-                chopList.extend(chop)
+                for pyPl in chop:
+                    if pyPl.numWire == numWire:
+                        chopList.append(pyPl.numGeom)
+
+            alignList = []
+            for pyPl in pyAlign.aligns:
+                if pyPl.numWire == numWire:
+                    alignList.append(pyPl.numGeom)
+            if pyAlign.base.numWire == numWire:
+                alignList.append(pyAlign.base.numGeom)
 
             rangoChop = pyAlign.rango
             rConsol = []
             for rr in rangoChop:
                 rConsol.extend(rr)
 
+            if not pyAlign.falsify:
+                line = pyAlign.base.geomAligned
+            else:
+                line = Part.makeCompound([pyBase.geomAligned, pyBase.forward])
+
         cutterList = []
         for pyPl in pyPlaneList:
+            nGeom = pyPl.numGeom
             if pyPl.numGeom not in control:
                 pl = pyPl.shape
                 if pl:
-                    # print '### numGeom ', pyPl.numGeom
+                    print '### numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
-                        # print 'pyPl.aligned'
+                        print 'pyPl.aligned'
                         pyAli = self.selectAlignment(pyPl.numWire, pyPl.numGeom)
-                        # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                        print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                        pyB = pyAli.base
 
                     if pyPl.choped:
-                        # print 'a'
+                        print 'a'
 
                         if self.aligned:
-                            # print 'a1'
+                            print 'a1'
 
-                            if pyPl.aligned:
-                                # print 'a11'
+                            if nGeom not in chopList and\
+                               nGeom not in alignList:
+                                print 'a11'
 
-                                section =\
-                                    pyPl.geomAligned.section(self.geomAligned)
-                                if not section.Vertexes:
-                                    # print 'a111'
-                                    plSimulated = pyAli.simulatedAlignment
-                                    cutterList.extend(plSimulated)
+                                if pyPl.aligned:
+                                    print 'a111'
 
-                            else:
-                                # print 'a12'
-                                # y virtualizado?
-                                if pyPl not in chopList:
+                                    if not pyAli.falsify:
+                                        ll = pyB.geomAligned
+                                    else:
+                                        ll = Part.makeCompound([pyB.geomAligned, pyB.forward])
+
+                                    section =\
+                                        line.section([ll], _Py.tolerance)
+
+                                    if not section.Vertexes:
+                                        print 'a1111'
+                                        plSimulated = pyAli.simulatedAlignment
+                                        cutterList.extend(plSimulated)
+
+                                else:
+                                    print 'a112'
                                     plSimulated = pyPl.simulatedShape
                                     cutterList.append(plSimulated)
 
                         else:
-                            # print 'a2'
+                            print 'a2'
+
                             if pyPl.aligned:
-                                # print 'a21'
+                                print 'a21'
                                 plSimulated = pyAli.simulatedAlignment
                                 cutterList.extend(plSimulated)
+
                             else:
-                                # print 'a22'
+                                print 'a22'
                                 plSimulated = pyPl.simulatedShape
                                 cutterList.append(plSimulated)
 
                     elif pyPl.aligned:
-                        # print 'b'
+                        print 'b'
                         if self.aligned:
-                            # print 'b1'
+                            print 'b1'
                             if self not in pyAli.aligns:
-                                # print 'b11'
+                                print 'b11'
                                 if pyPl not in pyAlign.aligns:
-                                    # print 'b111'
+                                    print 'b111'
                                     plSimulated = pyAli.simulatedAlignment
                                     cutterList.extend(plSimulated)
                         else:
-                            # print 'b2'
+                            print 'b2'
                             plSimulated = pyAli.simulatedAlignment
                             cutterList.extend(plSimulated)
 
                     else:
-                        # print 'c'
+                        print 'c'
                         pass
 
                         if self.aligned:
-                            # print 'c1'
+                            print 'c1'
 
                             if pyPl.numGeom not in rConsol:
-                                # print 'c11'
+                                print 'c11'
 
                                 cutterList.append(pl)
                                 control.append(pyPl.numGeom)
 
                         else:
-                            # print 'c2'
+                            print 'c2'
 
                             cutterList.append(pl)
                             control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList
+            print 'cutterList ', cutterList
             plane = self.shape
             gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)
             self.shape = plane
-            # print 'plane ', plane
+            print 'plane ', plane
 
     def rangging(self, pyWire, direction):
 
