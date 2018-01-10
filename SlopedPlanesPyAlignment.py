@@ -374,6 +374,8 @@ class _PyAlignment(_Py):
                                 # print 'B'
                                 pyPl.trimmingTwo(enShape)
 
+                # TODO falseAlignment base and continuation don't cut opp rango
+
                 # the chops are trimmed by their aligned rears
                 if num == 0:
                     rear = pyPlane.rear[-1]
@@ -475,12 +477,7 @@ class _PyAlignment(_Py):
             if pyPrior.numWire == 0:
                 # print 'a1'
 
-                # TODO cuando tengas arrow en dos direcciones podrás simplificar
-
-                firstChop = self.chops[0][0]
-                # print 'firstChop.rango ', firstChop.rango
-
-                if firstChop.rango[-1]:  # arrow?
+                if not pyPrior.arrow:
                     # print 'a11'
 
                     gS = pyPrior.geomShape
@@ -502,9 +499,7 @@ class _PyAlignment(_Py):
             if pyLater.numWire == 0:
                 # print 'b1'
 
-                lastChop = self.chops[-1][-1]
-                # print 'lastChop.rango ', lastChop.rango
-                if lastChop.rango[0]:  # arrow?
+                if not pyLater.arrow:
 
                     if not self.falsify:
                         # print 'b11'
@@ -792,10 +787,7 @@ class _PyAlignment(_Py):
                         rList.append(pl)
                         # print 'rangoChop ', nn
 
-            rango = pyOne.rango[-1]
-            rear = pyOne.rear[-1]
-
-            cList = [enormousBase]
+            pyTwinPlane = pyTwo
 
             num = -1
             for pyPlane in [pyOne, pyTwo]:
@@ -807,6 +799,23 @@ class _PyAlignment(_Py):
                     gS = pyPlane.geomShape
                     plane = self.cutting(plane, rList, gS)
                     pyPlane.shape = plane
+
+                if num == 0:
+                    rango = pyOne.rango[-1]
+                    rear = pyOne.rear[-1]
+                    cList = [enormousBase]
+                    oppRango = pyTwo.rango[0]
+                    oppRear = pyTwo.rear[0]
+
+                else:
+                    rango = pyTwo.rango[0]
+                    rear = pyTwo.rear[0]
+                    oppRango = pyOne.rango[-1]
+                    oppRear = pyOne.rear[-1]
+                    if falsify:
+                        cList = [enormousCont]
+                    else:
+                        cList = [enormousBase]
 
                 cutList = []
                 rC = []
@@ -821,17 +830,14 @@ class _PyAlignment(_Py):
                             cutList.append(rangoPlane)
                             rC.append(rangoPlane)
                             # print'rango ', nn
-                        else:
+                        else:   # ???
                             # print 'a2'
-                            pyAlign = self.selectAlignment(0, nn)   # ???
+                            pyAlign = self.selectAlignment(0, nn)
                             cutList.extend(pyAlign.simulatedAlignment)
                             # print'rango simulated', nn
-                    else:
+                    else:     # ???
                         # print 'b'
                         pass
-
-                # en arrow el opp chop, el chop tiene que cortar con el rear del opp chop
-                # PRIMERO ARREGLAR ARROW (,)
 
                 pyPl = pyPlaneList[rear]
                 if not pyPl.choped:
@@ -842,17 +848,33 @@ class _PyAlignment(_Py):
                         # if rearPlane not in cutList:
                         cutList.append(rearPlane)
                         # print'rearPlane ', rear
-                    else:
+                    else:     # ???
                         # print 'a2'
-                        pyAlign = self.selectAlignment(0, rear)     # ???
+                        pyAlign = self.selectAlignment(0, rear)
                         cutList.extend(pyAlign.simulatedAlignment)
                         # print'rearPlane simulated ', rear
-                else:
+                else:     # ???
                     # print 'b'
                     pass
 
-                rango = pyTwo.rango[0]
-                rear = pyTwo.rear[0]
+                if not oppRango:
+                    pyPl = pyPlaneList[oppRear]
+                    if not pyPl.choped:
+                        # print 'a'
+                        if not pyPl.aligned:
+                            # print 'a1'
+                            oppRearPlane = pyPl.shape
+                            # if rearPlane not in cutList:
+                            cutList.append(oppRearPlane)
+                            # print'rearPlane ', rear
+                        else:     # ???
+                            # print 'a2'
+                            pyAlign = self.selectAlignment(0, oppRear)
+                            cutList.extend(pyAlign.simulatedAlignment)
+                            # print'rearPlane simulated ', rear
+                    else:     # ???
+                        # print 'b'
+                        pass
 
                 rC = Part.makeCompound(rC)
 
@@ -861,9 +883,6 @@ class _PyAlignment(_Py):
 
                 cutterList = cutList + cList
                 # print 'cutterList ', cutterList
-
-                if falsify:
-                    cList = [enormousCont]
 
                 gS = pyPlane.geomShape
                 planeCopy = planeCopy.cut(cutterList, tolerance)
@@ -884,8 +903,7 @@ class _PyAlignment(_Py):
 
                 if cutList:
 
-                    pyOppPlane = [pyOne, pyTwo][num-1]
-                    if pyPlane.numWire == 0 and pyOppPlane.numWire != 0:
+                    if pyPlane.numWire == 0 and pyTwinPlane.numWire != 0:
                         # debería ser mas selectivo ya que prodrian haber otros chops en el wire exterior
                         # puedes comprobarlo con self.aligns o con self.rango
                         rChop = rangoChop[numChop]
@@ -944,6 +962,8 @@ class _PyAlignment(_Py):
                 # print 'aList ', aList
                 comp = Part.makeCompound(aList)
                 pyPlane.shape = comp
+
+                pyTwinPlane = pyOne
 
             # twin
 
