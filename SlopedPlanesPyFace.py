@@ -784,7 +784,6 @@ class _PyFace(_Py):
         pyPlane.addValue('rear', nGeom, direction)
 
         # arrow: esto podría trasladarlo a planning y rangging
-        # TODO arrow debería ser doble (,)
 
         if direction == 'forward':
             endNum = self.sliceIndex(numGeom+2, lenWire)

@@ -1,5 +1,5 @@
 # SlopedPlanes Macro for FreeCAD
-A geometric factory. Build figures controlling the slope of their faces.
+A geometric factory. Build figures controlling the slopes of their faces.
 
 ![image](https://user-images.githubusercontent.com/4140247/32797459-d40a6dd0-c93f-11e7-8773-a89312c10626.png)
 

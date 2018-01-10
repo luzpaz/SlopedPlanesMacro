@@ -132,8 +132,6 @@ Remember to apply the modifications before to pop down the advaced options windo
 
         ''''''
 
-        # RECOMPUTA ???
-
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
         return True
