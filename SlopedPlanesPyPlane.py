@@ -918,11 +918,7 @@ class _PyPlane(_Py):
                         print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                         pyB = pyAli.base
 
-                    if pyPl.choped:
-                        print 'a'
-                        pass
-
-                    elif pyPl.aligned:
+                    if pyPl.aligned:
                         print 'b'
                         if self.aligned:
                             print 'b1'
@@ -936,6 +932,10 @@ class _PyPlane(_Py):
                             print 'b2'
                             plSimulated = pyAli.simulatedAlignment
                             cutterList.extend(plSimulated)
+
+                    elif pyPl.choped:
+                        print 'a'
+                        pass
 
                     else:
                         print 'c'
