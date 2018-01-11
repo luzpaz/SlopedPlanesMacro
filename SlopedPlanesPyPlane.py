@@ -920,47 +920,7 @@ class _PyPlane(_Py):
 
                     if pyPl.choped:
                         print 'a'
-
-                        if self.aligned:
-                            print 'a1'
-
-                            if nGeom not in chopList and\
-                               nGeom not in alignList:
-                                print 'a11'
-
-                                if pyPl.aligned:
-                                    print 'a111'
-
-                                    if not pyAli.falsify:
-                                        ll = pyB.geomAligned
-                                    else:
-                                        ll = Part.makeCompound([pyB.geomAligned, pyB.forward])
-
-                                    section =\
-                                        line.section([ll], _Py.tolerance)
-
-                                    if not section.Vertexes:
-                                        print 'a1111'
-                                        plSimulated = pyAli.simulatedAlignment
-                                        cutterList.extend(plSimulated)
-
-                                else:
-                                    print 'a112'
-                                    plSimulated = pyPl.simulatedShape
-                                    cutterList.append(plSimulated)
-
-                        else:
-                            print 'a2'
-
-                            if pyPl.aligned:
-                                print 'a21'
-                                plSimulated = pyAli.simulatedAlignment
-                                cutterList.extend(plSimulated)
-
-                            else:
-                                print 'a22'
-                                plSimulated = pyPl.simulatedShape
-                                cutterList.append(plSimulated)
+                        pass
 
                     elif pyPl.aligned:
                         print 'b'

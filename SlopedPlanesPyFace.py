@@ -1063,16 +1063,8 @@ class _PyFace(_Py):
             pyWire.simulating()
 
         for pyAlign in self.alignments:
-            pyAlign.simulatingChop()
-        self.printControl('simulatingChop')
+            pyAlign.simulatingAlignment()
 
-        for pyAlign in self.alignments:
-            if not pyAlign.falsify:
-                pyAlign.simulatingAlignment()
-
-        for pyAlign in self.alignments:
-            if pyAlign.falsify:
-                pyAlign.simulatingAlignment()
         self.printControl('simulatingAlignment')
 
     def reflexing(self):
@@ -1229,7 +1221,7 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
-        # self.end()
+        self.end()
 
     def end(self):
 
