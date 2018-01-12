@@ -370,6 +370,7 @@ To cero the plane width is equal to the related edge length of the base'''
                                 pyPlane.arrow = False
                                 pyPlane.choped = False
                                 pyPlane.reflexed = False
+                                pyPlane.fronted = False
                                 pyPlane.seedShape = None
                         except IndexError:
                             # print '2'
@@ -402,6 +403,11 @@ To cero the plane width is equal to the related edge length of the base'''
                         pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
 
+                    try:
+                        print pyPlane.fronted
+                    except AttributeError:
+                        pyPlane.fronted = False
+
             pyFace.parsing()        #
 
             pyFace.planning()       #
@@ -418,9 +424,9 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.reflexing()      #
 
-            '''pyFace.ordinaries()     #
+            pyFace.ordinaries()     #
 
-            pyFace.betweenWires()   #
+            '''pyFace.betweenWires()   #
 
             pyFace.aligning()       # '''
 

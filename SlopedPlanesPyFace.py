@@ -1092,16 +1092,45 @@ class _PyFace(_Py):
         '''betweenWires(self)
         '''
 
-        # print '######### betweenWires'
-
-
-
-
+        print '######### betweenWires'
 
         pyWireList = self.wires[:]
         if len(pyWireList) > 1:
 
             tolerance = _Py.tolerance
+
+            alignments = self.alignments
+
+            # full wire
+            cuttedFace = []
+            # wire with rangoChop simulated
+            cutterFace = []
+
+            numWire = -1
+            for pyWire in pyWireList:
+                numWire += 1
+                # print '### numWire ', numWire
+                cuttedWire = []
+                cutterWire = []
+
+                for pyPlane in pyWire.planes:
+                    plane = pyPlane.shape
+                    if plane:
+                        cuttedWire.append(plane)
+                    else:
+                        cuttedWire.append(None)
+                    
+
+
+    def betweenWiresOld(self):
+
+        '''betweenWires(self)
+        '''
+
+        # print '######### betweenWires'
+
+        pyWireList = self.wires[:]
+        if len(pyWireList) > 1:
 
             numWire = -1
             for pyWire in pyWireList:

@@ -55,6 +55,7 @@ class _PyPlane(_Py):
         self.reflexed = False
         self.aligned = False
         self.choped = False
+        self.fronted = False
         self.arrow = False
         self.geom = None
         self.geomShape = None
@@ -287,6 +288,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._choped = choped
+
+    @property
+    def fronted(self):
+
+        ''''''
+
+        return self._fronted
+
+    @fronted.setter
+    def fronted(self, fronted):
+
+        ''''''
+
+        self._fronted = fronted
 
     @property
     def arrow(self):
@@ -637,6 +652,7 @@ class _PyPlane(_Py):
             rango = self.rango
             rangoConsolidate = self.rangoConsolidate
             angle = self.angle
+            fronted = self.fronted
 
             if not plane:
                 (nWire, nGeom) = angle
@@ -658,6 +674,7 @@ class _PyPlane(_Py):
             pyPlane.rangoConsolidate = rangoConsolidate
             pyPlane.aligned = True
             pyPlane.reflexed = True
+            pyPlane.fronted = fronted
             pyPlane.shape = plane.copy()
             pyPlane.bigShape = big
             pyPlane.enormousShape = enormous

@@ -48,6 +48,7 @@ class _PyAlignment(_Py):
         self.rangoRear = []
         self.falsify = False
         self.simulatedAlignment = []
+        self.simulatedChops = []
         self.prior = None
         self.later = None
 
@@ -162,6 +163,20 @@ class _PyAlignment(_Py):
         ''''''
 
         self._simulatedAlignment = simulatedAlignment
+
+    @property
+    def simulatedChops(self):
+
+        ''''''
+
+        return self._simulatedChops
+
+    @simulatedChops.setter
+    def simulatedChops(self, simulatedChops):
+
+        ''''''
+
+        self._simulatedChops = simulatedChops
 
     @property
     def prior(self):
@@ -327,6 +342,7 @@ class _PyAlignment(_Py):
                     gS = pyPl.geomShape
                     bPl = self.cutting(bPl, cutList, gS)
                     pyPl.bigShape = bPl
+                    pyPl.fronted = True
 
                     rC.append(bPl)
 
@@ -699,6 +715,8 @@ class _PyAlignment(_Py):
 
         enormousBase = pyBase.enormousShape
 
+        simulatedChops = []
+
         numChop = -1
         for [pyOne, pyTwo] in chops:
             numChop += 1
@@ -731,6 +749,8 @@ class _PyAlignment(_Py):
             shapeTwo = self.cutting(shapeTwo, [enormousBase], gS)
             cutList.append(shapeTwo)
 
+            simulatedChops.append(cutList)
+
             if cutList:
                 print 'cutList ', cutList
 
@@ -749,6 +769,10 @@ class _PyAlignment(_Py):
                             gS = pyPl.geomShape
                             pl = self.cutting(pl, cutList, gS)
                             pyPl.shape = pl
+                    # else:
+                        # pass     # incluir choped pero sin seleccionar cara EN INTERIOR EXTERIOR TAMBIEN
+
+        self.simulatedChops = simulatedChops
 
     def aligning(self):
 
@@ -1218,7 +1242,8 @@ class _PyAlignment(_Py):
                 pl = pyPl.shape
                 rearList.append(pl)
 
-        if rearList:
+        if rearList and chopList:
+
             for r in rangoChop:
                 pyPl = pyPlaneList[r]
                 if not pyPl.choped and not pyPl.aligned:
@@ -1227,7 +1252,6 @@ class _PyAlignment(_Py):
                     pl = self.cutting(pl, rearList, gS)
                     pyPl.shape = pl
 
-        if chopList:
             for r in rangoRear:
                 pyPl = pyPlaneList[r]
                 if not pyPl.choped and not pyPl.aligned:
@@ -1235,46 +1259,6 @@ class _PyAlignment(_Py):
                     gS = pyPl.geomShape
                     pl = self.cutting(pl, chopList, gS)
                     pyPl.shape = pl
-
-    def endOld(self, pyPlaneList):
-
-        ''''''
-
-        # print '# self.Base ', self.base.numGeom
-
-        rangoChop = self.rango
-
-        numChop = -1
-        for chop in self.chops:
-            numChop += 1
-            rChop = rangoChop[numChop]
-            # print 'rChop ', rChop
-
-            [pyOne, pyTwo] = chop
-
-            rangoOne = pyOne.rango[-1]
-            # print 'rangoOne ', rangoOne
-            rangoTwo = pyTwo.rango[0]
-            # print 'rangoTwo ', rangoTwo
-
-            rr = rangoOne + rangoTwo
-            cutterList = []
-            for r in rr:
-                pyPl = pyPlaneList[r]
-                pl = pyPl.shape
-                if pl:
-                    cutterList.append(pl)
-            # print 'cutterList ', cutterList
-
-            if cutterList:
-
-                for nn in rChop:
-                    pyPlane = pyPlaneList[nn]
-                    plane = pyPlane.shape
-                    if plane:
-                        # print 'nn ', nn
-                        plane = self.cutting(plane, cutterList, pyPlane.geomShape)
-                        pyPlane.shape = plane
 
     def rangging(self):
 
