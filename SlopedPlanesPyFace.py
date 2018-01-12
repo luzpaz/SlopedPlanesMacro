@@ -1094,6 +1094,10 @@ class _PyFace(_Py):
 
         # print '######### betweenWires'
 
+
+
+
+
         pyWireList = self.wires[:]
         if len(pyWireList) > 1:
 
