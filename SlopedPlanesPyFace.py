@@ -718,8 +718,13 @@ class _PyFace(_Py):
         print vertex.Point
 
         coord = pyWire.coordinates
+
         try:
             nGeom = coord.index(self.roundVector(vertex.Point))
+            if not edge:
+                if direction == 'backward':
+                    nGeom = self.sliceIndex(nGeom-1, lenWire)
+
         except ValueError:
             nGeom = -1
             for shape in shapeGeomWire:
@@ -728,9 +733,10 @@ class _PyFace(_Py):
                 if sect.Vertexes:
                     break
 
-        if direction == 'forward':
-            print 'forward'
-            nGeom = self.sliceIndex(nGeom-1, lenWire)
+        if edge:
+            if direction == 'forward':
+                print 'forward'
+                nGeom = self.sliceIndex(nGeom-1, lenWire)
 
         print 'nGeom ', nGeom
 
