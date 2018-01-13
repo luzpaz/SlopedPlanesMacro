@@ -688,81 +688,51 @@ class _PyFace(_Py):
         also determines if a arrow situacion happens'''
 
         shapeGeomWire = pyWire.shapeGeom
+        print shapeGeomWire
+        sGW = Part.Wire(shapeGeomWire)
         numWire = pyWire.numWire
         lenWire = len(pyWire.planes)
         numGeom = pyPlane.numGeom
 
         lineShape = pyPlane.forward
-        section = lineShape.section(shapeGeomWire, _Py.tolerance)
+        print lineShape
+        section = lineShape.section([sGW], _Py.tolerance)
+        print 'section.Edges ', section.Edges
+        print 'section.Wires ', section.Wires
         edge = False
-        # print[v.Point for v in section.Vertexes]
 
         if section.Edges:
-            # print'a'
+            print'a'
             edge = True
             if direction == 'forward':
-                # print'aa'
+                print'aa'
                 vertex = section.Edges[0].Vertexes[0]
             else:
-                # print'aaa'
+                print'aaa'
                 vertex = section.Edges[-1].Vertexes[1]
 
-        elif len(section.Vertexes) != lenWire:
-            # print'b'
+        else:
+            print'b'
             vertex = section.Vertexes[1]
 
-        else:
-            # print'c'
-            if pyPlane.aligned:
-                # print'cc'
-                if pyPlane.shape:
-                    # print 'cc1'
-                    lineEndPoint = pyPlane.geomAligned.EndPoint
-                    if section.Vertexes[0].Point == lineEndPoint:
-                        # print 'cc11'
-                        return
-                    else:
-                        # print 'cc12'
-                        vertex = section.Vertexes[1]
-                else:
-                    # print 'cc2'
-                    return
-            elif pyPlane.choped:
-                # print 'ccc'
-                vertex = section.Vertexes[1]
-            else:
-                # print'cccc'
-                vertex = section.Vertexes[1]
-        # print vertex.Point
+        print vertex.Point
 
-        shapeGeomWire = pyWire.shapeGeom
-        lenWire = len(pyWire.planes)
-        section = vertex.section(shapeGeomWire, _Py.tolerance)
-
-        if len(section.Vertexes) > lenWire:
-            # print '1'
+        coord = pyWire.coordinates
+        try:
+            nGeom = coord.index(self.roundVector(vertex.Point))
+        except ValueError:
             nGeom = -1
             for shape in shapeGeomWire:
                 nGeom += 1
                 sect = vertex.section([shape], _Py.tolerance)
-                if len(sect.Vertexes) > 0:
+                if sect.Vertexes:
                     break
 
-        else:
-            # print '2'
-            coord = pyWire.coordinates
-            nGeom = coord.index(self.roundVector(vertex.Point))
-            if direction == 'backward':
-                nGeom = self.sliceIndex(nGeom-1, lenWire)
+        if direction == 'forward':
+            print 'forward'
+            nGeom = self.sliceIndex(nGeom-1, lenWire)
 
-        if edge:
-            if direction == 'backward':
-                # print '3'
-                nGeom = self.sliceIndex(nGeom+1, lenWire)
-            else:
-                # print '4'
-                nGeom = self.sliceIndex(nGeom-1, lenWire)
-        # print 'nGeom ', nGeom
+        print 'nGeom ', nGeom
 
         pyPlane.addValue('rear', nGeom, direction)
 
