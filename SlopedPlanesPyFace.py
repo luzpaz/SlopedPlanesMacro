@@ -698,7 +698,11 @@ class _PyFace(_Py):
         print lineShape
         section = lineShape.section([sGW], _Py.tolerance)
         print 'section.Edges ', section.Edges
-        print 'section.Wires ', section.Wires
+        print 'section.Vertexes ', section.Vertexes
+
+        if len(section.Vertexes) == 1:
+            return
+
         edge = False
 
         if section.Edges:
