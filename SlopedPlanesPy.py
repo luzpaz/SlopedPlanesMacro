@@ -120,16 +120,14 @@ class _Py(object):
 
         '''selectAlignmentBase(self, numWire, numGeom)
         select an unique alignment which base plane is (numWire, numGeom),
-        and it is not a false alignment,
         and return it, or None
-        used in PyFace and PyAlignment'''
+        used in PyFace'''
 
         pyPlane = self.selectPlane(numWire, numGeom)
 
         for pyAlign in _Py.pyFace.alignments:
             if pyAlign.base == pyPlane:
-                if not pyAlign.falsify:
-                    return pyAlign
+                return pyAlign
 
         return None
 

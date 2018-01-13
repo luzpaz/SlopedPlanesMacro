@@ -590,19 +590,22 @@ class _PyFace(_Py):
         alignList = pyAlign.aligns
         chopList = pyAlign.chops
 
+        # chop one
+
         jumpChop = False
         if pyAlign.falsify:
             if pyPlane.aligned:
                 pyAliBase = self.selectAlignmentBase(numWire, numGeom)
 
                 if pyAliBase:
-                    # a falseAlignment where base plane is aligned (and not falsify, of course), pyAliBase
-                    jumpChop = True
-                    pp = pyAliBase.aligns[-1]
-                    numWireChopOne = pp.numWire
-                    pyw = self.wires[numWireChopOne]
-                    lenWire = len(pyw.planes)
-                    numGeomChopOne = self.sliceIndex(pp.numGeom+1, lenWire)
+                    # finds a falseAlignment backward
+                    if not pyAliBase.falsify:
+                        jumpChop = True
+                        pp = pyAliBase.aligns[-1]
+                        numWireChopOne = pp.numWire
+                        pyw = self.wires[numWireChopOne]
+                        lenWire = len(pyw.planes)
+                        numGeomChopOne = self.sliceIndex(pp.numGeom+1, lenWire)
 
         if not jumpChop:
 
@@ -615,19 +618,26 @@ class _PyFace(_Py):
                 numGeomChopOne = self.sliceIndex(numGeom+1, lenWire)
                 numWireChopOne = numWire
 
+        # aligns
+
         alignList.append(pyPl)
 
         if pyAlign.falsify:
             pyAli = None
         else:
+            pyPl.shape = None
             pyAli = self.selectAlignmentBase(nWire, nGeom)
             if pyAli:
-                # pyAlign finds an alignment (could be falsify), pyAli
+                # finds an alignment forward
                 if not pyAli.falsify:
                     bL = pyAli.aligns
                     alignList.extend(bL)
                     for b in bL:
                         b.angle = [numWire, numGeom]
+
+        pyAlign.aligns = alignList
+
+        # chop two
 
         pyWireList = self.wires
         if numWire == nWire:
@@ -636,18 +646,10 @@ class _PyFace(_Py):
             lenW = len(pyWireList[nWire].planes)
             numGeomChopTwo = self.sliceIndex(nGeom-1, lenW)
 
+        # chops
+
         pyOne = self.selectPlane(numWireChopOne, numGeomChopOne)
         pyTwo = self.selectPlane(nWire, numGeomChopTwo)
-
-        if self.reset:
-
-            if numWireChopOne == 0:
-                self.forBack(pyOne, 'backward')
-                self.findRear(pyWireList[numWireChopOne], pyOne, 'backward')
-
-            if nWire == 0:
-                self.forBack(pyTwo, 'forward')
-                self.findRear(pyW, pyTwo, 'forward')
 
         chopList.append([pyOne, pyTwo])
 
@@ -657,20 +659,25 @@ class _PyFace(_Py):
                 chopList.extend(dL)
                 self.removeAlignment(pyAli)  # joined in one alignment
 
-        pyAlign.aligns = alignList
         pyAlign.chops = chopList
 
-        pyPlane.reflexed = True
-        pyPlane.aligned = True
-        pyPl.reflexed = True
-        pyPl.aligned = True
-        if not pyAlign.falsify:
-            pyPl.shape = None
+        if self.reset:
 
-        pyOne.reflexed = True
-        pyOne.choped = True
-        pyTwo.reflexed = True
-        pyTwo.choped = True
+            self.forBack(pyOne, 'backward')
+            self.findRear(pyWireList[numWireChopOne], pyOne, 'backward')
+
+            self.forBack(pyTwo, 'forward')
+            self.findRear(pyW, pyTwo, 'forward')
+
+            pyPlane.reflexed = True
+            pyPlane.aligned = True
+            pyPl.reflexed = True
+            pyPl.aligned = True
+
+            pyOne.reflexed = True
+            pyOne.choped = True
+            pyTwo.reflexed = True
+            pyTwo.choped = True
 
         return pyAli
 
