@@ -297,12 +297,11 @@ class _PyFace(_Py):
         '''parsing(self)
         Splits the face finding its reflex corners and alignments'''
 
-        # print '######### parsing'
+        print '######### parsing'
 
         resetFace = self.reset
 
         if not resetFace and not self.alignments:
-            # self.printSummary()
             return
 
         pyWireList = self.wires
@@ -312,7 +311,6 @@ class _PyFace(_Py):
                 pyWire.reflexs = []  # reset reflexs
 
         elif self.alignments and _Py.slopedPlanes.Proxy.State is False:
-            # print 'reset reflexs planes'
             for pyWire in pyWireList:
                 for pyReflex in pyWire.reflexs:
                     planeList = []
@@ -320,7 +318,7 @@ class _PyFace(_Py):
                         if pyPlane.aligned:
                             pyPlane = self.selectPlane(pyPlane.numWire,
                                                        pyPlane.numGeom)
-                        planeList.append(pyPlane)
+                        planeList.append(pyPlane)  # reset reflexs planes
                     pyReflex.planes = planeList
 
         self.alignments = []  # always reset alignments
@@ -328,36 +326,35 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
             numWire = pyWire.numWire
-            # print '###### numWire ', numWire
-            ref = False  # the second plane of a reflex corner
-
+            print '###### numWire ', numWire
             lenWire = len(pyWire.planes)
-            coord = pyWire.coordinates
-            # print 'coordinates ', coord
-            eje = coord[1].sub(coord[0])
-            pyPrePlane = None  # the first corner always convex
-            pyPlaneList = pyWire.planes
 
+            # the first corner always convex
+            ref = False
+            pyPrePlane = None
             refList, preList = [], []
+
+            coord = pyWire.coordinates
+            eje = coord[1].sub(coord[0])
+            pyPlaneList = pyWire.planes
 
             for pyPlane in pyPlaneList:
                 numGeom = pyPlane.numGeom
-                # print '### numGeom ', numGeom, ' angle ', pyPlane.angle
+                print '### numGeom ', numGeom, ' angle ', pyPlane.angle
+
+                nextEje = coord[numGeom+2].sub(coord[numGeom+1])
+                corner = self.convexReflex(eje, nextEje, numWire)
+                print 'corner ', corner
+                eje = nextEje
 
                 if not pyPlane.geomAligned:
-                    nextEje = coord[numGeom+2].sub(coord[numGeom+1])
-                    corner = self.convexReflex(eje, nextEje, numWire)
+
                     if corner == 'reflex':
                         ref = True
                     else:
                         ref = False
-                    eje = nextEje
 
                 else:
-                    nextEje = coord[numGeom+2].sub(coord[numGeom+1])
-                    corner = self.convexReflex(eje, nextEje, numWire)
-                    # print 'corner ', corner
-                    eje = nextEje
 
                     if resetFace:
 
@@ -369,35 +366,34 @@ class _PyFace(_Py):
                             pass
 
                         if ref:
-                            # print 'ref'
+                            print 'ref'
                             self.forBack(pyPlane, 'backward')
                             forward = pyPlane.forward
                             section = forward.section(shapeGeomFace,
                                                       _Py.tolerance)
+
                             if section.Edges:
-                                # print 'edges'
+                                print 'edges'
                                 edge = section.Edges[0]
 
                                 edgeStart = edge.firstVertex(True).Point
                                 edgeEnd = edge.lastVertex(True).Point
-                                lineEnd = pyWire.coordinates[numGeom]  # TODO revisar
+                                lineEnd = pyWire.coordinates[numGeom]
                                 distStart = edgeStart.sub(lineEnd).Length
                                 distEnd = edgeEnd.sub(lineEnd).Length
 
-                                if distStart > distEnd and numWire == 0:  # TODO revisar
-                                    # print 'alignament'
+                                if distStart > distEnd and numWire == 0:
+                                    print 'alignament'
                                     pass
 
                                 else:
-                                    # print 'no alignament '
-                                    self.findRear(pyWire, pyPrePlane,
-                                                  'forward')
-                                    self.findRear(pyWire, pyPlane,
-                                                  'backward')
+                                    print 'no alignament '
+                                    self.findRear(pyWire, pyPrePlane, 'forward')
+                                    self.findRear(pyWire, pyPlane, 'backward')
                                     self.doReflex(pyWire, pyPrePlane, pyPlane)
 
                             else:
-                                # print 'no alignament'
+                                print 'no alignament'
                                 self.findRear(pyWire, pyPrePlane, 'forward')
                                 self.findRear(pyWire, pyPlane, 'backward')
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
@@ -405,36 +401,34 @@ class _PyFace(_Py):
                             ref = False
 
                         if corner == 'reflex' or numWire > 0:
-                            # print '0'
-                            # interior wires always need forwardLine
-                            # the reflex for rear and
-                            # the convex for alignments
-                            # exterior wires rear and alignaments with reflex
+                            print 'forward'
+                            # interior wires always need forward, reflex and convex
+                            # exterior wires only with reflex
                             self.forBack(pyPlane, 'forward')
 
                     if ((numWire == 0 and corner == 'reflex') or
-                       (numWire > 0 and corner == 'convex')):
-                        # print '1 does look for alignments'
+                       (numWire > 0)):
+                        print '1 does look for alignments'
 
                         forward = pyPlane.forward
                         section = forward.section(shapeGeomFace, _Py.tolerance)
 
                         if section.Edges:
-                            # print '11 possible alignament'
+                            print '11 possible alignament'
 
                             numEdge = -1
                             for edge in section.Edges:
                                 numEdge += 1
-                                # print '111 edge by edge'
+                                print '111 edge by edge'
 
                                 edgeStart = edge.firstVertex(True).Point
                                 edgeEnd = edge.lastVertex(True).Point
-                                lineEnd = pyWire.coordinates[numGeom+1]  # TODO revisar
+                                lineEnd = pyWire.coordinates[numGeom+1]
                                 distStart = edgeStart.sub(lineEnd).Length
                                 distEnd = edgeEnd.sub(lineEnd).Length
 
-                                if distStart < distEnd:  # TODO revisar
-                                    # print '1111 aligment'
+                                if distStart < distEnd:
+                                    print '1111 aligment'
 
                                     point = self.roundVector(edgeStart)
                                     (nWire, nGeom) = self.findAlignment(point)
@@ -442,7 +436,7 @@ class _PyFace(_Py):
                                     pyPl = self.selectPlane(nWire, nGeom)
 
                                     if pyPl.geomAligned:
-                                        # print '11111 has a shape'
+                                        print '11111 has a shape'
 
                                         if numEdge == 0:
                                             pyAlign =\
@@ -453,32 +447,35 @@ class _PyFace(_Py):
                                         fGeom = pyPlane.deGeom()
                                         sGeom = pyPl.deGeom()
 
+                                        # TODO curved
+
+                                        forwardLine = forward.Curve
+
+                                        startParam = fGeom.FirstParameter
+                                        endPoint = sGeom.EndPoint
+                                        endParam =\
+                                            forwardLine.parameter(endPoint)
+                                        eGeom =\
+                                            Part.LineSegment(fGeom,
+                                                             startParam,
+                                                             endParam)
+                                        eGeomShape = eGeom.toShape()
+
                                         if fAng == sAng:
-                                            # print '111111 alignment'
+                                            print '111111 alignment'
                                             pyPl.geomAligned = None
                                             pyPl.angle = [numWire, numGeom]
 
-                                            # TODO curved 
-
-                                            forwardLine = forward.Curve
-
-                                            startParam = fGeom.FirstParameter
-                                            endPoint = sGeom.EndPoint
-                                            endParam =\
-                                                forwardLine.parameter(endPoint)
-                                            eGeom =\
-                                                Part.LineSegment(fGeom,
-                                                                 startParam,
-                                                                 endParam)
-                                            pyPlane.geomAligned =\
-                                                eGeom.toShape()
+                                            pyPlane.geomAligned = eGeomShape
 
                                         else:
-                                            # print '111112 falseAlignment'
+                                            print '111112 falseAlignment'
                                             if numEdge > 0:
                                                 pyAlign =\
                                                     self.doAlignment(pyPlane)
                                             pyAlign.falsify = True
+
+                                        pyAlign.geomAligned = eGeomShape
 
                                         pyAli =\
                                             self.seatAlignment(pyAlign,
@@ -486,33 +483,35 @@ class _PyFace(_Py):
                                                                pyW, pyPl)
 
                                         if pyAli:
-                                            # print 'break other alignament'
+                                            print 'break other alignament'
                                             ref = False
                                             break
 
                                         if pyAlign.falsify:
-                                            # print 'break false alignament'
+                                            print 'break false alignament'
                                             ref = False
                                             break
 
                                 else:
-                                    # print '11112 confront directions'
+                                    print '11112 confront directions'
                                     if resetFace:
-                                        # print '111121'
+                                        print '111121'
                                         if corner == 'reflex':
-                                            # print '1111211'
+                                            print '1111211'
+
                                             if ref:
-                                                # print 'ref'
-                                                self.findRear(pyWire,
-                                                              pyPlane,
+                                                print 'ref'
+                                                self.findRear(pyWire, pyPlane,
                                                               'backward')
                                                 self.findRear(pyWire, pyPlane,
                                                               'forward')
+
                                             ref = True
+
                                         break
 
                             else:
-                                # print 'end alignment'
+                                print 'end alignment'
                                 if resetFace:
 
                                     pyEnd = pyAlign.aligns[-1]
@@ -520,76 +519,57 @@ class _PyFace(_Py):
                                         nn = pyPl.numGeom
                                         lenW = len(pyW.planes)
                                         num = self.sliceIndex(nn+1, lenW)
-                                        pyNextPlane = pyW.planes[num]
                                         coo = pyW.coordinates
                                         jj = coo[num].sub(coo[nn])
                                         nnjj = coo[num+1].sub(coo[num])
-                                        corner = self.convexReflex(jj, nnjj,
-                                                                   pyW.numWire)
+                                        corner = self.convexReflex(jj, nnjj, pyW.numWire)
 
                                         if corner == 'reflex':
-                                            # print 'reflex'
+                                            print 'reflex'
                                             if not pyPl.forward:
-                                                refList.append([pyW.numWire,
-                                                                num])
-                                                # print 'refList ', refList
+                                                refList.append([pyW.numWire, num])
                                                 preList.append(pyPlane)
-                                                # print preList
+                                                print 'preList, refList', preList, refList
 
                                         ref = False
 
                         else:
-                            # print '12 no alignment'
+                            print '12 no alignment'
                             if resetFace:
-                                # print '121'
+                                print '121'
                                 if corner == 'reflex':
-                                    # print '1211 exterior wire reflexed'
-                                    if not pyPlane.choped:
-                                        # print '12111'
-                                        if ref:
-                                            # print 'ref'
-                                            pyPlane.addValue('forward',
-                                                             pyPlane.backward,
-                                                             'backward')
-                                            pyPlane.addValue('backward',
-                                                             pyPlane.forward,
-                                                             'backward')
-                                            self.findRear(pyWire, pyPlane,
-                                                          'backward')
-                                            self.doReflex(pyWire, pyPrePlane,
-                                                          pyPlane)
-                                    # ojo podría necesitar if not pyNextPlanes.aligned
-                                    ref = True
+                                    print '1211 reflexed'
+
+                                    nextNum = self.sliceIndex(numGeom+1,
+                                                              lenWire)
+                                    print 'nextNum ', nextNum
+                                    pyNextPlane = self.selectPlane(numWire, nextNum)
+
+                                    if pyPlane.choped and numWire > 0:
+                                        print 'a'
+                                        ref = False
+
+                                    elif pyNextPlane.choped and numWire > 0:
+                                        print 'b'
+                                        ref = False
+
+                                    else:
+                                        print 'c'
+                                        ref = True
 
                     else:
-                        # print '2 does not look for alignments'
-                        # exterior wires convex, interior wires reflex
-                        if resetFace:
-                            if corner == 'reflex':
-                                # print '21 interior wire reflex'
-                                if not pyPlane.choped:
-                                    # print '211 is not choped'
-                                    num = self.sliceIndex(numGeom+1, lenWire)
-                                    pyNextPlane = pyPlaneList[num]
-                                    if not pyNextPlane.choped:
-                                        # print '2111 next is not alignament'
-                                        ref = True
+                        print '2 does not look for alignments'
+                        # exterior wires convex
+                        pass
 
                 pyPrePlane = pyPlane
 
-                # print pyWire.reflexs
-                # print self.alignments
-                # print[a.base.numGeom for a in self.alignments]
-                # print[a.falsify for a in self.alignments]
-                # print[[a.numGeom for a in ali.aligns] for ali in self.alignments]
-                # print[[(a.numGeom, b.numGeom) for [a, b] in ali.chops] for ali in self.alignments]
-                # print '######'
+                print 'reflex ', pyWire.reflexs
+                print 'alignments ', self.alignments
 
             pyWire.reset = False
 
         self.priorLaterAlignments()
-
-        # self.printSummary()
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -707,9 +687,7 @@ class _PyFace(_Py):
 
         lineShape = pyPlane.forward
         section = lineShape.section(shapeGeomWire, _Py.tolerance)
-
         edge = False
-
         # print[v.Point for v in section.Vertexes]
 
         if section.Edges:
@@ -748,7 +726,6 @@ class _PyFace(_Py):
             else:
                 # print'cccc'
                 vertex = section.Vertexes[1]
-
         # print vertex.Point
 
         shapeGeomWire = pyWire.shapeGeom
@@ -778,13 +755,11 @@ class _PyFace(_Py):
             else:
                 # print '4'
                 nGeom = self.sliceIndex(nGeom-1, lenWire)
-
         # print 'nGeom ', nGeom
 
         pyPlane.addValue('rear', nGeom, direction)
 
         # arrow: esto podría trasladarlo a planning y rangging
-
         if direction == 'forward':
             endNum = self.sliceIndex(numGeom+2, lenWire)
         else:
@@ -960,7 +935,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        # self.printSummary()
+        self.printSummary()
 
     def upping(self):
 
@@ -1016,7 +991,6 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.virtualizing()
-        # self.printControl('virtualizing')
 
     def trimming(self):
 
@@ -1087,7 +1061,7 @@ class _PyFace(_Py):
             pyWire.ordinaries()
         self.printControl('ordinaries')
 
-    def betweenWires(self):
+    def betweenWiresNew(self):
 
         '''betweenWires(self)
         '''
@@ -1122,7 +1096,7 @@ class _PyFace(_Py):
                     
 
 
-    def betweenWiresOld(self):
+    def betweenWires(self):
 
         '''betweenWires(self)
         '''

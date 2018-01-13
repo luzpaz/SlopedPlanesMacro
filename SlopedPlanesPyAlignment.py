@@ -425,6 +425,7 @@ class _PyAlignment(_Py):
                 # print '### chop ', pyPlane.numWire, pyPlane.numGeom
                 enormousShape = pyPlane.enormousShape
 
+                # the cross
                 cont = True
                 if num == 0:
                     rango = pyPlane.rango[-1]

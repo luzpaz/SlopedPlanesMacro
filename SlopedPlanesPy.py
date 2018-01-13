@@ -273,7 +273,7 @@ class _Py(object):
         for pyWire in _Py.pyFace.wires:
 
             print '****** numWire ', pyWire.numWire
-            print '*** coordinates ', pyWire.coordinates
+            # print '*** coordinates ', pyWire.coordinates
             print '*** reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
 
@@ -283,14 +283,14 @@ class _Py(object):
                     print 'numGeom ', pyPlane.numGeom
                     print 'rear ', pyPlane.rear
                     print 'rango ', pyPlane.rango
-                    forward = pyPlane.forward
+                    '''forward = pyPlane.forward
                     print 'forward ',\
                         (self.roundVector(forward.firstVertex(True).Point),
                          self.roundVector(forward.lastVertex(True).Point))
                     backward = pyPlane.backward
                     print 'backward ',\
                         (self.roundVector(backward.firstVertex(True).Point),
-                         self.roundVector(backward.lastVertex(True).Point))
+                         self.roundVector(backward.lastVertex(True).Point))'''
 
         print '********* alignments ', _Py.pyFace.alignments
         for pyAlignment in _Py.pyFace.alignments:
@@ -301,9 +301,9 @@ class _Py(object):
             print 'angle ', pyAlignment.base.angle
             print 'rear ', pyAlignment.base.rear
             print 'rango ',  pyAlignment.base.rango
-            print 'geom ', pyAlignment.base.geom
-            print 'geomAligned ', pyAlignment.base.geomAligned
-            print 'shape ', pyAlignment.base.shape
+            # print 'geom ', pyAlignment.base.geom
+            # print 'geomAligned ', pyAlignment.base.geomAligned
+            # print 'shape ', pyAlignment.base.shape
             print 'falsify ', pyAlignment.falsify
             print 'rangoChop ', pyAlignment.rango
             print 'prior ', pyAlignment.prior.numGeom
@@ -323,9 +323,9 @@ class _Py(object):
                 print(align.numWire, align.numGeom)
                 print 'rear ', align.rear
                 print 'rango ', align.rango
-                print 'geom ', align.geom
-                print 'geomAligned ', align.geomAligned
-                print 'shape ', align.shape
+                # print 'geom ', align.geom
+                # print 'geomAligned ', align.geomAligned
+                # print 'shape ', align.shape
 
         print '###############################################################'
 

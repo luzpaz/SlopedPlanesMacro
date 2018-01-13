@@ -416,7 +416,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.virtualizing()   #
 
-            pyFace.trimming()       #
+            '''pyFace.trimming()       #
 
             pyFace.priorLater()     #
 
@@ -426,7 +426,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.ordinaries()     #
 
-            '''pyFace.betweenWires()   #
+            pyFace.betweenWires()   #
 
             pyFace.aligning()       # '''
 
