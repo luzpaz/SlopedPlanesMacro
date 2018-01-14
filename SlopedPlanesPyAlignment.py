@@ -265,26 +265,20 @@ class _PyAlignment(_Py):
         g1 = pyPrior.numGeom
         g2 = pyLater.numGeom
         rangoRear = self.rang((w2, g2), (w1, g1))
-        rangoRear.insert(0, lat)
-        rangoRear.append(pr)
+        if rangoRear:
+            rangoRear.insert(0, lat)
+            rangoRear.append(pr)
         self.rangoRear = rangoRear
         print 'rangoRear ', rangoRear
 
         rangoChop = self.rango
-        copyRangoChop = rangoChop[:]
         chops = self.chops
 
-        # rangoChop
         numChop = -1
         for rChop in rangoChop:
             numChop += 1
 
             [pyOne, pyTwo] = chops[numChop]
-
-            pop = copyRangoChop.pop(numChop)
-            restList = []
-            for rC in copyRangoChop:
-                restList.extend(rC)
 
             # rango
             totalRango = []
@@ -348,11 +342,11 @@ class _PyAlignment(_Py):
 
                     control = pyPl.control
 
-                    # comprobar numWire
                     # rChop doesn't cut with rangoRear
-                    for r in rangoRear:
-                        if r not in control:
-                            control.append(r)
+                    if w1 == pyOne.numWire:
+                        for r in rangoRear:
+                            if r not in control:
+                                control.append(r)
 
                     # rChop doesn't cut with alignment:
                     control.append(numGeom)
@@ -363,62 +357,11 @@ class _PyAlignment(_Py):
                     control.append(pyOne.numGeom)
                     control.append(pyTwo.numGeom)
 
-                    # comprobar numWire
-                    # rChop doesn't cut with other rChop
-                    for r in restList:
-                        if r not in control:
-                            control.append(r)
-
+                    # TODO rChop doesn't cut with other rChop
                     # TODO rChop doesn't cut with other chops
 
-            copyRangoChop.insert(numChop, pop)
-
-            if falsify:
-                # the base and cont are cutted by a chop
-
-                rC = Part.makeCompound(rC)
-
-                section = rC.section([base], _Py.tolerance)
-                gS = pyBase.geomShape
-                if section.Edges:
-                    base = self.cutting(base, [pyTwo.enormousShape], gS)
-                else:
-                    base = self.cutting(base, [pyOne.enormousShape], gS)
-                pyBase.shape = base
-
-                section = rC.section([cont], _Py.tolerance)
-                gS = pyCont.geomShape
-                if section.Edges:
-                    cont = self.cutting(cont, [pyOne.enormousShape], gS)
-                else:
-                    cont = self.cutting(cont, [pyTwo.enormousShape], gS)
-                pyCont.shape = cont
-
-                # TODO falseAlignment base and continuation don't cut opp rango
-
-        # rangoRear doesn't cut with rangoChop
-        # comprobar numWire
-        pyPlList = pyWireList[w1].planes
-        for rr in rangoRear:
-            print 'rangoRear ', rr
-            pyPl = pyPlList[rr]
-            control = pyPl.control
-            numChop = -1
-            for rChop in self.rango:
-                numChop += 1
-                [pyOne, pyTwo] = chops[numChop]
-                if w1 == pyOne.numWire:
-                    for nn in rChop:
-                        control.append(nn)
-                        print 'rangoRear doesn\'t cut with rangoChop', nn
-
-        # the rango's planes are cutted by the chop,
-        # and perhaps by the base or the continuation
-
-        # HAY REPETICION, refact con lo de arriba
-
-        for [pyOne, pyTwo] in chops:
-
+            # the rango's planes are cutted by the chop,
+            # and perhaps by the base or the continuation
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
@@ -428,12 +371,12 @@ class _PyAlignment(_Py):
                 # the cross
                 cont = True
                 if num == 0:
-                    rango = pyPlane.rango[-1]
+                    rango = rangoOne
                     if pyPlane.virtualized:
                         if not pyPlane.geomAligned:
                             cont = False
                 else:
-                    rango = pyPlane.rango[0]
+                    rango = rangoTwo
                     if pyPlane.virtualized:
                         if pyPlane.geomAligned:
                             cont = False
@@ -478,6 +421,44 @@ class _PyAlignment(_Py):
                             else:
                                 # print 'B'
                                 pyPl.trimmingTwo(enormousShape)
+
+        if falsify:
+            # the base and cont are cutted by a chop
+
+            rC = Part.makeCompound(rC)
+
+            section = rC.section([base], _Py.tolerance)
+            gS = pyBase.geomShape
+            if section.Edges:
+                base = self.cutting(base, [pyTwo.enormousShape], gS)
+            else:
+                base = self.cutting(base, [pyOne.enormousShape], gS)
+            pyBase.shape = base
+
+            section = rC.section([cont], _Py.tolerance)
+            gS = pyCont.geomShape
+            if section.Edges:
+                cont = self.cutting(cont, [pyOne.enormousShape], gS)
+            else:
+                cont = self.cutting(cont, [pyTwo.enormousShape], gS)
+            pyCont.shape = cont
+
+            # TODO falseAlignment base and continuation don't cut opp rango
+
+        # rangoRear doesn't cut with rangoChop
+        pyPlList = pyWireList[w1].planes
+        for rr in rangoRear:
+            print 'rangoRear ', rr
+            pyPl = pyPlList[rr]
+            control = pyPl.control
+            numChop = -1
+            for rChop in self.rango:
+                numChop += 1
+                [pyOne, pyTwo] = chops[numChop]
+                if w1 == pyOne.numWire:
+                    for nn in rChop:
+                        control.append(nn)
+                        print 'rangoRear doesn\'t cut with rangoChop', nn
 
     def priorLater(self):
 
