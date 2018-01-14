@@ -739,10 +739,11 @@ class _PyAlignment(_Py):
             cutList.append(shapeTwo)
 
             simulatedChops.append(cutList)
+            # AQUI !!!
+            self.simulatedAlignment.extend(cutList)
 
+        # podría eliminar simulatedChops
         self.simulatedChops = simulatedChops
-
-        # quite la trasera cortada por simulatedChop
 
     def aligning(self):
 
