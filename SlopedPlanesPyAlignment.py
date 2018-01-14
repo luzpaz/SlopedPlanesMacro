@@ -743,7 +743,7 @@ class _PyAlignment(_Py):
             self.simulatedAlignment.extend(cutList)
 
         # podría eliminar simulatedChops
-        # tambien prodria eliminar fronted
+        # tambien prodria eliminar fronted, reforrzando el control
         self.simulatedChops = simulatedChops
 
     def aligning(self):
