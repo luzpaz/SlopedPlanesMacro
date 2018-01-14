@@ -294,8 +294,7 @@ class _Py(object):
         for pyAlignment in _Py.pyFace.alignments:
 
             print '****** base'
-            print 'numWire ', pyAlignment.base.numWire
-            print 'numGeom ', pyAlignment.base.numGeom
+            print(pyAlignment.base.numWire, pyAlignment.base.numGeom)
             print 'angle ', pyAlignment.base.angle
             print 'rear ', pyAlignment.base.rear
             print 'rango ',  pyAlignment.base.rango
