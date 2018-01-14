@@ -378,15 +378,18 @@ class _PyFace(_Py):
                                 edge = section.Edges[0]
 
                                 edgeStart = edge.firstVertex(True).Point
+                                print 'edgeStart ', edgeStart
                                 edgeEnd = edge.lastVertex(True).Point
-                                lineEnd = coord[numGeom]
-                                lineStart = coord[numGeom-1]
-                                distStart = edgeStart.sub(lineEnd).Length
-                                distEnd = edgeEnd.sub(lineEnd).Length
+                                print 'edgeEnd ', edgeEnd
+                                lineStart = coord[numGeom]
+                                print 'lineStart ', lineStart
+
+                                distStart = edgeStart.sub(lineStart).Length
+                                distEnd = edgeEnd.sub(lineStart).Length
 
                                 into = False
                                 face = self.face
-                                lineInto = Part.LineSegment(lineStart, edgeStart)
+                                lineInto = Part.LineSegment(lineStart, edgeEnd)
                                 lIS = lineInto.toShape()
                                 sect = face.section([lIS], tolerance)
                                 if sect.Edges:
@@ -433,8 +436,12 @@ class _PyFace(_Py):
                                 print '111 edge by edge'
 
                                 edgeStart = edge.firstVertex(True).Point
+                                print 'edgeStart ', edgeStart
                                 edgeEnd = edge.lastVertex(True).Point
+                                print 'edgeEnd ', edgeEnd
                                 lineEnd = coord[numGeom+1]
+                                print 'lineEnd ', lineEnd
+
                                 distStart = edgeStart.sub(lineEnd).Length
                                 distEnd = edgeEnd.sub(lineEnd).Length
 
@@ -884,7 +891,7 @@ class _PyFace(_Py):
         pyPl.reflexed = True
         pyReflex = _PyReflex()
         pyWire.addLink('reflexs', pyReflex)
-        print 'reflex done'
+        print '¡¡¡ reflex done !!!'
         pyReflex.addLink('planes', pyPlane)
         pyReflex.addLink('planes', pyPl)
 
@@ -895,7 +902,7 @@ class _PyFace(_Py):
 
         pyAlign = _PyAlignment()
         self.addLink('alignments', pyAlign)
-        print 'alignment done'
+        print '¡¡¡ alignment done !!!'
         pyAlign.base = pyPlane
 
         return pyAlign
