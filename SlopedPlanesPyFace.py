@@ -324,6 +324,8 @@ class _PyFace(_Py):
         self.alignments = []  # always reset alignments
         shapeGeomFace = self.shapeGeom
 
+        tolerance = _Py.tolerance
+
         for pyWire in pyWireList:
             numWire = pyWire.numWire
             print '###### numWire ', numWire
@@ -369,8 +371,7 @@ class _PyFace(_Py):
                             print 'ref'
                             self.forBack(pyPlane, 'backward')
                             forward = pyPlane.forward
-                            section = forward.section(shapeGeomFace,
-                                                      _Py.tolerance)
+                            section = forward.section(shapeGeomFace, tolerance)
 
                             if section.Edges:
                                 print 'edges'
@@ -378,11 +379,21 @@ class _PyFace(_Py):
 
                                 edgeStart = edge.firstVertex(True).Point
                                 edgeEnd = edge.lastVertex(True).Point
-                                lineEnd = pyWire.coordinates[numGeom]
+                                lineEnd = coord[numGeom]
+                                lineStart = coord[numGeom-1]
                                 distStart = edgeStart.sub(lineEnd).Length
                                 distEnd = edgeEnd.sub(lineEnd).Length
 
-                                if distStart > distEnd and numWire == 0:
+                                into = False
+                                face = self.face
+                                lineInto = Part.LineSegment(lineStart, edgeStart)
+                                lIS = lineInto.toShape()
+                                sect = face.section([lIS], tolerance)
+                                if sect.Edges:
+                                    if len(sect.Vertexes) == 2:
+                                        into = True
+
+                                if distStart > distEnd and into:
                                     print 'alignament'
                                     pass
 
@@ -402,16 +413,16 @@ class _PyFace(_Py):
 
                         if corner == 'reflex' or numWire > 0:
                             print 'forward'
-                            # interior wires always need forward, reflex and convex
+                            # interior wires always look for alignment, reflex and convex
                             # exterior wires only with reflex
                             self.forBack(pyPlane, 'forward')
 
-                    if ((numWire == 0 and corner == 'reflex') or
-                       (numWire > 0)):
+                    if numWire == 0 and corner == 'reflex' or\
+                       numWire > 0:
                         print '1 does look for alignments'
 
                         forward = pyPlane.forward
-                        section = forward.section(shapeGeomFace, _Py.tolerance)
+                        section = forward.section(shapeGeomFace, tolerance)
 
                         if section.Edges:
                             print '11 possible alignament'
@@ -423,11 +434,20 @@ class _PyFace(_Py):
 
                                 edgeStart = edge.firstVertex(True).Point
                                 edgeEnd = edge.lastVertex(True).Point
-                                lineEnd = pyWire.coordinates[numGeom+1]
+                                lineEnd = coord[numGeom+1]
                                 distStart = edgeStart.sub(lineEnd).Length
                                 distEnd = edgeEnd.sub(lineEnd).Length
 
-                                if distStart < distEnd:
+                                into = False
+                                face = self.face
+                                lineInto = Part.LineSegment(lineEnd, edgeStart)
+                                lIS = lineInto.toShape()
+                                sect = face.section([lIS], tolerance)
+                                if sect.Edges:
+                                    if len(sect.Vertexes) == 2:
+                                        into = True
+
+                                if distStart < distEnd and into:
                                     print '1111 aligment'
 
                                     point = self.roundVector(edgeStart)
@@ -688,17 +708,15 @@ class _PyFace(_Py):
         also determines if a arrow situacion happens'''
 
         shapeGeomWire = pyWire.shapeGeom
-        print shapeGeomWire
         sGW = Part.Wire(shapeGeomWire)
         numWire = pyWire.numWire
         lenWire = len(pyWire.planes)
         numGeom = pyPlane.numGeom
 
         lineShape = pyPlane.forward
-        print lineShape
         section = lineShape.section([sGW], _Py.tolerance)
-        print 'section.Edges ', section.Edges
-        print 'section.Vertexes ', section.Vertexes
+        # print 'section.Edges ', section.Edges
+        # print 'section.Vertexes ', section.Vertexes
 
         if len(section.Vertexes) == 1:
             return
@@ -706,47 +724,54 @@ class _PyFace(_Py):
         edge = False
 
         if section.Edges:
-            print'a'
+            # print 'a'
             edge = True
             if direction == 'forward':
-                print'aa'
+                # print 'a1'
                 vertex = section.Edges[0].Vertexes[0]
             else:
-                print'aaa'
+                # print 'a2'
                 vertex = section.Edges[-1].Vertexes[1]
 
         else:
-            print'b'
+            # print 'b'
             vertex = section.Vertexes[1]
 
-        print vertex.Point
+        # print vertex.Point
 
         coord = pyWire.coordinates
 
         try:
+
             nGeom = coord.index(self.roundVector(vertex.Point))
-            if not edge:
+            # print 'on vertex'
+
+            if edge:
+                if direction == 'forward':
+                    # print 'aa'
+                    nGeom = self.sliceIndex(nGeom-1, lenWire)
+
+            else:
                 if direction == 'backward':
+                    # print 'bb'
                     nGeom = self.sliceIndex(nGeom-1, lenWire)
 
         except ValueError:
+            # print 'on edge'
+
             nGeom = -1
-            for shape in shapeGeomWire:
+            for geomShape in shapeGeomWire:
                 nGeom += 1
-                sect = vertex.section([shape], _Py.tolerance)
+                sect = vertex.section([geomShape], _Py.tolerance)
                 if sect.Vertexes:
                     break
 
-        if edge:
-            if direction == 'forward':
-                print 'forward'
-                nGeom = self.sliceIndex(nGeom-1, lenWire)
-
-        print 'nGeom ', nGeom
+        # print 'nGeom ', nGeom
 
         pyPlane.addValue('rear', nGeom, direction)
 
-        # arrow: esto podría trasladarlo a planning y rangging
+        # arrow
+
         if direction == 'forward':
             endNum = self.sliceIndex(numGeom+2, lenWire)
         else:
@@ -859,6 +884,7 @@ class _PyFace(_Py):
         pyPl.reflexed = True
         pyReflex = _PyReflex()
         pyWire.addLink('reflexs', pyReflex)
+        print 'reflex done'
         pyReflex.addLink('planes', pyPlane)
         pyReflex.addLink('planes', pyPl)
 
@@ -869,6 +895,7 @@ class _PyFace(_Py):
 
         pyAlign = _PyAlignment()
         self.addLink('alignments', pyAlign)
+        print 'alignment done'
         pyAlign.base = pyPlane
 
         return pyAlign
