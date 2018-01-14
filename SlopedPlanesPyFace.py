@@ -509,11 +509,11 @@ class _PyFace(_Py):
                                             break
 
                                 else:
-                                    # print '11112 confront directions'
+                                    # print '1112 confront directions'
                                     if resetFace:
-                                        # print '111121'
+                                        # print '11121'
                                         if corner == 'reflex':
-                                            # print '1111211'
+                                            # print '111211'
 
                                             if ref:
                                                 # print 'ref'
@@ -564,6 +564,9 @@ class _PyFace(_Py):
                                                               lenWire)
                                     # print 'nextNum ', nextNum
                                     pyNextPlane = self.selectPlane(numWire, nextNum)
+
+                                    # habra que quitar a y b: interior super multi corner
+                                    # arreglar reflexing !!!
 
                                     if pyPlane.choped and numWire > 0:
                                         # print 'a'
