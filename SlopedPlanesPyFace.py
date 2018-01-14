@@ -1076,8 +1076,15 @@ class _PyFace(_Py):
             pyWire.simulating()
 
         for pyAlign in self.alignments:
+            pyAlign.simulating()
+
+        for pyAlign in self.alignments:
             pyAlign.simulatingAlignment()
-        self.printControl('simulatingAlignment')
+
+        for pyAlign in self.alignments:
+            pyAlign.simulatingChops()
+
+        self.printControl('simulating')
 
     def reflexing(self):
 
