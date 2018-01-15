@@ -326,7 +326,7 @@ class _PyWire(_Py):
                             control.append(prior)
                             if pyPlane.simulatedShape:
                                 cutList.append(bigPrior)
-    
+
                         else:
                             if not pyPrior.aligned:
                                 pyRPrior =\
@@ -337,7 +337,7 @@ class _PyWire(_Py):
                                     if pyPlane.simulatedShape:
                                         cutList.append(bigPrior)
 
-                    if not later in control:
+                    if later not in control:
 
                         if not pyLater.reflexed:
                             # print'2'

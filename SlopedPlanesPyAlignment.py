@@ -349,16 +349,16 @@ class _PyAlignment(_Py):
                             if r not in control:
                                 control.append(r)
 
-                    # rChop doesn't cut with alignment:
+                    # rChop doesn't cut with alignment
                     control.append(numGeom)
                     if falsify:
                         control.append(nGeom)
 
-                    # rChop doesn't cut with chops: ???
-                    '''control.append(pyOne.numGeom)
-                    control.append(pyTwo.numGeom)'''
+                    # pyOne and pyTwo don't cut rChop
+                    pyOne.control.append(nG)
+                    pyTwo.control.append(nG)
 
-                    # the aligment doesn't cut rChop
+                    # the aligment doesn't cut rChop ???
                     baseControl.append(nG)
 
                     # TODO rChop doesn't cut with other rChop
@@ -730,6 +730,8 @@ class _PyAlignment(_Py):
                     pl = pyPl.bigShape
                     cutList.append(pl)
 
+            cList = []
+
             if cutList:
 
                 bb = self.base.shape.copy()
@@ -746,28 +748,26 @@ class _PyAlignment(_Py):
                 cL = cL.cut([pyOne.enormousShape,
                              pyTwo.enormousShape], tolerance)
 
-                cutList = []
                 for ff in cL.Faces:
                     section = ff.section([bb], tolerance)
                     if section.Edges:
-                        cutList.append(ff)
+                        cList.append(ff)
 
-                if cutList:
+                if cList:
 
-                    pyOne.simulating(cutList)
-                    pyTwo.simulating(cutList)
+                    pyOne.simulating(cList)
+                    pyTwo.simulating(cList)
+
+            simulatedChops.append(cList[:])
 
             shapeOne = pyOne.simulatedShape
-            cutList.append(shapeOne)
+            cList.append(shapeOne)
 
             shapeTwo = pyTwo.simulatedShape
-            cutList.append(shapeTwo)
+            cList.append(shapeTwo)
 
-            simulatedChops.append(cutList)
+            simulatedAlignment.extend(cList)
 
-            simulatedAlignment.extend(cutList)
-
-        # podría eliminar simulatedChops
         self.simulatedChops = simulatedChops
 
     def aligning(self):
@@ -798,6 +798,8 @@ class _PyAlignment(_Py):
 
         # the chops
 
+        simulatedChops = self.simulatedChops
+
         chopList = []
         numChop = -1
         for [pyOne, pyTwo] in self.chops:
@@ -811,14 +813,8 @@ class _PyAlignment(_Py):
             pyW = pyWireList[nW]
             pyPlList = pyW.planes
 
-            rList = []
-            for nn in rChop:
-                pyPl = pyPlList[nn]
-                if not pyPl.choped:
-                    if not pyPl.aligned:
-                        bpl = pyPl.bigShape
-                        rList.append(bpl)
-                        print 'rangoChop ', nn
+            simulatedC = simulatedChops[numChop]
+            print 'simulatedC ', simulatedC
 
             pyTwinPlane = pyTwo
 
@@ -827,10 +823,10 @@ class _PyAlignment(_Py):
                 num += 1
                 print '# pyPlane ', (pyPlane.numWire, pyPlane.numGeom)
 
-                if rList:
+                if simulatedC:
                     plane = pyPlane.shape
                     gS = pyPlane.geomShape
-                    plane = self.cutting(plane, rList, gS)
+                    plane = self.cutting(plane, simulatedC, gS)
                     pyPlane.shape = plane
 
                 if num == 0:
@@ -1099,22 +1095,9 @@ class _PyAlignment(_Py):
                 cutterList = [shapeOne, shapeTwo]
                 cutList.extend(cutterList)
 
-                for nn in rChop:
-                    pyPl = pyPlList[nn]
-                    if not pyPl.choped and not pyPl.aligned:
-                        pl = pyPl.shape
-                        if pl:
-                            section = pl.section([base], _Py.tolerance)
-                            if section.Edges:
-                                pl = pl.copy()
-                                gS = pyPl.geomShape
-                                pl = pl.cut([pyOne.enormousShape,
-                                             pyTwo.enormousShape], _Py.tolerance)
-                                for ff in pl.Faces:
-                                    section = ff.section(self.simulatedAlignment, _Py.tolerance)
-                                    if not section.Edges:
-                                        cutterList.append(ff)
-                                        # print 'rangoChop ', nn
+                simulatedC = simulatedChops[numChop]
+
+                cutterList.extend(simulatedC)
 
                 base = base.cut(cutterList, _Py.tolerance)
                 print 'base.Faces ', base.Faces

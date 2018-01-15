@@ -1215,7 +1215,7 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             pyAlign.aligning()
 
-        # self.end()
+        self.end()
 
     def end(self):
 
@@ -1277,7 +1277,6 @@ class _PyFace(_Py):
 
                             else:
                                 # print '12'
-
                                 gS = pyPlane.geomShape
                                 fList = []
                                 ff = self.cutting(plane.Faces[0], cutterList, gS)
