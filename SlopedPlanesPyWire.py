@@ -427,7 +427,9 @@ class _PyWire(_Py):
         '''ordinaries(self)
         '''
 
+        # the plane to be cutted
         for pyPlane in self.planes:
+            # all plane with shape, except chops and reflexs
             if not (pyPlane.reflexed and not pyPlane.aligned):
                 if pyPlane.shape:
                     print '###### ordinaries ', pyPlane.numGeom

@@ -638,7 +638,7 @@ class _PyPlane(_Py):
 
         if self.aligned:
 
-            # TODO cambia a copia
+            # TODO copying dict
 
             [numWire, numGeom] = [self.numWire, self.numGeom]
             plane = self.shape
@@ -896,84 +896,43 @@ class _PyPlane(_Py):
         if self.aligned:
             print 'aligned'
 
-            pyAlign = self.selectAlignment(self.numWire, self.numGeom)
-            pyBase = pyAlign.base
-            print 'base ', (pyAlign.base.numWire, pyAlign.base.numGeom)
-
-            chopList = []
-            for chop in pyAlign.chops:
-                for pyPl in chop:
-                    if pyPl.numWire == numWire:
-                        chopList.append(pyPl.numGeom)
-
-            alignList = []
-            for pyPl in pyAlign.aligns:
-                if pyPl.numWire == numWire:
-                    alignList.append(pyPl.numGeom)
-            if pyAlign.base.numWire == numWire:
-                alignList.append(pyAlign.base.numGeom)
-
-            rangoChop = pyAlign.rango
-            rConsol = []
-            for rr in rangoChop:
-                rConsol.extend(rr)
-
-            if not pyAlign.falsify:
-                line = pyAlign.base.geomAligned
-            else:
-                line = Part.makeCompound([pyBase.geomAligned, pyBase.forward])
+            pyAlign = self.selectAlignment(numWire, self.numGeom)
+            print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
+            line = pyAlign.geomAligned
 
         cutterList = []
         for pyPl in pyPlaneList:
             nGeom = pyPl.numGeom
-            if pyPl.numGeom not in control:
+            if nGeom not in control:
                 pl = pyPl.shape
                 if pl:
                     print '### numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
-                        print 'pyPl.aligned'
-                        pyAli = self.selectAlignment(pyPl.numWire, pyPl.numGeom)
-                        print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
-                        pyB = pyAli.base
+                        print 'a'
 
-                    if pyPl.aligned:
-                        print 'b'
+                        pyAli = self.selectAlignment(numWire, nGeom)
+                        print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                        ll = pyAli.geomAligned
+
                         if self.aligned:
-                            print 'b1'
-                            if self not in pyAli.aligns:
-                                print 'b11'
-                                if pyPl not in pyAlign.aligns:
-                                    print 'b111'
-                                    plSimulated = pyAli.simulatedAlignment
-                                    cutterList.extend(plSimulated)
+                            print 'a1'
+                            section = line.section([ll], _Py.tolerance)
+                            if not section.Vertexes:
+                                cutterList.extend(pyAli.simulatedAlignment)
+
                         else:
-                            print 'b2'
-                            plSimulated = pyAli.simulatedAlignment
-                            cutterList.extend(plSimulated)
+                            print 'a2'
+                            cutterList.extend(pyAli.simulatedAlignment)
 
                     elif pyPl.choped:
-                        print 'a'
+                        print 'b'
                         pass
 
                     else:
                         print 'c'
-                        pass
-
-                        if self.aligned:
-                            print 'c1'
-
-                            if pyPl.numGeom not in rConsol:
-                                print 'c11'
-
-                                cutterList.append(pl)
-                                control.append(pyPl.numGeom)
-
-                        else:
-                            print 'c2'
-
-                            cutterList.append(pl)
-                            control.append(pyPl.numGeom)
+                        cutterList.append(pl)
+                        control.append(pyPl.numGeom)
 
         if cutterList:
             print 'cutterList ', cutterList

@@ -98,8 +98,7 @@ class _Py(object):
 
         '''selectAlignment(self, numWire, numGeom)
         select an unique alignment which includes the plane (numWire, numGeom)
-        as base plane or in its aligned planes
-        and return it, or None
+        as base plane or in its aligned planes and return it, or None
         used in Py, PyPlane and PyReflex'''
 
         pyWireList = _Py.pyFace.wires

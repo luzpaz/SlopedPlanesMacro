@@ -329,7 +329,6 @@ class _PyFace(_Py):
         for pyWire in pyWireList:
             numWire = pyWire.numWire
             # print '###### numWire ', numWire
-            lenWire = len(pyWire.planes)
 
             # the first corner always convex
             ref = False
@@ -1261,7 +1260,7 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             pyAlign.aligning()
 
-        self.end()
+        # self.end()
 
     def end(self):
 
