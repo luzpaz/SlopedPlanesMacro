@@ -33,7 +33,7 @@ __version__ = ""
 
 class _PyWire(_Py):
 
-    '''The complementary python object class for wires'''
+    '''The complementary python object class for wires.'''
 
     def __init__(self, numWire):
 
@@ -133,8 +133,8 @@ class _PyWire(_Py):
     def planning(self):
 
         '''planning(self):
-        Transfers to PyPlane
-        Arranges the reflex and its planes ranges
+        Transfers to PyPlane.
+        Arranges the reflex range and its planes ranges.
         '''
 
         for pyPlane in self.planes:
@@ -160,8 +160,8 @@ class _PyWire(_Py):
     def trimming(self):
 
         '''trimming(self)
-        The reflex corners act like a dam
-        blocking the progress of others planes'''
+        The reflex corners act like a dam blocking the progress
+        of others planes.'''
 
         # print '###### trimming reflexs numWire ', self.numWire
 

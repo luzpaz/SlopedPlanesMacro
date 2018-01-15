@@ -40,7 +40,7 @@ __version__ = ""
 
 class _PyFace(_Py):
 
-    '''The complementary python object class for faces'''
+    '''The complementary python object class for faces.'''
 
     def __init__(self, numFace):
 
@@ -140,7 +140,7 @@ class _PyFace(_Py):
     def __getstate__(self, serialize):
 
         '''__getstate__(self)
-        Serializes the complementary python objects
+        Serializes the complementary python objects.
         '''
 
         wireList = []
@@ -216,7 +216,7 @@ class _PyFace(_Py):
     def __setstate__(self, wires, alignments, serialize):
 
         '''__setstate__(self, wires, alignments)
-        Deserializes the complementary python objects
+        Deserializes the complementary python objects.
         '''
 
         geomShapeFace = []
@@ -295,7 +295,7 @@ class _PyFace(_Py):
     def parsing(self):
 
         '''parsing(self)
-        Splits the face finding its reflex corners and alignments'''
+        Splits the face finding its reflex corners and alignments.'''
 
         # print '######### parsing'
 
@@ -624,9 +624,9 @@ class _PyFace(_Py):
 
         '''seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl)
         pyAlign is the alignment.
-        pyPlane is the base plane. pyWire is its wire
-        pyPl is the continued plane. pyW is its wire
-        If pyAlign finds other alignment return it, pyAli, or return None
+        pyPlane is the base plane. pyWire is its wire.
+        pyPl is the continued plane. pyW is its wire.
+        If pyAlign finds other alignment return it, pyAli, or return None.
         '''
 
         numWire = pyWire.numWire
@@ -647,7 +647,7 @@ class _PyFace(_Py):
                 pyAliBase = self.selectAlignmentBase(numWire, numGeom)
 
                 if pyAliBase:
-                    # finds a falseAlignment backward
+                    # finds an alignment backward
                     if not pyAliBase.falsify:
                         jumpChop = True
                         pp = pyAliBase.aligns[-1]
@@ -733,8 +733,8 @@ class _PyFace(_Py):
     def findRear(self, pyWire, pyPlane, direction):
 
         '''findRear(self, pyWire, pyPlane, direction)
-        finds the rear plane of a reflexed plane
-        also determines if a arrow situacion happens'''
+        Finds the rear plane of a reflexed plane.
+        Determines if a arrow situacion happens.'''
 
         shapeGeomWire = pyWire.shapeGeom
         sGW = Part.Wire(shapeGeomWire)
@@ -796,7 +796,6 @@ class _PyFace(_Py):
                     break
 
         # print 'nGeom ', nGeom
-
         pyPlane.addValue('rear', nGeom, direction)
 
         # arrow
@@ -962,9 +961,9 @@ class _PyFace(_Py):
     def planning(self):
 
         '''planning(self)
-        Transfers to PyWire
-        Arranges the alignment ranges
-        Rearmes tha face reset system'''
+        Transfers to PyWire.
+        Arranges the alignment ranges.
+        Rearmes tha face reset system.'''
 
         # print '######### planning'
 
@@ -1025,20 +1024,21 @@ class _PyFace(_Py):
     def virtualizing(self):
 
         '''virtualizing(self)
+        Transfers to PyWire and PyAlignment.
         '''
 
         # print '######### virtualizing'
 
-        for pyAlign in self.alignments:
-            pyAlign.virtualizing()
-
         for pyWire in self.wires:
             pyWire.virtualizing()
+
+        for pyAlign in self.alignments:
+            pyAlign.virtualizing()
 
     def trimming(self):
 
         '''trimming(self)
-        Transfers to PyWire and PyAlignment
+        Transfers to PyWire and PyAlignment.
         '''
 
         self.printSummary()
@@ -1056,6 +1056,7 @@ class _PyFace(_Py):
     def priorLater(self):
 
         '''priorLater(self)
+        Transfers to PyWire and PyAlignment.
         '''
 
         # print '######### priorLater'
@@ -1071,6 +1072,7 @@ class _PyFace(_Py):
     def simulating(self):
 
         '''simulating(self)
+        Transfers to PyWire and PyAlignment.
         '''
 
         # print '######### simulating'
@@ -1092,6 +1094,7 @@ class _PyFace(_Py):
     def reflexing(self):
 
         '''reflexing(self)
+        Transfers to PyWire.
         '''
 
         # print '######### reflexing'
@@ -1103,6 +1106,7 @@ class _PyFace(_Py):
     def ordinaries(self):
 
         '''ordinaries(self)
+        Transfers to PyWire.
         '''
 
         print '######### ordinaries'
@@ -1262,6 +1266,8 @@ class _PyFace(_Py):
     def aligning(self):
 
         '''aligning(self)
+        Transfers to PyAlignment.
+        Arranges de end operations.
         '''
 
         # print '######### aligning'
@@ -1275,7 +1281,10 @@ class _PyFace(_Py):
 
     def end(self):
 
-        ''''''
+        '''end(self)
+        
+        Transfers to PyAlignment.
+        '''
 
         pyAlignList = self.alignments
 

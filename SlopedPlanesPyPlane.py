@@ -35,7 +35,7 @@ __version__ = ""
 
 class _PyPlane(_Py):
 
-    '''The complementary python object class for planes'''
+    '''The complementary python object class for planes.'''
 
     def __init__(self, numWire, numGeom):
 
@@ -637,6 +637,8 @@ class _PyPlane(_Py):
         '''
 
         if self.aligned:
+
+            # TODO cambia a copia
 
             [numWire, numGeom] = [self.numWire, self.numGeom]
             plane = self.shape

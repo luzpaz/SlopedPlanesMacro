@@ -34,7 +34,7 @@ __version__ = ""
 
 class _PyAlignment(_Py):
 
-    '''The complementary python object class for alignments'''
+    '''The complementary python object class for alignments.'''
 
     def __init__(self):
 
@@ -209,7 +209,7 @@ class _PyAlignment(_Py):
     def virtualizing(self):
 
         '''virtualizing(self)
-        virtualizes the chops and the base of falsify alignnments'''
+        Virtualizes the chops and the base of falsify alignnments.'''
 
         virtualizedChops = []
         for [pyChopOne, pyChopTwo] in self.chops:
@@ -231,8 +231,8 @@ class _PyAlignment(_Py):
     def trimming(self):
 
         '''trimming(self)
-        The alignment blocks the progress
-        of the planes in its front and laterals'''
+        The alignment blocks the progress of the planes
+        in its front and laterals.'''
 
         print '###### trimming base ', (self.base.numWire, self.base.numGeom)
 
@@ -743,7 +743,6 @@ class _PyAlignment(_Py):
             self.simulatedAlignment.extend(cutList)
 
         # podría eliminar simulatedChops
-        # tambien prodria eliminar fronted, reforrzando el control
         self.simulatedChops = simulatedChops
 
     def aligning(self):
@@ -761,7 +760,6 @@ class _PyAlignment(_Py):
         pyPlaneList = pyWireList[0].planes
 
         falsify = self.falsify
-
 
         pyBase = self.base
         base = pyBase.shape

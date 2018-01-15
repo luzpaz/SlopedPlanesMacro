@@ -99,7 +99,7 @@ class _PyReflex(_Py):
     def preProcess(self, pyWire):
 
         '''preProcess(self, pyWire)
-        the planes included in a range are cutted between them
+        The planes included in a range are cutted between them.
         '''
 
         # print '#### preProcess'

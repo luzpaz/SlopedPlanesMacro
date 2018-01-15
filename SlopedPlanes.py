@@ -185,7 +185,7 @@ To cero the plane width is equal to the related edge length of the base'''
     def execute(self, slopedPlanes):
 
         '''execute(self, slopedPlanes)
-        Builds the shape of the slopedPlanes object'''
+        Builds the shape of the slopedPlanes object.'''
 
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
@@ -422,11 +422,11 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.simulating()     #
 
-            '''pyFace.reflexing()      #
+            pyFace.reflexing()      #
 
             pyFace.ordinaries()     #
 
-            pyFace.betweenWires()   #
+            '''pyFace.betweenWires()   #
 
             pyFace.aligning()       #'''
 
@@ -566,7 +566,6 @@ To cero the plane width is equal to the related edge length of the base'''
             endShape.complement()
 
         if slopedPlanes.Thickness:
-            # normal = self.faceNormal(self.faceList[0])
             normal = self.faceNormal(faceList[0])
             if slopedPlanes.Reverse:
                 normal = normal * -1
