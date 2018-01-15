@@ -919,6 +919,7 @@ class _PyPlane(_Py):
                             print 'a1'
                             section = line.section([ll], _Py.tolerance)
                             if not section.Vertexes:
+                                # TODO dos alineaciones en esquina ?
                                 cutterList.extend(pyAli.simulatedAlignment)
 
                         else:

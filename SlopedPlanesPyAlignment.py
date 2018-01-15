@@ -703,9 +703,12 @@ class _PyAlignment(_Py):
 
         ''''''
 
+        tolerance = _Py.tolerance
+
         pyFace = _Py.pyFace
         pyWireList = pyFace.wires
 
+        simulatedAlignment = self.simulatedAlignment
         rangoChop = self.rango
         simulatedChops = []
 
@@ -730,20 +733,22 @@ class _PyAlignment(_Py):
             if cutList:
 
                 bb = self.base.shape.copy()
-                bb = bb.cut([pyOne.simulatedShape, pyTwo.simulatedShape], _Py.tolerance)
+                bb = bb.cut([pyOne.simulatedShape,
+                             pyTwo.simulatedShape], tolerance)
 
                 for ff in bb.Faces:
-                    section = ff.section(geomList, _Py.tolerance)
+                    section = ff.section(geomList, tolerance)
                     if not section.Edges:
                         bb = ff
                         break
 
                 cL = Part.makeCompound(cutList)
-                cL = cL.cut([pyOne.enormousShape, pyTwo.enormousShape], _Py.tolerance)
+                cL = cL.cut([pyOne.enormousShape,
+                             pyTwo.enormousShape], tolerance)
 
                 cutList = []
                 for ff in cL.Faces:
-                    section = ff.section(bb, _Py.tolerance)
+                    section = ff.section([bb], tolerance)
                     if section.Edges:
                         cutList.append(ff)
 
@@ -759,8 +764,8 @@ class _PyAlignment(_Py):
             cutList.append(shapeTwo)
 
             simulatedChops.append(cutList)
-            # AQUI !!!
-            self.simulatedAlignment.extend(cutList)
+
+            simulatedAlignment.extend(cutList)
 
         # podría eliminar simulatedChops
         self.simulatedChops = simulatedChops
