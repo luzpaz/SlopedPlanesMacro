@@ -542,14 +542,16 @@ class _PyFace(_Py):
 
                                         if corner == 'reflex':
                                             # print 'reflex'
-                                            pyP = self.selectPlane(pyW.numWire, num)
-                                            if not pyEnd.forward:
-                                                self.forBack(pyEnd, 'forward')
-                                            self.findRear(pyW, pyEnd, 'forward')
-                                            if not pyP.backward:
-                                                self.forBack(pyP, 'backward')
-                                            self.findRear(pyW, pyP, 'backward')
-                                            self.doReflex(pyW, pyEnd, pyP)
+                                            # with three or more aligns doesn't repeat reflex corner at the end of the alignment
+                                            if not pyAli:
+                                                pyP = self.selectPlane(pyW.numWire, num)
+                                                if not pyEnd.forward:
+                                                    self.forBack(pyEnd, 'forward')
+                                                self.findRear(pyW, pyEnd, 'forward')
+                                                if not pyP.backward:
+                                                    self.forBack(pyP, 'backward')
+                                                self.findRear(pyW, pyP, 'backward')
+                                                self.doReflex(pyW, pyEnd, pyP)
 
                                         ref = False
 
@@ -560,51 +562,33 @@ class _PyFace(_Py):
                                 if corner == 'reflex':
                                     # print '1211 reflexed'
 
-                                    nextNum = self.sliceIndex(numGeom+1,
-                                                              lenWire)
-                                    # print 'nextNum ', nextNum
-                                    pyNextPlane = self.selectPlane(numWire, nextNum)
+                                    ref = True
 
-                                    # habra que quitar a y b: interior super multi corner
-                                    # arreglar reflexing !!!
+                                    backward = pyPlane.backward
+                                    section = backward.section(shapeGeomFace, tolerance)
+                                    if section.Edges:
+                                        # print 'edges'
+                                        edge = section.Edges[0]
 
-                                    if pyPlane.choped and numWire > 0:
-                                        # print 'a'
-                                        ref = False
+                                        edgeStart = edge.firstVertex(True).Point
+                                        # print 'edgeStart ', edgeStart
+                                        edgeEnd = edge.lastVertex(True).Point
+                                        # print 'edgeEnd ', edgeEnd
+                                        lineStart = coord[numGeom]
+                                        # print 'lineStart ', lineStart
 
-                                    elif pyNextPlane.choped and numWire > 0:
-                                        # print 'b'
-                                        ref = False
+                                        distStart = edgeStart.sub(lineStart).Length
+                                        distEnd = edgeEnd.sub(lineStart).Length
 
-                                    else:
-                                        # print 'c'
-                                        ref = True
+                                        face = self.face
+                                        lineInto = Part.LineSegment(lineStart, edgeEnd)
+                                        lIS = lineInto.toShape()
+                                        sect = face.section([lIS], tolerance)
 
-                                        backward = pyPlane.backward
-                                        section = backward.section(shapeGeomFace, tolerance)
-                                        if section.Edges:
-                                            # print 'edges'
-                                            edge = section.Edges[0]
-
-                                            edgeStart = edge.firstVertex(True).Point
-                                            # print 'edgeStart ', edgeStart
-                                            edgeEnd = edge.lastVertex(True).Point
-                                            # print 'edgeEnd ', edgeEnd
-                                            lineStart = coord[numGeom]
-                                            # print 'lineStart ', lineStart
-
-                                            distStart = edgeStart.sub(lineStart).Length
-                                            distEnd = edgeEnd.sub(lineStart).Length
-
-                                            face = self.face
-                                            lineInto = Part.LineSegment(lineStart, edgeEnd)
-                                            lIS = lineInto.toShape()
-                                            sect = face.section([lIS], tolerance)
-
-                                            if sect.Edges:
-                                                if len(sect.Vertexes) == 2:
-                                                    # print 'cc'
-                                                    ref = False
+                                        if sect.Edges:
+                                            if len(sect.Vertexes) == 2:
+                                                # print 'cc'
+                                                ref = False
 
                     else:
                         # print '2 does not look for alignments'

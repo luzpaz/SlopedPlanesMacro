@@ -198,8 +198,6 @@ class _PyWire(_Py):
                         pyPl = pyPlaneList[nG]
                         control = pyPl.control
 
-                        # TODO pyPl numWire and angle ???
-
                         if numGeom not in pyPl.control:
                             # print '# cutted ', nG
 
