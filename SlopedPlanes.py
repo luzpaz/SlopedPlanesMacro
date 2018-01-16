@@ -720,6 +720,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
         if serialize:
             self.OnChanged = False
+            # if the geometry change after loading, recompute
         else:
             self.OnChanged = True
 

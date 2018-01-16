@@ -824,6 +824,7 @@ class _PyAlignment(_Py):
                 gS = pyPlane.geomShape
                 plane = pyPlane.shape
 
+                # with complex rChop this will not work fine ???
                 if simulatedC:
                     plane = self.cutting(plane, simulatedC, gS)
                     pyPlane.shape = plane
