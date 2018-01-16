@@ -519,16 +519,16 @@ class _PyPlane(_Py):
         '''
 
         numGeom = self.numGeom
-        # print '# planning ', numGeom
+        print '# planning ', numGeom
 
         if self.seedShape:
-            # print 'seed'
+            print 'seed'
 
             self.shape = self.seedShape.copy()
             self.bigShape = self.seedBigShape.copy()
 
         else:
-            # print 'no seed'
+            print 'no seed'
 
             coordinates = pyWire.coordinates
             geom = self.deGeom()
@@ -537,6 +537,9 @@ class _PyPlane(_Py):
             angle = self.angle
             if _Py.reverse:
                 angle = angle * -1
+            print direction
+            print eje
+            print angle
             direction = self.rotateVector(direction, eje, angle)
             direction.normalize()
 
@@ -894,10 +897,10 @@ class _PyPlane(_Py):
         control = self.control
 
         if self.aligned:
-            print 'aligned'
+            # print 'aligned'
 
             pyAlign = self.selectAlignment(numWire, self.numGeom)
-            print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
+            # print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
             line = pyAlign.geomAligned
 
         cutterList = []
@@ -906,42 +909,42 @@ class _PyPlane(_Py):
             if nGeom not in control:
                 pl = pyPl.shape
                 if pl:
-                    print '### numGeom ', pyPl.numGeom
+                    # print '### numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
-                        print 'a'
+                        # print 'a'
 
                         pyAli = self.selectAlignment(numWire, nGeom)
-                        print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                        # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                         ll = pyAli.geomAligned
 
                         if self.aligned:
-                            print 'a1'
+                            # print 'a1'
                             section = line.section([ll], _Py.tolerance)
                             if not section.Vertexes:
                                 # TODO dos alineaciones en esquina ?
                                 cutterList.extend(pyAli.simulatedAlignment)
 
                         else:
-                            print 'a2'
+                            # print 'a2'
                             cutterList.extend(pyAli.simulatedAlignment)
 
                     elif pyPl.choped:
-                        print 'b'
+                        # print 'b'
                         pass
 
                     else:
-                        print 'c'
+                        # print 'c'
                         cutterList.append(pl)
                         control.append(pyPl.numGeom)
 
         if cutterList:
-            print 'cutterList ', cutterList
+            # print 'cutterList ', cutterList
             plane = self.shape
             gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)
             self.shape = plane
-            print 'plane ', plane
+            # print 'plane ', plane
 
     def rangging(self, pyWire, direction):
 

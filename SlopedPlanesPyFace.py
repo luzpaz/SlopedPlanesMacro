@@ -300,6 +300,7 @@ class _PyFace(_Py):
         # print '######### parsing'
 
         resetFace = self.reset
+        print 'resetFace ', resetFace
 
         if not resetFace and not self.alignments:
             return
@@ -602,6 +603,8 @@ class _PyFace(_Py):
             pyWire.reset = False
 
         self.priorLaterAlignments()
+
+        self.printSummary()
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -1024,17 +1027,17 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment.
         '''
 
-        self.printSummary()
+        # self.printSummary()
 
-        print '######### trimming'
+        # print '######### trimming'
 
         for pyWire in self.wires:
             pyWire.trimming()
-        self.printControl('trimming reflexs')
+        # self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()
-        self.printControl('trimming alignments')
+        # self.printControl('trimming alignments')
 
     def priorLater(self):
 
@@ -1046,11 +1049,11 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.priorLater()
-        self.printControl('priorLater wires')
+        # self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
-        self.printControl('priorLater alignments')
+        # self.printControl('priorLater alignments')
 
     def simulating(self):
 
@@ -1072,7 +1075,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingChops()
 
-        self.printControl('simulating')
+        # self.printControl('simulating')
 
     def reflexing(self):
 
@@ -1092,11 +1095,11 @@ class _PyFace(_Py):
         Transfers to PyWire.
         '''
 
-        print '######### ordinaries'
+        # print '######### ordinaries'
 
         for pyWire in self.wires:
             pyWire.ordinaries()
-        self.printControl('ordinaries')
+        # self.printControl('ordinaries')
 
     def betweenWires(self):
 

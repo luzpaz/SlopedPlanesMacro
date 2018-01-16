@@ -206,7 +206,7 @@ To cero the plane width is equal to the related edge length of the base'''
             onChanged = True
 
         if onChanged:
-            # print 'A'
+            print 'A'
 
             face = Part.makeFace(shape, faceMaker)
             fList = face.Faces
@@ -240,7 +240,7 @@ To cero the plane width is equal to the related edge length of the base'''
             self.faceList = faceList
 
         else:
-            # print 'B'
+            print 'B'
 
             faceList = self.faceList
 
@@ -258,7 +258,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             if onChanged:
                 # elaborates complementary python objects of a face
-                # print 'AA'
+                print 'AA'
 
                 coordinates = coordinatesOuterOrdered[numFace]
                 for pyFace in pyFaceListOld:
@@ -372,6 +372,12 @@ To cero the plane width is equal to the related edge length of the base'''
                                 pyPlane.reflexed = False
                                 pyPlane.fronted = False
                                 pyPlane.seedShape = None
+                                angle = pyPlane.angle
+                                if isinstance(angle, list):
+                                    angle = self.selectPlane(angle[0],
+                                                             angle[1]).angle
+                                    pyPlane.angle = angle
+
                         except IndexError:
                             # print '2'
                             pyPlane = _PyPlane(numWire, numGeom)
@@ -393,7 +399,7 @@ To cero the plane width is equal to the related edge length of the base'''
                 pyFace.wires = pyWireListNew
 
             else:
-                # print 'BB'
+                print 'BB'
 
                 pyFace = self.Pyth[numFace]
                 _Py.pyFace = pyFace
@@ -403,10 +409,11 @@ To cero the plane width is equal to the related edge length of the base'''
                         pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
 
-                    try:
-                        print pyPlane.fronted
-                    except AttributeError:
-                        pyPlane.fronted = False
+                        # QUITAR
+                        try:
+                            pyPlane.fronted
+                        except AttributeError:
+                            pyPlane.fronted = False
 
             pyFace.parsing()        #
 
@@ -431,10 +438,10 @@ To cero the plane width is equal to the related edge length of the base'''
             pyFace.aligning()       #'''
 
         if onChanged:
-            # print 'AAA'
+            print 'AAA'
             self.Pyth = pyFaceListNew
         else:
-            # print 'BBB'
+            print 'BBB'
             pyFaceListNew = self.Pyth
 
         self.OnChanged = True
