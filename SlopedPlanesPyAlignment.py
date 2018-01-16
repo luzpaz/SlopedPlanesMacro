@@ -744,7 +744,7 @@ class _PyAlignment(_Py):
 
             if cutList:
 
-                bb = self.base.shape.copy()
+                bb = self.base.seedShape.copy()
                 bb = bb.cut([pyOne.simulatedShape,
                              pyTwo.simulatedShape], tolerance)
 
