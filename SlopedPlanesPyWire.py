@@ -411,6 +411,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflexTwo(self)
 
+        # TODO problems!!!
         for pyReflex in self.reflexs:
             pyReflex.rearing(self, False)
 

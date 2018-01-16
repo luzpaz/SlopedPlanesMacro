@@ -319,6 +319,7 @@ class _Py(object):
                 print(align.numWire, align.numGeom)
                 print 'rear ', align.rear
                 print 'rango ', align.rango
+                print 'angle ', align.angle
                 # print 'geom ', align.geom
                 # print 'geomAligned ', align.geomAligned
                 # print 'shape ', align.shape

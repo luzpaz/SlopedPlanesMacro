@@ -270,7 +270,7 @@ class _PyAlignment(_Py):
             rangoRear.insert(0, lat)
             rangoRear.append(pr)
         self.rangoRear = rangoRear
-        # print 'rangoRear ', rangoRear
+        print 'rangoRear ', rangoRear
 
         rangoChop = self.rango
         chops = self.chops
@@ -369,53 +369,53 @@ class _PyAlignment(_Py):
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
-                # print '### chop ', pyPlane.numWire, pyPlane.numGeom
+                print '### chop ', pyPlane.numWire, pyPlane.numGeom
                 enormousShape = pyPlane.enormousShape
 
                 # the cross
-                cont = True
+                notCross = True
                 if num == 0:
                     rango = rangoOne
                     if pyPlane.virtualized:
                         if not pyPlane.geomAligned:
-                            cont = False
+                            notCross = False
                 else:
                     rango = rangoTwo
                     if pyPlane.virtualized:
                         if pyPlane.geomAligned:
-                            cont = False
-                # print 'cont ', cont
-                # print 'rango ', rango
+                            notCross = False
+                print 'notCross ', notCross
+                print 'rango ', rango
 
                 for nG in rango:
                     pyPl = pyPlaneList[nG]
                     control = pyPl.control
                     if numGeom not in control:
                         if not pyPl.aligned and not pyPl.choped:
-                            # print '# nG ', nG
+                            print '# nG ', nG
 
-                            if cont:
-                                # print 'A'
+                            if notCross:
+                                print 'A'
                                 cList = [enormousShape]
 
                                 if nG not in baseRear and nG not in contRear:
-                                    # print 'a'
+                                    print 'a'
                                     if nG not in [pr, lat]:
-                                        # print 'aa'
+                                        print 'aa'
 
                                         if falsify:
-                                            # print 'aa1'
+                                            print 'aa1'
                                             if num == 0:
-                                                # print 'aa11'
+                                                print 'aa11'
                                                 cList.append(enormousBase)
                                                 control.append(numGeom)
                                             else:
-                                                # print 'aa12'
+                                                print 'aa12'
                                                 cList.append(enormousCont)
                                                 control.append(nGeom)
 
                                         else:
-                                            # print 'aa2'
+                                            print 'aa2'
                                             cList.append(enormousBase)
                                             control.append(numGeom)
 
@@ -423,7 +423,7 @@ class _PyAlignment(_Py):
                                 control.append(pyPlane.numGeom)
 
                             else:
-                                # print 'B'
+                                print 'B'
                                 pyPl.trimmingTwo(enormousShape)
 
         if falsify:
@@ -452,7 +452,7 @@ class _PyAlignment(_Py):
         # rangoRear doesn't cut with rangoChop
         pyPlList = pyWireList[w1].planes
         for rr in rangoRear:
-            # print 'rangoRear ', rr
+            print 'rangoRear ', rr
             pyPl = pyPlList[rr]
             control = pyPl.control
             numChop = -1
@@ -462,7 +462,7 @@ class _PyAlignment(_Py):
                 if w1 == pyOne.numWire:
                     for nn in rChop:
                         control.append(nn)
-                        # print 'rangoRear doesn\'t cut with rangoChop', nn
+                        print 'rangoRear doesn\'t cut with rangoChop', nn
 
     def priorLater(self):
 
@@ -753,10 +753,19 @@ class _PyAlignment(_Py):
                     if section.Edges:
                         cList.append(ff)
 
-                if cList:
+                # podría evitarse la repetición de cortes
+                pyOne.simulating(cutList)
+                pyTwo.simulating(cutList)
 
-                    pyOne.simulating(cList)
-                    pyTwo.simulating(cList)
+                shapeOne = pyOne.shape
+                gS = pyOne.geomShape
+                shapeOne = self.cutting(shapeOne, cutList, gS)
+                pyOne.shape = shapeOne
+
+                shapeTwo = pyTwo.shape
+                gS = pyTwo.geomShape
+                shapeTwo = self.cutting(shapeTwo, cutList, gS)
+                pyTwo.shape = shapeTwo
 
             simulatedChops.append(cList[:])
 
@@ -826,7 +835,7 @@ class _PyAlignment(_Py):
 
                 # with complex rChop this will not work fine ???
                 # en la etapa de simulado ya haces este corte. Revisar
-                if simulatedC:
+                '''if simulatedC:
                     plane = self.cutting(plane, simulatedC, gS)
                     pyPlane.shape = plane
                 else:
@@ -844,7 +853,7 @@ class _PyAlignment(_Py):
                             prePl = self.selectPlane(nW, preNum)
                             if not prePl.aligned and not prePl.choped:
                                 plane = self.cutting(plane, [prePl.shape], gS)
-                                pyPlane.shape = plane
+                                pyPlane.shape = plane'''
 
                 if num == 0:
                     rango = pyOne.rango[-1]
