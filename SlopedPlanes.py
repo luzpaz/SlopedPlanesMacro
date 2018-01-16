@@ -315,22 +315,19 @@ To cero the plane width is equal to the related edge length of the base'''
                     numWire += 1
                     # print '###### numWire ', numWire
                     coo = coordinates[numWire]
-                    brea = False
                     for pyWire in pyWireListOld:
                         oldCoo = pyWire.coordinates
                         if oldCoo[0] == coo[0]:
                             # print 'a'
-                            brea = True
                             if oldCoo != coo:
                                 # print 'b'
                                 pyFace.reset = True
                                 if len(oldCoo) != len(coo):
                                     # print 'c'
                                     pyWire.reset = True
-                            if brea:
-                                pyWireListNew.append(pyWire)
-                                pyWire.numWire = numWire
-                                break
+                            pyWireListNew.append(pyWire)
+                            pyWire.numWire = numWire
+                            break
                     else:
                         # print 'd'
                         pyWire = _PyWire(numWire)

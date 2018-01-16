@@ -519,16 +519,16 @@ class _PyPlane(_Py):
         '''
 
         numGeom = self.numGeom
-        print '# planning ', numGeom
+        # print '# planning ', numGeom
 
         if self.seedShape:
-            print 'seed'
+            # print 'seed'
 
             self.shape = self.seedShape.copy()
             self.bigShape = self.seedBigShape.copy()
 
         else:
-            print 'no seed'
+            # print 'no seed'
 
             coordinates = pyWire.coordinates
             geom = self.deGeom()
@@ -537,9 +537,6 @@ class _PyPlane(_Py):
             angle = self.angle
             if _Py.reverse:
                 angle = angle * -1
-            print direction
-            print eje
-            print angle
             direction = self.rotateVector(direction, eje, angle)
             direction.normalize()
 

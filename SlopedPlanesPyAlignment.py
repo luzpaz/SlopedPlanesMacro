@@ -825,6 +825,7 @@ class _PyAlignment(_Py):
                 plane = pyPlane.shape
 
                 # with complex rChop this will not work fine ???
+                # en la etapa de simulado ya haces este corte. Revisar
                 if simulatedC:
                     plane = self.cutting(plane, simulatedC, gS)
                     pyPlane.shape = plane
