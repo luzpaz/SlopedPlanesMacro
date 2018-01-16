@@ -618,15 +618,25 @@ class _PyAlignment(_Py):
 
         ''''''
 
+        falsify = self.falsify
+
         enormousBase = self.base.enormousShape
+        enormousCont = self.aligns[-1].enormousShape
 
         for [pyOne, pyTwo] in self.chops:
 
-            enormous = pyTwo.enormousShape
-            pyOne.simulating([enormous, enormousBase])
+            if falsify:
 
-            enormous = pyOne.enormousShape
-            pyTwo.simulating([enormous, enormousBase])
+                pyOne.simulating([enormousBase])
+                pyTwo.simulating([enormousCont])
+
+            else:
+
+                enormous = pyTwo.enormousShape
+                pyOne.simulating([enormous, enormousBase])
+
+                enormous = pyOne.enormousShape
+                pyTwo.simulating([enormous, enormousBase])
 
     def simulatingAlignment(self):
 
