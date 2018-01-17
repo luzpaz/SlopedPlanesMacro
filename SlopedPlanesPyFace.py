@@ -1218,8 +1218,6 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             pyAlign.aligning()
 
-        self.end()
-
     def end(self):
 
         '''end(self)

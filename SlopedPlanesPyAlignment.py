@@ -794,10 +794,10 @@ class _PyAlignment(_Py):
         '''aligning(self)
         '''
 
-        # print '###### base ', (self.base.numWire, self.base.numGeom)
-        # print '###### base shape ', self.base.shape
-        # print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
-        # print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
+        print '###### base ', (self.base.numWire, self.base.numGeom)
+        print '###### base shape ', self.base.shape
+        print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
+        print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
 
         tolerance = _Py.tolerance
         pyWireList = _Py.pyFace.wires
@@ -823,7 +823,7 @@ class _PyAlignment(_Py):
         numChop = -1
         for [pyOne, pyTwo] in self.chops:
             numChop += 1
-            # print '### [pyOne, pyTwo]', [(pyOne.numWire, pyOne.numGeom), (pyTwo.numWire, pyTwo.numGeom)]
+            print '### [pyOne, pyTwo]', [(pyOne.numWire, pyOne.numGeom), (pyTwo.numWire, pyTwo.numGeom)]
 
             rChop = rangoChop[numChop]
 
@@ -832,14 +832,14 @@ class _PyAlignment(_Py):
             pyPlList = pyW.planes
 
             simulatedC = simulatedChops[numChop]
-            # print 'simulatedC ', simulatedC
+            print 'simulatedC ', simulatedC
 
             pyTwinPlane = pyTwo
 
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
-                # print '# pyPlane ', (pyPlane.numWire, pyPlane.numGeom)
+                print '# pyPlane ', (pyPlane.numWire, pyPlane.numGeom)
                 gS = pyPlane.geomShape
                 plane = pyPlane.shape
 
@@ -872,7 +872,10 @@ class _PyAlignment(_Py):
                     pyPl = pyPlaneList[nn]
                     if pyPl.aligned:
                         pyAli = self.selectAlignment(0, nn)
-                        pl = pyAli.simulatedAlignment
+                        if pyAli != self:
+                            pl = pyAli.simulatedAlignment
+                        else:
+                            pl = None
                     elif not pyPl.choped:
                         rC.append(pyPl.shape)
                         pl = [pyPl.shape]
@@ -881,7 +884,7 @@ class _PyAlignment(_Py):
                     if pl:
                         if pl not in cutList:
                             cutList.extend(pl)
-                            # print'rangoPlane ', nn
+                            print'rangoPlane ', nn
                 # print 'rC ', rC
                 rC = Part.makeCompound(rC)
 
@@ -889,7 +892,10 @@ class _PyAlignment(_Py):
                     pyPl = pyPlaneList[nn]
                     if pyPl.aligned:
                         pyAli = self.selectAlignment(0, nn)
-                        pl = pyAli.simulatedAlignment
+                        if pyAli != self:
+                            pl = pyAli.simulatedAlignment
+                        else:
+                            pl = None
                     elif not pyPl.choped:
                         pl = [pyPl.shape]
                     else:
@@ -897,7 +903,7 @@ class _PyAlignment(_Py):
                     if pl:
                         if pl not in cutList:
                             cutList.extend(pl)
-                            # print'oppRangoPlane ', nn
+                            print'oppRangoPlane ', nn
 
                 pyPl = pyPlaneList[rear]
                 if pyPl.aligned:
@@ -910,28 +916,28 @@ class _PyAlignment(_Py):
                 if pl:
                     if pl not in cutList:
                         cutList.extend(pl)
-                        # print'rearPlane ', rear
+                        print'rearPlane ', rear
 
                 if not oppRango:
                     pyPl = pyPlaneList[oppRear]
                     if not pyPl.choped:
-                        # print 'a'
+                        print 'a'
                         if not pyPl.aligned:
-                            # print 'a1'
+                            print 'a1'
                             oppRearPlane = pyPl.shape
                             # if rearPlane not in cutList:
                             cutList.append(oppRearPlane)
-                            # print'rearPlane ', rear
+                            print'rearPlane ', rear
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
 
                 cutterList = cutList + cList
-                # print 'cutterList ', cutterList
+                print 'cutterList ', cutterList
 
                 gS = pyPlane.geomShape
                 planeCopy = planeCopy.cut(cutterList, tolerance)
-                # print 'planeCopy.Faces ', planeCopy.Faces
+                print 'planeCopy.Faces ', planeCopy.Faces
 
                 fList = []
                 for ff in planeCopy.Faces:
@@ -940,11 +946,14 @@ class _PyAlignment(_Py):
                         section = ff.section([_Py.face], tolerance)
                         if section.Edges:
                             fList.append(ff)
+                print 'fList ', fList
 
                 planeCopy = plane.copy()
 
                 if fList:
                     planeCopy = planeCopy.cut(fList, tolerance)
+
+                print 'planeCopy.Faces ', planeCopy.Faces
 
                 if cutList:
 
@@ -958,7 +967,7 @@ class _PyAlignment(_Py):
                             pyWire = pyWireList[0]
                             falsePlane.rangging(pyWire, 'backward')
                             rr = falsePlane.rangoConsolidate
-                            # print rr
+                            print rr
 
                             for nn in rr:
                                 pyPl = pyPlaneList[nn]
@@ -966,22 +975,23 @@ class _PyAlignment(_Py):
                                     if not pyPl.aligned:
                                         pl = pyPl.shape
                                         cutList.append(pl)
-                                        # print 'rr ', nn
+                                        print 'rr ', nn
 
                     planeCopy = planeCopy.cut(cutList, tolerance)
 
-                # print 'planeCopy.Faces ', planeCopy.Faces
+                print 'planeCopy.Faces ', planeCopy.Faces
 
                 aList = []
                 for ff in planeCopy.Faces:
-                    # print '1'
+                    print '1'
                     section = ff.section([gS], tolerance)
                     if section.Edges:
-                        # print '11'
+                        print '11'
                         aList.append(ff)
                         planeCopy = planeCopy.removeShape([ff])
                         break
-                # print 'planeCopy.Faces ', planeCopy.Faces
+                print 'planeCopy.Faces ', planeCopy.Faces
+                print 'aList ', aList
 
                 if planeCopy.Faces:
                     planeCopy = planeCopy.cut(cList, tolerance)
@@ -991,21 +1001,21 @@ class _PyAlignment(_Py):
 
                 ffList = []
                 for ff in planeCopy.Faces:
-                    # print '2'
+                    print '2'
                     section = ff.section([forward, backward], tolerance)
                     if not section.Edges:
-                        # print '21'
+                        print '21'
                         section = ff.section(aList, tolerance)
                         if not section.Vertexes:
-                            # print '211'
+                            print '211'
                             section = ff.section([rC], tolerance)
                             if section.Edges:
-                                # print '2111'
+                                print '2111'
                                 ffList.append(ff)
                                 break
 
                 aList.extend(ffList)
-                # print 'aList ', aList
+                print 'aList ', aList
                 comp = Part.makeCompound(aList)
                 pyPlane.shape = comp
 
