@@ -864,6 +864,9 @@ class _PyAlignment(_Py):
 
                 cutList = []
 
+                # TODO pasar arriba
+                # CAMBIAR NUMWIRE
+
                 rC = []
                 for nn in rango:
                     pyPl = pyPlaneList[nn]
@@ -1083,17 +1086,15 @@ class _PyAlignment(_Py):
                 base = self.cutting(base, cutterList, gS)
                 pyBase.shape = base
 
+                gS = pyCont.geomShape
+                cont = self.cutting(cont, cutterList, gS)
+                pyCont.shape = cont
+
             if not pyTwo.virtualized:
 
                 gS = pyTwo.geomShape
                 shapeTwo = self.cutting(shapeTwo, [base, cont, shapeOne], gS)
                 pyTwo.shape = shapeTwo
-
-            if cutterList:
-
-                gS = pyCont.geomShape
-                cont = self.cutting(cont, cutterList, gS)
-                pyCont.shape = cont
 
             if not pyOne.virtualized:
 
