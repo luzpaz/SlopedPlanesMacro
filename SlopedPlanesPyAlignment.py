@@ -843,28 +843,6 @@ class _PyAlignment(_Py):
                 gS = pyPlane.geomShape
                 plane = pyPlane.shape
 
-                # with complex rChop this will not work fine ???
-                # en la etapa de simulado ya haces este corte. Revisar
-                '''if simulatedC:
-                    plane = self.cutting(plane, simulatedC, gS)
-                    pyPlane.shape = plane
-                else:
-                    if rChop:
-                        if num == 0:
-                            nextNum = self.sliceIndex(pyOne.numGeom+1,
-                                                      len(pyPlList))
-                            nextPl = self.selectPlane(nW, nextNum)
-                            if not nextPl.aligned and not nextPl.choped:
-                                plane = self.cutting(plane, [nextPl.shape], gS)
-                                pyPlane.shape = plane
-                        else:
-                            preNum = self.sliceIndex(pyTwo.numGeom-1,
-                                                     len(pyPlList))
-                            prePl = self.selectPlane(nW, preNum)
-                            if not prePl.aligned and not prePl.choped:
-                                plane = self.cutting(plane, [prePl.shape], gS)
-                                pyPlane.shape = plane'''
-
                 if num == 0:
                     rango = pyOne.rango[-1]
                     rear = pyOne.rear[-1]
@@ -885,8 +863,8 @@ class _PyAlignment(_Py):
                         cList = [enormousBase]
 
                 cutList = []
-                rC = []
 
+                rC = []
                 for nn in rango:
                     pyPl = pyPlaneList[nn]
                     if pyPl.aligned:
@@ -901,9 +879,22 @@ class _PyAlignment(_Py):
                         if pl not in cutList:
                             cutList.extend(pl)
                             # print'rangoPlane ', nn
-
                 # print 'rC ', rC
                 rC = Part.makeCompound(rC)
+
+                for nn in oppRango:
+                    pyPl = pyPlaneList[nn]
+                    if pyPl.aligned:
+                        pyAli = self.selectAlignment(0, nn)
+                        pl = pyAli.simulatedAlignment
+                    elif not pyPl.choped:
+                        pl = [pyPl.shape]
+                    else:
+                        pl = None
+                    if pl:
+                        if pl not in cutList:
+                            cutList.extend(pl)
+                            # print'oppRangoPlane ', nn
 
                 pyPl = pyPlaneList[rear]
                 if pyPl.aligned:
@@ -1035,7 +1026,7 @@ class _PyAlignment(_Py):
             for ff in shapeOne.Faces[1:]:
                 ff = ff.cut([shapeTwo], _Py.tolerance)
                 for f in ff.Faces:
-                    section = f.section([rCOne], _Py.tolerance)
+                    section = f.section([rCOne], tolerance)
                     if section.Edges:
                         fList.append(f)
 
@@ -1049,11 +1040,11 @@ class _PyAlignment(_Py):
             fList.append(ff)
 
             for ff in shapeTwo.Faces[1:]:
-                ff = ff.cut([shapeOne], _Py.tolerance)
+                ff = ff.cut([shapeOne], tolerance)
                 for f in ff.Faces:
                     section = f.section([rCTwo])
                     if section.Edges:
-                        fList.append(f)
+                       fList.append(f)
 
             # print 'fList ', fList
             compound = Part.makeCompound(fList)
@@ -1136,38 +1127,50 @@ class _PyAlignment(_Py):
                 cutterList.extend(simulatedC)
 
                 base = base.cut(cutterList, _Py.tolerance)
-                # print 'base.Faces ', base.Faces
-                baseCopy = base.copy()
+                print 'base.Faces ', base.Faces, len(base.Faces)
 
-                number = 2
-                if len(shapeOne.Faces) > 1 or len(shapeTwo.Faces) > 1:
-                    number += 1
-                # print 'number ', number
+                gA = self.geomAligned
+                number = -1
+                for ff in base.Faces:
+                    section = ff.section([gA], tolerance)
+                    if section.Edges:
+                        number += 1
+                print 'number ', number
 
-                if len(base.Faces) == number:
-                    # print 'a'
+                if number == 1:
+                    print 'a'
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
                     pyBase.shape = base
                     cutList.append(base)
 
+                    shapeOne = pyOne.shape
+                    fList = shapeOne.Faces
+                    if len(fList) > 1:
+                        ff = fList[1]
+                        section = ff.section([base], tolerance)
+                        if not section.Edges:
+                            pyOne.shape = Part.makeCompound(fList[:1])
+
+                    shapeTwo = pyTwo.shape
+                    fList = shapeTwo.Faces
+                    if len(fList) > 1:
+                        ff = fList[1]
+                        section = ff.section([base], tolerance)
+                        if not section.Edges:
+                            pyTwo.shape = Part.makeCompound(fList[:1])
+
                 else:
-                    # print 'b'
-
-                    enShapeOne = pyOne.enormousShape
-                    enShapeTwo = pyTwo.enormousShape
-
-                    baseC = baseCopy.copy()
-                    baseC = baseC.cut([enShapeTwo], _Py.tolerance)
+                    print 'b'
 
                     gS = pyBase.geomShape
-                    ff = self.selectFace(baseC.Faces, gS)
+                    ff = self.selectFace(base.Faces, gS)
                     pyBase.shape = ff
                     cutList.append(ff)
 
                     if not pyTwo.virtualized:
-                        # print 'bb'
+                        print 'bb'
                         gS = pyTwo.geomShape
 
                         f = shapeTwo.Faces[0]
@@ -1176,17 +1179,14 @@ class _PyAlignment(_Py):
 
                         for f in shapeTwo.Faces[1:]:
                             f = f.cut([ff], _Py.tolerance)
-                            fList.append(f.Faces[0])
+                            fList.append(f.Faces[0])    # esto tiene que cambiar
 
-                        # print 'fList ', fList
+                        print 'fList ', fList
                         compound = Part.makeCompound(fList)
                         pyTwo.shape = compound
 
-                    baseC = baseCopy.copy()
-                    baseC = baseC.cut([enShapeOne], _Py.tolerance)
-
                     gS = pyCont.geomShape
-                    ff = self.selectFace(baseC.Faces, gS)
+                    ff = self.selectFace(base.Faces, gS)
                     pyCont.shape = ff
                     cutList.append(ff)
 
@@ -1199,7 +1199,7 @@ class _PyAlignment(_Py):
                     pyCont.angle = pyBase.angle
 
                     if not pyOne.virtualized:
-                        # print 'bbb'
+                        print 'bbb'
                         gS = pyOne.geomShape
 
                         f = shapeOne.Faces[0]
@@ -1210,7 +1210,7 @@ class _PyAlignment(_Py):
                             f = f.cut([ff], _Py.tolerance)
                             fList.append(f.Faces[0])
 
-                        # print 'fList ', fList
+                        print 'fList ', fList
                         compound = Part.makeCompound(fList)
                         pyOne.shape = compound
 
@@ -1226,7 +1226,7 @@ class _PyAlignment(_Py):
                                 gS = pyPl.geomShape
                                 pl = self.cutting(pl, cutList, gS)
                                 pyPl.shape = pl
-                                # print 'rangoChop ', nn
+                                print 'rangoChop ', nn
 
     def end(self, pyPlaneList):
 
