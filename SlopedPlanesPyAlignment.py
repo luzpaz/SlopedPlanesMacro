@@ -783,6 +783,7 @@ class _PyAlignment(_Py):
 
             simulatedChops.append(cList[:])
 
+            # esto es un coñazo
             '''shapeOne = pyOne.simulatedShape
             cList.append(shapeOne)
 

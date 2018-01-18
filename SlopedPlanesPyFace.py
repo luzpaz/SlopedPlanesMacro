@@ -332,9 +332,11 @@ class _PyFace(_Py):
             print '###### numWire ', numWire
 
             pyPlaneList = pyWire.planes
+            lenWire = len(pyPlaneList)
 
             ref = False
             pyPrePlane = None
+            refList = []
 
             coord = pyWire.coordinates
             eje = coord[1].sub(coord[0])
@@ -355,6 +357,12 @@ class _PyFace(_Py):
                 else:
 
                     if resetFace:
+
+                        if numGeom in refList:
+                            ref = True
+                            num = self.sliceIndex(numGeom-1, lenWire)
+                            pyPrePlane = pyPlaneList[num]
+                            self.forBack(pyPrePlane, 'backward')
 
                         if ref:
                             print 'ref'
@@ -535,28 +543,19 @@ class _PyFace(_Py):
                                 if resetFace:
 
                                     pyEnd = pyAlign.aligns[-1]
-                                    if not pyEnd.rear:
-                                        nn = pyPl.numGeom
-                                        lenW = len(pyW.planes)
-                                        num = self.sliceIndex(nn+1, lenW)
-                                        coo = pyW.coordinates
-                                        jj = coo[num].sub(coo[nn])
-                                        nnjj = coo[num+1].sub(coo[num])
-                                        corner = self.convexReflex(jj, nnjj)
+                                    nn = pyPl.numGeom
+                                    lenW = len(pyW.planes)
+                                    num = self.sliceIndex(nn+1, lenW)
+                                    coo = pyW.coordinates
+                                    jj = coo[num].sub(coo[nn])
+                                    nnjj = coo[num+1].sub(coo[num])
+                                    corner = self.convexReflex(jj, nnjj)
 
-                                        if corner == 'reflex':
-                                            print 'reflex'
-                                            if not pyAli:
-                                                pyP = self.selectPlane(pyW.numWire, num)
-                                                if not pyEnd.forward:
-                                                    self.forBack(pyEnd, 'forward')
-                                                self.findRear(pyW, pyEnd, 'forward')
-                                                if not pyP.backward:
-                                                    self.forBack(pyP, 'backward')
-                                                self.findRear(pyW, pyP, 'backward')
-                                                self.doReflex(pyW, pyEnd, pyP)
+                                    if corner == 'reflex':
+                                        print 'reflex'
+                                        refList.append(num)
 
-                                        ref = False
+                                    ref = False
 
                         else:
                             print '12 no alignment'
