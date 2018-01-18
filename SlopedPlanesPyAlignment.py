@@ -783,11 +783,11 @@ class _PyAlignment(_Py):
 
             simulatedChops.append(cList[:])
 
-            shapeOne = pyOne.simulatedShape
+            '''shapeOne = pyOne.simulatedShape
             cList.append(shapeOne)
 
             shapeTwo = pyTwo.simulatedShape
-            cList.append(shapeTwo)
+            cList.append(shapeTwo)'''
 
             simulatedAlignment.extend(cList)
 
@@ -1058,7 +1058,7 @@ class _PyAlignment(_Py):
                     if section.Edges:
                         fList.append(f)
 
-            # print 'fList ', fList
+            print 'fList ', fList
             compound = Part.makeCompound(fList)
             pyOne.shape = compound
 
@@ -1074,7 +1074,7 @@ class _PyAlignment(_Py):
                     if section.Edges:
                        fList.append(f)
 
-            # print 'fList ', fList
+            print 'fList ', fList
             compound = Part.makeCompound(fList)
             pyTwo.shape = compound
 
