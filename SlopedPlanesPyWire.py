@@ -147,8 +147,9 @@ class _PyWire(_Py):
                 pyReflex.rangging(self)
                 direction = "forward"
                 for pyPlane in pyReflex.planes:
-                    pyPlane.rangging(self, direction)
-                    direction = "backward"
+                    if pyPlane.rear:
+                        pyPlane.rangging(self, direction)
+                        direction = "backward"
 
     def virtualizing(self):
 
@@ -178,13 +179,6 @@ class _PyWire(_Py):
                 enormousShape = pyPlane.enormousShape
                 numGeom = pyPlane.numGeom
                 numWire = pyPlane.numWire
-                angle = pyPlane.angle
-                # print 'angle ', angle
-
-                if ((numWire == 0 and angle > 90) or
-                   (numWire > 0 and angle < 90)):
-                    # print 'return'
-                    return
 
                 rango = pyPlane.rangoConsolidate
                 # print 'rango ', rango

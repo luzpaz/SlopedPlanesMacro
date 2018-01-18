@@ -206,10 +206,6 @@ class _PyReflex(_Py):
         angle = pyR.angle
         numWire = pyWire.numWire
 
-        if (numWire == 0 and angle > 90) or (numWire > 0 and angle < 90):
-            # print 'angle>90'
-            pyR.addLink('cutter', oppReflexEnormous)
-
         rear = pyR.rear
 
         for nGeom in rear:
@@ -495,8 +491,12 @@ class _PyReflex(_Py):
                       direction, pyWire):
 
         '''processReflex(self, reflex, oppReflex, pyR, pyOppR,
-                         direction)
+                         direction, pyWire)
         '''
+
+        if not pyR.rear:
+            pyR.shape = pyR.simulatedShape.copy()
+            return
 
         tolerance = _Py.tolerance
         planeList = pyWire.planes
@@ -772,21 +772,23 @@ class _PyReflex(_Py):
         rear = pyR.rear
         oppRear = pyOppR.rear
 
-        rG = rear[0]
-        try:
-            oG = oppRear[1]
-        except IndexError:
-            oG = oppRear[0]
+        if rear and oppRear:
 
-        if oG > rG:
-            ran = range(rG+1, oG)
+            rG = rear[0]
+            try:
+                oG = oppRear[1]
+            except IndexError:
+                oG = oppRear[0]
 
-        elif oG < rG:
-            ranA = range(rG+1, lenWire)
-            ranB = range(0, oG)
-            ran = ranA + ranB
+            if oG > rG:
+                ran = range(rG+1, oG)
 
-        else:
-            ran = []
+            elif oG < rG:
+                ranA = range(rG+1, lenWire)
+                ranB = range(0, oG)
+                ran = ranA + ranB
 
-        self.rango = ran
+            else:
+                ran = []
+
+            self.rango = ran
