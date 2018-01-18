@@ -234,7 +234,7 @@ class _PyAlignment(_Py):
         The alignment blocks the progress of the planes
         in its front and laterals.'''
 
-        # print '###### trimming base ', (self.base.numWire, self.base.numGeom)
+        print '###### trimming base ', (self.base.numWire, self.base.numGeom)
 
         pyWireList = _Py.pyFace.wires
         pyWire = pyWireList[0]
@@ -295,31 +295,33 @@ class _PyAlignment(_Py):
 
             # the two rangos don't cut between them
 
-            for nG in rangoOne:
-                pyPl = pyPlaneList[nG]
-                control = pyPl.control
-                for r in rangoTwo:
-                    if r not in control:
-                        control.append(r)
-                # and opp Chop
-                r = pyTwo.numGeom
-                if r not in control:
-                    control.append(r)
-
-            for nG in rangoTwo:
-                pyPl = pyPlaneList[nG]
-                control = pyPl.control
-                for r in rangoOne:
-                    if r not in control:
-                        control.append(r)
-                # and opp chop
-                r = pyOne.numGeom
-                if r not in control:
-                    control.append(r)
-
-            # TODO [pyOne, pyTwo] dont cut with other twin chops
-
             pyPlList = pyWireList[pyOne.numWire].planes
+
+            if pyOne.numWire == pyTwo.numWire:
+
+                for nG in rangoOne:
+                    pyPl = pyPlList[nG]
+                    control = pyPl.control
+                    for r in rangoTwo:
+                        if r not in control:
+                            control.append(r)
+                    # and opp Chop
+                    r = pyTwo.numGeom
+                    if r not in control:
+                        control.append(r)
+
+                for nG in rangoTwo:
+                    pyPl = pyPlList[nG]
+                    control = pyPl.control
+                    for r in rangoOne:
+                        if r not in control:
+                            control.append(r)
+                    # and opp chop
+                    r = pyOne.numGeom
+                    if r not in control:
+                        control.append(r)
+
+                # TODO [pyOne, pyTwo] dont cut with other twin chops
 
             # rChop: trimming bigShape
 
@@ -376,11 +378,13 @@ class _PyAlignment(_Py):
                 notCross = True
                 if num == 0:
                     rango = rangoOne
+                    pyPlList = pyWireList[pyOne.numWire].planes
                     if pyPlane.virtualized:
                         if not pyPlane.geomAligned:
                             notCross = False
                 else:
                     rango = rangoTwo
+                    pyPlList = pyWireList[pyTwo.numWire].planes
                     if pyPlane.virtualized:
                         if pyPlane.geomAligned:
                             notCross = False
@@ -388,7 +392,7 @@ class _PyAlignment(_Py):
                 print 'rango ', rango
 
                 for nG in rango:
-                    pyPl = pyPlaneList[nG]
+                    pyPl = pyPlList[nG]
                     control = pyPl.control
                     if numGeom not in control:
                         if not pyPl.aligned and not pyPl.choped:
@@ -810,14 +814,13 @@ class _PyAlignment(_Py):
         enormousBase = pyBase.enormousShape
         aligns = self.aligns
         rangoChop = self.rango
+        simulatedChops = self.simulatedChops
 
         pyCont = aligns[-1]
         cont = pyCont.shape
         enormousCont = pyCont.enormousShape
 
         # the chops
-
-        simulatedChops = self.simulatedChops
 
         chopList = []
         numChop = -1
@@ -827,14 +830,8 @@ class _PyAlignment(_Py):
 
             rChop = rangoChop[numChop]
 
-            nW = pyOne.numWire
-            pyW = pyWireList[nW]
-            pyPlList = pyW.planes
-
             simulatedC = simulatedChops[numChop]
             print 'simulatedC ', simulatedC
-
-            pyTwinPlane = pyTwo
 
             num = -1
             for pyPlane in [pyOne, pyTwo]:
@@ -846,32 +843,41 @@ class _PyAlignment(_Py):
                 if num == 0:
                     rango = pyOne.rango[-1]
                     rear = pyOne.rear[-1]
-                    rearOne = rear
-                    cList = [enormousBase]
                     oppRango = pyTwo.rango[0]
                     oppRear = pyTwo.rear[0]
+                    pyTwinPlane = pyTwo
+                    cList = [enormousBase]
+                    numWire = pyOne.numWire
+                    pyWire = pyWireList[numWire]
+                    pyPlaneList = pyWire.planes
+                    nW = pyTwo.numWire
+                    pyW = pyWireList[nW]
+                    pyPlList = pyW.planes
 
                 else:
                     rango = pyTwo.rango[0]
                     rear = pyTwo.rear[0]
-                    rearTwo = rear
                     oppRango = pyOne.rango[-1]
                     oppRear = pyOne.rear[-1]
+                    pyTwinPlane = pyOne
                     if falsify:
                         cList = [enormousCont]
                     else:
                         cList = [enormousBase]
+                    numWire = pyTwo.numWire
+                    pyWire = pyWireList[numWire]
+                    pyPlaneList = pyWire.planes
+                    nW = pyOne.numWire
+                    pyW = pyWireList[nW]
+                    pyPlList = pyW.planes
 
                 cutList = []
-
-                # TODO pasar arriba
-                # CAMBIAR NUMWIRE
 
                 rC = []
                 for nn in rango:
                     pyPl = pyPlaneList[nn]
                     if pyPl.aligned:
-                        pyAli = self.selectAlignment(0, nn)
+                        pyAli = self.selectAlignment(numWire, nn)
                         if pyAli != self:
                             pl = pyAli.simulatedAlignment
                         else:
@@ -889,9 +895,9 @@ class _PyAlignment(_Py):
                 rC = Part.makeCompound(rC)
 
                 for nn in oppRango:
-                    pyPl = pyPlaneList[nn]
+                    pyPl = pyPlList[nn]
                     if pyPl.aligned:
-                        pyAli = self.selectAlignment(0, nn)
+                        pyAli = self.selectAlignment(nW, nn)
                         if pyAli != self:
                             pl = pyAli.simulatedAlignment
                         else:
@@ -919,15 +925,15 @@ class _PyAlignment(_Py):
                         print'rearPlane ', rear
 
                 if not oppRango:
-                    pyPl = pyPlaneList[oppRear]
+                    pyPl = pyPlList[oppRear]
                     if not pyPl.choped:
                         print 'a'
                         if not pyPl.aligned:
                             print 'a1'
                             oppRearPlane = pyPl.shape
-                            # if rearPlane not in cutList:
-                            cutList.append(oppRearPlane)
-                            print'rearPlane ', rear
+                            if oppRearPlane not in cutList:
+                                cutList.append(oppRearPlane)
+                                print'oppRearPlane ', rear
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
@@ -968,7 +974,7 @@ class _PyAlignment(_Py):
                             falsePlane.rangging(pyWire, 'backward')
                             rr = falsePlane.rangoConsolidate
                             print rr
-
+                            pyPlaneList = pyWire.planes
                             for nn in rr:
                                 pyPl = pyPlaneList[nn]
                                 if not pyPl.choped:
@@ -1019,12 +1025,10 @@ class _PyAlignment(_Py):
                 comp = Part.makeCompound(aList)
                 pyPlane.shape = comp
 
-                pyTwinPlane = pyOne
-
                 if num == 0:
-                    rCOne = rC
+                    rCOne = rC.copy()
                 else:
-                    rCTwo = rC
+                    rCTwo = rC.copy()
 
             # twin
 

@@ -223,7 +223,7 @@ class _Py(object):
 
         return None
 
-    def convexReflex(self, eje, nextEje, numWire):
+    def convexReflex(self, eje, nextEje):
 
         ''''''
 
@@ -232,19 +232,10 @@ class _Py(object):
         if cross != origin:
             cross.normalize()
 
-            if numWire == 0:
-
-                if cross == _Py.normal:
-                    corner = 'convex'
-                else:
-                    corner = 'reflex'
-
+            if cross == _Py.normal:
+                corner = 'convex'
             else:
-
-                if cross == _Py.normal:
-                    corner = 'reflex'
-                else:
-                    corner = 'convex'
+                corner = 'reflex'
 
         return corner
 

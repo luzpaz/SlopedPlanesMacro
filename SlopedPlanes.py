@@ -420,7 +420,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.virtualizing()   #
 
-            pyFace.trimming()       #
+            '''pyFace.trimming()       #
 
             pyFace.priorLater()     #
 
