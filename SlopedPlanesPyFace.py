@@ -413,12 +413,17 @@ class _PyFace(_Py):
 
                             ref = False
 
-                        self.forBack(pyPlane, 'forward')
+                        if corner == 'reflex':
+
+                            self.forBack(pyPlane, 'forward')
 
                     if corner == 'reflex':
                         print '1 Reflex: does look for alignments'
 
                         forward = pyPlane.forward
+                        print forward
+                        print (forward.firstVertex(True).Point, forward.lastVertex(True).Point)
+                        print shapeGeomFace
                         section = forward.section(shapeGeomFace, tolerance)
 
                         if section.Edges:
@@ -611,8 +616,7 @@ class _PyFace(_Py):
                     print 'firstPlane'
                     firstPlane = pyPlaneList[0]
                     if not firstPlane.aligned or not pyPlane.choped:
-                        print 'firstPlane no aligned'
-                        self.forBack(firstPlane, 'backward')
+                        print 'firstPlane no aligned or pyPlane no choped'
                         self.doReflex(pyWire, pyPlane, firstPlane)
 
             pyWire.reset = False
