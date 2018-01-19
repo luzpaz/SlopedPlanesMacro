@@ -493,15 +493,16 @@ class _PyAlignment(_Py):
         prior = pyPrior.shape
         later = pyLater.shape
         pr = pyPrior.numGeom
-        print 'pr ', pr
+        print 'pr ', (pyPrior.numWire, pr)
         lat = pyLater.numGeom
-        print 'lat ', lat
+        print 'lat ', (pyLater.numWire, lat)
         bigPrior = pyPrior.bigShape
         bigLater = pyLater.bigShape
 
         cutterList = []
 
         if ((not pyPrior.reflexed) or
+           (not pyPrior.choped and not pyPrior.rear) or
            (not pyPrior.choped and pyPrior.aligned)):
             print '1'
             cutterList.append(bigPrior)
@@ -510,6 +511,7 @@ class _PyAlignment(_Py):
                 control.append(pr)
 
         if ((not pyLater.reflexed) or
+           (not pyLater.choped and not pyLater.rear) or
            (not pyLater.choped and pyLater.aligned)):
             print '2'
             cutterList.append(bigLater)

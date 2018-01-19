@@ -757,7 +757,8 @@ class _PyReflex(_Py):
         direction = "forward"
         for pyPlane in self.planes:
             if not pyPlane.aligned:
-                pyPlane.rearing(pyWire, self, direction, case)
+                if pyPlane.rear:
+                    pyPlane.rearing(pyWire, self, direction, case)
             direction = "backward"
 
     def rangging(self, pyWire):
