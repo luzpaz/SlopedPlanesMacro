@@ -502,8 +502,8 @@ class _PyAlignment(_Py):
         cutterList = []
 
         if ((not pyPrior.reflexed) or
-           (not pyPrior.choped and not pyPrior.rear) or
-           (not pyPrior.choped and pyPrior.aligned)):
+           (not pyPrior.rear) or
+           (pyPrior.aligned)):
             print '1'
             cutterList.append(bigPrior)
             if not pyBase.choped:
@@ -511,8 +511,8 @@ class _PyAlignment(_Py):
                 control.append(pr)
 
         if ((not pyLater.reflexed) or
-           (not pyLater.choped and not pyLater.rear) or
-           (not pyLater.choped and pyLater.aligned)):
+           (not pyLater.rear) or
+           (pyLater.aligned)):
             print '2'
             cutterList.append(bigLater)
             if not self.falsify:
@@ -552,7 +552,7 @@ class _PyAlignment(_Py):
 
         # cuts pyPrior and pyLater
 
-        if not pyPrior.reflexed or pyPrior.choped:
+        if not pyPrior.reflexed:
             print 'a'
 
             if not pyPrior.arrow:
@@ -564,9 +564,10 @@ class _PyAlignment(_Py):
                 pyPrior.shape = prior
 
                 if falsify:
+                    print 'a11'
                     pyPrior.control.append(nGeom)
 
-        if not pyLater.reflexed or pyLater.choped:
+        if not pyLater.reflexed:
             print 'b'
 
             if not pyLater.arrow:
