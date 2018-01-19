@@ -327,6 +327,8 @@ class _PyFace(_Py):
 
         tolerance = _Py.tolerance
 
+        refList = []
+
         for pyWire in pyWireList:
             numWire = pyWire.numWire
             print '###### numWire ', numWire
@@ -336,7 +338,6 @@ class _PyFace(_Py):
 
             ref = False
             pyPrePlane = None
-            refList = []
 
             coord = pyWire.coordinates
             eje = coord[1].sub(coord[0])
@@ -351,18 +352,21 @@ class _PyFace(_Py):
                 eje = nextEje
 
                 if not pyPlane.geomAligned:
+                    print 'A'
 
                     ref = False
 
                 else:
+                    print 'B'
 
                     if resetFace:
+                        print '0'
+                        print [numWire, numGeom]
 
                         if [numWire, numGeom] in refList:
+                            print 'refList'
+                            self.forBack(pyPrePlane, 'forward')
                             ref = True
-                            num = self.sliceIndex(numGeom-1, lenWire)
-                            pyPrePlane = pyPlaneList[num]
-                            self.forBack(pyPrePlane, 'backward')
 
                         if ref:
                             print 'ref'
@@ -395,7 +399,6 @@ class _PyFace(_Py):
 
                                 if distStart > distEnd and into:
                                     print 'alignament'
-                                    pass
 
                                 else:
                                     print 'no alignament '
