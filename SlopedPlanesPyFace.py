@@ -358,7 +358,7 @@ class _PyFace(_Py):
 
                     if resetFace:
 
-                        if numGeom in refList:
+                        if [numWire, numGeom] in refList:
                             ref = True
                             num = self.sliceIndex(numGeom-1, lenWire)
                             pyPrePlane = pyPlaneList[num]
@@ -553,7 +553,8 @@ class _PyFace(_Py):
 
                                     if corner == 'reflex':
                                         print 'reflex'
-                                        refList.append(num)
+                                        refList.append([pyW.numWire, num])
+                                        print 'refList ', refList
 
                                     ref = False
 
