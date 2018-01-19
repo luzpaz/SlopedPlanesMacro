@@ -1277,13 +1277,14 @@ class _PyAlignment(_Py):
                             pyPl.shape = pl
                             chopList.append(pl)
 
-                    for r in rangoRear:
-                        pyPl = pyPlaneList[r]
-                        if not pyPl.choped and not pyPl.aligned:
-                            pl = pyPl.shape
-                            gS = pyPl.geomShape
-                            pl = self.cutting(pl, chopList, gS)
-                            pyPl.shape = pl
+                    if chopList:
+                        for r in rangoRear:
+                            pyPl = pyPlaneList[r]
+                            if not pyPl.choped and not pyPl.aligned:
+                                pl = pyPl.shape
+                                gS = pyPl.geomShape
+                                pl = self.cutting(pl, chopList, gS)
+                                pyPl.shape = pl
 
     def rangging(self):
 
