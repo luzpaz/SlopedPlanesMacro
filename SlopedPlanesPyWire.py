@@ -339,7 +339,7 @@ class _PyWire(_Py):
                             control.append(later)
                             if pyPlane.simulatedShape:
                                 cutList.append(bigLater)
-    
+
                         else:
                             if not pyLater.aligned:
                                 pyRLater =\

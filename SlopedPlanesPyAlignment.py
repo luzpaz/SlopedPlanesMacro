@@ -501,18 +501,18 @@ class _PyAlignment(_Py):
 
         cutterList = []
 
-        if ((not pyPrior.reflexed) or
-           (not pyPrior.choped and not pyPrior.rear) or
-           (not pyPrior.choped and pyPrior.aligned)):
+        if not pyPrior.reflexed or\
+           not pyPrior.rear or\
+           pyPrior.aligned:
             print '1'
             cutterList.append(bigPrior)
             if not pyBase.choped:
                 print '11'
                 control.append(pr)
 
-        if ((not pyLater.reflexed) or
-           (not pyLater.choped and not pyLater.rear) or
-           (not pyLater.choped and pyLater.aligned)):
+        if not pyLater.reflexed or\
+           not pyLater.rear or\
+           pyLater.aligned:
             print '2'
             cutterList.append(bigLater)
             if not self.falsify:
@@ -552,68 +552,34 @@ class _PyAlignment(_Py):
 
         # cuts pyPrior and pyLater
 
-        if not pyPrior.reflexed or pyPrior.choped:
-            # print 'a'
+        if not pyPrior.reflexed:
+            print 'a'
 
-            if pyPrior.numWire == 0:
-                # print 'a1'
-
-                if not pyPrior.arrow:
-                    # print 'a11'
-
-                    gS = pyPrior.geomShape
-                    prior = self.cutting(prior, [bigBase], gS)
-                    pyPrior.control.append(numGeom)
-                    pyPrior.shape = prior
-
-            else:
-                # print 'a2'
+            if not pyPrior.arrow:
+                print 'a1'
 
                 gS = pyPrior.geomShape
                 prior = self.cutting(prior, [bigBase], gS)
                 pyPrior.control.append(numGeom)
                 pyPrior.shape = prior
 
-            if falsify:
-                pyPrior.control.append(nGeom)
+                if falsify:
+                    pyPrior.control.append(nGeom)
 
-        if not pyLater.reflexed or pyLater.choped:
-            # print 'b'
+        if not pyLater.reflexed:
+            print 'b'
 
-            if pyLater.numWire == 0:
-                # print 'b1'
-
-                if not pyLater.arrow:
-
-                    if not falsify:
-                        # print 'b11'
-
-                        gS = pyLater.geomShape
-                        later = self.cutting(later, [bigBase], gS)
-                        pyLater.control.append(numGeom)
-
-                    else:
-                        # print 'b12'
-
-                        gS = pyLater.geomShape
-                        later = self.cutting(later, [bigCont], gS)
-                        pyLater.control.append(nGeom)
-                        pyLater.control.append(numGeom)
-
-                    pyLater.shape = later
-
-            else:
-                # print 'b2'
+            if not pyLater.arrow:
 
                 if not falsify:
-                    # print 'b21'
+                    print 'b1'
 
                     gS = pyLater.geomShape
                     later = self.cutting(later, [bigBase], gS)
                     pyLater.control.append(numGeom)
 
                 else:
-                    # print 'b22'
+                    print 'b2'
 
                     gS = pyLater.geomShape
                     later = self.cutting(later, [bigCont], gS)
