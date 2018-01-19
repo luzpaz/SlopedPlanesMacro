@@ -402,7 +402,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
 
-        for pyReflex in self.reflexs:
+        '''for pyReflex in self.reflexs:
             pyReflex.solveReflexTwo(self)
 
         # TODO problems!!!
@@ -413,7 +413,7 @@ class _PyWire(_Py):
             pyReflex.postProcess(self)
 
         for pyReflex in self.reflexs:
-            pyReflex.rearing(self, True)
+            pyReflex.rearing(self, True)'''
 
         # '''
 
