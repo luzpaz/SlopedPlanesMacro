@@ -712,7 +712,10 @@ class _PyAlignment(_Py):
             for rr in rChop:
                 pyPl = pyPlList[rr]
                 if not pyPl.aligned and not pyPl.choped:
-                    pl = pyPl.bigShape
+                    if pyPl.reflexed:
+                        pl = pyPl.simulatedShape
+                    else:
+                        pl = pyPl.bigShape
                     cutList.append(pl)
 
             cList = []
