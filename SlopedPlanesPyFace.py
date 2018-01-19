@@ -571,34 +571,7 @@ class _PyFace(_Py):
                                 print '121'
                                 if corner == 'reflex':
                                     print '1211 reflexed'
-
                                     ref = True
-
-                                    backward = pyPlane.backward
-                                    section = backward.section(shapeGeomFace, tolerance)
-                                    if section.Edges:
-                                        print 'edges'
-                                        edge = section.Edges[0]
-
-                                        edgeStart = edge.firstVertex(True).Point
-                                        # print 'edgeStart ', edgeStart
-                                        edgeEnd = edge.lastVertex(True).Point
-                                        # print 'edgeEnd ', edgeEnd
-                                        lineStart = coord[numGeom]
-                                        # print 'lineStart ', lineStart
-
-                                        distStart = edgeStart.sub(lineStart).Length
-                                        distEnd = edgeEnd.sub(lineStart).Length
-
-                                        face = self.face
-                                        lineInto = Part.LineSegment(lineStart, edgeEnd)
-                                        lIS = lineInto.toShape()
-                                        sect = face.section([lIS], tolerance)
-
-                                        if sect.Edges:
-                                            if len(sect.Vertexes) == 2:
-                                                print 'cc'
-                                                ref = False
 
                     else:
                         print '2 Convex: does not look for alignments'
