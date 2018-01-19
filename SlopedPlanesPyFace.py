@@ -334,7 +334,6 @@ class _PyFace(_Py):
             print '###### numWire ', numWire
 
             pyPlaneList = pyWire.planes
-            lenWire = len(pyPlaneList)
 
             ref = False
             pyPrePlane = None
@@ -545,7 +544,6 @@ class _PyFace(_Py):
                                 print 'end alignment'
                                 if resetFace:
 
-                                    pyEnd = pyAlign.aligns[-1]
                                     nn = pyPl.numGeom
                                     lenW = len(pyW.planes)
                                     num = self.sliceIndex(nn+1, lenW)
@@ -605,11 +603,16 @@ class _PyFace(_Py):
                 print 'reflex ', pyWire.reflexs
                 print 'alignments ', self.alignments
 
-            if numWire > 0:
+            if resetFace:
 
-                firstPlane = pyPlaneList[0]
-                self.forBack(firstPlane, 'backward')
-                self.doReflex(pyWire, pyPlane, firstPlane)
+                if numWire > 0:
+
+                    print 'firstPlane'
+                    firstPlane = pyPlaneList[0]
+                    if not firstPlane.aligned or not pyPlane.choped:
+                        print 'firstPlane no aligned'
+                        self.forBack(firstPlane, 'backward')
+                        self.doReflex(pyWire, pyPlane, firstPlane)
 
             pyWire.reset = False
 
