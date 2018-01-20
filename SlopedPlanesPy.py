@@ -135,7 +135,7 @@ class _Py(object):
         '''selectAllAlignment(self, numWire, numGeom)
         select all alignment which the plane (numWire, numGeom)
         is in their chops, and return them
-        used in PyAlignment'''
+        used in PyAlignment, PyFace'''
 
         pyAlignList = []
 

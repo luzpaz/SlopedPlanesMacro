@@ -950,6 +950,7 @@ class _PyPlane(_Py):
         '''ordinaries(self, pyWire)
         '''
 
+        tolerance = _Py.tolerance
         pyPlaneList = pyWire.planes
         numWire = pyWire.numWire
         control = self.control
@@ -960,6 +961,7 @@ class _PyPlane(_Py):
             pyAlign = self.selectAlignment(numWire, self.numGeom)
             # print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
             line = pyAlign.geomAligned
+            simulatedAlignment = Part.makeCompound(pyAlign.simulatedAlignment)
 
         cutterList = []
         for pyPl in pyPlaneList:
@@ -975,13 +977,16 @@ class _PyPlane(_Py):
                         pyAli = self.selectAlignment(numWire, nGeom)
                         # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                         ll = pyAli.geomAligned
+                        simulAlign = pyAli.simulatedAlignment
 
                         if self.aligned:
                             # print 'a1'
-                            section = line.section([ll], _Py.tolerance)
+                            section = line.section([ll], tolerance)
                             if not section.Vertexes:
                                 # TODO dos alineaciones en esquina ?
-                                cutterList.extend(pyAli.simulatedAlignment)
+                                common = simulatedAlignment.common(simulAlign, tolerance)
+                                if not common.Area:
+                                    cutterList.extend(pyAli.simulatedAlignment)
 
                         else:
                             # print 'a2'

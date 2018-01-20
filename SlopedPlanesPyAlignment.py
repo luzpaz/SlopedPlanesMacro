@@ -552,7 +552,7 @@ class _PyAlignment(_Py):
 
         # cuts pyPrior and pyLater
 
-        if not pyPrior.reflexed:
+        if not pyPrior.reflexed or pyPrior.choped:
             # print 'a'
 
             if not pyPrior.arrow:
@@ -567,7 +567,7 @@ class _PyAlignment(_Py):
                     # print 'a11'
                     pyPrior.control.append(nGeom)
 
-        if not pyLater.reflexed:
+        if not pyLater.reflexed or pyLater.choped:
             # print 'b'
 
             if not pyLater.arrow:
@@ -758,11 +758,11 @@ class _PyAlignment(_Py):
             simulatedChops.append(cList[:])
 
             # esto es un coñazo
-            '''shapeOne = pyOne.simulatedShape
+            shapeOne = pyOne.simulatedShape
             cList.append(shapeOne)
 
             shapeTwo = pyTwo.simulatedShape
-            cList.append(shapeTwo)'''
+            cList.append(shapeTwo)
 
             simulatedAlignment.extend(cList)
 
@@ -773,10 +773,10 @@ class _PyAlignment(_Py):
         '''aligning(self)
         '''
 
-        # print '###### base ', (self.base.numWire, self.base.numGeom)
-        # print '###### base shape ', self.base.shape
-        # print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
-        # print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
+        print '###### base ', (self.base.numWire, self.base.numGeom)
+        print '###### base shape ', self.base.shape
+        print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
+        print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
 
         tolerance = _Py.tolerance
         pyWireList = _Py.pyFace.wires
@@ -1142,7 +1142,7 @@ class _PyAlignment(_Py):
                 cutterList.extend(simulatedC)
 
                 base = base.cut(cutterList, _Py.tolerance)
-                # print 'base.Faces ', base.Faces, len(base.Faces)
+                print 'base.Faces ', base.Faces, len(base.Faces)
 
                 gA = self.geomAligned
                 number = -1
@@ -1150,10 +1150,10 @@ class _PyAlignment(_Py):
                     section = ff.section([gA], tolerance)
                     if section.Edges:
                         number += 1
-                # print 'number ', number
+                print 'number ', number
 
-                if number == 1:
-                    # print 'a'
+                if number <= 1:
+                    print 'a'
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
@@ -1177,7 +1177,7 @@ class _PyAlignment(_Py):
                             pyTwo.shape = Part.makeCompound(fList[:1])
 
                 else:
-                    # print 'b'
+                    print 'b'
 
                     gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
