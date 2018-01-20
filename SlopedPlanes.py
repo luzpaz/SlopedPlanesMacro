@@ -206,7 +206,7 @@ To cero the plane width is equal to the related edge length of the base'''
             onChanged = True
 
         if onChanged:
-            print 'A'
+            # print 'A'
 
             face = Part.makeFace(shape, faceMaker)
             fList = face.Faces
@@ -240,7 +240,7 @@ To cero the plane width is equal to the related edge length of the base'''
             self.faceList = faceList
 
         else:
-            print 'B'
+            # print 'B'
 
             faceList = self.faceList
 
@@ -258,7 +258,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             if onChanged:
                 # elaborates complementary python objects of a face
-                print 'AA'
+                # print 'AA'
 
                 coordinates = coordinatesOuterOrdered[numFace]
                 for pyFace in pyFaceListOld:
@@ -396,7 +396,7 @@ To cero the plane width is equal to the related edge length of the base'''
                 pyFace.wires = pyWireListNew
 
             else:
-                print 'BB'
+                # print 'BB'
 
                 pyFace = self.Pyth[numFace]
                 _Py.pyFace = pyFace
@@ -437,10 +437,10 @@ To cero the plane width is equal to the related edge length of the base'''
             pyFace.end()            #'''
 
         if onChanged:
-            print 'AAA'
+            # print 'AAA'
             self.Pyth = pyFaceListNew
         else:
-            print 'BBB'
+            # print 'BBB'
             pyFaceListNew = self.Pyth
 
         self.OnChanged = True

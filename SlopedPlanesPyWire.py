@@ -164,7 +164,7 @@ class _PyWire(_Py):
         The reflex corners act like a dam blocking the progress
         of others planes.'''
 
-        print '###### trimming reflexs numWire ', self.numWire
+        # print '###### trimming reflexs numWire ', self.numWire
 
         pyPlaneList = self.planes
         tolerance = _Py.tolerance
