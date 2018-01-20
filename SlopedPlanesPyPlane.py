@@ -590,6 +590,7 @@ class _PyPlane(_Py):
             geomCopy = geom.copy()
             geomCopy.translate(-1*self.overhang*direction)
 
+            print '# normal'
             scale = 1
             plane =\
                 self.doPlane(direction, geomCopy, firstParam,
@@ -600,6 +601,7 @@ class _PyPlane(_Py):
             geomCopy = geom.copy()
             geomCopy.translate(-1*_Py.size*direction)
 
+            print '# big'
             scale = self.bigScale
             bigPlane =\
                 self.doPlane(direction, geomCopy, firstParam,
@@ -609,6 +611,7 @@ class _PyPlane(_Py):
 
             if self.reflexed:
 
+                print '# enormous'
                 scale = self.enormousScale
                 enormousPlane =\
                     self.doPlane(direction, geomCopy, firstParam,
@@ -624,13 +627,23 @@ class _PyPlane(_Py):
         '''doPlane(self, direction, geom, firstParam, lastParam, scale)
         '''
 
+        print 'scale ', scale
+
         size = _Py.size
         width = size
         length = 2 * size
 
+        print 'size ', size
+        print 'width ', width
+        print 'length ', length
+
         leftScale = self.leftWidth * scale
         rightScale = self.rightWidth * scale
         upScale = self.length * scale
+
+        print 'leftScale ', leftScale
+        print 'rightScale ', rightScale
+        print 'upScale ', upScale
 
         if not upScale:
             # print 'up'
@@ -649,6 +662,10 @@ class _PyPlane(_Py):
             if self.length < length:
                 # print 'length'
                 upScale = length * scale
+
+        print 'leftScale ', leftScale
+        print 'rightScale ', rightScale
+        print 'upScale ', upScale
 
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola)):

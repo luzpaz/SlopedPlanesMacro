@@ -359,13 +359,15 @@ class _PyWire(_Py):
                         if not pyPrior.aligned:
                             # print '1'
                             cutterList.append(bigPrior)
-                            control.append(prior)
+                            if pyPrior.bigScale > 1:
+                                control.append(prior)
 
                     if not later in control:
                         if not pyLater.aligned:
                             # print '2'
                             cutterList.append(bigLater)
-                            control.append(later)
+                            if pyLater.bigScale > 1:
+                                control.append(later)
 
                 if cutterList:
                     # print'D'

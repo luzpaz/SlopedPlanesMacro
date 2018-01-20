@@ -304,13 +304,13 @@ Remember to apply the modifications before to pop down the advaced options windo
                                 self.tree.setItemWidget(item, 5, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                                doubleSpinBox.setToolTip("The big scale of the related face")
+                                doubleSpinBox.setToolTip("Experimental! The big scale of the related face")
                                 doubleSpinBox.setMaximum(10000*size)
                                 doubleSpinBox.setValue(pyPlane.bigScale)
                                 self.tree.setItemWidget(item, 6, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                                doubleSpinBox.setToolTip("The enormous scale of the related face")
+                                doubleSpinBox.setToolTip("Experimental! The enormous scale of the related face")
                                 doubleSpinBox.setMaximum(1000000*size)
                                 doubleSpinBox.setValue(pyPlane.enormousScale)
                                 self.tree.setItemWidget(item, 7, doubleSpinBox)
