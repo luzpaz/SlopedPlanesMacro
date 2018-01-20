@@ -472,23 +472,7 @@ To cero the plane width is equal to the related edge length of the base'''
                 for pyPlane in pyWire.planes:
                     numAngle = pyPlane.numGeom
                     angle = pyPlane.angle
-
                     # some figures (a few of them) break the planes numeration
-                    '''
-                    print 'numGeom ', numAngle
-                    plane = pyPlane.shape
-                    gS = pyPlane.geomShape
-                    print (gS.firstVertex(True).Point,
-                           gS.lastVertex(True).Point)
-                    if plane:
-                        section = plane.section(gS)
-                        if section.Edges:
-                            print 'okey'
-                        else:
-                            print 'bad'
-                    else:
-                        print 'no plane'
-                    '''
 
                     if pyPlane.length:
 
