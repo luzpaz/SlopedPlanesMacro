@@ -71,6 +71,8 @@ class _PyPlane(_Py):
         self.control = [numGeom]
         self.seedShape = None
         self.seedBigShape = None
+        self.bigScale = 100
+        self.enormousScale = 10000
 
     @property
     def numWire(self):
@@ -513,6 +515,48 @@ class _PyPlane(_Py):
 
         self._seedBigShape = seedBigShape
 
+    @property
+    def bigScale(self):
+
+        ''''''
+
+        return self._bigScale
+
+    @bigScale.setter
+    def bigScale(self, bigScale):
+
+        ''''''
+
+        try:
+            oldScale = self.bigScale
+            if oldScale != bigScale:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
+        self._bigScale = bigScale
+
+    @property
+    def enormousScale(self):
+
+        ''''''
+
+        return self._enormousScale
+
+    @enormousScale.setter
+    def enormousScale(self, enormousScale):
+
+        ''''''
+
+        try:
+            oldScale = self.enormousScale
+            if oldScale != enormousScale:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
+        self._enormousScale = enormousScale
+
     def planning(self, pyWire):
 
         '''planning(self, pyWire)
@@ -556,7 +600,7 @@ class _PyPlane(_Py):
             geomCopy = geom.copy()
             geomCopy.translate(-1*_Py.size*direction)
 
-            scale = 100
+            scale = self.bigScale
             bigPlane =\
                 self.doPlane(direction, geomCopy, firstParam,
                              lastParam, scale)
@@ -565,7 +609,7 @@ class _PyPlane(_Py):
 
             if self.reflexed:
 
-                scale = 10000
+                scale = self.enormousScale
                 enormousPlane =\
                     self.doPlane(direction, geomCopy, firstParam,
                                  lastParam, scale)

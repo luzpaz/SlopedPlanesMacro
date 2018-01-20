@@ -407,10 +407,21 @@ To cero the plane width is equal to the related edge length of the base'''
                         pyPlane.control = [pyPlane.numGeom]
 
                         # QUITAR
+
                         try:
                             pyPlane.fronted
                         except AttributeError:
                             pyPlane.fronted = False
+
+                        try:
+                            pyPlane.bigScale
+                        except AttributeError:
+                            pyPlane.bigScale = 100
+
+                        try:
+                            pyPlane.enormousScale
+                        except AttributeError:
+                            pyPlane.enormousScale = 10000
 
             pyFace.parsing()        #
 
@@ -434,7 +445,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.aligning()       #
 
-            pyFace.end()            #'''
+            pyFace.end()            # '''
 
         if onChanged:
             # print 'AAA'

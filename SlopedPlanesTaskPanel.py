@@ -93,7 +93,9 @@ Remember to apply the modifications before to pop down the advaced options windo
                                        ("Length"),
                                        ("Overhang"),
                                        ("Left Width"),
-                                       ("Right Width")])
+                                       ("Right Width"),
+                                       ("Big Scale"),
+                                       ("Enormous Scale")])
         else:
             self.tree.setHeaderLabels([("Face"),
                                        ("Angle")])
@@ -164,6 +166,8 @@ Remember to apply the modifications before to pop down the advaced options windo
             self.tree.header().resizeSection(3, 120)
             self.tree.header().resizeSection(4, 120)
             self.tree.header().resizeSection(5, 120)
+            self.tree.header().resizeSection(6, 120)
+            self.tree.header().resizeSection(7, 120)
 
         else:
             self.tree.setColumnCount(2)
@@ -299,6 +303,18 @@ Remember to apply the modifications before to pop down the advaced options windo
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 5, doubleSpinBox)
 
+                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setToolTip("The big scale of the related face")
+                                doubleSpinBox.setMaximum(10000*size)
+                                doubleSpinBox.setValue(pyPlane.bigScale)
+                                self.tree.setItemWidget(item, 6, doubleSpinBox)
+
+                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setToolTip("The enormous scale of the related face")
+                                doubleSpinBox.setMaximum(1000000*size)
+                                doubleSpinBox.setValue(pyPlane.enormousScale)
+                                self.tree.setItemWidget(item, 7, doubleSpinBox)
+
                 value = 0
                 if upFace:
                     value += 1
@@ -413,6 +429,14 @@ Remember to apply the modifications before to pop down the advaced options windo
                             doubleSpinBox = self.tree.itemWidget(it, 5)
                             right = doubleSpinBox.value()
                             pyPlane.rightWidth = right
+
+                            doubleSpinBox = self.tree.itemWidget(it, 6)
+                            bigScale = doubleSpinBox.value()
+                            pyPlane.bigScale = bigScale
+
+                            doubleSpinBox = self.tree.itemWidget(it, 7)
+                            enormousScale = doubleSpinBox.value()
+                            pyPlane.enormousScale = enormousScale
 
                 value = 0
                 if upFace:
