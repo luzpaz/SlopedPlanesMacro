@@ -73,6 +73,7 @@ class _PyPlane(_Py):
         self.seedBigShape = None
         self.bigScale = 100
         self.enormousScale = 10000
+        self.reared = False
 
     @property
     def numWire(self):
@@ -557,6 +558,20 @@ class _PyPlane(_Py):
 
         self._enormousScale = enormousScale
 
+    @property
+    def reared(self):
+
+        ''''''
+
+        return self._reared
+
+    @reared.setter
+    def reared(self, reared):
+
+        ''''''
+
+        self._reared = reared
+
     def planning(self, pyWire):
 
         '''planning(self, pyWire)
@@ -716,6 +731,9 @@ class _PyPlane(_Py):
             rangoConsolidate = self.rangoConsolidate
             angle = self.angle
             fronted = self.fronted
+            bigScale = self.bigScale
+            enormousScale = self.enormousScale
+            reared = self.reared
 
             if not plane:
                 (nWire, nGeom) = angle
@@ -744,6 +762,9 @@ class _PyPlane(_Py):
             pyPlane.simulatedShape = simulated
             pyPlane.angle = angle
             pyPlane.virtualized = True
+            pyPlane.bigScale = bigScale
+            pyPlane.enormousScale = enormousScale
+            pyPlane.reared = reared
 
             return pyPlane
 

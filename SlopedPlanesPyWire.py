@@ -137,6 +137,8 @@ class _PyWire(_Py):
         Arranges the reflex range and its planes ranges.
         '''
 
+        pyPlaneList = self.planes
+
         for pyPlane in self.planes:
             if pyPlane.geomAligned:
                 pyPlane.planning(self)
@@ -150,6 +152,10 @@ class _PyWire(_Py):
                     if pyPlane.rear:
                         pyPlane.rangging(self, direction)
                         direction = "backward"
+
+                        for rr in pyPlane.rear:
+                            pyRearPlane = pyPlaneList[rr]
+                            pyRearPlane.reared = True
 
     def virtualizing(self):
 
@@ -357,17 +363,19 @@ class _PyWire(_Py):
 
                     if not prior in control:
                         if not pyPrior.aligned:
-                            # print '1'
-                            cutterList.append(bigPrior)
-                            if pyPrior.bigScale > 1:
-                                control.append(prior)
+                            if not (pyPrior.reflexed and pyPrior.reared):
+                                # print '1'
+                                cutterList.append(bigPrior)
+                                if pyPrior.bigScale > 1:
+                                    control.append(prior)
 
                     if not later in control:
                         if not pyLater.aligned:
-                            # print '2'
-                            cutterList.append(bigLater)
-                            if pyLater.bigScale > 1:
-                                control.append(later)
+                            if not (pyLater.reflexed and pyLater.reared):
+                                # print '2'
+                                cutterList.append(bigLater)
+                                if pyLater.bigScale > 1:
+                                    control.append(later)
 
                 if cutterList:
                     # print'D'

@@ -376,6 +376,7 @@ To cero the plane width is equal to the related edge length of the base'''
                                     pyPlane.angle = angle
                                 pyPlane.bigScale = 100
                                 pyPlane.enormousScale = 10000
+                                pyPlane.reared = False
 
                         except IndexError:
                             # print '2'
@@ -424,6 +425,11 @@ To cero the plane width is equal to the related edge length of the base'''
                             pyPlane.enormousScale
                         except AttributeError:
                             pyPlane.enormousScale = 10000
+
+                        try:
+                            pyPlane.reared
+                        except AttributeError:
+                            pyPlane.reared = False
 
             pyFace.parsing()        #
 
