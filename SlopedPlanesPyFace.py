@@ -942,7 +942,7 @@ class _PyFace(_Py):
         '''planning(self)
         Transfers to PyWire.
         Arranges the alignment ranges.
-        Rearmes tha face reset system.'''
+        Rearmes the face reset system.'''
 
         # print '######### planning'
 
@@ -956,7 +956,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        # self.printSummary()
+        self.printSummary()
 
     def upping(self):
 

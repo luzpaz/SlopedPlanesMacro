@@ -431,6 +431,14 @@ To cero the plane width is equal to the related edge length of the base'''
                         except AttributeError:
                             pyPlane.reared = False
 
+                    pyPlaneList = pyWire.planes
+                    for pyReflex in pyWire.reflexs:
+                        for pyPlane in pyReflex.planes:
+                            if pyPlane.rear:
+                                for rr in pyPlane.rear:
+                                    pyRearPlane = pyPlaneList[rr]
+                                    pyRearPlane.reared = True
+
             pyFace.parsing()        #
 
             pyFace.planning()       #
