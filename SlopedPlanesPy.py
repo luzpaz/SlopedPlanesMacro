@@ -228,6 +228,7 @@ class _Py(object):
         if cross != origin:
             cross.normalize()
 
+            # TODO dos lineas alineadas
             if cross == _Py.normal:
                 corner = 'convex'
             else:

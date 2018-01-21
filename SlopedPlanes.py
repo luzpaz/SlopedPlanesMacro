@@ -411,41 +411,6 @@ To cero the plane width is equal to the related edge length of the base'''
                         pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
 
-                        # QUITAR
-
-                        try:
-                            pyPlane.fronted
-                        except AttributeError:
-                            pyPlane.fronted = False
-
-                        try:
-                            pyPlane.bigScale
-                        except AttributeError:
-                            pyPlane.bigScale = 100
-
-                        try:
-                            pyPlane.enormousScale
-                        except AttributeError:
-                            pyPlane.enormousScale = 10000
-
-                        try:
-                            pyPlane.reared
-                        except AttributeError:
-                            pyPlane.reared = False
-
-                        try:
-                            pyPlane.LineInto
-                        except AttributeError:
-                            pyPlane.lineInto = None
-
-                    pyPlaneList = pyWire.planes
-                    for pyReflex in pyWire.reflexs:
-                        for pyPlane in pyReflex.planes:
-                            if pyPlane.rear:
-                                for rr in pyPlane.rear:
-                                    pyRearPlane = pyPlaneList[rr]
-                                    pyRearPlane.reared = True
-
             pyFace.parsing()        #
 
             pyFace.planning()       #
@@ -462,7 +427,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.reflexing()      #
 
-            '''pyFace.ordinaries()     #
+            pyFace.ordinaries()     #
 
             pyFace.betweenWires()   #
 

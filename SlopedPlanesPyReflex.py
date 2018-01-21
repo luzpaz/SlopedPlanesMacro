@@ -228,7 +228,9 @@ class _PyReflex(_Py):
 
                 elif rearPyPl.reflexed:
                     # print 'c'
-                    rearPl = rearPyPl.simulatedShape
+                    # rearPl = rearPyPl.simulatedShape
+                    # # OJO
+                    rearPl = rearPyPl.bigShape
                     pyR.addLink('cutter', rearPl)
                     # print 'included rear simulated', (numWire, nGeom)
 

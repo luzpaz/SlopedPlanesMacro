@@ -412,10 +412,7 @@ class _PyFace(_Py):
 
                             ref = False
 
-                        if corner == 'reflex':
-                            # print '00'
-
-                            self.forBack(pyPlane, 'forward')
+                        self.forBack(pyPlane, 'forward')
 
                     if corner == 'reflex':
                         # print '1 Reflex: does look for alignments'
@@ -570,7 +567,8 @@ class _PyFace(_Py):
 
                     else:
                         # print '2 Convex: does not look for alignments'
-                        self.forBack(pyPlane, 'forward')
+                        if resetFace:
+                            self.forBack(pyPlane, 'forward')
                         forward = pyPlane.forward
                         section = forward.section(shapeGeomWire, tolerance)
 
@@ -591,7 +589,7 @@ class _PyFace(_Py):
                                     # print 'a'
                                     point = self.roundVector(edgeStart)
                                 else:
-                                    print 'b'
+                                    # print 'b'
                                     point = self.roundVector(edgeEnd)
 
                                 nGeom = self.findConvexAlignment(numWire, point)
@@ -763,9 +761,9 @@ class _PyFace(_Py):
 
         lineShape = pyPlane.forward
         section = lineShape.section([sGW], tolerance)
-        print 'section.Edges ', section.Edges
-        print 'section.Vertexes ', section.Vertexes
-        print[v.Point for v in section.Vertexes]
+        # print 'section.Edges ', section.Edges
+        # print 'section.Vertexes ', section.Vertexes
+        # print[v.Point for v in section.Vertexes]
 
         if len(section.Vertexes) == 1:
             return
@@ -773,30 +771,30 @@ class _PyFace(_Py):
         edge = False
 
         if pyPlane.lineInto:
-            print 'a'
+            # print 'a'
 
             section = pyPlane.lineInto.section([sGW], tolerance)
             vertex = section.Vertexes[1]
 
         elif section.Edges:
-            print 'b'
+            # print 'b'
 
             edge = True
 
             if direction == 'forward':
-                print 'b1'
+                # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
 
             else:
-                print 'b2'
+                # print 'b2'
                 vertex = section.Edges[-1].Vertexes[1]
 
         else:
             # print 'c'
             vertex = section.Vertexes[1]
 
-        print vertex.Point
-        print edge
+        # print vertex.Point
+        # print edge
 
         coord = pyWire.coordinates
 

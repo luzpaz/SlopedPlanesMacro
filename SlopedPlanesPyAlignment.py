@@ -774,10 +774,10 @@ class _PyAlignment(_Py):
         '''aligning(self)
         '''
 
-        print '###### base ', (self.base.numWire, self.base.numGeom)
-        print '###### base shape ', self.base.shape
-        print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
-        print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
+        # print '###### base ', (self.base.numWire, self.base.numGeom)
+        # print '###### base shape ', self.base.shape
+        # print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
+        # print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
 
         tolerance = _Py.tolerance
         pyWireList = _Py.pyFace.wires
@@ -1000,29 +1000,32 @@ class _PyAlignment(_Py):
                 # print 'planeCopy.Faces ', planeCopy.Faces
                 # print 'aList ', aList
 
-                if planeCopy.Faces:
-                    planeCopy = planeCopy.cut(cList, tolerance)
+                if rear:
 
-                forward = pyPlane.forward
-                backward = pyPlane.backward
+                    if planeCopy.Faces:
+                        planeCopy = planeCopy.cut(cList, tolerance)
 
-                ffList = []
-                for ff in planeCopy.Faces:
-                    # print '2'
-                    section = ff.section([forward, backward], tolerance)
-                    if not section.Edges:
-                        # print '21'
-                        section = ff.section(aList, tolerance)
-                        if not section.Vertexes:
-                            # print '211'
-                            section = ff.section([rC], tolerance)
-                            if section.Edges:
-                                # print '2111'
-                                ffList.append(ff)
-                                break
+                    forward = pyPlane.forward
+                    backward = pyPlane.backward
 
-                aList.extend(ffList)
-                # print 'aList ', aList
+                    ffList = []
+                    for ff in planeCopy.Faces:
+                        # print '2'
+                        section = ff.section([forward, backward], tolerance)
+                        if not section.Edges:
+                            # print '21'
+                            section = ff.section(aList, tolerance)
+                            if not section.Vertexes:
+                                # print '211'
+                                section = ff.section([rC], tolerance)
+                                if section.Edges:
+                                    # print '2111'
+                                    ffList.append(ff)
+                                    break
+
+                    aList.extend(ffList)
+                    # print 'aList ', aList
+
                 comp = Part.makeCompound(aList)
                 pyPlane.shape = comp
 
@@ -1143,7 +1146,7 @@ class _PyAlignment(_Py):
                 cutterList.extend(simulatedC)
 
                 base = base.cut(cutterList, _Py.tolerance)
-                print 'base.Faces ', base.Faces, len(base.Faces)
+                # print 'base.Faces ', base.Faces, len(base.Faces)
 
                 gA = self.geomAligned
                 number = -1
@@ -1151,10 +1154,10 @@ class _PyAlignment(_Py):
                     section = ff.section([gA], tolerance)
                     if section.Edges:
                         number += 1
-                print 'number ', number
+                # print 'number ', number
 
                 if number <= 1:
-                    print 'a'
+                    # print 'a'
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
@@ -1178,7 +1181,7 @@ class _PyAlignment(_Py):
                             pyTwo.shape = Part.makeCompound(fList[:1])
 
                 else:
-                    print 'b'
+                    # print 'b'
 
                     gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
