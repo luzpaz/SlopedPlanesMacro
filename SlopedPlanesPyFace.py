@@ -40,7 +40,8 @@ __version__ = ""
 
 class _PyFace(_Py):
 
-    '''The complementary python object class for faces.'''
+    '''The complementary python object class for faces resulting to apply
+    the FaceMaker to the SlopedPlanes base.'''
 
     def __init__(self, numFace):
 
@@ -295,7 +296,7 @@ class _PyFace(_Py):
     def parsing(self):
 
         '''parsing(self)
-        Splits the face finding its reflex corners and alignments.'''
+        Splits the pyFace object finding its reflex corners and alignments.'''
 
         # print '######### parsing'
 
@@ -360,7 +361,6 @@ class _PyFace(_Py):
 
                     if resetFace:
                         # print '0'
-                        # print [numWire, numGeom]
 
                         if [numWire, numGeom] in refList:
                             # print 'refList'
@@ -387,14 +387,7 @@ class _PyFace(_Py):
                                 distStart = edgeStart.sub(lineStart).Length
                                 distEnd = edgeEnd.sub(lineStart).Length
 
-                                into = False
-                                face = self.face
-                                lineInto = Part.LineSegment(lineStart, edgeEnd)
-                                lIS = lineInto.toShape()
-                                sect = face.section([lIS], tolerance)
-                                if sect.Edges:
-                                    if len(sect.Vertexes) == 2:
-                                        into = True
+                                into = self.into(lineStart, edgeEnd)
 
                                 if distStart > distEnd and into:
                                     # print 'alignament'
@@ -415,6 +408,7 @@ class _PyFace(_Py):
                             ref = False
 
                         if corner == 'reflex':
+                            # print '00'
 
                             self.forBack(pyPlane, 'forward')
 
@@ -422,9 +416,6 @@ class _PyFace(_Py):
                         # print '1 Reflex: does look for alignments'
 
                         forward = pyPlane.forward
-                        # print forward
-                        # print (forward.firstVertex(True).Point, forward.lastVertex(True).Point)
-                        # print shapeGeomFace
                         section = forward.section(shapeGeomFace, tolerance)
 
                         if section.Edges:
@@ -448,15 +439,10 @@ class _PyFace(_Py):
                                 distEnd = edgeEnd.sub(lineEnd).Length
                                 # print 'distEnd ', distEnd
 
-                                into = False
-                                face = self.face
-                                lineInto = Part.LineSegment(lineEnd, edgeStart)
-                                lIS = lineInto.toShape()
-                                sect = face.section([lIS], tolerance)
-                                if sect.Edges:
-                                    if len(sect.Vertexes) == 2:
-                                        into = True
-                                        lineEnd = edgeEnd
+                                into = self.into(lineEnd, edgeStart)
+
+                                if into:
+                                    lineEnd = edgeEnd
 
                                 # print 'into ', into
 
@@ -527,6 +513,7 @@ class _PyFace(_Py):
 
                                 elif not into:
                                     # print '1112 interference'
+                                    ref = True
                                     break
 
                                 else:
@@ -598,6 +585,21 @@ class _PyFace(_Py):
         self.priorLaterAlignments()
 
         # self.printSummary()
+
+    def into(self, pointOne, pointTwo):
+
+        ''''''
+
+        tolerance = _Py.tolerance
+        into = False
+        face = self.face
+        lineInto = Part.LineSegment(pointOne, pointTwo)
+        lIS = lineInto.toShape()
+        sect = face.section([lIS], tolerance)
+        if sect.Edges:
+            if len(sect.Vertexes) == 2:
+                into = True
+        return into
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
