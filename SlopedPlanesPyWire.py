@@ -270,7 +270,7 @@ class _PyWire(_Py):
         '''priorLater(self)
         '''
 
-        # print '###### priorLater wire ', self.numWire
+        print '###### priorLater wire ', self.numWire
 
         pyPlaneList = self.planes
         lenWire = len(pyPlaneList)
@@ -282,7 +282,7 @@ class _PyWire(_Py):
                 plane = pyPlane.shape
                 numGeom = pyPlane.numGeom
                 control = pyPlane.control
-                # print '### numGeom ', numGeom
+                print '### numGeom ', numGeom
 
                 prior = self.sliceIndex(numGeom-1, lenWire)
                 later = self.sliceIndex(numGeom+1, lenWire)
@@ -293,15 +293,15 @@ class _PyWire(_Py):
                 bigPrior = pyPrior.bigShape
                 bigLater = pyLater.bigShape
 
-                # print'prior ', (pyPrior.numWire, pyPrior.numGeom)
-                # print'later ', (pyLater.numWire, pyLater.numGeom)
+                print'prior ', (pyPrior.numWire, pyPrior.numGeom)
+                print'later ', (pyLater.numWire, pyLater.numGeom)
 
                 gS = pyPlane.geomShape
                 cutterList = []
                 cutList = []
 
                 if pyPlane.arrow:
-                    # print'A'
+                    print'A'
 
                     if prior not in control:
                         if not pyPrior.reflexed:
@@ -316,7 +316,7 @@ class _PyWire(_Py):
                             control.append(later)
 
                 elif pyPlane.reflexed:
-                    # print'B'
+                    print'B'
 
                     if prior not in control:
 
@@ -357,14 +357,14 @@ class _PyWire(_Py):
                                         cutList.append(bigLater)
 
                 else:
-                    # print'C'
+                    print'C'
 
                     cutterList = []
 
                     if not prior in control:
                         if not pyPrior.aligned:
                             if not (pyPrior.reflexed and pyPrior.reared):
-                                # print '1'
+                                print '1'
                                 cutterList.append(bigPrior)
                                 if pyPrior.bigScale > 1:
                                     control.append(prior)
@@ -372,18 +372,18 @@ class _PyWire(_Py):
                     if not later in control:
                         if not pyLater.aligned:
                             if not (pyLater.reflexed and pyLater.reared):
-                                # print '2'
+                                print '2'
                                 cutterList.append(bigLater)
                                 if pyLater.bigScale > 1:
                                     control.append(later)
 
                 if cutterList:
-                    # print'D'
+                    print'D'
                     plane = self.cutting(plane, cutterList, gS)
                     pyPlane.shape = plane
 
                 if cutList:
-                    # print 'E'
+                    print 'E'
                     simulated = pyPlane.simulatedShape
                     simulated = self.cutting(simulated, cutList, gS)
                     pyPlane.simulatedShape = simulated
@@ -401,7 +401,7 @@ class _PyWire(_Py):
         '''reflexing(self)
         '''
 
-        # print '###### reflexing wire ', self.numWire
+        print '###### reflexing wire ', self.numWire
 
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
@@ -409,7 +409,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
 
-        for pyReflex in self.reflexs:
+        '''for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
 
         for pyReflex in self.reflexs:

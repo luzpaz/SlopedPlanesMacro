@@ -378,6 +378,7 @@ To cero the plane width is equal to the related edge length of the base'''
                                 pyPlane.bigScale = 100
                                 pyPlane.enormousScale = 10000
                                 pyPlane.reared = False
+                                pyPlane.lineInto = None
 
                         except IndexError:
                             # print '2'
@@ -432,6 +433,11 @@ To cero the plane width is equal to the related edge length of the base'''
                         except AttributeError:
                             pyPlane.reared = False
 
+                        try:
+                            pyPlane.LineInto
+                        except AttributeError:
+                            pyPlane.lineInto = None
+
                     pyPlaneList = pyWire.planes
                     for pyReflex in pyWire.reflexs:
                         for pyPlane in pyReflex.planes:
@@ -456,7 +462,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.reflexing()      #
 
-            pyFace.ordinaries()     #
+            '''pyFace.ordinaries()     #
 
             pyFace.betweenWires()   #
 

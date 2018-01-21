@@ -102,15 +102,15 @@ class _PyReflex(_Py):
         The planes included in a range are cutted between them.
         '''
 
-        # print '#### preProcess'
+        print '### preProcess'
 
         pyPlaneList = pyWire.planes
         numWire = pyWire.numWire
 
         for pyReflexPlane in self.planes:
-            # print '# pyReflexPlane ', pyReflexPlane.numGeom
+            print '# pyReflexPlane ', pyReflexPlane.numGeom
             rango = pyReflexPlane.rangoConsolidate
-            # print 'rango ', rango
+            print 'rango ', rango
             pyRan = []
             for nG in rango:
                 pyPl = pyPlaneList[nG]
@@ -120,59 +120,60 @@ class _PyReflex(_Py):
                 cList = []
                 plane = pyPlane.shape
                 if not pyPlane.choped and not pyPlane.aligned:
-                    # print 'pyPlane.numGeom ', pyPlane.numGeom, control
+                    print 'pyPlane.numGeom ', pyPlane.numGeom
 
                     control = pyPlane.control
                     rangoPost = pyPlane.rangoConsolidate
                     total = control + rangoPost
-                    # print 'total ', total
+                    print 'total ', total
                     num = -1
                     for nG in rango:
                         num += 1
                         if nG not in total:
                             pyPl = pyRan[num]
-                            # print 'pyPl.numGeom ', nG
+                            print 'pyPl.numGeom ', nG
 
                             if not pyPl.reflexed:
-                                # print 'a'
+                                print 'a'
                                 cList.append(pyPl.shape)
                                 control.append(nG)
 
                             elif pyPl.choped:
-                                # print 'b'
+                                print 'b'
                                 pass
 
                             elif pyPl.aligned:
-                                # print 'c'
+                                print 'c'
                                 pyAli =\
                                     self.selectAlignment(numWire, nG)
                                 if pyAli:
                                     cList.extend(pyAli.simulatedAlignment)
 
                             else:
-                                # print 'd'
+                                print 'd'
                                 if not pyPlane.reflexed or pyPlane.aligned:
-                                    # print 'dd'
+                                    print 'dd'
                                     cList.append(pyPl.simulatedShape)
                                 else:
-                                    # print 'ddd'
+                                    print 'ddd'
                                     pyReflexList =\
                                         self.selectAllReflex(numWire, nG)
                                     for pyReflex in pyReflexList:
                                         [pyOne, pyTwo] = pyReflex.planes
                                         if pyPlane.numGeom in\
                                            [pyOne.numGeom, pyTwo.numGeom]:
-                                            # print 'ddd1'
+                                            print 'ddd1'
                                             break
                                     else:
-                                        # print 'ddd2'
+                                        print 'ddd2'
                                         cList.append(pyPl.simulatedShape)
 
                 if cList:
-                    # print 'cList', cList
+                    print 'cList', cList
                     gS = pyPlane.geomShape
                     plane = self.cutting(plane, cList, gS)
                     pyPlane.shape = plane
+                    print 'plane ', plane
 
     def reflexing(self, pyWire):
 

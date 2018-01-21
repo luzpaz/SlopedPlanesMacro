@@ -74,6 +74,7 @@ class _PyPlane(_Py):
         self.bigScale = 100
         self.enormousScale = 10000
         self.reared = False
+        self.lineInto = None
 
     @property
     def numWire(self):
@@ -571,6 +572,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._reared = reared
+
+    @property
+    def lineInto(self):
+
+        ''''''
+
+        return self._lineInto
+
+    @lineInto.setter
+    def lineInto(self, lineInto):
+
+        ''''''
+
+        self._lineInto = lineInto
 
     def planning(self, pyWire):
 

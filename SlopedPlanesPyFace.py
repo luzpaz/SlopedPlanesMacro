@@ -169,6 +169,7 @@ class _PyFace(_Py):
 
                 dd['_seedShape'] = None
                 dd['_seedBigShape'] = None
+                dd['_lineInto'] = None
 
                 if serialize:
 
@@ -387,7 +388,7 @@ class _PyFace(_Py):
                                 distStart = edgeStart.sub(lineStart).Length
                                 distEnd = edgeEnd.sub(lineStart).Length
 
-                                into = self.into(lineStart, edgeEnd)
+                                into, lineInto = self.into(lineStart, edgeEnd)
 
                                 if distStart > distEnd and into:
                                     # print 'alignament'
@@ -395,6 +396,9 @@ class _PyFace(_Py):
 
                                 else:
                                     # print 'no alignament '
+                                    if not into:
+                                        if distStart > distEnd:
+                                            pyPlane.lineInto = lineInto
                                     self.findRear(pyWire, pyPrePlane, 'forward')
                                     self.findRear(pyWire, pyPlane, 'backward')
                                     self.doReflex(pyWire, pyPrePlane, pyPlane)
@@ -425,6 +429,7 @@ class _PyFace(_Py):
                             # print 'lineEnd ', lineEnd
 
                             numEdge = -1
+                            pyPl = pyPlane
                             for edge in section.Edges:
                                 numEdge += 1
                                 # print '111 edge by edge'
@@ -439,11 +444,10 @@ class _PyFace(_Py):
                                 distEnd = edgeEnd.sub(lineEnd).Length
                                 # print 'distEnd ', distEnd
 
-                                into = self.into(lineEnd, edgeStart)
+                                into, lineInto = self.into(lineEnd, edgeStart)
 
                                 if into:
                                     lineEnd = edgeEnd
-
                                 # print 'into ', into
 
                                 if distStart < distEnd and into:
@@ -514,6 +518,8 @@ class _PyFace(_Py):
                                 elif not into:
                                     # print '1112 interference'
                                     ref = True
+                                    if distStart < distEnd:
+                                        pyPl.lineInto = lineInto
                                     break
 
                                 else:
@@ -599,7 +605,7 @@ class _PyFace(_Py):
         if sect.Edges:
             if len(sect.Vertexes) == 2:
                 into = True
-        return into
+        return into, lIS
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -717,6 +723,7 @@ class _PyFace(_Py):
         Finds the rear plane of a reflexed plane.
         Determines if a arrow situacion happens.'''
 
+        tolerance = _Py.tolerance
         shapeGeomWire = pyWire.shapeGeom
         sGW = Part.Wire(shapeGeomWire)
         numWire = pyWire.numWire
@@ -724,30 +731,41 @@ class _PyFace(_Py):
         numGeom = pyPlane.numGeom
 
         lineShape = pyPlane.forward
-        section = lineShape.section([sGW], _Py.tolerance)
-        # print 'section.Edges ', section.Edges
-        # print 'section.Vertexes ', section.Vertexes
+        section = lineShape.section([sGW], tolerance)
+        print 'section.Edges ', section.Edges
+        print 'section.Vertexes ', section.Vertexes
+        print[v.Point for v in section.Vertexes]
 
         if len(section.Vertexes) == 1:
             return
 
         edge = False
 
-        if section.Edges:
-            # print 'a'
+        if pyPlane.lineInto:
+            print 'a'
+
+            section = pyPlane.lineInto.section([sGW], tolerance)
+            vertex = section.Vertexes[1]
+
+        elif section.Edges:
+            print 'b'
+
             edge = True
+
             if direction == 'forward':
-                # print 'a1'
+                print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
+
             else:
-                # print 'a2'
+                print 'b2'
                 vertex = section.Edges[-1].Vertexes[1]
 
         else:
-            # print 'b'
+            # print 'c'
             vertex = section.Vertexes[1]
 
-        # print vertex.Point
+        print vertex.Point
+        print edge
 
         coord = pyWire.coordinates
 
@@ -767,7 +785,7 @@ class _PyFace(_Py):
                     nGeom = self.sliceIndex(nGeom-1, lenWire)
 
         except ValueError:
-            # print 'on edge'
+            # print 'not in vertex (edge False)'
 
             nGeom = -1
             for geomShape in shapeGeomWire:
@@ -1028,7 +1046,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.trimming()
-        # self.printControl('trimming reflexs')
+        self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()
@@ -1044,11 +1062,11 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.priorLater()
-        # self.printControl('priorLater wires')
+        self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
-        self.printControl('priorLater alignments')
+        # self.printControl('priorLater alignments')
 
     def simulating(self):
 
@@ -1070,7 +1088,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingChops()
 
-        # self.printControl('simulating')
+        self.printControl('simulating')
 
     def reflexing(self):
 
