@@ -1046,7 +1046,7 @@ class _PyFace(_Py):
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
-        # self.printControl('priorLater alignments')
+        self.printControl('priorLater alignments')
 
     def simulating(self):
 

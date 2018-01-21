@@ -429,6 +429,7 @@ class _PyAlignment(_Py):
                             else:
                                 # print 'B'
                                 pyPl.trimmingTwo(enormousShape)
+                                baseControl.append(nG)
 
         if falsify:
             # the base and cont are cutted by a chop

@@ -1013,7 +1013,7 @@ class _PyPlane(_Py):
                             print 'a2'
                             cutterList.extend(pyAli.simulatedAlignment)
 
-                    elif pyPl.choped or pyPl.fronted:
+                    elif pyPl.choped:
                         print 'b'
                         pass
 
