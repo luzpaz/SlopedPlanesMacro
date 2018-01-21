@@ -85,7 +85,7 @@ class _Py(object):
 
         ''''''
 
-        # hacer que no se repitan valores
+        # TODO hacer que no se repitan valores
 
         valueList = getattr(self, prop)
         if direction == 'forward':
@@ -97,9 +97,8 @@ class _Py(object):
     def selectAlignment(self, numWire, numGeom):
 
         '''selectAlignment(self, numWire, numGeom)
-        select an unique alignment which includes the plane (numWire, numGeom)
-        as base plane or in its aligned planes and return it, or None
-        used in Py, PyPlane and PyReflex'''
+        selects an unique alignment which includes the plane (numWire, numGeom)
+        as base plane or in its aligned planes and return it, or None.'''
 
         pyWireList = _Py.pyFace.wires
         pyWire = pyWireList[numWire]
@@ -118,9 +117,8 @@ class _Py(object):
     def selectAlignmentBase(self, numWire, numGeom):
 
         '''selectAlignmentBase(self, numWire, numGeom)
-        select an unique alignment which base plane is (numWire, numGeom),
-        and return it, or None
-        used in PyFace'''
+        selects an unique alignment which base plane is (numWire, numGeom),
+        and return it, or None.'''
 
         pyPlane = self.selectPlane(numWire, numGeom)
 
@@ -133,9 +131,8 @@ class _Py(object):
     def selectAllAlignment(self, numWire, numGeom):
 
         '''selectAllAlignment(self, numWire, numGeom)
-        select all alignment which the plane (numWire, numGeom)
-        is in their chops, and return them
-        used in PyAlignment, PyFace'''
+        selects all alignment which the plane (numWire, numGeom)
+        is in their chops, and return them.'''
 
         pyAlignList = []
 
@@ -151,10 +148,8 @@ class _Py(object):
     def selectAllReflex(self, numWire, numGeom):
 
         '''selectAllReflex(self, numWire, numGeom)
-        select all reflex corner (cero, one or two) in the wire numWire,
-        which envolve the plane numGeom,
-        and return it
-        used in PyWire and PyReflex'''
+        selects all reflex corner (cero, one or two) in the wire numWire,
+        which envolve the plane numGeom, and return them.'''
 
         pyRList = []
         for pyReflex in _Py.pyFace.wires[numWire].reflexs:
@@ -168,10 +163,9 @@ class _Py(object):
     def selectReflex(self, numWire, numGeom, nGeom):
 
         '''selectReflex(self, numWire, numGeom, nGeom)
-        select an unique reflex corner in the wire numWire,
+        selects an unique reflex corner in the wire numWire,
         which envolves the planes numGeom and nGeom,
-        and return it, or None
-        used in PyWire.'''
+        and return it, or None.'''
 
         for pyReflex in _Py.pyFace.wires[numWire].reflexs:
             [pyPlane, pyPl] = pyReflex.planes
@@ -184,6 +178,7 @@ class _Py(object):
     def selectPlane(self, numWire, numGeom):
 
         '''selectPlane(self, numWire, numGeom)
+        Selects the plane numWire and numGeom.
         '''
 
         return _Py.pyFace.wires[numWire].planes[numGeom]
@@ -191,7 +186,8 @@ class _Py(object):
     def selectBasePlane(self, numWire, numGeom):
 
         '''selectBasePlane(self, numWire, numGeom)
-        '''
+        Selects the plane numWire and numGeom, or if this allow of shape
+        selects the base plane of the alignment.'''
 
         pyPlane = self.selectPlane(numWire, numGeom)
 
