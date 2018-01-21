@@ -40,7 +40,8 @@ __url__ = "http://www.freecadweb.org"
 __version__ = ""
 __doc__ = '''Requieres a sketch or DWire as base.
              The base must support the FaceMaker.
-             The angles correspond to the faces of the SlopedPlane's shape.'''
+             The angles numeration corresponds
+             to the faces of the SlopedPlane's shape.'''
 
 
 def makeSlopedPlanes(sketch):
@@ -66,7 +67,7 @@ def makeSlopedPlanes(sketch):
 
 class _SlopedPlanes(_Py):
 
-    '''The SlopedPlanes object Class'''
+    '''The Class of the FreeCAD scripted object SlopedPlanes'''
 
     def __init__(self, slopedPlanes):
 
@@ -304,8 +305,8 @@ To cero the plane width is equal to the related edge length of the base'''
                 falseFaceList.insert(0, falseFaceOuter[numFace])
 
                 coordinates = [coordinates]
-                if coordinatesInnerOrdered:
-                    coordinates.extend(coordinatesInnerOrdered)
+                # if coordinatesInnerOrdered:
+                coordinates.extend(coordinatesInnerOrdered)
 
                 pyWireListOld = pyFace.wires
                 pyWireListNew = []
@@ -480,9 +481,8 @@ To cero the plane width is equal to the related edge length of the base'''
             secondaries = []
             planeFaceList = []
             originList = []
-            pyWireList = pyFace.wires
             wireList = []
-            for pyWire in pyWireList:
+            for pyWire in pyFace.wires:
                 numWire = pyWire.numWire
                 planeWireList = []
                 for pyPlane in pyWire.planes:
