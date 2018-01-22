@@ -433,7 +433,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.aligning()       #
 
-            pyFace.end()            # '''
+            '''pyFace.end()            # '''
 
         if onChanged:
             # print 'AAA'

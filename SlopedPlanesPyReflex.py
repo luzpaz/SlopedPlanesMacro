@@ -236,7 +236,9 @@ class _PyReflex(_Py):
 
                 else:
                     # print 'd'
-                    rearPl = rearPyPl.shape.copy()
+                    # rearPl = rearPyPl.shape.copy()
+                    # # OJO
+                    rearPl = rearPyPl.bigShape
                     pyR.addLink('cutter', rearPl)
                     # print 'included rear ', (numWire, nGeom)
                     control.append(nGeom)
