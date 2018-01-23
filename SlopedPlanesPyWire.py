@@ -187,11 +187,23 @@ class _PyWire(_Py):
                 numWire = pyPlane.numWire
 
                 if num == 0:
-                    rango = pyPlane.rango[0]
-                    oppRango = pyOppPlane.rango[-1]
+                    try:
+                        rango = pyPlane.rango[0]
+                    except IndexError:
+                        rango = []
+                    try:
+                        oppRango = pyOppPlane.rango[-1]
+                    except IndexError:
+                        oppRango = []
                 else:
-                    rango = pyPlane.rango[-1]
-                    oppRango = pyOppPlane.rango[0]
+                    try:
+                        rango = pyPlane.rango[-1]
+                    except IndexError:
+                        rango = []
+                    try:
+                        oppRango = pyOppPlane.rango[0]
+                    except IndexError:
+                        oppRango = []
 
                 for nG in rango:
                     pyPl = pyPlaneList[nG]
@@ -435,10 +447,10 @@ class _PyWire(_Py):
         '''ordinaries(self)
         '''
 
-        # the plane to be cutted
+         # all plane with shape, except chops and reflexs and fronted. The plane to be cutted
         for pyPlane in self.planes:
-            # all plane with shape, except chops and reflexs
             if not (pyPlane.reflexed and not pyPlane.aligned):
                 if pyPlane.shape:
-                    # print '###### ordinaries ', pyPlane.numGeom
-                    pyPlane.ordinaries(self)
+                    if not pyPlane.fronted:
+                        print '###### ordinaries ', (pyPlane.numWire, pyPlane.numGeom)
+                        pyPlane.ordinaries(self)

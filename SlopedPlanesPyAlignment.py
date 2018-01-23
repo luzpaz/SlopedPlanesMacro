@@ -1108,17 +1108,17 @@ class _PyAlignment(_Py):
                 cont = self.cutting(cont, cutterList, gS)
                 pyCont.shape = cont
 
-            if not pyTwo.virtualized:
+            #if not pyTwo.virtualized:
 
-                gS = pyTwo.geomShape
-                shapeTwo = self.cutting(shapeTwo, [base, cont, shapeOne], gS)
-                pyTwo.shape = shapeTwo
+            gS = pyTwo.geomShape
+            shapeTwo = self.cutting(shapeTwo, [base, cont, shapeOne], gS)
+            pyTwo.shape = shapeTwo
 
-            if not pyOne.virtualized:
+            #if not pyOne.virtualized:
 
-                gS = pyOne.geomShape
-                shapeOne = self.cutting(shapeOne, [cont, base, shapeTwo], gS)
-                pyOne.shape = shapeOne
+            gS = pyOne.geomShape
+            shapeOne = self.cutting(shapeOne, [cont, base, shapeTwo], gS)
+            pyOne.shape = shapeOne
 
         else:
 
@@ -1139,7 +1139,7 @@ class _PyAlignment(_Py):
                 shapeTwo = pyTwo.shape
 
                 cutterList = [shapeOne, shapeTwo]
-                cutList.extend(cutterList)
+                # cutList.extend(cutterList)
 
                 simulatedC = simulatedChops[numChop]
 
@@ -1164,7 +1164,7 @@ class _PyAlignment(_Py):
                     pyBase.shape = base
                     cutList.append(base)
 
-                    shapeOne = pyOne.shape
+                    '''shapeOne = pyOne.shape
                     fList = shapeOne.Faces
                     if len(fList) > 1:
                         ff = fList[1]
@@ -1178,7 +1178,7 @@ class _PyAlignment(_Py):
                         ff = fList[1]
                         section = ff.section([base], tolerance)
                         if not section.Edges:
-                            pyTwo.shape = Part.makeCompound(fList[:1])
+                            pyTwo.shape = Part.makeCompound(fList[:1])'''
 
                 else:
                     # print 'b'
@@ -1188,21 +1188,21 @@ class _PyAlignment(_Py):
                     pyBase.shape = ff
                     cutList.append(ff)
 
-                    if not pyTwo.virtualized:
+                    '''# if not pyTwo.virtualized:
                         # print 'bb'
-                        gS = pyTwo.geomShape
+                    gS = pyTwo.geomShape
 
-                        f = shapeTwo.Faces[0]
-                        f = self.cutting(f, [ff], gS)
-                        fList = [f]
+                    f = shapeTwo.Faces[0]
+                    f = self.cutting(f, [ff], gS)
+                    fList = [f]
 
-                        for f in shapeTwo.Faces[1:]:
-                            f = f.cut([ff], _Py.tolerance)
-                            fList.append(f.Faces[0])    # esto tiene que cambiar
+                    for f in shapeTwo.Faces[1:]:
+                        f = f.cut([ff], _Py.tolerance)
+                        fList.append(f.Faces[0])    # esto tiene que cambiar
 
-                        # print 'fList ', fList
-                        compound = Part.makeCompound(fList)
-                        pyTwo.shape = compound
+                    # print 'fList ', fList
+                    compound = Part.makeCompound(fList)
+                    pyTwo.shape = compound'''
 
                     gS = pyCont.geomShape
                     ff = self.selectFace(base.Faces, gS)
@@ -1217,21 +1217,21 @@ class _PyAlignment(_Py):
 
                     pyCont.angle = pyBase.angle
 
-                    if not pyOne.virtualized:
+                    '''# if not pyOne.virtualized:
                         # print 'bbb'
-                        gS = pyOne.geomShape
+                    gS = pyOne.geomShape
 
-                        f = shapeOne.Faces[0]
-                        f = self.cutting(f, [ff], gS)
-                        fList = [f]
+                    f = shapeOne.Faces[0]
+                    f = self.cutting(f, [ff], gS)
+                    fList = [f]
 
-                        for f in shapeOne.Faces[1:]:
-                            f = f.cut([ff], _Py.tolerance)
-                            fList.append(f.Faces[0])
+                    for f in shapeOne.Faces[1:]:
+                        f = f.cut([ff], _Py.tolerance)
+                        fList.append(f.Faces[0])
 
-                        # print 'fList ', fList
-                        compound = Part.makeCompound(fList)
-                        pyOne.shape = compound
+                    # print 'fList ', fList
+                    compound = Part.makeCompound(fList)
+                    pyOne.shape = compound'''
 
                     pyBase = aligns[numChop]
 
