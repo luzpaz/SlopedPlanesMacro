@@ -1312,7 +1312,8 @@ class _PyFace(_Py):
                     pyPlaneList = pyWireList[pyOne.numWire].planes
                     for nn in rChop:
                         pyPl = pyPlaneList[nn]
-                        if pyPl.shape:
+                        if not (pyPl.choped or pyPl.aligned):
+                            #if pyPl.shape:
                             pl = pyPl.shape.copy()
                             gS = pyPl.geomShape
                             ch.append(pl)
@@ -1330,8 +1331,10 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             number += 1
             simulatedAlign = Part.makeCompound(pyAlign.simulatedAlignment)
+            line = pyAlign.geomAligned
 
             pyBase = pyAlign.base
+            print '###### pyAlign.base ', (pyBase.numWire, pyBase.numGeom)
             base = pyBase.shape
             gS = pyBase.geomShape
 
@@ -1341,21 +1344,76 @@ class _PyFace(_Py):
                 num += 1
                 if number != num:
                     simulAl = pyAl.simulatedAlignment
+                    ll = pyAl.geomAligned
                     section = simulatedAlign.section(simulAl, tolerance)
                     if section.Edges:
+                        section = line.section([ll], tolerance)
+                        if not section.Vertexes:
+                            common = simulatedAlign.common(simulAl, tolerance)
+                            if not common.Area:
 
-                        cutterList = frontedList[num]
-                        if cutterList:
+                                print '### pyAl ', (pyAl.numWire, pyAl.numGeom)
 
-                            base = self.cutting(base, cutterList, gS)
-                            pyBase.shape = base
+                                cutterList = frontedList[num]
+                                if cutterList:
+                                    print 'cutterList ', cutterList
 
-                            for pyPlane in pyAlign.aligns:
-                                plane = pyPlane.shape
-                                if plane:
-                                    gS = pyPlane.geomShape
-                                    plane = self.cutting(plane, cutterList, gS)
-                                    pyPlane.shape = plane
+                                    base = self.cutting(base, cutterList, gS)
+                                    pyBase.shape = base
+
+                                    for pyPlane in pyAlign.aligns:
+                                        plane = pyPlane.shape
+                                        if plane:
+                                            gS = pyPlane.geomShape
+                                            plane = self.cutting(plane, cutterList, gS)
+                                            pyPlane.shape = plane
+
+                                    rangoChop = pyAlign.rango
+                                    numChop = -1
+                                    for [pyOne, pyTwo] in pyAlign.chops:
+                                        numChop += 1
+
+                                        one = pyOne.shape
+                                        gS = pyOne.geomShape
+                                        one = self.cutting(one, cutterList, gS)
+                                        pyOne.shape = one
+
+                                        two = pyTwo.shape
+                                        gS = pyTwo.geomShape
+                                        two = self.cutting(two, cutterList, gS)
+                                        pyTwo.shape = two
+
+                                        pyPlaneList = pyWireList[pyOne.numWire].planes
+
+                                        rChop = rangoChop[numChop]
+                                        if rChop:
+                                            for nn in rChop:
+                                                pyPl = pyPlaneList[nn]
+                                                pl = pyPl.shape
+                                                if pl:
+                                                    gS = pyPl.geomShape
+                                                    pl = self.cutting(pl, cutterList, gS)
+                                                    pyPl.shape = pl
+
+        '''number = -1
+        for pyAlign in self.alignments:
+            number += 1
+            simulatedAlign = Part.makeCompound(pyAlign.simulatedAlignment)
+
+            rangoChop = pyAlign.rango
+            num = -1
+            for pyAl in pyAlignList:
+                num += 1
+                if number != num:
+                    simulAl = pyAl.simulatedAlignment
+                    section = simulatedAlign.section(simulAl, tolerance)
+                    if section.Edges:
+                        common = simulatedAlign.common(simulAl, tolerance)
+                        if not common.Area:
+
+                            cutterList = chopList[num]
+                            for [pyOne, pyTwo] in pyAl.chops:
+                                cutterList.extend([pyOne.shape, pyTwo.shape])
 
                             rangoChop = pyAlign.rango
                             numChop = -1
@@ -1374,6 +1432,8 @@ class _PyFace(_Py):
 
                                 pyPlaneList = pyWireList[pyOne.numWire].planes
 
+                                cutList = cutterList[:]
+
                                 rChop = rangoChop[numChop]
                                 if rChop:
                                     for nn in rChop:
@@ -1381,60 +1441,11 @@ class _PyFace(_Py):
                                         pl = pyPl.shape
                                         if pl:
                                             gS = pyPl.geomShape
-                                            pl = self.cutting(pl, cutterList, gS)
+                                            pl = self.cutting(pl, cutList, gS)
                                             pyPl.shape = pl
 
-        number = -1
-        for pyAlign in self.alignments:
-            number += 1
-            simulatedAlign = Part.makeCompound(pyAlign.simulatedAlignment)
-
-            rangoChop = pyAlign.rango
-            num = -1
-            for pyAl in pyAlignList:
-                num += 1
-                if number != num:
-                    simulAl = pyAl.simulatedAlignment
-                    section = simulatedAlign.section(simulAl, tolerance)
-                    if section.Edges:
-
-                        cutterList = chopList[num]
-                        for [pyOne, pyTwo] in pyAl.chops:
-                            cutterList.extend([pyOne.shape, pyTwo.shape])
-
-                        rangoChop = pyAlign.rango
-                        numChop = -1
-                        for [pyOne, pyTwo] in pyAlign.chops:
-                            numChop += 1
-
-                            one = pyOne.shape
-                            gS = pyOne.geomShape
-                            one = self.cutting(one, cutterList, gS)
-                            pyOne.shape = one
-
-                            two = pyTwo.shape
-                            gS = pyTwo.geomShape
-                            two = self.cutting(two, cutterList, gS)
-                            pyTwo.shape = two
-
-                            pyPlaneList = pyWireList[pyOne.numWire].planes
-
-                            cutList = cutterList[:]
-                            cutList.extend([one, two])
-
-                            rChop = rangoChop[numChop]
-                            if rChop:
-                                for nn in rChop:
-                                    pyPl = pyPlaneList[nn]
-                                    pl = pyPl.shape
-                                    if pl:
-                                        gS = pyPl.geomShape
-                                        pl = self.cutting(pl, cutList, gS)
-                                        pyPl.shape = pl
-
-        '''for pyAlign in pyAlignList:
+        for pyAlign in pyAlignList:
             pyAlign.end()'''
-
 
     def endOld(self):
 
