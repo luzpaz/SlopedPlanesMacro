@@ -193,15 +193,7 @@ class _PyWire(_Py):
                     rango = pyPlane.rango[-1]
                     oppRango = pyOppPlane.rango[0]
 
-                '''rango = pyPlane.rangoConsolidate
-                # print 'rango ', rango
-                oppRango = pyOppPlane.rangoConsolidate
-                # print 'oppRango ', oppRango'''
-
                 for nG in rango:
-                    '''if nG in oppRango:
-                        pass
-                    else:'''
                     pyPl = pyPlaneList[nG]
                     control = pyPl.control
 
