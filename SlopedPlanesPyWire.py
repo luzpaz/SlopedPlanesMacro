@@ -186,84 +186,97 @@ class _PyWire(_Py):
                 numGeom = pyPlane.numGeom
                 numWire = pyPlane.numWire
 
-                rango = pyPlane.rangoConsolidate
+                if num == 0:
+                    rango = pyPlane.rango[0]
+                    oppRango = pyOppPlane.rango[-1]
+                else:
+                    rango = pyPlane.rango[-1]
+                    oppRango = pyOppPlane.rango[0]
+
+                '''rango = pyPlane.rangoConsolidate
                 # print 'rango ', rango
                 oppRango = pyOppPlane.rangoConsolidate
-                # print 'oppRango ', oppRango
+                # print 'oppRango ', oppRango'''
 
                 for nG in rango:
-                    if nG in oppRango:
+                    '''if nG in oppRango:
                         pass
-                    else:
-                        pyPl = pyPlaneList[nG]
-                        control = pyPl.control
+                    else:'''
+                    pyPl = pyPlaneList[nG]
+                    control = pyPl.control
 
-                        if numGeom not in pyPl.control:
-                            # print '# cutted ', nG
+                    if numGeom not in pyPl.control:
+                        # print '# cutted ', nG
 
-                            if not pyPl.reflexed:
-                                # print 'a'
-                                pyPl.trimming(enormousShape)
-                                control.append(numGeom)
+                        if not pyPl.reflexed:
+                            # print 'a'
+                            pyPl.trimming(enormousShape)
+                            control.append(numGeom)
 
-                            elif pyPl.aligned:
-                                # print 'b'
-                                pass
+                        elif pyPl.aligned:
+                            # print 'b'
+                            pass
 
+                        else:
+                            # print 'c'
+
+                            if len(pyPlane.rear) == 1:
+                                forward = pyPlane.forward
                             else:
-                                # print 'c'
-
-                                if len(pyPlane.rear) == 1:
+                                if num == 0:
                                     forward = pyPlane.forward
                                 else:
-                                    if num == 0:
-                                        forward = pyPlane.forward
-                                    else:
-                                        forward = pyPlane.backward
+                                    forward = pyPlane.backward
 
-                                gS = pyPl.geomShape
-                                forw = pyPl.forward
-                                section =\
-                                    forward.section([forw, gS], tolerance)
+                            gS = pyPl.geomShape
+                            forw = pyPl.forward
+                            section =\
+                                forward.section([forw, gS], tolerance)
 
-                                if (not section.Edges and
-                                   len(section.Vertexes) == 1):
-                                    # print 'c1'
+                            if (not section.Edges and
+                               len(section.Vertexes) == 1):
+                                # print 'c1'
 
-                                    procc = True
-                                    pyRList =\
-                                        self.selectAllReflex(numWire, nG)
-                                    # print pyRList
+                                procc = True
+                                pyRList =\
+                                    self.selectAllReflex(numWire, nG)
+                                # print pyRList
 
-                                    for pyR in pyRList:
-                                        # print '1'
-                                        if not procc:
-                                            break
-                                        for pyP in pyR.planes:
-                                            # print '2'
-                                            if pyP != pyPl:
-                                                # print '3'
-                                                ff = pyP.forward
-                                                section =\
-                                                    ff.section([forward],
-                                                               tolerance)
-                                                if section.Vertexes:
-                                                    # print '4'
-                                                    procc = False
-                                                    break
+                                for pyR in pyRList:
+                                    # print '1'
+                                    if not procc:
+                                        break
+                                    for pyP in pyR.planes:
+                                        # print '2'
+                                        if pyP != pyPl:
+                                            # print '3'
+                                            ff = pyP.forward
+                                            section =\
+                                                ff.section([forward],
+                                                           tolerance)
+                                            if section.Vertexes:
+                                                # print '4'
+                                                procc = False
+                                                break
 
-                                    if procc:
-                                        # print 'procc'
-                                        pyPl.trimming(enormousShape)
-                                        control.append(numGeom)
-
-                                    else:
-                                        # print 'no procc'
-                                        pyPl.trimmingTwo(enormousShape)
+                                if procc:
+                                    # print 'procc'
+                                    pyPl.trimming(enormousShape)
+                                    control.append(numGeom)
 
                                 else:
-                                    # print 'c2'
+                                    # print 'no procc'
                                     pyPl.trimmingTwo(enormousShape)
+
+                            else:
+                                # print 'c2'
+                                pyPl.trimmingTwo(enormousShape)
+
+                    for nn in oppRango:
+                        pyP = pyPlaneList[nn]
+                        if not pyP.reflexed:
+                            if not nn in control:
+                                control.append(nn)
 
     def priorLater(self):
 

@@ -93,7 +93,7 @@ Remember to apply the modifications before to pop down the advaced options windo
                                        ("Length"),
                                        ("Overhang"),
                                        ("Left Width"),
-                                       ("Right Width")]
+                                       ("Right Width")])
         else:
             self.tree.setHeaderLabels([("Face"),
                                        ("Angle")])
