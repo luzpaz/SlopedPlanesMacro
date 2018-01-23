@@ -1356,3 +1356,93 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
             pyAlign.end()
+
+
+    def endOld(self):
+
+        '''end(self)
+        
+        Transfers to PyAlignment.
+        '''
+
+        print '######### end'
+
+        pyAlignList = self.alignments
+
+        cutterList = []
+        for pyAlign in pyAlignList:
+
+            if isinstance(pyAlign.base.angle, float):
+                base = pyAlign.base.shape
+                if base not in cutterList:
+                    cutterList.append(base)
+                    print 'a ', pyAlign.base.numGeom
+
+            for pyPlane in pyAlign.aligns:
+                plane = pyPlane.shape
+                if plane:
+                    if plane not in cutterList:
+                        cutterList.append(plane)
+                        print 'b ', pyPlane.numGeom
+
+            for [pyChopOne, pyChopTwo] in pyAlign.chops:
+
+                if not pyChopOne.virtualized:
+                    chopOne = pyChopOne.shape
+                    if chopOne not in cutterList:
+                        cutterList.append(chopOne)
+                        print 'c ', pyChopOne.numGeom
+
+                if not pyChopTwo.virtualized:
+                    chopTwo = pyChopTwo.shape
+                    if chopTwo not in cutterList:
+                        cutterList.append(chopTwo)
+                        print 'd ', pyChopTwo.numGeom
+
+        if cutterList:
+            print cutterList
+
+            for pyWire in self.wires:
+                for pyPlane in pyWire.planes:
+                    plane = pyPlane.shape
+                    print 'plane', plane
+                    if plane:
+                        print 'numGeom', pyPlane.numGeom
+
+                        if pyPlane.choped or pyPlane.aligned:
+                            print '1'
+                            cutterList.remove(plane)
+
+                            if pyPlane.aligned:
+                                print '11'
+                                gS = pyPlane.geomShape
+                                plane = self.cutting(plane, cutterList, gS)
+                                pyPlane.shape = plane
+
+                            else:
+                                print '12'
+                                gS = pyPlane.geomShape
+                                fList = []
+                                ff = self.cutting(plane.Faces[0], cutterList, gS)
+                                fList.append(ff)
+
+                                for ff in plane.Faces[1:]:
+                                    ff = ff.cut(cutterList, _Py.tolerance)
+                                    fList.append(ff.Faces[0])   # esto tiene que cambiar
+
+                                plane = Part.makeCompound(fList)
+                                pyPlane.shape = plane
+
+                            cutterList.append(plane)
+
+                        else:  # quitar los fronted
+                            print '2'
+                            print 'cutterList ', cutterList
+                            gS = pyPlane.geomShape
+                            plane = self.cutting(plane, cutterList, gS)
+                            pyPlane.shape = plane
+
+                        print pyPlane.shape
+
+        for pyAlign in pyAlignList:
+            pyAlign.end()
