@@ -1314,10 +1314,16 @@ class _PyFace(_Py):
 
             for pyWire in self.wires:
                 for pyPlane in pyWire.planes:
+
+
+
                     plane = pyPlane.shape
                     print 'plane', plane
+
                     if plane:
                         print 'numGeom', pyPlane.numGeom
+
+
 
                         if pyPlane.choped or pyPlane.aligned:
                             print '1'

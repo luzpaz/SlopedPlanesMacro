@@ -702,8 +702,6 @@ class _PyPlane(_Py):
             rangoConsolidate = self.rangoConsolidate
             angle = self.angle
             fronted = self.fronted
-            bigScale = self.bigScale
-            enormousScale = self.enormousScale
             reared = self.reared
 
             if not plane:
@@ -733,8 +731,6 @@ class _PyPlane(_Py):
             pyPlane.simulatedShape = simulated
             pyPlane.angle = angle
             pyPlane.virtualized = True
-            pyPlane.bigScale = bigScale
-            pyPlane.enormousScale = enormousScale
             pyPlane.reared = reared
 
             return pyPlane
