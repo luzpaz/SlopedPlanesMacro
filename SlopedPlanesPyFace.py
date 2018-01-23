@@ -1054,11 +1054,11 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.trimming()
-        # self.printControl('trimming reflexs')
+        self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()
-        # self.printControl('trimming alignments')
+        self.printControl('trimming alignments')
 
     def priorLater(self):
 
@@ -1070,11 +1070,11 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.priorLater()
-        # self.printControl('priorLater wires')
+        self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
-        # self.printControl('priorLater alignments')
+        self.printControl('priorLater alignments')
 
     def simulating(self):
 
@@ -1096,7 +1096,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingChops()
 
-        #self.printControl('simulating')
+        # self.printControl('simulating')
 
     def reflexing(self):
 
@@ -1109,6 +1109,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             if pyWire.reflexs:
                 pyWire.reflexing()
+        self.printControl('reflexing')
 
     def ordinaries(self):
 
@@ -1120,7 +1121,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.ordinaries()
-        # self.printControl('ordinaries')
+        self.printControl('ordinaries')
 
     def betweenWires(self):
 
