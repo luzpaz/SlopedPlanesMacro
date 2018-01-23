@@ -71,8 +71,8 @@ class _PyPlane(_Py):
         self.control = [numGeom]
         self.seedShape = None
         self.seedBigShape = None
-        self.bigScale = 100
-        self.enormousScale = 10000
+        #self.bigScale = 100
+        #self.enormousScale = 10000
         self.reared = False
         self.lineInto = None
 
@@ -517,7 +517,7 @@ class _PyPlane(_Py):
 
         self._seedBigShape = seedBigShape
 
-    @property
+    '''@property
     def bigScale(self):
 
         ''''''
@@ -557,7 +557,7 @@ class _PyPlane(_Py):
         except AttributeError:
             pass
 
-        self._enormousScale = enormousScale
+        self._enormousScale = enormousScale'''
 
     @property
     def reared(self):

@@ -366,16 +366,16 @@ class _PyWire(_Py):
                             if not (pyPrior.reflexed and pyPrior.reared):
                                 # print '1'
                                 cutterList.append(bigPrior)
-                                if pyPrior.bigScale > 1:
-                                    control.append(prior)
+                                #if pyPrior.bigScale > 1:
+                                control.append(prior)
 
                     if not later in control:
                         if not (pyLater.aligned or pyLater.choped):
                             if not (pyLater.reflexed and pyLater.reared):
                                 # print '2'
                                 cutterList.append(bigLater)
-                                if pyLater.bigScale > 1:
-                                    control.append(later)
+                                #if pyLater.bigScale > 1:
+                                control.append(later)
 
                 if cutterList:
                     # print'D'

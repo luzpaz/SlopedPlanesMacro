@@ -714,7 +714,7 @@ class _PyAlignment(_Py):
                 pyPl = pyPlList[rr]
                 if not pyPl.aligned and not pyPl.choped:
                     if pyPl.reflexed:
-                        pl = pyPl.simulatedShape
+                        pl = pyPl.simulatedShape  # bigShape?
                     else:
                         pl = pyPl.bigShape
                     cutList.append(pl)

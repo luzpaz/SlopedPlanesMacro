@@ -375,8 +375,8 @@ To cero the plane width is equal to the related edge length of the base'''
                                     angle = self.selectPlane(angle[0],
                                                              angle[1]).angle
                                     pyPlane.angle = angle
-                                pyPlane.bigScale = 100
-                                pyPlane.enormousScale = 10000
+                                #pyPlane.bigScale = 100
+                                #pyPlane.enormousScale = 10000
                                 pyPlane.reared = False
                                 pyPlane.lineInto = None
 
@@ -433,7 +433,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.aligning()       #
 
-            '''pyFace.end()            # '''
+            pyFace.end()            # '''
 
         if onChanged:
             # print 'AAA'
