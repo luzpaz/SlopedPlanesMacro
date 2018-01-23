@@ -412,7 +412,9 @@ class _PyFace(_Py):
 
                             ref = False
 
-                        self.forBack(pyPlane, 'forward')
+                        if corner == 'reflex':
+
+                            self.forBack(pyPlane, 'forward')
 
                     if corner == 'reflex':
                         # print '1 Reflex: does look for alignments'
@@ -567,38 +569,7 @@ class _PyFace(_Py):
 
                     else:
                         # print '2 Convex: does not look for alignments'
-                        if resetFace:
-                            self.forBack(pyPlane, 'forward')
-                        forward = pyPlane.forward
-                        section = forward.section(shapeGeomWire, tolerance)
-
-                        if section.Edges:
-                            lineEnd = coord[numGeom+1]
-                            for edge in section.Edges:
-                                edgeStart = edge.firstVertex(True).Point
-                                # print 'edgeStart ', edgeStart
-                                edgeEnd = edge.lastVertex(True).Point
-                                # print 'edgeEnd ', edgeEnd
-
-                                distStart = edgeStart.sub(lineEnd).Length
-                                # print 'distStart ', distStart
-                                distEnd = edgeEnd.sub(lineEnd).Length
-                                # print 'distEnd ', distEnd
-
-                                if distStart < distEnd:
-                                    # print 'a'
-                                    point = self.roundVector(edgeStart)
-                                else:
-                                    # print 'b'
-                                    point = self.roundVector(edgeEnd)
-
-                                nGeom = self.findConvexAlignment(numWire, point)
-
-                                pyPlane.control.append(nGeom)
-                                pyPl = pyPlaneList[nGeom]
-                                pyPl.control.append(numGeom)
-
-                                lineEnd = edgeEnd
+                        pass
 
                 pyPrePlane = pyPlane
 
