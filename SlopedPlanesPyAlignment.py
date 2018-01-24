@@ -1123,13 +1123,10 @@ class _PyAlignment(_Py):
                 cont = self.cutting(cont, cutterList, gS)
                 pyCont.shape = cont
 
-            #if not pyTwo.virtualized:
-
+            # ???
             gS = pyTwo.geomShape
             shapeTwo = self.cutting(shapeTwo, [base, cont, shapeOne], gS)
             pyTwo.shape = shapeTwo
-
-            #if not pyOne.virtualized:
 
             gS = pyOne.geomShape
             shapeOne = self.cutting(shapeOne, [cont, base, shapeTwo], gS)
@@ -1154,7 +1151,6 @@ class _PyAlignment(_Py):
                 shapeTwo = pyTwo.shape
 
                 cutterList = [shapeOne, shapeTwo]
-                # cutList.extend(cutterList)
 
                 simulatedC = simulatedChops[numChop]
 

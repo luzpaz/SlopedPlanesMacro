@@ -944,12 +944,10 @@ class _PyPlane(_Py):
         control = self.control
 
         if self.aligned:
-            print 'aligned'
 
             pyAlign = self.selectAlignment(numWire, self.numGeom)
             print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
             line = pyAlign.geomAligned
-            simulatedAlignment = pyAlign.simulatedAlignment
             base = self.shape
 
         cutterList = []
@@ -967,7 +965,7 @@ class _PyPlane(_Py):
                         print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                         ll = pyAli.geomAligned
                         simulAlign = pyAli.simulatedAlignment
- 
+
                         if self.aligned:
                             print 'a1'
                             section = line.section([ll], tolerance)

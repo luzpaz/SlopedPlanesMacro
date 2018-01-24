@@ -447,7 +447,7 @@ class _PyWire(_Py):
         '''ordinaries(self)
         '''
 
-         # all plane with shape, except chops and reflexs and fronted. The plane to be cutted
+         # all plane with shape, except chops and reflexs and fronted.
         for pyPlane in self.planes:
             if not (pyPlane.reflexed and not pyPlane.aligned):
                 if pyPlane.shape:

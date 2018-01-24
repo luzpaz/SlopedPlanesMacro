@@ -1353,8 +1353,7 @@ class _PyFace(_Py):
                         if not section.Vertexes:
 
                             common = simulatedAlign.common(simulAl, tolerance)
-                            com = simulAl.common(simulatedAlign, tolerance)
-                            print 'area ', (pyAlign.base.numGeom, common.Area)
+                            # print 'area ', (pyAlign.base.numGeom, common.Area)
                             if not common.Area:
 
                                 print '### pyAl ', (pyAl.base.numWire, pyAl.base.numGeom)
