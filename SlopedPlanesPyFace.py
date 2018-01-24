@@ -40,8 +40,8 @@ __version__ = ""
 
 class _PyFace(_Py):
 
-    '''The complementary python object class for faces resulting to apply
-    the FaceMaker to the SlopedPlanes base.'''
+    '''The complementary python object class for the faces resulting
+    to apply the FaceMaker to the SlopedPlanes base.'''
 
     def __init__(self, numFace):
 
@@ -335,12 +335,10 @@ class _PyFace(_Py):
             numWire = pyWire.numWire
             # print '###### numWire ', numWire
 
-            pyPlaneList = pyWire.planes
-            shapeGeomWire = pyWire.shapeGeom
-
             ref = False
             pyPrePlane = None
 
+            pyPlaneList = pyWire.planes
             coord = pyWire.coordinates
             eje = coord[1].sub(coord[0])
 
@@ -448,7 +446,6 @@ class _PyFace(_Py):
 
                                 if into:
                                     lineEnd = edgeEnd
-                                # print 'into ', into
 
                                 if distStart < distEnd and into:
                                     # print '1111 aligment'
@@ -577,10 +574,9 @@ class _PyFace(_Py):
                 # print 'alignments ', self.alignments
 
             if resetFace:
-
                 if numWire > 0:
-
                     # print 'firstPlane'
+
                     firstPlane = pyPlaneList[0]
                     if not firstPlane.aligned or not pyPlane.choped:
                         # print 'firstPlane no aligned or pyPlane no choped'
@@ -605,6 +601,7 @@ class _PyFace(_Py):
         if sect.Edges:
             if len(sect.Vertexes) == 2:
                 into = True
+
         return into, lIS
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
@@ -1046,11 +1043,11 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.trimming()
-        self.printControl('trimming reflexs')
+        # self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()
-        self.printControl('trimming alignments')
+        # self.printControl('trimming alignments')
 
     def priorLater(self):
 
@@ -1062,11 +1059,11 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.priorLater()
-        self.printControl('priorLater wires')
+        # self.printControl('priorLater wires')
 
         for pyAlign in self.alignments:
             pyAlign.priorLater()
-        self.printControl('priorLater alignments')
+        # self.printControl('priorLater alignments')
 
     def simulating(self):
 
@@ -1101,7 +1098,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             if pyWire.reflexs:
                 pyWire.reflexing()
-        self.printControl('reflexing')
+        #self.printControl('reflexing')
 
     def ordinaries(self):
 
@@ -1109,18 +1106,18 @@ class _PyFace(_Py):
         Transfers to PyWire.
         '''
 
-        print '######### ordinaries'
+        # print '######### ordinaries'
 
         for pyWire in self.wires:
             pyWire.ordinaries()
-        self.printControl('ordinaries')
+        #self.printControl('ordinaries')
 
     def betweenWires(self):
 
         '''betweenWires(self)
         '''
 
-        print '######### betweenWires'
+        # print '######### betweenWires'
 
         pyWireList = self.wires
         if len(pyWireList) > 1:
@@ -1276,7 +1273,7 @@ class _PyFace(_Py):
         Transfers to PyAlignment.
         '''
 
-        print '######### end'
+        # print '######### end'
 
         tolerance = _Py.tolerance
         pyWireList = self.wires

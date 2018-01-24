@@ -305,7 +305,6 @@ To cero the plane width is equal to the related edge length of the base'''
                 falseFaceList.insert(0, falseFaceOuter[numFace])
 
                 coordinates = [coordinates]
-                # if coordinatesInnerOrdered:
                 coordinates.extend(coordinatesInnerOrdered)
 
                 pyWireListOld = pyFace.wires
