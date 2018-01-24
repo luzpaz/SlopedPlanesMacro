@@ -944,12 +944,13 @@ class _PyPlane(_Py):
         control = self.control
 
         if self.aligned:
-            # print 'aligned'
+            print 'aligned'
 
             pyAlign = self.selectAlignment(numWire, self.numGeom)
-            # print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
+            print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
             line = pyAlign.geomAligned
-            simulatedAlignment = Part.makeCompound(pyAlign.simulatedAlignment)
+            simulatedAlignment = pyAlign.simulatedAlignment
+            base = self.shape
 
         cutterList = []
         for pyPl in pyPlaneList:
@@ -957,45 +958,48 @@ class _PyPlane(_Py):
             if nGeom not in control:
                 pl = pyPl.shape
                 if pl:
-                    # print '### numGeom ', pyPl.numGeom
+                    print '### numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
-                        # print 'a'
+                        print 'a'
 
                         pyAli = self.selectAlignment(numWire, nGeom)
-                        # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                        print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                         ll = pyAli.geomAligned
                         simulAlign = pyAli.simulatedAlignment
-
+ 
                         if self.aligned:
-                            # print 'a1'
+                            print 'a1'
                             section = line.section([ll], tolerance)
                             if not section.Vertexes:
-                                # TODO dos alineaciones en esquina ?
-                                common = simulatedAlignment.common(simulAlign, tolerance)
-                                if not common.Area:
-                                    cutterList.extend(pyAli.simulatedAlignment)
+                                section = base.section([pl], tolerance)
+                                if section.Edges:
+                                    common = base.common(simulAlign, tolerance)
+                                    print 'area ', common.Area
+                                    if not common.Area:
+                                        print 'a11'
+                                        cutterList.extend(pyAli.simulatedAlignment)
 
                         else:
-                            # print 'a2'
+                            print 'a2'
                             cutterList.extend(pyAli.simulatedAlignment)
 
                     elif pyPl.choped:
-                        # print 'b'
+                        print 'b'
                         pass
 
                     else:
-                        # print 'c'
+                        print 'c'
                         cutterList.append(pl)
                         control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList
+            print 'cutterList ', cutterList
             plane = self.shape
             gS = self.geomShape
             plane = self.cutting(plane, cutterList, gS)
             self.shape = plane
-            # print 'plane ', plane
+            print 'plane ', plane
 
     def rangging(self, pyWire, direction):
 

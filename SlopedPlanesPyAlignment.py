@@ -1284,53 +1284,6 @@ class _PyAlignment(_Py):
                         pyPl.shape = pl
                         # print 'rangoChop ', nn
 
-    def endOld(self):
-
-        ''''''
-
-        # print '# self.Base ', self.base.numGeom
-
-        chops = self.chops
-        rangoChop = self.rango
-        rangoRear = self.rangoRear
-        w1 = self.prior.numWire
-        pyPlaneList = _Py.pyFace.wires[w1].planes
-
-        rearList = []
-
-        for r in rangoRear:
-            pyPl = pyPlaneList[r]
-            if not pyPl.choped and not pyPl.aligned:
-                pl = pyPl.shape
-                rearList.append(pl)
-
-        if rearList:
-
-            numChop = -1
-            for rC in rangoChop:
-                numChop += 1
-                [pyOne, pyTwo] = chops[numChop]
-                if pyOne.numWire == w1:
-
-                    chopList = []
-                    for r in rC:
-                        pyPl = pyPlaneList[r]
-                        if not pyPl.choped and not pyPl.aligned:
-                            pl = pyPl.shape
-                            gS = pyPl.geomShape
-                            pl = self.cutting(pl, rearList, gS)
-                            pyPl.shape = pl
-                            chopList.append(pl)
-
-                    if chopList:
-                        for r in rangoRear:
-                            pyPl = pyPlaneList[r]
-                            if not pyPl.choped and not pyPl.aligned:
-                                pl = pyPl.shape
-                                gS = pyPl.geomShape
-                                pl = self.cutting(pl, chopList, gS)
-                                pyPl.shape = pl
-
     def rangging(self):
 
         '''rangging(self)
