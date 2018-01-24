@@ -34,7 +34,9 @@ __version__ = ""
 
 class _PyAlignment(_Py):
 
-    '''The complementary python object class for alignments.'''
+    '''The complementary python object class for alignments. An alignment
+    is formed by two or more edges of the SlopedPlanes base which have
+    the same direction. The edges could belong to different wires'''
 
     def __init__(self):
 
@@ -209,7 +211,10 @@ class _PyAlignment(_Py):
     def virtualizing(self):
 
         '''virtualizing(self)
-        Virtualizes the chops and the base of falsify alignnments.'''
+        Virtualizes the chops which are aligned too, alignments and false
+        alignments.
+        Virtualizes the base of falsify alignnments which belong to
+        other alignment'''
 
         virtualizedChops = []
         for [pyChopOne, pyChopTwo] in self.chops:
@@ -238,8 +243,6 @@ class _PyAlignment(_Py):
 
         pyWireList = _Py.pyFace.wires
         pyWire = pyWireList[0]
-        pyPlaneList = pyWire.planes
-
         falsify = self.falsify
 
         pyBase = self.base
@@ -360,7 +363,7 @@ class _PyAlignment(_Py):
                     pyOne.control.append(nG)
                     pyTwo.control.append(nG)
 
-                    # the aligment doesn't cut rChop ???
+                    # the aligment doesn't cut rChop
                     baseControl.append(nG)
 
                     # rChop doesn't cut with other rChop
@@ -753,7 +756,6 @@ class _PyAlignment(_Py):
                     if section.Edges:
                         cList.append(ff)
 
-                # podría evitarse la repetición de cortes
                 pyOne.simulating(cutList)
                 pyTwo.simulating(cutList)
 
@@ -769,7 +771,6 @@ class _PyAlignment(_Py):
 
             simulatedChops.append(cList[:])
 
-            # esto es un coñazo
             shapeOne = pyOne.simulatedShape
             cList.append(shapeOne)
 
@@ -1178,22 +1179,6 @@ class _PyAlignment(_Py):
                     pyBase.shape = base
                     cutList.append(base)
 
-                    '''shapeOne = pyOne.shape
-                    fList = shapeOne.Faces
-                    if len(fList) > 1:
-                        ff = fList[1]
-                        section = ff.section([base], tolerance)
-                        if not section.Edges:
-                            pyOne.shape = Part.makeCompound(fList[:1])
-
-                    shapeTwo = pyTwo.shape
-                    fList = shapeTwo.Faces
-                    if len(fList) > 1:
-                        ff = fList[1]
-                        section = ff.section([base], tolerance)
-                        if not section.Edges:
-                            pyTwo.shape = Part.makeCompound(fList[:1])'''
-
                 else:
                     # print 'b'
 
@@ -1201,22 +1186,6 @@ class _PyAlignment(_Py):
                     ff = self.selectFace(base.Faces, gS)
                     pyBase.shape = ff
                     cutList.append(ff)
-
-                    '''# if not pyTwo.virtualized:
-                        # print 'bb'
-                    gS = pyTwo.geomShape
-
-                    f = shapeTwo.Faces[0]
-                    f = self.cutting(f, [ff], gS)
-                    fList = [f]
-
-                    for f in shapeTwo.Faces[1:]:
-                        f = f.cut([ff], _Py.tolerance)
-                        fList.append(f.Faces[0])    # esto tiene que cambiar
-
-                    # print 'fList ', fList
-                    compound = Part.makeCompound(fList)
-                    pyTwo.shape = compound'''
 
                     gS = pyCont.geomShape
                     ff = self.selectFace(base.Faces, gS)
@@ -1231,25 +1200,9 @@ class _PyAlignment(_Py):
 
                     pyCont.angle = pyBase.angle
 
-                    '''# if not pyOne.virtualized:
-                        # print 'bbb'
-                    gS = pyOne.geomShape
-
-                    f = shapeOne.Faces[0]
-                    f = self.cutting(f, [ff], gS)
-                    fList = [f]
-
-                    for f in shapeOne.Faces[1:]:
-                        f = f.cut([ff], _Py.tolerance)
-                        fList.append(f.Faces[0])
-
-                    # print 'fList ', fList
-                    compound = Part.makeCompound(fList)
-                    pyOne.shape = compound'''
-
                     pyBase = aligns[numChop]
 
-                '''for nn in rChop:
+                for nn in rChop:
                     pyPl = pyPlList[nn]
                     if not pyPl.choped and not pyPl.aligned:
                         pl = pyPl.shape
@@ -1257,7 +1210,7 @@ class _PyAlignment(_Py):
                             gS = pyPl.geomShape
                             pl = self.cutting(pl, cutList, gS)
                             pyPl.shape = pl
-                            # print 'rangoChop ', nn'''
+                            # print 'rangoChop ', nn
 
     def end(self):
 
