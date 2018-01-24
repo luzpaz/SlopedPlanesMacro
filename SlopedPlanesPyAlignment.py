@@ -1273,16 +1273,24 @@ class _PyAlignment(_Py):
             numChop += 1
             rChop = rangoChop[numChop]
             pyPlList = pyWireList[pyOne.numWire].planes
-            cutList = [pyOne.shape, pyTwo.shape]
-            for nn in rChop:
-                pyPl = pyPlList[nn]
-                if not pyPl.choped and not pyPl.aligned:
-                    pl = pyPl.shape
-                    if pl:
-                        gS = pyPl.geomShape
-                        pl = self.cutting(pl, cutList, gS)
-                        pyPl.shape = pl
-                        # print 'rangoChop ', nn
+            # cutList = [pyOne.shape, pyTwo.shape]
+            cutList = []
+            pyO = self.selectPlane(pyOne.numWire, pyOne.numGeom)
+            if pyO.shape:
+                cutList.append(pyO.shape)
+            pyT = self.selectPlane(pyTwo.numWire, pyTwo.numGeom)
+            if pyT.shape:
+                cutList.append(pyT.shape)
+            if cutList:
+                for nn in rChop:
+                    pyPl = pyPlList[nn]
+                    if not pyPl.choped and not pyPl.aligned:
+                        pl = pyPl.shape
+                        if pl:
+                            gS = pyPl.geomShape
+                            pl = self.cutting(pl, cutList, gS)
+                            pyPl.shape = pl
+                            # print 'rangoChop ', nn
 
     def rangging(self):
 
