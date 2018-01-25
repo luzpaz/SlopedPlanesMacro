@@ -646,7 +646,7 @@ class _PyAlignment(_Py):
         '''simulatingAlignment(self)
         '''
 
-        # print '###### simulatingAlignment ', (self.base.numWire, self.base.numGeom)
+         # print '###### simulatingAlignment ', (self.base.numWire, self.base.numGeom)
 
         chops = self.chops
         falsify = self.falsify

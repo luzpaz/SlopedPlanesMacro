@@ -1117,7 +1117,7 @@ class _PyFace(_Py):
         '''betweenWires(self)
         '''
 
-        # print '######### betweenWires'
+        print '######### betweenWires'
 
         pyWireList = self.wires
         if len(pyWireList) > 1:
@@ -1132,14 +1132,14 @@ class _PyFace(_Py):
 
             cutterFace = []
             for pyW in pyWireList:
-                # print '### nW', pyW.numWire
+                print '### nW', pyW.numWire
                 cutterList = []
                 pyPlaneList = pyW.planes
                 for pyPl in pyPlaneList:
                     if pyPl.shape:
-                        # print '# nG ', pyPl.numGeom
+                        print '# nG ', pyPl.numGeom
                         if not pyPl.choped and not pyPl.fronted and not pyPl.aligned:
-                            # print 'a'
+                            print 'a'
                             pl = pyPl.shape
                             cutterList.append(pl)
 
@@ -1192,7 +1192,8 @@ class _PyFace(_Py):
                                 print 'B'
                                 pyAlign = self.selectAlignmentBase(numWire, pyPlane.numGeom)
                                 line = pyAlign.geomAligned
-                                simulAlign = Part.makeCompound(pyAlign.simulatedAlignment)
+                                # simulAlign = Part.makeCompound(pyAlign.simulatedAlignment)
+                                simulAlign = Part.makeShell(pyAlign.simulatedAlignment)
                                 aList = alignments[:]
                                 aList.remove(pyAlign)
                                 aL = []
@@ -1200,9 +1201,9 @@ class _PyFace(_Py):
                                     ll = pyA.geomAligned
                                     section = line.section([ll], tolerance)
                                     if not section.Vertexes:
-                                        # TODO cambiar este common, ver ordinaries y end
-                                        simulA = pyA.simulatedAlignment
-                                        common = simulAlign.common(simulA, tolerance)
+                                        # simulA = pyA.simulatedAlignment
+                                        simulA = Part.makeShell(pyA.simulatedAlignment)
+                                        common = simulAlign.common([simulA], tolerance)
                                         if not common.Area:
                                             aL.extend(pyA.simulatedAlignment)
                                 cutList.extend(aL)
@@ -1319,8 +1320,8 @@ class _PyFace(_Py):
             numList.append(nList)
             chopList.append(ch)
 
-        print 'frontedList ', frontedList
-        print 'numList ', numList
+        # print 'frontedList ', frontedList
+        # print 'numList ', numList
 
         pyAlignList = self.alignments[:]
 
@@ -1329,7 +1330,7 @@ class _PyFace(_Py):
             number += 1
 
             pyBase = pyAlign.base
-            print '###### pyAlign.base ', (pyBase.numWire, pyBase.numGeom)
+            # print '###### pyAlign.base ', (pyBase.numWire, pyBase.numGeom)
             base = pyBase.shape
             gS = pyBase.geomShape
 
@@ -1356,19 +1357,19 @@ class _PyFace(_Py):
                             # print 'area ', (pyAlign.base.numGeom, common.Area)
                             if not common.Area:
 
-                                print '### pyAl ', (pyAl.base.numWire, pyAl.base.numGeom)
+                                # print '### pyAl ', (pyAl.base.numWire, pyAl.base.numGeom)
 
                                 cutterList = frontedList[num]
                                 nList = numList[num]
                                 if cutterList:
-                                    print 'cutterList ', cutterList
-                                    print 'nList ', nList
+                                    # print 'cutterList ', cutterList
+                                    # print 'nList ', nList
 
                                     if pyBase.numGeom not in nList:
 
                                         base = self.cutting(base, cutterList, gS)
                                         pyBase.shape = base
-                                        print 'base ', base
+                                        # print 'base ', base
 
                                         for pyPlane in pyAlign.aligns:
                                             plane = pyPlane.shape
@@ -1376,7 +1377,7 @@ class _PyFace(_Py):
                                                 gS = pyPlane.geomShape
                                                 plane = self.cutting(plane, cutterList, gS)
                                                 pyPlane.shape = plane
-                                                print 'align ', plane
+                                                # print 'align ', plane
 
                                     rangoChop = pyAlign.rango
                                     numChop = -1
@@ -1387,18 +1388,18 @@ class _PyFace(_Py):
                                         gS = pyOne.geomShape
                                         one = self.cutting(one, cutterList, gS)
                                         pyOne.shape = one
-                                        print 'one ', one
+                                        # print 'one ', one
 
                                         two = pyTwo.shape
                                         gS = pyTwo.geomShape
                                         two = self.cutting(two, cutterList, gS)
                                         pyTwo.shape = two
-                                        print 'two ', two
+                                        # print 'two ', two
 
                                         pyPlaneList = pyWireList[pyOne.numWire].planes
 
                                         rChop = rangoChop[numChop]
-                                        print 'rChop ', rChop
+                                        # print 'rChop ', rChop
                                         if rChop:
                                             for nn in rChop:
                                                 if nn not in nList:
@@ -1409,7 +1410,7 @@ class _PyFace(_Py):
                                                             gS = pyPl.geomShape
                                                             pl = self.cutting(pl, cutterList, gS)
                                                             pyPl.shape = pl
-                                                            print 'rango chop ', (nn, pl)
+                                                            # print 'rango chop ', (nn, pl)
 
         number = -1
         for pyAlign in self.alignments:
@@ -1433,8 +1434,8 @@ class _PyFace(_Py):
                             for [pyOne, pyTwo] in pyAl.chops:
                                 cutterList.extend([pyOne.shape, pyTwo.shape])
 
-                            print 'cutList ', cutList
-                            print 'cutterList ', cutterList
+                            # print 'cutList ', cutList
+                            # print 'cutterList ', cutterList
 
                             rangoChop = pyAlign.rango
                             numChop = -1
