@@ -628,6 +628,19 @@ class _PyAlignment(_Py):
                 enormous = pyOne.enormousShape
                 pyTwo.simulating([enormous, enormousBase])
 
+            if pyOne.virtualized:
+                pyO = self.selectPlane(pyOne.numWire, pyOne.numGeom)
+                if pyO.shape:
+                    pyO.simulating([enormousBase])
+
+            if pyTwo.virtualized:
+                pyT = self.selectPlane(pyTwo.numWire, pyTwo.numGeom)
+                if pyT.shape:
+                    if falsify:
+                        pyT.simulating([enormousCont])
+                    else:
+                        pyT.simulating([enormousBase])
+
     def simulatingAlignment(self):
 
         '''simulatingAlignment(self)
@@ -1356,8 +1369,6 @@ class _PyAlignment(_Py):
                                 gS = pyPl.geomShape
                                 pl = self.cutting(pl, chopList, gS)
                                 pyPl.shape = pl
-
-
 
     def rangging(self):
 

@@ -222,7 +222,7 @@ class _PyReflex(_Py):
 
                 elif rearPyPl.choped:
                     # print 'b'
-                    rearPl = rearPyPl.simulatedShape
+                    rearPl = rearPyPl.simulatedShape  # ???
                     pyR.addLink('cutter', rearPl)
                     # print 'included rear simulated ', (numWire, nGeom)
 
