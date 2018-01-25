@@ -1123,7 +1123,6 @@ class _PyAlignment(_Py):
                 cont = self.cutting(cont, cutterList, gS)
                 pyCont.shape = cont
 
-            # ???
             gS = pyTwo.geomShape
             shapeTwo = self.cutting(shapeTwo, [base, cont, shapeOne], gS)
             pyTwo.shape = shapeTwo
@@ -1175,6 +1174,22 @@ class _PyAlignment(_Py):
                     pyBase.shape = base
                     cutList.append(base)
 
+                    shapeOne = pyOne.shape
+                    fList = shapeOne.Faces
+                    if len(fList) > 1:
+                        ff = fList[1]
+                        section = ff.section([base], tolerance)
+                        if not section.Edges:
+                            pyOne.shape = Part.makeCompound(fList[:1])
+
+                    shapeTwo = pyTwo.shape
+                    fList = shapeTwo.Faces
+                    if len(fList) > 1:
+                        ff = fList[1]
+                        section = ff.section([base], tolerance)
+                        if not section.Edges:
+                            pyTwo.shape = Part.makeCompound(fList[:1])
+
                 else:
                     # print 'b'
 
@@ -1182,6 +1197,13 @@ class _PyAlignment(_Py):
                     ff = self.selectFace(base.Faces, gS)
                     pyBase.shape = ff
                     cutList.append(ff)
+
+                    gS = pyTwo.geomShape
+                    f = shapeTwo.Faces[0]
+                    f = self.cutting(f, [ff], gS)
+                    fList = [f]
+                    compound = Part.makeCompound(fList)
+                    pyTwo.shape = compound
 
                     gS = pyCont.geomShape
                     ff = self.selectFace(base.Faces, gS)
@@ -1195,6 +1217,13 @@ class _PyAlignment(_Py):
                         pass
 
                     pyCont.angle = pyBase.angle
+
+                    gS = pyOne.geomShape
+                    f = shapeOne.Faces[0]
+                    f = self.cutting(f, [ff], gS)
+                    fList = [f]
+                    compound = Part.makeCompound(fList)
+                    pyOne.shape = compound
 
                     pyBase = aligns[numChop]
 
