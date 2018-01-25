@@ -1244,6 +1244,12 @@ class _PyAlignment(_Py):
         # print '# self.Base ', self.base.numGeom
 
         pyWireList = _Py.pyFace.wires
+        pyBase = self.base
+        base = pyBase.shape
+        bList = [base]
+        for pyPl in self.aligns:
+            if pyPl.shape:
+                bList.append(pyPl.shape)
 
         rangoChop = self.rango
         numChop = -1
@@ -1269,6 +1275,89 @@ class _PyAlignment(_Py):
                             pl = self.cutting(pl, cutList, gS)
                             pyPl.shape = pl
                             # print 'rangoChop ', nn
+
+            if pyO.rear:
+                pyPlList = pyWireList[pyO.numWire].planes
+                rOne = pyO.rear[-1]
+                pyRearPl = pyPlList[rOne]
+                if not pyRearPl.aligned and not pyRearPl.choped:
+                    rearPl = pyRearPl.shape
+                    gS = pyRearPl.geomShape
+                    rearPl = self.cutting(rearPl, [pyO.shape] + bList, gS)
+                    pyRearPl.shape = rearPl
+
+                    two = pyT.shape
+                    rango = pyO.rango[-1]
+                    for nn in rango:
+                        pyPl = pyPlList[nn]
+                        if not pyPl.choped and not pyPl.aligned:
+                            pl = pyPl.shape
+                            gS = pyPl.geomShape
+                            pl = self.cutting(pl, [two], gS)
+                            pyPl.shape = pl
+
+            if pyT.rear:
+                pyPlList = pyWireList[pyT.numWire].planes
+                rTwo = pyT.rear[0]
+                pyRearPl = pyPlList[rTwo]
+                if not pyRearPl.aligned and not pyRearPl.choped:
+                    rearPl = pyRearPl.shape
+                    gS = pyRearPl.geomShape
+                    rearPl = self.cutting(rearPl, [pyT.shape] + bList, gS)
+                    pyRearPl.shape = rearPl
+
+                    one = pyO.shape
+                    rango = pyT.rango[0]
+                    for nn in rango:
+                        pyPl = pyPlList[nn]
+                        if not pyPl.choped and not pyPl.aligned:
+                            pl = pyPl.shape
+                            gS = pyPl.geomShape
+                            pl = self.cutting(pl, [one], gS)
+                            pyPl.shape = pl
+
+        chops = self.chops
+        rangoChop = self.rango
+        rangoRear = self.rangoRear
+        w1 = self.prior.numWire
+        pyPlaneList = _Py.pyFace.wires[w1].planes
+
+        rearList = []
+
+        for r in rangoRear:
+            pyPl = pyPlaneList[r]
+            if not pyPl.choped and not pyPl.aligned:
+                pl = pyPl.shape
+                rearList.append(pl)
+
+        if rearList:
+
+            numChop = -1
+            for rC in rangoChop:
+                numChop += 1
+                [pyOne, pyTwo] = chops[numChop]
+                if pyOne.numWire == w1:
+
+                    chopList = []
+                    for r in rC:
+                        pyPl = pyPlaneList[r]
+                        if not pyPl.choped and not pyPl.aligned:
+                            pl = pyPl.shape
+                            gS = pyPl.geomShape
+                            pl = self.cutting(pl, rearList, gS)
+                            pyPl.shape = pl
+                            chopList.append(pl)
+
+                    if chopList:
+                        for r in rangoRear:
+                            pyPl = pyPlaneList[r]
+                            if not pyPl.choped and not pyPl.aligned:
+                                pl = pyPl.shape
+                                gS = pyPl.geomShape
+                                pl = self.cutting(pl, chopList, gS)
+                                pyPl.shape = pl
+
+
 
     def rangging(self):
 
