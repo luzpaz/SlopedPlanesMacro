@@ -1031,6 +1031,10 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.virtualizing()
 
+        for pyWire in self.wires:
+            for pyPlane in pyWire.planes:
+                print (pyPlane.numGeom, pyPlane.simulatedShape)
+
     def trimming(self):
 
         '''trimming(self)
@@ -1049,6 +1053,10 @@ class _PyFace(_Py):
             pyAlign.trimming()
         # self.printControl('trimming alignments')
 
+        for pyWire in self.wires:
+            for pyPlane in pyWire.planes:
+                print (pyPlane.numGeom, pyPlane.simulatedShape)
+
     def priorLater(self):
 
         '''priorLater(self)
@@ -1064,6 +1072,10 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.priorLater()
         # self.printControl('priorLater alignments')
+
+        for pyWire in self.wires:
+            for pyPlane in pyWire.planes:
+                print (pyPlane.numGeom, pyPlane.simulatedShape)
 
     def simulating(self):
 
@@ -1085,7 +1097,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingChops()
 
-        # self.printControl('simulating')
+        self.printControl('simulating')
 
     def reflexing(self):
 
@@ -1098,7 +1110,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             if pyWire.reflexs:
                 pyWire.reflexing()
-        #self.printControl('reflexing')
+        self.printControl('reflexing')
 
     def ordinaries(self):
 
@@ -1161,97 +1173,101 @@ class _PyFace(_Py):
 
                 for pyPlane in pyWire.planes:
                     cutList = cutterList[:]
-                    if not pyPlane.fronted:
-                        plane = pyPlane.shape
-                        if plane:
-                            print '# numGeom ', pyPlane.numGeom
-                            gS = pyPlane.geomShape
+                    # if not pyPlane.fronted:
+                    plane = pyPlane.shape
+                    if plane:
+                        print '# numGeom ', pyPlane.numGeom
+                        gS = pyPlane.geomShape
 
-                            if pyPlane.choped:
-                                print 'A'
-                                aList = alignments[:]
-                                print 'aList ', aList
-                                pyAlignList = self.selectAllAlignment(numWire, pyPlane.numGeom)
-                                print 'pyAlignList ', pyAlignList
-                                baseList = []
-                                for pyA in pyAlignList:
-                                    aList.remove(pyA)
-                                    baseList.append(pyA.base.enormousShape)
+                        if pyPlane.fronted:
+                            print '0'
+                            pass
 
-                                aL = []
-                                print 'aList ', aList
-                                for aa in aList:
-                                    sim = aa.base.shape.copy()
-                                    geomShape = aa.geomAligned
-                                    sim = self.cutting(sim, baseList, geomShape)
-                                    aL.append(sim)
-                                print 'aL ', aL
-                                cutList.extend(aL)
+                        elif pyPlane.choped:
+                            print 'A'
+                            aList = alignments[:]
+                            print 'aList ', aList
+                            pyAlignList = self.selectAllAlignment(numWire, pyPlane.numGeom)
+                            print 'pyAlignList ', pyAlignList
+                            baseList = []
+                            for pyA in pyAlignList:
+                                aList.remove(pyA)
+                                baseList.append(pyA.base.enormousShape)
 
-                            elif pyPlane.aligned:
-                                print 'B'
-                                pyAlign = self.selectAlignmentBase(numWire, pyPlane.numGeom)
-                                line = pyAlign.geomAligned
-                                # simulAlign = Part.makeCompound(pyAlign.simulatedAlignment)
-                                simulAlign = Part.makeShell(pyAlign.simulatedAlignment)
-                                aList = alignments[:]
-                                aList.remove(pyAlign)
-                                aL = []
-                                for pyA in aList:
-                                    ll = pyA.geomAligned
-                                    section = line.section([ll], tolerance)
-                                    if not section.Vertexes:
-                                        # simulA = pyA.simulatedAlignment
-                                        simulA = Part.makeShell(pyA.simulatedAlignment)
-                                        common = simulAlign.common([simulA], tolerance)
-                                        if not common.Area:
-                                            aL.extend(pyA.simulatedAlignment)
-                                cutList.extend(aL)
+                            aL = []
+                            print 'aList ', aList
+                            for aa in aList:
+                                sim = aa.base.shape.copy()
+                                geomShape = aa.geomAligned
+                                sim = self.cutting(sim, baseList, geomShape)
+                                aL.append(sim)
+                            print 'aL ', aL
+                            cutList.extend(aL)
 
-                            else:
-                                print 'C'
-                                cutList.extend(aliList)
+                        elif pyPlane.aligned:
+                            print 'B'
+                            pyAlign = self.selectAlignmentBase(numWire, pyPlane.numGeom)
+                            line = pyAlign.geomAligned
+                            # simulAlign = Part.makeCompound(pyAlign.simulatedAlignment)
+                            simulAlign = Part.makeShell(pyAlign.simulatedAlignment)
+                            aList = alignments[:]
+                            aList.remove(pyAlign)
+                            aL = []
+                            for pyA in aList:
+                                ll = pyA.geomAligned
+                                section = line.section([ll], tolerance)
+                                if not section.Vertexes:
+                                    # simulA = pyA.simulatedAlignment
+                                    simulA = Part.makeShell(pyA.simulatedAlignment)
+                                    common = simulAlign.common([simulA], tolerance)
+                                    if not common.Area:
+                                        aL.extend(pyA.simulatedAlignment)
+                            cutList.extend(aL)
 
-                            if cutList:
+                        else:
+                            print 'C'
+                            cutList.extend(aliList)
 
-                                print 'cutList ', cutList
+                        if cutList:
 
-                                if isinstance(plane, Part.Compound):
-                                    print '1'
+                            print 'cutList ', cutList
 
-                                    # esto hay que revisarlo
-                                    if len(plane.Faces) > 1:
-                                        print '11'
+                            if isinstance(plane, Part.Compound):
+                                print '1'
 
-                                        fList = []
-                                        for ff in plane.Faces:
-                                            ff = ff.cut(cutList, tolerance)
-                                            fList.append(ff.Faces[0])   # esto hay que cambiarlo
-                                        compound = Part.makeCompound(fList)
-                                        pyPlane.shape = compound
+                                # esto hay que revisarlo
+                                if len(plane.Faces) > 1:
+                                    print '11'
 
-                                    else:
-                                        print '12'
-
-                                        plane = plane.cut(cutList, tolerance)
-                                        fList = []
-                                        ff = self.cutting(plane, cutList, gS)
-                                        fList.append(ff)
-                                        plane = plane.removeShape([ff])
-                                        for ff in plane.Faces:
-                                            section = ff.section(fList, tolerance)
-                                            if not section.Edges:
-                                                fList.append(ff)
-                                                break
-                                        compound = Part.makeCompound(fList)
-                                        pyPlane.shape = compound
+                                    fList = []
+                                    for ff in plane.Faces:
+                                        ff = ff.cut(cutList, tolerance)
+                                        fList.append(ff.Faces[0])   # esto hay que cambiarlo
+                                    compound = Part.makeCompound(fList)
+                                    pyPlane.shape = compound
 
                                 else:
-                                    print '2'
-                                    plane = self.cutting(plane, cutList, gS)
-                                    pyPlane.shape = plane
+                                    print '12'
 
-                                print 'SHAPE ', pyPlane.shape
+                                    plane = plane.cut(cutList, tolerance)
+                                    fList = []
+                                    ff = self.cutting(plane, cutList, gS)
+                                    fList.append(ff)
+                                    plane = plane.removeShape([ff])
+                                    for ff in plane.Faces:
+                                        section = ff.section(fList, tolerance)
+                                        if not section.Edges:
+                                            fList.append(ff)
+                                            break
+                                    compound = Part.makeCompound(fList)
+                                    pyPlane.shape = compound
+
+                            else:
+                                print '2'
+                                plane = self.cutting(plane, cutList, gS)
+                                pyPlane.shape = plane
+
+                            print 'SHAPE ', pyPlane.shape
 
     def aligning(self):
 
