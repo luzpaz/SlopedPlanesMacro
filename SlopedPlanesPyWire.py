@@ -186,6 +186,9 @@ class _PyWire(_Py):
                 numGeom = pyPlane.numGeom
                 numWire = pyPlane.numWire
 
+                rango = []
+                oppRango = []
+
                 if num == 0:
                     if pyPlane.rear:
                         rango = pyPlane.rango[0]
@@ -293,7 +296,6 @@ class _PyWire(_Py):
                 numGeom = pyPlane.numGeom
                 control = pyPlane.control
                 print '### numGeom ', numGeom
-                print pyPlane.simulatedShape
 
                 prior = self.sliceIndex(numGeom-1, lenWire)
                 later = self.sliceIndex(numGeom+1, lenWire)
@@ -394,6 +396,7 @@ class _PyWire(_Py):
                     pyPlane.shape = plane
 
                 if cutList:
+                    print 'E'
                     simulated = pyPlane.simulatedShape
                     simulated = self.cutting(simulated, cutList, gS)
                     pyPlane.simulatedShape = simulated
@@ -411,7 +414,7 @@ class _PyWire(_Py):
         '''reflexing(self)
         '''
 
-        # print '###### reflexing wire ', self.numWire
+        print '###### reflexing wire ', self.numWire
 
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
@@ -427,7 +430,6 @@ class _PyWire(_Py):
             pyReflex.solveReflexTwo(self)
         self.printControl('solveReflex')
 
-        # TODO problems!!!
         for pyReflex in self.reflexs:
             pyReflex.rearing(self, False)
 

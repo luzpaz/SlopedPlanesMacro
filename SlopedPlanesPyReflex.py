@@ -228,9 +228,9 @@ class _PyReflex(_Py):
 
                 elif rearPyPl.reflexed:
                     print 'c'
-                    ## rearPl = rearPyPl.simulatedShape
+                    rearPl = rearPyPl.simulatedShape
                     # # OJO
-                    rearPl = rearPyPl.bigShape
+                    # # rearPl = rearPyPl.bigShape
                     pyR.addLink('cutter', rearPl)
                     print 'included rear simulated', (numWire, nGeom)
 
@@ -524,7 +524,7 @@ class _PyReflex(_Py):
         cList = [pyOppR.enormousShape]
         if not pyR.aligned:
             cList.extend(pyR.cutter)
-        print 'pyR.cutter ', pyR.cutter, len(pyR.cutter)
+        # print 'pyR.cutter ', pyR.cutter, len(pyR.cutter)
 
         aa = aa.cut(cList, tolerance)
         print 'aa.Faces ', aa.Faces, len(aa.Faces)
@@ -582,6 +582,7 @@ class _PyReflex(_Py):
                     print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
                 # TODO corregir
+                # TODO cambiar a rango con dirección
 
                 corner = []
                 for num in pyR.rangoConsolidate:
@@ -598,7 +599,10 @@ class _PyReflex(_Py):
                         print pyPl.simulatedShape
                     else:
                         print 'c'
-                        corner.append(pyPl.shape)
+                        pl = pyPl.shape.copy()
+                        gShape = pyPl.geomShape
+                        pl = self.cutting(pl, [pyOppR.enormousShape, rr.enormousShape], gShape)
+                        corner.append(pl)
                         print pyPl.shape
 
                 bList = []

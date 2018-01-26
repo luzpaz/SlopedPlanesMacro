@@ -816,10 +816,9 @@ class _PyPlane(_Py):
 
         if direction == 'forward':
             rear = self.rear[0]
-            oppRear = pyOppPlane.rear[-1]
+
         else:
             rear = self.rear[-1]
-            oppRear = pyOppPlane.rear[0]
 
         if self.choped:
             if pyOppPlane.aligned:
@@ -833,13 +832,11 @@ class _PyPlane(_Py):
         # for numG in rear:
 
         pyPl = pyPlaneList[rear]
-        # pyOppPl = pyPlaneList[oppRear]
 
         if not pyPl.aligned:
 
             gS = pyPl.geomShape
             pl = pyPl.shape
-            # oppPl = pyOppPl.shape
             forw = pyPl.forward
             control = pyPl.control
 
@@ -851,7 +848,6 @@ class _PyPlane(_Py):
 
             if condition:
                 print 'rear ', rear
-                print 'oppRear ', oppRear
 
                 if not fo:
                     print 'no fo'
@@ -927,7 +923,7 @@ class _PyPlane(_Py):
                         if not pl.section([forw], tolerance).Edges:
                             print 'fo11'
                             gS = self.geomShape
-                            plane = self.cutting(plane, [pl], gS)   # cambiar por bigShape
+                            plane = self.cutting(plane, [pl], gS)   # cambiar por bigShape ## OJO
                             compound = Part.Compound([plane])
                             self.shape = compound
                             self.control.append(rear)
@@ -1011,6 +1007,9 @@ class _PyPlane(_Py):
             plane = self.shape
             gS = self.geomShape
             if self.reflexed and not self.aligned:
+
+                # TODO control forward
+
                 if len(plane.Faces) == 1:
                     plane = self.cutting(plane, cutterList, gS)
                     self.shape = plane
