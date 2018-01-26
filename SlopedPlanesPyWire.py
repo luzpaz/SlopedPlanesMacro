@@ -446,8 +446,9 @@ class _PyWire(_Py):
 
          # all plane with shape, except chops and reflexs and fronted.
         for pyPlane in self.planes:
-            if not (pyPlane.reflexed and not pyPlane.aligned):
+            # if not (pyPlane.reflexed and not pyPlane.aligned):
+            if not pyPlane.choped:
                 if pyPlane.shape:
                     if not pyPlane.fronted:
-                        # print '###### ordinaries ', (pyPlane.numWire, pyPlane.numGeom)
+                        print '###### ordinaries ', (pyPlane.numWire, pyPlane.numGeom)
                         pyPlane.ordinaries(self)

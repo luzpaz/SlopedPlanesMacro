@@ -1031,10 +1031,6 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.virtualizing()
 
-        for pyWire in self.wires:
-            for pyPlane in pyWire.planes:
-                print (pyPlane.numGeom, pyPlane.simulatedShape)
-
     def trimming(self):
 
         '''trimming(self)
@@ -1053,10 +1049,6 @@ class _PyFace(_Py):
             pyAlign.trimming()
         # self.printControl('trimming alignments')
 
-        for pyWire in self.wires:
-            for pyPlane in pyWire.planes:
-                print (pyPlane.numGeom, pyPlane.simulatedShape)
-
     def priorLater(self):
 
         '''priorLater(self)
@@ -1072,10 +1064,6 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.priorLater()
         # self.printControl('priorLater alignments')
-
-        for pyWire in self.wires:
-            for pyPlane in pyWire.planes:
-                print (pyPlane.numGeom, pyPlane.simulatedShape)
 
     def simulating(self):
 
