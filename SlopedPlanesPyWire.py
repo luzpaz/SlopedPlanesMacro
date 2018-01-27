@@ -153,10 +153,6 @@ class _PyWire(_Py):
                         pyPlane.rangging(self, direction)
                         direction = "backward"
 
-                        for rr in pyPlane.rear:
-                            pyRearPlane = pyPlaneList[rr]
-                            pyRearPlane.reared = True
-
     def virtualizing(self):
 
         ''''''
@@ -378,14 +374,12 @@ class _PyWire(_Py):
 
                     if not prior in control:
                         if not (pyPrior.aligned or pyPrior.choped):
-                            # if not (pyPrior.reflexed and pyPrior.reared):  # quitar
                             # print '1'
                             cutterList.append(bigPrior)
                             # control.append(prior)
 
                     if not later in control:
                         if not (pyLater.aligned or pyLater.choped):
-                            # if not (pyLater.reflexed and pyLater.reared):  # quitar
                             # print '2'
                             cutterList.append(bigLater)
                             # control.append(later)
@@ -414,7 +408,7 @@ class _PyWire(_Py):
         '''reflexing(self)
         '''
 
-        # print '###### reflexing wire ', self.numWire
+        print '###### reflexing wire ', self.numWire
 
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)

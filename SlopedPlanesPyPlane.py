@@ -71,7 +71,6 @@ class _PyPlane(_Py):
         self.control = [numGeom]
         self.seedShape = None
         self.seedBigShape = None
-        self.reared = False
         self.lineInto = None
 
     @property
@@ -516,20 +515,6 @@ class _PyPlane(_Py):
         self._seedBigShape = seedBigShape
 
     @property
-    def reared(self):
-
-        ''''''
-
-        return self._reared
-
-    @reared.setter
-    def reared(self, reared):
-
-        ''''''
-
-        self._reared = reared
-
-    @property
     def lineInto(self):
 
         ''''''
@@ -702,7 +687,6 @@ class _PyPlane(_Py):
             rangoConsolidate = self.rangoConsolidate
             angle = self.angle
             fronted = self.fronted
-            reared = self.reared
 
             if not plane:
                 (nWire, nGeom) = angle
@@ -731,7 +715,6 @@ class _PyPlane(_Py):
             pyPlane.simulatedShape = simulated
             pyPlane.angle = angle
             pyPlane.virtualized = True
-            pyPlane.reared = reared
 
             return pyPlane
 
@@ -794,7 +777,7 @@ class _PyPlane(_Py):
         '''rearing(self, pyWire, pyReflex)
         '''
 
-        # print '# rearing ', (self.numWire, self.numGeom)
+        print '# rearing ', (self.numWire, self.numGeom)
 
         tolerance = _Py.tolerance
         plane = self.shape

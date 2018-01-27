@@ -1099,7 +1099,7 @@ class _PyFace(_Py):
         Transfers to PyWire.
         '''
 
-        # print '######### reflexing'
+        print '######### reflexing'
 
         for pyWire in self.wires:
             if pyWire.reflexs:

@@ -374,7 +374,6 @@ To cero the plane width is equal to the related edge length of the base'''
                                     angle = self.selectPlane(angle[0],
                                                              angle[1]).angle
                                     pyPlane.angle = angle
-                                pyPlane.reared = False
                                 pyPlane.lineInto = None
 
                         except IndexError:
@@ -424,7 +423,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.reflexing()      #
 
-            pyFace.ordinaries()     #
+            '''pyFace.ordinaries()     #
 
             pyFace.betweenWires()   #
 
