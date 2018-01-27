@@ -764,6 +764,7 @@ class _PyFace(_Py):
             # vertex = section.Vertexes[1]
             vertex = section.Vertexes[-1]
             # esto necesita ser bastante mas completo, necesitara into
+            # no esta probado
 
         print vertex.Point
         print edge
