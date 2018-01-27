@@ -941,7 +941,7 @@ class _PyPlane(_Py):
         if self.aligned:
 
             pyAlign = self.selectAlignment(numWire, self.numGeom)
-            # print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
+            print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
             line = pyAlign.geomAligned
             base = self.shape
 
@@ -951,67 +951,83 @@ class _PyPlane(_Py):
             if nGeom not in control:
                 pl = pyPl.shape
                 if pl:
-                    # print '### numGeom ', pyPl.numGeom
+                    print '### numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
-                        # print 'a'
+                        print 'a'
 
                         pyAli = self.selectAlignment(numWire, nGeom)
-                        # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                        print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                         ll = pyAli.geomAligned
                         simulAlign = pyAli.simulatedAlignment
 
                         if self.aligned:
-                            # print 'a1'
+                            print 'a1'
                             section = line.section([ll], tolerance)
                             if not section.Vertexes:
                                 section = base.section([pl], tolerance)
                                 if section.Edges:
                                     common = base.common(simulAlign, tolerance)
-                                    # print 'area ', common.Area
+                                    print 'area ', common.Area
                                     if not common.Area:
-                                        # print 'a11'
+                                        print 'a11'
                                         cutterList.extend(pyAli.simulatedAlignment)
 
                         else:
-                            # print 'a2'
+                            print 'a2'
                             cutterList.extend(pyAli.simulatedAlignment)
 
                     elif pyPl.choped:
-                        # print 'b'
+                        print 'b'
                         pass
 
                     else:
-                        # print 'c'
+                        print 'c'
                         cutterList.append(pl)
                         control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList
+            print 'cutterList ', cutterList
             plane = self.shape
             gS = self.geomShape
             if self.reflexed and not self.aligned:
-
-                # TODO control forward
+                print '1'
 
                 if len(plane.Faces) == 1:
-                    plane = self.cutting(plane, cutterList, gS)
+                    print '11'
+                    plane = plane.cut(cutterList, tolerance)
+                    ff = self.selectFace(plane.Faces, gS)
+                    fList = [ff]
+                    plane = plane.removeShape([ff])
+                    for ff in plane.Faces:
+                        section = ff.section(fList, tolerance)
+                        if not section.Edges:
+                            fList.append(ff)
+                            break
+                    compound = Part.makeCompound(fList)
+                    self.shape = compound
+                    print 'fList ', fList
+                    print 'compound ', compound
+                    '''plane = self.cutting(plane, cutterList, gS)
                     self.shape = plane
-                    # print 'plane ', plane
+                    print 'plane ', plane'''
 
                 else:
+                    print '12'
                     fList = []
                     for ff in plane.Faces:
                         ff = ff.cut(cutterList, tolerance)
-                        fList.append(ff.Faces[0])   # esto hay que cambiarlo
+                        fList.append(ff.Faces[0])   # esto hay que cambiarlo?
                     compound = Part.makeCompound(fList)
-                    # print 'fList ', fList
                     self.shape = compound
+                    print 'fList ', fList
+                    print 'compound ', compound
 
             else:
+                print '2'
                 plane = self.cutting(plane, cutterList, gS)
                 self.shape = plane
-                # print 'plane ', plane
+                print 'plane ', plane
 
     def rangging(self, pyWire, direction):
 
