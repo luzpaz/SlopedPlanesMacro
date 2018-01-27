@@ -451,6 +451,10 @@ class _PyReflex(_Py):
                     print '61'
                     pass
 
+                elif forwa.section([fo], tolerance).Vertexes:
+                    print '611'
+                    pass
+
                 else:
                     print '62'
                     pl = pyPl.shape.copy()
@@ -600,8 +604,8 @@ class _PyReflex(_Py):
                     else:
                         print 'c'
                         pl = pyPl.shape.copy()
-                        gShape = pyPl.geomShape
-                        pl = self.cutting(pl, [pyOppR.enormousShape, rr.enormousShape], gShape)
+                        '''gShape = pyPl.geomShape
+                        pl = self.cutting(pl, [pyOppR.enormousShape, rr.enormousShape], gShape)'''
                         corner.append(pl)
                         print pyPl.shape
 
@@ -739,6 +743,8 @@ class _PyReflex(_Py):
                         for pyPlane in pyReflex.planes:
                             if pyPlane not in self.planes:
                                 print pyPlane.numGeom
+
+                                # EXCLUIR EL RANGO CORNER. ver 'T reflexed'
 
                                 fo = pyPlane.forward
                                 ba = pyPlane.backward

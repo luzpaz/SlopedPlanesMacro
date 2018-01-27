@@ -720,6 +720,8 @@ class _PyFace(_Py):
         Finds the rear plane of a reflexed plane.
         Determines if a arrow situacion happens.'''
 
+        print 'findRear ', (pyPlane.numWire, pyPlane.numGeom)
+
         tolerance = _Py.tolerance
         shapeGeomWire = pyWire.shapeGeom
         sGW = Part.Wire(shapeGeomWire)
@@ -729,9 +731,9 @@ class _PyFace(_Py):
 
         lineShape = pyPlane.forward
         section = lineShape.section([sGW], tolerance)
-        # print 'section.Edges ', section.Edges
-        # print 'section.Vertexes ', section.Vertexes
-        # print[v.Point for v in section.Vertexes]
+        print 'section.Edges ', section.Edges
+        print 'section.Vertexes ', section.Vertexes
+        print[v.Point for v in section.Vertexes]
 
         if len(section.Vertexes) == 1:
             return
@@ -739,50 +741,52 @@ class _PyFace(_Py):
         edge = False
 
         if pyPlane.lineInto:
-            # print 'a'
+            print 'a'
 
             section = pyPlane.lineInto.section([sGW], tolerance)
             vertex = section.Vertexes[1]
 
         elif section.Edges:
-            # print 'b'
+            print 'b'
 
             edge = True
 
             if direction == 'forward':
-                # print 'b1'
+                print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
 
             else:
-                # print 'b2'
+                print 'b2'
                 vertex = section.Edges[-1].Vertexes[1]
 
         else:
-            # print 'c'
-            vertex = section.Vertexes[1]
+            print 'c'
+            # vertex = section.Vertexes[1]
+            vertex = section.Vertexes[-1]
+            # esto necesita ser bastante mas completo, necesitara into
 
-        # print vertex.Point
-        # print edge
+        print vertex.Point
+        print edge
 
         coord = pyWire.coordinates
 
         try:
 
             nGeom = coord.index(self.roundVector(vertex.Point))
-            # print 'on vertex'
+            print 'on vertex'
 
             if edge:
                 if direction == 'forward':
-                    # print 'aa'
+                    print 'aa'
                     nGeom = self.sliceIndex(nGeom-1, lenWire)
 
             else:
                 if direction == 'backward':
-                    # print 'bb'
+                    print 'bb'
                     nGeom = self.sliceIndex(nGeom-1, lenWire)
 
         except ValueError:
-            # print 'not in vertex (edge False)'
+            print 'not in vertex (edge False)'
 
             nGeom = -1
             for geomShape in shapeGeomWire:
@@ -791,7 +795,7 @@ class _PyFace(_Py):
                 if sect.Vertexes:
                     break
 
-        # print 'nGeom ', nGeom
+        print 'nGeom ', nGeom
         pyPlane.addValue('rear', nGeom, direction)
 
         # arrow
