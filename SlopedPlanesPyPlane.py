@@ -918,8 +918,9 @@ class _PyPlane(_Py):
                             # print 'fo21'
 
                             gS = self.geomShape
-                            big = pyPl.bigShape  # MUCHO OJO
-                            plane = self.cutting(plane, [big], gS)
+                            '''big = pyPl.bigShape  # MUCHO OJO
+                            plane = self.cutting(plane, [big], gS)'''
+                            plane = self.cutting(plane, [pl], gS)
                             compound = Part.Compound([plane])
                             self.shape = compound
 

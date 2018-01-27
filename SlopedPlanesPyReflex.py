@@ -551,7 +551,7 @@ class _PyReflex(_Py):
                 if section.Edges:
                     cutterList.append(ff)
                 elif section.Vertexes:
-                    section = ff.section([rrG], tolerance)
+                    section = ff.section([rrG], tolerance)  # podría dar problemas en interiores sin trasera
                     if not section.Vertexes:
                         cutterList.append(ff)
         print 'cutterList ', cutterList, len(cutterList)

@@ -435,6 +435,8 @@ class _PyWire(_Py):
 
         # '''
 
+        # en interiores un reflexed con una sola trasera da lugar a innecesaria repeticiòn
+
     def ordinaries(self):
 
         '''ordinaries(self)
