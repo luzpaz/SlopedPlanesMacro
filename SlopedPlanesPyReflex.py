@@ -451,9 +451,9 @@ class _PyReflex(_Py):
                     print '61'
                     pass
 
-                elif forwa.section([fo], tolerance).Vertexes:
+                    '''elif forwa.section([fo], tolerance).Vertexes:
                     print '611'
-                    pass
+                    pass''' # MAL
 
                 else:
                     print '62'
@@ -744,7 +744,7 @@ class _PyReflex(_Py):
                             if pyPlane not in self.planes:
                                 print pyPlane.numGeom
 
-                                # EXCLUIR EL RANGO CORNER. ver 'T reflexed'
+                                # EXCLUIR EL RANGO CORNER. ver 'T reflexed'. NOO
 
                                 fo = pyPlane.forward
                                 ba = pyPlane.backward

@@ -761,10 +761,12 @@ class _PyFace(_Py):
 
         else:
             print 'c'
-            # vertex = section.Vertexes[1]
-            vertex = section.Vertexes[-1]
+            vertex = section.Vertexes[1]
+            # vertex = section.Vertexes[-1]
             # esto necesita ser bastante mas completo, necesitara into
             # no esta probado
+            if len(section.Vertexes) > 2:
+                edge = True
 
         print vertex.Point
         print edge
