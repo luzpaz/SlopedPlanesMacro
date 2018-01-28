@@ -427,10 +427,10 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.rearing(self, False)
 
-        '''for pyReflex in self.reflexs:
+        for pyReflex in self.reflexs:
             pyReflex.postProcess(self)
 
-        for pyReflex in self.reflexs:
+        '''for pyReflex in self.reflexs:
             pyReflex.rearing(self, True)
 
         # '''

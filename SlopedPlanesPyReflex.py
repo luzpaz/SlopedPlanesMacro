@@ -786,55 +786,49 @@ class _PyReflex(_Py):
         planeList = self.planes
         tolerance = _Py.tolerance
 
-        forw = planeList[1].forward
+        pyOppPlane = planeList[1]
+        forwardOpp = pyOppPlane.forward
 
-        for pyPl in self.planes:
-            pl = pyPl.shape
+        for pyPlane in self.planes:
+            plane = pyPlane.shape
 
-            if len(pl.Faces) == 1:
-                print '# cutted ', pyPl.numGeom
+            if len(plane.Faces) == 1:
+                print '# cutted ', pyPlane.numGeom
 
-                forward = pyPl.forward
-                gS = pyPl.geomShape
+                forward = pyPlane.forward
+                gS = pyPlane.geomShape
 
                 cutterList = []
                 for pyReflex in pyWire.reflexs:
                     if pyReflex != self:
-                        for pyPlane in pyReflex.planes:
-                            if pyPlane not in self.planes:
-                                print pyPlane.numGeom
+                        for pyPl in pyReflex.planes:
+                            if pyPl not in self.planes:
+                                print pyPl.numGeom
 
-                                fo = pyPlane.forward
-                                ba = pyPlane.backward
-
-                                section = fo.section([forward], tolerance)
-                                sect = fo.section([forw], tolerance)
-
-                                if section.Vertexes or sect.Vertexes:
+                                fo = pyPl.forward
+                                ba = pyPl.backward
+                                pl = pyPl.shape
+                                section = pl.section([fo, ba], tolerance)
+                                if not section.Edges:
                                     print 'a'
-
-                                    plane = pyPlane.shape
-
-                                    # subir o invertir
-                                    section =\
-                                        plane.section([fo, ba], tolerance)
-
-                                    if not section.Edges:
+                                    section = fo.section([forward], tolerance)
+                                    sect = fo.section([forwardOpp], tolerance)
+                                    if section.Vertexes or sect.Vertexes:
                                         print 'b'
-
-                                        cutterList.append(plane)
-                                        print '# included cutter ', pyPlane.numGeom
-                                        pyPl.control.append(pyPlane.numGeom)
+                                        cutterList.append(pl)
+                                        print '# included cutter ', pyPl.numGeom
+                                        pyPlane.control.append(pyPl.numGeom)
 
                 if cutterList:
                     print 'cutterList', cutterList
 
-                    ff = pl.Faces[0]
+                    ff = plane.Faces[0]
                     ff = self.cutting(ff, cutterList, gS)
                     compound = Part.Compound([ff])
-                    pyPl.shape = compound
+                    pyPlane.shape = compound
 
-            forw = planeList[0].forward
+            pyOppPlane = planeList[0]
+            forwardOpp = pyOppPlane.forward
 
     def rearing(self, pyWire, case):
 
