@@ -185,14 +185,14 @@ class _PyReflex(_Py):
         pyOppR = pyPlaneList[1]
 
         direction = "forward"
-        print '### direction ', direction
-        print(pyR.numGeom, pyOppR.numGeom)
+        # print '### direction ', direction
+        # print(pyR.numGeom, pyOppR.numGeom)
         if not pyR.cutter:
             self.twin(pyWire, pyR, pyOppR, direction)
 
         direction = "backward"
-        print '### direction ', direction
-        print(pyOppR.numGeom, pyR.numGeom)
+        # print '### direction ', direction
+        # print(pyOppR.numGeom, pyR.numGeom)
         if not pyOppR.cutter:
             self.twin(pyWire, pyOppR, pyR, direction)
 
@@ -807,9 +807,10 @@ class _PyReflex(_Py):
                                 print pyPl.numGeom
 
                                 fo = pyPl.forward
-                                ba = pyPl.backward
+                                # ba = pyPl.backward
                                 pl = pyPl.shape
-                                section = pl.section([fo, ba], tolerance)
+                                # section = pl.section([fo, ba], tolerance)
+                                section = pl.section([fo], tolerance)
                                 if not section.Edges:
                                     print 'a'
                                     section = fo.section([forward], tolerance)
