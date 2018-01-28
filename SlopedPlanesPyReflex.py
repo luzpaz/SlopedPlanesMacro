@@ -614,10 +614,7 @@ class _PyReflex(_Py):
                             section = ff.section(corn, tolerance)
                             if section.Edges:
                                 print 'd'
-                                section = ff.section([rrS], tolerance)  # no sirve para nada?
-                                if section.Edges:
-                                    print 'e'
-                                    bList.append(ff)
+                                bList.append(ff)
 
                 print 'bList ', bList
 
@@ -655,9 +652,6 @@ class _PyReflex(_Py):
 
         print '### ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflexTwo(reflex, oppReflex, pyR, pyOppR, pyWire, 'forward')
-
-        '''reflex = pyR.shape
-        oppReflex = pyOppR.shape'''
 
         print '### ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, pyWire, 'backward')
@@ -787,7 +781,7 @@ class _PyReflex(_Py):
 
         ''''''
 
-        # print '### postProcess'
+        print '### postProcess'
 
         planeList = self.planes
         tolerance = _Py.tolerance
@@ -798,7 +792,7 @@ class _PyReflex(_Py):
             pl = pyPl.shape
 
             if len(pl.Faces) == 1:
-                # print '# cutted ', pyPl.numGeom
+                print '# cutted ', pyPl.numGeom
 
                 forward = pyPl.forward
                 gS = pyPl.geomShape
@@ -808,7 +802,7 @@ class _PyReflex(_Py):
                     if pyReflex != self:
                         for pyPlane in pyReflex.planes:
                             if pyPlane not in self.planes:
-                                # print pyPlane.numGeom
+                                print pyPlane.numGeom
 
                                 fo = pyPlane.forward
                                 ba = pyPlane.backward
@@ -817,7 +811,7 @@ class _PyReflex(_Py):
                                 sect = fo.section([forw], tolerance)
 
                                 if section.Vertexes or sect.Vertexes:
-                                    # print 'a'
+                                    print 'a'
 
                                     plane = pyPlane.shape
 
@@ -826,14 +820,14 @@ class _PyReflex(_Py):
                                         plane.section([fo, ba], tolerance)
 
                                     if not section.Edges:
-                                        # print 'b'
+                                        print 'b'
 
                                         cutterList.append(plane)
-                                        # print '# included cutter ', pyPlane.numGeom
+                                        print '# included cutter ', pyPlane.numGeom
                                         pyPl.control.append(pyPlane.numGeom)
 
                 if cutterList:
-                    # print 'cutterList', cutterList
+                    print 'cutterList', cutterList
 
                     ff = pl.Faces[0]
                     ff = self.cutting(ff, cutterList, gS)

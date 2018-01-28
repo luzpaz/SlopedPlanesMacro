@@ -424,10 +424,10 @@ class _PyWire(_Py):
             pyReflex.solveReflexTwo(self)
         # self.printControl('solveReflex')
 
-        '''for pyReflex in self.reflexs:
+        for pyReflex in self.reflexs:
             pyReflex.rearing(self, False)
 
-        for pyReflex in self.reflexs:
+        '''for pyReflex in self.reflexs:
             pyReflex.postProcess(self)
 
         for pyReflex in self.reflexs:

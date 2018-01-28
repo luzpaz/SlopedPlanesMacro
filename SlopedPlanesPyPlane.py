@@ -777,156 +777,116 @@ class _PyPlane(_Py):
         '''rearing(self, pyWire, pyReflex)
         '''
 
-        print '# rearing ', (self.numWire, self.numGeom)
+        print '### rearing ', (self.numWire, self.numGeom)
 
         tolerance = _Py.tolerance
-        plane = self.shape
         forward = self.forward
-
-        fo = False
+        plane = self.shape
         if plane.section([forward], tolerance).Edges:
-            # print 'fo'
-            fo = True
+            print 'foo'
+            return
 
         pyPlaneList = pyWire.planes
 
         if direction == "forward":
             pyOppPlane = pyReflex.planes[1]
-        else:
-            pyOppPlane = pyReflex.planes[0]
-        oppPlane = pyOppPlane.shape
-        # print 'pyOppPlane.numGeom ', pyOppPlane.numGeom
-
-        if direction == 'forward':
             rear = self.rear[0]
 
         else:
+            pyOppPlane = pyReflex.planes[0]
             rear = self.rear[-1]
+
+        oppPlane = pyOppPlane.shape
+        print 'pyOppPlane ', pyOppPlane.numGeom
 
         if self.choped:
             if pyOppPlane.aligned:
-                # print 'a'
+                print 'a'
                 rear = rear[1]
             else:
-                # print 'b'
+                print 'b'
                 rear = rear[0]
-        # print 'rear ', rear
 
-        # for numG in rear:
+        pyRearPl = pyPlaneList[rear]
+        print 'pyRearPl ', rear
 
-        pyPl = pyPlaneList[rear]
+        if not pyRearPl.aligned:
 
-        if not pyPl.aligned:
-
-            gS = pyPl.geomShape
-            pl = pyPl.shape
-            forw = pyPl.forward
-            control = pyPl.control
+            gS = pyRearPl.geomShape
+            rearPl = pyRearPl.shape
+            control = pyRearPl.control
 
             if case:
-                condition = not (pyPl.aligned or pyPl.choped)
+                condition = not (pyRearPl.aligned or pyRearPl.choped)
 
             else:
-                condition = (pyPl.reflexed and not pyPl.aligned and not pyPl.choped)
+                condition = (pyRearPl.reflexed and not pyRearPl.aligned and not pyRearPl.choped)
 
             if condition:
-                # print 'rear ', rear
 
-                if not fo:
-                    # print 'no fo'
+                cList = []
+                if self.numGeom not in control:
+                    cList.append(plane)
+                    print 'included ', self.numGeom
+                    control.append(self.numGeom)
 
-                    cList = []
-                    if self.numGeom not in control:
-                        cList.append(plane)
-                        # print 'included ', self.numGeom
-                        control.append(self.numGeom)
+                if pyOppPlane.numGeom not in control:
+                    cList.append(oppPlane)
+                    print 'included ', pyOppPlane.numGeom
+                    control.append(pyOppPlane.numGeom)
 
-                    if pyOppPlane.numGeom not in control:
-                        cList.append(oppPlane)
-                        # print 'included ', pyOppPlane.numGeom
-                        control.append(pyOppPlane.numGeom)
+                if cList:
+                    print 'cList ', cList
 
-                    if cList:
-                        # print 'cList ', cList
+                    if isinstance(rearPl, Part.Compound):
+                        print 'aa'
 
-                        if isinstance(pl, Part.Compound):
-                            # print 'aa'
+                        if len(rearPl.Faces) > 1:
+                            print 'aa1'
 
-                            if len(pl.Faces) > 1:
-                                # print 'aa1'
+                            aList = []
+                            for ff in rearPl.Faces:
+                                section = ff.section([gS], tolerance)
+                                ff = ff.cut(cList, tolerance)
+                                if section.Edges:
+                                    print 'aa11'
+                                    ff = self.selectFace(ff.Faces, gS)
+                                    aList.append(ff)
+                                else:
+                                    print 'aa12'
+                                    aList.append(ff.Faces[0])
 
-                                aList = []
-                                for ff in pl.Faces:
-                                    section = ff.section([gS], tolerance)
-                                    ff = ff.cut(cList, tolerance)
-                                    if section.Edges:
-                                        # print 'aa11'
-                                        ff = self.selectFace(ff.Faces, gS)
-                                        aList.append(ff)
-                                    else:
-                                        # print 'aa12'
-                                        aList.append(ff.Faces[0])
-
-                                compound = Part.Compound(aList)
-                                pyPl.shape = compound
-
-                            else:
-                                # print 'aa2'
-                                pl = self.cutting(pl, cList, gS)
-                                compound = Part.Compound([pl])
-                                pyPl.shape = compound
+                            compound = Part.Compound(aList)
+                            pyRearPl.shape = compound
 
                         else:
-                            # print 'bb'
-                            pl = self.cutting(pl, cList, gS)
-                            pyPl.shape = pl
+                            print 'aa2'
+                            rearPl = self.cutting(rearPl, cList, gS)
+                            compound = Part.Compound([rearPl])
+                            pyRearPl.shape = compound
 
-                        if len(plane.Faces) == 1:
-                            # print 'AA'
-
-                            gS = self.geomShape
-                            plane = self.cutting(plane, [pl], gS)
-                            compound = Part.Compound([plane])
-                            self.shape = compound
-                            self.control.append(rear)
-
-                        if len(oppPlane.Faces) == 1:
-                            # print 'BB'
-
-                            gS = pyOppPlane.geomShape
-                            oppPlane = self.cutting(oppPlane, [pl], gS)
-                            compound = Part.Compound([oppPlane])
-                            pyOppPlane.shape = compound
-                            pyOppPlane.control.append(rear)
-
-                else:
-                    # print 'fo'
-                    if pyPl.reflexed:
-                        # print 'fo1'
-                        if not pl.section([forw], tolerance).Edges:
-                            # print 'fo11'
-                            gS = self.geomShape
-                            plane = self.cutting(plane, [pl], gS)   # cambiar por bigShape ## OJO
-                            compound = Part.Compound([plane])
-                            self.shape = compound
-                            self.control.append(rear)
                     else:
-                        # print 'fo2'
-                        # if not self.choped:
+                        print 'bb'
+                        rearPl = self.cutting(rearPl, cList, gS)
+                        pyRearPl.shape = rearPl
 
-                        if not self.choped and not self.aligned:
-                            # print 'fo21'
+                    if len(plane.Faces) == 1:
+                        print 'AA'
 
-                            gS = self.geomShape
-                            big = pyPl.bigShape  # MUCHO OJO
-                            plane = self.cutting(plane, [big], gS)
-                            #plane = self.cutting(plane, [pl], gS)
-                            compound = Part.Compound([plane])
-                            self.shape = compound
+                        gS = self.geomShape
+                        plane = self.cutting(plane, [rearPl], gS)
+                        compound = Part.Compound([plane])
+                        self.shape = compound
+                        self.control.append(rear)
 
-                            gS = pyPl.geomShape
-                            pl = self.cutting(pl, [compound], gS)
-                            pyPl.shape = pl
+                    if len(oppPlane.Faces) == 1:
+                        print 'BB'
+
+                        gS = pyOppPlane.geomShape
+                        oppPlane = self.cutting(oppPlane, [rearPl], gS)
+                        compound = Part.Compound([oppPlane])
+                        pyOppPlane.shape = compound
+                        pyOppPlane.control.append(rear)
 
     def ordinaries(self, pyWire):
 
