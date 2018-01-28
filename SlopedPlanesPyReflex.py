@@ -785,6 +785,7 @@ class _PyReflex(_Py):
 
         planeList = self.planes
         tolerance = _Py.tolerance
+        reflexList = pyWire.reflexs
 
         pyOppPlane = planeList[1]
         forwardOpp = pyOppPlane.forward
@@ -799,7 +800,7 @@ class _PyReflex(_Py):
                 gS = pyPlane.geomShape
 
                 cutterList = []
-                for pyReflex in pyWire.reflexs:
+                for pyReflex in reflexList:
                     if pyReflex != self:
                         for pyPl in pyReflex.planes:
                             if pyPl not in self.planes:
@@ -829,6 +830,85 @@ class _PyReflex(_Py):
 
             pyOppPlane = planeList[0]
             forwardOpp = pyOppPlane.forward
+
+    def postProcessTwo(self, pyWire):
+
+        ''''''
+
+        print '### postProcessTwo'
+
+        rangoInter = self.rango
+        if not rangoInter:
+            return
+
+        tolerance = _Py.tolerance
+        pyPlaneList = pyWire.planes
+        reflexList = pyWire.reflexs
+        refList = self.planes
+
+        pyOppPlane = refList[1]
+        oppRear = pyOppPlane.rear[-1]
+        rear = refList[0].rear[0]
+
+        for pyPlane in refList:
+            plane = pyPlane.shape
+
+            forward = pyPlane.forward
+
+            section = plane.section([forward], tolerance)
+            if section.Edges:
+                print '# cutted ', pyPlane.numGeom
+
+                pyRearPlane = pyPlaneList[rear]
+                rearPl = pyRearPlane.shape
+                pyOppRearPlane = pyPlaneList[oppRear]
+
+                # esta cutterList se debe trabajar mejor
+
+                cutterList = [rearPl, pyOppRearPlane.shape]
+
+                for pyReflex in reflexList:
+                    for pyPl in pyReflex.planes:
+                        if pyPl.numGeom in rangoInter:
+                            print pyPl.numGeom
+
+                            pl = pyPl.shape
+                            section = pl.section([rearPl], tolerance)
+
+                            if section.Edges:
+                                print 'a'
+                                cutterList.append(pl)
+                                print '# included cutter ', pyPl.numGeom
+                                pyPlane.control.append(pyPl.numGeom)
+
+                print 'cutterList', cutterList
+
+                gS = pyPlane.geomShape
+
+                if len(plane.Faces) == 1:
+
+                    plane = self.cutting(plane, cutterList, gS)
+                    aList = [plane]
+
+                else:
+
+                    ff = plane.Faces[0]
+                    aList = [ff]
+
+                    ff = plane.Faces[1]
+                    ff = ff.cut(cutterList, tolerance)
+                    for f in ff.Faces:
+                        section = f.section([forward], tolerance)
+                        if not section.Edges:
+                            aList.append(f)
+                            break
+
+                compound = Part.Compound(aList)
+                pyPlane.shape = compound
+
+            pyOppPlane = refList[0]
+            oppRear = pyOppPlane.rear[0]
+            rear = refList[1].rear[-1]
 
     def rearing(self, pyWire, case):
 
