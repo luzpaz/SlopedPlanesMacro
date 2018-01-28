@@ -1044,20 +1044,25 @@ class _PyPlane(_Py):
         rangoConsolidate = []
 
         if lenRear == 0:
+            # print 'A'
 
             rango = [[]]
 
         elif lenRear == 1:
+            # print 'B'
 
             [nGeom] = rear
 
             if nGeom > numGeom:
+                # print 'B1'
 
                 if direction == "forward":
+                    # print 'B11'
                     num = self.sliceIndex(numGeom+2, lenWire)
                     ran = range(num, nGeom)
 
                 else:
+                    # print 'B12'
                     ranA = range(nGeom+1, lenWire)
                     ranA.reverse()
                     ranB = range(0, numGeom-1)
@@ -1065,18 +1070,24 @@ class _PyPlane(_Py):
                     ran = ranB + ranA
 
             else:
+                # print 'B2'
 
                 if direction == "forward":
+                    # print 'B21'
                     ran = range(numGeom+2, lenWire) +\
                         range(0, nGeom)
 
                 else:
+                    # print 'B22'
                     ran = range(nGeom+1, numGeom-1)
+                    ran.reverse()
 
             rango.append(ran)
             rangoConsolidate.extend(ran)
 
         elif lenRear == 2:
+            # print 'C'
+
             [nGeom1, nGeom2] = rear
 
             number = -1
@@ -1084,23 +1095,29 @@ class _PyPlane(_Py):
                 number += 1
 
                 if number == 0:
+                    # print 'C1'
 
                     if numGeom < nG:
+                        # print 'C11'
                         ran = range(numGeom+2, nG)
 
                     else:
+                        # print 'C12'
                         ranA = range(numGeom+2, lenWire)
                         ranB = range(0, nG)
                         ran = ranA + ranB
 
                 else:
+                    # print 'C2'
 
                     if numGeom < nG:
+                        # print 'C21'
                         ranA = range(nG+1, lenWire)
                         ranB = range(0, numGeom-1)
                         ran = ranA + ranB
 
                     else:
+                        # print 'C22'
                         ran = range(nG+1, numGeom-1)
 
                 rango.append(ran)

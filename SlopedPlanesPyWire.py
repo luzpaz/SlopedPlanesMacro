@@ -420,11 +420,11 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
 
-        for pyReflex in self.reflexs:
+        for pyReflex in self.reflexs[:2]:
             pyReflex.solveReflexTwo(self)
         # self.printControl('solveReflex')
 
-        for pyReflex in self.reflexs:
+        '''for pyReflex in self.reflexs:
             pyReflex.rearing(self, False)
 
         for pyReflex in self.reflexs:
