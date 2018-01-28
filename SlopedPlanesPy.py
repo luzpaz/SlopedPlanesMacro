@@ -228,7 +228,6 @@ class _Py(object):
         if cross != origin:
             cross.normalize()
 
-            # TODO dos lineas alineadas
             if cross == _Py.normal:
                 corner = 'convex'
             else:
@@ -573,7 +572,7 @@ class _Py(object):
 
         return geom
 
-    def deGeom(self):
+    def doGeom(self):
 
         ''''''
 

@@ -77,14 +77,13 @@ class _TaskPanel_SlopedPlanes():
 
         taskPanel.setWindowTitle("SlopedPlanes")
         self.title.setText("SlopedPlanes parameters")
-        titleToolTip = '''The angles correspond with the faces of the SlopedPlanes. The numeration start
+        titleToolTip = '''The angles correspond with the faces of the SlopedPlanes shape. The numeration start
 at the LowerLeft corner and increase counter clockwise for exterior wires, and
-at the UpperLeft corner and increase clocwise for the interior wires.'''
+at the UpperLeft corner and increase clockwise for the interior wires.'''
         self.title.setToolTip(titleToolTip)
 
         self.advancedOptions.setText("Advanced Options")
-        advancedOptionsToolTip = '''More parameters to control the faces of the SlopedPlanes.
-Remember to apply the modifications before to pop down the advaced options window, or loose the changes'''
+        advancedOptionsToolTip = '''More parameters to control the faces of the SlopedPlanes.'''
         self.advancedOptions.setToolTip(advancedOptionsToolTip)
 
         if self.advancedOptions.isChecked():

@@ -33,7 +33,12 @@ __version__ = ""
 
 class _PyWire(_Py):
 
-    '''The complementary python object class for wires.'''
+    '''The complementary python object class for wires. Two consecutive planes
+    of the same wire could make reflex corners.
+    The planes could make alignments with others planes even belonging
+    to different wires.
+    The exterior wires round counterclockwise, from the lowerleft point.
+    The interior wires round clockwise, from the upperleft point.'''
 
     def __init__(self, numWire):
 
@@ -136,8 +141,6 @@ class _PyWire(_Py):
         Transfers to PyPlane.
         Arranges the reflex range and its planes ranges.
         '''
-
-        pyPlaneList = self.planes
 
         for pyPlane in self.planes:
             if pyPlane.geomAligned:

@@ -546,7 +546,7 @@ class _PyPlane(_Py):
             # print 'no seed'
 
             coordinates = pyWire.coordinates
-            geom = self.deGeom()
+            geom = self.doGeom()
             eje = coordinates[numGeom+1].sub(coordinates[numGeom])
             direction = self.rotateVector(eje, _Py.normal, 90)
             angle = self.angle

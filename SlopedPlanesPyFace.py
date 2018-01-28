@@ -41,7 +41,8 @@ __version__ = ""
 class _PyFace(_Py):
 
     '''The complementary python object class for the faces resulting
-    to apply the FaceMaker to the SlopedPlanes base.'''
+    to apply the FaceMaker to the SlopedPlanes base.
+    The faces could have several wires, and as a consequense holes.'''
 
     def __init__(self, numFace):
 
@@ -464,8 +465,8 @@ class _PyFace(_Py):
 
                                         fAng = self.findAngle(numWire, numGeom)
                                         sAng = self.findAngle(nWire, nGeom)
-                                        fGeom = pyPlane.deGeom()
-                                        sGeom = pyPl.deGeom()
+                                        fGeom = pyPlane.doGeom()
+                                        sGeom = pyPl.doGeom()
 
                                         # TODO curved
 
@@ -718,9 +719,7 @@ class _PyFace(_Py):
 
         '''findRear(self, pyWire, pyPlane, direction)
         Finds the rear plane of a reflexed plane.
-        Determines if a arrow situacion happens.'''
-
-        # print 'findRear ', (pyPlane.numWire, pyPlane.numGeom)
+        Determines if an arrow situacion happens.'''
 
         tolerance = _Py.tolerance
         shapeGeomWire = pyWire.shapeGeom
@@ -1043,8 +1042,6 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment.
         '''
 
-        # self.printSummary()
-
         # print '######### trimming'
 
         for pyWire in self.wires:
@@ -1267,7 +1264,6 @@ class _PyFace(_Py):
 
         '''aligning(self)
         Transfers to PyAlignment.
-        Arranges de end operations.
         '''
 
         # print '######### aligning'

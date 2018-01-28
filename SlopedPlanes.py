@@ -41,7 +41,7 @@ __version__ = ""
 __doc__ = '''Requieres a sketch or DWire as base.
              The base must support the FaceMaker.
              The angles numeration corresponds
-             to the faces of the SlopedPlane's shape.'''
+             to the faces of the SlopedPlanes shape.'''
 
 
 def makeSlopedPlanes(sketch):
@@ -83,7 +83,7 @@ class _SlopedPlanes(_Py):
 
         - the two lists:
             Pyth: the complementary python objects
-            faceList: faces produced by the base'''
+            faceList: faces produced by the FaceMaker over the base'''
 
         doc = "The sketch or Dwire in which the SlopedPlanes is based"
 
@@ -195,9 +195,9 @@ To cero the plane width is equal to the related edge length of the base'''
         sketchAngle = sketch.Placement.Rotation.Angle
         shape.Placement = FreeCAD.Placement()
 
+        _Py.slopedPlanes = slopedPlanes
         _Py.tolerance = slopedPlanes.Tolerance
         _Py.reverse = slopedPlanes.Reverse
-        _Py.slopedPlanes = slopedPlanes
         _Py.upList = []
 
         faceMaker = slopedPlanes.FaceMaker
@@ -246,6 +246,7 @@ To cero the plane width is equal to the related edge length of the base'''
             faceList = self.faceList
 
         # procedees face by face and stores them into the Proxy
+
         pyFaceListOld = self.Pyth
         pyFaceListNew = []
         numFace = -1
@@ -258,8 +259,9 @@ To cero the plane width is equal to the related edge length of the base'''
             _Py.face = face
 
             if onChanged:
-                # elaborates complementary python objects of a face
                 # print 'AA'
+
+                # elaborates complementary python objects of a face
 
                 coordinates = coordinatesOuterOrdered[numFace]
                 for pyFace in pyFaceListOld:
@@ -423,7 +425,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
             pyFace.reflexing()      #
 
-            '''pyFace.ordinaries()     #
+            pyFace.ordinaries()     #
 
             pyFace.betweenWires()   #
 

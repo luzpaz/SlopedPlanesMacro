@@ -213,7 +213,7 @@ class _PyAlignment(_Py):
         '''virtualizing(self)
         Virtualizes the chops which are aligned too, alignments and false
         alignments.
-        Virtualizes the base of falsify alignnments which belong to
+        Virtualizes the base of falsify alignnments which belongs to
         other alignment'''
 
         virtualizedChops = []
@@ -242,7 +242,6 @@ class _PyAlignment(_Py):
         # print '###### trimming base ', (self.base.numWire, self.base.numGeom)
 
         pyWireList = _Py.pyFace.wires
-        pyWire = pyWireList[0]
         falsify = self.falsify
 
         pyBase = self.base
