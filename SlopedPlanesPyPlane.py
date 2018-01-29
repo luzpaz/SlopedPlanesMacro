@@ -821,6 +821,7 @@ class _PyPlane(_Py):
 
             else:
                 condition = (pyRearPl.reflexed and not pyRearPl.aligned and not pyRearPl.choped and len(plane.Faces) > 1)
+                # condition = (pyRearPl.reflexed and not pyRearPl.aligned and not pyRearPl.choped)
 
             if condition:
 

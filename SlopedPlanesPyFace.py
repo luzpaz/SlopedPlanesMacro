@@ -1046,7 +1046,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.trimming()
-        # self.printControl('trimming reflexs')
+        self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()

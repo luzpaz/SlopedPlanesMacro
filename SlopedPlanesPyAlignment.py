@@ -509,9 +509,9 @@ class _PyAlignment(_Py):
         prior = pyPrior.shape
         later = pyLater.shape
         pr = pyPrior.numGeom
-        # print 'pr ', (pyPrior.numWire, pr)
+        # print 'prior ', (pyPrior.numWire, pr)
         lat = pyLater.numGeom
-        # print 'lat ', (pyLater.numWire, lat)
+        # print 'later ', (pyLater.numWire, lat)
         bigPrior = pyPrior.bigShape
         bigLater = pyLater.bigShape
 

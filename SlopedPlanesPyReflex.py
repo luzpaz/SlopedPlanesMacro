@@ -177,6 +177,56 @@ class _PyReflex(_Py):
                     pyPlane.shape = plane
                     # print 'plane ', plane
 
+        num = -1
+        for pyPlane in self.planes:
+            num += 1
+            print '### cutter Two ', pyPlane.numGeom
+
+            pyOppPlane = self.planes[num-1]
+            if pyOppPlane.rear and pyPlane.rear:
+
+                rango = []
+
+                if num == 0:
+                    rango = pyPlane.rango[0]
+                    rear = pyPlane.rear[0]
+                    oppRear = pyOppPlane.rear[-1]
+                else:
+                    rango = pyPlane.rango[-1]
+                    rear = pyPlane.rear[-1]
+                    oppRear = pyOppPlane.rear[0]
+
+                # print 'rango ', rango
+                # print 'oppRear ', oppRear
+                # print 'rear ', rear
+
+                pyRearPlane = pyPlaneList[rear]
+                if pyRearPlane.reflexed:
+                    rearPlane = pyRearPlane.simulatedShape
+                else:
+                    rearPlane = pyRearPlane.shape
+
+                pyOppRearPlane = pyPlaneList[oppRear]
+                if pyOppRearPlane.reflexed:
+                    oppRearPlane = pyOppRearPlane.simulatedShape
+                else:
+                    oppRearPlane = pyOppRearPlane.shape
+
+                for nG in rango:
+                    pyPl = pyPlaneList[nG]
+                    control = pyPl.control
+
+                    if oppRear not in control:
+                        print '# cutted Two ', nG
+
+                        if not pyPl.reflexed:
+                            print 'a'
+                            pl = pyPl.shape
+                            gS = pyPl.geomShape
+                            pl = self.cutting(pl, [oppRearPlane, rearPlane], gS)
+                            pyPl.shape = pl
+                            control.append(oppRear)
+
     def reflexing(self, pyWire):
 
         '''reflexing(self, pyWire)
@@ -778,6 +828,7 @@ class _PyReflex(_Py):
             else:
                 pass
                 print 'C'
+                # TODO aqui falta algo
 
     def postProcess(self, pyWire):
 

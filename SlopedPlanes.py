@@ -116,13 +116,14 @@ class _SlopedPlanes(_Py):
                                  "SlopedPlanes", doc)
 
         doc = '''Gives a plane on top of the SlopedPlanes.
-The Up could break the interior wires numeration.
+The Up could break the interior wires planes numeration.
 First give the angles and later apply Up.'''
 
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanes", doc)
 
         doc = '''Gives a thickness to the SlopedPlanes.
+The Thickness breaks the planes numeration.
 First give the angles and later apply thickness.'''
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
