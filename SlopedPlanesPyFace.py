@@ -1042,11 +1042,11 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment.
         '''
 
-        print '######### trimming'
+        # print '######### trimming'
 
         for pyWire in self.wires:
             pyWire.trimming()
-        self.printControl('trimming reflexs')
+        # self.printControl('trimming reflexs')
 
         for pyAlign in self.alignments:
             pyAlign.trimming()
@@ -1058,7 +1058,7 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment.
         '''
 
-        print '######### priorLater'
+        # print '######### priorLater'
 
         for pyWire in self.wires:
             pyWire.priorLater()
@@ -1074,7 +1074,7 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment.
         '''
 
-        print '######### simulating'
+        # print '######### simulating'
 
         for pyWire in self.wires:
             pyWire.simulating()
@@ -1088,7 +1088,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingChops()
 
-        # self.printControl('simulating')
+        self.printControl('simulating')
 
     def reflexing(self):
 
@@ -1101,7 +1101,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             if pyWire.reflexs:
                 pyWire.reflexing()
-        # self.printControl('reflexing')
+        self.printControl('reflexing')
 
     def ordinaries(self):
 
@@ -1109,7 +1109,7 @@ class _PyFace(_Py):
         Transfers to PyWire.
         '''
 
-        print '######### ordinaries'
+        # print '######### ordinaries'
 
         for pyWire in self.wires:
             pyWire.ordinaries()
@@ -1120,7 +1120,7 @@ class _PyFace(_Py):
         '''betweenWires(self)
         '''
 
-        print '######### betweenWires'
+        # print '######### betweenWires'
 
         pyWireList = self.wires
         if len(pyWireList) > 1:
@@ -1131,72 +1131,72 @@ class _PyFace(_Py):
             aliList = []
             for ali in alignments:
                 aliList.extend(ali.simulatedAlignment)
-            print 'aliList ', aliList
+            # print 'aliList ', aliList
 
             cutterFace = []
             for pyW in pyWireList:
-                print '### nW', pyW.numWire
+                # print '### nW', pyW.numWire
                 cutterList = []
                 pyPlaneList = pyW.planes
                 for pyPl in pyPlaneList:
                     if pyPl.shape:
-                        print '# nG ', pyPl.numGeom
+                        # print '# nG ', pyPl.numGeom
                         if not pyPl.choped and not pyPl.fronted and not pyPl.aligned:
-                            print 'a'
+                            # print 'a'
                             pl = pyPl.shape
                             cutterList.append(pl)
 
                 cutterFace.append(cutterList)
 
-            print 'cutterFace ', cutterFace
+            # print 'cutterFace ', cutterFace
 
             numWire = -1
             for pyWire in pyWireList:
                 numWire += 1
-                print '### numWire ', numWire
+                # print '### numWire ', numWire
 
                 pop = cutterFace.pop(numWire)
                 cutterList = []
                 for cL in cutterFace:
                     cutterList.extend(cL)
                 cutterFace.insert(numWire, pop)
-                print 'cutterList ', cutterList
+                # print 'cutterList ', cutterList
 
                 for pyPlane in pyWire.planes:
                     cutList = cutterList[:]
                     # if not pyPlane.fronted:
                     plane = pyPlane.shape
                     if plane:
-                        print '# numGeom ', pyPlane.numGeom
+                        # print '# numGeom ', pyPlane.numGeom
                         gS = pyPlane.geomShape
 
                         if pyPlane.fronted:
-                            print '0'
+                            # print '0'
                             pass
 
                         elif pyPlane.choped:
-                            print 'A'
+                            # print 'A'
                             aList = alignments[:]
-                            print 'aList ', aList
+                            # print 'aList ', aList
                             pyAlignList = self.selectAllAlignment(numWire, pyPlane.numGeom)
-                            print 'pyAlignList ', pyAlignList
+                            # print 'pyAlignList ', pyAlignList
                             baseList = []
                             for pyA in pyAlignList:
                                 aList.remove(pyA)
                                 baseList.append(pyA.base.enormousShape)
 
                             aL = []
-                            print 'aList ', aList
+                            # print 'aList ', aList
                             for aa in aList:
                                 sim = aa.base.shape.copy()
                                 geomShape = aa.geomAligned
                                 sim = self.cutting(sim, baseList, geomShape)
                                 aL.append(sim)
-                            print 'aL ', aL
+                            # print 'aL ', aL
                             cutList.extend(aL)
 
                         elif pyPlane.aligned:
-                            print 'B'
+                            # print 'B'
                             pyAlign = self.selectAlignmentBase(numWire, pyPlane.numGeom)
                             line = pyAlign.geomAligned
                             # simulAlign = Part.makeCompound(pyAlign.simulatedAlignment)
@@ -1216,19 +1216,19 @@ class _PyFace(_Py):
                             cutList.extend(aL)
 
                         else:
-                            print 'C'
+                            # print 'C'
                             cutList.extend(aliList)
 
                         if cutList:
 
-                            print 'cutList ', cutList
+                            # print 'cutList ', cutList
 
                             if isinstance(plane, Part.Compound):
-                                print '1'
+                                # print '1'
 
                                 # esto hay que revisarlo
                                 if len(plane.Faces) > 1:
-                                    print '11'
+                                    # print '11'
 
                                     fList = []
                                     for ff in plane.Faces:
@@ -1238,7 +1238,7 @@ class _PyFace(_Py):
                                     pyPlane.shape = compound
 
                                 else:
-                                    print '12'
+                                    # print '12'
 
                                     plane = plane.cut(cutList, tolerance)
                                     fList = []
@@ -1254,11 +1254,11 @@ class _PyFace(_Py):
                                     pyPlane.shape = compound
 
                             else:
-                                print '2'
+                                # print '2'
                                 plane = self.cutting(plane, cutList, gS)
                                 pyPlane.shape = plane
 
-                            print 'SHAPE ', pyPlane.shape
+                            # print 'SHAPE ', pyPlane.shape
 
     def aligning(self):
 
@@ -1266,7 +1266,7 @@ class _PyFace(_Py):
         Transfers to PyAlignment.
         '''
 
-        print '######### aligning'
+        # print '######### aligning'
 
         pyAlignList = self.alignments
 
@@ -1280,7 +1280,7 @@ class _PyFace(_Py):
         Transfers to PyAlignment.
         '''
 
-        print '######### end'
+        # print '######### end'
 
         tolerance = _Py.tolerance
         pyWireList = self.wires

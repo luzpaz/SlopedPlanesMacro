@@ -180,7 +180,7 @@ class _PyReflex(_Py):
         num = -1
         for pyPlane in self.planes:
             num += 1
-            print '### cutter Two ', pyPlane.numGeom
+            # print '### cutter Two ', pyPlane.numGeom
 
             pyOppPlane = self.planes[num-1]
             if pyOppPlane.rear and pyPlane.rear:
@@ -217,10 +217,10 @@ class _PyReflex(_Py):
                     control = pyPl.control
 
                     if oppRear not in control:
-                        print '# cutted Two ', nG
+                        # print '# cutted Two ', nG
 
                         if not pyPl.reflexed:
-                            print 'a'
+                            # print 'a'
                             pl = pyPl.shape
                             gS = pyPl.geomShape
                             pl = self.cutting(pl, [oppRearPlane, rearPlane], gS)
@@ -536,19 +536,19 @@ class _PyReflex(_Py):
         '''solveReflex(self)
         '''
 
-        print '### solveReflexs'
+        # print '### solveReflexs'
 
         [pyR, pyOppR] = self.planes
 
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        print '# ', (pyR.numGeom, pyOppR.numGeom)
+        # print '# ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflex(reflex, oppReflex,
                            pyR, pyOppR,
                            'forward', pyWire)
 
-        print '# ', (pyOppR.numGeom, pyR.numGeom)
+        # print '# ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflex(oppReflex, reflex,
                            pyOppR, pyR,
                            'backward', pyWire)
@@ -579,7 +579,7 @@ class _PyReflex(_Py):
         # print 'pyR.cutter ', pyR.cutter, len(pyR.cutter)
 
         aa = aa.cut(cList, tolerance)
-        print 'aa.Faces ', aa.Faces, len(aa.Faces)
+        # print 'aa.Faces ', aa.Faces, len(aa.Faces)
         gS = pyR.geomShape
 
         rear = pyR.rear
@@ -588,12 +588,12 @@ class _PyReflex(_Py):
 
             if direction == 'forward':
                 rr = pyPlaneList[rear[0]]
-                print 'rango ', pyR.rango[0]
+                # print 'rango ', pyR.rango[0]
                 corner = pyR.rango[0]
 
             else:
                 rr = pyPlaneList[rear[-1]]
-                print 'rango ', pyR.rango[-1]
+                # print 'rango ', pyR.rango[-1]
                 corner = pyR.rango[-1]
 
             rrG = rr.geomShape
@@ -603,14 +603,14 @@ class _PyReflex(_Py):
             for nn in corner:
                 pyPl = pyPlaneList[nn]
                 if pyPl.aligned:
-                    print 'a'
+                    # print 'a'
                     pyAlign = self.selectAlignment(pyWire.numWire, nn)
                     pl = pyAlign.simulatedAlignment
                 elif pyPl.reflexed:
-                    print 'b'
+                    # print 'b'
                     pl = pyPl.simulatedShape
                 else:
-                    print 'c'
+                    # print 'c'
                     pl = pyPl.shape
                 corn.append(pl)
             corn = Part.makeCompound(corn)
@@ -627,15 +627,15 @@ class _PyReflex(_Py):
                     section = ff.section([rrG], tolerance)  # podría dar problemas en interiores sin trasera
                     if not section.Vertexes:
                         cutterList.append(ff)
-        print 'cutterList ', cutterList, len(cutterList)
+        # print 'cutterList ', cutterList, len(cutterList)
 
         if cutterList:
             reflex = reflex.cut(cutterList, tolerance)
-            print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
+            # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
         if not pyR.aligned:
             reflex = reflex.cut(pyR.cutter, tolerance)
-            print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
+            # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
         aList = []
         for ff in reflex.Faces:
@@ -644,7 +644,7 @@ class _PyReflex(_Py):
                 aList.append(ff)
                 reflex = reflex.removeShape([ff])
                 break
-        print 'aList ', aList, len(aList)
+        # print 'aList ', aList, len(aList)
 
         if pyR.rear:
 
@@ -652,23 +652,23 @@ class _PyReflex(_Py):
 
                 if reflex.Faces:
                     reflex = reflex.cut([pyOppR.enormousShape], tolerance)
-                    print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
+                    # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
                 bList = []
                 for ff in reflex.Faces:
-                    print 'a'
+                    # print 'a'
                     section = ff.section(aList, tolerance)
                     if not section.Edges:
-                        print 'b'
+                        # print 'b'
                         section = ff.section(cutterList, tolerance)
                         if section.Edges:
-                            print 'c'
+                            # print 'c'
                             section = ff.section(corn, tolerance)
                             if section.Edges:
-                                print 'd'
+                                # print 'd'
                                 bList.append(ff)
 
-                print 'bList ', bList
+                # print 'bList ', bList
 
                 if len(bList) > 1:
                     distance = _Py.size
@@ -688,7 +688,7 @@ class _PyReflex(_Py):
                 aList.extend(secondaries)
                 aList.extend(bList)
                 # aList.extend(reflex.Faces)
-                print 'aList ', aList
+                # print 'aList ', aList
 
         compound = Part.makeCompound(aList)
         pyR.shape = compound
@@ -725,51 +725,52 @@ class _PyReflex(_Py):
             ff = reflex.Faces[0].copy()
             ff = self.cutting(ff, [oppReflex], gS)
             aList.append(ff)
-            print 'aList ', aList
+            # print 'aList ', aList
 
-            print 'reflex.Faces ', reflex.Faces
+            # print 'reflex.Faces ', reflex.Faces
             bList = []
             if len(reflex.Faces) > 1:
-                print 'two faces'
+                # print 'two faces'
                 ff = reflex.Faces[1]
                 bList = [ff]
 
                 if direction == 'forward':
-                    print 'rango ', pyR.rango[0]
+                    # print 'rango ', pyR.rango[0]
                     corner = pyR.rango[0]
 
                 else:
-                    print 'rango ', pyR.rango[-1]
+                    # print 'rango ', pyR.rango[-1]
                     corner = pyR.rango[-1]
 
                 corn = []
                 for nn in corner:
                     pyPl = pyPlaneList[nn]
                     if pyPl.aligned:
-                        print 'a'
+                        # print 'a'
                         pyAlign = self.selectAlignment(pyWire.numWire, nn)
                         pl = pyAlign.simulatedAlignment
                     elif pyPl.choped:
-                        print 'aa'
+                        # print 'aa'
                         pl = pyPl.simulatedShape
                     elif pyPl.reflexed:
-                        print 'b'
+                        # print 'b'
                         pl = pyPl.shape
                     else:
-                        print 'c'
+                        # print 'c'
                         pl = pyPl.shape
                     corn.append(pl)
                 corn = Part.makeCompound(corn)
 
                 section = ff.section(corn, tolerance)
-                print 'section.Edges ', section.Edges
+                # print 'section.Edges ', section.Edges
                 if not section.Edges:
-                    print 'a'
+                    # print 'a'
                     bList = []
 
             aList.extend(bList)
             compound = Part.makeCompound(aList)
             pyR.shape = compound
+            pyR.control.append(pyOppR.numGeom)
 
         else:
             if reflex.section([pyR.forward, pyR.backward], tolerance).Edges:
@@ -780,33 +781,33 @@ class _PyReflex(_Py):
                 ff = self.selectFace(reflex.Faces, gS)
                 aList.append(ff)
 
-                print 'aList ', aList
-                print 'reflex.Faces', reflex.Faces
+                # print 'aList ', aList
+                # print 'reflex.Faces', reflex.Faces
 
                 if direction == 'forward':
-                    print 'rango ', pyR.rango[0]
+                    # print 'rango ', pyR.rango[0]
                     corner = pyR.rango[0]
 
                 else:
-                    print 'rango ', pyR.rango[-1]
+                    # print 'rango ', pyR.rango[-1]
                     corner = pyR.rango[-1]
 
                 corn = []
                 for nn in corner:
-                    print 'nn', nn
+                    # print 'nn', nn
                     pyPl = pyPlaneList[nn]
                     if pyPl.aligned:
-                        print 'a'
+                        # print 'a'
                         pyAlign = self.selectAlignment(pyWire.numWire, nn)
                         pl = pyAlign.simulatedAlignment
                     elif pyPl.choped:
-                        print 'aa'
+                        # print 'aa'
                         pl = pyPl.simulatedShape
                     elif pyPl.reflexed:
-                        print 'b'
+                        # print 'b'
                         pl = pyPl.shape
                     else:
-                        print 'c'
+                        # print 'c'
                         pl = pyPl.shape
                     corn.append(pl)
                 corn = Part.makeCompound(corn)
@@ -815,26 +816,33 @@ class _PyReflex(_Py):
                 for ff in reflex.Faces:
                     section = ff.section([gS, pyR.backward], tolerance)
                     if not section.Edges:
-                        print 'a'
+                        # print 'a'
                         section = ff.section(corn, tolerance)
                         if section.Edges:
-                            print 'b'
+                            # print 'b'
                             bList = [ff]
 
                 aList.extend(bList)
                 compound = Part.makeCompound(aList)
                 pyR.shape = compound
+                pyR.control.append(pyOppR.numGeom)
 
             else:
-                pass
                 print 'C'
-                # TODO aqui falta algo
+                pass
+
+        if direction == 'backward':
+            if pyR.numGeom not in pyOppR.control:
+                print 'D'
+                oppReflex = pyOppR.shape
+                reflex = pyR.shape
+                self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, pyWire, 'forward')
 
     def postProcess(self, pyWire):
 
         ''''''
 
-        print '### postProcess'
+        # print '### postProcess'
 
         planeList = self.planes
         tolerance = _Py.tolerance
@@ -847,7 +855,7 @@ class _PyReflex(_Py):
             plane = pyPlane.shape
 
             if len(plane.Faces) == 1:
-                print '# cutted ', pyPlane.numGeom
+                # print '# cutted ', pyPlane.numGeom
 
                 forward = pyPlane.forward
                 gS = pyPlane.geomShape
@@ -857,7 +865,7 @@ class _PyReflex(_Py):
                     if pyReflex != self:
                         for pyPl in pyReflex.planes:
                             if pyPl not in self.planes:
-                                print pyPl.numGeom
+                                # print pyPl.numGeom
 
                                 fo = pyPl.forward
                                 # ba = pyPl.backward
@@ -865,17 +873,17 @@ class _PyReflex(_Py):
                                 # section = pl.section([fo, ba], tolerance)
                                 section = pl.section([fo], tolerance)
                                 if not section.Edges:
-                                    print 'a'
+                                    # print 'a'
                                     section = fo.section([forward], tolerance)
                                     sect = fo.section([forwardOpp], tolerance)
                                     if section.Vertexes or sect.Vertexes:
-                                        print 'b'
+                                        # print 'b'
                                         cutterList.append(pl)
-                                        print '# included cutter ', pyPl.numGeom
+                                        # print '# included cutter ', pyPl.numGeom
                                         pyPlane.control.append(pyPl.numGeom)
 
                 if cutterList:
-                    print 'cutterList', cutterList
+                    # print 'cutterList', cutterList
 
                     ff = plane.Faces[0]
                     ff = self.cutting(ff, cutterList, gS)
@@ -889,7 +897,7 @@ class _PyReflex(_Py):
 
         ''''''
 
-        print '### postProcessTwo'
+        # print '### postProcessTwo'
 
         rangoInter = self.rango
         if not rangoInter:
@@ -911,7 +919,7 @@ class _PyReflex(_Py):
 
             section = plane.section([forward], tolerance)
             if section.Edges:
-                print '# cutted ', pyPlane.numGeom
+                # print '# cutted ', pyPlane.numGeom
 
                 pyRearPlane = pyPlaneList[rear]
                 rearPl = pyRearPlane.shape
@@ -924,18 +932,18 @@ class _PyReflex(_Py):
                 for pyReflex in reflexList:
                     for pyPl in pyReflex.planes:
                         if pyPl.numGeom in rangoInter:
-                            print pyPl.numGeom
+                            # print pyPl.numGeom
 
                             pl = pyPl.shape
                             section = pl.section([rearPl], tolerance)
 
                             if section.Edges:
-                                print 'a'
+                                # print 'a'
                                 cutterList.append(pl)
-                                print '# included cutter ', pyPl.numGeom
+                                # print '# included cutter ', pyPl.numGeom
                                 pyPlane.control.append(pyPl.numGeom)
 
-                print 'cutterList', cutterList
+                # print 'cutterList', cutterList
 
                 gS = pyPlane.geomShape
 
