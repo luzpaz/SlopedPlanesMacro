@@ -1042,7 +1042,7 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment.
         '''
 
-        # print '######### trimming'
+        print '######### trimming'
 
         for pyWire in self.wires:
             pyWire.trimming()
@@ -1058,7 +1058,7 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment.
         '''
 
-        # print '######### priorLater'
+        print '######### priorLater'
 
         for pyWire in self.wires:
             pyWire.priorLater()
@@ -1074,7 +1074,7 @@ class _PyFace(_Py):
         Transfers to PyWire and PyAlignment.
         '''
 
-        # print '######### simulating'
+        print '######### simulating'
 
         for pyWire in self.wires:
             pyWire.simulating()
@@ -1109,7 +1109,7 @@ class _PyFace(_Py):
         Transfers to PyWire.
         '''
 
-        # print '######### ordinaries'
+        print '######### ordinaries'
 
         for pyWire in self.wires:
             pyWire.ordinaries()
@@ -1266,7 +1266,7 @@ class _PyFace(_Py):
         Transfers to PyAlignment.
         '''
 
-        # print '######### aligning'
+        print '######### aligning'
 
         pyAlignList = self.alignments
 
@@ -1280,7 +1280,7 @@ class _PyFace(_Py):
         Transfers to PyAlignment.
         '''
 
-        # print '######### end'
+        print '######### end'
 
         tolerance = _Py.tolerance
         pyWireList = self.wires

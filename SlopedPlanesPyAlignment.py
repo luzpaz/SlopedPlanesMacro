@@ -243,6 +243,7 @@ class _PyAlignment(_Py):
 
         pyWireList = _Py.pyFace.wires
         falsify = self.falsify
+        tolerance = _Py.tolerance
 
         pyBase = self.base
         base = pyBase.shape
@@ -265,9 +266,7 @@ class _PyAlignment(_Py):
         # rangoRear
         w1 = pyPrior.numWire
         w2 = pyLater.numWire
-        g1 = pyPrior.numGeom
-        g2 = pyLater.numGeom
-        rangoRear = self.rang((w2, g2), (w1, g1))
+        rangoRear = self.rang((w2, lat), (w1, pr))
         if rangoRear:
             rangoRear.insert(0, lat)
             rangoRear.append(pr)
@@ -275,9 +274,10 @@ class _PyAlignment(_Py):
         # print 'rangoRear ', rangoRear
 
         rangoChop = self.rango
+        rangoCopy = rangoChop[:]
         chops = self.chops
 
-        rangoCopy = rangoChop[:]
+        # rangoChop
 
         numChop = -1
         for rChop in rangoChop:
@@ -285,10 +285,11 @@ class _PyAlignment(_Py):
 
             [pyOne, pyTwo] = chops[numChop]
 
-            # rango
+            # rango of the chops
+
             totalRango = []
             num = -1
-            for pyPlane in chops[numChop]:
+            for pyPlane in [pyOne, pyTwo]:
                 num += 1
                 if num == 0:
                     rangoOne = pyPlane.rango[-1]
@@ -299,9 +300,10 @@ class _PyAlignment(_Py):
 
             # the two rangos don't cut between them
 
-            pyPlList = pyWireList[pyOne.numWire].planes
+            nW = pyOne.numWire
+            pyPlList = pyWireList[nW].planes
 
-            if pyOne.numWire == pyTwo.numWire:
+            if nW == pyTwo.numWire:
 
                 for nG in rangoOne:
                     pyPl = pyPlList[nG]
@@ -348,7 +350,7 @@ class _PyAlignment(_Py):
                     control = pyPl.control
 
                     # rChop doesn't cut with rangoRear
-                    if w1 == pyOne.numWire:
+                    if w1 == nW:
                         for r in rangoRear:
                             if r not in control:
                                 control.append(r)
@@ -373,13 +375,13 @@ class _PyAlignment(_Py):
                         num += 1
                         if num != numChop:
                             [pyO, pyT] = chops[num]
-                            if pyO.numWire == pyOne.numWire:
+                            if pyO.numWire == nW:
                                 for nn in rr:
                                     pyOne.control.append(nn)
                                     pyTwo.control.append(nn)
                                     control.append(nn)
 
-            # the rango's planes are cutted by the chop,
+            # the rango of the chop are cutted by the chop,
             # and perhaps by the base or the continuation
             num = -1
             for pyPlane in [pyOne, pyTwo]:
@@ -449,7 +451,7 @@ class _PyAlignment(_Py):
 
             rC = Part.makeCompound(rC)
 
-            section = rC.section([base], _Py.tolerance)
+            section = rC.section([base], tolerance)
             gS = pyBase.geomShape
             if section.Edges:
                 base = self.cutting(base, [pyTwo.enormousShape], gS)
@@ -457,7 +459,7 @@ class _PyAlignment(_Py):
                 base = self.cutting(base, [pyOne.enormousShape], gS)
             pyBase.shape = base
 
-            section = rC.section([cont], _Py.tolerance)
+            section = rC.section([cont], tolerance)
             gS = pyCont.geomShape
             if section.Edges:
                 cont = self.cutting(cont, [pyOne.enormousShape], gS)
