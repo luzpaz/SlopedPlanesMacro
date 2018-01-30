@@ -942,6 +942,16 @@ class _PyPlane(_Py):
                         # print 'b'
                         pass
 
+                    elif pyPl.fronted:
+                        print 'c'
+                        if self.aligned:
+                            print 'c1'
+                            cutterList.append(pl)
+                            control.append(pyPl.numGeom)
+                        else:
+                            print 'c2'
+                            pass
+
                     else:
                         # print 'c'
                         cutterList.append(pl)
