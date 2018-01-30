@@ -172,10 +172,8 @@ class _PyReflex(_Py):
 
                 if cList:
                     # print 'cList', cList
-                    gS = pyPlane.geomShape
-                    plane = self.cutting(plane, cList, gS)
-                    pyPlane.shape = plane
-                    # print 'plane ', plane
+                    pyPlane.cuttingPyth(cList)
+                    # print 'plane ', pyPlane.shape
 
         num = -1
         for pyPlane in self.planes:
@@ -221,10 +219,7 @@ class _PyReflex(_Py):
 
                         if not pyPl.reflexed:
                             # print 'a'
-                            pl = pyPl.shape
-                            gS = pyPl.geomShape
-                            pl = self.cutting(pl, [oppRearPlane, rearPlane], gS)
-                            pyPl.shape = pl
+                            pyPl.cuttingPyth([oppRearPlane, rearPlane])
                             control.append(oppRear)
 
     def reflexing(self, pyWire):

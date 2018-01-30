@@ -736,8 +736,7 @@ class _PyPlane(_Py):
         else:
             cutterList = [enormousShape]
 
-        shape = self.cutting(shape, cutterList, gS)
-        self.shape = shape
+        self.cuttingPyth(cutterList)
 
         bigShape = self.cutting(bigShape, [enormousShape], gS)
         self.bigShape = bigShape
@@ -868,8 +867,7 @@ class _PyPlane(_Py):
 
                     else:
                         # print 'bb'
-                        rearPl = self.cutting(rearPl, cList, gS)
-                        pyRearPl.shape = rearPl
+                        pyRearPl.cuttingPyth(cList)
 
                     if len(plane.Faces) == 1:
                         # print 'AA'
@@ -943,13 +941,13 @@ class _PyPlane(_Py):
                         pass
 
                     elif pyPl.fronted:
-                        print 'c'
+                        # print 'c'
                         if self.aligned:
-                            print 'c1'
+                            # print 'c1'
                             cutterList.append(pl)
                             control.append(pyPl.numGeom)
                         else:
-                            print 'c2'
+                            # print 'c2'
                             pass
 
                     else:
@@ -979,9 +977,6 @@ class _PyPlane(_Py):
                     self.shape = compound
                     # print 'fList ', fList
                     # print 'compound ', compound
-                    '''plane = self.cutting(plane, cutterList, gS)
-                    self.shape = plane
-                    # print 'plane ', plane'''
 
                 else:
                     # print '12'
@@ -996,9 +991,8 @@ class _PyPlane(_Py):
 
             else:
                 # print '2'
-                plane = self.cutting(plane, cutterList, gS)
-                self.shape = plane
-                # print 'plane ', plane
+                self.cuttingPyth(cutterList)
+                # print 'plane ', self.plane
 
     def rangging(self, pyWire, direction):
 

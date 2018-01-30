@@ -207,6 +207,19 @@ class _Py(object):
 
         return cutted
 
+    def cuttingPyth(self, cutter):
+
+        '''cutting(self, cutted, cutter, geomShape)
+        '''
+
+        cutted = self.shape
+        if cutted:
+            geomShape = self.geomShape
+            cutted = self.cutting(cutted, cutter, geomShape)
+            self.shape = cutted
+
+        return cutted
+
     def selectFace(self, faceList, geomShape):
 
         '''selectFace(self, faceList, geomShape)

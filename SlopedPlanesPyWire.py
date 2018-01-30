@@ -390,8 +390,7 @@ class _PyWire(_Py):
 
                 if cutterList:
                     # print'D'
-                    plane = self.cutting(plane, cutterList, gS)
-                    pyPlane.shape = plane
+                   pyPlane.cuttingPyth(cutterList)
 
                 if cutList:
                     # print 'E'
