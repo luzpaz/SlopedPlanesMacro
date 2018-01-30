@@ -1296,6 +1296,8 @@ class _PyFace(_Py):
 
         # print '######### end'
 
+        # recolects
+
         tolerance = _Py.tolerance
         pyWireList = self.wires
 
@@ -1304,15 +1306,18 @@ class _PyFace(_Py):
         numList = []
         for pyAlign in self.alignments:
             rangoChop = pyAlign.rango
+
             pyBase = pyAlign.base
             base = pyBase.shape
             aligns = pyAlign.aligns[:]
-            front = [base]
+
             ch = []
+            front = [base]
             nList = [pyBase.numGeom]
             numChop = -1
             for [pyOne, pyTwo] in pyAlign.chops:
                 numChop += 1
+
                 pyPl = aligns[numChop]
                 pl = pyPl.shape
                 if pl:
@@ -1328,7 +1333,6 @@ class _PyFace(_Py):
                     for nn in rChop:
                         pyPl = pyPlaneList[nn]
                         if not pyPl.choped and not pyPl.aligned:
-                            #if pyPl.shape:
                             pl = pyPl.shape.copy()
                             gS = pyPl.geomShape
                             ch.append(pl)
@@ -1336,12 +1340,19 @@ class _PyFace(_Py):
                             front.append(pl)
                             nList.append(nn)
 
+            chopList.append(ch)
             frontedList.append(front)
             numList.append(nList)
-            chopList.append(ch)
 
+        # print 'chopList ', chopList
         # print 'frontedList ', frontedList
         # print 'numList ', numList
+
+        # other rChops cutted by chops: frontedList
+        # alignments with contact
+        # alignments without section between lines
+        # alignments without common area
+        # cutted base, aligns, chops and rChop
 
         pyAlignList = self.alignments[:]
 
@@ -1432,6 +1443,11 @@ class _PyFace(_Py):
                                                             pyPl.shape = pl
                                                             # print 'rango chop ', (nn, pl)
 
+        # other rChops no cutted by chops: chopList
+        # alignments with contact
+        # alignments without common area
+        # cutted chops, and rChop including chops
+
         number = -1
         for pyAlign in self.alignments:
             number += 1
@@ -1442,9 +1458,12 @@ class _PyFace(_Py):
             for pyAl in pyAlignList:
                 num += 1
                 if number != num:
+
                     simulAl = Part.makeShell(pyAl.simulatedAlignment)
+
                     section = simulatedAlign.section(simulAl, tolerance)
                     if section.Edges:
+
                         common = simulatedAlign.common(simulAl, tolerance)
                         if not common.Area:
 
@@ -1485,6 +1504,7 @@ class _PyFace(_Py):
                                                     gS = pyPl.geomShape
                                                     pl = self.cutting(pl, cutterList, gS)
                                                     pyPl.shape = pl
+                                                    # print 'rango chop ', (nn, pl)
 
-        '''for pyAlign in pyAlignList:
-            pyAlign.end()'''
+        for pyAlign in pyAlignList:
+            pyAlign.end()

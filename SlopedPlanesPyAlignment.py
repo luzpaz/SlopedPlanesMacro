@@ -1140,6 +1140,22 @@ class _PyAlignment(_Py):
             shapeOne = self.cutting(shapeOne, [cont, base, shapeTwo], gS)
             pyOne.shape = shapeOne
 
+            cutList = [cont, base]
+
+            nW = pyOne.numWire
+            pyW = pyWireList[nW]
+            pyPlList = pyW.planes
+
+            for nn in rChop:
+                pyPl = pyPlList[nn]
+                if not pyPl.choped and not pyPl.aligned:
+                    pl = pyPl.shape
+                    if pl:
+                        gS = pyPl.geomShape
+                        pl = self.cutting(pl, cutList, gS)
+                        pyPl.shape = pl
+                        # print 'rangoChop ', nn
+
         else:
 
             cutList = []
