@@ -784,43 +784,45 @@ class _PyReflex(_Py):
                 # print 'aList ', aList
                 # print 'reflex.Faces', reflex.Faces
 
-                if direction == 'forward':
-                    # print 'rango ', pyR.rango[0]
-                    corner = pyR.rango[0]
-
-                else:
-                    # print 'rango ', pyR.rango[-1]
-                    corner = pyR.rango[-1]
-
-                corn = []
-                for nn in corner:
-                    # print 'nn', nn
-                    pyPl = pyPlaneList[nn]
-                    if pyPl.aligned:
-                        # print 'a'
-                        pyAlign = self.selectAlignment(pyWire.numWire, nn)
-                        pl = pyAlign.simulatedAlignment
-                    elif pyPl.choped:
-                        # print 'aa'
-                        pl = pyPl.simulatedShape
-                    elif pyPl.reflexed:
-                        # print 'b'
-                        pl = pyPl.shape
-                    else:
-                        # print 'c'
-                        pl = pyPl.shape
-                    corn.append(pl)
-                corn = Part.makeCompound(corn)
-
                 bList = []
-                for ff in reflex.Faces:
-                    section = ff.section([gS, pyR.backward], tolerance)
-                    if not section.Edges:
-                        # print 'a'
-                        section = ff.section(corn, tolerance)
-                        if section.Edges:
+                if pyR.rear:
+
+                    if direction == 'forward':
+                        # print 'rango ', pyR.rango[0]
+                        corner = pyR.rango[0]
+
+                    else:
+                        # print 'rango ', pyR.rango[-1]
+                        corner = pyR.rango[-1]
+
+                    corn = []
+                    for nn in corner:
+                        # print 'nn', nn
+                        pyPl = pyPlaneList[nn]
+                        if pyPl.aligned:
+                            # print 'a'
+                            pyAlign = self.selectAlignment(pyWire.numWire, nn)
+                            pl = pyAlign.simulatedAlignment
+                        elif pyPl.choped:
+                            # print 'aa'
+                            pl = pyPl.simulatedShape
+                        elif pyPl.reflexed:
                             # print 'b'
-                            bList = [ff]
+                            pl = pyPl.shape
+                        else:
+                            # print 'c'
+                            pl = pyPl.shape
+                        corn.append(pl)
+                    corn = Part.makeCompound(corn)
+
+                    for ff in reflex.Faces:
+                        section = ff.section([gS, pyR.backward], tolerance)
+                        if not section.Edges:
+                            # print 'a'
+                            section = ff.section(corn, tolerance)
+                            if section.Edges:
+                                # print 'b'
+                                bList = [ff]
 
                 aList.extend(bList)
                 compound = Part.makeCompound(aList)
