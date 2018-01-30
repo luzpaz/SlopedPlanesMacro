@@ -1122,17 +1122,6 @@ class _PyAlignment(_Py):
 
             cutterList.extend(simulatedC)
 
-            '''for nn in rChop:
-
-                nW = pyOne.numWire
-                pyW = pyWireList[nW]
-                pyPlList = pyW.planes
-
-                pl = pyPlList[nn].shape
-                if pl:
-                    cutterList.append(pl)
-                    # print 'rangoChop ', nn'''
-
             if cutterList:
 
                 gS = pyBase.geomShape
