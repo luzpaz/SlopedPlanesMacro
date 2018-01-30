@@ -355,17 +355,19 @@ class _PyAlignment(_Py):
                             if r not in control:
                                 control.append(r)
 
-                    # rChop doesn't cut with alignment
+                    # rChop is not cutted by alignment
                     control.append(numGeom)
                     if falsify:
                         control.append(nGeom)
 
+                    # the aligment is not cutted by rChop
+                    baseControl.append(nG)
+                    if falsify:
+                        pyCont.control.append(nG)
+
                     # pyOne and pyTwo don't cut rChop
                     pyOne.control.append(nG)
                     pyTwo.control.append(nG)
-
-                    # the aligment doesn't cut rChop
-                    baseControl.append(nG)
 
                     # rChop doesn't cut with other rChop
                     # chops doesn't cut with other rChop
@@ -467,7 +469,7 @@ class _PyAlignment(_Py):
                 cont = self.cutting(cont, [pyTwo.enormousShape], gS)
             pyCont.shape = cont
 
-            # TODO falseAlignment base and continuation don't cut opp rango
+            # TODO falseAlignment base and continuation don't cut opp rango ?
 
         # rangoRear doesn't cut with rangoChop
         pyPlList = pyWireList[w1].planes
@@ -1094,7 +1096,7 @@ class _PyAlignment(_Py):
                 for f in ff.Faces:
                     section = f.section([rCTwo])
                     if section.Edges:
-                       fList.append(f)
+                        fList.append(f)
 
             # print 'fList ', fList
             compound = Part.makeCompound(fList)
@@ -1116,7 +1118,11 @@ class _PyAlignment(_Py):
 
             cutterList = [shapeOne, shapeTwo]
 
-            for nn in rChop:
+            simulatedC = simulatedChops[0]
+
+            cutterList.extend(simulatedC)
+
+            '''for nn in rChop:
 
                 nW = pyOne.numWire
                 pyW = pyWireList[nW]
@@ -1125,7 +1131,7 @@ class _PyAlignment(_Py):
                 pl = pyPlList[nn].shape
                 if pl:
                     cutterList.append(pl)
-                    # print 'rangoChop ', nn
+                    # print 'rangoChop ', nn'''
 
             if cutterList:
 
