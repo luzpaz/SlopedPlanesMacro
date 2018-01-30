@@ -1094,15 +1094,12 @@ class _PyFace(_Py):
             pyWire.simulating()
 
         for pyAlign in self.alignments:
-            pyAlign.simulating()
+            pyAlign.simulatingChops()
 
         for pyAlign in self.alignments:
             pyAlign.simulatingAlignment()
 
-        for pyAlign in self.alignments:
-            pyAlign.simulatingChops()
-
-        self.printControl('simulating')
+        #self.printControl('simulating')
 
     def reflexing(self):
 
@@ -1115,7 +1112,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             if pyWire.reflexs:
                 pyWire.reflexing()
-        self.printControl('reflexing')
+        #self.printControl('reflexing')
 
     def ordinaries(self):
 
@@ -1147,9 +1144,11 @@ class _PyFace(_Py):
                 aliList.extend(ali.simulatedAlignment)
             print 'aliList ', aliList
 
+            chopFace = []
             cutterFace = []
             for pyW in pyWireList:
                 print '### nW', pyW.numWire
+                chopList = []
                 cutterList = []
                 pyPlaneList = pyW.planes
                 for pyPl in pyPlaneList:
@@ -1159,7 +1158,12 @@ class _PyFace(_Py):
                             print 'a'
                             pl = pyPl.shape
                             cutterList.append(pl)
+                        elif pyPl.choped:
+                            print 'b'
+                            pl = pyPl.simulatedShape
+                            chopList.append(pl)
 
+                chopFace.append(chopList)
                 cutterFace.append(cutterList)
 
             print 'cutterFace ', cutterFace
@@ -1176,9 +1180,15 @@ class _PyFace(_Py):
                 cutterFace.insert(numWire, pop)
                 print 'cutterList ', cutterList
 
+                pop = chopFace.pop(numWire)
+                chopList = []
+                for cL in chopFace:
+                    chopList.extend(cL)
+                chopFace.insert(numWire, pop)
+                print 'chopList ', chopList
+
                 for pyPlane in pyWire.planes:
                     cutList = cutterList[:]
-                    # if not pyPlane.fronted:
                     plane = pyPlane.shape
                     if plane:
                         print '# numGeom ', pyPlane.numGeom
@@ -1213,7 +1223,6 @@ class _PyFace(_Py):
                             print 'B'
                             pyAlign = self.selectAlignmentBase(numWire, pyPlane.numGeom)
                             line = pyAlign.geomAligned
-                            # simulAlign = Part.makeCompound(pyAlign.simulatedAlignment)
                             simulAlign = Part.makeShell(pyAlign.simulatedAlignment)
                             aList = alignments[:]
                             aList.remove(pyAlign)
@@ -1222,7 +1231,6 @@ class _PyFace(_Py):
                                 ll = pyA.geomAligned
                                 section = line.section([ll], tolerance)
                                 if not section.Vertexes:
-                                    # simulA = pyA.simulatedAlignment
                                     simulA = Part.makeShell(pyA.simulatedAlignment)
                                     common = simulAlign.common([simulA], tolerance)
                                     if not common.Area:
@@ -1232,6 +1240,7 @@ class _PyFace(_Py):
                         else:
                             print 'C'
                             cutList.extend(aliList)
+                            cutList.extend(chopList)
 
                         if cutList:
 
@@ -1258,12 +1267,13 @@ class _PyFace(_Py):
                                     fList = []
                                     ff = self.cutting(plane, cutList, gS)
                                     fList.append(ff)
-                                    plane = plane.removeShape([ff])
-                                    for ff in plane.Faces:
-                                        section = ff.section(fList, tolerance)
-                                        if not section.Edges:
-                                            fList.append(ff)
-                                            break
+                                    if pyPlane.rear:
+                                        plane = plane.removeShape([ff])
+                                        for ff in plane.Faces:
+                                            section = ff.section(fList, tolerance)
+                                            if not section.Edges:
+                                                fList.append(ff)
+                                                break
                                     compound = Part.makeCompound(fList)
                                     pyPlane.shape = compound
 
@@ -1505,6 +1515,8 @@ class _PyFace(_Py):
                                                     pl = self.cutting(pl, cutterList, gS)
                                                     pyPl.shape = pl
                                                     # print 'rango chop ', (nn, pl)
+
+
 
         for pyAlign in pyAlignList:
             pyAlign.end()

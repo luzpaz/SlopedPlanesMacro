@@ -607,16 +607,28 @@ class _PyAlignment(_Py):
 
                 pyLater.shape = later
 
-    def simulating(self):
+    def simulatingChops(self):
 
         ''''''
 
+        tolerance = _Py.tolerance
+        pyFace = _Py.pyFace
+        face = pyFace.face
+        pyWireList = pyFace.wires
         falsify = self.falsify
+
+        rangoChop = self.rango
+        simulatedChops = []
+
+        geomList = [pyP.geomShape for pyP in self.aligns]
+        geomList.insert(0, self.base.geomShape)
 
         enormousBase = self.base.enormousShape
         enormousCont = self.aligns[-1].enormousShape
 
+        numChop = -1
         for [pyOne, pyTwo] in self.chops:
+            numChop += 1
 
             if falsify:
 
@@ -625,11 +637,8 @@ class _PyAlignment(_Py):
 
             else:
 
-                enormous = pyTwo.enormousShape
-                pyOne.simulating([enormous, enormousBase])
-
-                enormous = pyOne.enormousShape
-                pyTwo.simulating([enormous, enormousBase])
+                pyOne.simulating([enormousBase])
+                pyTwo.simulating([enormousBase])
 
             if pyOne.virtualized:
                 pyO = self.selectPlane(pyOne.numWire, pyOne.numGeom)
@@ -643,97 +652,6 @@ class _PyAlignment(_Py):
                         pyT.simulating([enormousCont])
                     else:
                         pyT.simulating([enormousBase])
-
-    def simulatingAlignment(self):
-
-        '''simulatingAlignment(self)
-        '''
-
-         # print '###### simulatingAlignment ', (self.base.numWire, self.base.numGeom)
-
-        chops = self.chops
-        falsify = self.falsify
-
-        pyBase = self.base
-        base = pyBase.shape.copy()
-
-        pyPrior = self.prior
-        pyLater = self.later
-
-        # the chops
-        cutterList = []
-
-        for [pyOne, pyTwo] in chops:
-
-            cutterList.append(pyOne.simulatedShape)
-            cutterList.append(pyTwo.simulatedShape)
-
-        if falsify:
-
-            pyCont = self.aligns[-1]
-            cont = pyCont.shape.copy()
-
-            # prior and later
-
-            cList = cutterList[:]
-            if pyPrior.numGeom not in pyBase.control:
-                cList.append(pyPrior.bigShape)
-            gS = pyBase.geomShape
-            base = self.cutting(base, cList, gS)
-
-            cList = cutterList[:]
-            if pyLater.numGeom not in pyCont.control:
-                cList.append(pyLater.bigShape)
-            gS = pyCont.geomShape
-            cont = self.cutting(cont, cList, gS)
-
-            shapeList = [base, cont]
-
-        else:
-
-            # prior and later
-
-            if pyPrior.numGeom not in pyBase.control:
-                cutterList.append(pyPrior.bigShape)
-
-            if pyLater.numGeom not in pyBase.control:
-                cutterList.append(pyLater.bigShape)
-
-            geomList = [pyP.geomShape for pyP in self.aligns]
-            geomList.insert(0, pyBase.geomShape)
-            # print geomList
-
-            base = base.cut(cutterList, _Py.tolerance)
-            # print 'base.Faces ', base.Faces
-            shapeList = []
-            for ff in base.Faces:
-                section = ff.section(geomList, _Py.tolerance)
-                if section.Edges:
-                    # print 'section'
-                    shapeList.append(ff)
-            # print 'shapeList ', shapeList
-
-        self.simulatedAlignment = shapeList
-
-    def simulatingChops(self):
-
-        ''''''
-
-        tolerance = _Py.tolerance
-
-        pyFace = _Py.pyFace
-        pyWireList = pyFace.wires
-
-        simulatedAlignment = self.simulatedAlignment
-        rangoChop = self.rango
-        simulatedChops = []
-
-        geomList = [pyP.geomShape for pyP in self.aligns]
-        geomList.insert(0, self.base.geomShape)
-
-        numChop = -1
-        for [pyOne, pyTwo] in self.chops:
-            numChop += 1
 
             rChop = rangoChop[numChop]
 
@@ -760,8 +678,10 @@ class _PyAlignment(_Py):
                 for ff in bb.Faces:
                     section = ff.section(geomList, tolerance)
                     if not section.Edges:
-                        bb = ff
-                        break
+                        section = ff.section([face], tolerance)
+                        if section.Edges:
+                            bb = ff
+                            break
 
                 cL = Part.makeCompound(cutList)
                 cL = cL.cut([pyOne.enormousShape,
@@ -785,17 +705,115 @@ class _PyAlignment(_Py):
                 shapeTwo = self.cutting(shapeTwo, cutList, gS)
                 pyTwo.shape = shapeTwo
 
-            simulatedChops.append(cList[:])
+                if pyOne.virtualized:
+                    # pyO = self.selectPlane(pyOne.numWire, pyOne.numGeom)
+                    if pyO.shape:
+                        shapeOne = pyO.shape
+                        gS = pyO.geomShape
+                        shapeOne = self.cutting(shapeOne, cutList, gS)
+                        pyO.shape = shapeOne
+                        pyO.simulating(cutList)
 
-            shapeOne = pyOne.simulatedShape
-            cList.append(shapeOne)
+                if pyTwo.virtualized:
+                    # pyT = self.selectPlane(pyTwo.numWire, pyTwo.numGeom)
+                    if pyT.shape:
+                        shapeTwo = pyT.shape
+                        gS = pyT.geomShape
+                        shapeTwo = self.cutting(shapeTwo, cutList, gS)
+                        pyT.shape = shapeTwo
+                        pyT.simulating(cutList)
 
-            shapeTwo = pyTwo.simulatedShape
-            cList.append(shapeTwo)
-
-            simulatedAlignment.extend(cList)
+            simulatedChops.append(cList)
 
         self.simulatedChops = simulatedChops
+
+    def simulatingAlignment(self):
+
+        '''simulatingAlignment(self)
+        '''
+
+         # print '###### simulatingAlignment ', (self.base.numWire, self.base.numGeom)
+
+        chops = self.chops
+        simulatedChops = self.simulatedChops
+        falsify = self.falsify
+
+        pyBase = self.base
+        base = pyBase.shape.copy()
+        pyPrior = self.prior
+        pyLater = self.later
+
+        shapeList = []
+        cutterList = []
+
+        numChop = -1
+        for [pyOne, pyTwo] in chops:
+            numChop += 1
+
+            simulC = simulatedChops[numChop]
+            shapeList.extend(simulC)
+
+            one = pyOne.simulatedShape.copy()
+            two = pyTwo.simulatedShape.copy()
+
+            if not falsify:
+
+                enormousTwo = pyTwo.enormousShape
+                gS = pyOne.geomShape
+                one = self.cutting(one, [enormousTwo], gS)
+
+                enormousOne = pyOne.enormousShape
+                gS = pyTwo.geomShape
+                two = self.cutting(two, [enormousOne], gS)
+
+            cutterList.extend([one, two])
+            shapeList.extend([one, two])
+
+        if falsify:
+
+            pyCont = self.aligns[-1]
+            cont = pyCont.shape.copy()
+
+            # prior and later
+
+            cList = cutterList[:]
+            if pyPrior.numGeom not in pyBase.control:
+                cList.append(pyPrior.bigShape)
+            gS = pyBase.geomShape
+            base = self.cutting(base, cList, gS)
+
+            cList = cutterList[:]
+            if pyLater.numGeom not in pyCont.control:
+                cList.append(pyLater.bigShape)
+            gS = pyCont.geomShape
+            cont = self.cutting(cont, cList, gS)
+
+            shapeList.extend([base, cont])
+
+        else:
+
+            # prior and later
+
+            if pyPrior.numGeom not in pyBase.control:
+                cutterList.append(pyPrior.bigShape)
+
+            if pyLater.numGeom not in pyBase.control:
+                cutterList.append(pyLater.bigShape)
+
+            geomList = [pyP.geomShape for pyP in self.aligns]
+            geomList.insert(0, pyBase.geomShape)
+            # print geomList
+
+            base = base.cut(cutterList, _Py.tolerance)
+            # print 'base.Faces ', base.Faces
+            for ff in base.Faces:
+                section = ff.section(geomList, _Py.tolerance)
+                if section.Edges:
+                    # print 'section'
+                    shapeList.append(ff)
+            # print 'shapeList ', shapeList
+
+        self.simulatedAlignment = shapeList
 
     def aligning(self):
 
@@ -1268,6 +1286,8 @@ class _PyAlignment(_Py):
 
         # print '# self.Base ', self.base.numGeom
 
+        # recolects
+
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         base = pyBase.shape
@@ -1275,6 +1295,8 @@ class _PyAlignment(_Py):
         for pyPl in self.aligns:
             if pyPl.shape:
                 bList.append(pyPl.shape)
+
+        # chops
 
         rangoChop = self.rango
         numChop = -1
@@ -1290,6 +1312,9 @@ class _PyAlignment(_Py):
             pyT = self.selectPlane(pyTwo.numWire, pyTwo.numGeom)
             if pyT.shape:
                 cutList.append(pyT.shape)
+
+            # rangoChop with real chops
+
             if cutList:
                 for nn in rChop:
                     pyPl = pyPlList[nn]
@@ -1300,6 +1325,8 @@ class _PyAlignment(_Py):
                             pl = self.cutting(pl, cutList, gS)
                             pyPl.shape = pl
                             # print 'rangoChop ', nn
+
+            # rearChop with chop and alignment
 
             if pyO.rear:
                 pyPlList = pyWireList[pyO.numWire].planes
@@ -1340,6 +1367,8 @@ class _PyAlignment(_Py):
                             gS = pyPl.geomShape
                             pl = self.cutting(pl, [one], gS)
                             pyPl.shape = pl
+
+        # rangoRear vs rangoChop
 
         chops = self.chops
         rangoChop = self.rango

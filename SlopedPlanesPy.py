@@ -301,7 +301,7 @@ class _Py(object):
                         pyPlane.rear,\
                         pyPlane.rango
 
-            print '*** aligns ', [x.numGeom for x in pyAlignment.aligns]
+            print '*** aligns ', [(x.numWire, x.numGeom) for x in pyAlignment.aligns]
             for align in pyAlignment.aligns:
                 print(align.numWire, align.numGeom)
                 print 'rear ', align.rear
