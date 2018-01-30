@@ -978,7 +978,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        # self.printSummary()
+        self.printSummary()
 
     def upping(self):
 
@@ -1088,7 +1088,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingChops()
 
-        # self.printControl('simulating')
+        self.printControl('simulating')
 
     def reflexing(self):
 
@@ -1096,7 +1096,7 @@ class _PyFace(_Py):
         Transfers to PyWire.
         '''
 
-        print '######### reflexing'
+        # print '######### reflexing'
 
         for pyWire in self.wires:
             if pyWire.reflexs:
@@ -1109,11 +1109,11 @@ class _PyFace(_Py):
         Transfers to PyWire.
         '''
 
-        # print '######### ordinaries'
+        print '######### ordinaries'
 
         for pyWire in self.wires:
             pyWire.ordinaries()
-        # self.printControl('ordinaries')
+        self.printControl('ordinaries')
 
     def betweenWires(self):
 

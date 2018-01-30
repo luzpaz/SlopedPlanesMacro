@@ -802,10 +802,10 @@ class _PyAlignment(_Py):
         '''aligning(self)
         '''
 
-        # print '###### base ', (self.base.numWire, self.base.numGeom)
-        # print '###### base shape ', self.base.shape
-        # print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
-        # print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
+        print '###### base ', (self.base.numWire, self.base.numGeom)
+        print '###### base shape ', self.base.shape
+        print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
+        print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
 
         tolerance = _Py.tolerance
         pyWireList = _Py.pyFace.wires
@@ -1176,7 +1176,7 @@ class _PyAlignment(_Py):
                 # print 'number ', number
 
                 if number <= 1:
-                    # print 'a'
+                    print 'a'
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
@@ -1200,7 +1200,7 @@ class _PyAlignment(_Py):
                             pyTwo.shape = Part.makeCompound(fList[:1])
 
                 else:
-                    # print 'b'
+                    print 'b'
 
                     gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
