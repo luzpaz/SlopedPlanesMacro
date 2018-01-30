@@ -1088,7 +1088,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingChops()
 
-        self.printControl('simulating')
+        # self.printControl('simulating')
 
     def reflexing(self):
 
@@ -1101,7 +1101,7 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             if pyWire.reflexs:
                 pyWire.reflexing()
-        self.printControl('reflexing')
+        # self.printControl('reflexing')
 
     def ordinaries(self):
 
@@ -1113,7 +1113,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.ordinaries()
-        #self.printControl('ordinaries')
+        # self.printControl('ordinaries')
 
     def betweenWires(self):
 
