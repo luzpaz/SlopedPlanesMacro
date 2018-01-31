@@ -641,13 +641,16 @@ class _PyReflex(_Py):
                 break
         # print 'aList ', aList, len(aList)
 
-        if corner and oppCorner:
+        # if corner and oppCorner:
+        if corner:
 
             if not rr.aligned:
 
                 if reflex.Faces:
                     reflex = reflex.cut([pyOppR.enormousShape], tolerance)
                     # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
+
+                forward = pyR.forward
 
                 bList = []
                 for ff in reflex.Faces:
@@ -661,7 +664,18 @@ class _PyReflex(_Py):
                             section = ff.section(corn, tolerance)
                             if section.Edges:
                                 # print 'd'
-                                bList.append(ff)
+                                ## bList.append(ff)
+
+                                section = ff.section([forward], tolerance)
+                                if section.Edges:
+                                    print 'e'
+                                    section = ff.section([aList[0]], tolerance)
+                                    if section.Vertexes:
+                                        print 'f'
+                                        bList.append(ff)
+                                else:
+                                    print 'ee'
+                                    bList.append(ff)
 
                 # print 'bList ', bList
 
@@ -866,12 +880,10 @@ class _PyReflex(_Py):
                     if pyReflex != self:
                         for pyPl in pyReflex.planes:
                             if pyPl not in self.planes:
-                                # print pyPl.numGeom
+                                # print 'reflexed plane ', pyPl.numGeom
 
                                 fo = pyPl.forward
-                                # ba = pyPl.backward
                                 pl = pyPl.shape
-                                # section = pl.section([fo, ba], tolerance)
                                 section = pl.section([fo], tolerance)
                                 if not section.Edges:
                                     # print 'a'
