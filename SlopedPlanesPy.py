@@ -274,8 +274,8 @@ class _Py(object):
             print '*** reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
 
-                print 'rangoInter ', pyReflex.rango
                 print 'planes ', pyReflex.planes
+                print 'rangoInter ', pyReflex.rango
                 for pyPlane in pyReflex.planes:
                     print 'numGeom ', pyPlane.numGeom
                     print 'rear ', pyPlane.rear
