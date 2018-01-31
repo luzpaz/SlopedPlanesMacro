@@ -493,22 +493,23 @@ class _PyReflex(_Py):
 
             elif kind == 'rangoNext':
                 # print '6'
+                pass
 
-                if forwa.section([gS], tolerance).Vertexes:
+                '''if forwa.section([gS], tolerance).Vertexes:
                     # print '61'
                     pass
 
                 else:
                     # print '62'
                     pl = pyPl.shape.copy()
-                    pl = self.cutting(pl, [oppReflexEnormous], gS)
+                    pl = self.cutting(pl, [oppReflexEnormous], gS)'''
 
             elif kind == 'rangoInter':
                 # print '7'
                 pass
 
             else:
-                #print 'NEW CASE'
+                # print 'NEW CASE'
                 pass
 
             pyR.addLink('cutter', pl)
@@ -583,16 +584,11 @@ class _PyReflex(_Py):
 
             if direction == 'forward':
                 rr = pyPlaneList[rear[0]]
-                # print 'rango ', pyR.rango[0]
                 corner = pyR.rango[0]
-                oppCorner = pyOppR.rango[-1]
-
             else:
                 rr = pyPlaneList[rear[-1]]
-                # print 'rango ', pyR.rango[-1]
                 corner = pyR.rango[-1]
-                oppCorner = pyOppR.rango[0]
-
+            # print 'corner ', corner
             rrG = rr.geomShape
 
             corn = []
@@ -641,7 +637,6 @@ class _PyReflex(_Py):
                 break
         # print 'aList ', aList, len(aList)
 
-        # if corner and oppCorner:
         if corner:
 
             if not rr.aligned:
@@ -664,17 +659,16 @@ class _PyReflex(_Py):
                             section = ff.section(corn, tolerance)
                             if section.Edges:
                                 # print 'd'
-                                ## bList.append(ff)
 
                                 section = ff.section([forward], tolerance)
                                 if section.Edges:
-                                    print 'e'
+                                    # print 'e'
                                     section = ff.section([aList[0]], tolerance)
                                     if section.Vertexes:
-                                        print 'f'
+                                        # print 'f'
                                         bList.append(ff)
                                 else:
-                                    print 'ee'
+                                    # print 'ee'
                                     bList.append(ff)
 
                 # print 'bList ', bList
@@ -696,7 +690,6 @@ class _PyReflex(_Py):
 
                 aList.extend(secondaries)
                 aList.extend(bList)
-                # aList.extend(reflex.Faces)
                 # print 'aList ', aList
 
         compound = Part.makeCompound(aList)
@@ -711,10 +704,10 @@ class _PyReflex(_Py):
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        print '### ', (pyR.numGeom, pyOppR.numGeom)
+        # print '### ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflexTwo(reflex, oppReflex, pyR, pyOppR, pyWire, 'forward')
 
-        print '### ', (pyOppR.numGeom, pyR.numGeom)
+        # print '### ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, pyWire, 'backward')
 
     def processReflexTwo(self, reflex, oppReflex, pyR, pyOppR, pyWire, direction):
@@ -728,56 +721,56 @@ class _PyReflex(_Py):
         pyPlaneList = pyWire.planes
 
         if not oppReflex.section([pyOppR.forward, pyOppR.backward], tolerance).Edges:
-            print 'A'
+            # print 'A'
 
-            print 'reflex.Faces ', reflex.Faces
+            # print 'reflex.Faces ', reflex.Faces
 
             aList = []
             ff = reflex.Faces[0].copy()
             ff = self.cutting(ff, [oppReflex], gS)
             aList.append(ff)
-            print 'aList ', aList
+            # print 'aList ', aList
 
-            print 'reflex.Faces ', reflex.Faces
+            # print 'reflex.Faces ', reflex.Faces
             bList = []
 
 
             if len(reflex.Faces) > 1:
-                print 'two faces'
+                # print 'two faces'
                 ff = reflex.Faces[1]
                 bList = [ff]
 
                 if direction == 'forward':
-                    print 'rango ', pyR.rango[0]
+                    # print 'rango ', pyR.rango[0]
                     corner = pyR.rango[0]
 
                 else:
-                    print 'rango ', pyR.rango[-1]
+                    # print 'rango ', pyR.rango[-1]
                     corner = pyR.rango[-1]
 
                 corn = []
                 for nn in corner:
                     pyPl = pyPlaneList[nn]
                     if pyPl.aligned:
-                        print 'a'
+                        # print 'a'
                         pyAlign = self.selectAlignment(pyWire.numWire, nn)
                         pl = pyAlign.simulatedAlignment
                     elif pyPl.choped:
-                        print 'aa'
+                        # print 'aa'
                         pl = pyPl.simulatedShape
                     elif pyPl.reflexed:
-                        print 'b'
+                        # print 'b'
                         pl = pyPl.shape
                     else:
-                        print 'c'
+                        # print 'c'
                         pl = pyPl.shape
                     corn.append(pl)
                 corn = Part.makeCompound(corn)
 
                 section = ff.section(corn, tolerance)
-                print 'section.Edges ', section.Edges
+                # print 'section.Edges ', section.Edges
                 if not section.Edges:
-                    print '0'
+                    # print '0'
                     bList = []
 
             aList.extend(bList)
@@ -787,7 +780,7 @@ class _PyReflex(_Py):
 
         else:
             if reflex.section([pyR.forward, pyR.backward], tolerance).Edges:
-                print 'B'
+                # print 'B'
 
                 aList = []
                 reflex = reflex.cut([oppReflex], tolerance)
@@ -843,12 +836,12 @@ class _PyReflex(_Py):
                 pyR.control.append(pyOppR.numGeom)
 
             else:
-                print 'C'
+                # print 'C'
                 pass
 
         if direction == 'backward':
             if pyR.numGeom not in pyOppR.control:
-                print 'D'
+                # print 'D'
                 oppReflex = pyOppR.shape
                 reflex = pyR.shape
                 self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, pyWire, 'forward')
