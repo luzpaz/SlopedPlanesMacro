@@ -237,19 +237,17 @@ class _PyReflex(_Py):
         '''reflexing(self, pyWire)
         '''
 
-        pyPlaneList = self.planes
-        pyR = pyPlaneList[0]
-        pyOppR = pyPlaneList[1]
+        pyReflexPlaneList = self.planes
+        pyR = pyReflexPlaneList[0]
+        pyOppR = pyReflexPlaneList[1]
 
         direction = "forward"
-        # print '### direction ', direction
-        # print(pyR.numGeom, pyOppR.numGeom)
+        # print '### direction ', direction, (pyR.numGeom, pyOppR.numGeom)
         if not pyR.cutter:
             self.twin(pyWire, pyR, pyOppR, direction)
 
         direction = "backward"
-        # print '### direction ', direction
-        # print(pyOppR.numGeom, pyR.numGeom)
+        # print '### direction ', direction, (pyOppR.numGeom, pyR.numGeom)
         if not pyOppR.cutter:
             self.twin(pyWire, pyOppR, pyR, direction)
 
@@ -260,7 +258,6 @@ class _PyReflex(_Py):
 
         pyPlaneList = pyWire.planes
         control = pyR.control
-        oppReflexEnormous = pyOppR.enormousShape
         numWire = pyWire.numWire
 
         rear = pyR.rear
@@ -279,26 +276,22 @@ class _PyReflex(_Py):
 
                 elif rearPyPl.choped:
                     # print 'b'
-                    rearPl = rearPyPl.simulatedShape  # ???
+                    rearPl = rearPyPl.simulatedShape
                     pyR.addLink('cutter', rearPl)
                     # print 'included rear simulated ', (numWire, nGeom)
 
                 elif rearPyPl.reflexed:
                     # print 'c'
                     rearPl = rearPyPl.simulatedShape
-                    # # OJO
-                    # # rearPl = rearPyPl.bigShape
                     pyR.addLink('cutter', rearPl)
                     # print 'included rear simulated', (numWire, nGeom)
 
                 else:
                     # print 'd'
                     rearPl = rearPyPl.shape
-                    # # OJO
-                    # # rearPl = rearPyPl.bigShape
                     pyR.addLink('cutter', rearPl)
-                    # print 'included rear ', (numWire, nGeom)
                     control.append(nGeom)
+                    # print 'included rear ', (numWire, nGeom)
 
         oppRear = pyOppR.rear
 
@@ -335,8 +328,7 @@ class _PyReflex(_Py):
 
         elif len(oppRear) == 2:
 
-            self.processOppRear(oppRear, direction, pyWire, pyR,
-                                pyOppR, oppReflexEnormous)
+            self.processOppRear(oppRear, direction, pyWire, pyR, pyOppR)
 
         rangoCorner = pyR.rangoConsolidate
         # print 'rangoCorner ', rangoCorner
@@ -344,7 +336,8 @@ class _PyReflex(_Py):
         for nn in rangoCorner:
             if nn not in control:
                 if nn not in oppRear:
-                    self.processRango(pyWire, pyR, pyOppR, nn, 'rangoCorner', direction)
+                    self.processRango(pyWire, pyR, pyOppR, nn,
+                                      'rangoCorner', direction)
 
         rangoNext = pyOppR.rangoConsolidate
         # print 'rangoNext ', rangoNext
@@ -352,25 +345,25 @@ class _PyReflex(_Py):
         if len(rear) == 1:
             for nn in rangoNext:
                 if nn not in control:
-                    self.processRango(pyWire, pyR, pyOppR, nn, 'rangoNext', direction)
+                    self.processRango(pyWire, pyR, pyOppR, nn,
+                                      'rangoNext', direction)
 
         rangoInter = self.rango
         # print 'rangoInter ', rangoInter
 
         for nn in rangoInter:
             if nn not in control:
-                self.processRango(pyWire, pyR, pyOppR, nn,  'rangoInter', direction)
+                self.processRango(pyWire, pyR, pyOppR, nn,
+                                  'rangoInter', direction)
 
-    def processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR,
-                       oppReflexEnormous):
+    def processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR):
 
-        '''processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR,
-                          oppReflexEnormous)
-        '''
+        '''processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR)'''
 
         pyPlaneList = pyWire.planes
         tolerance = _Py.tolerance
         control = pyR.control
+        oppReflexEnormous = pyOppR.enormousShape
 
         if direction == "forward":
             nGeom = oppRear[1]
