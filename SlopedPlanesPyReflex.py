@@ -100,19 +100,19 @@ class _PyReflex(_Py):
 
     def preProcess(self, pyWire):
 
-        '''preProcess(self, pyWire)
-        The planes included in a range are cutted between them.
-        
-        '''
+        '''preProcess(self, pyWire)'''
 
         # print '### preProcess'
 
         pyPlaneList = pyWire.planes
         numWire = pyWire.numWire
 
+        # The planes included in a range are cutted between them
+
+        rango = self.planes[0].rango[0]
+
         for pyReflexPlane in self.planes:
             # print '# pyReflexPlane ', pyReflexPlane.numGeom
-            rango = pyReflexPlane.rangoConsolidate
             # print 'rango ', rango
             pyRan = []
             for nG in rango:
@@ -147,7 +147,7 @@ class _PyReflex(_Py):
                             elif pyPl.aligned:
                                 # print 'c'
                                 pyAli =\
-                                    self.selectAlignment(numWire, nG)
+                                    self.selectAlignmentBase(numWire, nG)
                                 if pyAli:
                                     cList.extend(pyAli.simulatedAlignment)
 
@@ -175,10 +175,14 @@ class _PyReflex(_Py):
                     pyPlane.cuttingPyth(cList)
                     # print 'plane ', pyPlane.shape
 
+            rango = self.planes[-1].rango[-1]
+
+        # The planes included in a range are cutted by rear and oppRear
+
         num = -1
         for pyPlane in self.planes:
             num += 1
-            # print '### cutter Two ', pyPlane.numGeom
+            # print '# pyPlane ', pyPlane.numGeom
 
             pyOppPlane = self.planes[num-1]
             if pyOppPlane.rear and pyPlane.rear:
@@ -211,16 +215,22 @@ class _PyReflex(_Py):
                     oppRearPlane = pyOppRearPlane.shape
 
                 for nG in rango:
+                    # print '# nG ', nG
                     pyPl = pyPlaneList[nG]
-                    control = pyPl.control
-
-                    if oppRear not in control:
-                        # print '# cutted Two ', nG
-
-                        if not pyPl.reflexed:
-                            # print 'a'
-                            pyPl.cuttingPyth([oppRearPlane, rearPlane])
-                            control.append(oppRear)
+                    if not pyPl.reflexed:
+                        # print 'a'
+                        control = pyPl.control
+                        cList = []
+                        if oppRear not in control:
+                            cList.append(oppRearPlane)
+                            if not pyOppRearPlane.reflexed:
+                                control.append(oppRear)
+                        if rear not in control:
+                            cList.append(rearPlane)
+                            if not pyRearPlane.reflexed:
+                                control.append(rear)
+                        if cList:
+                            pyPl.cuttingPyth(cList)
 
     def reflexing(self, pyWire):
 
@@ -600,6 +610,7 @@ class _PyReflex(_Py):
             corn = Part.makeCompound(corn)
 
             bList = []
+            # TODO añadir oppRear
             bb = bb.cut([pyOppR.enormousShape, rr.seedBigShape], tolerance)
 
             for ff in bb.Faces:

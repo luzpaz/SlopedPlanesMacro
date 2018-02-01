@@ -995,7 +995,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        # self.printSummary()
+        self.printSummary()
 
     def upping(self):
 
@@ -1487,5 +1487,5 @@ class _PyFace(_Py):
                                                 pyPl.cuttingPyth(cutterList)
                                                 # print 'rango chop ', (nn, pl)
 
-        for pyAlign in pyAlignList:
-            pyAlign.end()
+        '''for pyAlign in pyAlignList:
+            pyAlign.end()'''
