@@ -582,22 +582,6 @@ class _PyReflex(_Py):
             # print 'corner ', corner
             rrG = rr.geomShape
 
-            '''corn = []
-            for nn in corner:
-                pyPl = pyPlaneList[nn]
-                if pyPl.aligned:
-                    # print 'a'
-                    pyAlign = self.selectAlignment(pyWire.numWire, nn)
-                    pl = pyAlign.simulatedAlignment
-                elif pyPl.reflexed:
-                    # print 'b'
-                    pl = pyPl.simulatedShape
-                else:
-                    # print 'c'
-                    pl = pyPl.shape
-                corn.append(pl)
-            corn = Part.makeCompound(corn)'''
-
             bList = []
             # TODO añadir oppRear
             bb = bb.cut([pyOppR.enormousShape, rr.seedBigShape,
@@ -661,10 +645,6 @@ class _PyReflex(_Py):
                             if common.Area:
                                 # print 'd'
                                 bList.append(ff)
-                                '''section = ff.section(corn, tolerance)
-                                if section.Edges:
-                                    # print 'e'
-                                    bList.append(ff)'''
                 # print 'bList ', bList
 
                 if len(bList) > 1:
