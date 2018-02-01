@@ -735,9 +735,10 @@ class _PyFace(_Py):
         Finds the rear plane of a reflexed plane.
         Determines if an arrow situacion happens.'''
 
-        print '### findRear ', (pyPlane.numWire, pyPlane.numGeom)
+        # print '### findRear ', (pyPlane.numWire, pyPlane.numGeom)
 
         tolerance = _Py.tolerance
+        face = self.face
         shapeGeomWire = pyWire.shapeGeom
         sGW = Part.Wire(shapeGeomWire)
         numWire = pyWire.numWire
@@ -774,21 +775,15 @@ class _PyFace(_Py):
 
         else:
             print 'c'
-            ll = lineShape.copy()
-            ll = ll.cut([sGW], tolerance)
-            wire = Part.Wire(ll.Edges)
+            section = lineShape.section([face], tolerance)
+            wire = Part.Wire(section.Edges[0])
             orderedVertexes = wire.OrderedVertexes
             print 'orderedVertexes ', [v.Point for v in orderedVertexes]
-            vv = orderedVertexes[0]
-            print vv.Point
-            print lineShape.firstVertex(True).Point
-            if vv.Point == lineShape.firstVertex(True).Point:
-                print 'c1'
-                vertex = orderedVertexes[1]
+            vertex = orderedVertexes[1]
+            point = self.roundVector(vertex.Point)
+            if point in coord:
+                print 'cc'
                 edge = True
-            else:
-                print 'c2'
-                vertex = orderedVertexes[0]
 
         print 'point ', vertex.Point
         print 'edge ', edge
