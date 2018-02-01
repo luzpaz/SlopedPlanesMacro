@@ -495,21 +495,12 @@ class _PyReflex(_Py):
                 # print '6'
                 pass
 
-                '''if forwa.section([gS], tolerance).Vertexes:
-                    # print '61'
-                    pass
-
-                else:
-                    # print '62'
-                    pl = pyPl.shape.copy()
-                    pl = self.cutting(pl, [oppReflexEnormous], gS)'''
-
             elif kind == 'rangoInter':
                 # print '7'
                 pass
 
             else:
-                # print 'NEW CASE'
+                # print '8'
                 pass
 
             pyR.addLink('cutter', pl)
@@ -532,19 +523,19 @@ class _PyReflex(_Py):
         '''solveReflex(self)
         '''
 
-        # print '### solveReflexs'
+        print '### solveReflexs'
 
         [pyR, pyOppR] = self.planes
 
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        # print '# ', (pyR.numGeom, pyOppR.numGeom)
+        print '# ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflex(reflex, oppReflex,
                            pyR, pyOppR,
                            'forward', pyWire)
 
-        # print '# ', (pyOppR.numGeom, pyR.numGeom)
+        print '# ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflex(oppReflex, reflex,
                            pyOppR, pyR,
                            'backward', pyWire)
@@ -556,30 +547,30 @@ class _PyReflex(_Py):
                          direction, pyWire)
         '''
 
-        if not pyR.rear:
-            pyR.cutter = [pyOppR.enormousShape]
-
         tolerance = _Py.tolerance
         pyPlaneList = pyWire.planes
+        gS = pyR.geomShape
+
+        if not pyR.rear:
+            pyR.cutter = [pyOppR.enormousShape]
 
         if isinstance(reflex, Part.Compound):
             secondaries = reflex.Faces[1:]
         else:
             secondaries = []
 
-        aa = reflex.copy()
-
         cList = [pyOppR.enormousShape]
         if not pyR.aligned:
             cList.extend(pyR.cutter)
         # print 'pyR.cutter ', pyR.cutter, len(pyR.cutter)
 
+        bb = reflex.copy()
+        aa = reflex.copy()
+
         aa = aa.cut(cList, tolerance)
-        # print 'aa.Faces ', aa.Faces, len(aa.Faces)
-        gS = pyR.geomShape
+        print 'aa.Faces ', aa.Faces, len(aa.Faces)
 
         rear = pyR.rear
-
         if rear:
 
             if direction == 'forward':
@@ -588,7 +579,8 @@ class _PyReflex(_Py):
             else:
                 rr = pyPlaneList[rear[-1]]
                 corner = pyR.rango[-1]
-            # print 'corner ', corner
+            print 'rear ', rr.numGeom
+            print 'corner ', corner
             rrG = rr.geomShape
 
             corn = []
@@ -606,6 +598,16 @@ class _PyReflex(_Py):
                     pl = pyPl.shape
                 corn.append(pl)
             corn = Part.makeCompound(corn)
+
+            bList = []
+            bb = bb.cut([pyOppR.enormousShape, rr.seedBigShape ], tolerance)
+
+            for ff in bb.Faces:
+                section = ff.section([_Py.face], tolerance)
+                if section.Edges:
+                    bList.append(ff)
+            print 'triangle ', bList
+            triangle = Part.makeShell(bList)
 
         cutterList = []
         for ff in aa.Faces:
@@ -643,9 +645,7 @@ class _PyReflex(_Py):
 
                 if reflex.Faces:
                     reflex = reflex.cut([pyOppR.enormousShape], tolerance)
-                    # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
-
-                forward = pyR.forward
+                    print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
                 bList = []
                 for ff in reflex.Faces:
@@ -659,38 +659,14 @@ class _PyReflex(_Py):
                             section = ff.section(corn, tolerance)
                             if section.Edges:
                                 # print 'd'
-
-                                section = ff.section([forward], tolerance)
-                                if section.Edges:
+                                common = ff.common([triangle], tolerance)
+                                if common.Area:
                                     # print 'e'
-                                    section = ff.section([aList[0]], tolerance)
-                                    if section.Vertexes:
-                                        # print 'f'
-                                        bList.append(ff)
-                                else:
-                                    # print 'ee'
                                     bList.append(ff)
-
-                # print 'bList ', bList
-
-                if len(bList) > 1:
-                    distance = _Py.size
-                    ind = 0
-                    obj = aList[0]
-                    num = -1
-                    for ff in bList:
-                        num += 1
-                        dist = ff.distToShape(obj)[0]
-                        if dist < distance:
-                            distance = dist
-                            ind = num
-
-                    ff = bList[ind]
-                    bList = [ff]
 
                 aList.extend(secondaries)
                 aList.extend(bList)
-                # print 'aList ', aList
+                print 'aList ', aList
 
         compound = Part.makeCompound(aList)
         pyR.shape = compound
