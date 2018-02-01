@@ -375,8 +375,8 @@ class _PyReflex(_Py):
 
             oppRearPl = pyOppRear.shape.copy()
             pyR.addLink('cutter', oppRearPl)
-            # print 'included oppRear ', (pyWire.numWire, nGeom)
             control.append(nGeom)
+            # print 'included oppRear ', (pyWire.numWire, nGeom)
 
         if direction == "forward":
             nGeom = oppRear[0]
@@ -436,9 +436,7 @@ class _PyReflex(_Py):
             pl = pyPl.simulatedShape.copy()
 
             rear = pyPl.rear
-
             forward = pyR.forward
-            forwa = pyOppR.forward
             fo = pyPl.forward
 
             pyReflexList = self.selectAllReflex(numWire, nn)
@@ -474,36 +472,30 @@ class _PyReflex(_Py):
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
 
             elif kind == 'rangoCorner':
-                # print '4'
+                # print '3'
 
                 if forward.section([fo], tolerance).Vertexes:
-                    # print '42'
+                    # print '32'
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
 
                 else:
-                    # print '43'
+                    # print '33'
                     pl = pyPl.shape.copy()
-                    # cList = [oppReflexEnormous]
                     rang = self.rang(pyWire, numGeom, nn, direction)
                     # print 'rang ', rang
                     cList = []
                     for mm in rang:
                         pyP = pyPlaneList[mm]
                         if pyP.reflexed:
-                            if forward.section([pyP.forward, pyP.backward], tolerance).Vertexes:
+                            section =\
+                                forward.section([pyP.forward, pyP.backward],
+                                                tolerance)
+                            if section.Vertexes:
                                 cList.append(pyP.enormousShape)
                     pl = self.cutting(pl, cList, gS)
 
-            elif kind == 'rangoNext':
-                # print '6'
-                pass
-
-            elif kind == 'rangoInter':
-                # print '7'
-                pass
-
-            else:
-                # print '8'
+            else:   # rangoNext, rangoInter, other?
+                # print '4'
                 pass
 
             pyR.addLink('cutter', pl)
@@ -518,8 +510,8 @@ class _PyReflex(_Py):
                 pl = self.cutting(pl, [oppReflexEnormous], gS)
 
             pyR.addLink('cutter', pl)
-            # print 'included rango ', (pl, numWire, nn)
             pyR.control.append(nn)
+            # print 'included rango ', (pl, numWire, nn)
 
     def solveReflex(self, pyWire):
 
