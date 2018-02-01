@@ -600,7 +600,7 @@ class _PyReflex(_Py):
             corn = Part.makeCompound(corn)
 
             bList = []
-            bb = bb.cut([pyOppR.enormousShape, rr.seedBigShape ], tolerance)
+            bb = bb.cut([pyOppR.enormousShape, rr.seedBigShape], tolerance)
 
             for ff in bb.Faces:
                 section = ff.section([_Py.face], tolerance)
@@ -656,13 +656,30 @@ class _PyReflex(_Py):
                         section = ff.section(cutterList, tolerance)
                         if section.Edges:
                             # print 'c'
-                            section = ff.section(corn, tolerance)
-                            if section.Edges:
+                            common = ff.common([triangle], tolerance)
+                            if common.Area:
                                 # print 'd'
-                                common = ff.common([triangle], tolerance)
-                                if common.Area:
+                                section = ff.section(corn, tolerance)
+                                if section.Edges:
                                     # print 'e'
                                     bList.append(ff)
+                # print 'bList ', bList
+
+                if len(bList) > 1:
+                    # print 'select faces'
+                    distance = _Py.size
+                    ind = 0
+                    obj = aList[0]
+                    num = -1
+                    for ff in bList:
+                        num += 1
+                        dist = ff.distToShape(obj)[0]
+                        if dist < distance:
+                            distance = dist
+                            ind = num
+
+                    ff = bList[ind]
+                    bList = [ff]
 
                 aList.extend(secondaries)
                 aList.extend(bList)

@@ -755,56 +755,56 @@ class _PyFace(_Py):
         edge = False
 
         if pyPlane.lineInto:
-            print 'a'
+            # print 'a'
 
             section = pyPlane.lineInto.section([sGW], tolerance)
             vertex = section.Vertexes[1]
 
         elif section.Edges:
-            print 'b'
+            # print 'b'
 
             edge = True
 
             if direction == 'forward':
-                print 'b1'
+                # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
 
             else:
-                print 'b2'
+                # print 'b2'
                 vertex = section.Edges[-1].Vertexes[1]
 
         else:
-            print 'c'
+            # print 'c'
             section = lineShape.section([face], tolerance)
             wire = Part.Wire(section.Edges[0])
             orderedVertexes = wire.OrderedVertexes
-            print 'orderedVertexes ', [v.Point for v in orderedVertexes]
+            # print 'orderedVertexes ', [v.Point for v in orderedVertexes]
             vertex = orderedVertexes[1]
             point = self.roundVector(vertex.Point)
             if point in coord:
-                print 'cc'
+                # print 'cc'
                 edge = True
 
-        print 'point ', vertex.Point
-        print 'edge ', edge
+        # print 'point ', vertex.Point
+        # print 'edge ', edge
 
         try:
 
             nGeom = coord.index(self.roundVector(vertex.Point))
-            print 'on vertex'
+            # print 'on vertex'
 
             if edge:
                 if direction == 'forward':
-                    print 'aa'
+                    # print 'aa'
                     nGeom = self.sliceIndex(nGeom-1, lenWire)
 
             else:
                 if direction == 'backward':
-                    print 'bb'
+                    # print 'bb'
                     nGeom = self.sliceIndex(nGeom-1, lenWire)
 
         except ValueError:
-            print 'not in vertex (edge False)'
+            # print 'not in vertex (edge False)'
 
             nGeom = -1
             for geomShape in shapeGeomWire:
@@ -813,7 +813,7 @@ class _PyFace(_Py):
                 if sect.Vertexes:
                     break
 
-        print 'nGeom ', nGeom
+        # print 'nGeom ', nGeom
         pyPlane.addValue('rear', nGeom, direction)
 
         # arrow
@@ -995,7 +995,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        self.printSummary()
+        # self.printSummary()
 
     def upping(self):
 
