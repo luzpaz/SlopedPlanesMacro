@@ -566,19 +566,23 @@ class _PyReflex(_Py):
         # print 'aa.Faces ', aa.Faces, len(aa.Faces)
 
         rear = pyR.rear
+        oppRear = pyOppR.rear
         if rear:
 
             if direction == 'forward':
                 rr = pyPlaneList[rear[0]]
                 corner = pyR.rango[0]
+                ro = pyPlaneList[oppRear[0]]
             else:
                 rr = pyPlaneList[rear[-1]]
                 corner = pyR.rango[-1]
+                ro = pyPlaneList[oppRear[-1]]
             # print 'rear ', rr.numGeom
+            # print 'oppRear ', ro.numGeom
             # print 'corner ', corner
             rrG = rr.geomShape
 
-            corn = []
+            '''corn = []
             for nn in corner:
                 pyPl = pyPlaneList[nn]
                 if pyPl.aligned:
@@ -592,11 +596,12 @@ class _PyReflex(_Py):
                     # print 'c'
                     pl = pyPl.shape
                 corn.append(pl)
-            corn = Part.makeCompound(corn)
+            corn = Part.makeCompound(corn)'''
 
             bList = []
             # TODO añadir oppRear
-            bb = bb.cut([pyOppR.enormousShape, rr.seedBigShape], tolerance)
+            bb = bb.cut([pyOppR.enormousShape, rr.seedBigShape,
+                         ro.seedBigShape], tolerance)
 
             for ff in bb.Faces:
                 section = ff.section([_Py.face], tolerance)
@@ -655,10 +660,11 @@ class _PyReflex(_Py):
                             common = ff.common([triangle], tolerance)
                             if common.Area:
                                 # print 'd'
-                                section = ff.section(corn, tolerance)
+                                bList.append(ff)
+                                '''section = ff.section(corn, tolerance)
                                 if section.Edges:
                                     # print 'e'
-                                    bList.append(ff)
+                                    bList.append(ff)'''
                 # print 'bList ', bList
 
                 if len(bList) > 1:
