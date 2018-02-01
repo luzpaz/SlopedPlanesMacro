@@ -237,9 +237,7 @@ class _PyReflex(_Py):
         '''reflexing(self, pyWire)
         '''
 
-        pyReflexPlaneList = self.planes
-        pyR = pyReflexPlaneList[0]
-        pyOppR = pyReflexPlaneList[1]
+        [pyR, pyOppR] = self.planes
 
         direction = "forward"
         # print '### direction ', direction, (pyR.numGeom, pyOppR.numGeom)
@@ -407,7 +405,7 @@ class _PyReflex(_Py):
 
     def processRango(self, pyWire, pyR, pyOppR, nn, kind, direction):
 
-        ''''''
+        '''processRango(self, pyWire, pyR, pyOppR, nn, kind, direction)'''
 
         tolerance = _Py.tolerance
         numWire = pyWire.numWire
@@ -515,7 +513,7 @@ class _PyReflex(_Py):
 
     def solveReflex(self, pyWire):
 
-        '''solveReflex(self)
+        '''solveReflex(self, pyWire)
         '''
 
         # print '### solveReflexs'
