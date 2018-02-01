@@ -523,19 +523,19 @@ class _PyReflex(_Py):
         '''solveReflex(self)
         '''
 
-        print '### solveReflexs'
+        # print '### solveReflexs'
 
         [pyR, pyOppR] = self.planes
 
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        print '# ', (pyR.numGeom, pyOppR.numGeom)
+        # print '# ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflex(reflex, oppReflex,
                            pyR, pyOppR,
                            'forward', pyWire)
 
-        print '# ', (pyOppR.numGeom, pyR.numGeom)
+        # print '# ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflex(oppReflex, reflex,
                            pyOppR, pyR,
                            'backward', pyWire)
@@ -568,7 +568,7 @@ class _PyReflex(_Py):
         aa = reflex.copy()
 
         aa = aa.cut(cList, tolerance)
-        print 'aa.Faces ', aa.Faces, len(aa.Faces)
+        # print 'aa.Faces ', aa.Faces, len(aa.Faces)
 
         rear = pyR.rear
         if rear:
@@ -579,8 +579,8 @@ class _PyReflex(_Py):
             else:
                 rr = pyPlaneList[rear[-1]]
                 corner = pyR.rango[-1]
-            print 'rear ', rr.numGeom
-            print 'corner ', corner
+            # print 'rear ', rr.numGeom
+            # print 'corner ', corner
             rrG = rr.geomShape
 
             corn = []
@@ -606,7 +606,7 @@ class _PyReflex(_Py):
                 section = ff.section([_Py.face], tolerance)
                 if section.Edges:
                     bList.append(ff)
-            print 'triangle ', bList
+            # print 'triangle ', bList
             triangle = Part.makeShell(bList)
 
         cutterList = []
@@ -645,7 +645,7 @@ class _PyReflex(_Py):
 
                 if reflex.Faces:
                     reflex = reflex.cut([pyOppR.enormousShape], tolerance)
-                    print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
+                    # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
                 bList = []
                 for ff in reflex.Faces:
@@ -666,7 +666,7 @@ class _PyReflex(_Py):
 
                 aList.extend(secondaries)
                 aList.extend(bList)
-                print 'aList ', aList
+                # print 'aList ', aList
 
         compound = Part.makeCompound(aList)
         pyR.shape = compound
