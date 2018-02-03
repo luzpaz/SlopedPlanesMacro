@@ -846,6 +846,7 @@ class _PyReflex(_Py):
                                 section = pl.section([fo], tolerance)
                                 if not section.Edges:
                                     # print 'a'
+                                    # podría incluir todos
                                     section = fo.section([forward], tolerance)
                                     sect = fo.section([forwardOpp], tolerance)
                                     se = fo.section([gS], tolerance)

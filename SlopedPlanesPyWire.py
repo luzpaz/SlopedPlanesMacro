@@ -223,10 +223,10 @@ class _PyWire(_Py):
                             # print 'a'
                             pyPl.trimming(enormousShape)
                             control.append(numGeom)
-                            '''section = forward.section([gS], tolerance)
+                            section = forward.section([gS], tolerance)
                             if not section.Vertexes:
                                 pyPl.trimming(enormousShape)
-                            control.append(numGeom)'''
+                            control.append(numGeom)
 
                         elif pyPl.aligned:
                             # print 'b'
