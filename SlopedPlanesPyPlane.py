@@ -1095,3 +1095,17 @@ class _PyPlane(_Py):
 
         self.rango = rango
         self.rangoConsolidate = rangoConsolidate
+
+    def isSolved(self):
+
+        ''''''
+
+        tolerance = _Py.tolerance
+        forward = self.forward
+        backward = self.backward
+        plane = self.shape
+        section = plane.section([forward, backward], tolerance)
+        if section.Edges:
+            return False
+        else:
+            return True

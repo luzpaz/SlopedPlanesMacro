@@ -718,31 +718,23 @@ class _PyReflex(_Py):
         oppReflex = pyOppR.shape.copy()
 
         # print '### ', (pyR.numGeom, pyOppR.numGeom)
-        self.processReflexTwo(reflex, oppReflex, pyR, pyOppR, pyWire,
-                              'forward')
+        self.processReflexTwo(reflex, oppReflex, pyR, pyOppR, 'forward')
 
         # print '### ', (pyOppR.numGeom, pyR.numGeom)
-        self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, pyWire,
-                              'backward')
+        self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, 'backward')
 
-    def processReflexTwo(self, reflex, oppReflex, pyR, pyOppR, pyWire,
-                         direction):
+    def processReflexTwo(self, reflex, oppReflex, pyR, pyOppR, direction):
 
         '''
-        processReflexTwo(self, reflex, oppReflex, pyR, pyOppR, pyWire,
-                         direction)
+        processReflexTwo(self, reflex, oppReflex, pyR, pyOppR, direction)
         '''
 
         tolerance = _Py.tolerance
         gS = pyR.geomShape
         forward = pyR.forward
         backward = pyR.backward
-        forw = pyOppR.forward
-        backw = pyOppR.backward
 
-        section = oppReflex.section([forw, backw], tolerance)
-
-        if not section.Edges:
+        if pyOppR.isSolved():
             # print 'A'
 
             aList = []
@@ -769,9 +761,7 @@ class _PyReflex(_Py):
 
         else:
 
-            section = reflex.section([forward, backward], tolerance)
-
-            if section.Edges:
+            if pyR.isSolved():
                 # print 'B'
 
                 aList = []
@@ -805,7 +795,7 @@ class _PyReflex(_Py):
 
                 oppReflex = pyOppR.shape
                 reflex = pyR.shape
-                self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, pyWire,
+                self.processReflexTwo(oppReflex, reflex, pyOppR, pyR,
                                       'forward')
 
     def postProcess(self, pyWire):
