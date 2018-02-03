@@ -717,10 +717,10 @@ class _PyReflex(_Py):
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        print '### ', (pyR.numGeom, pyOppR.numGeom)
+        # print '### ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflexTwo(reflex, oppReflex, pyR, pyOppR, 'forward')
 
-        print '### ', (pyOppR.numGeom, pyR.numGeom)
+        # print '### ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, 'backward')
 
     def processReflexTwo(self, reflex, oppReflex, pyR, pyOppR, direction):
@@ -735,7 +735,7 @@ class _PyReflex(_Py):
         backward = pyR.backward
 
         if pyOppR.isSolved():
-            print 'A'
+            # print 'A'
 
             aList = []
             ff = reflex.Faces[0].copy()
@@ -762,7 +762,7 @@ class _PyReflex(_Py):
         else:
 
             if not pyR.isSolved():
-                print 'B'
+                # print 'B'
 
                 aList = []
                 reflex = reflex.cut([oppReflex], tolerance)
@@ -785,13 +785,13 @@ class _PyReflex(_Py):
                 pyR.control.append(pyOppR.numGeom)
 
             else:
-                print 'C'
+                # print 'C'
 
                 pass
 
         if direction == 'backward':
             if pyR.numGeom not in pyOppR.control:
-                print 'D'
+                # print 'D'
 
                 oppReflex = pyOppR.shape
                 reflex = pyR.shape

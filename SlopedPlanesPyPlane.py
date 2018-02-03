@@ -986,10 +986,14 @@ class _PyPlane(_Py):
 
                 else:
                     # print '12'
-                    fList = []
-                    for ff in plane.Faces:
-                        ff = ff.cut(cutterList, tolerance)
-                        fList.append(ff.Faces[0])   # esto hay que cambiarlo?
+                    ff = plane.Faces[0]
+                    ff = self.cutting(ff, cutterList, gS)
+                    fList = [ff]
+
+                    ff = plane.Faces[1]
+                    ff = ff.cut(cutterList, tolerance)
+                    fList.append(ff.Faces[0])   # esto hay que cambiarlo?
+
                     compound = Part.makeCompound(fList)
                     self.shape = compound
                     # print 'fList ', fList
@@ -998,7 +1002,7 @@ class _PyPlane(_Py):
             else:
                 # print '2'
                 self.cuttingPyth(cutterList)
-                # print 'plane ', self.plane
+                # print 'plane ', self
 
     def rangging(self, pyWire, direction):
 
