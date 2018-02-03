@@ -782,7 +782,8 @@ class _PyPlane(_Py):
         # backward = self.backward
         plane = self.shape
         # if plane.section([forward, backward], tolerance).Edges:
-        if plane.section([forward], tolerance).Edges:
+        ## if plane.section([forward], tolerance).Edges:
+        if not self.isSolved():
             # print 'foo'
             return
 

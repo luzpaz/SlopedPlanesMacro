@@ -717,10 +717,10 @@ class _PyReflex(_Py):
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        # print '### ', (pyR.numGeom, pyOppR.numGeom)
+        print '### ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflexTwo(reflex, oppReflex, pyR, pyOppR, 'forward')
 
-        # print '### ', (pyOppR.numGeom, pyR.numGeom)
+        print '### ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, 'backward')
 
     def processReflexTwo(self, reflex, oppReflex, pyR, pyOppR, direction):
@@ -735,7 +735,7 @@ class _PyReflex(_Py):
         backward = pyR.backward
 
         if pyOppR.isSolved():
-            # print 'A'
+            print 'A'
 
             aList = []
             ff = reflex.Faces[0].copy()
@@ -761,8 +761,8 @@ class _PyReflex(_Py):
 
         else:
 
-            if pyR.isSolved():
-                # print 'B'
+            if not pyR.isSolved():
+                print 'B'
 
                 aList = []
                 reflex = reflex.cut([oppReflex], tolerance)
@@ -785,13 +785,13 @@ class _PyReflex(_Py):
                 pyR.control.append(pyOppR.numGeom)
 
             else:
-                # print 'C'
+                print 'C'
 
                 pass
 
         if direction == 'backward':
             if pyR.numGeom not in pyOppR.control:
-                # print 'D'
+                print 'D'
 
                 oppReflex = pyOppR.shape
                 reflex = pyR.shape
@@ -813,7 +813,7 @@ class _PyReflex(_Py):
         pyOppPlane = refList[1]
         forwardOpp = pyOppPlane.forward
 
-        for pyPlane in self.planes:
+        for pyPlane in refList:
             plane = pyPlane.shape
 
             if len(plane.Faces) == 1:
@@ -833,15 +833,16 @@ class _PyReflex(_Py):
                                 # ba = pyPl.backward
                                 pl = pyPl.shape
                                 # section = pl.section([fo, ba], tolerance)
-                                section = pl.section([fo], tolerance)
-                                if not section.Edges:
+                                # section = pl.section([fo], tolerance)
+                                # if not section.Edges:
+                                if pyPl.isSolved():
                                     # print 'a'
-                                    # podría incluir todos
                                     section = fo.section([forward], tolerance)
                                     sect = fo.section([forwardOpp], tolerance)
                                     se = fo.section([gS], tolerance)
                                     if section.Vertexes or sect.Vertexes or se.Vertexes:
                                         # print 'b'
+                                        pl = pyPl.shape
                                         cutterList.append(pl)
                                         pyPlane.control.append(pyPl.numGeom)
                                         # print '# included cutter ', pyPl.numGeom
