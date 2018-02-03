@@ -727,7 +727,6 @@ class _PyPlane(_Py):
         '''trimming(self, enormousShape, enormShape=None)
         '''
 
-        shape = self.shape
         bigShape = self.bigShape
         gS = self.geomShape
 
@@ -780,7 +779,9 @@ class _PyPlane(_Py):
 
         tolerance = _Py.tolerance
         forward = self.forward
+        # backward = self.backward
         plane = self.shape
+        # if plane.section([forward, backward], tolerance).Edges:
         if plane.section([forward], tolerance).Edges:
             # print 'foo'
             return
@@ -831,6 +832,10 @@ class _PyPlane(_Py):
                     control.append(self.numGeom)
 
                 if pyOppPlane.numGeom not in control:
+                    '''fo = pyOppPlane.forward
+                    ba = pyOppPlane.backward
+                    section = oppPlane.section([fo, ba], tolerance)
+                    if not section.Edges:'''
                     cList.append(oppPlane)
                     # print 'included ', pyOppPlane.numGeom
                     control.append(pyOppPlane.numGeom)
@@ -878,7 +883,7 @@ class _PyPlane(_Py):
                         self.shape = compound
                         self.control.append(rear)
 
-                    if len(oppPlane.Faces) == 1:
+                    if len(oppPlane.Faces) == 1:    # cuidado
                         # print 'BB'
 
                         gS = pyOppPlane.geomShape

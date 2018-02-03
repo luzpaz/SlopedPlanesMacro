@@ -194,11 +194,21 @@ class _PyWire(_Py):
                         rango = pyPlane.rango[0]
                     if pyOppPlane.rear:
                         oppRango = pyOppPlane.rango[-1]
+
                 else:
                     if pyPlane.rear:
                         rango = pyPlane.rango[-1]
                     if pyOppPlane.rear:
                         oppRango = pyOppPlane.rango[0]
+
+                # volver a bajar a reflexed ??
+                if len(pyPlane.rear) == 1:
+                    forward = pyPlane.forward
+                else:
+                    if num == 0:
+                        forward = pyPlane.forward
+                    else:
+                        forward = pyPlane.backward
 
                 for nG in rango:
                     pyPl = pyPlaneList[nG]
@@ -207,10 +217,16 @@ class _PyWire(_Py):
                     if numGeom not in control:
                         # print '# cutted ', nG
 
+                        gS = pyPl.geomShape
+
                         if not pyPl.reflexed:
                             # print 'a'
                             pyPl.trimming(enormousShape)
                             control.append(numGeom)
+                            '''section = forward.section([gS], tolerance)
+                            if not section.Vertexes:
+                                pyPl.trimming(enormousShape)
+                            control.append(numGeom)'''
 
                         elif pyPl.aligned:
                             # print 'b'
@@ -219,16 +235,8 @@ class _PyWire(_Py):
                         else:
                             # print 'c'
 
-                            if len(pyPlane.rear) == 1:
-                                forward = pyPlane.forward
-                            else:
-                                if num == 0:
-                                    forward = pyPlane.forward
-                                else:
-                                    forward = pyPlane.backward
+                            forw = pyPl.forward     # no deberia seleccionar C?
 
-                            gS = pyPl.geomShape
-                            forw = pyPl.forward
                             section =\
                                 forward.section([forw, gS], tolerance)
 
