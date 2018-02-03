@@ -832,13 +832,13 @@ class _PyPlane(_Py):
                     control.append(self.numGeom)
 
                 if pyOppPlane.numGeom not in control:
-                    '''fo = pyOppPlane.forward
+                    fo = pyOppPlane.forward
                     ba = pyOppPlane.backward
                     section = oppPlane.section([fo, ba], tolerance)
-                    if not section.Edges:'''
-                    cList.append(oppPlane)
-                    # print 'included ', pyOppPlane.numGeom
-                    control.append(pyOppPlane.numGeom)
+                    if not section.Edges:
+                        cList.append(oppPlane)
+                        # print 'included ', pyOppPlane.numGeom
+                        control.append(pyOppPlane.numGeom)
 
                 if cList:
                     # print 'cList ', cList
