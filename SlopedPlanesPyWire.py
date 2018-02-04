@@ -221,8 +221,6 @@ class _PyWire(_Py):
 
                         if not pyPl.reflexed:
                             # print 'a'
-                            pyPl.trimming(enormousShape)
-                            control.append(numGeom)
                             section = forward.section([gS], tolerance)
                             if not section.Vertexes:
                                 pyPl.trimming(enormousShape)
