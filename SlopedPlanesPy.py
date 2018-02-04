@@ -348,12 +348,19 @@ class _Py(object):
             compound.Placement = placement
             Part.show(compound, self.slopedPlanes.Name+' cutter '+str(numWire)+' '+str(numGeom))
 
-        '''under = pyPlane._under
+        under = pyPlane.under
         if under:
 
             compound = Part.makeCompound(under)
             compound.Placement = placement
-            Part.show(compound, self.slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))'''
+            Part.show(compound, self.slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))
+
+        seed = pyPlane.seed
+        if seed:
+
+            compound = Part.makeCompound(seed)
+            compound.Placement = placement
+            Part.show(compound, self.slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))
 
         if pyPlane.aligned:
             pyAli = self.selectAlignment(numWire, numGeom)

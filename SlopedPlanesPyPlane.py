@@ -50,6 +50,9 @@ class _PyPlane(_Py):
         self.length = 2 * size
         self.overhang = 0
         self.rear = []
+        ##self.secondRear = []
+        self.under = None
+        self.seed = None
         self.rango = []
         self.rangoConsolidate = []
         self.reflexed = False
@@ -219,6 +222,48 @@ class _PyPlane(_Py):
         ''''''
 
         self._rear = rear
+
+    '''@property
+    def secondRear(self):
+
+        ''''''
+
+        return self._secondRear
+
+    @secondRear.setter
+    def secondRear(self, secondRear):
+
+        ''''''
+
+        self._secondRear = secondRear'''
+
+    @property
+    def under(self):
+
+        ''''''
+
+        return self._under
+
+    @under.setter
+    def under(self, under):
+
+        ''''''
+
+        self._under = under
+
+    @property
+    def seed(self):
+
+        ''''''
+
+        return self._seed
+
+    @seed.setter
+    def seed(self, seed):
+
+        ''''''
+
+        self._seed = seed
 
     @property
     def rango(self):
@@ -592,6 +637,8 @@ class _PyPlane(_Py):
         if self.reflexed:
             self.simulatedShape = None
             self.cutter = []
+            self.under = None  # ??
+            self.seed = None
 
     def doPlane(self, direction, geom, firstParam, lastParam, scale):
 
