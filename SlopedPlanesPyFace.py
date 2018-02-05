@@ -312,6 +312,8 @@ class _PyFace(_Py):
             return
 
         pyWireList = self.wires
+        shapeGeomFace = self.shapeGeom
+        tolerance = _Py.tolerance
 
         if resetFace:
             for pyWire in pyWireList:
@@ -329,11 +331,8 @@ class _PyFace(_Py):
                     pyReflex.planes = planeList
 
         self.alignments = []  # always reset alignments
-        shapeGeomFace = self.shapeGeom
 
-        tolerance = _Py.tolerance
-
-        refList = []
+        refList = []    # covers the reflexs conected with alignment
 
         for pyWire in pyWireList:
             numWire = pyWire.numWire
@@ -604,11 +603,9 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-        # self.printSummary()
-
     def into(self, pointOne, pointTwo):
 
-        ''''''
+        '''into(self, pointOne, pointTwo)'''
 
         tolerance = _Py.tolerance
         into = False
@@ -738,7 +735,7 @@ class _PyFace(_Py):
         Finds the rear plane of a reflexed plane.
         Determines if an arrow situacion happens.'''
 
-        print '### findRear ', (pyPlane.numWire, pyPlane.numGeom)
+        # print '### findRear ', (pyPlane.numWire, pyPlane.numGeom)
 
         tolerance = _Py.tolerance
         face = self.face
@@ -758,26 +755,26 @@ class _PyFace(_Py):
         edge = False
 
         if pyPlane.lineInto:
-            print 'a'
+            # print 'a'
 
             section = pyPlane.lineInto.section([sGW], tolerance)
             vertex = section.Vertexes[1]
 
         elif section.Edges:
-            print 'b'
+            # print 'b'
 
             edge = True
 
             if direction == 'forward':
-                print 'b1'
+                # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
 
             else:
-                print 'b2'
+                # print 'b2'
                 vertex = section.Edges[-1].Vertexes[1]
 
         else:
-            print 'c'
+           # print 'c'
             section = lineShape.section([face], tolerance)
 
             '''wire = Part.Wire(section.Edges[0])
@@ -788,7 +785,7 @@ class _PyFace(_Py):
             vertex = section.Edges[0].lastVertex(True)
             point = self.roundVector(vertex.Point)
             if point in coord:
-                print 'cc'
+                # print 'cc'
                 edge = True
 
             # second rear
@@ -805,12 +802,12 @@ class _PyFace(_Py):
                 print 'second rear ', pGeom
                 pyPlane.addValue('secondRear', pGeom, direction)'''
 
-        print 'point ', vertex.Point
-        print 'edge ', edge
+        # print 'point ', vertex.Point
+        # print 'edge ', edge
 
         nGeom = self.findGeomRear(pyWire, direction, vertex, edge)
 
-        print 'nGeom ', nGeom
+        # print 'nGeom ', nGeom
         pyPlane.addValue('rear', nGeom, direction)
 
         # arrow
@@ -826,7 +823,7 @@ class _PyFace(_Py):
 
     def findGeomRear(self, pyWire, direction, vertex, edge=False):
 
-        ''''''
+        '''findGeomRear(self, pyWire, direction, vertex, edge=False)'''
 
         coord = pyWire.coordinates
         lenWire = len(pyWire.planes)
@@ -1070,8 +1067,7 @@ class _PyFace(_Py):
     def virtualizing(self):
 
         '''virtualizing(self)
-        Transfers to PyWire and PyAlignment.
-        '''
+        Transfers to PyWire and PyAlignment.'''
 
         # print '######### virtualizing'
 
@@ -1084,8 +1080,7 @@ class _PyFace(_Py):
     def trimming(self):
 
         '''trimming(self)
-        Transfers to PyWire and PyAlignment.
-        '''
+        Transfers to PyWire and PyAlignment.'''
 
         # print '######### trimming'
 
@@ -1100,8 +1095,7 @@ class _PyFace(_Py):
     def priorLater(self):
 
         '''priorLater(self)
-        Transfers to PyWire and PyAlignment.
-        '''
+        Transfers to PyWire and PyAlignment.'''
 
         # print '######### priorLater'
 
@@ -1116,8 +1110,7 @@ class _PyFace(_Py):
     def simulating(self):
 
         '''simulating(self)
-        Transfers to PyWire and PyAlignment.
-        '''
+        Transfers to PyWire and PyAlignment.'''
 
         # print '######### simulating'
 
@@ -1135,8 +1128,7 @@ class _PyFace(_Py):
     def reflexing(self):
 
         '''reflexing(self)
-        Transfers to PyWire.
-        '''
+        Transfers to PyWire.'''
 
         # print '######### reflexing'
 
@@ -1148,8 +1140,7 @@ class _PyFace(_Py):
     def ordinaries(self):
 
         '''ordinaries(self)
-        Transfers to PyWire.
-        '''
+        Transfers to PyWire.'''
 
         # print '######### ordinaries'
 
@@ -1317,8 +1308,7 @@ class _PyFace(_Py):
     def aligning(self):
 
         '''aligning(self)
-        Transfers to PyAlignment.
-        '''
+        Transfers to PyAlignment.'''
 
         # print '######### aligning'
 
@@ -1331,8 +1321,7 @@ class _PyFace(_Py):
 
         '''end(self)
         
-        Transfers to PyAlignment.
-        '''
+        Transfers to PyAlignment.'''
 
         # print '######### end'
 
@@ -1519,5 +1508,5 @@ class _PyFace(_Py):
                                                 pyPl.cuttingPyth(cutterList)
                                                 # print 'rango chop ', (nn, pl)
 
-        '''for pyAlign in pyAlignList:
-            pyAlign.end()'''
+        for pyAlign in pyAlignList:
+            pyAlign.end()

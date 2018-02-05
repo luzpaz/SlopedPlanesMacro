@@ -33,7 +33,6 @@ __version__ = ""
 
 
 origin = FreeCAD.Vector(0, 0, 0)
-axisZ = FreeCAD.Vector(0, 0, 1)
 
 
 class _Py(object):

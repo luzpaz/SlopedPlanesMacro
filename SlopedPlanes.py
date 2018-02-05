@@ -376,7 +376,7 @@ To cero the plane width is equal to the related edge length of the base'''
                                 pyPlane.fronted = False
                                 pyPlane.seedShape = None
                                 angle = pyPlane.angle
-                                if isinstance(angle, list):
+                                if isinstance(angle, list):     # ???
                                     angle = self.selectPlane(angle[0],
                                                              angle[1]).angle
                                     pyPlane.angle = angle
