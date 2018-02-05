@@ -516,19 +516,19 @@ class _PyReflex(_Py):
         '''solveReflex(self, pyWire)
         '''
 
-        # print '### solveReflexs'
+        print '### solveReflexs'
 
         [pyR, pyOppR] = self.planes
 
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        # print '# ', (pyR.numGeom, pyOppR.numGeom)
+        print '# ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflex(reflex, oppReflex,
                            pyR, pyOppR,
                            'forward', pyWire)
 
-        # print '# ', (pyOppR.numGeom, pyR.numGeom)
+        print '# ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflex(oppReflex, reflex,
                            pyOppR, pyR,
                            'backward', pyWire)
@@ -593,25 +593,30 @@ class _PyReflex(_Py):
 
             corn = []
             for nn in corner:
+                # print 'corner nn ', nn
                 pyPl = pyPlaneList[nn]
                 if pyPl.aligned:
                     # print 'a'
                     pyAlign = self.selectAlignment(pyWire.numWire, nn)
                     pl = pyAlign.simulatedAlignment
+                    corn.append(pl)
                 elif pyPl.reflexed:
                     # print 'b'
                     pl = pyPl.simulatedShape
                     line = pyPl.forward
                     section = forw.section([line], tolerance)
                     if section.Vertexes:
-                        pass
+                        # print 'b1'
                         enormous.append(pyPl.enormousShape)
+                    else:
+                        # print 'b2'
+                        corn.append(pl)
                 else:
                     # print 'c'
                     pl = pyPl.shape
-                corn.append(pl)
+                    corn.append(pl)
             corn = Part.makeCompound(corn)
-
+            # print 'corn ', corn
             # print 'enormous ', enormous
 
             enorm = []
@@ -625,7 +630,6 @@ class _PyReflex(_Py):
                                 if not section.Vertexes:
                                     # print 'enorm ', pyPl.numGeom
                                     enorm.append(pyPl.enormousShape)
-
             # print 'enorm ', enorm
 
         aa = reflex.copy()
@@ -645,7 +649,6 @@ class _PyReflex(_Py):
                     section = ff.section([rrG], tolerance)
                     if not section.Vertexes:
                         cutterList.append(ff)
-
         # print 'cutterList ', cutterList, len(cutterList)
 
         cList = []
