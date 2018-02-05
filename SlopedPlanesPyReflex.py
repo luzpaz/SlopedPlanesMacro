@@ -942,7 +942,7 @@ class _PyReflex(_Py):
 
         ''''''
 
-        # print '### postProcessTwo'
+        print '### postProcessTwo'
 
         rangoInter = self.rango
         if not rangoInter:
@@ -964,42 +964,46 @@ class _PyReflex(_Py):
 
             section = plane.section([forward], tolerance)
             if section.Edges:
-                # print '# cutted ', pyPlane.numGeom
+                print '# cutted ', pyPlane.numGeom
 
                 pyRearPlane = pyPlaneList[rear]
                 rearPl = pyRearPlane.shape
                 pyOppRearPlane = pyPlaneList[oppRear]
+                oppRearPl = pyOppRearPlane.shape
 
                 # esta cutterList se debe trabajar mejor
 
-                cutterList = [rearPl, pyOppRearPlane.shape]
+                cutterList = [rearPl, oppRearPl]
 
                 for pyReflex in reflexList:
                     for pyPl in pyReflex.planes:
                         if pyPl.numGeom in rangoInter:
-                            # print pyPl.numGeom
+                            print pyPl.numGeom
 
                             pl = pyPl.shape
                             section = pl.section([rearPl], tolerance)
 
                             if section.Edges:
-                                # print 'a'
+                                print 'a'
                                 cutterList.append(pl)
-                                # print '# included cutter ', pyPl.numGeom
                                 pyPlane.control.append(pyPl.numGeom)
+                                print '# included cutter ', pyPl.numGeom
 
-                # print 'cutterList', cutterList
+                print 'cutterList', cutterList
 
                 gS = pyPlane.geomShape
 
                 if len(plane.Faces) == 1:
+                    print 'A'
 
                     plane = self.cutting(plane, cutterList, gS)
                     aList = [plane]
 
                 else:
+                    print 'B'
 
                     ff = plane.Faces[0]
+                    ff = self.cutting(ff, cutterList, gS)
                     aList = [ff]
 
                     ff = plane.Faces[1]
