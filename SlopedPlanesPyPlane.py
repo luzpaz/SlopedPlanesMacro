@@ -825,11 +825,8 @@ class _PyPlane(_Py):
         # print '### rearing ', (self.numWire, self.numGeom)
 
         tolerance = _Py.tolerance
-        forward = self.forward
-        # backward = self.backward
         plane = self.shape
-        # if plane.section([forward, backward], tolerance).Edges:
-        ## if plane.section([forward], tolerance).Edges:
+
         if not self.isSolved():
             # print 'foo'
             return

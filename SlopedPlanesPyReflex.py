@@ -625,14 +625,6 @@ class _PyReflex(_Py):
                                     # print 'enorm ', pyPl.numGeom
                                     enorm.append(pyPl.enormousShape)
 
-            '''for nn in oppCorner:
-                pyPl = pyPlaneList[nn]
-                if pyPl.reflexed:
-                    section = forw.section([pyPl.forward], tolerance)
-                    if section.Vertexes:
-                        # print 'enorm ', pyPl.numGeom
-                        enorm.append(pyPl.enormousShape)'''
-
             # print 'enorm ', enorm
 
         aa = reflex.copy()
@@ -688,15 +680,6 @@ class _PyReflex(_Py):
                 if reflex.Faces:
                     reflex = reflex.cut([pyOppR.enormousShape], tolerance)
                     # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
-
-                '''cList = []
-                for f in cutterList:
-                    section = f.section([backward], tolerance)
-                    if not section.Edges:
-                        cList.append(f)
-                pyR.under = cList
-                cutterList = Part.makeCompound(cList)
-                # print 'cutterList ', cutterList, len(cutterList)'''
 
                 if enormous:
 
@@ -755,29 +738,6 @@ class _PyReflex(_Py):
                                             # print 'e11'
                                             bList.append(ff)
 
-                                    '''if enormous:
-                                        # print 'e1'
-
-                                        common = ff.common([seed], tolerance)
-                                        if common.Area:
-                                            # print 'e11'
-                                            
-                                            
-                                            
-                                            bList.append(ff)
-
-                                    else:
-                                        # print 'e2'
-                                        section = ff.section([forward], tolerance)
-                                        if section.Edges:
-                                            # print 'e21'
-                                            section = ff.section(aList, tolerance)
-                                            if len(section.Vertexes) == 1:
-                                                # print 'e211'
-                                                bList.append(ff)
-                                        else:
-                                            # print 'e22'
-                                            bList.append(ff)'''
                 # print 'bList ', bList
 
                 aList.extend(secondaries)
@@ -911,14 +871,9 @@ class _PyReflex(_Py):
                             if pyPl not in refList:
                                 # print 'reflexed plane ', pyPl.numGeom
 
-                                fo = pyPl.forward
-                                # ba = pyPl.backward
-                                pl = pyPl.shape
-                                # section = pl.section([fo, ba], tolerance)
-                                # section = pl.section([fo], tolerance)
-                                # if not section.Edges:
                                 if pyPl.isSolved():
                                     # print 'a'
+                                    fo = pyPl.forward
                                     section = fo.section([forward], tolerance)
                                     sect = fo.section([forwardOpp], tolerance)
                                     se = fo.section([gS], tolerance)
