@@ -589,6 +589,7 @@ class _PyReflex(_Py):
             forw = orderedEdges[0]
 
             enormous = [rr.shape, oppRr.shape]   # rr.bigShape???
+            ## enormous = [rr.bigShape, oppRr.bigShape]
 
             corn = []
             for nn in corner:
@@ -720,6 +721,35 @@ class _PyReflex(_Py):
                                     section = ff.section([forward, backward], tolerance)
 
                                     if section.Edges:
+                                        # print 'e1'
+                                        section = ff.section(aList, tolerance)
+                                        if len(section.Vertexes) == 1:
+                                            # print 'e11'
+                                            if enormous:
+                                                # print 'e111'
+                                                common = ff.common([seed], tolerance)
+                                                if common.Area:
+                                                    # print 'e1111'
+                                                    bList.append(ff)
+                                            else:
+                                                # print 'e12'
+                                                bList.append(ff)
+
+                                    else:
+                                        # print 'e2'
+                                        if enormous:
+                                            # print 'e21'
+                                            common = ff.common([seed], tolerance)
+                                            if common.Area:
+                                                # print 'e211'
+                                                bList.append(ff)
+                                        else:
+                                            # print 'e22'
+                                            bList.append(ff)
+
+                                    '''section = ff.section([forward, backward], tolerance)
+
+                                    if section.Edges:
                                         # print 'e21'
                                         section = ff.section(aList, tolerance)
                                         if len(section.Vertexes) == 1:
@@ -736,7 +766,7 @@ class _PyReflex(_Py):
                                                 bList.append(ff)
                                         else:
                                             # print 'e11'
-                                            bList.append(ff)
+                                            bList.append(ff)'''
 
                 # print 'bList ', bList
 
