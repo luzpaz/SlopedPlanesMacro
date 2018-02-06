@@ -1025,7 +1025,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        # self.printSummary()
+        self.printSummary()
 
     def upping(self):
 
@@ -1124,7 +1124,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingAlignment()
 
-        # self.printControl('simulating')
+        self.printControl('simulating')
 
     def reflexing(self):
 

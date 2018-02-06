@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+import Part
 from SlopedPlanesPy import _Py
 
 
@@ -169,7 +170,7 @@ class _PyWire(_Py):
         The reflex corners act like a dam, blocking the progress
         of others planes.'''
 
-        print '###### trimming reflexs numWire ', self.numWire
+        # print '###### trimming reflexs numWire ', self.numWire
 
         pyPlaneList = self.planes
         tolerance = _Py.tolerance
@@ -178,7 +179,7 @@ class _PyWire(_Py):
             num = -1
             for pyPlane in pyReflex.planes:
                 num += 1
-                print '### cutter ', pyPlane.numGeom
+                # print '### cutter ', pyPlane.numGeom
 
                 numGeom = pyPlane.numGeom
                 numWire = pyPlane.numWire
@@ -211,7 +212,7 @@ class _PyWire(_Py):
                         forward = pyPlane.backward
 
                 if pyPlane.secondRear:
-                    # print 'secondRear'
+                    print 'secondRear'
                     pyRearPl = pyPlaneList[rear]
                     direction, geom = pyRearPl.direction(self, rear)
                     firstParam = geom.FirstParameter
@@ -223,30 +224,31 @@ class _PyWire(_Py):
                         pyRearPl.doPlane(direction, geomCopy, firstParam,
                                          lastParam, scale)
                     gS = pyPlane.geomShape
-                    enormousShape = self.cutting(enormousShape, [giantPlane], gS)
-                    # pyPlane.enormousShape = enormousShape
+                    enormousShape =\
+                        self.cutting(enormousShape, [giantPlane], gS)
+                    # no esta completo : preProcessTwo
 
                 for nG in rango:
                     pyPl = pyPlaneList[nG]
                     control = pyPl.control
 
                     if numGeom not in control:
-                        print '# cutted ', nG
+                        # print '# cutted ', nG
 
                         gS = pyPl.geomShape
 
                         if not pyPl.reflexed:
-                            print 'a'
+                            # print 'a'
 
                             pyPl.trimming(enormousShape)
                             control.append(numGeom)
 
                         elif pyPl.aligned:
-                            print 'b'
+                            # print 'b'
                             pass
 
                         else:
-                            print 'c'
+                            # print 'c'
 
                             forw = pyPl.forward     # no deberia seleccionar C?
 
@@ -280,16 +282,16 @@ class _PyWire(_Py):
                                                 break
 
                                 if procc:
-                                    print 'procc'
+                                    # print 'procc'
                                     pyPl.trimming(enormousShape)
                                     control.append(numGeom)
 
                                 else:
-                                    print 'no procc'
+                                    # print 'no procc'
                                     pyPl.trimmingTwo(enormousShape)
 
                             else:
-                                print 'c2'
+                                # print 'c2'
                                 pyPl.trimmingTwo(enormousShape)
 
                     if not pyPl.reflexed:
@@ -312,7 +314,6 @@ class _PyWire(_Py):
         for pyPlane in pyPlaneList:
             if not pyPlane.aligned:
 
-                plane = pyPlane.shape
                 numGeom = pyPlane.numGeom
                 control = pyPlane.control
                 # print '### numGeom ', numGeom
@@ -434,6 +435,10 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.preProcess(self)
         # self.printControl('preProcess')
+
+        for pyReflex in self.reflexs:
+            pyReflex.preProcessTwo(self)
+        # self.printControl('preProcessTwo')
 
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)

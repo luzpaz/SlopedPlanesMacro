@@ -177,12 +177,20 @@ class _PyReflex(_Py):
 
             rango = self.planes[-1].rango[-1]
 
+    def preProcessTwo(self, pyWire):
+
+        '''preProcess(self, pyWire)'''
+
+        # print '### preProcessTwo'
+
+        pyPlaneList = pyWire.planes
+
         # The planes included in a range are cutted by rear and oppRear
 
         num = -1
         for pyPlane in self.planes:
             num += 1
-            # print '# pyPlane ', pyPlane.numGeom
+            print '# pyPlane ', pyPlane.numGeom
 
             pyOppPlane = self.planes[num-1]
             if pyOppPlane.rear and pyPlane.rear:
@@ -198,9 +206,9 @@ class _PyReflex(_Py):
                     rear = pyPlane.rear[-1]
                     oppRear = pyOppPlane.rear[0]
 
-                # print 'rango ', rango
-                # print 'oppRear ', oppRear
-                # print 'rear ', rear
+                print 'rango ', rango
+                print 'oppRear ', oppRear
+                print 'rear ', rear
 
                 pyRearPlane = pyPlaneList[rear]
                 if pyRearPlane.reflexed:
@@ -215,10 +223,10 @@ class _PyReflex(_Py):
                     oppRearPlane = pyOppRearPlane.shape
 
                 for nG in rango:
-                    # print '# nG ', nG
+                    print '# nG ', nG
                     pyPl = pyPlaneList[nG]
                     if not pyPl.reflexed:
-                        # print 'a'
+                        print 'a'
                         control = pyPl.control
                         cList = []
                         if oppRear not in control:

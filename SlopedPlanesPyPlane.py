@@ -590,16 +590,6 @@ class _PyPlane(_Py):
         else:
             # print 'no seed'
 
-            '''coordinates = pyWire.coordinates
-            geom = self.doGeom()
-            eje = coordinates[numGeom+1].sub(coordinates[numGeom])
-            direction = self.rotateVector(eje, _Py.normal, 90)
-            angle = self.angle
-            if _Py.reverse:
-                angle = angle * -1
-            direction = self.rotateVector(direction, eje, angle)
-            direction.normalize()'''
-
             direction, geom = self.direction(pyWire, numGeom)
 
             firstParam = geom.FirstParameter

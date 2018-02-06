@@ -354,6 +354,7 @@ To cero the plane width is equal to the related edge length of the base'''
                             pyPlaneListNew.append(pyPlane)
                             pyPlane.numGeom = numGeom
                             # print '1'
+
                             if pyWire.reset:
                                 # print '11'
                                 pyPlane.angle = 45
@@ -361,6 +362,7 @@ To cero the plane width is equal to the related edge length of the base'''
                                 pyPlane.leftWidth = size
                                 pyPlane.length = 2 * size
                                 pyPlane.overhang = 0
+
                             if pyFace.reset:
                                 # print '111'
                                 pyPlane.rear = []
@@ -376,7 +378,7 @@ To cero the plane width is equal to the related edge length of the base'''
                                 pyPlane.fronted = False
                                 pyPlane.seedShape = None
                                 angle = pyPlane.angle
-                                if isinstance(angle, list):     # ???
+                                if isinstance(angle, list):
                                     angle = self.selectPlane(angle[0],
                                                              angle[1]).angle
                                     pyPlane.angle = angle
