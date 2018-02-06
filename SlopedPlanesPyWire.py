@@ -34,9 +34,9 @@ __version__ = ""
 class _PyWire(_Py):
 
     '''The complementary python object class for wires. Two consecutive planes
-    of the same wire could make reflex corners.
-    The planes could make alignments with others planes even belonging
-    to different wires.
+    of the same wire could make a reflex corner.
+    The planes of the wire could make alignments with others planes,
+    even belonging to different wires.
     The exterior wires round counterclockwise, from the lowerleft point.
     The interior wires round clockwise, from the upperleft point.'''
 
@@ -154,7 +154,7 @@ class _PyWire(_Py):
                 for pyPlane in pyReflex.planes:
                     if pyPlane.rear:
                         pyPlane.rangging(self, direction)
-                        direction = "backward"
+                    direction = "backward"
 
     def virtualizing(self):
 
