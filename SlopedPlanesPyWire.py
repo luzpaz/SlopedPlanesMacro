@@ -194,7 +194,6 @@ class _PyWire(_Py):
                         rango = pyPlane.rango[0]
                     if pyOppPlane.rear:
                         oppRango = pyOppPlane.rango[-1]
-
                 else:
                     if pyPlane.rear:
                         rango = pyPlane.rango[-1]
@@ -208,6 +207,10 @@ class _PyWire(_Py):
                         forward = pyPlane.forward
                     else:
                         forward = pyPlane.backward
+
+                if pyPlane.secondRear:
+                    print 'secondRear'
+                    
 
                 for nG in rango:
                     pyPl = pyPlaneList[nG]

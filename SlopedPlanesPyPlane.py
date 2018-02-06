@@ -590,7 +590,7 @@ class _PyPlane(_Py):
         else:
             # print 'no seed'
 
-            coordinates = pyWire.coordinates
+            '''coordinates = pyWire.coordinates
             geom = self.doGeom()
             eje = coordinates[numGeom+1].sub(coordinates[numGeom])
             direction = self.rotateVector(eje, _Py.normal, 90)
@@ -598,7 +598,9 @@ class _PyPlane(_Py):
             if _Py.reverse:
                 angle = angle * -1
             direction = self.rotateVector(direction, eje, angle)
-            direction.normalize()
+            direction.normalize()'''
+
+            direction, geom = self.direction(pyWire, numGeom)
 
             firstParam = geom.FirstParameter
             lastParam = geom.LastParameter
@@ -637,8 +639,24 @@ class _PyPlane(_Py):
         if self.reflexed:
             self.simulatedShape = None
             self.cutter = []
-            self.under = None  # ??
+            self.under = None
             self.seed = None
+
+    def direction(self, pyWire, numGeom):
+
+        '''direction(self, pyWire, numGeom)'''
+
+        coordinates = pyWire.coordinates
+        geom = self.doGeom()
+        eje = coordinates[numGeom+1].sub(coordinates[numGeom])
+        direction = self.rotateVector(eje, _Py.normal, 90)
+        angle = self.angle
+        if _Py.reverse:
+            angle = angle * -1
+        direction = self.rotateVector(direction, eje, angle)
+        direction.normalize()
+
+        return direction, geom
 
     def doPlane(self, direction, geom, firstParam, lastParam, scale):
 
