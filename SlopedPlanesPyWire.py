@@ -212,7 +212,7 @@ class _PyWire(_Py):
                         forward = pyPlane.backward
 
                 if pyPlane.secondRear:
-                    print 'secondRear'
+                    # print 'secondRear'
                     pyRearPl = pyPlaneList[rear]
                     direction, geom = pyRearPl.direction(self, rear)
                     firstParam = geom.FirstParameter

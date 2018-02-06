@@ -779,7 +779,7 @@ class _PyFace(_Py):
 
             '''wire = Part.Wire(section.Edges[0])
             orderedVertexes = wire.OrderedVertexes
-            print 'orderedVertexes ', [v.Point for v in orderedVertexes]
+            # print 'orderedVertexes ', [v.Point for v in orderedVertexes]
             vertex = orderedVertexes[1]'''
 
             vertex = section.Edges[0].lastVertex(True)
@@ -800,7 +800,7 @@ class _PyFace(_Py):
                 if poi in coord:
                     ed = True
                 pGeom = self.findGeomRear(pyWire, direction, vert, ed)
-                print 'second rear ', pGeom'''
+                # print 'second rear ', pGeom'''
                 pyPlane.addValue('secondRear', 'True', direction)
 
         # print 'point ', vertex.Point
@@ -1025,7 +1025,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        self.printSummary()
+        # self.printSummary()
 
     def upping(self):
 
@@ -1124,7 +1124,7 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingAlignment()
 
-        self.printControl('simulating')
+        # self.printControl('simulating')
 
     def reflexing(self):
 
