@@ -364,7 +364,7 @@ To cero the plane width is equal to the related edge length of the base'''
                             if pyFace.reset:
                                 # print '111'
                                 pyPlane.rear = []
-                                ## pyPlane.secondRear = []
+                                pyPlane.secondRear = []
                                 pyPlane.under = None
                                 pyPlane.seed = None
                                 pyPlane.rango = []
@@ -412,6 +412,11 @@ To cero the plane width is equal to the related edge length of the base'''
                     for pyPlane in pyWire.planes:
                         pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
+
+                        try:
+                            pyPlane.secondRear
+                        except AttributeError:
+                            pyPlane.secondRear = []
 
             pyFace.parsing()        #
 

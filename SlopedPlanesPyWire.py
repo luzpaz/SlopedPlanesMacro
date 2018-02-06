@@ -158,7 +158,7 @@ class _PyWire(_Py):
 
     def virtualizing(self):
 
-        ''''''
+        '''virtualizing(self)'''
 
         for pyReflex in self.reflexs:
             pyReflex.virtualizing()
@@ -166,7 +166,7 @@ class _PyWire(_Py):
     def trimming(self):
 
         '''trimming(self)
-        The reflex corners act like a dam blocking the progress
+        The reflex corners act like a dam, blocking the progress
         of others planes.'''
 
         # print '###### trimming reflexs numWire ', self.numWire
@@ -201,7 +201,6 @@ class _PyWire(_Py):
                     if pyOppPlane.rear:
                         oppRango = pyOppPlane.rango[0]
 
-                # volver a bajar a reflexed ??
                 if len(pyPlane.rear) == 1:
                     forward = pyPlane.forward
                 else:
@@ -221,11 +220,6 @@ class _PyWire(_Py):
 
                         if not pyPl.reflexed:
                             # print 'a'
-
-                            '''section = forward.section([gS], tolerance)
-                            if not section.Vertexes:
-                                pyPl.trimming(enormousShape)
-                            control.append(numGeom)'''
 
                             pyPl.trimming(enormousShape)
                             control.append(numGeom)
@@ -290,8 +284,7 @@ class _PyWire(_Py):
 
     def priorLater(self):
 
-        '''priorLater(self)
-        '''
+        '''priorLater(self)'''
 
         # print '###### priorLater wire ', self.numWire
 
@@ -410,16 +403,14 @@ class _PyWire(_Py):
 
     def simulating(self):
 
-        '''simulating(self)
-        '''
+        '''simulating(self)'''
 
         for pyReflex in self.reflexs:
             pyReflex.simulating()
 
     def reflexing(self):
 
-        '''reflexing(self)
-        '''
+        '''reflexing(self)'''
 
         # print '###### reflexing wire ', self.numWire
 
@@ -459,8 +450,7 @@ class _PyWire(_Py):
 
     def ordinaries(self):
 
-        '''ordinaries(self)
-        '''
+        '''ordinaries(self)'''
 
          # all plane with shape, except chops and reflexs and fronted. CAMBIAR
         for pyPlane in self.planes:

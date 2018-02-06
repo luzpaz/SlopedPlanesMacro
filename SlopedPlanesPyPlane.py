@@ -50,7 +50,7 @@ class _PyPlane(_Py):
         self.length = 2 * size
         self.overhang = 0
         self.rear = []
-        ##self.secondRear = []
+        self.secondRear = []
         self.under = None
         self.seed = None
         self.rango = []
@@ -223,7 +223,7 @@ class _PyPlane(_Py):
 
         self._rear = rear
 
-    '''@property
+    @property
     def secondRear(self):
 
         ''''''
@@ -235,7 +235,7 @@ class _PyPlane(_Py):
 
         ''''''
 
-        self._secondRear = secondRear'''
+        self._secondRear = secondRear
 
     @property
     def under(self):

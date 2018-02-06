@@ -516,19 +516,19 @@ class _PyReflex(_Py):
         '''solveReflex(self, pyWire)
         '''
 
-        print '### solveReflexs'
+        # print '### solveReflexs'
 
         [pyR, pyOppR] = self.planes
 
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        print '# ', (pyR.numGeom, pyOppR.numGeom)
+        # print '# ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflex(reflex, oppReflex,
                            pyR, pyOppR,
                            'forward', pyWire)
 
-        print '# ', (pyOppR.numGeom, pyR.numGeom)
+        # print '# ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflex(oppReflex, reflex,
                            pyOppR, pyR,
                            'backward', pyWire)

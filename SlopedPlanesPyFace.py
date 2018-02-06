@@ -789,18 +789,19 @@ class _PyFace(_Py):
                 edge = True
 
             # second rear
-            '''try:
-                vert = section.Edges[1].firstVertex(True)
+            try:
+                # vert = section.Edges[1].firstVertex(True)
+                section.Edges[1].firstVertex(True)
             except IndexError:
                 pass
             else:
-                poi = self.roundVector(vert.Point)
+                '''poi = self.roundVector(vert.Point)
                 ed = False
                 if poi in coord:
                     ed = True
                 pGeom = self.findGeomRear(pyWire, direction, vert, ed)
-                print 'second rear ', pGeom
-                pyPlane.addValue('secondRear', pGeom, direction)'''
+                print 'second rear ', pGeom'''
+                pyPlane.addValue('secondRear', 'True', direction)
 
         # print 'point ', vertex.Point
         # print 'edge ', edge
