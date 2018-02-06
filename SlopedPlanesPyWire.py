@@ -169,7 +169,7 @@ class _PyWire(_Py):
         The reflex corners act like a dam, blocking the progress
         of others planes.'''
 
-        # print '###### trimming reflexs numWire ', self.numWire
+        print '###### trimming reflexs numWire ', self.numWire
 
         pyPlaneList = self.planes
         tolerance = _Py.tolerance
@@ -178,11 +178,11 @@ class _PyWire(_Py):
             num = -1
             for pyPlane in pyReflex.planes:
                 num += 1
-                # print '### cutter ', pyPlane.numGeom
+                print '### cutter ', pyPlane.numGeom
 
                 numGeom = pyPlane.numGeom
                 numWire = pyPlane.numWire
-                enormousShape = pyPlane.enormousShape
+                enormousShape = pyPlane.enormousShape.copy()
 
                 pyOppPlane = pyReflex.planes[num-1]
 
@@ -191,11 +191,13 @@ class _PyWire(_Py):
 
                 if num == 0:
                     if pyPlane.rear:
+                        rear = pyPlane.rear[0]
                         rango = pyPlane.rango[0]
                     if pyOppPlane.rear:
                         oppRango = pyOppPlane.rango[-1]
                 else:
                     if pyPlane.rear:
+                        rear = pyPlane.rear[-1]
                         rango = pyPlane.rango[-1]
                     if pyOppPlane.rear:
                         oppRango = pyOppPlane.rango[0]
@@ -210,29 +212,45 @@ class _PyWire(_Py):
 
                 if pyPlane.secondRear:
                     print 'secondRear'
-                    
+                    pyRearPl = pyPlaneList[rear]
+                    direction, geom = pyRearPl.direction(self, rear)
+                    print 'direction ', direction
+                    print 'geom ', geom
+                    firstParam = geom.FirstParameter
+                    lastParam = geom.LastParameter
+                    geomCopy = geom.copy()
+                    geomCopy.translate(-1*_Py.size*direction)
+                    scale = 1000000
+                    giantPlane =\
+                        pyRearPl.doPlane(direction, geomCopy, firstParam,
+                                         lastParam, scale)
+                    print 'gaint ', giantPlane
+                    gS = pyPlane.geomShape
+                    enormousShape = self.cutting(enormousShape, [giantPlane], gS)
+                    print 'enormous ', enormousShape
+                    # pyPlane.enormousShape = enormousShape
 
                 for nG in rango:
                     pyPl = pyPlaneList[nG]
                     control = pyPl.control
 
                     if numGeom not in control:
-                        # print '# cutted ', nG
+                        print '# cutted ', nG
 
                         gS = pyPl.geomShape
 
                         if not pyPl.reflexed:
-                            # print 'a'
+                            print 'a'
 
                             pyPl.trimming(enormousShape)
                             control.append(numGeom)
 
                         elif pyPl.aligned:
-                            # print 'b'
+                            print 'b'
                             pass
 
                         else:
-                            # print 'c'
+                            print 'c'
 
                             forw = pyPl.forward     # no deberia seleccionar C?
 
@@ -266,16 +284,16 @@ class _PyWire(_Py):
                                                 break
 
                                 if procc:
-                                    # print 'procc'
+                                    print 'procc'
                                     pyPl.trimming(enormousShape)
                                     control.append(numGeom)
 
                                 else:
-                                    # print 'no procc'
+                                    print 'no procc'
                                     pyPl.trimmingTwo(enormousShape)
 
                             else:
-                                # print 'c2'
+                                print 'c2'
                                 pyPl.trimmingTwo(enormousShape)
 
                     if not pyPl.reflexed:
