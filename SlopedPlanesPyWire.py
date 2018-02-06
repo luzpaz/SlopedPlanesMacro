@@ -211,11 +211,9 @@ class _PyWire(_Py):
                         forward = pyPlane.backward
 
                 if pyPlane.secondRear:
-                    print 'secondRear'
+                    # print 'secondRear'
                     pyRearPl = pyPlaneList[rear]
                     direction, geom = pyRearPl.direction(self, rear)
-                    print 'direction ', direction
-                    print 'geom ', geom
                     firstParam = geom.FirstParameter
                     lastParam = geom.LastParameter
                     geomCopy = geom.copy()
@@ -224,10 +222,8 @@ class _PyWire(_Py):
                     giantPlane =\
                         pyRearPl.doPlane(direction, geomCopy, firstParam,
                                          lastParam, scale)
-                    print 'gaint ', giantPlane
                     gS = pyPlane.geomShape
                     enormousShape = self.cutting(enormousShape, [giantPlane], gS)
-                    print 'enormous ', enormousShape
                     # pyPlane.enormousShape = enormousShape
 
                 for nG in rango:
