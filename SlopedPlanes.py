@@ -418,29 +418,29 @@ To cero the plane width is equal to the related edge length of the base'''
                         except AttributeError:
                             pyPlane.secondRear = []
 
-            pyFace.parsing()        #
+            pyFace.parsing()
 
-            pyFace.planning()       #
+            pyFace.planning()
 
-            pyFace.upping()         #
+            pyFace.upping()
 
-            pyFace.virtualizing()   #
+            pyFace.virtualizing()
 
-            pyFace.trimming()       #
+            pyFace.trimming()
 
-            pyFace.priorLater()     #
+            pyFace.priorLater()
 
-            pyFace.simulating()     #
+            pyFace.simulating()
 
-            pyFace.reflexing()      #
+            pyFace.reflexing()
 
-            '''pyFace.ordinaries()     #
+            pyFace.ordinaries()
 
-            pyFace.betweenWires()   #
+            pyFace.betweenWires()
 
-            pyFace.aligning()       #
+            pyFace.aligning()
 
-            pyFace.end()            # '''
+            pyFace.end()  # '''
 
         if onChanged:
             # print 'AAA'
@@ -564,7 +564,7 @@ To cero the plane width is equal to the related edge length of the base'''
             normal = self.faceNormal(faceList[0])
             if slopedPlanes.Reverse:
                 normal = normal * -1
-            endShape = endShape.extrude(slopedPlanes.Thickness.Value*normal)
+            endShape = endShape.extrude(slopedPlanes.Thickness.Value * normal)
 
             # the Thickness System breaks the faces numeration
             # first give the angles and later apply Thickness
@@ -578,8 +578,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
     def onChanged(self, slopedPlanes, prop):
 
-        '''onChanged(self, slopedPlanes, prop)
-        '''
+        '''onChanged(self, slopedPlanes, prop)'''
 
         if self.State:
 
@@ -621,8 +620,7 @@ To cero the plane width is equal to the related edge length of the base'''
 
     def overWritePyProp(self, prop, value):
 
-        '''overWritePyProp(self, prop, value)
-        '''
+        '''overWritePyProp(self, prop, value)'''
 
         for pyFace in self.Pyth:
 

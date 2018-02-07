@@ -275,7 +275,7 @@ class _PyAlignment(_Py):
         else:
             rangoRear = []
         self.rangoRear = rangoRear
-        print 'rangoRear ', rangoRear
+        # print 'rangoRear ', rangoRear
 
         rangoChop = self.rango
         rangoCopy = rangoChop[:]

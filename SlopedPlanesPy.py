@@ -616,20 +616,20 @@ class _Py(object):
 
         ''''''
 
-        print 'rang ', (numGeom, nGeom)
+        # print 'rang ', (numGeom, nGeom)
 
         lenWire = len(pyWire.planes)
 
         if nGeom > numGeom:
-            print 'B1'
+            # print 'B1'
 
             if direction == "forward":
-                print 'B11'
+                # print 'B11'
                 num = self.sliceIndex(numGeom+2, lenWire)
                 ran = range(num, nGeom)
 
             else:
-                print 'B12'
+                # print 'B12'
                 ranA = range(nGeom+1, lenWire)
                 ranA.reverse()
                 ranB = range(0, numGeom-1)
@@ -637,15 +637,15 @@ class _Py(object):
                 ran = ranB + ranA
 
         else:
-            print 'B2'
+            # print 'B2'
 
             if direction == "forward":
-                print 'B21'
+                # print 'B21'
                 ran = range(numGeom+2, lenWire) +\
                     range(0, nGeom)
 
             else:
-                print 'B22'
+                # print 'B22'
                 ran = range(nGeom+1, numGeom-1)
                 ran.reverse()
 

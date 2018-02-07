@@ -485,10 +485,10 @@ class _PyReflex(_Py):
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
 
                 else:
-                    print '33'
+                    # print '33'
                     pl = pyPl.shape.copy()
                     rang = self.rang(pyWire, numGeom, nn, direction)
-                    print 'rang ', rang
+                    # print 'rang ', rang
                     cList = []
                     for mm in rang:
                         pyP = pyPlaneList[mm]
