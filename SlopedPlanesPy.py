@@ -61,6 +61,8 @@ class _Py(object):
 
     def setstate(self, fList):
 
+        ''''''
+
         faceList = []
         for string in fList:
             shape = Part.Shape()

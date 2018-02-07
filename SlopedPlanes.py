@@ -38,10 +38,6 @@ __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
 __version__ = ""
-__doc__ = '''Requieres a sketch or DWire as base.
-             The base must support the FaceMaker.
-             The angles numeration corresponds
-             to the faces of the SlopedPlanes shape.'''
 
 
 def makeSlopedPlanes(sketch):
@@ -67,7 +63,9 @@ def makeSlopedPlanes(sketch):
 
 class _SlopedPlanes(_Py):
 
-    '''The Class of the FreeCAD scripted object SlopedPlanes'''
+    '''The Class of the FreeCAD scripted object SlopedPlanes.
+    Requieres a sketch or DWire as base. The base must support the FaceMaker.
+    The angles numeration corresponds to the faces of the SlopedPlanes shape.'''
 
     def __init__(self, slopedPlanes):
 

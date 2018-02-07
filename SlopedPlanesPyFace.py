@@ -1321,7 +1321,7 @@ class _PyFace(_Py):
     def end(self):
 
         '''end(self)
-        
+
         Transfers to PyAlignment.'''
 
         # print '######### end'
