@@ -485,10 +485,10 @@ class _PyReflex(_Py):
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
 
                 else:
-                    # print '33'
+                    print '33'
                     pl = pyPl.shape.copy()
                     rang = self.rang(pyWire, numGeom, nn, direction)
-                    # print 'rang ', rang
+                    print 'rang ', rang
                     cList = []
                     for mm in rang:
                         pyP = pyPlaneList[mm]
@@ -498,7 +498,8 @@ class _PyReflex(_Py):
                                                 tolerance)
                             if section.Vertexes:
                                 cList.append(pyP.enormousShape)
-                    pl = self.cutting(pl, cList, gS)
+                    if cList:
+                        pl = self.cutting(pl, cList, gS)
 
             else:   # rangoNext, rangoInter, other?
                 # print '4'
