@@ -204,7 +204,7 @@ class _PyFace(_Py):
             reflexList = []
             for pyReflex in pyWire.reflexs:
                 dd = pyReflex.__dict__.copy()
-                planes = [[pyPlane.numWire,  pyPlane.numGeom]
+                planes = [[pyPlane.numWire, pyPlane.numGeom]
                           for pyPlane in pyReflex.planes]
                 dd['_planes'] = planes
                 reflexList.append(dd)
@@ -593,7 +593,8 @@ class _PyFace(_Py):
                             self.doReflex(pyWire, pyPlane, firstPlane)
 
                         else:
-                            pyAlignmentList = self.selectAllAlignment(numWire, numGeom)
+                            pyAlignmentList = self.selectAllAlignment(numWire,
+                                                                      numGeom)
                             pyAlignment = self.selectAlignment(numWire, 0)
                             if pyAlignment not in pyAlignmentList:
                                 # print 'pyPlane no chop of firstPlane'
@@ -625,8 +626,7 @@ class _PyFace(_Py):
         pyAlign is the alignment.
         pyPlane is the base plane. pyWire is its wire.
         pyPl is the continued plane. pyW is its wire.
-        If pyAlign finds other alignment return it, pyAli, or return None.
-        '''
+        If pyAlign finds other alignment return it, pyAli, or return None.'''
 
         numWire = pyWire.numWire
         numGeom = pyPlane.numGeom
@@ -859,8 +859,7 @@ class _PyFace(_Py):
 
     def findAngle(self, numWire, numGeom):
 
-        '''findAngle(self, nW, nG)
-        '''
+        '''findAngle(self, nW, nG)'''
 
         angle = self.wires[numWire].planes[numGeom].angle
 
@@ -871,8 +870,7 @@ class _PyFace(_Py):
 
     def findAlignment(self, point):
 
-        '''findAlignment(self, point)
-        '''
+        '''findAlignment(self, point)'''
 
         for pyWire in self.wires:
             numWire = pyWire.numWire
@@ -887,8 +885,7 @@ class _PyFace(_Py):
 
     def removeAlignment(self, pyAlign):
 
-        '''removeAlignment(self, pyAlign)
-        '''
+        '''removeAlignment(self, pyAlign)'''
 
         pyAlignList = self.alignments
         pyAlignList.remove(pyAlign)
@@ -896,8 +893,7 @@ class _PyFace(_Py):
 
     def forBack(self, pyPlane, direction):
 
-        '''forBack(self, pyPlane, direction)
-        '''
+        '''forBack(self, pyPlane, direction)'''
 
         geom = pyPlane.geom
         firstParam = geom.FirstParameter
@@ -941,6 +937,8 @@ class _PyFace(_Py):
         # print'backwardLine ', backwardLine
         backwardLineShape = backwardLine.toShape()
 
+        # Always forward into and backward outside
+
         if direction == "forward":
             # print 'a'
             pyPlane.backward = backwardLineShape
@@ -953,8 +951,7 @@ class _PyFace(_Py):
 
     def doReflex(self, pyWire, pyPlane, pyPl):
 
-        '''doReflex(self, pyWire, pyPlane, pyPl)
-        '''
+        '''doReflex(self, pyWire, pyPlane, pyPl)'''
 
         pyPlane.reflexed = True
         pyPl.reflexed = True
@@ -966,8 +963,7 @@ class _PyFace(_Py):
 
     def doAlignment(self, pyPlane):
 
-        '''doAlignment(self, pyPlane)
-        '''
+        '''doAlignment(self, pyPlane)'''
 
         pyAlign = _PyAlignment()
         self.addLink('alignments', pyAlign)
@@ -978,8 +974,7 @@ class _PyFace(_Py):
 
     def priorLaterAlignments(self):
 
-        '''priorLaterAlignments(self)
-        '''
+        '''priorLaterAlignments(self)'''
 
         pyWireList = self.wires
 
@@ -1029,8 +1024,7 @@ class _PyFace(_Py):
 
     def upping(self):
 
-        '''upping(self)
-        '''
+        '''upping(self)'''
 
         # print '######### upping'
 
