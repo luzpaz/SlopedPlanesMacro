@@ -297,7 +297,7 @@ class _Py(object):
             print(pyAlignment.base.numWire, pyAlignment.base.numGeom)
             print 'angle ', pyAlignment.base.angle
             print 'rear ', pyAlignment.base.rear
-            print 'rango ',  pyAlignment.base.rango
+            print 'rango ', pyAlignment.base.rango
             # print 'geom ', pyAlignment.base.geom
             # print 'geomAligned ', pyAlignment.base.geomAligned
             # print 'shape ', pyAlignment.base.shape
@@ -611,3 +611,42 @@ class _Py(object):
         geom = self.makeGeom(curve, startParam, endParam)
 
         return geom
+
+    def rang(self, pyWire, numGeom, nGeom, direction):
+
+        ''''''
+
+        print 'rang ', (numGeom, nGeom)
+
+        lenWire = len(pyWire.planes)
+
+        if nGeom > numGeom:
+            print 'B1'
+
+            if direction == "forward":
+                print 'B11'
+                num = self.sliceIndex(numGeom+2, lenWire)
+                ran = range(num, nGeom)
+
+            else:
+                print 'B12'
+                ranA = range(nGeom+1, lenWire)
+                ranA.reverse()
+                ranB = range(0, numGeom-1)
+                ranB.reverse()
+                ran = ranB + ranA
+
+        else:
+            print 'B2'
+
+            if direction == "forward":
+                print 'B21'
+                ran = range(numGeom+2, lenWire) +\
+                    range(0, nGeom)
+
+            else:
+                print 'B22'
+                ran = range(nGeom+1, numGeom-1)
+                ran.reverse()
+
+        return ran

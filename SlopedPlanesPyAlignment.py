@@ -266,12 +266,16 @@ class _PyAlignment(_Py):
         # rangoRear
         w1 = pyPrior.numWire
         w2 = pyLater.numWire
-        rangoRear = self.rang((w2, lat), (w1, pr))
-        if rangoRear:
-            rangoRear.insert(0, lat)
-            rangoRear.append(pr)
+        if w1 == w2:
+            pyWire = pyWireList[w1]
+            rangoRear = self.rang(pyWire, lat, pr, 'forward')
+            if rangoRear:
+                rangoRear.insert(0, lat)
+                rangoRear.append(pr)
+        else:
+            rangoRear = []
         self.rangoRear = rangoRear
-        # print 'rangoRear ', rangoRear
+        print 'rangoRear ', rangoRear
 
         rangoChop = self.rango
         rangoCopy = rangoChop[:]
@@ -1346,44 +1350,19 @@ class _PyAlignment(_Py):
 
         for [pyPlane, pyPl] in self.chops:
 
-            pyWire = pyWireList[pyPlane.numWire]
-            pyW = pyWireList[pyPl.numWire]
+            numWire = pyPlane.numWire
+            nWire = pyPl.numWire
+
+            pyWire = pyWireList[numWire]
+            pyW = pyWireList[nWire]
 
             pyPlane.rangging(pyWire, 'backward')
             pyPl.rangging(pyW, 'forward')
 
-    def ranggingChop(self):
-
-        '''ranggingChop(self)
-        '''
-
-        for [pyPlane, pyPl] in self.chops:
-            [(w1, g1), (w2, g2)] =\
-                [(pyPlane.numWire, pyPlane.numGeom),
-                 (pyPl.numWire, pyPl.numGeom)]
-
-            rangoChop = self.rang((w1, g1), (w2, g2))
-
-            self.addValue('rango', rangoChop, 'backward')
-
-    def rang(self, (w1, g1), (w2, g2)):
-
-        ''''''
-
-        pyWireList = _Py.pyFace.wires
-
-        if w1 == w2:
-            pyWire = pyWireList[w1]
-            lenWire = len(pyWire.planes)
-            if g1 > g2:
-                ranA = range(g1+1, lenWire)
-                ranB = range(0, g2)
-                ran = ranA + ranB
+            if numWire == nWire:
+                numGeom = pyPlane.numGeom
+                nGeom = pyPl.numGeom
+                rangoChop = self.rang(pyWire, numGeom, nGeom, 'forward')
             else:
-                ran = range(g1+1, g2)
-            rangoChop = ran
-
-        else:
-            rangoChop = []
-
-        return rangoChop
+                rangoChop = []
+            self.addValue('rango', rangoChop, 'backward')

@@ -1064,94 +1064,14 @@ class _PyPlane(_Py):
         numGeom = self.numGeom
 
         rear = self.rear
-        lenWire = len(pyWire.planes)
-        lenRear = len(rear)
+        if direction == 'forward':
+            nGeom = rear[0]
+        else:
+            nGeom = rear[-1]
 
-        rango = []
-        rangoConsolidate = []
-
-        if lenRear == 0:
-            # print 'A'
-
-            rango = [[]]
-
-        elif lenRear == 1:
-            # print 'B'
-
-            [nGeom] = rear
-
-            if nGeom > numGeom:
-                # print 'B1'
-
-                if direction == "forward":
-                    # print 'B11'
-                    num = self.sliceIndex(numGeom+2, lenWire)
-                    ran = range(num, nGeom)
-
-                else:
-                    # print 'B12'
-                    ranA = range(nGeom+1, lenWire)
-                    ranA.reverse()
-                    ranB = range(0, numGeom-1)
-                    ranB.reverse()
-                    ran = ranB + ranA
-
-            else:
-                # print 'B2'
-
-                if direction == "forward":
-                    # print 'B21'
-                    ran = range(numGeom+2, lenWire) +\
-                        range(0, nGeom)
-
-                else:
-                    # print 'B22'
-                    ran = range(nGeom+1, numGeom-1)
-                    ran.reverse()
-
-            rango.append(ran)
-            rangoConsolidate.extend(ran)
-
-        elif lenRear == 2:
-            # print 'C'
-
-            [nGeom1, nGeom2] = rear
-
-            number = -1
-            for nG in rear:
-                number += 1
-
-                if number == 0:
-                    # print 'C1'
-
-                    if numGeom < nG:
-                        # print 'C11'
-                        ran = range(numGeom+2, nG)
-
-                    else:
-                        # print 'C12'
-                        ranA = range(numGeom+2, lenWire)
-                        ranB = range(0, nG)
-                        ran = ranA + ranB
-
-                else:
-                    # print 'C2'
-
-                    if numGeom < nG:
-                        # print 'C21'
-                        ranA = range(nG+1, lenWire)
-                        ranB = range(0, numGeom-1)
-                        ran = ranA + ranB
-
-                    else:
-                        # print 'C22'
-                        ran = range(nG+1, numGeom-1)
-
-                rango.append(ran)
-                rangoConsolidate.extend(ran)
-
-        self.rango = rango
-        self.rangoConsolidate = rangoConsolidate
+        ran = self.rang(pyWire, numGeom, nGeom, direction)
+        self.rangoConsolidate.extend(ran)
+        self.addValue('rango', ran, direction)
 
     def isSolved(self):
 

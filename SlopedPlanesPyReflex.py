@@ -1036,8 +1036,6 @@ class _PyReflex(_Py):
         '''rangging(self, pyWire)
         '''
 
-        lenWire = len(pyWire.planes)
-
         pyR = self.planes[0]
         pyOppR = self.planes[1]
         rear = pyR.rear
@@ -1046,52 +1044,12 @@ class _PyReflex(_Py):
         if rear and oppRear:
 
             rG = rear[0]
-            try:
-                oG = oppRear[1]
-            except IndexError:
-                oG = oppRear[0]
-
-            if oG > rG:
-                ran = range(rG+1, oG)
-
-            elif oG < rG:
-                ranA = range(rG+1, lenWire)
-                ranB = range(0, oG)
-                ran = ranA + ranB
-
-            else:
-                ran = []
-
+            oG = oppRear[-1]
+            ran = self.rang(pyWire, rG, oG, 'forward')
             self.rango = ran
 
-    def rang(self, pyWire, g1, g2, direction):
-
-        ''''''
-
-        # print(g1, g2)
-
-        lenWire = len(pyWire.planes)
-
-        if direction == 'forward':
-            # print 'forward'
-            if g2 > g1:
-                # print 'a'
-                ran = range(g1+1, g2)
-            else:
-                # print 'b'
-                ranA = range(g1+1, lenWire)
-                ranB = range(0, g2)
-                ran = ranA + ranB
-
-        else:
-            # print 'backward'
-            if g1 > g2:
-                # print 'aa'
-                ran = range(g2+1, g1)
-            else:
-                # print 'bb'
-                ranB = range(0, g2)
-                ranA = range(g1+1, lenWire)
-                ran = ranA + ranB
-
-        return ran
+        direction = "forward"
+        for pyPlane in self.planes:
+            if pyPlane.rear:
+                pyPlane.rangging(pyWire, direction)
+            direction = "backward"

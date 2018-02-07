@@ -1016,11 +1016,10 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             if self.reset:
                 pyAlign.rangging()
-            pyAlign.ranggingChop()
 
         self.reset = False
 
-        # self.printSummary()
+        self.printSummary()
 
     def upping(self):
 

@@ -151,11 +151,6 @@ class _PyWire(_Py):
         if reset:
             for pyReflex in self.reflexs:
                 pyReflex.rangging(self)
-                direction = "forward"
-                for pyPlane in pyReflex.planes:
-                    if pyPlane.rear:
-                        pyPlane.rangging(self, direction)
-                    direction = "backward"
 
     def virtualizing(self):
 
