@@ -413,11 +413,6 @@ To cero the plane width is equal to the related edge length of the base'''
                         pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
 
-                        try:
-                            pyPlane.secondRear
-                        except AttributeError:
-                            pyPlane.secondRear = []
-
             pyFace.parsing()
 
             pyFace.planning()

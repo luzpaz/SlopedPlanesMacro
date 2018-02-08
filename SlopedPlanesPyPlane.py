@@ -1070,7 +1070,7 @@ class _PyPlane(_Py):
         else:
             nGeom = rear[-1]
 
-        ran = self.rang(pyWire, numGeom, nGeom, direction)
+        ran = self.rang(pyWire, numGeom, nGeom, direction, True)
         self.rangoConsolidate.extend(ran)
         self.addValue('rango', ran, direction)
 

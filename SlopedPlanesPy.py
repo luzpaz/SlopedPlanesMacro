@@ -612,41 +612,54 @@ class _Py(object):
 
         return geom
 
-    def rang(self, pyWire, numGeom, nGeom, direction):
+    def rang(self, pyWire, numGeom, nGeom, direction, reflex=False):
 
         ''''''
 
-        # print 'rang ', (numGeom, nGeom)
+        # print 'rang ', (numGeom, nGeom, reflex)
 
         lenWire = len(pyWire.planes)
 
-        if nGeom > numGeom:
-            # print 'B1'
-
-            if direction == "forward":
-                # print 'B11'
-                num = self.sliceIndex(numGeom+2, lenWire)
-                ran = range(num, nGeom)
-
+        if direction == 'forward':
+            # print 'A'
+            if reflex:
+                # print 'reflex'
+                num = numGeom + 2
             else:
-                # print 'B12'
-                ranA = range(nGeom+1, lenWire)
+                # print 'no reflex'
+                num = numGeom + 1
+            num = self.sliceIndex(num, lenWire)
+            # print 'num ', num
+
+            if nGeom >= num:
+                # print 'A1'
+                ran = range(num,nGeom)
+            else:
+                # print 'A2'
+                ran = range(num, lenWire) + range(0, nGeom)
+
+        else:
+            # print 'B'
+            if reflex:
+                # print 'reflex'
+                num = numGeom - 1
+                num = self.sliceIndex(num, lenWire)
+            else:
+                # print 'no reflex'
+                num = numGeom
+            # print 'num ', num
+
+            if numGeom >= nGeom:
+                # print 'B1'
+                ran = range(nGeom + 1, num)
+                ran.reverse()
+            else:
+                # print 'B2'
+                ranA = range(nGeom + 1, lenWire)
                 ranA.reverse()
-                ranB = range(0, numGeom-1)
+                ranB = range(0, num)
                 ranB.reverse()
                 ran = ranB + ranA
 
-        else:
-            # print 'B2'
-
-            if direction == "forward":
-                # print 'B21'
-                ran = range(numGeom+2, lenWire) +\
-                    range(0, nGeom)
-
-            else:
-                # print 'B22'
-                ran = range(nGeom+1, numGeom-1)
-                ran.reverse()
-
+        # print 'ran ', ran
         return ran
