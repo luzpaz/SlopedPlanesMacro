@@ -1341,7 +1341,7 @@ class _PyAlignment(_Py):
                             if not pyPl.choped and not pyPl.aligned:
                                 pl = pyPl.cuttingPyth(chopList)
 
-    def rangging(self):
+    def rangging(self, reset):
 
         '''rangging(self)
         '''
@@ -1356,8 +1356,10 @@ class _PyAlignment(_Py):
             pyWire = pyWireList[numWire]
             pyW = pyWireList[nWire]
 
-            pyPlane.rangging(pyWire, 'backward')
-            pyPl.rangging(pyW, 'forward')
+            if reset:
+
+                pyPlane.rangging(pyWire, 'backward')
+                pyPl.rangging(pyW, 'forward')
 
             if numWire == nWire:
                 numGeom = pyPlane.numGeom

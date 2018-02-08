@@ -1014,8 +1014,7 @@ class _PyFace(_Py):
             pyWire.planning()
 
         for pyAlign in self.alignments:
-            if self.reset:
-                pyAlign.rangging()
+            pyAlign.rangging(self.reset)
 
         self.reset = False
 
