@@ -571,6 +571,9 @@ class _PyReflex(_Py):
         if not pyR.aligned:
             cList.extend(pyR.cutter)
 
+        enorm = []
+        corner = None
+
         rear = pyR.rear
         oppRear = pyOppR.rear
         if rear:
@@ -628,7 +631,7 @@ class _PyReflex(_Py):
             # print 'corn ', corn
             # print 'enormous ', enormous
 
-            enorm = []
+            ## enorm = []
             for pyReflex in reflexList:
                 if pyReflex != self:
                     for pyPl in pyReflex.planes:
@@ -1051,6 +1054,6 @@ class _PyReflex(_Py):
 
         direction = "forward"
         for pyPlane in self.planes:
-            if pyPlane.rear:
+            if not pyPlane.rango:
                 pyPlane.rangging(pyWire, direction)
             direction = "backward"

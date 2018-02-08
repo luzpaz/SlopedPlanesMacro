@@ -1358,8 +1358,10 @@ class _PyAlignment(_Py):
 
             if reset:
 
-                pyPlane.rangging(pyWire, 'backward')
-                pyPl.rangging(pyW, 'forward')
+                if not pyPlane.rango:
+                    pyPlane.rangging(pyWire, 'backward')
+                if not pyPl.rango:
+                    pyPl.rangging(pyW, 'forward')
 
             if numWire == nWire:
                 numGeom = pyPlane.numGeom

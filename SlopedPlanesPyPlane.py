@@ -1059,20 +1059,36 @@ class _PyPlane(_Py):
 
     def rangging(self, pyWire, direction):
 
-        '''rangging(self, pyWire, direction)
+        '''rangging(self, pyWire)
         '''
 
         numGeom = self.numGeom
 
         rear = self.rear
-        if direction == 'forward':
-            nGeom = rear[0]
-        else:
-            nGeom = rear[-1]
+        lenRear = len(rear)
 
-        ran = self.rang(pyWire, numGeom, nGeom, direction, True)
-        self.rangoConsolidate.extend(ran)
-        self.addValue('rango', ran, direction)
+        if lenRear == 0:
+
+            self.rango = [[]]
+
+        elif lenRear == 1:
+
+            nGeom = rear[0]
+            ran = self.rang(pyWire, numGeom, nGeom, direction, True)
+            self.rangoConsolidate.extend(ran)
+            self.addValue('rango', ran, 'forward')
+
+        else:
+
+            nGeom = rear[0]
+            ran = self.rang(pyWire, numGeom, nGeom, 'forward', True)
+            self.rangoConsolidate.extend(ran)
+            self.addValue('rango', ran, 'forward')
+
+            nGeom = rear[-1]
+            ran = self.rang(pyWire, numGeom, nGeom, 'backward', True)
+            self.rangoConsolidate.extend(ran)
+            self.addValue('rango', ran, 'backward')
 
     def isSolved(self):
 
