@@ -125,7 +125,10 @@ class _PyReflex(_Py):
                     # print 'pyPlane.numGeom ', pyPlane.numGeom
 
                     control = pyPlane.control
-                    rangoPost = pyPlane.rangoConsolidate
+                    ## ???
+                    rangoPost = []
+                    for ran in pyPlane.rango:
+                        rangoPost.extend(ran)
                     total = control + rangoPost
                     # print 'total ', total
                     num = -1
@@ -356,7 +359,6 @@ class _PyReflex(_Py):
 
                 self.processOppRear(oppRear, direction, pyWire, pyR, pyOppR)
 
-        # rangoCorner = pyR.rangoConsolidate
         # print 'rangoCorner ', rangoCorner
 
         for nn in rangoCorner:
@@ -365,7 +367,6 @@ class _PyReflex(_Py):
                     self.processRango(pyWire, pyR, pyOppR, nn,
                                       'rangoCorner', direction)
 
-        # rangoNext = pyOppR.rangoConsolidate
         # print 'rangoNext ', rangoNext
 
         if len(rear) == 1:

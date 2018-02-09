@@ -55,7 +55,6 @@ class _PyPlane(_Py):
         self.under = []
         self.seed = []
         self.rango = []
-        self.rangoConsolidate = []
         self.reflexed = False
         self.aligned = False
         self.choped = False
@@ -279,20 +278,6 @@ class _PyPlane(_Py):
         ''''''
 
         self._rango = rango
-
-    @property
-    def rangoConsolidate(self):
-
-        ''''''
-
-        return self._rangoConsolidate
-
-    @rangoConsolidate.setter
-    def rangoConsolidate(self, rangoConsolidate):
-
-        ''''''
-
-        self._rangoConsolidate = rangoConsolidate
 
     @property
     def reflexed(self):
@@ -597,7 +582,7 @@ class _PyPlane(_Py):
             lastParam = geom.LastParameter
 
             geomCopy = geom.copy()
-            geomCopy.translate(-1*self.overhang*direction)
+            geomCopy.translate(-1 * self.overhang * direction)
 
             # print '# normal'
             scale = 1
@@ -608,7 +593,7 @@ class _PyPlane(_Py):
             self.seedShape = plane.copy()
 
             geomCopy = geom.copy()
-            geomCopy.translate(-1*_Py.size*direction)
+            geomCopy.translate(-1 * _Py.size * direction)
 
             # print '# big'
             scale = 100
@@ -639,7 +624,7 @@ class _PyPlane(_Py):
 
         coordinates = pyWire.coordinates
         geom = self.doGeom()
-        eje = coordinates[numGeom+1].sub(coordinates[numGeom])
+        eje = coordinates[numGeom + 1].sub(coordinates[numGeom])
         direction = self.rotateVector(eje, _Py.normal, 90)
         angle = self.angle
         if _Py.reverse:
@@ -740,7 +725,6 @@ class _PyPlane(_Py):
             backward = self.backward
             rear = self.rear
             rango = self.rango
-            rangoConsolidate = self.rangoConsolidate
             angle = self.angle
             fronted = self.fronted
 
@@ -761,7 +745,6 @@ class _PyPlane(_Py):
             pyPlane.backward = backward
             pyPlane.rear = rear
             pyPlane.rango = rango
-            pyPlane.rangoConsolidate = rangoConsolidate
             pyPlane.aligned = True
             pyPlane.reflexed = True
             pyPlane.fronted = fronted
@@ -1075,19 +1058,16 @@ class _PyPlane(_Py):
 
             nGeom = rear[0]
             ran = self.rang(pyWire, numGeom, nGeom, direction, True)
-            self.rangoConsolidate.extend(ran)
             self.addValue('rango', ran, 'forward')
 
         else:
 
             nGeom = rear[0]
             ran = self.rang(pyWire, numGeom, nGeom, 'forward', True)
-            self.rangoConsolidate.extend(ran)
             self.addValue('rango', ran, 'forward')
 
             nGeom = rear[-1]
             ran = self.rang(pyWire, numGeom, nGeom, 'backward', True)
-            self.rangoConsolidate.extend(ran)
             self.addValue('rango', ran, 'backward')
 
     def isSolved(self):

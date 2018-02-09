@@ -992,7 +992,7 @@ class _PyAlignment(_Py):
                             falsePlane.rear = pyPlane.rear
                             pyWire = pyWireList[0]
                             falsePlane.rangging(pyWire, 'backward')
-                            rr = falsePlane.rangoConsolidate
+                            rr = falsePlane.rango[-1]
                             # print rr
                             pyPlaneList = pyWire.planes
                             for nn in rr:
