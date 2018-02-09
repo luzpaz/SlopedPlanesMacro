@@ -365,8 +365,8 @@ To cero the plane width is equal to the related edge length of the base'''
                                 # print '111'
                                 pyPlane.rear = []
                                 pyPlane.secondRear = []
-                                pyPlane.under = None
-                                pyPlane.seed = None
+                                pyPlane.under = []
+                                pyPlane.seed = []
                                 pyPlane.rango = []
                                 pyPlane.rangoConsolidate = []
                                 pyPlane.aligned = False

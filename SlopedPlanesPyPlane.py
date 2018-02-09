@@ -52,8 +52,8 @@ class _PyPlane(_Py):
         self.overhang = 0
         self.rear = []
         self.secondRear = []
-        self.under = None
-        self.seed = None
+        self.under = []
+        self.seed = []
         self.rango = []
         self.rangoConsolidate = []
         self.reflexed = False
@@ -630,8 +630,8 @@ class _PyPlane(_Py):
         if self.reflexed:
             self.simulatedShape = None
             self.cutter = []
-            self.under = None
-            self.seed = None
+            self.under = []
+            self.seed = []
 
     def direction(self, pyWire, numGeom):
 
