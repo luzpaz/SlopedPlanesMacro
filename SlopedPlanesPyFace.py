@@ -256,7 +256,7 @@ class _PyFace(_Py):
                     if dd['_forward']:
                         nf += 2
 
-                        pyPlane.forward = forBack[nf-1]
+                        pyPlane.forward = forBack[nf - 1]
                         pyPlane.backward = forBack[nf]
 
                     geomShape = edgeList[numGeom]
@@ -349,7 +349,7 @@ class _PyFace(_Py):
                 numGeom = pyPlane.numGeom
                 # print '### numGeom ', numGeom, ' angle ', pyPlane.angle
 
-                nextEje = coord[numGeom+2].sub(coord[numGeom+1])
+                nextEje = coord[numGeom + 2].sub(coord[numGeom + 1])
                 corner = self.convexReflex(eje, nextEje)
                 # print 'corner ', corner
                 eje = nextEje
@@ -426,7 +426,7 @@ class _PyFace(_Py):
                         if section.Edges:
                             # print '11 possible alignament'
 
-                            lineEnd = coord[numGeom+1]
+                            lineEnd = coord[numGeom + 1]
                             # print 'lineEnd ', lineEnd
 
                             numEdge = -1
@@ -546,10 +546,10 @@ class _PyFace(_Py):
 
                                     nn = pyPl.numGeom
                                     lenW = len(pyW.planes)
-                                    num = self.sliceIndex(nn+1, lenW)
+                                    num = self.sliceIndex(nn + 1, lenW)
                                     coo = pyW.coordinates
                                     jj = coo[num].sub(coo[nn])
-                                    nnjj = coo[num+1].sub(coo[num])
+                                    nnjj = coo[num + 1].sub(coo[num])
                                     corner = self.convexReflex(jj, nnjj)
 
                                     if corner == 'reflex':
@@ -653,17 +653,18 @@ class _PyFace(_Py):
                         numWireChopOne = pp.numWire
                         pyw = self.wires[numWireChopOne]
                         lenWire = len(pyw.planes)
-                        numGeomChopOne = self.sliceIndex(pp.numGeom+1, lenWire)
+                        numGeomChopOne =\
+                            self.sliceIndex(pp.numGeom + 1, lenWire)
 
         if not jumpChop:
 
             lenWire = len(pyWire.planes)
             if alignList:
                 num = alignList[-1].numGeom
-                numGeomChopOne = self.sliceIndex(num+1, lenWire)
+                numGeomChopOne = self.sliceIndex(num + 1, lenWire)
                 numWireChopOne = alignList[-1].numWire
             else:
-                numGeomChopOne = self.sliceIndex(numGeom+1, lenWire)
+                numGeomChopOne = self.sliceIndex(numGeom + 1, lenWire)
                 numWireChopOne = numWire
 
         # aligns
@@ -689,10 +690,10 @@ class _PyFace(_Py):
 
         pyWireList = self.wires
         if numWire == nWire:
-            numGeomChopTwo = self.sliceIndex(nGeom-1, lenWire)
+            numGeomChopTwo = self.sliceIndex(nGeom - 1, lenWire)
         else:
             lenW = len(pyWireList[nWire].planes)
-            numGeomChopTwo = self.sliceIndex(nGeom-1, lenW)
+            numGeomChopTwo = self.sliceIndex(nGeom - 1, lenW)
 
         # chops
 
@@ -796,7 +797,6 @@ class _PyFace(_Py):
                     pp = coord[numGeom + 1]
                 else:
                     pp = coord[numGeom]
-
                 # print 'pp ', pp
 
                 if pp == self.roundVector(orderedVertexes[0].Point):
@@ -997,7 +997,7 @@ class _PyFace(_Py):
             pyPlaneList = pyWire.planes
             lenWire = len(pyPlaneList)
 
-            prior = self.sliceIndex(numGeom-1, lenWire)
+            prior = self.sliceIndex(numGeom - 1, lenWire)
             pyPrior = self.selectBasePlane(numWire, prior)
 
             pyPl = pyAlign.aligns[-1]
@@ -1005,7 +1005,7 @@ class _PyFace(_Py):
             pyW = pyWireList[nW]
             lenW = len(pyW.planes)
 
-            later = self.sliceIndex(nG+1, lenW)
+            later = self.sliceIndex(nG + 1, lenW)
             pyLater = self.selectBasePlane(nW, later)
 
             pyAlign.prior = pyPrior
@@ -1050,8 +1050,8 @@ class _PyFace(_Py):
             diaLen = boundBox.DiagonalLength
             center = boundBox.Center
             upPlane = Part.makePlane(diaLen, diaLen,
-                                     center.sub(FreeCAD.Vector(diaLen/2,
-                                                               diaLen/2,
+                                     center.sub(FreeCAD.Vector(diaLen / 2,
+                                                               diaLen / 2,
                                                                center.z)))
 
             up = _Py.slopedPlanes.Up
@@ -1179,7 +1179,9 @@ class _PyFace(_Py):
                 for pyPl in pyPlaneList:
                     if pyPl.shape:
                         # print '# nG ', pyPl.numGeom, pyPl.fronted
-                        if not pyPl.choped and not pyPl.fronted and not pyPl.aligned:
+                        if not pyPl.choped and\
+                           not pyPl.fronted and\
+                           not pyPl.aligned:
                             # print 'a'
                             pl = pyPl.shape
                             cutterList.append(pl)
@@ -1227,7 +1229,9 @@ class _PyFace(_Py):
                             # print 'A'
                             aList = alignments[:]
                             # print 'aList ', aList
-                            pyAlignList = self.selectAllAlignment(numWire, pyPlane.numGeom)
+                            pyAlignList =\
+                                self.selectAllAlignment(numWire,
+                                                        pyPlane.numGeom)
                             # print 'pyAlignList ', pyAlignList
                             baseList = []
                             for pyA in pyAlignList:
@@ -1246,9 +1250,12 @@ class _PyFace(_Py):
 
                         elif pyPlane.aligned:
                             # print 'B'
-                            pyAlign = self.selectAlignmentBase(numWire, pyPlane.numGeom)
+                            pyAlign =\
+                                self.selectAlignmentBase(numWire,
+                                                         pyPlane.numGeom)
                             line = pyAlign.geomAligned
-                            simulAlign = Part.makeShell(pyAlign.simulatedAlignment)
+                            simulAlign =\
+                                Part.makeShell(pyAlign.simulatedAlignment)
                             aList = alignments[:]
                             aList.remove(pyAlign)
                             aL = []
@@ -1256,8 +1263,10 @@ class _PyFace(_Py):
                                 ll = pyA.geomAligned
                                 section = line.section([ll], tolerance)
                                 if not section.Vertexes:
-                                    simulA = Part.makeShell(pyA.simulatedAlignment)
-                                    common = simulAlign.common([simulA], tolerance)
+                                    simulA =\
+                                        Part.makeShell(pyA.simulatedAlignment)
+                                    common =\
+                                        simulAlign.common([simulA], tolerance)
                                     if not common.Area:
                                         aL.extend(pyA.simulatedAlignment)
                             cutList.extend(aL)
@@ -1295,7 +1304,8 @@ class _PyFace(_Py):
                                     if pyPlane.rear:
                                         plane = plane.removeShape([ff])
                                         for ff in plane.Faces:
-                                            section = ff.section(fList, tolerance)
+                                            section =\
+                                                ff.section(fList, tolerance)
                                             if not section.Edges:
                                                 fList.append(ff)
                                                 break
@@ -1447,7 +1457,8 @@ class _PyFace(_Py):
                                         pyTwo.cuttingPyth(cutterList)
                                         # print 'two ', two
 
-                                        pyPlaneList = pyWireList[pyOne.numWire].planes
+                                        pyPlaneList =\
+                                            pyWireList[pyOne.numWire].planes
 
                                         rChop = rangoChop[numChop]
                                         # print 'rChop ', rChop
@@ -1455,7 +1466,8 @@ class _PyFace(_Py):
                                             for nn in rChop:
                                                 if nn not in nList:
                                                     pyPl = pyPlaneList[nn]
-                                                    if not pyPl.aligned and not pyPl.choped:
+                                                    if not pyPl.aligned and\
+                                                       not pyPl.choped:
                                                         pyPl.cuttingPyth(cutterList)
                                                         # print 'rango chop ', (nn, pl)
 
@@ -1507,7 +1519,8 @@ class _PyFace(_Py):
                                     for nn in rChop:
                                         if nn not in nList:
                                             pyPl = pyPlaneList[nn]
-                                            if not pyPl.aligned and not pyPl.choped:
+                                            if not pyPl.aligned and\
+                                               not pyPl.choped:
                                                 pyPl.cuttingPyth(cutterList)
                                                 # print 'rango chop ', (nn, pl)
 
