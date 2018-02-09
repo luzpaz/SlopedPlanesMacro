@@ -22,7 +22,6 @@
 # *****************************************************************************
 
 
-import Part
 from SlopedPlanesPy import _Py
 
 
@@ -180,7 +179,7 @@ class _PyWire(_Py):
                 numWire = pyPlane.numWire
                 enormousShape = pyPlane.enormousShape.copy()
 
-                pyOppPlane = pyReflex.planes[num-1]
+                pyOppPlane = pyReflex.planes[num -1 ]
 
                 rango = []
                 oppRango = []
@@ -213,7 +212,7 @@ class _PyWire(_Py):
                     firstParam = geom.FirstParameter
                     lastParam = geom.LastParameter
                     geomCopy = geom.copy()
-                    geomCopy.translate(-1*_Py.size*direction)
+                    geomCopy.translate(-1 * _Py.size * direction)
                     scale = 1000000
                     giantPlane =\
                         pyRearPl.doPlane(direction, geomCopy, firstParam,
@@ -313,8 +312,8 @@ class _PyWire(_Py):
                 control = pyPlane.control
                 # print '### numGeom ', numGeom
 
-                prior = self.sliceIndex(numGeom-1, lenWire)
-                later = self.sliceIndex(numGeom+1, lenWire)
+                prior = self.sliceIndex(numGeom - 1, lenWire)
+                later = self.sliceIndex(numGeom + 1, lenWire)
 
                 pyPrior = self.selectBasePlane(numWire, prior)
                 pyLater = self.selectBasePlane(numWire, later)
@@ -406,7 +405,7 @@ class _PyWire(_Py):
 
                 if cutterList:
                     # print'D'
-                   pyPlane.cuttingPyth(cutterList)
+                    pyPlane.cuttingPyth(cutterList)
 
                 if cutList:
                     # print 'E'
@@ -469,9 +468,7 @@ class _PyWire(_Py):
 
         '''ordinaries(self)'''
 
-         # all plane with shape, except chops and reflexs and fronted. CAMBIAR
         for pyPlane in self.planes:
-            # if not (pyPlane.reflexed and not pyPlane.aligned):
             if not (pyPlane.choped and not pyPlane.aligned):
                 if pyPlane.shape:
                     if not pyPlane.fronted:
