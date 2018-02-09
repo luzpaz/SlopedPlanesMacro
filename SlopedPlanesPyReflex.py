@@ -34,9 +34,9 @@ __version__ = ""
 
 class _PyReflex(_Py):
 
-    '''The complementary python object class for reflex corners. Two consecutives
-    planes of the same wire make a reflex corner when the right hand rule is
-    opposed to the base normal'''
+    '''The complementary python object class for reflex corners.
+    Two consecutives planes of the same wire make a reflex corner
+    when the result of the right hand rule is opposed to the base normal.'''
 
     def __init__(self):
 

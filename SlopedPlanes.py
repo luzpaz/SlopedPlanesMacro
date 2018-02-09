@@ -113,16 +113,16 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyBool", "Down",
                                  "SlopedPlanes", doc)
 
-        doc = '''Gives a plane on top of the SlopedPlanes.
-The Up could break the interior wires planes numeration.
-First give the angles and later apply Up.'''
+        doc = ('Gives a plane on top of the SlopedPlanes.\n'
+               'The Up could break the interior wires planes numeration.\n'
+               'First give the angles and later apply Up.')
 
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanes", doc)
 
-        doc = '''Gives a thickness to the SlopedPlanes.
-The Thickness breaks the planes numeration.
-First give the angles and later apply thickness.'''
+        doc = ('Gives a thickness to the SlopedPlanes.\n'
+               'The Thickness breaks the planes numeration.\n'
+               'First give the angles and later apply thickness.')
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
@@ -132,22 +132,24 @@ First give the angles and later apply thickness.'''
         slopedPlanes.addProperty("App::PropertyLength", "Overhang",
                                  "SlopedPlanes", doc)
 
-        doc = '''Applies over all planes angles.
-To cero the SlopedPlanes hasn't shape'''
+        doc = ('Applies over all planes angles.\n'
+               'To cero the SlopedPlanes hasn\'t shape')
 
         slopedPlanes.addProperty("App::PropertyAngle", "Slope",
                                  "SlopedPlanes", doc)
 
-        doc = '''Applies over all planes length, or length of extrusion of the
-planes, multiplied by the diagonal of the SlopedPlanes base.
-To cero the SlopedPlanes hasn't shape'''
+        doc = ('Applies over all planes length, or length of extrusion \n'
+               'of the base\'s edges, multiplied by the diagonal \n'
+               'length of the SlopedPlanes base.\n'
+               'To cero the SlopedPlanes hasn\'t shape')
 
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
                                  "SlopedPlanes", doc)
 
-        doc = '''Applies over all planes width, left and right, multiplied by
-the diagonal of the SlopedPlanes base.
-To cero the plane width is equal to the related edge length of the base'''
+        doc = ('Applies over all planes width, left and right,\n'
+               'multiplied by the diagonal length of the SlopedPlanes base.\n'
+               'To cero the plane width is equal to the length of \n'
+               'the related edge of the base')
 
         slopedPlanes.addProperty("App::PropertyFloat", "FactorWidth",
                                  "SlopedPlanes", doc)
