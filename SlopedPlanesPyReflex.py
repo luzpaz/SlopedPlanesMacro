@@ -195,7 +195,7 @@ class _PyReflex(_Py):
             num += 1
             # print '# pyPlane ', pyPlane.numGeom
 
-            pyOppPlane = self.planes[num-1]
+            pyOppPlane = self.planes[num - 1]
             if pyOppPlane.rear and pyPlane.rear:
 
                 rango = []
@@ -252,12 +252,10 @@ class _PyReflex(_Py):
 
         direction = "forward"
         # print '### direction ', direction, (pyR.numGeom, pyOppR.numGeom)
-        # if not pyR.cutter:
         self.twin(pyWire, pyR, pyOppR, direction)
 
         direction = "backward"
         # print '### direction ', direction, (pyOppR.numGeom, pyR.numGeom)
-        # if not pyOppR.cutter:
         self.twin(pyWire, pyOppR, pyR, direction)
 
     def twin(self, pyWire, pyR, pyOppR, direction):
@@ -283,7 +281,6 @@ class _PyReflex(_Py):
                 nGeom = rear[-1]
                 rangoCorner = pyR.rango[-1]
 
-            # for nGeom in rear:
             if nGeom not in control:
 
                 rearPyPl = pyPlaneList[nGeom]
@@ -360,7 +357,6 @@ class _PyReflex(_Py):
                 self.processOppRear(oppRear, direction, pyWire, pyR, pyOppR)
 
         # print 'rangoCorner ', rangoCorner
-
         for nn in rangoCorner:
             if nn not in control:
                 if nn not in oppRear:
@@ -368,7 +364,6 @@ class _PyReflex(_Py):
                                       'rangoCorner', direction)
 
         # print 'rangoNext ', rangoNext
-
         if len(rear) == 1:
             for nn in rangoNext:
                 if nn not in control:
@@ -378,7 +373,6 @@ class _PyReflex(_Py):
 
         rangoInter = self.rango
         # print 'rangoInter ', rangoInter
-
         for nn in rangoInter:
             if nn not in control:
                 self.processRango(pyWire, pyR, pyOppR, nn,
@@ -520,7 +514,6 @@ class _PyReflex(_Py):
                 else:
                     # print '33'
                     pl = pyPl.shape.copy()
-                    # rang = self.rang(pyWire, numGeom, nn, direction, True)
                     rang = self.rang(pyWire, numGeom, nn, direction)
                     # print 'rang ', rang
                     cList = []
@@ -536,7 +529,7 @@ class _PyReflex(_Py):
                         # print 'cList ', cList
                         pl = self.cutting(pl, cList, gS)
 
-            else:   # rangoNext, rangoInter, other?
+            else:   # rangoNext, rangoInter
                 # print '4'
                 pass
 
@@ -587,15 +580,9 @@ class _PyReflex(_Py):
         tolerance = _Py.tolerance
         pyPlaneList = pyWire.planes
         gS = pyR.geomShape
-        # backward = pyR.backward
-        # forward = pyR.forward
         simul = pyR.simulatedShape
         face = _Py.face
-
         reflexList = pyWire.reflexs
-
-        '''if not pyR.rear:
-            pyR.cutter = [pyOppR.enormousShape]'''
 
         cList = [pyOppR.enormousShape]
 
@@ -613,7 +600,6 @@ class _PyReflex(_Py):
 
         enorm = []
         corner = None
-
         rear = pyR.rear
         oppRear = pyOppR.rear
         if rear:
@@ -961,7 +947,9 @@ class _PyReflex(_Py):
                                     section = fo.section([forward], tolerance)
                                     sect = fo.section([forwardOpp], tolerance)
                                     se = fo.section([gS], tolerance)
-                                    if section.Vertexes or sect.Vertexes or se.Vertexes:
+                                    if section.Vertexes or\
+                                       sect.Vertexes or\
+                                       se.Vertexes:
                                         # print 'b'
                                         pl = pyPl.shape
                                         cutterList.append(pl)
