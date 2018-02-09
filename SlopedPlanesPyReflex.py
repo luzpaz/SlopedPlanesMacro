@@ -580,19 +580,21 @@ class _PyReflex(_Py):
 
             if direction == 'forward':
                 rr = pyPlaneList[rear[0]]
-                oppRr = pyPlaneList[oppRear[-1]]
+                if oppRear:
+                    oppRr = pyPlaneList[oppRear[-1]]
                 corner = pyR.rango[0]
-                oppCorner = pyOppR.rango[-1]
+
             else:
                 rr = pyPlaneList[rear[-1]]
-                oppRr = pyPlaneList[oppRear[0]]
+                if oppRear:
+                    oppRr = pyPlaneList[oppRear[0]]
                 corner = pyR.rango[-1]
-                oppCorner = pyOppR.rango[0]
+
             # print 'rear ', rr.numGeom
             # print 'corner ', corner
             rrG = rr.geomShape
 
-            # lineInto
+            # lineInto?
             forw = forward.copy()
             forw = forw.cut([rrG], tolerance)
             # print 'forward.Edges ', forward.Edges
@@ -600,8 +602,9 @@ class _PyReflex(_Py):
             orderedEdges = wire.OrderedEdges
             forw = orderedEdges[0]
 
-            enormous = [rr.shape, oppRr.shape]   # rr.bigShape???
-            ## enormous = [rr.bigShape, oppRr.bigShape]
+            enormous = [rr.shape]   # rr.bigShape???
+            if oppRear:
+                enormous.append(oppRr.shape)
 
             corn = []
             for nn in corner:

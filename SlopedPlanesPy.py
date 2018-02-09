@@ -618,6 +618,9 @@ class _Py(object):
 
         # print 'rang ', (numGeom, nGeom, reflex)
 
+        if numGeom == nGeom:
+            return []
+
         lenWire = len(pyWire.planes)
 
         if direction == 'forward':
@@ -633,7 +636,7 @@ class _Py(object):
 
             if nGeom >= num:
                 # print 'A1'
-                ran = range(num,nGeom)
+                ran = range(num, nGeom)
             else:
                 # print 'A2'
                 ran = range(num, lenWire) + range(0, nGeom)

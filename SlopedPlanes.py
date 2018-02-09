@@ -258,7 +258,7 @@ To cero the plane width is equal to the related edge length of the base'''
             _Py.face = face
 
             if onChanged:
-                # print 'AA'
+                ## print 'AA'
 
                 # elaborates complementary python objects of a face
 
