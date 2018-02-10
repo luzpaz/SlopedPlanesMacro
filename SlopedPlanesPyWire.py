@@ -33,9 +33,9 @@ __version__ = ""
 
 class _PyWire(_Py):
 
-    '''The complementary python object class for wires. Two consecutive planes
-    of the same wire could make a reflex corner.
-    The planes of the wire could make alignments with others planes,
+    '''The complementary python object class for wires.
+    Two consecutive edges of the same wire could make a reflex corner.
+    The edges of the wire could make alignments with others edges,
     even belonging to different wires.
     The exterior wires round counterclockwise, from the lowerleft point.
     The interior wires round clockwise, from the upperleft point.'''

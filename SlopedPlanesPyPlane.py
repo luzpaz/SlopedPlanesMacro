@@ -35,8 +35,8 @@ __version__ = ""
 
 class _PyPlane(_Py):
 
-    '''The complementary python object class for planes. A plane could
-    have several faces.'''
+    '''The complementary python object class for planes.A plane correspond
+    to one or more edges of the base. A plane could have several faces.'''
 
     def __init__(self, numWire, numGeom):
 
