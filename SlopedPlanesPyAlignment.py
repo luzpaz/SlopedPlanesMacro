@@ -1116,7 +1116,7 @@ class _PyAlignment(_Py):
                 cont = pyCont.cuttingPyth(cutterList)
 
             pyTwo.cuttingPyth([base, cont, shapeOne])
-            pyOne.cutting([cont, base, shapeTwo])
+            pyOne.cuttingPyth([cont, base, shapeTwo])
 
             cutList = [cont, base]
 
