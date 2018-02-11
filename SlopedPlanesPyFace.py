@@ -1149,7 +1149,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.ordinaries()
-        # self.printControl('ordinaries')
+        self.printControl('ordinaries')
 
     def betweenWires(self):
 
@@ -1329,12 +1329,14 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
             pyAlign.aligning()
+        self.printControl('aligning')
+
+        for pyAlign in pyAlignList:
+            pyAlign.end()
 
     def end(self):
 
-        '''end(self)
-
-        Transfers to PyAlignment.'''
+        '''end(self)'''
 
         # print '######### end'
 
@@ -1524,5 +1526,4 @@ class _PyFace(_Py):
                                                 pyPl.cuttingPyth(cutterList)
                                                 # print 'rango chop ', (nn, pl)
 
-        for pyAlign in pyAlignList:
-            pyAlign.end()
+
