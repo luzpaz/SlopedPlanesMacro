@@ -1149,7 +1149,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.ordinaries()
-        self.printControl('ordinaries')
+        # self.printControl('ordinaries')
 
     def betweenWires(self):
 
@@ -1329,7 +1329,7 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
             pyAlign.aligning()
-        self.printControl('aligning')
+        # self.printControl('aligning')
 
         for pyAlign in pyAlignList:
             pyAlign.end()
