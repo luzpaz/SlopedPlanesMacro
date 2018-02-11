@@ -690,9 +690,10 @@ class _PyReflex(_Py):
                         cutterList.append(ff)
         # print 'cutterList ', cutterList, len(cutterList)
 
+        cList = []    # clean cutterList
+
         if rear:
 
-            cList = []    # clean cutterList
             for f in cutterList:
                 section = f.section([backward], tolerance)
                 if not section.Edges:
