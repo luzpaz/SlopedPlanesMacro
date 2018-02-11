@@ -283,6 +283,7 @@ class _PyReflex(_Py):
 
                 if rearPyPl.aligned:
                     # print 'a'
+                    # cambiar por selectAllAlignment
                     pyAlign = self.selectAlignment(numWire, nGeom)
                     rearPl = pyAlign.simulatedAlignment
                     pyR.addLink('cutter', rearPl)
@@ -324,6 +325,7 @@ class _PyReflex(_Py):
 
                     if pyOppRear.aligned:
                         # print 'a'
+                        # cambiar por selectAllAlignment
                         pyAlign = self.selectAlignment(numWire, nGeom)
                         oppRearPl = pyAlign.simulatedAlignment
                         pyR.addLink('cutter', oppRearPl)
@@ -438,6 +440,7 @@ class _PyReflex(_Py):
 
         if pyPl.aligned:
             # print 'A'
+            # cambiar por selectAllAlignment
             pyAlign = self.selectAlignment(numWire, nn)
             pl = pyAlign.simulatedAlignment
             pyR.addLink('cutter', pl)
@@ -637,6 +640,7 @@ class _PyReflex(_Py):
                 pyPl = pyPlaneList[nn]
                 if pyPl.aligned:
                     # print 'a'
+                    # cambiar por selectAllAlignment
                     pyAlign = self.selectAlignment(pyWire.numWire, nn)
                     pl = pyAlign.simulatedAlignment
                     corn.append(pl)

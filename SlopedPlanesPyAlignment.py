@@ -492,7 +492,7 @@ class _PyAlignment(_Py):
         '''priorLater(self)
         '''
 
-        # print '###### priorLater base ', (self.base.numWire, self.base.numGeom)
+        print '###### priorLater base ', (self.base.numWire, self.base.numGeom)
 
         falsify = self.falsify
 
@@ -514,88 +514,89 @@ class _PyAlignment(_Py):
         prior = pyPrior.shape
         later = pyLater.shape
         pr = pyPrior.numGeom
-        # print 'prior ', (pyPrior.numWire, pr)
+        print 'prior ', (pyPrior.numWire, pr)
         lat = pyLater.numGeom
-        # print 'later ', (pyLater.numWire, lat)
+        print 'later ', (pyLater.numWire, lat)
         bigPrior = pyPrior.bigShape
         bigLater = pyLater.bigShape
 
         cutterList = []
 
+        # arreglar
+
         if ((not pyPrior.reflexed) or
            (not pyPrior.rear) or
            (pyPrior.aligned)):
-            # print '1'
+            print '1'
             cutterList.append(bigPrior)
             if not pyBase.choped:
-                # print '11'
+                print '11'
                 control.append(pr)
 
         if ((not pyLater.reflexed) or
            (not pyLater.rear) or
            (pyLater.aligned)):
-            # print '2'
+            print '2'
             cutterList.append(bigLater)
             if not self.falsify:
                 if not pyBase.choped:
-                    # print '21'
+                    print '21'
                     control.append(lat)
 
         if falsify:
-            # print 'A'
+            print 'A'
 
             [pyOne, pyTwo] = self.chops[0]
 
-            cList = [bigPrior]
-            pyBase.cuttingPyth(cList)
-            control.append(lat)
+            if not pyPrior.reflexed:
 
-            cList = [bigLater]
-            pyCont.cuttingPyth(cList)
-            pyCont.control.append(lat)
-            pyCont.control.append(pr)
+                pyBase.cuttingPyth([bigPrior])
+                control.append(lat)
+
+            if not pyLater.reflexed:
+
+                pyCont.cuttingPyth([bigLater])
+                pyCont.control.append(lat)
+                pyCont.control.append(pr)
 
         else:
-            # print 'B'
+            print 'B'
 
             if cutterList:
-                # print 'BB'
+                print 'BB'
 
                 pyBase.cuttingPyth(cutterList)
 
         # cuts pyPrior and pyLater
 
-        if not pyPrior.reflexed or pyPrior.choped:
-            # print 'a'
+        if not pyPrior.reflexed:  # or pyPrior.choped:
+            print 'a'
 
             if not pyPrior.arrow:
-                # print 'a1'
+                print 'a1'
 
                 pyPrior.trimming(enormousBase)
-                # pyPrior.cuttingPyth([bigBase])
                 pyPrior.control.append(numGeom)
 
                 if falsify:
-                    # print 'a11'
+                    print 'a11'
                     pyPrior.control.append(nGeom)
 
-        if not pyLater.reflexed or pyLater.choped:
-            # print 'b'
+        if not pyLater.reflexed:  # or pyLater.choped:
+            print 'b'
 
             if not pyLater.arrow:
 
                 if not falsify:
-                    # print 'b1'
+                    print 'b1'
 
                     pyLater.trimming(enormousBase)
-                    # pyLater.cuttingPyth([bigBase])
                     pyLater.control.append(numGeom)
 
                 else:
-                    # print 'b2'
+                    print 'b2'
 
                     pyLater.trimming(enormousCont)
-                    # pyLater.cuttingPyth([bigCont])
                     pyLater.control.append(nGeom)
                     pyLater.control.append(numGeom)
 
@@ -891,6 +892,7 @@ class _PyAlignment(_Py):
                         pyPl = pyPlaneList[nn]
                         pl = None
                         if pyPl.aligned:
+                            # cambiar por selectAllAlignment
                             pyAli = self.selectAlignment(numWire, nn)
                             if pyAli != self:
                                 geomAli = pyAli.geomAligned
@@ -916,6 +918,7 @@ class _PyAlignment(_Py):
                         pyPl = pyPlList[nn]
                         pl = None
                         if pyPl.aligned:
+                            # cambiar por selectAllAlignment
                             pyAli = self.selectAlignment(nW, nn)
                             if pyAli != self:
                                 geomAli = pyAli.geomAligned
@@ -936,6 +939,7 @@ class _PyAlignment(_Py):
                     pyPl = pyPlaneList[rear]
                     pl = None
                     if pyPl.aligned:
+                        # cambiar por selectAllAlignment
                         pyAli = self.selectAlignment(numWire, rear)
                         if pyAli != self:
                             geomAli = pyAli.geomAligned
@@ -955,6 +959,7 @@ class _PyAlignment(_Py):
                         pyPl = pyPlList[oppRear]
                         pl = None
                         if pyPl.aligned:
+                            # cambiar por selectAllAlignment
                             pyAli = self.selectAlignment(numWire, rear)
                             if pyAli != self:
                                 geomAli = pyAli.geomAligned

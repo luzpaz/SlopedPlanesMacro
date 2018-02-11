@@ -115,6 +115,32 @@ class _Py(object):
 
         return None
 
+    def selectAllAlignment(self, numWire, numGeom):
+
+        '''selectAlignment(self, numWire, numGeom)
+        selects a list of alignments which includes the plane (numWire, numGeom)
+        as base plane or in its aligned planes and return it, or None.
+        A maximum of two alignments, one falsify'''
+
+        pyWireList = _Py.pyFace.wires
+        pyWire = pyWireList[numWire]
+        pyPlaneList = pyWire.planes
+        pyPlane = pyPlaneList[numGeom]
+
+        aliList = []
+
+        pyAlignList = _Py.pyFace.alignments
+        for pyAlign in pyAlignList:
+            if pyAlign.base == pyPlane:
+                aliList.append(pyAlign)
+            elif pyPlane in pyAlign.aligns:
+                aliList.append(pyAlign)
+
+        if aliList:
+            return aliList
+        else:
+            return None
+
     def selectAlignmentBase(self, numWire, numGeom):
 
         '''selectAlignmentBase(self, numWire, numGeom)
@@ -129,9 +155,9 @@ class _Py(object):
 
         return None
 
-    def selectAllAlignment(self, numWire, numGeom):
+    def selectAllAlignmentChop(self, numWire, numGeom):
 
-        '''selectAllAlignment(self, numWire, numGeom)
+        '''selectAllAlignmentChop(self, numWire, numGeom)
         selects all alignment which the plane (numWire, numGeom)
         is in their chops, and return them.'''
 
@@ -364,6 +390,7 @@ class _Py(object):
             Part.show(compound, self.slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))
 
         if pyPlane.aligned:
+            # cambiar por selectAllAlignment
             pyAli = self.selectAlignment(numWire, numGeom)
             print pyAli
 

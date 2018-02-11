@@ -941,6 +941,7 @@ class _PyPlane(_Py):
 
         if self.aligned:
 
+            # cambiar por selectAllAlignment
             pyAlign = self.selectAlignment(numWire, self.numGeom)
             # print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
             line = pyAlign.geomAligned
@@ -957,6 +958,7 @@ class _PyPlane(_Py):
                     if pyPl.aligned:
                         # print 'a'
 
+                        # cambiar por selectAllAlignment
                         pyAli = self.selectAlignment(numWire, nGeom)
                         # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                         ll = pyAli.geomAligned
