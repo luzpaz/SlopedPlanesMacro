@@ -993,9 +993,9 @@ class _PyAlignment(_Py):
 
                 # print 'planeCopy.Faces ', planeCopy.Faces
 
-                '''if cutList:
+                if cutList:
 
-                    if pyPlane.numWire == 0 and pyTwinPlane.numWire != 0:
+                    '''if pyPlane.numWire == 0 and pyTwinPlane.numWire != 0:
                         # debería ser mas selectivo ya que prodrian haber otros chops en el wire exterior
                         # puedes comprobarlo con self.aligns o con self.rango
                         rChop = rangoChop[numChop]
@@ -1013,9 +1013,9 @@ class _PyAlignment(_Py):
                                     if not pyPl.aligned:
                                         pl = pyPl.shape
                                         cutList.append(pl)
-                                        # print 'rr ', nn
+                                        # print 'rr ', nn'''
 
-                    planeCopy = planeCopy.cut(cutList, tolerance)'''
+                    planeCopy = planeCopy.cut(cutList, tolerance)
 
                 # print 'planeCopy.Faces ', planeCopy.Faces
 
