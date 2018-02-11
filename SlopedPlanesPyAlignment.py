@@ -415,7 +415,8 @@ class _PyAlignment(_Py):
                 for nG in rango:
                     pyPl = pyPlList[nG]
                     control = pyPl.control
-                    if numGeom not in control:
+                    # if numGeom not in control:
+                    if pyPlane.numGeom not in control:
                         if not pyPl.aligned and not pyPl.choped:
                             # print '# nG ', nG
 
