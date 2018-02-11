@@ -466,7 +466,7 @@ class _PyAlignment(_Py):
 
             section = rC.section([cont], tolerance)
             if section.Edges:
-                pyCont.cuttingPyth([pyOne.enormousShape],)
+                pyCont.cuttingPyth([pyOne.enormousShape])
             else:
                 pyCont.cuttingPyth([pyTwo.enormousShape])
 
@@ -500,12 +500,14 @@ class _PyAlignment(_Py):
         numGeom = pyBase.numGeom
         base = pyBase.shape
         bigBase = pyBase.bigShape
+        enormousBase = pyBase.enormousShape
         control = pyBase.control
 
         pyCont = self.aligns[-1]
         nGeom = pyCont.numGeom
         cont = pyCont.shape
         bigCont = pyCont.bigShape
+        enormousCont = pyCont.enormousShape
 
         pyPrior = self.prior
         pyLater = self.later
@@ -569,7 +571,8 @@ class _PyAlignment(_Py):
             if not pyPrior.arrow:
                 # print 'a1'
 
-                pyPrior.cuttingPyth([bigBase])
+                pyPrior.trimming(enormousBase)
+                # pyPrior.cuttingPyth([bigBase])
                 pyPrior.control.append(numGeom)
 
                 if falsify:
@@ -584,13 +587,15 @@ class _PyAlignment(_Py):
                 if not falsify:
                     # print 'b1'
 
-                    pyLater.cuttingPyth([bigBase])
+                    pyLater.trimming(enormousBase)
+                    # pyLater.cuttingPyth([bigBase])
                     pyLater.control.append(numGeom)
 
                 else:
                     # print 'b2'
 
-                    pyLater.cuttingPyth([bigCont])
+                    pyLater.trimming(enormousCont)
+                    # pyLater.cuttingPyth([bigCont])
                     pyLater.control.append(nGeom)
                     pyLater.control.append(numGeom)
 
@@ -652,6 +657,7 @@ class _PyAlignment(_Py):
                         pl = pyPl.simulatedShape  # bigShape?
                     else:
                         pl = pyPl.bigShape
+                        ## pl = pyPl.shape
                     cutList.append(pl)
 
             cList = []
