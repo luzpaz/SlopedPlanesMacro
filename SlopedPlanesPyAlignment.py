@@ -729,6 +729,7 @@ class _PyAlignment(_Py):
             numChop += 1
 
             simulC = simulatedChops[numChop]
+            cutterList.extend(simulC)
             shapeList.extend(simulC)
 
             one = pyOne.simulatedShape.copy()
@@ -1297,10 +1298,6 @@ class _PyAlignment(_Py):
                         pyPl.cuttingPyth(cutList)
                         #rr.appeend(pyPl.shape)
                         # print 'rangoChop ', nn
-
-                # chops with rangoChop
-
-
 
             # rearChop with chop and alignment
 

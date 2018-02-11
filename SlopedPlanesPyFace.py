@@ -1331,9 +1331,6 @@ class _PyFace(_Py):
             pyAlign.aligning()
         # self.printControl('aligning')
 
-        for pyAlign in pyAlignList:
-            pyAlign.end()
-
     def end(self):
 
         '''end(self)'''
@@ -1526,4 +1523,5 @@ class _PyFace(_Py):
                                                 pyPl.cuttingPyth(cutterList)
                                                 # print 'rango chop ', (nn, pl)
 
-
+        for pyAlign in pyAlignList:
+            pyAlign.end()
