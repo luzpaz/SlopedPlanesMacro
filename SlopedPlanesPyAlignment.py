@@ -892,9 +892,8 @@ class _PyAlignment(_Py):
                         pyPl = pyPlaneList[nn]
                         pl = None
                         if pyPl.aligned:
-                            # cambiar por selectAllAlignment
-                            pyAli = self.selectAlignment(numWire, nn)
-                            if pyAli != self:
+                            pyAli = self.selectAlignmentBase(numWire, nn)
+                            if pyAli and pyAli != self:
                                 geomAli = pyAli.geomAligned
                                 section = geomAligned.section([geomAli], tolerance)
                                 if not section.Vertexes:
@@ -918,9 +917,8 @@ class _PyAlignment(_Py):
                         pyPl = pyPlList[nn]
                         pl = None
                         if pyPl.aligned:
-                            # cambiar por selectAllAlignment
-                            pyAli = self.selectAlignment(nW, nn)
-                            if pyAli != self:
+                            pyAli = self.selectAlignmentBase(numWire, nn)
+                            if pyAli and pyAli != self:
                                 geomAli = pyAli.geomAligned
                                 section = geomAligned.section([geomAli], tolerance)
                                 if not section.Vertexes:
@@ -939,9 +937,8 @@ class _PyAlignment(_Py):
                     pyPl = pyPlaneList[rear]
                     pl = None
                     if pyPl.aligned:
-                        # cambiar por selectAllAlignment
-                        pyAli = self.selectAlignment(numWire, rear)
-                        if pyAli != self:
+                        pyAli = self.selectAlignmentBase(numWire, nn)
+                        if pyAli and pyAli != self:
                             geomAli = pyAli.geomAligned
                             section = geomAligned.section([geomAli], tolerance)
                             if not section.Vertexes:
@@ -959,9 +956,8 @@ class _PyAlignment(_Py):
                         pyPl = pyPlList[oppRear]
                         pl = None
                         if pyPl.aligned:
-                            # cambiar por selectAllAlignment
-                            pyAli = self.selectAlignment(numWire, rear)
-                            if pyAli != self:
+                            pyAli = self.selectAlignmentBase(numWire, nn)
+                            if pyAli and pyAli != self:
                                 geomAli = pyAli.geomAligned
                                 section = geomAligned.section([geomAli], tolerance)
                                 if not section.Vertexes:
