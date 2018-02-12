@@ -941,12 +941,14 @@ class _PyPlane(_Py):
 
         if self.aligned:
 
-            pyAlign = self.selectAlignmentBase(numWire, self.numGeom)
+            pyAlignList = self.selectAlignments(numWire, self.numGeom)
+
+            '''pyAlign = self.selectAlignmentBase(numWire, self.numGeom)
             if not pyAlign:
                 return
             # print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
             line = pyAlign.geomAligned
-            base = self.shape
+            base = self.shape'''
 
         cutterList = []
         for pyPl in pyPlaneList:
@@ -967,15 +969,20 @@ class _PyPlane(_Py):
 
                             if self.aligned:
                                 # print 'a1'
-                                section = line.section([ll], tolerance)
-                                if not section.Vertexes:
-                                    section = base.section([pl], tolerance)
-                                    if section.Edges:
-                                        common = base.common(simulAlign, tolerance)
-                                        # print 'area ', common.Area
-                                        if not common.Area:
-                                            # print 'a11'
-                                            cutterList.extend(pyAli.simulatedAlignment)
+                                for pyAlign in pyAlignList:
+
+                                    line = pyAlign.geomAligned
+                                    base = pyAlign.base.shape
+
+                                    section = line.section([ll], tolerance)
+                                    if not section.Vertexes:
+                                        section = base.section([pl], tolerance)
+                                        if section.Edges:
+                                            common = base.common(simulAlign, tolerance)
+                                            # print 'area ', common.Area
+                                            if not common.Area:
+                                                # print 'a11'
+                                                cutterList.extend(pyAli.simulatedAlignment)
 
                             else:
                                 # print 'a2'
