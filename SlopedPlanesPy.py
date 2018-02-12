@@ -95,32 +95,6 @@ class _Py(object):
             valueList.append(value)
         setattr(self, prop, valueList)
 
-    def selectAlignments(self, numWire, numGeom):
-
-        '''selectAlignment(self, numWire, numGeom)
-        selects a list of alignments which includes the plane (numWire, numGeom)
-        as base plane or in its aligned planes and return it, or None.
-        A maximum of two alignments, one falsify'''
-
-        pyWireList = _Py.pyFace.wires
-        pyWire = pyWireList[numWire]
-        pyPlaneList = pyWire.planes
-        pyPlane = pyPlaneList[numGeom]
-
-        aliList = []
-
-        pyAlignList = _Py.pyFace.alignments
-        for pyAlign in pyAlignList:
-            if pyAlign.base == pyPlane:
-                aliList.append(pyAlign)
-            elif pyPlane in pyAlign.aligns:
-                aliList.append(pyAlign)
-
-        if aliList:
-            return aliList
-        else:
-            return None
-
     def selectAlignmentBase(self, numWire, numGeom):
 
         '''selectAlignmentBase(self, numWire, numGeom)
