@@ -95,27 +95,7 @@ class _Py(object):
             valueList.append(value)
         setattr(self, prop, valueList)
 
-    def selectAlignment(self, numWire, numGeom):
-
-        '''selectAlignment(self, numWire, numGeom)
-        selects an unique alignment which includes the plane (numWire, numGeom)
-        as base plane or in its aligned planes and return it, or None.'''
-
-        pyWireList = _Py.pyFace.wires
-        pyWire = pyWireList[numWire]
-        pyPlaneList = pyWire.planes
-        pyPlane = pyPlaneList[numGeom]
-
-        pyAlignList = _Py.pyFace.alignments
-        for pyAlign in pyAlignList:
-            if pyAlign.base == pyPlane:
-                return pyAlign
-            elif pyPlane in pyAlign.aligns:
-                return pyAlign
-
-        return None
-
-    def selectAllAlignment(self, numWire, numGeom):
+    def selectAlignments(self, numWire, numGeom):
 
         '''selectAlignment(self, numWire, numGeom)
         selects a list of alignments which includes the plane (numWire, numGeom)
@@ -155,7 +135,7 @@ class _Py(object):
 
         return None
 
-    def selectAllAlignmentChop(self, numWire, numGeom):
+    def selectAlignmentsChop(self, numWire, numGeom):
 
         '''selectAllAlignmentChop(self, numWire, numGeom)
         selects all alignment which the plane (numWire, numGeom)
