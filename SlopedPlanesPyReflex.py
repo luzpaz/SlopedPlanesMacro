@@ -149,9 +149,10 @@ class _PyReflex(_Py):
 
                             elif pyPl.aligned:
                                 # print 'c'
+                                # podria ser mejor con if pyPl.shape:
                                 pyAli =\
                                     self.selectAlignmentBase(numWire, nG)
-                                if pyAli:
+                                if pyAli:  # quitar, revisar todos
                                     cList.extend(pyAli.simulatedAlignment)
 
                             else:

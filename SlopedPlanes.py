@@ -432,7 +432,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.ordinaries()
 
-            '''pyFace.betweenWires()
+            pyFace.betweenWires()
 
             pyFace.aligning()
 
