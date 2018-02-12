@@ -414,6 +414,8 @@ class _PyAlignment(_Py):
 
                 for nG in rango:
                     pyPl = pyPlList[nG]
+                    if pyPl.aligned or pyPl.choped:  # reflexed?
+                        break
                     control = pyPl.control
                     if pyPlane.numGeom not in control:
                         if not pyPl.aligned and not pyPl.choped:
@@ -708,8 +710,7 @@ class _PyAlignment(_Py):
 
     def simulatingAlignment(self):
 
-        '''simulatingAlignment(self)
-        '''
+        '''simulatingAlignment(self)'''
 
          # print '###### simulatingAlignment ', (self.base.numWire, self.base.numGeom)
 
@@ -1346,9 +1347,10 @@ class _PyAlignment(_Py):
 
         for r in rangoRear:
             pyPl = pyPlaneList[r]
-            if not pyPl.choped and not pyPl.aligned:
-                pl = pyPl.shape
-                rearList.append(pl)
+            if pyPl.choped or pyPl.aligned:
+                break
+            pl = pyPl.shape
+            rearList.append(pl)
 
         if rearList:
             # print 'rearList ', rearList
