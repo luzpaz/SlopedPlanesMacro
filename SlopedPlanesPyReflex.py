@@ -283,11 +283,11 @@ class _PyReflex(_Py):
 
                 if rearPyPl.aligned:
                     # print 'a'
-                    # cambiar por selectAllAlignment
-                    pyAlign = self.selectAlignment(numWire, nGeom)
-                    rearPl = pyAlign.simulatedAlignment
-                    pyR.addLink('cutter', rearPl)
-                    # print 'included rear simulated ', (numWire, nGeom)
+                    pyAlign = self.selectAlignmentBase(numWire, nGeom)
+                    if pyAlign:
+                        rearPl = pyAlign.simulatedAlignment
+                        pyR.addLink('cutter', rearPl)
+                        # print 'included rear simulated ', (numWire, nGeom)
 
                 elif rearPyPl.choped:
                     # print 'b'
@@ -325,11 +325,11 @@ class _PyReflex(_Py):
 
                     if pyOppRear.aligned:
                         # print 'a'
-                        # cambiar por selectAllAlignment
-                        pyAlign = self.selectAlignment(numWire, nGeom)
-                        oppRearPl = pyAlign.simulatedAlignment
-                        pyR.addLink('cutter', oppRearPl)
-                        # print 'included oppRear simulated ', (numWire, nGeom)
+                        pyAlign = self.selectAlignmentBase(numWire, nGeom)
+                        if pyAlign:
+                            oppRearPl = pyAlign.simulatedAlignment
+                            pyR.addLink('cutter', oppRearPl)
+                            # print 'included oppRear simulated ', (numWire, nGeom)
 
                     elif pyOppRear.choped:
                         # print 'b'
@@ -440,11 +440,11 @@ class _PyReflex(_Py):
 
         if pyPl.aligned:
             # print 'A'
-            # cambiar por selectAllAlignment
-            pyAlign = self.selectAlignment(numWire, nn)
-            pl = pyAlign.simulatedAlignment
-            pyR.addLink('cutter', pl)
-            # print 'included rango simulated ', (numWire, nn)
+            pyAlign = self.selectAlignmentBase(numWire, nn)
+            if pyAlign:
+                pl = pyAlign.simulatedAlignment
+                pyR.addLink('cutter', pl)
+                # print 'included rango simulated ', (numWire, nn)
 
         elif pyPl.choped:
             # print 'B'
@@ -640,10 +640,10 @@ class _PyReflex(_Py):
                 pyPl = pyPlaneList[nn]
                 if pyPl.aligned:
                     # print 'a'
-                    # cambiar por selectAllAlignment
-                    pyAlign = self.selectAlignment(pyWire.numWire, nn)
-                    pl = pyAlign.simulatedAlignment
-                    corn.append(pl)
+                    pyAlign = self.selectAlignmentBase(pyWire.numWire, nn)
+                    if pyAlign:
+                        pl = pyAlign.simulatedAlignment
+                        corn.append(pl)
                 elif pyPl.reflexed:
                     # print 'b'
                     pl = pyPl.simulatedShape
