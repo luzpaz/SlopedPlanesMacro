@@ -594,12 +594,12 @@ class _PyFace(_Py):
 
                         else:
                             pyAlignmentList =\
-                                self.selectAllAlignmentChop(numWire, numGeom)
-                            # cambiar por selectAllAlignment
-                            pyAlignment = self.selectAlignment(numWire, 0)
-                            if pyAlignment not in pyAlignmentList:
-                                # print 'pyPlane no chop of firstPlane'
-                                self.doReflex(pyWire, pyPlane, firstPlane)
+                                self.selectAlignmentsChop(numWire, numGeom)
+                            pyAlignment = self.selectAlignmentBase(numWire, 0)
+                            if pyAlignment:
+                                if pyAlignment not in pyAlignmentList:
+                                    # print 'pyPlane no chop of firstPlane'
+                                    self.doReflex(pyWire, pyPlane, firstPlane)
 
             pyWire.reset = False
 
@@ -1231,7 +1231,7 @@ class _PyFace(_Py):
                             aList = alignments[:]
                             # print 'aList ', aList
                             pyAlignList =\
-                                self.selectAllAlignmentChop(numWire,
+                                self.selectAlignmentsChop(numWire,
                                                         pyPlane.numGeom)
                             # print 'pyAlignList ', pyAlignList
                             baseList = []

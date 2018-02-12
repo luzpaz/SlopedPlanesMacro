@@ -370,13 +370,13 @@ class _Py(object):
             Part.show(compound, self.slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))
 
         if pyPlane.aligned:
-            # cambiar por selectAllAlignment
+            # cambiar por selectAlignmentBase
             pyAli = self.selectAlignment(numWire, numGeom)
-            print pyAli
+            if pyAli:
 
-            compound = Part.makeCompound(pyAli.simulatedAlignment)
-            compound.Placement = placement
-            Part.show(compound, self.slopedPlanes.Name+' simulatedAlignment '+str(numWire)+' '+str(numGeom))
+                compound = Part.makeCompound(pyAli.simulatedAlignment)
+                compound.Placement = placement
+                Part.show(compound, self.slopedPlanes.Name+' simulatedAlignment '+str(numWire)+' '+str(numGeom))
 
         if pyPlane.choped:
             if pyPlane.simulatedShape:
