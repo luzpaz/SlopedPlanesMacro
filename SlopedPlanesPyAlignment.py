@@ -759,12 +759,14 @@ class _PyAlignment(_Py):
             cList = cutterList[:]
             if pyPrior.numGeom not in pyBase.control:
                 cList.append(pyPrior.bigShape)
-            base = pyBase.cuttingPyth(cList)
+            gS = pyBase.geomShape
+            base = self.cutting(base, cList, gS)
 
             cList = cutterList[:]
             if pyLater.numGeom not in pyCont.control:
                 cList.append(pyLater.bigShape)
-            cont = pyCont.cuttingPyth(cList)
+            gS = pyCont.geomShape
+            cont = self.cutting(cont, cList, gS)
 
             shapeList.extend([base, cont])
 
