@@ -99,8 +99,8 @@ class _Py(object):
 
         '''selectAlignment(self, numWire, numGeom)
         selects a list of alignments which includes the plane (numWire, numGeom)
-        as base plane or in its aligned planes and return it, or None.
-        A maximum of two alignments, one falsify'''
+        as base plane or in its aligned planes and return it.
+        A maximum of two alignments'''
 
         pyWireList = _Py.pyFace.wires
         pyWire = pyWireList[numWire]
@@ -116,10 +116,7 @@ class _Py(object):
             elif pyPlane in pyAlign.aligns:
                 aliList.append(pyAlign)
 
-        if aliList:
-            return aliList
-        else:
-            return None
+        return aliList
 
     def selectAlignmentBase(self, numWire, numGeom):
 
