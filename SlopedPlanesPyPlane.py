@@ -715,6 +715,7 @@ class _PyPlane(_Py):
 
             [numWire, numGeom] = [self.numWire, self.numGeom]
             plane = self.shape
+            seedShape = self.seedShape
             big = self.bigShape
             enormous = self.enormousShape
             simulated = self.simulatedShape
@@ -730,14 +731,19 @@ class _PyPlane(_Py):
 
             if not plane:
                 (nWire, nGeom) = angle
-                pyPlane = self.selectPlane(nWire, nGeom)
-                plane = pyPlane.shape
-                big = pyPlane.bigShape
-                enormous = pyPlane.enormousShape
-                simulated = pyPlane.simulatedShape
-                angle = pyPlane.angle
+                # print (nWire, nGeom)
+                pyPl = self.selectPlane(nWire, nGeom)
+                plane = pyPl.shape
+                seedShape = pyPl.seedShape
+                # print seedShape
+                big = pyPl.bigShape
+                enormous = pyPl.enormousShape
+                simulated = pyPl.simulatedShape
+                angle = pyPl.angle
 
             pyPlane = _PyPlane(numWire, numGeom)
+
+            pyPlane.angle = angle    # danger. It could change the seedShape
             pyPlane.geomShape = geomShape
             pyPlane.geom = geom
             pyPlane.geomAligned = geomAligned
@@ -749,12 +755,13 @@ class _PyPlane(_Py):
             pyPlane.reflexed = True
             pyPlane.fronted = fronted
             pyPlane.shape = plane.copy()
+            pyPlane.seedShape = seedShape
             pyPlane.bigShape = big
             pyPlane.enormousShape = enormous
             pyPlane.simulatedShape = simulated
-            pyPlane.angle = angle
             pyPlane.virtualized = True
 
+            # print pyPlane.seedShape
             return pyPlane
 
         else:
