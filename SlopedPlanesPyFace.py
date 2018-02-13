@@ -713,12 +713,6 @@ class _PyFace(_Py):
 
         if self.reset:
 
-            self.forBack(pyOne, 'backward')
-            self.findRear(pyWireList[numWireChopOne], pyOne, 'backward')
-
-            self.forBack(pyTwo, 'forward')
-            self.findRear(pyW, pyTwo, 'forward')
-
             pyPlane.reflexed = True
             pyPlane.aligned = True
             pyPl.reflexed = True
@@ -728,6 +722,12 @@ class _PyFace(_Py):
             pyOne.choped = True
             pyTwo.reflexed = True
             pyTwo.choped = True
+
+            self.forBack(pyOne, 'backward')
+            self.findRear(pyWireList[numWireChopOne], pyOne, 'backward')
+
+            self.forBack(pyTwo, 'forward')
+            self.findRear(pyW, pyTwo, 'forward')
 
         return pyAli
 
@@ -808,10 +808,12 @@ class _PyFace(_Py):
                 # print 'second rear'
                 pyPlane.addValue('secondRear', 'True', direction)
 
-            point = self.roundVector(vertex.Point)
-            if point in coord:
-                # print 'cc'
-                edge = True
+            if not pyPlane.choped:  # ???
+
+                point = self.roundVector(vertex.Point)
+                if point in coord:
+                    # print 'cc'
+                    edge = True
 
         # print 'point ', vertex.Point
         # print 'edge ', edge
