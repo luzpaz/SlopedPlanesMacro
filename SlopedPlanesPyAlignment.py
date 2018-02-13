@@ -232,12 +232,19 @@ class _PyAlignment(_Py):
 
         if self.falsify:
             # print 'a'
+
             if not self.base.shape:
                 # print 'b'
                 virtualBase = self.base.virtualizing()
                 self.base = virtualBase
                 # print virtualBase.shape
                 # print virtualBase.seedShape
+
+            '''pyCont = self.aligns[-1]
+            pyAlignList = self.selectAlignments(pyCont.numWire, pyCont.numGeom)
+            if len(pyAlignList) > 1:
+                virtualCont = pyCont.virtualizing()
+                self.aligns = [virtualCont]'''
 
     def trimming(self):
 
