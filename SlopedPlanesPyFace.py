@@ -1029,7 +1029,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        self.printSummary()
+        # self.printSummary()
 
     def upping(self):
 
@@ -1329,7 +1329,13 @@ class _PyFace(_Py):
         pyAlignList = self.alignments
 
         for pyAlign in pyAlignList:
-            pyAlign.aligning()
+            if pyAlign.falsify:
+                pyAlign.aligning()
+
+        for pyAlign in pyAlignList:
+            if not pyAlign.falsify:
+                pyAlign.aligning()
+
         # self.printControl('aligning')
 
     def end(self):

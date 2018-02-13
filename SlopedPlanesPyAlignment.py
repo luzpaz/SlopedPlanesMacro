@@ -240,6 +240,7 @@ class _PyAlignment(_Py):
                 # print virtualBase.shape
                 # print virtualBase.seedShape
 
+            # esto no funciona ni es necesario
             '''pyCont = self.aligns[-1]
             pyAlignList = self.selectAlignments(pyCont.numWire, pyCont.numGeom)
             if len(pyAlignList) > 1:
@@ -831,10 +832,10 @@ class _PyAlignment(_Py):
         '''aligning(self)
         '''
 
-        print '###### base ', (self.base.numWire, self.base.numGeom)
-        print '###### base shape ', self.base.shape
-        print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
-        print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
+        # print '###### base ', (self.base.numWire, self.base.numGeom)
+        # print '###### base shape ', self.base.shape
+        # print '###### aligns ', [(x.numWire, x.numGeom) for x in self.aligns]
+        # print '###### chops ', [[(x.numWire, x.numGeom), (y.numWire, y.numGeom)] for [x, y] in self.chops]
 
         tolerance = _Py.tolerance
         pyWireList = _Py.pyFace.wires
@@ -1163,6 +1164,12 @@ class _PyAlignment(_Py):
 
                 base = pyBase.cuttingPyth(cutterList)
                 cont = pyCont.cuttingPyth(cutterList)
+
+                if pyBase.virtualized:
+                    pyB = self.selectPlane(pyBase.numWire, pyBase.numGeom)
+                    angle = pyB.angle
+                    pyb = self.selectPlane(angle[0], angle[1])
+                    pyb.cuttingPyth(cutterList)
 
             pyTwo.cuttingPyth([base, cont, shapeOne])
             pyOne.cuttingPyth([cont, base, shapeTwo])
