@@ -231,21 +231,9 @@ class _PyAlignment(_Py):
         self.chops = virtualizedChops
 
         if self.falsify:
-            # print 'a'
-
             if not self.base.shape:
-                # print 'b'
                 virtualBase = self.base.virtualizing()
                 self.base = virtualBase
-                # print virtualBase.shape
-                # print virtualBase.seedShape
-
-            # esto no funciona ni es necesario
-            '''pyCont = self.aligns[-1]
-            pyAlignList = self.selectAlignments(pyCont.numWire, pyCont.numGeom)
-            if len(pyAlignList) > 1:
-                virtualCont = pyCont.virtualizing()
-                self.aligns = [virtualCont]'''
 
     def trimming(self):
 
@@ -565,11 +553,22 @@ class _PyAlignment(_Py):
             [pyOne, pyTwo] = self.chops[0]
 
             if not pyPrior.reflexed:
+                # print 'AP1'
 
                 pyBase.cuttingPyth([bigPrior])
                 control.append(lat)
 
+            else:
+                # print 'AP2'
+
+                if pyBase.virtualized:
+                    # print 'AP21'
+
+                    pyBase.cuttingPyth([bigPrior])
+                    control.append(lat)
+
             if not pyLater.reflexed:
+                # print 'AL'
 
                 pyCont.cuttingPyth([bigLater])
                 pyCont.control.append(lat)
