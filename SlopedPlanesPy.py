@@ -102,19 +102,18 @@ class _Py(object):
         as base plane or in its aligned planes and return it.
         A maximum of two alignments'''
 
-        pyWireList = _Py.pyFace.wires
-        pyWire = pyWireList[numWire]
-        pyPlaneList = pyWire.planes
-        pyPlane = pyPlaneList[numGeom]
-
         aliList = []
 
-        pyAlignList = _Py.pyFace.alignments
-        for pyAlign in pyAlignList:
-            if pyAlign.base == pyPlane:
+        for pyAlign in _Py.pyFace.alignments:
+            if pyAlign.base.numWire == numWire and\
+               pyAlign.base.numGeom == numGeom:
                 aliList.append(pyAlign)
-            elif pyPlane in pyAlign.aligns:
-                aliList.append(pyAlign)
+            else:
+                for pyPlane in pyAlign.aligns:
+                    if pyPlane.numWire == numWire and\
+                       pyPlane.numGeom == numGeom:
+                        aliList.append(pyAlign)
+                        break
 
         return aliList
 
@@ -124,10 +123,12 @@ class _Py(object):
         selects an unique alignment which base plane is (numWire, numGeom),
         and return it, or None.'''
 
-        pyPlane = self.selectPlane(numWire, numGeom)
+        # pyPlane = self.selectPlane(numWire, numGeom)
 
         for pyAlign in _Py.pyFace.alignments:
-            if pyAlign.base == pyPlane:
+            # if pyAlign.base == pyPlane:
+            if pyAlign.base.numWire == numWire and\
+               pyAlign.base.numGeom == numGeom:
                 return pyAlign
 
         return None
@@ -367,8 +368,7 @@ class _Py(object):
             Part.show(compound, self.slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))
 
         if pyPlane.aligned:
-            # cambiar por selectAlignmentBase
-            pyAli = self.selectAlignment(numWire, numGeom)
+            pyAli = self.selectAlignmentBase(numWire, numGeom)
             if pyAli:
 
                 compound = Part.makeCompound(pyAli.simulatedAlignment)
