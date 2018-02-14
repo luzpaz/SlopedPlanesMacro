@@ -1002,22 +1002,22 @@ class _PyAlignment(_Py):
 
                 if oppRear:
 
-                    if not oppRango:
-                        pyPl = pyPlList[oppRear]
-                        pl = None
-                        if pyPl.aligned:
-                            pyAli = self.selectAlignmentBase(numWire, nn)
-                            if pyAli and pyAli != self:
-                                geomAli = pyAli.geomAligned
-                                section = geomAligned.section([geomAli], tolerance)
-                                if not section.Vertexes:
-                                    pl = pyAli.simulatedAlignment
-                        elif not pyPl.choped:
-                            pl = [pyPl.shape]
-                        if pl:
-                            if pl not in cutList:
-                                cutList.extend(pl)
-                                # print'oppRearPlane ', rear
+                    # if not oppRango:
+                    pyPl = pyPlList[oppRear]
+                    pl = None
+                    if pyPl.aligned:
+                        pyAli = self.selectAlignmentBase(numWire, nn)
+                        if pyAli and pyAli != self:
+                            geomAli = pyAli.geomAligned
+                            section = geomAligned.section([geomAli], tolerance)
+                            if not section.Vertexes:
+                                pl = pyAli.simulatedAlignment
+                    elif not pyPl.choped:
+                        pl = [pyPl.shape]
+                    if pl:
+                        if pl not in cutList:
+                            cutList.extend(pl)
+                            # print'oppRearPlane ', rear
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
@@ -1356,7 +1356,7 @@ class _PyAlignment(_Py):
                         #rr.appeend(pyPl.shape)
                         # print 'rangoChop ', nn
 
-            # rearChop with chop and alignment
+            # rearChop with chop and alignment. Rango and rear with opp chop
 
             if pyO.rear:
                 pyPlList = pyWireList[pyO.numWire].planes
@@ -1366,7 +1366,7 @@ class _PyAlignment(_Py):
                     pyRearPl.cuttingPyth([pyO.shape] + bList)
 
                     two = pyT.shape
-                    rango = pyO.rango[-1]
+                    rango = pyO.rango[-1] + [rOne]
                     for nn in rango:
                         pyPl = pyPlList[nn]
                         if not pyPl.choped and not pyPl.aligned:
@@ -1380,7 +1380,7 @@ class _PyAlignment(_Py):
                     pyRearPl.cuttingPyth([pyT.shape] + bList)
 
                     one = pyO.shape
-                    rango = pyT.rango[0]
+                    rango = pyT.rango[0] + [rTwo]
                     for nn in rango:
                         pyPl = pyPlList[nn]
                         if not pyPl.choped and not pyPl.aligned:
