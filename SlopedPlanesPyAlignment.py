@@ -414,10 +414,11 @@ class _PyAlignment(_Py):
                 # print 'notCross ', notCross
                 # print 'rango ', rango
 
+                consecutive = False
                 for nG in rango:
                     pyPl = pyPlList[nG]
                     if pyPl.aligned or pyPl.choped:  # reflexed?
-                        break
+                        consecutive = True
                     control = pyPl.control
                     if pyPlane.numGeom not in control:
                         if not pyPl.aligned and not pyPl.choped:
@@ -425,30 +426,38 @@ class _PyAlignment(_Py):
 
                             if notCross:
                                 # print 'A'
-                                cList = [enormousShape]
 
-                                if nG not in baseRear and nG not in contRear:
-                                    # print 'a'
-                                    if nG not in [pr, lat]:
-                                        # print 'aa'
+                                if consecutive:
 
-                                        if falsify:
-                                            # print 'aa1'
-                                            if num == 0:
-                                                # print 'aa11'
+                                    pyPl.trimming(enormousShape)
+
+                                else:
+
+                                    cList = [enormousShape]
+
+                                    if nG not in baseRear and nG not in contRear:
+                                        # print 'a'
+                                        if nG not in [pr, lat]:
+                                            # print 'aa'
+
+                                            if falsify:
+                                                # print 'aa1'
+                                                if num == 0:
+                                                    # print 'aa11'
+                                                    cList.append(enormousBase)
+                                                    control.append(numGeom)
+                                                else:
+                                                    # print 'aa12'
+                                                    cList.append(enormousCont)
+                                                    control.append(nGeom)
+
+                                            else:
+                                                # print 'aa2'
                                                 cList.append(enormousBase)
                                                 control.append(numGeom)
-                                            else:
-                                                # print 'aa12'
-                                                cList.append(enormousCont)
-                                                control.append(nGeom)
 
-                                        else:
-                                            # print 'aa2'
-                                            cList.append(enormousBase)
-                                            control.append(numGeom)
+                                    pyPl.trimming(enormousShape, cList)
 
-                                pyPl.trimming(enormousShape, cList)
                                 control.append(pyPlane.numGeom)
 
                             else:
@@ -934,8 +943,16 @@ class _PyAlignment(_Py):
                             else:
                                 pl = None
                         elif not pyPl.choped:
-                            rC.append(pyPl.shape)
-                            pl = [pyPl.shape]
+
+                            pl = pyPl.shape.copy()
+
+                            if pyPl.arrow:
+                                gShape = pyPl.geomShape
+                                pl = self.cutting(pl, [enormousBase] , gShape)
+
+                            rC.append(pl)
+                            pl = [pl]
+
                         if pl:
                             if pl not in cutList:
                                 cutList.extend(pl)
