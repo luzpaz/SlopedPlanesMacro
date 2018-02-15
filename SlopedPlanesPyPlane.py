@@ -949,13 +949,11 @@ class _PyPlane(_Py):
         if self.aligned:
 
             pyAlignList = self.selectAlignments(numWire, self.numGeom)
+            # print 'pyAlignList ', pyAlignList
 
-            '''pyAlign = self.selectAlignmentBase(numWire, self.numGeom)
-            if not pyAlign:
-                return
-            # print 'pyAlign ', (pyAlign.base.numWire, pyAlign.base.numGeom)
-            line = pyAlign.geomAligned
-            base = self.shape'''
+            rr = []
+            for pyA in pyAlignList:
+                rr.extend(pyA.rangoRear)
 
         cutterList = []
         for pyPl in pyPlaneList:
@@ -969,8 +967,8 @@ class _PyPlane(_Py):
                         # print 'a'
 
                         pyAli = self.selectAlignmentBase(numWire, nGeom)
-                        # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                         if pyAli:
+                            # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                             ll = pyAli.geomAligned
                             simulAlign = pyAli.simulatedAlignment
 
@@ -1003,14 +1001,16 @@ class _PyPlane(_Py):
                         # print 'c'
                         if self.aligned:
                             # print 'c1'
-                            cutterList.append(pl)
-                            control.append(pyPl.numGeom)
+                            if nGeom in rr:
+                                pl = pyPl.bigShape
+                                cutterList.append(pl)
+                                # control.append(pyPl.numGeom)
                         else:
                             # print 'c2'
                             pass
 
                     else:
-                        # print 'c'
+                        # print 'd'
                         cutterList.append(pl)
                         control.append(pyPl.numGeom)
 

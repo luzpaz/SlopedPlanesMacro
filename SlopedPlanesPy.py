@@ -214,7 +214,7 @@ class _Py(object):
 
     def cuttingPyth(self, cutter):
 
-        '''cutting(self, cutted, cutter, geomShape)
+        '''
         '''
 
         cutted = self.shape
