@@ -915,64 +915,72 @@ class _PyReflex(_Py):
 
         ''''''
 
-        # print '### postProcess'
+        print '### postProcess'
 
         refList = self.planes
-        # print 'refList ', refList
+        print 'refList ', refList
         tolerance = _Py.tolerance
-        reflexList = pyWire.reflexs
-        # print 'reflexList ', reflexList
-
-        pyOppPlane = refList[1]
-        forwardOpp = pyOppPlane.forward
 
         for pyPlane in refList:
             plane = pyPlane.shape
+            simul = pyPlane.simulatedShape
+            gS = pyPlane.geomShape
 
             if len(plane.Faces) == 1:
-                # print '# cutted ', pyPlane.numGeom
+                print '# cutted ', pyPlane.numGeom
 
-                forward = pyPlane.forward
-                gS = pyPlane.geomShape
-
-                cutterList = []
-                for pyReflex in reflexList:
+                for pyReflex in pyWire.reflexs:
                     if pyReflex != self:
                         for pyPl in pyReflex.planes:
                             if pyPl not in refList:
-                                # print 'reflexed plane ', pyPl.numGeom
 
-                                if pyPl.isSolved():
-                                    # print 'a'
-                                    fo = pyPl.forward
-                                    section = fo.section([forward], tolerance)
-                                    sect = fo.section([forwardOpp], tolerance)
-                                    se = fo.section([gS], tolerance)
-                                    if section.Vertexes or\
-                                       sect.Vertexes or\
-                                       se.Vertexes:
-                                        # print 'b'
+                                if pyPlane.numGeom not in pyPl.rear:
+                                    if pyPl.isSolved():
+                                        print 'candidate ', pyPl.numGeom
+
                                         pl = pyPl.shape
-                                        cutterList.append(pl)
-                                        pyPlane.control.append(pyPl.numGeom)
-                                        # print '# included cutter ', pyPl.numGeom
+                                        plane = pyPlane.shape
 
-                if cutterList:
-                    # print 'cutterList', cutterList
+                                        under = pyPl.under
+                                        under = Part.makeCompound(under)
 
-                    ff = plane.Faces[0]
-                    ff = self.cutting(ff, cutterList, gS)
-                    compound = Part.Compound([ff])
-                    pyPlane.shape = compound
+                                        section = plane.section([under], tolerance)
+                                        if section.Vertexes:
 
-            pyOppPlane = refList[0]
-            forwardOpp = pyOppPlane.forward
+                                            planeCopy = plane.copy()
+                                            planeCopy = planeCopy.cut([pl], tolerance)
+
+                                            if len(planeCopy.Faces) > 1:
+                                                print 'faces ', len(planeCopy.Faces)
+
+                                                ff = self.selectFace(planeCopy.Faces, gS)
+                                                planeCopy = planeCopy.removeShape([ff])
+                                                fList = [ff]
+
+                                                for ff in planeCopy.Faces:
+                                                    print 'a'
+                                                    common = ff.common([simul], tolerance)
+                                                    if common.Area:
+                                                        print 'b'
+                                                        break
+
+                                                else:
+                                                    compound = Part.Compound(fList)
+                                                    pyPlane.shape = compound
+                                                    print 'cutter ', pyPl.numGeom
 
     def postProcessTwo(self, pyWire):
 
         ''''''
 
         # print '### postProcessTwo'
+        pass
+
+    def postProcessThree(self, pyWire):
+
+        ''''''
+
+        # print '### postProcessThree'
 
         rangoInter = self.rango
         if not rangoInter:
