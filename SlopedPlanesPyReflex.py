@@ -986,9 +986,11 @@ class _PyReflex(_Py):
                                         for pyP in conflictList:
                                             # print 'conflict'
                                             pyPl.cuttingPyth([pyP.shape])
+                                            pyPl.control.append(pyP.numGeom)
                                         cutterList.append(pyPl.shape)
                                     else:
                                         cutterList.append(pl)
+                                    control.append(pyPl.numGeom)
 
             # print 'cutterList', cutterList
 
