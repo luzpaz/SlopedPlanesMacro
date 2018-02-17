@@ -1100,3 +1100,33 @@ class _PyPlane(_Py):
             return False
         else:
             return True
+
+    def isReallySolved(self, pyWire, pyReflex):
+
+        ''''''
+
+        tolerance = _Py.tolerance
+        conflictList = []
+        simul = self.simulatedShape
+
+        pyReflexList = pyWire.reflexs
+        for pyRef in pyReflexList:
+            if pyRef != pyReflex:
+                for pyPlane in pyRef.planes:
+                    if pyPlane != self:
+                        # print pyPlane.numGeom
+                        plane = pyPlane.shape
+                        shape = self.shape.copy()
+                        shape = shape.cut([plane], tolerance)
+                        if len(shape.Faces) == 2:
+                            conf = []
+                            for ff in shape.Faces:
+                                # print 'a'
+                                common = ff.common([simul], tolerance)
+                                if common.Area:
+                                    # print 'b'
+                                    conf.append(pyPlane)
+                            if len(conf) == 1:
+                                conflictList.extend(conf)
+
+        return conflictList
