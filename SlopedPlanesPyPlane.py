@@ -731,11 +731,9 @@ class _PyPlane(_Py):
 
             if not plane:
                 (nWire, nGeom) = angle
-                # print (nWire, nGeom)
                 pyPl = self.selectPlane(nWire, nGeom)
                 plane = pyPl.shape
                 seedShape = pyPl.seedShape
-                # print seedShape
                 big = pyPl.bigShape
                 enormous = pyPl.enormousShape
                 simulated = pyPl.simulatedShape
@@ -761,7 +759,6 @@ class _PyPlane(_Py):
             pyPlane.simulatedShape = simulated
             pyPlane.virtualized = True
 
-            # print pyPlane.seedShape
             return pyPlane
 
         else:

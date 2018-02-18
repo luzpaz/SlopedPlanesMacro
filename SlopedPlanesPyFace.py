@@ -40,7 +40,7 @@ __version__ = ""
 
 class _PyFace(_Py):
 
-    '''The complementary python object class for the faces, resulting
+    '''The complementary python object class for the faces resulting
     to apply the FaceMaker to the SlopedPlanes base.
     The faces could have several wires, and as a consequense holes.'''
 
@@ -1542,6 +1542,3 @@ class _PyFace(_Py):
                                                not pyPl.choped:
                                                 pyPl.cuttingPyth(cutterList)
                                                 # print 'rango chop ', (nn, pl)
-
-        '''for pyAlign in pyAlignList:
-            pyAlign.end()'''
