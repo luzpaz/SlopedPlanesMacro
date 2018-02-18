@@ -860,7 +860,8 @@ class _PyReflex(_Py):
                 section = ff.section([forward], tolerance)
                 if section.Edges:
                     section = ff.section(aList, tolerance)
-                    if section.Vertexes:
+                    #if section.Vertexes:
+                    if section.Vertexes and not section.Edges:
                         bList = [ff]
                 else:
                     bList = [ff]
@@ -887,8 +888,15 @@ class _PyReflex(_Py):
                     for ff in reflex.Faces:
                         section = ff.section([gS, backward], tolerance)
                         if not section.Edges:
-                            bList = [ff]
-                            break
+                            section = backward.section(aList, tolerance)
+                            if section.Edges:
+                                bList = [ff]
+                                break
+                            else:
+                                section = ff.section(aList, tolerance)  ##
+                                if not section.Edges:                   ##
+                                    bList = [ff]
+                                    break
 
                 aList.extend(bList)
                 compound = Part.makeCompound(aList)
@@ -920,6 +928,7 @@ class _PyReflex(_Py):
         refList = self.planes
 
         pyOppPlane = refList[1]
+
         for pyPlane in refList:
             plane = pyPlane.shape
             control = pyPlane.control
@@ -938,9 +947,8 @@ class _PyReflex(_Py):
                             if pyPl.numGeom not in control:
                                 if pyPl not in refList:
                                     if pyPl.isSolved():
-                                        pl = pyPl.shape
 
-                                        # if len(pl.Faces) == 1:
+                                        pl = pyPl.shape
                                         fo = pyPl.forward
                                         section = fo.section([lines], tolerance)
                                         if section.Vertexes:
@@ -985,6 +993,7 @@ class _PyReflex(_Py):
                                         conflictList = pyPl.isReallySolved(pyWire, pyReflex)
                                         for pyP in conflictList:
                                             # print 'conflict'
+                                            # solved ?
                                             pyPl.cuttingPyth([pyP.shape])
                                             pyPl.control.append(pyP.numGeom)
                                         cutterList.append(pyPl.shape)

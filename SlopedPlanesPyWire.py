@@ -453,11 +453,11 @@ class _PyWire(_Py):
             pyReflex.postProcess(self)
         # self.printControl('postProcess')
 
-        for pyReflex in self.reflexs:
+        '''for pyReflex in self.reflexs:
             pyReflex.postProcessTwo(self)
         # self.printControl('postProcessTwo')
 
-        '''for pyReflex in self.reflexs:
+        for pyReflex in self.reflexs:
             pyReflex.rearing(self, True)
 
         # '''
