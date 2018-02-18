@@ -747,6 +747,7 @@ class _PyFace(_Py):
         numGeom = pyPlane.numGeom
         coord = pyWire.coordinates
         # print 'coord ', coord
+        secondRear = False
 
         lineShape = pyPlane.forward
         section = lineShape.section([sGW], tolerance)
@@ -802,11 +803,14 @@ class _PyFace(_Py):
 
                 if pp == self.roundVector(orderedVertexes[0].Point):
                     vertex = orderedVertexes[1]
+                    vert = orderedVertexes[2]
                 else:
                     vertex = orderedVertexes[0]
+                    vert = orderedVertexes[1]
 
                 # print 'second rear'
-                pyPlane.addValue('secondRear', 'True', direction)
+
+                secondRear = True
 
             if not pyPlane.choped:  # ???
 
@@ -819,9 +823,13 @@ class _PyFace(_Py):
         # print 'edge ', edge
 
         nGeom = self.findGeomRear(pyWire, direction, vertex, edge)
-
-        # print 'nGeom ', nGeom
         pyPlane.addValue('rear', nGeom, direction)
+        # print 'nGeom ', nGeom
+
+        if secondRear:
+            sGeom = self.findGeomRear(pyWire, direction, vert, edge)
+            pyPlane.addValue('secondRear', sGeom, direction)
+            # print 'sGeom ', sGeom
 
         # arrow
 

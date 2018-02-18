@@ -946,9 +946,9 @@ class _PyReflex(_Py):
                         for pyPl in pyReflex.planes:
                             if pyPl.numGeom not in control:
                                 if pyPl not in refList:
+                                    pl = pyPl.shape
                                     if pyPl.isSolved():
 
-                                        pl = pyPl.shape
                                         fo = pyPl.forward
                                         section = fo.section([lines], tolerance)
                                         if section.Vertexes:
@@ -975,31 +975,78 @@ class _PyReflex(_Py):
         # print '### postProcessTwo'
 
         tolerance = _Py.tolerance
+        pyPlaneList = pyWire.planes
 
-        for pyPlane in self.planes:
+        refList = self.planes
+        rangoInter = self.rango
+
+        pyOppPlane = refList[1]
+        oppRear = pyOppPlane.rear[-1]
+        rear = refList[0].rear[0]
+
+        for pyPlane in refList:
             # print '# pyPlane ', pyPlane.numGeom
             plane = pyPlane.shape
             control = pyPlane.control
-            cutterList = []
+            forward = pyPlane.forward
 
+            pyRearPlane = pyPlaneList[rear]
+            rearPl = pyRearPlane.shape
+            pyOppRearPlane = pyPlaneList[oppRear]
+            oppRearPl = pyOppRearPlane.shape
+
+            cutterList = []
             for pyReflex in pyWire.reflexs:
                 if pyReflex != self:
                     for pyPl in pyReflex.planes:
                         if pyPl.numGeom not in control:
-                            if pyPl not in self.planes:
+                            if pyPl not in refList:
+
                                 if pyPl.isSolved():
+                                    # print 'pyPl solved', pyPl.numGeom
                                     pl = pyPl.shape
                                     if len(pl.Faces) == 1:
+                                        # print 'A'
                                         conflictList = pyPl.isReallySolved(pyWire, pyReflex)
+                                        cList = []
                                         for pyP in conflictList:
-                                            # print 'conflict'
-                                            # solved ?
-                                            pyPl.cuttingPyth([pyP.shape])
-                                            pyPl.control.append(pyP.numGeom)
-                                        cutterList.append(pyPl.shape)
+                                            if pyP.isSolved():
+                                                cList.append(pyP)
+                                            else:
+                                                break
+                                        else:
+                                            for pyP in cList:
+                                                # print 'pyP ', pyP.numGeom
+                                                pyPl.cuttingPyth([pyP.shape])
+                                                pyPl.control.append(pyP.numGeom)
+                                            # print 'AA'
+                                            cutterList.append(pyPl.shape)
+                                            control.append(pyPl.numGeom)
                                     else:
+                                        # print 'B'
                                         cutterList.append(pl)
-                                    control.append(pyPl.numGeom)
+                                        control.append(pyPl.numGeom)
+
+                                else:
+                                    # print 'pyPl no solved', pyPl.numGeom
+                                    if pyPl.numGeom in rangoInter:
+                                        # print 'a'
+
+                                        section = plane.section([forward], tolerance)
+                                        if section.Edges:
+                                            # print 'b'
+
+                                            cutterList.extend([rearPl, oppRearPl])
+                                            control.extend([rear, oppRear])
+
+                                            pl = pyPl.shape
+                                            section = pl.section([rearPl], tolerance)
+
+                                            if section.Edges:
+                                                # print 'c'
+
+                                                cutterList.append(pl)
+                                                control.append(pyPl.numGeom)
 
             # print 'cutterList', cutterList
 
@@ -1008,13 +1055,13 @@ class _PyReflex(_Py):
                 gS = pyPlane.geomShape
 
                 if len(plane.Faces) == 1:
-                    # print 'A'
+                    # print '0'
 
                     plane = self.cutting(plane, cutterList, gS)
                     aList = [plane]
 
                 else:
-                    # print 'B'
+                    # print '1'
 
                     forward = pyPlane.forward
 
@@ -1025,15 +1072,19 @@ class _PyReflex(_Py):
                     ff = plane.Faces[1]
                     ff = ff.cut(cutterList, tolerance)
                     for f in ff.Faces:
-                        # print 'a'
+                        # print '11'
                         section = f.section([forward], tolerance)
                         if not section.Edges:
-                            # print 'b'
+                            # print '111'
                             aList.append(f)
                             break
 
                 compound = Part.Compound(aList)
                 pyPlane.shape = compound
+
+            pyOppPlane = refList[0]
+            oppRear = pyOppPlane.rear[0]
+            rear = refList[1].rear[-1]
 
     def rearing(self, pyWire, case):
 

@@ -1108,6 +1108,7 @@ class _PyPlane(_Py):
         tolerance = _Py.tolerance
         conflictList = []
         simul = self.simulatedShape
+        gS = self.geomShape
 
         pyReflexList = pyWire.reflexs
         for pyRef in pyReflexList:

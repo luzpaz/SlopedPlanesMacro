@@ -206,21 +206,26 @@ class _PyWire(_Py):
                         forward = pyPlane.backward
 
                 if pyPlane.secondRear:
-                    # print 'secondRear'
-                    pyRearPl = pyPlaneList[rear]
-                    direction, geom = pyRearPl.direction(self, rear)
-                    firstParam = geom.FirstParameter
-                    lastParam = geom.LastParameter
-                    geomCopy = geom.copy()
-                    geomCopy.translate(-1 * _Py.size * direction)
-                    scale = 1000000
-                    giantPlane =\
-                        pyRearPl.doPlane(direction, geomCopy, firstParam,
-                                         lastParam, scale)
-                    gS = pyPlane.geomShape
-                    enormousShape =\
-                        self.cutting(enormousShape, [giantPlane], gS)
-                    # no esta completo : preProcessTwo
+                    if num == 0:
+                        sR = pyPlane.secondRear[0]
+                    else:
+                        sR = pyPlane.secondRear[-1]
+                    if sR in rango:
+                        # print 'secondRear'
+                        pyRearPl = pyPlaneList[rear]
+                        direction, geom = pyRearPl.direction(self, rear)
+                        firstParam = geom.FirstParameter
+                        lastParam = geom.LastParameter
+                        geomCopy = geom.copy()
+                        geomCopy.translate(-1 * _Py.size * direction)
+                        scale = 1000000
+                        giantPlane =\
+                            pyRearPl.doPlane(direction, geomCopy, firstParam,
+                                             lastParam, scale)
+                        gS = pyPlane.geomShape
+                        enormousShape =\
+                            self.cutting(enormousShape, [giantPlane], gS)
+                        # no esta completo : preProcessTwo
 
                 for nG in rango:
                     pyPl = pyPlaneList[nG]
@@ -453,7 +458,7 @@ class _PyWire(_Py):
             pyReflex.postProcess(self)
         # self.printControl('postProcess')
 
-        '''for pyReflex in self.reflexs:
+        for pyReflex in self.reflexs:
             pyReflex.postProcessTwo(self)
         # self.printControl('postProcessTwo')
 
