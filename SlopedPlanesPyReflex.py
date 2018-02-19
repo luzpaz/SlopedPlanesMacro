@@ -981,19 +981,12 @@ class _PyReflex(_Py):
         rangoInter = self.rango
 
         pyOppPlane = refList[1]
-        oppRear = pyOppPlane.rear[-1]
-        rear = refList[0].rear[0]
 
         for pyPlane in refList:
             # print '# pyPlane ', pyPlane.numGeom
             plane = pyPlane.shape
             control = pyPlane.control
             forward = pyPlane.forward
-
-            pyRearPlane = pyPlaneList[rear]
-            rearPl = pyRearPlane.shape
-            pyOppRearPlane = pyPlaneList[oppRear]
-            oppRearPl = pyOppRearPlane.shape
 
             cutterList = []
             for pyReflex in pyWire.reflexs:
@@ -1036,8 +1029,19 @@ class _PyReflex(_Py):
                                         if section.Edges:
                                             # print 'b'
 
-                                            cutterList.extend([rearPl, oppRearPl])
-                                            control.extend([rear, oppRear])
+                                            rear = pyPlane.rear[0]
+                                            if rear not in control:
+                                                pyRearPlane = pyPlaneList[rear]
+                                                rearPl = pyRearPlane.shape
+                                                cutterList.append(rearPl)
+                                                control.append(rearPl)
+
+                                            oppRear = pyOppPlane.rear[-1]
+                                            if oppRear not in control:
+                                                pyOppRearPlane = pyPlaneList[oppRear]
+                                                oppRearPl = pyOppRearPlane.shape
+                                                cutterList.append(oppRearPl)
+                                                control.append(oppRearPl)
 
                                             pl = pyPl.shape
                                             section = pl.section([rearPl], tolerance)
@@ -1083,8 +1087,6 @@ class _PyReflex(_Py):
                 pyPlane.shape = compound
 
             pyOppPlane = refList[0]
-            oppRear = pyOppPlane.rear[0]
-            rear = refList[1].rear[-1]
 
     def rearing(self, pyWire, case):
 
