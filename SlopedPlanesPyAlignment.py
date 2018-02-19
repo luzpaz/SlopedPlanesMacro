@@ -856,6 +856,44 @@ class _PyAlignment(_Py):
             simulatedC = simulatedChops[numChop]
             # print 'simulatedC ', simulatedC
 
+            rangoOne = pyOne.rango[-1]
+            numOne = pyOne.numWire
+            pyWireOne = pyWireList[numOne]
+            pyPlaneListOne = pyWireOne.planes
+            if pyOne.rear:
+                rearOne = pyOne.rear[-1]
+                pyPlOne = pyPlaneListOne[rearOne]
+
+            rangoTwo = pyTwo.rango[0]
+            numTwo = pyTwo.numWire
+            pyWireTwo = pyWireList[numTwo]
+            pyPlaneListTwo = pyWireTwo.planes
+            if pyTwo.rear:
+                rearTwo = pyTwo.rear[0]
+                pyPlTwo = pyPlaneListTwo[rearTwo]
+
+            cutList = []
+
+            rCOne, cList = self.processRango(rangoOne, pyPlaneListOne, pyOne,
+                                             numOne, enormousBase)
+            cutList.extend(cList)
+            rCTwo, cList = self.processRango(rangoTwo, pyPlaneListTwo, pyTwo,
+                                             numTwo, enormousBase)
+            cutList.extend(cList)
+            if pyOne.rear:
+                plOne = self.processRear(rearOne, pyPlOne, pyOne, numOne)
+                if plOne:
+                    cutList.extend(plOne)
+            if pyTwo.rear:
+                plTwo = self.processRear(rearTwo, pyPlTwo, pyTwo, numTwo)
+                if plTwo:
+                    cutList.extend(plTwo)
+
+            if numTwo == numOne:
+                between = self.rang(pyWireOne, rearTwo, rearOne, 'forward')
+                cList = self.processBetween(between, pyPlaneListOne)
+                cutList.extend(cList)
+
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
@@ -865,166 +903,13 @@ class _PyAlignment(_Py):
                 control = pyPlane.control
 
                 if num == 0:
-                    rango = pyOne.rango[-1]
-                    if pyOne.rear:
-                        rear = pyOne.rear[-1]
-                    oppRango = pyTwo.rango[0]
-                    if pyTwo.rear:
-                        oppRear = pyTwo.rear[0]
-                    pyTwinPlane = pyTwo
                     cList = [enormousBase]
-                    numWire = pyOne.numWire
-                    pyWire = pyWireList[numWire]
-                    pyPlaneList = pyWire.planes
-                    nW = pyTwo.numWire
-                    pyW = pyWireList[nW]
-                    pyPlList = pyW.planes
 
                 else:
-                    rango = pyTwo.rango[0]
-                    if pyTwo.rear:
-                        rear = pyTwo.rear[0]
-                    oppRango = pyOne.rango[-1]
-                    if pyOne.rear:
-                        oppRear = pyOne.rear[-1]
-                    pyTwinPlane = pyOne
                     if falsify:
                         cList = [enormousCont]
                     else:
                         cList = [enormousBase]
-                    numWire = pyTwo.numWire
-                    pyWire = pyWireList[numWire]
-                    pyPlaneList = pyWire.planes
-                    nW = pyOne.numWire
-                    pyW = pyWireList[nW]
-                    pyPlList = pyW.planes
-
-                # print 'rear ', rear
-                # print 'oppRear ', oppRear
-                # print 'rango ', rango
-                # print 'oppRango ', oppRango
-
-                cutList = []
-
-                # REFACT!!! subir
-
-                # rango
-
-                rC = []
-                for nn in rango:
-                    if not nn in control:
-                        pyPl = pyPlaneList[nn]
-                        pl = None
-
-                        if pyPl.aligned:
-
-                            if pyPlane.virtualized:
-                                pl = None
-                            else:
-                                pyAli = self.selectAlignmentBase(numWire, nn)
-                                if pyAli and pyAli != self:
-                                    pl = pyAli.simulatedAlignment
-
-                        elif not pyPl.choped:
-
-                            pl = pyPl.shape.copy()
-
-                            if pyPl.arrow:
-                                gShape = pyPl.geomShape
-                                pl = self.cutting(pl, [enormousBase] , gShape)
-
-                            rC.append(pl)
-                            pl = [pl]
-
-                        if pl:
-                            if pl not in cutList:
-                                cutList.extend(pl)
-                                # print 'rangoPlane ', nn
-                # print 'rC ', rC
-                rC = Part.makeCompound(rC)
-
-                # oppRango
-
-                for nn in oppRango:
-                    if nn not in control:
-                        pyPl = pyPlList[nn]
-                        pl = None
-
-                        if pyPl.aligned:
-
-                            if pyPlane.virtualized:
-                                pl = None
-                            else:
-                                pyAli = self.selectAlignmentBase(numWire, nn)
-                                if pyAli and pyAli != self:
-                                    pl = pyAli.simulatedAlignment
-
-                        elif not pyPl.choped and not pyPl.fronted:
-
-                            pl = [pyPl.shape]
-
-                        if pl:
-                            if pl not in cutList:
-                                cutList.extend(pl)
-                                # print 'oppRangoPlane ', nn
-
-                if pyPlane.rear:
-                    # print 'r'
-                    pyPl = pyPlaneList[rear]
-                    pl = None
-
-                    if pyPl.aligned:
-                        # print 'r1'
-
-                        if pyPlane.virtualized:
-                            pl = None
-                        else:
-                            pyAli = self.selectAlignmentBase(numWire, rear)
-                            if pyAli and pyAli != self:
-                                pl = pyAli.simulatedAlignment
-
-                    elif pyPl.fronted:
-                        # print 'r2'
-                        pl = [pyPl.bigShape]
-
-                    elif not pyPl.choped:  # and not pyPl.fronted:
-                        # print 'r3'
-                        pl = [pyPl.shape]
-
-                    if pl:
-                        # print 'rr'
-                        if pl not in cutList:
-                            # print 'rrr'
-                            cutList.extend(pl)
-                            # print 'rearPlane ', rear
-
-                if pyTwinPlane.rear:
-
-                    # if not oppRango:
-                    pyPl = pyPlList[oppRear]
-                    pl = None
-
-                    if pyPl.aligned:
-
-                        if pyPlane.virtualized:
-                            pl = None
-                        else:
-                            pyAli = self.selectAlignmentBase(numWire, oppRear)
-                            if pyAli and pyAli != self:
-                                pl = pyAli.simulatedAlignment
-
-                    elif pyPl.fronted:
-
-                        pl = [pyPl.bigShape]
-
-                    elif not pyPl.choped:
-
-                        pl = [pyPl.shape]
-
-                    if pl:
-                        if pl not in cutList:
-                            cutList.extend(pl)
-                            # print 'oppRearPlane ', oppRear
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
@@ -1348,6 +1233,94 @@ class _PyAlignment(_Py):
                     if not pyPl.choped and not pyPl.aligned:
                         pyPl.cuttingPyth(cutList)
                         # print 'rangoChop ', nn
+
+    def processRango(self, rango, pyPlaneList, pyPlane, numWire, enormousBase):
+
+        ''''''
+
+        rC, cutList = [], []
+        for nn in rango:
+            pyPl = pyPlaneList[nn]
+            pl = None
+
+            if pyPl.aligned:
+
+                if pyPlane.virtualized:
+                    pl = None
+                else:
+                    pyAli = self.selectAlignmentBase(numWire, nn)
+                    if pyAli and pyAli != self:
+                        pl = pyAli.simulatedAlignment
+
+            elif not pyPl.choped:
+
+                pl = pyPl.shape.copy()
+
+                if pyPl.arrow:
+                    gShape = pyPl.geomShape
+                    pl = self.cutting(pl, [enormousBase] , gShape)
+
+                rC.append(pl)
+                pl = [pl]
+
+            if pl:
+                cutList.extend(pl)
+                # print 'rangoPlane ', nn
+
+        # print 'rC ', rC
+        rC = Part.makeCompound(rC)
+
+        return rC, cutList
+
+    def processRear(self, rear, pyPl, pyPlane, numWire):
+
+        ''''''
+
+        pl = None
+
+        if pyPl.aligned:
+            # print 'r1'
+
+            if pyPlane.virtualized:
+                pl = None
+            else:
+                pyAli = self.selectAlignmentBase(numWire, rear)
+                if pyAli and pyAli != self:
+                    pl = pyAli.simulatedAlignment
+
+        elif pyPl.fronted:
+            # print 'r2'
+            pl = [pyPl.bigShape]
+
+        elif not pyPl.choped:
+            # print 'r3'
+            pl = [pyPl.shape]
+
+        return pl
+
+    def processBetween(self, rango, pyPlaneList):
+
+        ''''''
+
+        cutList = []
+        for nn in rango:
+            pyPl = pyPlaneList[nn]
+            pl = None
+
+            if pyPl.aligned:
+
+                pl = None
+
+            elif not pyPl.choped:
+
+                pl = pyPl.shape
+                pl = [pl]
+
+            if pl:
+                cutList.extend(pl)
+                # print 'rangoBetween ', nn
+
+        return cutList
 
     def end(self):
 
