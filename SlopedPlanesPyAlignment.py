@@ -900,12 +900,13 @@ class _PyAlignment(_Py):
                 # print '# pyPlane ', (pyPlane.numWire, pyPlane.numGeom)
                 gS = pyPlane.geomShape
                 plane = pyPlane.shape
-                control = pyPlane.control
 
                 if num == 0:
+                    rC = rCOne
                     cList = [enormousBase]
 
                 else:
+                    rC = rCTwo
                     if falsify:
                         cList = [enormousCont]
                     else:
@@ -1039,11 +1040,6 @@ class _PyAlignment(_Py):
 
                 comp = Part.makeCompound(aList)
                 pyPlane.shape = comp
-
-                if num == 0:
-                    rCOne = rC.copy()
-                else:
-                    rCTwo = rC.copy()
 
             # twin
 
