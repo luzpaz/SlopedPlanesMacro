@@ -521,6 +521,14 @@ class _PyAlignment(_Py):
             if not pyBase.choped:
                 # print '11'
                 control.append(pr)
+        elif pyPrior.aligned:
+            # print '10'
+            pyA = self.selectAlignmentBase(pyPrior.numWire, pr)
+            # print 'pyA.later ', pyA.later.numGeom
+            if pyA.later.numGeom == numGeom:
+                # print '101'
+                cutterList.append(pyA.base.bigShape)
+                control.append(pr)
 
         if ((not pyLater.reflexed) or
            (not pyLater.rear and not pyLater.aligned)):
@@ -530,6 +538,14 @@ class _PyAlignment(_Py):
                 if not pyBase.choped:
                     # print '21'
                     control.append(lat)
+        elif pyLater.aligned:
+            # print '20'
+            pyA = self.selectAlignmentBase(pyLater.numWire, lat)
+            # print 'pyA.prior ', pyA.prior.numGeom
+            if pyA.prior.numGeom == numGeom:
+                # print '201'
+                cutterList.append(pyA.base.bigShape)
+                control.append(lat)
 
         if falsify:
             # print 'A'
