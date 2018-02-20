@@ -828,7 +828,7 @@ class _PyAlignment(_Py):
 
         tolerance = _Py.tolerance
         pyWireList = _Py.pyFace.wires
-        pyPlaneList = pyWireList[0].planes
+        # pyPlaneList = pyWireList[0].planes
 
         falsify = self.falsify
 
@@ -874,12 +874,14 @@ class _PyAlignment(_Py):
 
             cutList = []
 
-            rCOne, cList = self.processRango(rangoOne, pyPlaneListOne, pyOne,
-                                             numOne, enormousBase)
-            cutList.extend(cList)
-            rCTwo, cList = self.processRango(rangoTwo, pyPlaneListTwo, pyTwo,
-                                             numTwo, enormousBase)
-            cutList.extend(cList)
+            rCOne, cListOne, oppCListOne =\
+                self.processRango(rangoOne, pyPlaneListOne, pyOne,
+                                  numOne, enormousBase)
+
+            rCTwo, cListTwo, oppCListTwo =\
+                self.processRango(rangoTwo, pyPlaneListTwo, pyTwo,
+                                  numTwo, enormousBase)
+
             if pyOne.rear:
                 plOne = self.processRear(rearOne, pyPlOne, pyOne, numOne)
                 if plOne:
@@ -902,9 +904,14 @@ class _PyAlignment(_Py):
                 gS = pyPlane.geomShape
                 plane = pyPlane.shape
 
+                ccList = cutList[:]
+
                 if num == 0:
                     rC = rCOne
                     cList = [enormousBase]
+
+                    ccList.extend(cListOne)
+                    ccList.extend(oppCListTwo)
 
                 else:
                     rC = rCTwo
@@ -913,10 +920,13 @@ class _PyAlignment(_Py):
                     else:
                         cList = [enormousBase]
 
+                    ccList.extend(cListTwo)
+                    ccList.extend(oppCListOne)
+
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
 
-                cutterList = cutList + cList
+                cutterList = ccList + cList
                 # print 'cutterList ', cutterList
 
                 gS = pyPlane.geomShape
@@ -1236,40 +1246,38 @@ class _PyAlignment(_Py):
         ''''''
 
         control = pyPlane.control
-        rC, cutList = [], []
+        rC, cutList, oppCutList = [], [], []
         for nn in rango:
             if nn not in control:
                 pyPl = pyPlaneList[nn]
-                pl = None
 
                 if pyPl.aligned:
 
-                    if pyPlane.virtualized:
-                        pl = None
-                    else:
+                    if not pyPlane.virtualized:
                         pyAli = self.selectAlignmentBase(numWire, nn)
                         if pyAli and pyAli != self:
                             pl = pyAli.simulatedAlignment
+                            cutList.extend(pl)
+                            oppCutList.extend(pl)
 
                 elif not pyPl.choped:
 
                     pl = pyPl.shape.copy()
 
+                    if not pyPl.fronted:
+                        oppCutList.append(pl)
+
                     if pyPl.arrow:
                         gShape = pyPl.geomShape
-                        pl = self.cutting(pl, [enormousBase] , gShape)
+                        pl = self.cutting(pl, [enormousBase], gShape)
 
+                    cutList.append(pl)
                     rC.append(pl)
-                    pl = [pl]
-
-                if pl:
-                    cutList.extend(pl)
-                    # print 'rangoPlane ', nn
 
         # print 'rC ', rC
         rC = Part.makeCompound(rC)
 
-        return rC, cutList
+        return rC, cutList, oppCutList
 
     def processRear(self, rear, pyPl, pyPlane, numWire):
 
@@ -1310,10 +1318,9 @@ class _PyAlignment(_Py):
 
                 pl = None
 
-            elif not pyPl.choped:
+            elif not pyPl.choped and not pyPl.fronted:
 
-                pl = pyPl.shape
-                pl = [pl]
+                pl = [pyPl.shape]
 
             if pl:
                 cutList.extend(pl)
