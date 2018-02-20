@@ -857,6 +857,7 @@ class _PyAlignment(_Py):
             # print 'simulatedC ', simulatedC
 
             rangoOne = pyOne.rango[-1]
+            # print 'rangoOne ', rangoOne
             numOne = pyOne.numWire
             pyWireOne = pyWireList[numOne]
             pyPlaneListOne = pyWireOne.planes
@@ -865,6 +866,7 @@ class _PyAlignment(_Py):
                 pyPlOne = pyPlaneListOne[rearOne]
 
             rangoTwo = pyTwo.rango[0]
+            # print 'rangoTwo ', rangoTwo
             numTwo = pyTwo.numWire
             pyWireTwo = pyWireList[numTwo]
             pyPlaneListTwo = pyWireTwo.planes
@@ -877,25 +879,33 @@ class _PyAlignment(_Py):
             rCOne, cListOne, oppCListOne =\
                 self.processRango(rangoOne, pyPlaneListOne, pyOne,
                                   numOne, enormousBase)
+            # print rCOne, cListOne, oppCListOne
 
             rCTwo, cListTwo, oppCListTwo =\
                 self.processRango(rangoTwo, pyPlaneListTwo, pyTwo,
                                   numTwo, enormousBase)
+            # print rCTwo, cListTwo, oppCListTwo
 
             if pyOne.rear:
+                # print 'rearOne ', rearOne
                 plOne = self.processRear(rearOne, pyPlOne, pyOne, numOne)
                 if plOne:
                     cutList.extend(plOne)
+                    # print plOne
             if pyTwo.rear:
+                # print 'rearTwo ', rearTwo
                 plTwo = self.processRear(rearTwo, pyPlTwo, pyTwo, numTwo)
                 if plTwo:
                     cutList.extend(plTwo)
+                    # print plTwo
 
             if numTwo == numOne:
                 if pyOne.rear and pyTwo.rear:
                     between = self.rang(pyWireOne, rearTwo, rearOne, 'forward')
+                    # print 'between ', between
                     cList = self.processBetween(between, pyPlaneListOne)
                     cutList.extend(cList)
+                    # print cList
 
             num = -1
             for pyPlane in [pyOne, pyTwo]:
@@ -926,6 +936,7 @@ class _PyAlignment(_Py):
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
 
+                # print 'ccList ', ccList
                 cutterList = ccList + cList
                 # print 'cutterList ', cutterList
 
@@ -983,7 +994,8 @@ class _PyAlignment(_Py):
 
                 # print 'planeCopy.Faces ', planeCopy.Faces
 
-                if cutList:
+                ##if cutList:
+                if ccList:
 
                     '''if pyPlane.numWire == 0 and pyTwinPlane.numWire != 0:
                         # debería ser mas selectivo ya que prodrian haber otros chops en el wire exterior
@@ -1005,7 +1017,8 @@ class _PyAlignment(_Py):
                                         cutList.append(pl)
                                         # print 'rr ', nn'''
 
-                    planeCopy = planeCopy.cut(cutList, tolerance)
+                    # planeCopy = planeCopy.cut(cutList, tolerance)
+                    planeCopy = planeCopy.cut(ccList, tolerance)
 
                 # print 'planeCopy.Faces ', planeCopy.Faces
 
@@ -1248,10 +1261,12 @@ class _PyAlignment(_Py):
         control = pyPlane.control
         rC, cutList, oppCutList = [], [], []
         for nn in rango:
+            # print 'nn ',nn
             if nn not in control:
                 pyPl = pyPlaneList[nn]
 
                 if pyPl.aligned:
+                    # print 'a'
 
                     if not pyPlane.virtualized:
                         pyAli = self.selectAlignmentBase(numWire, nn)
@@ -1261,6 +1276,7 @@ class _PyAlignment(_Py):
                             oppCutList.extend(pl)
 
                 elif not pyPl.choped:
+                    # print 'b'
 
                     pl = pyPl.shape.copy()
 
@@ -1277,6 +1293,8 @@ class _PyAlignment(_Py):
         # print 'rC ', rC
         rC = Part.makeCompound(rC)
 
+        # print 'cutList ', cutList
+        # print 'oppCutList ', oppCutList
         return rC, cutList, oppCutList
 
     def processRear(self, rear, pyPl, pyPlane, numWire):
