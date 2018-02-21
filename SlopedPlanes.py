@@ -416,20 +416,6 @@ class _SlopedPlanes(_Py):
                         pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
 
-
-
-                        try:
-                            pyPlane.virtuals
-                        except AttributeError:
-                            pyPlane.virtuals = []
-
-                        try:
-                            pyPlane.cross
-                        except AttributeError:
-                            pyPlane.cross = False
-
-
-
             pyFace.parsing()
 
             pyFace.planning()
@@ -451,8 +437,6 @@ class _SlopedPlanes(_Py):
             pyFace.betweenWires()
 
             pyFace.aligning()
-
-            '''pyFace.end()  #  '''
 
         if onChanged:
             # print 'AAA'
