@@ -287,25 +287,25 @@ class _PyReflex(_Py):
                     pyAlign = self.selectAlignmentBase(numWire, nGeom)
                     if pyAlign:
                         rearPl = pyAlign.simulatedAlignment
-                        pyR.addLink('cutter', rearPl)
+                        pyR.cutter.append(rearPl)
                         # print 'included rear simulated ', (numWire, nGeom)
 
                 elif rearPyPl.choped:
                     # print 'b'
                     rearPl = rearPyPl.simulatedShape
-                    pyR.addLink('cutter', rearPl)
+                    pyR.cutter.append(rearPl)
                     # print 'included rear simulated ', (numWire, nGeom)
 
                 elif rearPyPl.reflexed:
                     # print 'c'
                     rearPl = rearPyPl.simulatedShape
-                    pyR.addLink('cutter', rearPl)
+                    pyR.cutter.append(rearPl)
                     # print 'included rear simulated ', (numWire, nGeom)
 
                 else:
                     # print 'd'
                     rearPl = rearPyPl.shape
-                    pyR.addLink('cutter', rearPl)
+                    pyR.cutter.append(rearPl)
                     control.append(nGeom)
                     # print 'included rear ', (numWire, nGeom)
 
@@ -329,25 +329,25 @@ class _PyReflex(_Py):
                         pyAlign = self.selectAlignmentBase(numWire, nGeom)
                         if pyAlign:
                             oppRearPl = pyAlign.simulatedAlignment
-                            pyR.addLink('cutter', oppRearPl)
+                            pyR.cutter.append(oppRearPl)
                             # print 'included oppRear simulated ', (numWire, nGeom)
 
                     elif pyOppRear.choped:
                         # print 'b'
                         oppRearPl = pyOppRear.simulatedShape
-                        pyR.addLink('cutter', oppRearPl)
+                        pyR.cutter.append(oppRearPl)
                         # print 'included oppRear simulated ', (numWire, nGeom)
 
                     elif pyOppRear.reflexed:
                         # print 'c'
                         oppRearPl = pyOppRear.simulatedShape
-                        pyR.addLink('cutter', oppRearPl)
+                        pyR.cutter.append(oppRearPl)
                         # print 'included oppRear simulated ', (numWire, nGeom)
 
                     else:
                         # print 'd'
                         oppRearPl = pyOppRear.shape
-                        pyR.addLink('cutter', oppRearPl)
+                        pyR.cutter.append(oppRearPl)
                         control.append(nGeom)
                         # print 'included oppRear ', (numWire, nGeom)
 
@@ -395,7 +395,7 @@ class _PyReflex(_Py):
             pyOppRear = pyPlaneList[nGeom]
 
             oppRearPl = pyOppRear.shape.copy()
-            pyR.addLink('cutter', oppRearPl)
+            pyR.cutter.append(oppRearPl)
             control.append(nGeom)
             # print 'included oppRear ', (pyWire.numWire, nGeom)
 
@@ -422,7 +422,7 @@ class _PyReflex(_Py):
             for ff in oppRearPl.Faces:
                 section = vertex.section([ff], tolerance)
                 if section.Vertexes:
-                    pyR.addLink('cutter', ff)
+                    pyR.cutter.append(ff)
                     # print 'included oppRear rectified ', (pyWire.numWire, nGeom)
                     break
 
@@ -444,13 +444,13 @@ class _PyReflex(_Py):
             pyAlign = self.selectAlignmentBase(numWire, nn)
             if pyAlign:
                 pl = pyAlign.simulatedAlignment
-                pyR.addLink('cutter', pl)
+                pyR.cutter.append(pl)
                 # print 'included rango simulated ', (numWire, nn)
 
         elif pyPl.choped:
             # print 'B'
             pl = pyPl.simulatedShape
-            pyR.addLink('cutter', pl)
+            pyR.cutter.append(pl)
             # print 'included rango simulated ', (numWire, nn)
 
         elif pyPl.reflexed:
@@ -483,7 +483,7 @@ class _PyReflex(_Py):
 
                 pl = pyPl.shape.copy()
                 pl = self.cutting(pl, [oppReflexEnormous], gS)
-                pyR.addLink('cutter', pl)
+                pyR.cutter.append(pl)
                 # print 'included rango ', (numWire, nn)
 
                 pl = pyPl.simulatedShape.copy()     # Two faces included
@@ -533,7 +533,7 @@ class _PyReflex(_Py):
                 # print '4'
                 pass
 
-            pyR.addLink('cutter', pl)
+            pyR.cutter.append(pl)
             # print 'included rango simulated ', (numWire, nn)
 
         else:
@@ -544,7 +544,7 @@ class _PyReflex(_Py):
                 # print 'D1'
                 pl = self.cutting(pl, [oppReflexEnormous], gS)
 
-            pyR.addLink('cutter', pl)
+            pyR.cutter.append(pl)
             pyR.control.append(nn)
             # print 'included rango ', (numWire, nn)
 

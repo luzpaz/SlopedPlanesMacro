@@ -50,7 +50,7 @@ class _Py(object):
 
     def getstate(self, faceList):
 
-        ''''''
+        '''getstate(self, faceList)'''
 
         fList = []
         for face in faceList:
@@ -61,7 +61,7 @@ class _Py(object):
 
     def setstate(self, fList):
 
-        ''''''
+        '''setstate(self, fList)'''
 
         faceList = []
         for string in fList:
@@ -71,22 +71,9 @@ class _Py(object):
 
         return faceList
 
-    def addLink(self, prop, obj):
-
-        ''''''
-
-        linkList = getattr(self, prop)
-        if isinstance(obj, list):
-            linkList.extend(obj)
-        else:
-            linkList.append(obj)
-        setattr(self, prop, linkList)
-
     def addValue(self, prop, value, direction='forward'):
 
-        ''''''
-
-        # TODO hacer que no se repitan valores
+        '''addValue(self, prop, value, direction='forward')'''
 
         valueList = getattr(self, prop)
         if direction == 'forward':
@@ -374,7 +361,7 @@ class _Py(object):
                 compound.Placement = placement
                 Part.show(compound, self.slopedPlanes.Name+' simulatedAlignment '+str(numWire)+' '+str(numGeom))
 
-        virtuals = pyPlane.virtuals 
+        virtuals = pyPlane.virtuals
         if virtuals:
             for pyP in virtuals:
                 Part.show(pyP.shape, self.slopedPlanes.Name+' shape '+str(numWire)+' '+str(numGeom))

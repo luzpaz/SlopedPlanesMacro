@@ -275,7 +275,7 @@ class _PyFace(_Py):
                 pyReflex = _PyReflex()
                 for [numWire, numGeom] in dd['_planes']:
                     pyPlane = planeList[numGeom]
-                    pyReflex.addLink('planes', pyPlane)
+                    pyReflex.planes.append(pyPlane)
                 dd['_planes'] = pyReflex.planes
                 pyReflex.__dict__ = dd
                 reflexList.append(pyReflex)
@@ -979,17 +979,17 @@ class _PyFace(_Py):
         pyPlane.reflexed = True
         pyPl.reflexed = True
         pyReflex = _PyReflex()
-        pyWire.addLink('reflexs', pyReflex)
+        pyWire.reflexs.append(pyReflex)
         # print '¡¡¡ reflex done !!!'
-        pyReflex.addLink('planes', pyPlane)
-        pyReflex.addLink('planes', pyPl)
+        pyReflex.planes.append(pyPlane)
+        pyReflex.planes.append(pyPl)
 
     def doAlignment(self, pyPlane):
 
         '''doAlignment(self, pyPlane)'''
 
         pyAlign = _PyAlignment()
-        self.addLink('alignments', pyAlign)
+        self.alignments.append(pyAlign)
         # print '¡¡¡ alignment done !!!'
         pyAlign.base = pyPlane
 
@@ -1244,7 +1244,7 @@ class _PyFace(_Py):
                             # print 'aList ', aList
                             pyAlignList =\
                                 self.selectAlignmentsChop(numWire,
-                                                        pyPlane.numGeom)
+                                                          pyPlane.numGeom)
                             # print 'pyAlignList ', pyAlignList
                             baseList = []
                             for pyA in pyAlignList:
@@ -1350,8 +1350,5 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
             pyAlign.end()
-
-        for pyAlign in pyAlignList:
-            pyAlign.endTwo()
 
         # self.printControl('aligning')
