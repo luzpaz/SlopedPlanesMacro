@@ -71,10 +71,12 @@ class _PyPlane(_Py):
         self.forward = None
         self.backward = None
         self.virtualized = False
+        self.virtuals = []
         self.control = [numGeom]
         self.seedShape = None
         self.seedBigShape = None
         self.lineInto = None
+        self.cross = False
 
     @property
     def numWire(self):
@@ -504,6 +506,20 @@ class _PyPlane(_Py):
         self._virtualized = virtualized
 
     @property
+    def virtuals(self):
+
+        ''''''
+
+        return self._virtuals
+
+    @virtuals.setter
+    def virtuals(self, virtuals):
+
+        ''''''
+
+        self._virtuals = virtuals
+
+    @property
     def control(self):
 
         ''''''
@@ -558,6 +574,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._lineInto = lineInto
+
+    @property
+    def cross(self):
+
+        ''''''
+
+        return self._cross
+
+    @cross.setter
+    def cross(self, cross):
+
+        ''''''
+
+        self._cross = cross
 
     def planning(self, pyWire):
 
@@ -759,6 +789,8 @@ class _PyPlane(_Py):
             pyPlane.simulatedShape = simulated
             pyPlane.virtualized = True
 
+            self.virtuals.append(pyPlane)
+
             return pyPlane
 
         else:
@@ -950,7 +982,9 @@ class _PyPlane(_Py):
 
             rr = []
             for pyA in pyAlignList:
+                # print 'pyA.rangoRear ', pyA.rangoRear
                 rr.extend(pyA.rangoRear)
+            # print 'rr ', rr
 
         cutterList = []
         for pyPl in pyPlaneList:

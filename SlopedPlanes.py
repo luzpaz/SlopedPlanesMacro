@@ -373,6 +373,7 @@ class _SlopedPlanes(_Py):
                                 pyPlane.aligned = False
                                 pyPlane.arrow = False
                                 pyPlane.choped = False
+                                pyPlane.virtuals = []
                                 pyPlane.reflexed = False
                                 pyPlane.fronted = False
                                 pyPlane.seedShape = None
@@ -382,6 +383,7 @@ class _SlopedPlanes(_Py):
                                                              angle[1]).angle
                                     pyPlane.angle = angle
                                 pyPlane.lineInto = None
+                                pyPlane.cross = False
 
                         except IndexError:
                             # print '2'
@@ -413,6 +415,20 @@ class _SlopedPlanes(_Py):
                     for pyPlane in pyWire.planes:
                         pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
+
+
+
+                        try:
+                            pyPlane.virtuals
+                        except AttributeError:
+                            pyPlane.virtuals = []
+
+                        try:
+                            pyPlane.cross
+                        except AttributeError:
+                            pyPlane.cross = False
+
+
 
             pyFace.parsing()
 

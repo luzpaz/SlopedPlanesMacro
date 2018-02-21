@@ -347,7 +347,6 @@ class _Py(object):
 
         cutter = pyPlane.cutter
         if cutter:
-            print cutter
 
             compound = Part.makeCompound(cutter)
             compound.Placement = placement
@@ -375,12 +374,12 @@ class _Py(object):
                 compound.Placement = placement
                 Part.show(compound, self.slopedPlanes.Name+' simulatedAlignment '+str(numWire)+' '+str(numGeom))
 
-        if pyPlane.choped:
-            if pyPlane.simulatedShape:
-
-                compound = Part.makeCompound(pyPlane.simulatedShape)
-                compound.Placement = placement
-                Part.show(compound, self.slopedPlanes.Name+' simulatedShape '+str(numWire)+' '+str(numGeom))
+        virtuals = pyPlane.virtuals 
+        if virtuals:
+            for pyP in virtuals:
+                Part.show(pyP.shape, self.slopedPlanes.Name+' shape '+str(numWire)+' '+str(numGeom))
+                compound = Part.makeCompound(pyP.under)
+                Part.show(compound, self.slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))
 
     def printControl(self, text):
 

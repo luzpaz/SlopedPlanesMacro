@@ -247,6 +247,8 @@ class _PyAlignment(_Py):
         falsify = self.falsify
         tolerance = _Py.tolerance
 
+        geomAligned = self.geomAligned
+
         pyBase = self.base
         base = pyBase.shape
         numGeom = pyBase.numGeom
@@ -394,25 +396,29 @@ class _PyAlignment(_Py):
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
-                # print '### chop ', pyPlane.numWire, pyPlane.numGeom
+                # print '### chop ', (pyPlane.numWire, pyPlane.numGeom)
                 enormousShape = pyPlane.enormousShape
 
-                # the cross
-                notCross = True
                 if num == 0:
                     rango = rangoOne
                     pyPlList = pyWireList[pyOne.numWire].planes
-                    if pyPlane.virtualized:
-                        if not pyPlane.geomAligned:
-                            notCross = False
                 else:
                     rango = rangoTwo
                     pyPlList = pyWireList[pyTwo.numWire].planes
-                    if pyPlane.virtualized:
-                        if pyPlane.geomAligned:
-                            notCross = False
-                # print 'notCross ', notCross
                 # print 'rango ', rango
+
+                # the cross
+                notCross = True
+                if pyPlane.virtualized:
+                    aliList = self.selectAlignments(pyPlane.numWire,
+                                                    pyPlane.numGeom)
+                    for pyA in aliList:
+                        gA = pyA.geomAligned.copy()
+                        gA = gA.cut([geomAligned], tolerance)
+                        if len(gA.Edges) == 2:
+                            notCross = False
+                            pyPlane.cross = True
+                # print 'notCross ', notCross
 
                 consecutive = False
                 for nG in rango:
@@ -960,13 +966,17 @@ class _PyAlignment(_Py):
                 planeCopy = plane.copy()
 
                 if fList:
+                    pyPlane.under = fList
                     planeCopy = planeCopy.cut(fList, tolerance)
 
                 if hList:
+                    # print(pyPlane.virtualized, pyPlane.cross)
+                    # print pyPlane.virtuals
 
-                    if pyPlane.virtualized:
+                    if pyPlane.virtualized and not pyPlane.cross:
                         # print 'virtualized plane ', (pyPlane.numWire, pyPlane.numGeom)
                         pyP = self.selectPlane(pyPlane.numWire, pyPlane.numGeom)
+                        # print pyP.virtuals
 
                         if isinstance(pyP.angle, list):
                             # print 'virt B'
@@ -994,7 +1004,6 @@ class _PyAlignment(_Py):
 
                 # print 'planeCopy.Faces ', planeCopy.Faces
 
-                ##if cutList:
                 if ccList:
 
                     '''if pyPlane.numWire == 0 and pyTwinPlane.numWire != 0:
@@ -1017,7 +1026,6 @@ class _PyAlignment(_Py):
                                         cutList.append(pl)
                                         # print 'rr ', nn'''
 
-                    # planeCopy = planeCopy.cut(cutList, tolerance)
                     planeCopy = planeCopy.cut(ccList, tolerance)
 
                 # print 'planeCopy.Faces ', planeCopy.Faces
@@ -1107,6 +1115,7 @@ class _PyAlignment(_Py):
         # the alignments
 
         if self.falsify:
+            # print 'AA'
 
             rChop = rangoChop[0]
             pyCont = aligns[0]
@@ -1150,6 +1159,7 @@ class _PyAlignment(_Py):
                     # print 'rangoChop ', nn
 
         else:
+            # print 'BB'
 
             cutList = []
 
@@ -1306,12 +1316,13 @@ class _PyAlignment(_Py):
         if pyPl.aligned:
             # print 'r1'
 
-            if pyPlane.virtualized:
+            '''if pyPlane.virtualized:
                 pl = None
-            else:
-                pyAli = self.selectAlignmentBase(numWire, rear)
-                if pyAli and pyAli != self:
-                    pl = pyAli.simulatedAlignment
+            else:'''
+            pyAli = self.selectAlignmentBase(numWire, rear)
+            if pyAli and pyAli != self:
+                # print 'pyAli ', pyAli.base.numGeom
+                pl = pyAli.simulatedAlignment
 
         elif pyPl.fronted:
             # print 'r2'
@@ -1422,6 +1433,17 @@ class _PyAlignment(_Py):
                             if not pyPl.choped and not pyPl.aligned:
                                 pyPl.cuttingPyth([one])
 
+            # between rears with chops
+
+            if pyO.shape and pyO.rear and\
+               pyT.shape and pyT.rear:
+                pyWireOne = pyWireList[pyO.numWire]
+                between = self.rang(pyWireOne, rTwo, rOne, 'forward')
+                for nn in between:
+                    pyPl = pyPlList[nn]
+                    if not pyPl.choped and not pyPl.aligned:
+                        pyPl.cuttingPyth(cutList)
+
         # rangoRear vs rangoChop
 
         chops = self.chops
@@ -1463,6 +1485,38 @@ class _PyAlignment(_Py):
                             pyPl = pyPlaneList[r]
                             if not pyPl.choped and not pyPl.aligned:
                                 pl = pyPl.cuttingPyth(chopList)
+
+    def endTwo(self, ):
+
+        ''''''
+
+        # print 'base ', self.base.numGeom
+
+        pyBase = self.base
+
+        # base with choped rear
+
+        w1 = self.prior.numWire
+        pyPlaneList = _Py.pyFace.wires[w1].planes
+        rangoRear = self.rangoRear
+        # print 'rangoRear ', rangoRear
+
+        rearList = []
+        for r in rangoRear:
+            # print 'r ', r
+            pyPl = pyPlaneList[r]
+            if pyPl.choped:
+                # print 'a'
+                pl = pyPl.shape
+                if pl:
+                    rearList.append(pl)
+
+        if rearList:
+            # print 'rearList ', rearList
+            pyBase.cuttingPyth(rearList)
+            for pyPl in self.aligns:
+                if pyPl.shape:
+                    pyPl.cuttingPyth(rearList)
 
     def rangging(self, reset):
 
