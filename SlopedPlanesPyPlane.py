@@ -799,8 +799,7 @@ class _PyPlane(_Py):
 
     def trimming(self, enormousShape, enormShape=None):
 
-        '''trimming(self, enormousShape, enormShape=None)
-        '''
+        '''trimming(self, enormousShape, enormShape=None)'''
 
         bigShape = self.bigShape
         gS = self.geomShape
@@ -817,8 +816,7 @@ class _PyPlane(_Py):
 
     def trimmingTwo(self, enormousShape):
 
-        '''trimmingTwo(self, enormousShape)
-        '''
+        '''trimmingTwo(self, enormousShape)'''
 
         self.simulating(enormousShape)
 
@@ -829,8 +827,7 @@ class _PyPlane(_Py):
 
     def simulating(self, cList):
 
-        '''simulating(self, enormousShape)
-        '''
+        '''simulating(self, cList)'''
 
         # print '# simulating ', self.numGeom
 
@@ -847,8 +844,7 @@ class _PyPlane(_Py):
 
     def rearing(self, pyWire, pyReflex, direction, case):
 
-        '''rearing(self, pyWire, pyReflex)
-        '''
+        '''rearing(self, pyWire, pyReflex, direction, case)'''
 
         # print '### rearing ', (self.numWire, self.numGeom)
 
@@ -967,8 +963,7 @@ class _PyPlane(_Py):
 
     def ordinaries(self, pyWire):
 
-        '''ordinaries(self, pyWire)
-        '''
+        '''ordinaries(self, pyWire)'''
 
         tolerance = _Py.tolerance
         pyPlaneList = pyWire.planes
@@ -1090,8 +1085,7 @@ class _PyPlane(_Py):
 
     def rangging(self, pyWire, direction):
 
-        '''rangging(self, pyWire)
-        '''
+        '''rangging(self, pyWire, direction)'''
 
         numGeom = self.numGeom
 
@@ -1120,7 +1114,7 @@ class _PyPlane(_Py):
 
     def isSolved(self):
 
-        ''''''
+        '''isSolved(self)'''
 
         tolerance = _Py.tolerance
         forward = self.forward
@@ -1134,12 +1128,11 @@ class _PyPlane(_Py):
 
     def isReallySolved(self, pyWire, pyReflex):
 
-        ''''''
+        '''isReallySolved(self, pyWire, pyReflex)'''
 
         tolerance = _Py.tolerance
         conflictList = []
         simul = self.simulatedShape
-        gS = self.geomShape
 
         pyReflexList = pyWire.reflexs
         for pyRef in pyReflexList:

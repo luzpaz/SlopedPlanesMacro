@@ -75,8 +75,7 @@ class _PyReflex(_Py):
 
     def virtualizing(self):
 
-        '''virtualizing(self)
-        '''
+        '''virtualizing(self)'''
 
         [pyReflex, pyOppReflex] = self.planes
 
@@ -87,8 +86,7 @@ class _PyReflex(_Py):
 
     def simulating(self, force=False):
 
-        '''simulating(self, force=False)
-        '''
+        '''simulating(self, force=False)'''
 
         [pyR, pyOppR] = self.planes
 
@@ -149,10 +147,9 @@ class _PyReflex(_Py):
 
                             elif pyPl.aligned:
                                 # print 'c'
-                                # podria ser mejor con if pyPl.shape:
                                 pyAli =\
                                     self.selectAlignmentBase(numWire, nG)
-                                if pyAli:  # quitar, revisar todos
+                                if pyAli:
                                     cList.extend(pyAli.simulatedAlignment)
 
                             else:
@@ -214,13 +211,17 @@ class _PyReflex(_Py):
                 # print 'rear ', rear
 
                 pyRearPlane = pyPlaneList[rear]
-                if pyRearPlane.reflexed:
+                if pyRearPlane.aligned:
+                    rearPlane = None
+                elif pyRearPlane.reflexed:
                     rearPlane = pyRearPlane.simulatedShape
                 else:
                     rearPlane = pyRearPlane.shape
 
                 pyOppRearPlane = pyPlaneList[oppRear]
-                if pyOppRearPlane.reflexed:
+                if pyOppRearPlane.aligned:
+                    oppRearPlane = None
+                elif pyOppRearPlane.reflexed:
                     oppRearPlane = pyOppRearPlane.simulatedShape
                 else:
                     oppRearPlane = pyOppRearPlane.shape
@@ -233,20 +234,22 @@ class _PyReflex(_Py):
                         control = pyPl.control
                         cList = []
                         if oppRear not in control:
-                            cList.append(oppRearPlane)
-                            if not pyOppRearPlane.reflexed:
-                                control.append(oppRear)
+                            if oppRearPlane:
+                                cList.append(oppRearPlane)
+                                if not pyOppRearPlane.reflexed:
+                                    control.append(oppRear)
                         if rear not in control:
-                            cList.append(rearPlane)
-                            if not pyRearPlane.reflexed:
-                                control.append(rear)
+                            if rearPlane:
+                                cList.append(rearPlane)
+                                if not pyRearPlane.reflexed:
+                                    control.append(rear)
                         if cList:
+                            # print 'cList ', cList
                             pyPl.cuttingPyth(cList)
 
     def reflexing(self, pyWire):
 
-        '''reflexing(self, pyWire)
-        '''
+        '''reflexing(self, pyWire)'''
 
         [pyR, pyOppR] = self.planes
 
@@ -258,8 +261,7 @@ class _PyReflex(_Py):
 
     def twin(self, pyWire, pyR, pyOppR, direction):
 
-        '''twin(self, pyWire, pyR, pyOppR, direction)
-        '''
+        '''twin(self, pyWire, pyR, pyOppR, direction)'''
 
         pyPlaneList = pyWire.planes
         numWire = pyWire.numWire
@@ -287,7 +289,7 @@ class _PyReflex(_Py):
                     pyAlign = self.selectAlignmentBase(numWire, nGeom)
                     if pyAlign:
                         rearPl = pyAlign.simulatedAlignment
-                        pyR.cutter.append(rearPl)
+                        pyR.cutter.extend(rearPl)
                         # print 'included rear simulated ', (numWire, nGeom)
 
                 elif rearPyPl.choped:
@@ -329,7 +331,7 @@ class _PyReflex(_Py):
                         pyAlign = self.selectAlignmentBase(numWire, nGeom)
                         if pyAlign:
                             oppRearPl = pyAlign.simulatedAlignment
-                            pyR.cutter.append(oppRearPl)
+                            pyR.cutter.extend(oppRearPl)
                             # print 'included oppRear simulated ', (numWire, nGeom)
 
                     elif pyOppRear.choped:
@@ -394,7 +396,23 @@ class _PyReflex(_Py):
         if nGeom not in control:
             pyOppRear = pyPlaneList[nGeom]
 
-            oppRearPl = pyOppRear.shape.copy()
+            if pyOppRear.aligned:
+                # print 'a'
+                aliList = self.selectAlignments(pyWire.numWire, nGeom)
+                oppRearPl = []
+                for pyA in aliList:
+                    oppRearPl.extend(pyA.simulatedAlignment)
+                oppRearPl = Part.makeCompound(oppRearPl)
+
+            elif pyOppRear.reflexed:
+                # print 'c'
+                oppRearPl = pyOppRear.simulatedShape
+
+            else:
+                # print 'd'
+                oppRearPl = pyOppRear.shape
+
+            oppRearPl = oppRearPl.copy()
             pyR.cutter.append(oppRearPl)
             control.append(nGeom)
             # print 'included oppRear ', (pyWire.numWire, nGeom)
@@ -406,7 +424,24 @@ class _PyReflex(_Py):
 
         if nGeom not in control:
             pyOppRear = pyPlaneList[nGeom]
-            oppRearPl = pyOppRear.shape.copy()
+
+            if pyOppRear.aligned:
+                # print 'a'
+                aliList = self.selectAlignments(pyWire.numWire, nGeom)
+                oppRearPl = []
+                for pyA in aliList:
+                    oppRearPl.extend(pyA.simulatedAlignment)
+                oppRearPl = Part.makeCompound(oppRearPl)
+
+            elif pyOppRear.reflexed:
+                # print 'c'
+                oppRearPl = pyOppRear.simulatedShape
+
+            else:
+                # print 'd'
+                oppRearPl = pyOppRear.shape
+
+            oppRearPl = oppRearPl.copy()
             oppRearPl = oppRearPl.cut([oppReflexEnormous], tolerance)
 
             pointWire = pyWire.coordinates
@@ -444,7 +479,7 @@ class _PyReflex(_Py):
             pyAlign = self.selectAlignmentBase(numWire, nn)
             if pyAlign:
                 pl = pyAlign.simulatedAlignment
-                pyR.cutter.append(pl)
+                pyR.cutter.extend(pl)
                 # print 'included rango simulated ', (numWire, nn)
 
         elif pyPl.choped:
@@ -550,8 +585,7 @@ class _PyReflex(_Py):
 
     def solveReflex(self, pyWire):
 
-        '''solveReflex(self, pyWire)
-        '''
+        '''solveReflex(self, pyWire)'''
 
         # print '### solveReflexs'
 
@@ -570,8 +604,7 @@ class _PyReflex(_Py):
                       direction, pyWire):
 
         '''processReflex(self, reflex, oppReflex, pyR, pyOppR,
-                         direction, pyWire)
-        '''
+                         direction, pyWire)'''
 
         tolerance = _Py.tolerance
         pyPlaneList = pyWire.planes
@@ -591,6 +624,7 @@ class _PyReflex(_Py):
             secondaries = []
             if not pyR.aligned:
                 # print '11'
+                # print 'pyR.cutter ', pyR.cutter
                 cutList.extend(pyR.cutter)
 
         # print 'cutList ', cutList
@@ -631,9 +665,30 @@ class _PyReflex(_Py):
             orderedEdges = wire.OrderedEdges
             forw = orderedEdges[0]
 
-            enormous = [rr.shape]    # auxiliar to build the allowed location to extra faces
+            rrS = None
+            if rr.aligned:
+                pyA = self.selectAlignmentBase(rr.numWire, rr.numGeom)
+                if pyA:
+                    rrS = pyA.simulatedAlignment
+            else:
+                rrS = [rr.shape]
+
+            enormous = []  # auxiliar to build the allowed location to extra faces
+
+            if rrS:
+                enormous.extend(rrS)
+
             if oppRear:
-                enormous.append(oppRr.shape)
+                oppRS = None
+                if oppRr.aligned:
+                    pyA = self.selectAlignmentBase(oppRr.numWire, oppRr.numGeom)
+                    if pyA:
+                        oppRS = pyA.simulatedAlignment
+                else:
+                    oppRS = [oppRr.shape]
+
+                if oppRS:
+                    enormous.extend(oppRS)
 
             corn = []    # auxiliar to look for extra faces
             for nn in rangoCorner:
@@ -660,9 +715,9 @@ class _PyReflex(_Py):
                     # print 'c'
                     pl = pyPl.shape
                     corn.append(pl)
-            corn = Part.makeCompound(corn)
             # print 'corn ', corn
             # print 'enormous ', enormous
+            corn = Part.makeCompound(corn)
 
             for pyReflex in reflexList:
                 if pyReflex != self:
@@ -679,6 +734,7 @@ class _PyReflex(_Py):
         aa = reflex.copy()
         if enorm:
             cutList.extend(enorm)
+            # print 'cutList ', cutList
         aa = aa.cut(cutList, tolerance)
         # print 'aa.Faces ', aa.Faces, len(aa.Faces)
 
@@ -893,8 +949,8 @@ class _PyReflex(_Py):
                                 bList = [ff]
                                 break
                             else:
-                                section = ff.section(aList, tolerance)  ##
-                                if not section.Edges:                   ##
+                                section = ff.section(aList, tolerance)
+                                if not section.Edges:
                                     bList = [ff]
                                     break
 
@@ -920,7 +976,8 @@ class _PyReflex(_Py):
 
     def postProcess(self, pyWire):
 
-        ''''''
+        '''postProcess(self, pyWire)
+        Reflexed planes with only one face'''
 
         # print '### postProcess'
 
@@ -970,7 +1027,7 @@ class _PyReflex(_Py):
 
     def postProcessTwo(self, pyWire):
 
-        ''''''
+        '''postProcessTwo(self, pyWire)'''
 
         # print '### postProcessTwo'
 
@@ -1030,9 +1087,9 @@ class _PyReflex(_Py):
                                             # print 'b'
 
                                             rear = pyPlane.rear[0]
+                                            pyRearPlane = pyPlaneList[rear]
+                                            rearPl = pyRearPlane.shape
                                             if rear not in control:
-                                                pyRearPlane = pyPlaneList[rear]
-                                                rearPl = pyRearPlane.shape
                                                 cutterList.append(rearPl)
                                                 control.append(rearPl)
 
@@ -1090,8 +1147,7 @@ class _PyReflex(_Py):
 
     def rearing(self, pyWire, case):
 
-        '''rearing(self, pyWire)
-        '''
+        '''rearing(self, pyWire)'''
 
         direction = "forward"
         for pyPlane in self.planes:
@@ -1102,8 +1158,7 @@ class _PyReflex(_Py):
 
     def rangging(self, pyWire):
 
-        '''rangging(self, pyWire)
-        '''
+        '''rangging(self, pyWire)'''
 
         pyR = self.planes[0]
         pyOppR = self.planes[1]

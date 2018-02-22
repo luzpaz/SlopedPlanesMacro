@@ -139,8 +139,7 @@ class _PyWire(_Py):
 
         '''planning(self):
         Transfers to PyPlane.
-        Arranges the reflex range and its planes ranges.
-        '''
+        Arranges the reflex range and its planes ranges.'''
 
         for pyPlane in self.planes:
             if pyPlane.geomAligned:

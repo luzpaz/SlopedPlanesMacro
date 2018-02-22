@@ -1451,6 +1451,28 @@ class _PyAlignment(_Py):
                             if not pyPl.choped and not pyPl.aligned:
                                 pl = pyPl.cuttingPyth(chopList)
 
+        # into rangoChop
+
+        for rC in rangoChop:
+            if len(rC) > 2:
+                chopList = []
+                planeList = []
+                for r in rC:
+                    pyPl = pyPlaneList[r]
+                    if pyPl.choped or pyPl.aligned:
+                        break
+                    pl = pyPl.shape
+                    chopList.append(pl.copy())
+                    planeList.append(pyPl)
+
+                num = -1
+                for pyPl in planeList:
+                    num += 1
+                    pop = chopList.pop(num)
+                    if chopList:
+                        pyPl.cuttingPyth(chopList)
+                    chopList.insert(num, pop)
+
         # alignment with choped rangoRear
 
         rearList = []

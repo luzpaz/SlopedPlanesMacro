@@ -436,7 +436,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.betweenWires()
 
-            pyFace.aligning()
+            pyFace.aligning()  # '''
 
         if onChanged:
             # print 'AAA'
