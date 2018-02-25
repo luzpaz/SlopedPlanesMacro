@@ -224,24 +224,34 @@ class _Py(object):
 
         return None
 
+    def selectFacePoint(self, shape, point):
+
+        ''''''
+
+        vertex = Part.Vertex(point)
+        for ff in shape.Faces:
+            section = vertex.section([ff], _Py.tolerance)
+            if section.Vertexes:
+                return ff
+
     def selectShape(self):
 
         '''selectShape(self)'''
 
         if self.aligned:
             # print 'a'
-            aliList = self.selectAlignments(self.numWire,self.nGeom)
+            aliList = self.selectAlignments(self.numWire, self.numGeom)
             shape = []
             for pyA in aliList:
                 shape.extend(pyA.simulatedAlignment)
             shape = Part.makeCompound(shape)
 
         elif self.reflexed:
-            # print 'c'
+            # print 'b'
             shape = self.simulatedShape
 
         else:
-            # print 'd'
+            # print 'c'
             shape = self.shape
 
         return shape

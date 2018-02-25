@@ -142,8 +142,7 @@ class _PyFace(_Py):
     def __getstate__(self, serialize):
 
         '''__getstate__(self)
-        Serializes the complementary python objects.
-        '''
+        Serializes the complementary python objects.'''
 
         wireList = []
         for pyWire in self.wires:
@@ -224,8 +223,7 @@ class _PyFace(_Py):
     def __setstate__(self, wires, alignments, serialize):
 
         '''__setstate__(self, wires, alignments)
-        Deserializes the complementary python objects.
-        '''
+        Deserializes the complementary python objects.'''
 
         geomShapeFace = []
         wireList = []
@@ -395,12 +393,12 @@ class _PyFace(_Py):
                                 distEnd = edgeEnd.sub(lineStart).Length
                                 # print 'distEnd ', distEnd
 
-                                ### into, lineInto = self.into(lineStart, edgeEnd)
-
                                 if distStart < distEnd:
-                                    into, lineInto = self.into(lineStart, edgeStart)
+                                    into, lineInto =\
+                                        self.into(lineStart, edgeStart)
                                 else:
-                                    into, lineInto = self.into(lineStart, edgeEnd)
+                                    into, lineInto =\
+                                        self.into(lineStart, edgeEnd)
 
                                 if distStart > distEnd and into:
                                     # print 'alignment'
@@ -466,8 +464,6 @@ class _PyFace(_Py):
                                 # print 'distStart ', distStart
                                 distEnd = edgeEnd.sub(lineEnd).Length
                                 # print 'distEnd ', distEnd
-
-                                ### into, lineInto = self.into(lineEnd, edgeStart)
 
                                 if distStart < distEnd:
                                     into, lineInto = self.into(lineEnd, edgeStart)
@@ -557,12 +553,12 @@ class _PyFace(_Py):
                                             # print '111311'
 
                                             # esto sobra ???
-                                            if ref:
+                                            '''if ref:
                                                 # print 'ref'
                                                 self.findRear(pyWire, pyPlane,
                                                               'backward')
                                                 self.findRear(pyWire, pyPlane,
-                                                              'forward')
+                                                              'forward')'''
 
                                             ref = True
 
@@ -610,7 +606,6 @@ class _PyFace(_Py):
 
                     firstPlane = pyPlaneList[0]
 
-                    # this reflex hasn't rear
                     if not firstPlane.aligned:
                         # print 'firstPlane no aligned'
                         pyReflex = self.doReflex(pyWire, pyPlane, firstPlane)
@@ -633,6 +628,7 @@ class _PyFace(_Py):
                                     pyReflex =\
                                         self.doReflex(pyWire, pyPlane, firstPlane)
 
+                    # this reflex hasn't rear
                     if pyReflex:
                         pyReflex.rear = [None, None]
 
@@ -782,7 +778,6 @@ class _PyFace(_Py):
         sGW = Part.Wire(shapeGeomWire)
         numWire = pyWire.numWire
         lenWire = len(pyWire.planes)
-        pyPlaneList = pyWire.planes
         numGeom = pyPlane.numGeom
         coord = pyWire.coordinates
         # print 'coord ', coord
@@ -864,8 +859,6 @@ class _PyFace(_Py):
         nGeom = self.findGeomRear(pyWire, direction, vertex, edge)
         pyPlane.addValue('rear', nGeom, direction)
         # print 'nGeom ', nGeom
-        pyPl = pyPlaneList[nGeom]
-        pyPl.reared.append(numGeom)
 
         if secondRear:
             sGeom = self.findGeomRear(pyWire, direction, vert, edge)
@@ -1208,8 +1201,7 @@ class _PyFace(_Py):
 
     def betweenWires(self):
 
-        '''betweenWires(self)
-        '''
+        '''betweenWires(self)'''
 
         # print '######### betweenWires'
 
@@ -1242,13 +1234,9 @@ class _PyFace(_Py):
                            not pyPl.fronted and\
                            not pyPl.aligned:
                             # print 'a'
-                            pl = pyPl.shape
-                            ## cutterList.append(pl)
                             cutterList.append(pyPl)
                         elif pyPl.choped:
                             # print 'b'
-                            pl = pyPl.simulatedShape
-                            ## chopList.append(pl)
                             chopList.append(pyPl)
 
                 chopFace.append(chopList)
@@ -1344,7 +1332,6 @@ class _PyFace(_Py):
                             cutList.extend(chopList)
 
                         if cutList:
-
                             # print 'cutList ', cutList
 
                             if isinstance(plane, Part.Compound):
@@ -1383,7 +1370,7 @@ class _PyFace(_Py):
                                 # print '2'
                                 pyPlane.cuttingPyth(cutList)
 
-                            # print 'SHAPE ', pyPlane.shape
+                            # print 'pyPlane.shape ', pyPlane.shape
 
     def aligning(self):
 

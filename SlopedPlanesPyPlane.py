@@ -77,7 +77,6 @@ class _PyPlane(_Py):
         self.seedBigShape = None
         self.lineInto = None
         self.cross = False
-        self.reared = []
 
     @property
     def numWire(self):
@@ -516,7 +515,8 @@ class _PyPlane(_Py):
     @virtuals.setter
     def virtuals(self, virtuals):
 
-        ''''''
+        '''virtuals(self, virtuals)
+        _Py.printAsociatedShapes'''
 
         self._virtuals = virtuals
 
@@ -589,20 +589,6 @@ class _PyPlane(_Py):
         ''''''
 
         self._cross = cross
-
-    @property
-    def reared(self):
-
-        ''''''
-
-        return self._reared
-
-    @reared.setter
-    def reared(self, reared):
-
-        ''''''
-
-        self._reared = reared
 
     def planning(self, pyWire):
 
@@ -755,8 +741,6 @@ class _PyPlane(_Py):
         '''
 
         if self.aligned:
-
-            # TODO copying dict
 
             [numWire, numGeom] = [self.numWire, self.numGeom]
             plane = self.shape
