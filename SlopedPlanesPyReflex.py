@@ -277,7 +277,6 @@ class _PyReflex(_Py):
         '''twin(self, pyWire, pyR, pyOppR, direction)'''
 
         pyPlaneList = pyWire.planes
-        numWire = pyWire.numWire
         control = pyR.control
         rear = pyR.rear
 

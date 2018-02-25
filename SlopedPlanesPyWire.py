@@ -328,14 +328,16 @@ class _PyWire(_Py):
                                             if section.Vertexes:
                                                 # print '4'
                                                 procc = False
-                                                # print 'no procc'
-                                                pyPl.trimmingTwo(enormousShape)
                                                 break
 
-                                else:
+                                if procc:
                                     # print 'procc'
                                     pyPl.trimming(enormousShape)
                                     control.append(numGeom)
+
+                                else:
+                                    # print 'no procc'
+                                    pyPl.trimmingTwo(enormousShape)
 
                             else:
                                 # print 'c2'
