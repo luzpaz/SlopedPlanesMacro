@@ -44,6 +44,7 @@ class _PyReflex(_Py):
 
         self.planes = []
         self.rango = []
+        self.rear = []
 
     @property
     def planes(self):
@@ -72,6 +73,20 @@ class _PyReflex(_Py):
         ''''''
 
         self._rango = rango
+
+    @property
+    def rear(self):
+
+        ''''''
+
+        return self._rear
+
+    @rear.setter
+    def rear(self, rear):
+
+        ''''''
+
+        self._rear = rear
 
     def virtualizing(self):
 
@@ -633,6 +648,7 @@ class _PyReflex(_Py):
         rangoCorner = None
         rear = pyR.rear
         oppRear = pyOppR.rear
+
         if rear:
 
             if direction == 'forward':
@@ -767,9 +783,22 @@ class _PyReflex(_Py):
             reflex = reflex.cut(cList, tolerance)
             # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
-        if not pyR.aligned and pyR.cutter:
-            reflex = reflex.cut(pyR.cutter, tolerance)
-            # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
+        if not pyR.aligned:
+            cList = pyR.cutter[:]
+
+            if pyWire.numWire > 0:
+                # print 'interior wire'
+
+                if not pyOppR.rear:
+
+                    rList =\
+                        self.selectAllReflex(pyOppR.numWire, pyOppR.numGeom)
+                    if len(rList) == 2:
+                        cList.append(pyOppR.enormousShape)
+
+            if cList:
+                reflex = reflex.cut(cList, tolerance)
+                # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
         # main face
         aList = []
@@ -1175,5 +1204,5 @@ class _PyReflex(_Py):
         direction = "forward"
         for pyPlane in self.planes:
             if not pyPlane.rango:
-                pyPlane.rangging(pyWire, direction)
+                pyPlane.rangging(pyWire, direction, self)
             direction = "backward"

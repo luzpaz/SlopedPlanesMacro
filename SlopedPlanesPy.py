@@ -224,6 +224,28 @@ class _Py(object):
 
         return None
 
+    def selectShape(self):
+
+        '''selectShape(self)'''
+
+        if self.aligned:
+            # print 'a'
+            aliList = self.selectAlignments(self.numWire,self.nGeom)
+            shape = []
+            for pyA in aliList:
+                shape.extend(pyA.simulatedAlignment)
+            shape = Part.makeCompound(shape)
+
+        elif self.reflexed:
+            # print 'c'
+            shape = self.simulatedShape
+
+        else:
+            # print 'd'
+            shape = self.shape
+
+        return shape
+
     def convexReflex(self, eje, nextEje):
 
         ''''''
@@ -268,9 +290,10 @@ class _Py(object):
 
                 print 'planes ', pyReflex.planes
                 print 'rangoInter ', pyReflex.rango
+                print 'rear reflex', pyReflex.rear
                 for pyPlane in pyReflex.planes:
                     print 'numGeom ', pyPlane.numGeom
-                    print 'rear ', pyPlane.rear
+                    print 'rear plane', pyPlane.rear
                     print 'rango ', pyPlane.rango
                     '''forward = pyPlane.forward
                     print 'forward ',\

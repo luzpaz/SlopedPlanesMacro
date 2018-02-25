@@ -77,6 +77,7 @@ class _PyPlane(_Py):
         self.seedBigShape = None
         self.lineInto = None
         self.cross = False
+        self.reared = []
 
     @property
     def numWire(self):
@@ -589,6 +590,20 @@ class _PyPlane(_Py):
 
         self._cross = cross
 
+    @property
+    def reared(self):
+
+        ''''''
+
+        return self._reared
+
+    @reared.setter
+    def reared(self, reared):
+
+        ''''''
+
+        self._reared = reared
+
     def planning(self, pyWire):
 
         '''planning(self, pyWire)
@@ -846,7 +861,7 @@ class _PyPlane(_Py):
 
         '''rearing(self, pyWire, pyReflex, direction, case)'''
 
-        # print '### rearing ', (self.numWire, self.numGeom)
+        # print '### rearing ', (self.numWire, self.numGeom), direction
 
         tolerance = _Py.tolerance
         plane = self.shape
@@ -1083,26 +1098,43 @@ class _PyPlane(_Py):
                 self.cuttingPyth(cutterList)
                 # print 'plane ', self
 
-    def rangging(self, pyWire, direction):
+    def rangging(self, pyWire, direction, pyReflex=None):
 
         '''rangging(self, pyWire, direction)'''
 
+        # print 'rangging ', (self.numWire, self.numGeom), direction, self.rear
         numGeom = self.numGeom
 
         rear = self.rear
         lenRear = len(rear)
 
         if lenRear == 0:
+            # print 'a'
 
             self.rango = [[]]
 
         elif lenRear == 1:
+            # print 'b'
 
-            nGeom = rear[0]
+            if pyReflex:
+                # print 'b1'
+                rearReflex = pyReflex.rear
+                if direction == 'forward':
+                    nGeom = rearReflex[0]
+                else:
+                    nGeom = rearReflex[1]
+                if nGeom is None:
+                    return
+
+            else:
+                # print 'b2'
+                nGeom = rear[0]
+
             ran = self.rang(pyWire, numGeom, nGeom, direction, True)
-            self.addValue('rango', ran, 'forward')
+            self.addValue('rango', ran, direction)
 
         else:
+            # print 'c'
 
             nGeom = rear[0]
             ran = self.rang(pyWire, numGeom, nGeom, 'forward', True)
@@ -1111,6 +1143,8 @@ class _PyPlane(_Py):
             nGeom = rear[-1]
             ran = self.rang(pyWire, numGeom, nGeom, 'backward', True)
             self.addValue('rango', ran, 'backward')
+
+        # print 'rango ', self.rango
 
     def isSolved(self):
 

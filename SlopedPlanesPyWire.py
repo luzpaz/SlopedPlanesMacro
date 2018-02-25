@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+import Part
 from SlopedPlanesPy import _Py
 
 
@@ -178,12 +179,12 @@ class _PyWire(_Py):
                 numWire = pyPlane.numWire
                 enormousShape = pyPlane.enormousShape.copy()
 
-                pyOppPlane = pyReflex.planes[num -1 ]
+                pyOppPlane = pyReflex.planes[num -1]
 
                 rango = []
                 oppRango = []
 
-                if num == 0:
+                '''if num == 0:
                     if pyPlane.rear:
                         rear = pyPlane.rear[0]
                         rango = pyPlane.rango[0]
@@ -194,15 +195,91 @@ class _PyWire(_Py):
                         rear = pyPlane.rear[-1]
                         rango = pyPlane.rango[-1]
                     if pyOppPlane.rear:
-                        oppRango = pyOppPlane.rango[0]
+                        oppRango = pyOppPlane.rango[0]'''
 
-                if len(pyPlane.rear) == 1:
+                '''if len(pyPlane.rear) == 1:
                     forward = pyPlane.forward
                 else:
                     if num == 0:
                         forward = pyPlane.forward
                     else:
-                        forward = pyPlane.backward
+                        forward = pyPlane.backward'''
+
+                if num == 0:
+                    rear = pyReflex.rear[0]
+                    oppRear = pyReflex.rear[1]
+                    if rear is not None:
+                        rango = pyPlane.rango[0]
+                        forward = pyPlane.forward
+                    if oppRear is not None:
+                        oppRango = pyOppPlane.rango[-1]
+
+                    if self.numWire > 0:
+
+                        try:
+                            rr = pyOppPlane.rear[-1]
+                            if rr is not oppRear:
+                                pyPl = pyPlaneList[rr]
+
+                                pyPl.cuttingPyth([enormousShape])
+                                pyPl.control.append(numGeom)
+
+                                pl = pyPl.shape.copy()
+                                pl = pl.cut([pyOppPlane.enormousShape], tolerance)
+                                point = self.coordinates[rr + 1]
+                                vertex = Part.Vertex(point)
+                                for ff in pl.Faces:
+                                    section = vertex.section([ff], tolerance)
+                                    if section.Vertexes:
+                                        pl = ff
+                                        break
+
+                                pyPlane.cuttingPyth([pl])
+                                pyPlane.control.append(rr)
+
+                        except IndexError:
+                            pass
+
+                else:
+                    rear = pyReflex.rear[1]
+                    oppRear = pyReflex.rear[0]
+                    if rear is not None:
+                        rango = pyPlane.rango[-1]
+                        if len(pyPlane.rango) == 1:
+                            forward = pyPlane.forward
+                        else:
+                            forward = pyPlane.backward
+                    if oppRear is not None:
+                        oppRango = pyOppPlane.rango[0]
+
+                    if self.numWire > 0:
+
+                        try:
+                            rr = pyOppPlane.rear[0]
+                            if rr is not oppRear:
+                                pyPl = pyPlaneList[rr]
+
+                                pyPl.cuttingPyth([enormousShape])
+                                pyPl.control.append(numGeom)
+
+                                pl = pyPl.shape.copy()
+                                pl = pl.cut([pyOppPlane.enormousShape], tolerance)
+                                point = self.coordinates[rr]
+                                vertex = Part.Vertex(point)
+                                for ff in pl.Faces:
+                                    section = vertex.section([ff], tolerance)
+                                    if section.Vertexes:
+                                        pl = ff
+                                        break
+
+                                pyPlane.cuttingPyth([pl])
+                                pyPlane.control.append(rr)
+
+                        except IndexError:
+                            pass
+
+                # print 'rango ', rango
+                # print 'oppRango ', oppRango
 
                 if pyPlane.secondRear:
                     if num == 0:
