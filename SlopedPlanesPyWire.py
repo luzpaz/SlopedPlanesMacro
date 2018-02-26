@@ -487,23 +487,11 @@ class _PyWire(_Py):
         # self.printControl('preProcess')
 
         for pyReflex in self.reflexs:
-            pyReflex.preProcessTwo(self)
-        # self.printControl('preProcessTwo')
-
-        for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
 
         for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
         # self.printControl('solveReflex')
-
-        for pyReflex in self.reflexs:
-            pyReflex.solveReflexTwo(self)
-        # self.printControl('solveReflexTwo')
-
-        for pyReflex in self.reflexs:
-            pyReflex.rearing(self, False)
-        # self.printControl('rearing False')
 
         for pyReflex in self.reflexs:
             pyReflex.postProcess(self)
@@ -514,7 +502,7 @@ class _PyWire(_Py):
         # self.printControl('postProcessTwo')
 
         for pyReflex in self.reflexs:
-            pyReflex.rearing(self, True)
+            pyReflex.rearing(self)
 
         # '''
 

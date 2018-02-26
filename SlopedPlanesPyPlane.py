@@ -77,6 +77,8 @@ class _PyPlane(_Py):
         self.seedBigShape = None
         self.lineInto = None
         self.cross = False
+        self.solved = False
+        self.reallySolved = False
 
     @property
     def numWire(self):
@@ -590,6 +592,34 @@ class _PyPlane(_Py):
 
         self._cross = cross
 
+    @property
+    def solved(self):
+
+        ''''''
+
+        return self._solved
+
+    @solved.setter
+    def solved(self, solved):
+
+        ''''''
+
+        self._solved = solved
+
+    @property
+    def reallySolved(self):
+
+        ''''''
+
+        return self._reallySolved
+
+    @reallySolved.setter
+    def reallySolved(self, reallySolved):
+
+        ''''''
+
+        self._reallySolved = reallySolved
+
     def planning(self, pyWire):
 
         '''planning(self, pyWire)
@@ -841,9 +871,9 @@ class _PyPlane(_Py):
         plCopy = self.cutting(plCopy, cList, gS)
         self.simulatedShape = plCopy
 
-    def rearing(self, pyWire, pyReflex, direction, case):
+    def rearing(self, pyWire, pyReflex, direction):
 
-        '''rearing(self, pyWire, pyReflex, direction, case)'''
+        '''rearing(self, pyWire, pyReflex, direction)'''
 
         # print '### rearing ', (self.numWire, self.numGeom), direction
 
@@ -878,87 +908,78 @@ class _PyPlane(_Py):
         pyRearPl = pyPlaneList[rear]
         # print 'pyRearPl ', rear
 
-        if not pyRearPl.aligned:
+        if not (pyRearPl.aligned or pyRearPl.choped):
 
             gS = pyRearPl.geomShape
             rearPl = pyRearPl.shape
             control = pyRearPl.control
 
-            if case:
-                condition = not (pyRearPl.aligned or pyRearPl.choped)
+            cList = []
+            if self.numGeom not in control:
+                cList.append(plane)
+                # print 'included ', self.numGeom
+                control.append(self.numGeom)
 
-            else:
-                condition = (pyRearPl.reflexed and not pyRearPl.aligned and not pyRearPl.choped and len(plane.Faces) > 1)
-                # condition = (pyRearPl.reflexed and not pyRearPl.aligned and not pyRearPl.choped)
+            if pyOppPlane.numGeom not in control:
+                fo = pyOppPlane.forward
+                ba = pyOppPlane.backward
+                section = oppPlane.section([fo, ba], tolerance)
+                if not section.Edges:
+                    cList.append(oppPlane)
+                    # print 'included ', pyOppPlane.numGeom
+                    control.append(pyOppPlane.numGeom)
 
-            if condition:
+            if cList:
+                # print 'cList ', cList
 
-                cList = []
-                if self.numGeom not in control:
-                    cList.append(plane)
-                    # print 'included ', self.numGeom
-                    control.append(self.numGeom)
+                if isinstance(rearPl, Part.Compound):
+                    # print 'aa'
 
-                if pyOppPlane.numGeom not in control:
-                    fo = pyOppPlane.forward
-                    ba = pyOppPlane.backward
-                    section = oppPlane.section([fo, ba], tolerance)
-                    if not section.Edges:
-                        cList.append(oppPlane)
-                        # print 'included ', pyOppPlane.numGeom
-                        control.append(pyOppPlane.numGeom)
+                    if len(rearPl.Faces) > 1:
+                        # print 'aa1'
 
-                if cList:
-                    # print 'cList ', cList
+                        aList = []
+                        for ff in rearPl.Faces:
+                            section = ff.section([gS], tolerance)
+                            ff = ff.cut(cList, tolerance)
+                            if section.Edges:
+                                # print 'aa11'
+                                ff = self.selectFace(ff.Faces, gS)
+                                aList.append(ff)
+                            else:
+                                # print 'aa12'
+                                aList.append(ff.Faces[0])
 
-                    if isinstance(rearPl, Part.Compound):
-                        # print 'aa'
-
-                        if len(rearPl.Faces) > 1:
-                            # print 'aa1'
-
-                            aList = []
-                            for ff in rearPl.Faces:
-                                section = ff.section([gS], tolerance)
-                                ff = ff.cut(cList, tolerance)
-                                if section.Edges:
-                                    # print 'aa11'
-                                    ff = self.selectFace(ff.Faces, gS)
-                                    aList.append(ff)
-                                else:
-                                    # print 'aa12'
-                                    aList.append(ff.Faces[0])
-
-                            compound = Part.Compound(aList)
-                            pyRearPl.shape = compound
-
-                        else:
-                            # print 'aa2'
-                            rearPl = self.cutting(rearPl, cList, gS)
-                            compound = Part.Compound([rearPl])
-                            pyRearPl.shape = compound
+                        compound = Part.Compound(aList)
+                        pyRearPl.shape = compound
 
                     else:
-                        # print 'bb'
-                        pyRearPl.cuttingPyth(cList)
+                        # print 'aa2'
+                        rearPl = self.cutting(rearPl, cList, gS)
+                        compound = Part.Compound([rearPl])
+                        pyRearPl.shape = compound
 
-                    if len(plane.Faces) == 1:
-                        # print 'AA'
+                else:
+                    # print 'bb'
+                    pyRearPl.cuttingPyth(cList)
 
-                        gS = self.geomShape
-                        plane = self.cutting(plane, [rearPl], gS)
-                        compound = Part.Compound([plane])
-                        self.shape = compound
-                        self.control.append(rear)
+                if len(plane.Faces) == 1:
+                    # print 'AA'
 
-                    if len(oppPlane.Faces) == 1:    # cuidado
-                        # print 'BB'
+                    gS = self.geomShape
+                    plane = self.cutting(plane, [rearPl], gS)
+                    compound = Part.Compound([plane])
+                    self.shape = compound
+                    self.control.append(rear)
 
-                        gS = pyOppPlane.geomShape
-                        oppPlane = self.cutting(oppPlane, [rearPl], gS)
-                        compound = Part.Compound([oppPlane])
-                        pyOppPlane.shape = compound
-                        pyOppPlane.control.append(rear)
+                if len(oppPlane.Faces) == 1:    # cuidado
+                    # print 'BB'
+
+                    gS = pyOppPlane.geomShape
+                    oppPlane = self.cutting(oppPlane, [rearPl], gS)
+                    compound = Part.Compound([oppPlane])
+                    pyOppPlane.shape = compound
+                    pyOppPlane.control.append(rear)
 
     def ordinaries(self, pyWire):
 
@@ -1134,6 +1155,9 @@ class _PyPlane(_Py):
 
         '''isSolved(self)'''
 
+        if self.solved:
+            return True
+
         tolerance = _Py.tolerance
         forward = self.forward
         backward = self.backward
@@ -1142,11 +1166,15 @@ class _PyPlane(_Py):
         if section.Edges:
             return False
         else:
+            self.solved = True
             return True
 
     def isReallySolved(self, pyWire, pyReflex):
 
         '''isReallySolved(self, pyWire, pyReflex)'''
+
+        if self.reallySolved is not False:
+            return self.reallySolved
 
         tolerance = _Py.tolerance
         conflictList = []
@@ -1171,5 +1199,7 @@ class _PyPlane(_Py):
                                     conf.append(pyPlane)
                             if len(conf) == 1:
                                 conflictList.extend(conf)
+
+        self.reallySolved = conflictList
 
         return conflictList

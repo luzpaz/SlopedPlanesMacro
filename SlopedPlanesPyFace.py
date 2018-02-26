@@ -175,6 +175,7 @@ class _PyFace(_Py):
                 dd['_seed'] = []
 
                 dd['_virtuals'] = []
+                dd['_reallySolved'] = False
 
                 if serialize:
 

@@ -114,7 +114,8 @@ class _PyReflex(_Py):
     def preProcess(self, pyWire):
 
         '''preProcess(self, pyWire)
-        The planes included in a range are cutted between them'''
+        The planes included in a range are cutted between them,
+        and by rear and oppRear'''
 
         # print '### preProcess'
 
@@ -122,20 +123,37 @@ class _PyReflex(_Py):
         numWire = pyWire.numWire
         refPlanes = self.planes
 
-        rango = refPlanes[0].rango[0]
+        pyR = refPlanes[0]
+        rango = pyR.rango[0]
+        pyOppR = refPlanes[-1]
 
-        for pyReflexPlane in refPlanes:
-            # print '# pyReflexPlane ', pyReflexPlane.numGeom
+        if pyOppR.rear and pyR.rear:
+            rear = pyR.rear[0]
+            oppRear = pyOppR.rear[-1]
+
+            pyRearPlane = pyPlaneList[rear]
+            rearPlane = pyRearPlane.selectShape()
+
+
+            pyOppRearPlane = pyPlaneList[oppRear]
+            oppRearPlane = pyOppRearPlane.selectShape()
+
+        for pyR in refPlanes:
+            # print '# pyR ', pyR.numGeom
             # print 'rango ', rango
+            # print 'rear ', rear
+            # print 'oppRear ', oppRear
 
-            pyRan = [pyPlaneList[nG] for nG in rango]
+            pyRango = [pyPlaneList[nG] for nG in rango]
 
-            for pyPlane in pyRan:
+            for pyPlane in pyRango:
+                # print 'pyPlane.numGeom ', pyPlane.numGeom
                 cList = []
-                if not (pyPlane.choped or pyPlane.aligned):
-                    # print 'pyPlane.numGeom ', pyPlane.numGeom
+                control = pyPlane.control
 
-                    control = pyPlane.control
+                if not (pyPlane.choped or pyPlane.aligned):
+                    # print 'A'
+
                     rangoPost = []
                     for ran in pyPlane.rango:
                         rangoPost.extend(ran)
@@ -146,7 +164,7 @@ class _PyReflex(_Py):
                     for nG in rango:
                         num += 1
                         if nG not in total:
-                            pyPl = pyRan[num]
+                            pyPl = pyRango[num]
                             # print 'pyPl.numGeom ', nG
 
                             if not pyPl.reflexed:
@@ -184,81 +202,40 @@ class _PyReflex(_Py):
                                         # print 'ddd2'
                                         cList.append(pyPl.simulatedShape)
 
+                if not pyPlane.reflexed:
+                    # print 'B'
+                    if pyOppR.rear and pyR.rear:
+                        cutList = []
+                        if oppRear not in control:
+                            # print 'a'
+                            cutList.append(oppRearPlane)
+                            if not pyOppRearPlane.reflexed:
+                                control.append(oppRear)
+                        if rear not in control:
+                            # print 'b'
+                            cutList.append(rearPlane)
+                            if not pyRearPlane.reflexed:
+                                control.append(rear)
+                        cList.extend(cutList)
+
                 if cList:
                     # print 'cList', cList
                     pyPlane.cuttingPyth(cList)
                     # print 'plane ', pyPlane.shape
 
-            rango = refPlanes[-1].rango[-1]
+            if pyOppR.rear and pyR.rear:
 
-    def preProcessTwo(self, pyWire):
+                rr = oppRearPlane.copy()
+                oppRearPlane = rearPlane.copy()
+                rearPlane = rr
 
-        '''preProcess(self, pyWire)
-        The planes included in a range are cutted by rear and oppRear'''
+                nn = rear
+                oppRear = rear
+                rear = nn
 
-        # print '### preProcessTwo'
-
-        pyPlaneList = pyWire.planes
-
-        num = -1
-        for pyPlane in self.planes:
-            num += 1
-            # print '# pyPlane ', pyPlane.numGeom
-
-            pyOppPlane = self.planes[num - 1]
-            if pyOppPlane.rear and pyPlane.rear:
-
-                rango = []
-
-                if num == 0:
-                    rango = pyPlane.rango[0]
-                    rear = pyPlane.rear[0]
-                    oppRear = pyOppPlane.rear[-1]
-                else:
-                    rango = pyPlane.rango[-1]
-                    rear = pyPlane.rear[-1]
-                    oppRear = pyOppPlane.rear[0]
-
-                # print 'rango ', rango
-                # print 'oppRear ', oppRear
-                # print 'rear ', rear
-
-                pyRearPlane = pyPlaneList[rear]
-                if pyRearPlane.aligned:
-                    rearPlane = None
-                elif pyRearPlane.reflexed:
-                    rearPlane = pyRearPlane.simulatedShape
-                else:
-                    rearPlane = pyRearPlane.shape
-
-                pyOppRearPlane = pyPlaneList[oppRear]
-                if pyOppRearPlane.aligned:
-                    oppRearPlane = None
-                elif pyOppRearPlane.reflexed:
-                    oppRearPlane = pyOppRearPlane.simulatedShape
-                else:
-                    oppRearPlane = pyOppRearPlane.shape
-
-                for nG in rango:
-                    # print '# nG ', nG
-                    pyPl = pyPlaneList[nG]
-                    if not pyPl.reflexed:
-                        # print 'a'
-                        control = pyPl.control
-                        cList = []
-                        if oppRear not in control:
-                            if oppRearPlane:
-                                cList.append(oppRearPlane)
-                                if not pyOppRearPlane.reflexed:
-                                    control.append(oppRear)
-                        if rear not in control:
-                            if rearPlane:
-                                cList.append(rearPlane)
-                                if not pyRearPlane.reflexed:
-                                    control.append(rear)
-                        if cList:
-                            # print 'cList ', cList
-                            pyPl.cuttingPyth(cList)
+            pyR = refPlanes[-1]
+            rango = pyR.rango[-1]
+            pyOppR = refPlanes[0]
 
     def reflexing(self, pyWire):
 
@@ -278,10 +255,11 @@ class _PyReflex(_Py):
 
         pyPlaneList = pyWire.planes
         control = pyR.control
-        rear = pyR.rear
 
         rangoCorner = []
         rangoNext = []
+
+        rear = pyR.rear
 
         if pyR.rear:
 
@@ -313,6 +291,7 @@ class _PyReflex(_Py):
             if len(oppRear) == 1:
 
                 nGeom = oppRear[0]
+
                 if nGeom not in control:
 
                     pyOppRear = pyPlaneList[nGeom]
@@ -531,6 +510,17 @@ class _PyReflex(_Py):
 
         # print '# ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflex(oppReflex, reflex, pyOppR, pyR, 'backward', pyWire)
+
+        [pyR, pyOppR] = self.planes
+
+        reflex = pyR.shape.copy()
+        oppReflex = pyOppR.shape.copy()
+
+        # print '### ', (pyR.numGeom, pyOppR.numGeom)
+        self.processReflexTwo(reflex, oppReflex, pyR, pyOppR, 'forward')
+
+        # print '### ', (pyOppR.numGeom, pyR.numGeom)
+        self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, 'backward')
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
                       direction, pyWire):
@@ -821,21 +811,6 @@ class _PyReflex(_Py):
         compound = Part.makeCompound(aList)
         pyR.shape = compound
 
-    def solveReflexTwo(self, pyWire):
-
-        '''solveReflexTwo(self, pyWire)'''
-
-        [pyR, pyOppR] = self.planes
-
-        reflex = pyR.shape.copy()
-        oppReflex = pyOppR.shape.copy()
-
-        # print '### ', (pyR.numGeom, pyOppR.numGeom)
-        self.processReflexTwo(reflex, oppReflex, pyR, pyOppR, 'forward')
-
-        # print '### ', (pyOppR.numGeom, pyR.numGeom)
-        self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, 'backward')
-
     def processReflexTwo(self, reflex, oppReflex, pyR, pyOppR, direction):
 
         '''
@@ -963,6 +938,7 @@ class _PyReflex(_Py):
                                                 # print 'A'
                                                 pyPlane.cuttingPyth([pl])
                                                 control.append(pyPl.numGeom)
+                                                pyPl.reallySolved.remove(pyPlane)   ###
 
                                             elif not conflictList:
                                                 # print 'B'
@@ -1008,6 +984,7 @@ class _PyReflex(_Py):
                                         for pyP in conflictList:
                                             if pyP.isSolved():
                                                 cList.append(pyP)
+                                                pyPl.reallySolved.remove(pyP)   ###
                                             else:
                                                 break
                                         else:
@@ -1091,7 +1068,7 @@ class _PyReflex(_Py):
 
             pyOppPlane = refList[0]
 
-    def rearing(self, pyWire, case):
+    def rearing(self, pyWire):
 
         '''rearing(self, pyWire)'''
 
@@ -1099,7 +1076,7 @@ class _PyReflex(_Py):
         for pyPlane in self.planes:
             if not pyPlane.aligned:
                 if pyPlane.rear:
-                    pyPlane.rearing(pyWire, self, direction, case)
+                    pyPlane.rearing(pyWire, self, direction)
             direction = "backward"
 
     def rangging(self, pyWire):

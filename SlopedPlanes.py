@@ -384,6 +384,8 @@ class _SlopedPlanes(_Py):
                                     pyPlane.angle = angle
                                 pyPlane.lineInto = None
                                 pyPlane.cross = False
+                                pyPlane.solved = False
+                                pyPlane.reallySolved = False
 
                         except IndexError:
                             # print '2'
@@ -415,6 +417,8 @@ class _SlopedPlanes(_Py):
                     for pyPlane in pyWire.planes:
                         pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
+                        pyPlane.solved = False
+                        pyPlane.reallySolved = False
 
             pyFace.parsing()
 
