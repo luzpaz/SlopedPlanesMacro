@@ -1390,7 +1390,9 @@ class _PyFace(_Py):
             if not pyAlign.falsify:
                 pyAlign.aligning()
 
+        # self.printCprintControl('aligning')
+
         for pyAlign in pyAlignList:
             pyAlign.end()
 
-        # self.printControl('aligning')
+        # self.printControl('end')

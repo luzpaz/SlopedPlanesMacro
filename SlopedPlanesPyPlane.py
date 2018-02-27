@@ -966,20 +966,24 @@ class _PyPlane(_Py):
                 if len(plane.Faces) == 1:
                     # print 'AA'
 
-                    gS = self.geomShape
-                    plane = self.cutting(plane, [rearPl], gS)
-                    compound = Part.Compound([plane])
-                    self.shape = compound
-                    self.control.append(rear)
+                    if rear not in self.control:
+
+                        gS = self.geomShape
+                        plane = self.cutting(plane, [rearPl], gS)
+                        compound = Part.Compound([plane])
+                        self.shape = compound
+                        self.control.append(rear)
 
                 if len(oppPlane.Faces) == 1:    # cuidado
                     # print 'BB'
 
-                    gS = pyOppPlane.geomShape
-                    oppPlane = self.cutting(oppPlane, [rearPl], gS)
-                    compound = Part.Compound([oppPlane])
-                    pyOppPlane.shape = compound
-                    pyOppPlane.control.append(rear)
+                    if rear not in pyOppPlane.control:
+
+                        gS = pyOppPlane.geomShape
+                        oppPlane = self.cutting(oppPlane, [rearPl], gS)
+                        compound = Part.Compound([oppPlane])
+                        pyOppPlane.shape = compound
+                        pyOppPlane.control.append(rear)
 
     def ordinaries(self, pyWire):
 

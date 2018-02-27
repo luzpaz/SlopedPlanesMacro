@@ -182,16 +182,28 @@ class _PyWire(_Py):
 
                 rango = []
                 oppRango = []
+                nextRango = []
 
                 if num == 0:
+                    # print 'A'
 
                     rear = pyReflex.rear[0]
                     oppRear = pyReflex.rear[1]
                     if rear is not None:
+                        # print 'A1'
                         rango = pyPlane.rango[0]
                         forward = pyPlane.forward
                     if oppRear is not None:
+                        # print 'A2'
                         oppRango = pyOppPlane.rango[-1]
+
+                        if len(pyOppPlane.rango) > 1:
+                            nextRango = pyOppPlane.rango[0]
+
+                        '''if len(pyOppPlane.rango) == 1:
+                            oppForward = pyOppPlane.forward
+                        else:
+                            oppForward = pyOppPlane.backward'''
 
                     if self.numWire > 0:
 
@@ -217,17 +229,27 @@ class _PyWire(_Py):
                                 pyPlane.control.append(rr)
 
                 else:   # num > 0
+                    # print 'B'
 
                     rear = pyReflex.rear[1]
                     oppRear = pyReflex.rear[0]
                     if rear is not None:
+                        # print 'B1'
                         rango = pyPlane.rango[-1]
                         if len(pyPlane.rango) == 1:
+                            # print 'B11'
                             forward = pyPlane.forward
                         else:
+                            # print 'B12'
                             forward = pyPlane.backward
                     if oppRear is not None:
+                        # print 'B2'
                         oppRango = pyOppPlane.rango[0]
+
+                        if len(pyOppPlane.rango) > 1:
+                            nextRango = pyOppPlane.rango[-1]
+
+                        '''oppForward = pyOppPlane.forward'''
 
                     if self.numWire > 0:
 
@@ -252,8 +274,13 @@ class _PyWire(_Py):
                                 pyPlane.cuttingPyth([pl])
                                 pyPlane.control.append(rr)
 
+                # print 'rear ', rear
                 # print 'rango ', rango
+                # print 'forward ', (self.roundVector(forward.firstVertex(True).Point), self.roundVector(forward.lastVertex(True).Point))
+                # print 'oppRear ', oppRear
                 # print 'oppRango ', oppRango
+                '''print 'oppForward ', (self.roundVector(oppForward.firstVertex(True).Point), self.roundVector(oppForward.lastVertex(True).Point))'''
+                # print 'nextRango ', nextRango
 
                 if pyPlane.secondRear:
 
@@ -285,7 +312,12 @@ class _PyWire(_Py):
                     if numGeom not in control:
                         # print '# cutted ', nG
 
-                        if not pyPl.reflexed:
+                        if nG in nextRango:
+                            # print '0'
+                            control.append(numGeom)
+                            pyPlane.control.append(nG)
+
+                        elif not pyPl.reflexed:
                             # print 'a'
 
                             pyPl.trimming(enormousShape)
@@ -407,6 +439,7 @@ class _PyWire(_Py):
                         if not pyPrior.reflexed:
                             # print '1'
                             cutterList.append(bigPrior)
+                            control.append(prior)
                             if pyPlane.simulatedShape:
                                 cutList.append(bigPrior)
 
@@ -426,6 +459,7 @@ class _PyWire(_Py):
                         if not pyLater.reflexed:
                             # print '2'
                             cutterList.append(bigLater)
+                            control.append(later)
                             if pyPlane.simulatedShape:
                                 cutList.append(bigLater)
 
@@ -449,11 +483,17 @@ class _PyWire(_Py):
                         if not (pyPrior.aligned or pyPrior.choped):
                             # print '1'
                             cutterList.append(bigPrior)
+                            if not pyPrior.reflexed:
+                                # print '11'
+                                control.append(prior)
 
                     if not later in control:
                         if not (pyLater.aligned or pyLater.choped):
                             # print '2'
                             cutterList.append(bigLater)
+                            if not pyLater.reflexed:
+                                # print '21'
+                                control.append(later)
 
                 if cutterList:
                     # print 'D cutterList shape'
