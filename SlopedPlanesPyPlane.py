@@ -1050,7 +1050,6 @@ class _PyPlane(_Py):
                             if nGeom in rr:
                                 pl = pyPl.bigShape
                                 cutterList.append(pl)
-                                # control.append(pyPl.numGeom)
                         else:
                             # print 'c2'
                             pass
@@ -1064,6 +1063,7 @@ class _PyPlane(_Py):
             # print 'cutterList ', cutterList
             plane = self.shape
             gS = self.geomShape
+
             if self.reflexed and not self.aligned:
                 # print '1'
 

@@ -273,7 +273,6 @@ class _PyAlignment(_Py):
         if w1 == w2:
             pyWire = pyWireList[w1]
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
-            # if rangoRear:
             rangoRear.insert(0, lat)
             rangoRear.append(pr)
         else:
@@ -347,6 +346,7 @@ class _PyAlignment(_Py):
             for nG in rChop:
                 pyPl = pyPlList[nG]
                 if not pyPl.aligned:
+
                     bPl = pyPl.bigShape
                     gS = pyPl.geomShape
                     bPl = self.cutting(bPl, cutList, gS)
@@ -468,6 +468,7 @@ class _PyAlignment(_Py):
 
                             else:
                                 # print 'B'
+
                                 pyPl.trimmingTwo(enormousShape)
                                 baseControl.append(nG)
 
@@ -477,7 +478,6 @@ class _PyAlignment(_Py):
             rC = Part.makeCompound(rC)
 
             section = rC.section([base], tolerance)
-
             if section.Edges:
                 pyBase.cuttingPyth([pyTwo.enormousShape])
             else:
@@ -489,7 +489,8 @@ class _PyAlignment(_Py):
             else:
                 pyCont.cuttingPyth([pyTwo.enormousShape])
 
-            # TODO falseAlignment base and continuation don't cut opp rango ?
+            # TODO falseAlignment base and continuation don't cut opp rango
+            # pero si con rear entre rears
 
     def priorLater(self):
 
@@ -589,13 +590,12 @@ class _PyAlignment(_Py):
 
         # cuts pyPrior and pyLater
 
-        if not pyPrior.reflexed:  # or pyPrior.choped:
+        if not pyPrior.reflexed:
             # print 'a'
 
             if not pyPrior.arrow:
                 # print 'a1'
 
-                ###pyPrior.cuttingPyth([enormousBase])
                 pyPrior.trimming(enormousBase)
                 pyPrior.control.append(numGeom)
 
@@ -603,7 +603,7 @@ class _PyAlignment(_Py):
                     # print 'a11'
                     pyPrior.control.append(nGeom)
 
-        if not pyLater.reflexed:  # or pyLater.choped:
+        if not pyLater.reflexed:
             # print 'b'
 
             if not pyLater.arrow:
@@ -611,14 +611,12 @@ class _PyAlignment(_Py):
                 if not falsify:
                     # print 'b1'
 
-                    ###pyLater.cuttingPyth([enormousBase])
                     pyLater.trimming(enormousBase)
                     pyLater.control.append(numGeom)
 
                 else:
                     # print 'b2'
 
-                    ###pyLater.cuttingPyth([enormousCont])
                     pyLater.trimming(enormousCont)
                     pyLater.control.append(nGeom)
                     pyLater.control.append(numGeom)
@@ -681,10 +679,9 @@ class _PyAlignment(_Py):
                 pyPl = pyPlList[rr]
                 if not pyPl.aligned and not pyPl.choped:
                     if pyPl.reflexed:
-                        pl = pyPl.simulatedShape  # bigShape?
+                        pl = pyPl.simulatedShape
                     else:
                         pl = pyPl.bigShape
-                        ## pl = pyPl.shape
                     cutList.append(pl)
 
             cList = []

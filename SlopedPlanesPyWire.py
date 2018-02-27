@@ -391,13 +391,13 @@ class _PyWire(_Py):
                         if not pyPrior.reflexed:
                             # print '1'
                             cutterList.append(bigPrior)
-                            # control.append(prior)
+                            control.append(prior)
 
                     if later not in control:
                         if not pyLater.reflexed:
                             # print '2'
                             cutterList.append(bigLater)
-                            # control.append(later)
+                            control.append(later)
 
                 elif pyPlane.reflexed:
                     # print 'B reflexed'
@@ -407,7 +407,6 @@ class _PyWire(_Py):
                         if not pyPrior.reflexed:
                             # print '1'
                             cutterList.append(bigPrior)
-                            # control.append(prior)
                             if pyPlane.simulatedShape:
                                 cutList.append(bigPrior)
 
@@ -427,7 +426,6 @@ class _PyWire(_Py):
                         if not pyLater.reflexed:
                             # print '2'
                             cutterList.append(bigLater)
-                            # control.append(later)
                             if pyPlane.simulatedShape:
                                 cutList.append(bigLater)
 
@@ -451,13 +449,11 @@ class _PyWire(_Py):
                         if not (pyPrior.aligned or pyPrior.choped):
                             # print '1'
                             cutterList.append(bigPrior)
-                            # control.append(prior)
 
                     if not later in control:
                         if not (pyLater.aligned or pyLater.choped):
                             # print '2'
                             cutterList.append(bigLater)
-                            # control.append(later)
 
                 if cutterList:
                     # print 'D cutterList shape'
