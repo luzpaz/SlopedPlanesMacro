@@ -200,11 +200,6 @@ class _PyWire(_Py):
                         if len(pyOppPlane.rango) > 1:
                             nextRango = pyOppPlane.rango[0]
 
-                        '''if len(pyOppPlane.rango) == 1:
-                            oppForward = pyOppPlane.forward
-                        else:
-                            oppForward = pyOppPlane.backward'''
-
                     if self.numWire > 0:
 
                         try:
@@ -249,8 +244,6 @@ class _PyWire(_Py):
                         if len(pyOppPlane.rango) > 1:
                             nextRango = pyOppPlane.rango[-1]
 
-                        '''oppForward = pyOppPlane.forward'''
-
                     if self.numWire > 0:
 
                         try:
@@ -279,7 +272,6 @@ class _PyWire(_Py):
                 # print 'forward ', (self.roundVector(forward.firstVertex(True).Point), self.roundVector(forward.lastVertex(True).Point))
                 # print 'oppRear ', oppRear
                 # print 'oppRango ', oppRango
-                '''print 'oppForward ', (self.roundVector(oppForward.firstVertex(True).Point), self.roundVector(oppForward.lastVertex(True).Point))'''
                 # print 'nextRango ', nextRango
 
                 if pyPlane.secondRear:

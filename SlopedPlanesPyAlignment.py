@@ -521,7 +521,7 @@ class _PyAlignment(_Py):
         cutterList = []
 
         if ((not pyPrior.reflexed) or
-           (not pyPrior.rear and not pyPrior.aligned)):
+            (not pyPrior.rear and not pyPrior.aligned)):
             # print '1'
             cutterList.append(bigPrior)
             if not pyBase.choped:
@@ -537,7 +537,7 @@ class _PyAlignment(_Py):
                 control.append(pr)
 
         if ((not pyLater.reflexed) or
-           (not pyLater.rear and not pyLater.aligned)):
+            (not pyLater.rear and not pyLater.aligned)):
             # print '2'
             cutterList.append(bigLater)
             if not self.falsify:
