@@ -23,6 +23,7 @@
 
 
 from math import pi
+import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
 
@@ -760,8 +761,16 @@ class _PyPlane(_Py):
             pass
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
-        # print 'extendGeom ', extendGeom
-        plane = extendGeom.toShape().extrude(direction*upScale)
+        extendShape = extendGeom.toShape()
+        extendShape = Part.Wire(extendShape)
+
+        point = extendGeom.StartPoint
+        secondPoint = point.add(direction * upScale)
+        ll = Part.LineSegment(point, secondPoint)
+        path = ll.toShape()
+        path = Part.Wire(path)
+
+        plane = path.makePipeShell([extendShape])
 
         return plane
 
