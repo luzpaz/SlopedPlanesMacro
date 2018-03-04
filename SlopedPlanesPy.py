@@ -689,3 +689,40 @@ class _Py(object):
 
         # print 'ran ', ran
         return ran
+
+    def refine(self, faceOne, faceTwo):
+
+        ''''''
+
+        coordOne = self.faceDatas(faceOne)
+        coordTwo = self.faceDatas(faceTwo)
+
+        geomOne = self.arcGeometries(faceOne, coordOne)
+        geomTwo = self.arcGeometries(faceTwo, coordTwo)
+
+        numOne = -1
+        for cc in coordOne:
+            numOne += 1
+            if cc in coordTwo:
+                numTwo = coordTwo.index(cc)
+                break
+
+        aa = geomOne[:numOne]
+
+        if numTwo + 1 > len(geomTwo):
+            bb = 0
+        else:
+            bb = geomTwo[numTwo+1:]
+
+        cc = geomTwo[:numTwo]
+
+        if numOne + 1 > len(geomTwo):
+            dd = 0
+        else:
+            dd = geomOne[numOne+1:]
+
+        edgeList = aa + bb + cc + dd
+        wire = Part.Wire(edgeList)
+        face = Part.makeFace(wire, "Part::FaceMakerSimple")
+
+        return face
