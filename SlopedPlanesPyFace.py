@@ -198,10 +198,9 @@ class _PyFace(_Py):
 
             if serialize:
                 ww = Part.Wire(edgeList)
-                dct['_shapeGeom'] = ww.exportBrepToString()
-
-                fb = Part.Compound(forBack)
-                dct['_forBack'] = fb.exportBrepToString()
+                forBack.append(ww)
+                serial = Part.Compound(forBack)
+                dct['_serial'] = serial.exportBrepToString()
 
             reflexList = []
             for pyReflex in pyWire.reflexs:
@@ -239,13 +238,14 @@ class _PyFace(_Py):
             geomShapeWire = []
 
             if serialize:
-                edgeList = Part.Shape()
-                edgeList.importBrepFromString(dct['_shapeGeom'])
-                edgeList = edgeList.Edges
 
-                forBack = Part.Shape()
-                forBack.importBrepFromString(dct['_forBack'])
-                forBack = forBack.Edges
+                serial = Part.Shape()
+                serial.importBrepFromString(dct['_serial'])
+
+                wire = serial.Wires[0]
+                edgeList = wire.Edges
+                serial = serial.removeShape([wire])
+                forBack = serial.Edges
 
             for dd in dct['_planes']:
                 numGeom += 1
