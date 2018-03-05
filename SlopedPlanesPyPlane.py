@@ -80,7 +80,7 @@ class _PyPlane(_Py):
         self.cross = False
         self.solved = False
         self.reallySolved = False
-        self.sweepCurve = 'Line'
+        self.sweepCurve = None
 
     @property
     def numWire(self):
@@ -195,6 +195,20 @@ class _PyPlane(_Py):
         self._length = length
 
     @property
+    def height(self):
+
+        ''''''
+
+        return self._height
+
+    @height.setter
+    def height(self, height):
+
+        ''''''
+
+        self._height = height
+
+    @property
     def overhang(self):
 
         ''''''
@@ -214,6 +228,20 @@ class _PyPlane(_Py):
             pass
 
         self._overhang = overhang
+
+    @property
+    def overHeight(self):
+
+        ''''''
+
+        return self._overHeight
+
+    @overHeight.setter
+    def overHeight(self, overHeight):
+
+        ''''''
+
+        self._overHeight = overHeight
 
     @property
     def rear(self):

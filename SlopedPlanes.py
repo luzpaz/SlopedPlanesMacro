@@ -362,7 +362,7 @@ class _SlopedPlanes(_Py):
                                 pyPlane.leftWidth = size
                                 pyPlane.length = 2 * size
                                 pyPlane.overhang = 0
-                                pyPlane.sweepCurve = 'Line'
+                                pyPlane.sweepCurve = None
 
                             if pyFace.reset:
                                 # print '111'
@@ -420,6 +420,11 @@ class _SlopedPlanes(_Py):
                         pyPlane.control = [pyPlane.numGeom]
                         pyPlane.solved = False
                         pyPlane.reallySolved = False
+
+                        try:
+                            pyPlane.sweepCurve
+                        except AttributeError:
+                            pyPlane.sweepCurve = None
 
             pyFace.parsing()
 
