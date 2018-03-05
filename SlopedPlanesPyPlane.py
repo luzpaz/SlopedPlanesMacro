@@ -80,6 +80,7 @@ class _PyPlane(_Py):
         self.cross = False
         self.solved = False
         self.reallySolved = False
+        self.sweepCurve = 'Line'
 
     @property
     def numWire(self):
@@ -620,6 +621,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._reallySolved = reallySolved
+
+    @property
+    def sweepCurve(self):
+
+        ''''''
+
+        return self._sweepCurve
+
+    @sweepCurve.setter
+    def sweepCurve(self, sweepCurve):
+
+        ''''''
+
+        self._sweepCurve = sweepCurve
 
     def planning(self, pyWire):
 

@@ -56,8 +56,30 @@ class _PyLine(_PyCurve):
         pass
 
 
-class _PyArc(_PyCurve):
+class _PyPolyLine(_PyCurve):
 
-    ''''''
+    '''The complementary python object class for several LineSegments.'''
+
+    def __init__(self):
+
+        ''''''
+
+        pass
+
+
+class _PyBiSpyline(_PyCurve):
+
+    '''The complementary python object class for BiSpyline.'''
+
+    def __init__(self):
+
+        ''''''
+
+        pass
+
+
+class _PyArcOfCircle(_PyCurve):
+
+    '''The complementary python object class for ArcOfCircle.'''
 
     pass

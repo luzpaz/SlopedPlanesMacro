@@ -362,6 +362,7 @@ class _SlopedPlanes(_Py):
                                 pyPlane.leftWidth = size
                                 pyPlane.length = 2 * size
                                 pyPlane.overhang = 0
+                                pyPlane.sweepCurve = 'Line'
 
                             if pyFace.reset:
                                 # print '111'
@@ -656,6 +657,8 @@ class _SlopedPlanes(_Py):
 
         serialize = self.Serialize
         state['Serialize'] = serialize
+
+        # TODO acabar con el serializado
 
         if serialize:
             state['_faceList'] = self.getstate(self.faceList)
