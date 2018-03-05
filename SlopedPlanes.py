@@ -146,14 +146,6 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyFloat", "FactorLength",
                                  "SlopedPlanes", doc)
 
-        doc = ('Applies over all planes height, or height of extrusion \n'
-               'of the base\'s edges, multiplied by the diagonal \n'
-               'length of the SlopedPlanes base.\n'
-               'To cero the SlopedPlanes hasn\'t shape')
-
-        slopedPlanes.addProperty("App::PropertyFloat", "FactorHeight",
-                                 "SlopedPlanes", doc)
-
         doc = ('Applies over all planes width, left and right,\n'
                'multiplied by the diagonal length of the SlopedPlanes base.\n'
                'To cero the plane width is equal to the length of \n'
