@@ -207,6 +207,8 @@ class _PyPlane(_Py):
         ''''''
 
         self._height = height
+        angle = self.angle
+        ### length = 
 
     @property
     def overhang(self):
