@@ -775,6 +775,8 @@ class _PyPlane(_Py):
         else:
             pass
 
+        # TODO selector para que los 'flat' planos no se carguen
+
         extendGeom = self.makeGeom(geom, startParam, endParam)
         extendShape = extendGeom.toShape()
         extendShape = Part.Wire(extendShape)
