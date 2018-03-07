@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+import math
 import FreeCAD
 
 if FreeCAD.GuiUp:
@@ -152,6 +153,8 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
+        print 'edit ', self.updating, (item, column)
+
         if not self.updating:
             self.resetObject()
 
@@ -182,6 +185,8 @@ class _TaskPanel_SlopedPlanes():
     def update(self):
 
         ''''''
+
+        print 'update'
 
         self.updating = True
         self.tree.clear()
@@ -274,53 +279,69 @@ class _TaskPanel_SlopedPlanes():
 
                             if self.advancedOptions.isChecked():
 
+                                doubleSpinBox.valueChanged.connect(self.changeAngle)
+
+                                angle = math.radians(angle)
+
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The length of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
-                                doubleSpinBox.setValue(pyPlane.length)
+                                length = pyPlane.length
+                                doubleSpinBox.setValue(length)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 2, doubleSpinBox)
+                                #self.doubleSpinBox.clicked.connect(self.editLength)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The height of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
-                                doubleSpinBox.setValue(pyPlane.length)
+                                height = self.height(angle, length)
+                                doubleSpinBox.setValue(height)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 3, doubleSpinBox)
+                                #self.doubleSpinBox.clicked.connect(self.editHeight)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The run of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
-                                doubleSpinBox.setValue(pyPlane.length)
+                                run = self.run(angle, length)
+                                doubleSpinBox.setValue(run)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 4, doubleSpinBox)
+                                #self.doubleSpinBox.clicked.connect(self.editRun)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The overhang length of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
-                                doubleSpinBox.setValue(pyPlane.overhang)
+                                length = pyPlane.overhang
+                                doubleSpinBox.setValue(length)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 5, doubleSpinBox)
+                                #self.doubleSpinBox.clicked.connect(self.editOverhangLength)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The overhang height of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
-                                doubleSpinBox.setValue(pyPlane.overhang)
+                                height = self.height(angle, length)
+                                doubleSpinBox.setValue(height)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 6, doubleSpinBox)
+                                #self.doubleSpinBox.clicked.connect(self.editOverhangHeight)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The overhang run of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
-                                doubleSpinBox.setValue(pyPlane.overhang)
+                                run = self.run(angle, length)
+                                doubleSpinBox.setValue(run)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 7, doubleSpinBox)
+                                #self.doubleSpinBox.clicked.connect(self.editOverhangRun)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The left width of the related face")
@@ -466,3 +487,61 @@ class _TaskPanel_SlopedPlanes():
         slopedPlanes.touch()
         FreeCAD.ActiveDocument.recompute()
         self.update()
+
+    def height(self, angle, length):
+
+        ''''''
+
+        return length * math.sin(angle)
+
+    def run(self, angle, length):
+
+        ''''''
+
+        return length * math.cos(angle)
+
+
+    def changeAngle(self, value):
+
+        ''''''
+
+        print 'editAngle'
+        print value
+        print 
+
+    def editLength(self):
+
+        ''''''
+
+        pass
+
+    def editHeight(self):
+
+        ''''''
+
+        print 'editHeight'
+        pass
+
+    def editRun(self):
+
+        ''''''
+
+        pass
+
+    def editOverhangLength(self):
+
+        ''''''
+
+        pass
+
+    def editOverhangHeight(self):
+
+        ''''''
+
+        pass
+
+    def editOverhangRun(self):
+
+        ''''''
+
+        pass
