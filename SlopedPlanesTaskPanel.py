@@ -268,7 +268,9 @@ class _TaskPanel_SlopedPlanes():
                             item.setTextAlignment(0, QtCore.Qt.AlignLeft)
                             item.setText(0, str(numSlope))
 
-                            doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                            # doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                            doubleSpinBox = _DoubleSpinBox()
+                            doubleSpinBox.setParent(self.tree)
                             doubleSpinBox.setToolTip("The angle of the related face")
                             doubleSpinBox.setMaximum(1000.00)
                             doubleSpinBox.setMinimum(-1000.00)
@@ -279,7 +281,9 @@ class _TaskPanel_SlopedPlanes():
 
                             if self.advancedOptions.isChecked():
 
-                                doubleSpinBox.valueChanged.connect(self.changeAngle)
+                                doubleSpinBox.item = item
+                                doubleSpinBox.column = 1
+                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeAngle)
 
                                 angle = math.radians(angle)
 
@@ -501,13 +505,48 @@ class _TaskPanel_SlopedPlanes():
         return length * math.cos(angle)
 
 
+class _DoubleSpinBox(QtGui.QDoubleSpinBox):
+
+    def __init__(self):
+
+        ''''''
+
+        super(_DoubleSpinBox, self).__init__()
+
+    @property
+    def item(self):
+
+        ''''''
+
+        return self._item
+
+    @item.setter
+    def item(self, item):
+
+        ''''''
+
+        self._item = item
+
+    @property
+    def column(self):
+
+        ''''''
+
+        return self._column
+
+    @column.setter
+    def column(self, column):
+
+        ''''''
+
+        self._column = column
+
     def changeAngle(self, value):
 
         ''''''
 
         print 'editAngle'
         print value
-        print 
 
     def editLength(self):
 
@@ -545,3 +584,4 @@ class _TaskPanel_SlopedPlanes():
         ''''''
 
         pass
+
