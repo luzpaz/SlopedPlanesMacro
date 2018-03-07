@@ -56,9 +56,9 @@ class _PyPolyLine(_PyCurve):
         pass
 
 
-class _PyBiSpyline(_PyCurve):
+class _PyBSpline(_PyCurve):
 
-    '''The complementary python object class for BiSpyline.'''
+    '''The complementary python object class for BSpline.'''
 
     def __init__(self):
 

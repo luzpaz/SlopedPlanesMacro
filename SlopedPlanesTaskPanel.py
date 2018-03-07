@@ -90,7 +90,11 @@ class _TaskPanel_SlopedPlanes():
             self.tree.setHeaderLabels([("Face"),
                                        ("Angle"),
                                        ("Length"),
-                                       ("Overhang"),
+                                       ("Height"),
+                                       ("Run"),
+                                       ("OverhangLength"),
+                                       ("OverhangHeight"),
+                                       ("OverhangRun"),
                                        ("Left Width"),
                                        ("Right Width")])
         else:
@@ -156,13 +160,17 @@ class _TaskPanel_SlopedPlanes():
         ''''''
 
         if self.advancedOptions.isChecked():
-            self.tree.setColumnCount(6)
+            self.tree.setColumnCount(10)
             self.tree.header().resizeSection(0, 60)
             self.tree.header().resizeSection(1, 120)
             self.tree.header().resizeSection(2, 120)
             self.tree.header().resizeSection(3, 120)
             self.tree.header().resizeSection(4, 120)
             self.tree.header().resizeSection(5, 120)
+            self.tree.header().resizeSection(6, 120)
+            self.tree.header().resizeSection(7, 120)
+            self.tree.header().resizeSection(8, 120)
+            self.tree.header().resizeSection(9, 120)
 
         else:
             self.tree.setColumnCount(2)
@@ -275,12 +283,44 @@ class _TaskPanel_SlopedPlanes():
                                 self.tree.setItemWidget(item, 2, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
-                                doubleSpinBox.setToolTip("The overhang of the related face")
+                                doubleSpinBox.setToolTip("The height of the related face")
+                                doubleSpinBox.setMaximum(2000*size)
+                                doubleSpinBox.setMinimum(-2000*size)
+                                doubleSpinBox.setValue(pyPlane.length)
+                                doubleSpinBox.setSuffix(" mm")
+                                self.tree.setItemWidget(item, 3, doubleSpinBox)
+
+                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setToolTip("The run of the related face")
+                                doubleSpinBox.setMaximum(2000*size)
+                                doubleSpinBox.setMinimum(-2000*size)
+                                doubleSpinBox.setValue(pyPlane.length)
+                                doubleSpinBox.setSuffix(" mm")
+                                self.tree.setItemWidget(item, 4, doubleSpinBox)
+
+                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setToolTip("The overhang length of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
                                 doubleSpinBox.setValue(pyPlane.overhang)
                                 doubleSpinBox.setSuffix(" mm")
-                                self.tree.setItemWidget(item, 3, doubleSpinBox)
+                                self.tree.setItemWidget(item, 5, doubleSpinBox)
+
+                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setToolTip("The overhang height of the related face")
+                                doubleSpinBox.setMaximum(1000*size)
+                                doubleSpinBox.setMinimum(-1000*size)
+                                doubleSpinBox.setValue(pyPlane.overhang)
+                                doubleSpinBox.setSuffix(" mm")
+                                self.tree.setItemWidget(item, 6, doubleSpinBox)
+
+                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.setToolTip("The overhang run of the related face")
+                                doubleSpinBox.setMaximum(1000*size)
+                                doubleSpinBox.setMinimum(-1000*size)
+                                doubleSpinBox.setValue(pyPlane.overhang)
+                                doubleSpinBox.setSuffix(" mm")
+                                self.tree.setItemWidget(item, 7, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The left width of the related face")
@@ -288,7 +328,7 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setMinimum(-1000*size)
                                 doubleSpinBox.setValue(pyPlane.leftWidth)
                                 doubleSpinBox.setSuffix(" mm")
-                                self.tree.setItemWidget(item, 4, doubleSpinBox)
+                                self.tree.setItemWidget(item, 8, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The right width of the related face")
@@ -296,7 +336,7 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setMinimum(-1000*size)
                                 doubleSpinBox.setValue(pyPlane.rightWidth)
                                 doubleSpinBox.setSuffix(" mm")
-                                self.tree.setItemWidget(item, 5, doubleSpinBox)
+                                self.tree.setItemWidget(item, 9, doubleSpinBox)
 
                 value = 0
                 if upFace:
@@ -401,15 +441,15 @@ class _TaskPanel_SlopedPlanes():
                             length = doubleSpinBox.value()
                             pyPlane.length = length
 
-                            doubleSpinBox = self.tree.itemWidget(it, 3)
+                            doubleSpinBox = self.tree.itemWidget(it, 5)
                             overhang = doubleSpinBox.value()
                             pyPlane.overhang = overhang
 
-                            doubleSpinBox = self.tree.itemWidget(it, 4)
+                            doubleSpinBox = self.tree.itemWidget(it, 8)
                             left = doubleSpinBox.value()
                             pyPlane.leftWidth = left
 
-                            doubleSpinBox = self.tree.itemWidget(it, 5)
+                            doubleSpinBox = self.tree.itemWidget(it, 9)
                             right = doubleSpinBox.value()
                             pyPlane.rightWidth = right
 
