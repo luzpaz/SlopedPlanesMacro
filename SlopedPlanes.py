@@ -65,7 +65,7 @@ class _SlopedPlanes(_Py):
 
     '''The Class of the FreeCAD scripted object SlopedPlanes.
     Requieres a sketch or DWire as base. The base must support the FaceMaker.
-    The angles numeration corresponds to the SlopedPlanes shape faces'''
+    The angles numeration corresponds to the SlopedPlanes shape faces.'''
 
     def __init__(self, slopedPlanes):
 
@@ -73,13 +73,13 @@ class _SlopedPlanes(_Py):
         Initializes the properties of the SlopedPlanes object and its Proxy.
         The Proxy stores:
 
-        - the four flags
+        - four flags
             Type: object recognition
             State: indicates the loading file
             OnChanged: faster execute from property and task panels
             Serialize: Slower loading file and faster execute with State = True
 
-        - the two lists:
+        - two lists:
             Pyth: the complementary python objects
             faceList: faces produced by the FaceMaker over the base'''
 

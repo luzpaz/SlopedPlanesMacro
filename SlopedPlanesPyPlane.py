@@ -758,36 +758,46 @@ class _PyPlane(_Py):
 
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola)):
+
             startParam = firstParam - leftScale
             endParam = lastParam + rightScale
 
         elif isinstance(geom, (Part.ArcOfCircle,
                                Part.ArcOfEllipse)):
+
             startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
             endParam = startParam + 2 * pi
 
         elif isinstance(geom, Part.ArcOfHyperbola):
+
             pass
 
         elif isinstance(geom, Part.BSplineCurve):
+
             pass
 
         else:
-            pass
 
-        # TODO selector para que los 'flat' planos no se carguen
+            pass
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
         extendShape = extendGeom.toShape()
-        extendShape = Part.Wire(extendShape)
 
-        point = extendGeom.StartPoint
-        secondPoint = point.add(direction * upScale)
-        ll = Part.LineSegment(point, secondPoint)
-        path = ll.toShape()
-        path = Part.Wire(path)
+        if self.sweepCurve:
 
-        plane = path.makePipeShell([extendShape])
+            extendShape = Part.Wire(extendShape)
+
+            point = extendGeom.StartPoint
+            secondPoint = point.add(direction * upScale)
+            ll = Part.LineSegment(point, secondPoint)
+            path = ll.toShape()
+            path = Part.Wire(path)
+
+            plane = path.makePipeShell([extendShape])
+
+        else:
+
+            plane = extendShape.extrude(direction*upScale)
 
         return plane
 

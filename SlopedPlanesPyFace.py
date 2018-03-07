@@ -177,6 +177,9 @@ class _PyFace(_Py):
                 dd['_virtuals'] = []
                 dd['_reallySolved'] = False
 
+                ###
+                dd['_sweepCurve'] = None
+
                 if serialize:
 
                     edgeList.append(pyPlane.geomShape)
@@ -251,6 +254,8 @@ class _PyFace(_Py):
                 numGeom += 1
                 pyPlane = _PyPlane(numWire, numGeom)
                 pyPlane.__dict__ = dd
+
+                ### sweepCurve
 
                 if serialize:
 
