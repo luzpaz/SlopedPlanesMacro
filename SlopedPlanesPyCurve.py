@@ -74,21 +74,14 @@ class _PyArcOfCircle(_PyCurve):
     pass
 
 
-class _PySurface():
+class _PyConic(_PyCurve):
 
     ''''''
 
     pass
 
 
-class _PyConic(_PySurface):
-
-    ''''''
-
-    pass
-
-
-class _PySpheric(_PySurface):
+class _PySpheric(_PyCurve):
 
     ''''''
 

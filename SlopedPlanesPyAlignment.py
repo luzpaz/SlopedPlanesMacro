@@ -53,7 +53,6 @@ class _PyAlignment(_Py):
         self.simulatedChops = []
         self.prior = None
         self.later = None
-        self.surface = None
 
     @property
     def base(self):
@@ -208,20 +207,6 @@ class _PyAlignment(_Py):
         ''''''
 
         self._later = later
-
-    @property
-    def surface(self):
-
-        ''''''
-
-        return self._surface
-
-    @surface.setter
-    def surface(self, surface):
-
-        ''''''
-
-        self._surface = surface
 
     def virtualizing(self):
 
