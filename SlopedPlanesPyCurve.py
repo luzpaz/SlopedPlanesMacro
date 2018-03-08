@@ -72,17 +72,3 @@ class _PyArcOfCircle(_PyCurve):
     '''The complementary python object class for ArcOfCircle.'''
 
     pass
-
-
-class _PyConic(_PyCurve):
-
-    ''''''
-
-    pass
-
-
-class _PySpheric(_PyCurve):
-
-    ''''''
-
-    pass
