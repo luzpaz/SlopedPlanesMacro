@@ -627,8 +627,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             angle = math.radians(angle)
             height = self.height(angle, length)
             run = self.run(angle, length)
-            tree.itemWidget(item, 6).changeHeight(height, False)
-            tree.itemWidget(item, 7).changeRun(run, False)
+            tree.itemWidget(item, 6).changeOverhangHeight(height, False)
+            tree.itemWidget(item, 7).changeOverhangRun(run, False)
         else:
             tree.itemWidget(item, 5).setValue(length)
 
@@ -644,8 +644,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             angle = math.radians(angle)
             length = self.lengthHeight(angle, height)
             run = self.run(angle, length)
-            tree.itemWidget(item, 5).changeLength(length, False)
-            tree.itemWidget(item, 7).changeRun(run, False)
+            tree.itemWidget(item, 5).changeOverhangLength(length, False)
+            tree.itemWidget(item, 7).changeOverhangRun(run, False)
         else:
             tree.itemWidget(item, 6).setValue(height)
 
@@ -661,8 +661,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             angle = math.radians(angle)
             length = self.lengthRun(angle, run)
             height = self.height(angle, length)
-            tree.itemWidget(item, 5).changeLength(length, False)
-            tree.itemWidget(item, 6).changeHeight(height, False)
+            tree.itemWidget(item, 5).changeOverhangLength(length, False)
+            tree.itemWidget(item, 6).changeOverhangHeight(height, False)
         else:
             tree.itemWidget(item, 7).setValue(run)
 
