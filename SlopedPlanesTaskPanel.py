@@ -153,8 +153,6 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print 'edit ', self.updating, (item, column)
-
         if not self.updating:
             self.resetObject()
 
@@ -185,8 +183,6 @@ class _TaskPanel_SlopedPlanes():
     def update(self):
 
         ''''''
-
-        print 'update'
 
         self.updating = True
         self.tree.clear()
@@ -268,7 +264,6 @@ class _TaskPanel_SlopedPlanes():
                             item.setTextAlignment(0, QtCore.Qt.AlignLeft)
                             item.setText(0, str(numSlope))
 
-                            # doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                             doubleSpinBox = _DoubleSpinBox()
                             doubleSpinBox.setParent(self.tree)
                             doubleSpinBox.setToolTip("The angle of the related face")
@@ -282,12 +277,13 @@ class _TaskPanel_SlopedPlanes():
                             if self.advancedOptions.isChecked():
 
                                 doubleSpinBox.item = item
-                                doubleSpinBox.column = 1
+                                doubleSpinBox.parent = self.tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeAngle)
 
                                 angle = math.radians(angle)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(self.tree)
                                 doubleSpinBox.setToolTip("The length of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
@@ -295,9 +291,13 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setValue(length)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 2, doubleSpinBox)
-                                #self.doubleSpinBox.clicked.connect(self.editLength)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.item = item
+                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeLength)
+
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(self.tree)
                                 doubleSpinBox.setToolTip("The height of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
@@ -305,9 +305,13 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setValue(height)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 3, doubleSpinBox)
-                                #self.doubleSpinBox.clicked.connect(self.editHeight)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.item = item
+                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeHeight)
+
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(self.tree)
                                 doubleSpinBox.setToolTip("The run of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
@@ -315,7 +319,10 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setValue(run)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 4, doubleSpinBox)
-                                #self.doubleSpinBox.clicked.connect(self.editRun)
+
+                                doubleSpinBox.item = item
+                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeRun)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The overhang length of the related face")
@@ -507,6 +514,8 @@ class _TaskPanel_SlopedPlanes():
 
 class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
+    ''''''
+
     def __init__(self):
 
         ''''''
@@ -528,44 +537,83 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         self._item = item
 
     @property
-    def column(self):
+    def parent(self):
 
         ''''''
 
-        return self._column
+        return self._parent
 
-    @column.setter
-    def column(self, column):
-
-        ''''''
-
-        self._column = column
-
-    def changeAngle(self, value):
+    @parent.setter
+    def parent(self, parent):
 
         ''''''
 
-        print 'editAngle'
-        print value
+        self._parent = parent
 
-    def editLength(self):
-
-        ''''''
-
-        pass
-
-    def editHeight(self):
+    def changeAngle(self, angle):
 
         ''''''
 
-        print 'editHeight'
-        pass
+        item = self.item
+        tree = self.parent
 
-    def editRun(self):
+        length = tree.itemWidget(item, 2).value()
+        angle = math.radians(angle)
+        height = self.height(angle, length)
+        run = self.run(angle, length)
+        tree.itemWidget(item, 3).changeHeight(height, False)
+        tree.itemWidget(item, 4).changeRun(run, False)
+
+    def changeLength(self, length, update=True):
 
         ''''''
 
-        pass
+        item = self.item
+        tree = self.parent
+
+        if update:
+            angle = tree.itemWidget(item, 1).value()
+            angle = math.radians(angle)
+            height = self.height(angle, length)
+            run = self.run(angle, length)
+            tree.itemWidget(item, 3).changeHeight(height, False)
+            tree.itemWidget(item, 4).changeRun(run, False)
+        else:
+            tree.itemWidget(item, 2).setValue(length)
+
+    def changeHeight(self, height, update=True):
+
+        ''''''
+
+        item = self.item
+        tree = self.parent
+
+        if update:
+            angle = tree.itemWidget(item, 1).value()
+            angle = math.radians(angle)
+            length = self.lengthHeight(angle, height)
+            run = self.run(angle, length)
+            tree.itemWidget(item, 2).changeLength(length, False)
+            tree.itemWidget(item, 4).changeRun(run, False)
+        else:
+            tree.itemWidget(item, 3).setValue(height)
+
+    def changeRun(self, run, update=True):
+
+        ''''''
+
+        item = self.item
+        tree = self.parent
+
+        if update:
+            angle = tree.itemWidget(item, 1).value()
+            angle = math.radians(angle)
+            length = self.lengthRun(angle, run)
+            height = self.height(angle, length)
+            tree.itemWidget(item, 2).changeLength(length, False)
+            tree.itemWidget(item, 3).changeHeight(height, False)
+        else:
+            tree.itemWidget(item, 4).setValue(run)
 
     def editOverhangLength(self):
 
@@ -585,3 +633,26 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         pass
 
+    def height(self, angle, length):
+
+        ''''''
+
+        return length * math.sin(angle)
+
+    def run(self, angle, length):
+
+        ''''''
+
+        return length * math.cos(angle)
+
+    def lengthHeight(self, angle, height):
+
+        ''''''
+
+        return height / math.sin(angle)
+
+    def lengthRun(self, angle, run):
+
+        ''''''
+
+        return run / math.cos(angle)
