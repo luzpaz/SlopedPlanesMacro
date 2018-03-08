@@ -324,21 +324,6 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.parent = self.tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeRun)
 
-                                '''doubleSpinBox = _DoubleSpinBox()
-                                doubleSpinBox.setParent(self.tree)
-                                doubleSpinBox.setToolTip("The overhang angle of the related face")
-                                doubleSpinBox.setMaximum(1000*size)
-                                doubleSpinBox.setMinimum(-1000*size)
-                                overhangAngle = pyPlane.overhangAngle
-                                doubleSpinBox.setValue(overhangAngle)
-                                deg = u"\u00b0"
-                                doubleSpinBox.setSuffix(" "+deg)
-                                self.tree.setItemWidget(item, 5, doubleSpinBox)
-
-                                doubleSpinBox.item = item
-                                doubleSpinBox.parent = self.tree
-                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeOverhangAngle)'''
-
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(self.tree)
                                 doubleSpinBox.setToolTip("The overhang length of the related face")
