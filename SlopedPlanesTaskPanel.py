@@ -301,7 +301,7 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setToolTip("The height of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
-                                height = self.height(angle, length)
+                                height = length * math.sin(angle)
                                 doubleSpinBox.setValue(height)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 3, doubleSpinBox)
@@ -315,7 +315,7 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setToolTip("The run of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
-                                run = self.run(angle, length)
+                                run = length * math.cos(angle)
                                 doubleSpinBox.setValue(run)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 4, doubleSpinBox)
@@ -324,7 +324,8 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.parent = self.tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeRun)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(self.tree)
                                 doubleSpinBox.setToolTip("The overhang length of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
@@ -332,27 +333,38 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setValue(length)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 5, doubleSpinBox)
-                                #self.doubleSpinBox.clicked.connect(self.editOverhangLength)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.item = item
+                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeOverhangLength)
+
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(self.tree)
                                 doubleSpinBox.setToolTip("The overhang height of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
-                                height = self.height(angle, length)
+                                height = length * math.sin(angle)
                                 doubleSpinBox.setValue(height)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 6, doubleSpinBox)
-                                #self.doubleSpinBox.clicked.connect(self.editOverhangHeight)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox.item = item
+                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeOverhangHeight)
+
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(self.tree)
                                 doubleSpinBox.setToolTip("The overhang run of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
-                                run = self.run(angle, length)
+                                run = length * math.cos(angle)
                                 doubleSpinBox.setValue(run)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 7, doubleSpinBox)
-                                #self.doubleSpinBox.clicked.connect(self.editOverhangRun)
+
+                                doubleSpinBox.item = item
+                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeOverhangRun)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The left width of the related face")
@@ -499,18 +511,6 @@ class _TaskPanel_SlopedPlanes():
         FreeCAD.ActiveDocument.recompute()
         self.update()
 
-    def height(self, angle, length):
-
-        ''''''
-
-        return length * math.sin(angle)
-
-    def run(self, angle, length):
-
-        ''''''
-
-        return length * math.cos(angle)
-
 
 class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
@@ -615,23 +615,56 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         else:
             tree.itemWidget(item, 4).setValue(run)
 
-    def editOverhangLength(self):
+    def changeOverhangLength(self, length, update=True):
 
         ''''''
 
-        pass
+        item = self.item
+        tree = self.parent
 
-    def editOverhangHeight(self):
+        if update:
+            angle = tree.itemWidget(item, 1).value()
+            angle = math.radians(angle)
+            height = self.height(angle, length)
+            run = self.run(angle, length)
+            tree.itemWidget(item, 6).changeHeight(height, False)
+            tree.itemWidget(item, 7).changeRun(run, False)
+        else:
+            tree.itemWidget(item, 5).setValue(length)
+
+    def changeOverhangHeight(self, height, update=True):
 
         ''''''
 
-        pass
+        item = self.item
+        tree = self.parent
 
-    def editOverhangRun(self):
+        if update:
+            angle = tree.itemWidget(item, 1).value()
+            angle = math.radians(angle)
+            length = self.lengthHeight(angle, height)
+            run = self.run(angle, length)
+            tree.itemWidget(item, 5).changeLength(length, False)
+            tree.itemWidget(item, 7).changeRun(run, False)
+        else:
+            tree.itemWidget(item, 6).setValue(height)
+
+    def changeOverhangRun(self, run, update=True):
 
         ''''''
 
-        pass
+        item = self.item
+        tree = self.parent
+
+        if update:
+            angle = tree.itemWidget(item, 1).value()
+            angle = math.radians(angle)
+            length = self.lengthRun(angle, run)
+            height = self.height(angle, length)
+            tree.itemWidget(item, 5).changeLength(length, False)
+            tree.itemWidget(item, 6).changeHeight(height, False)
+        else:
+            tree.itemWidget(item, 7).setValue(run)
 
     def height(self, angle, length):
 
