@@ -2,7 +2,7 @@ language: python
 python:
   - "2.7"
 before_install:
-    - sudo add-apt-repository ppa:freecad-maintainers/freecad-daily
-    - sudo install freecad-daily
+    - sudo add-apt-repository -y ppa:freecad-maintainers/freecad-daily
+    - sudo install -y freecad-daily
 script:
   - pytest.py
