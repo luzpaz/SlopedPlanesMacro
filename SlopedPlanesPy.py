@@ -48,16 +48,7 @@ class _Py(object):
     slopedPlanes = None
     upList = []
 
-    def getstate(self, faceList):
-
-        '''getstate(self, faceList)'''
-
-        fList = []
-        for face in faceList:
-            string = face.exportBrepToString()
-            fList.append(string)
-
-        return fList
+    # provisionally
 
     def setstate(self, fList):
 

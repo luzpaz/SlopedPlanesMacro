@@ -665,12 +665,8 @@ class _SlopedPlanes(_Py):
         serialize = self.Serialize
         state['Serialize'] = serialize
 
-        # TODO acabar con el serializado
-
-        if serialize:
-            state['_faceList'] = self.getstate(self.faceList)
-        else:
-            state['_faceList'] = []
+        compound = Part.makeCompound(self.faceList)
+        state['_faceList'] = compound.exportBrepToString()
 
         pyth = []
         for pyFace in self.Pyth:
@@ -692,7 +688,15 @@ class _SlopedPlanes(_Py):
 
         serialize = state['Serialize']
 
-        faceList = self.setstate(state['_faceList'])
+        # provisionally
+
+        faceList = state['_faceList']
+        if isinstance(faceList, list):
+            faceList = self.setstate(state['_faceList'])
+        else:
+            compound = Part.makeCompound([])
+            compound.importBrepFromString(faceList)
+            faceList = compound.Faces
         self.faceList = faceList
 
         pyth = []
