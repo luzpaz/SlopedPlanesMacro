@@ -676,9 +676,13 @@ class _SlopedPlanes(_Py):
             dct['_shapeGeom'] = []
             dct['_wires'] = wires
             dct['_alignments'] = alignments
-            face = faceList[numFace]
-            serials = Part.makeCompound([face] + serials)
-            dct['_serials'] = serials.exportBrepToString()
+            if serialize:
+                face = faceList[numFace]
+                serials = Part.makeCompound([face] + serials)
+                dct['_serials'] = serials.exportBrepToString()
+            else:
+                if '_serials' in dct:
+                    del dct['_serials']
             pyth.append(dct)
         state['Pyth'] = pyth
 
@@ -696,6 +700,7 @@ class _SlopedPlanes(_Py):
 
         try:
             faceList = self.setstate(state['_faceList'])
+            del state['_faceList']
         except KeyError:
             faceList = []
 
