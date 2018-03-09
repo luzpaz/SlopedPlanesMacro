@@ -200,8 +200,12 @@ class _PyFace(_Py):
             dct['_planes'] = planeList
 
             if serialize:
-                ww = Part.Wire(edgeList + forBack)
-                serialList.append(ww)
+                ww = Part.Wire(edgeList)
+                ss = Part.Compound([ww] + forBack)
+                # print 'ss ', ss
+                # print ss.Wires
+                # print ss.Edges
+                serialList.append(ss)
 
             reflexList = []
             for pyReflex in pyWire.reflexs:
@@ -219,9 +223,10 @@ class _PyFace(_Py):
             dct = {}
             alignList.append(dct)
 
+        # print 'serialList ', serialList
         return wireList, alignList, serialList
 
-    def __setstate__(self, wires, alignments, serialize):
+    def __setstate__(self, wires, alignments, serialize, compound):
 
         '''__setstate__(self, wires, alignments)
         Deserializes the complementary python objects.'''
@@ -229,24 +234,51 @@ class _PyFace(_Py):
         geomShapeFace = []
         wireList = []
         numWire = -1
+
+        if compound:
+
+            # print 'compound ', compound
+            # print compound.Wires
+            # print compound.Edges
+            ww = compound.Wires[:]
+            compound = compound.removeShape(ww)
+            # print ww
+            # print compound
+            forBack = compound.Edges
+            ###
+            nf = -1
+
         for dct in wires:
             numWire += 1
             pyWire = _PyWire(numWire)
 
             planeList = []
             numGeom = -1
-            nf = -1
+
+            # privisionally
+            if not compound:
+                nf = -1
+
             geomShapeWire = []
 
             if serialize:
 
-                serial = Part.Shape()
-                serial.importBrepFromString(dct['_serial'])
+                # provisionally
 
-                wire = serial.Wires[0]
-                edgeList = wire.Edges
-                serial = serial.removeShape([wire])
-                forBack = serial.Edges
+                if compound:
+
+                    wire = ww[numWire]
+                    edgeList = wire.Edges
+
+                else:
+                    # provisionally
+                    serial = Part.Shape()
+                    serial.importBrepFromString(dct['_serial'])
+
+                    wire = serial.Wires[0]
+                    edgeList = wire.Edges
+                    serial = serial.removeShape([wire])
+                    forBack = serial.Edges
 
             for dd in dct['_planes']:
                 numGeom += 1

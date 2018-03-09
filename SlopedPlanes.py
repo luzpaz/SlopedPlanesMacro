@@ -665,17 +665,24 @@ class _SlopedPlanes(_Py):
         serialize = self.Serialize
         state['Serialize'] = serialize
 
-        compound = Part.makeCompound(self.faceList)
-        state['_faceList'] = compound.exportBrepToString()
+        faceList = self.faceList
 
         pyth = []
+        numFace = -1
         for pyFace in self.Pyth:
+            numFace += 1
             dct = pyFace.__dict__.copy()
             wires, alignments, serials = pyFace.__getstate__(serialize)
+            # print 'serials ', serials
             dct['_shapeGeom'] = []
             dct['_wires'] = wires
             dct['_alignments'] = alignments
-            serials = Part.makeCompound(serials)
+            face = faceList[numFace]
+            serials = Part.makeCompound([face] + serials)
+            # print 'serials ', serials
+            # print serials.Wires
+            # print serials.Edges
+            # print serials.Compounds
             dct['_serials'] = serials.exportBrepToString()
             pyth.append(dct)
         state['Pyth'] = pyth
@@ -692,30 +699,49 @@ class _SlopedPlanes(_Py):
 
         # provisionally
 
-        faceList = state['_faceList']
-        if isinstance(faceList, list):
+        try:
             faceList = self.setstate(state['_faceList'])
-        else:
-            compound = Part.makeCompound([])
-            compound.importBrepFromString(faceList)
-            faceList = compound.Faces
-        self.faceList = faceList
+        except KeyError:
+            faceList = []
 
         pyth = []
         numFace = -1
         for dct in state['Pyth']:
             numFace += 1
             pyFace = _PyFace(numFace)
+
             wires = dct['_wires']
             alignments = dct['_alignments']
+
+            # provisionally
+
+            try:
+                compound = Part.Compound([])
+                compound.importBrepFromString(dct['_serials'])
+                # print compound
+                # print compound.Wires
+                # print compound.Edges
+                # print compound.Faces
+                # print compound.Compounds
+
+                face = compound.Faces[0]
+                faceList.append(face)
+                compound = compound.removeShape([face])
+
+            except KeyError:
+                compound = None
+
             wires, alignments, geomShapeFace =\
-                pyFace.__setstate__(wires, alignments, serialize)
+                pyFace.__setstate__(wires, alignments, serialize, compound)
+
             dct['_wires'] = wires
             dct['_alignments'] = alignments
             dct['_shapeGeom'] = geomShapeFace
             pyFace.__dict__ = dct
             pyth.append(pyFace)
         self.Pyth = pyth
+
+        self.faceList = faceList
 
         self.Serialize = serialize
         self.State = True
