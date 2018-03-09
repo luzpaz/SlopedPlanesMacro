@@ -231,8 +231,7 @@ class _PyFace(_Py):
         wireList = []
         numWire = -1
 
-        # provisionally
-        if compound:
+        if serialize:
 
             ww = compound.Wires[:]
             compound = compound.removeShape(ww)
@@ -246,29 +245,12 @@ class _PyFace(_Py):
             planeList = []
             numGeom = -1
 
-            # privisionally
-            if not compound:
-                nf = -1
-
             geomShapeWire = []
 
             if serialize:
 
-                # provisionally
-
-                if compound:
-
-                    wire = ww[numWire]
-                    edgeList = wire.Edges
-
-                else:
-                    serial = Part.Shape()
-                    serial.importBrepFromString(dct['_serial'])
-
-                    wire = serial.Wires[0]
-                    edgeList = wire.Edges
-                    serial = serial.removeShape([wire])
-                    forBack = serial.Edges
+                wire = ww[numWire]
+                edgeList = wire.Edges
 
             for dd in dct['_planes']:
                 numGeom += 1

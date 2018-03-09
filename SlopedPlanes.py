@@ -696,14 +696,7 @@ class _SlopedPlanes(_Py):
 
         serialize = state['Serialize']
 
-        # provisionally
-
-        try:
-            faceList = self.setstate(state['_faceList'])
-            del state['_faceList']
-        except KeyError:
-            faceList = []
-
+        faceList = []
         pyth = []
         numFace = -1
         for dct in state['Pyth']:
@@ -713,16 +706,14 @@ class _SlopedPlanes(_Py):
             wires = dct['_wires']
             alignments = dct['_alignments']
 
-            # provisionally
-
-            try:
+            if serialize:
                 compound = Part.Compound([])
                 compound.importBrepFromString(dct['_serials'])
                 face = compound.Faces[0]
                 faceList.append(face)
                 compound = compound.removeShape([face])
 
-            except KeyError:
+            else:
                 compound = None
 
             wires, alignments, geomShapeFace =\
