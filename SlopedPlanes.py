@@ -671,10 +671,12 @@ class _SlopedPlanes(_Py):
         pyth = []
         for pyFace in self.Pyth:
             dct = pyFace.__dict__.copy()
-            wires, alignments = pyFace.__getstate__(serialize)
+            wires, alignments, serials = pyFace.__getstate__(serialize)
             dct['_shapeGeom'] = []
             dct['_wires'] = wires
             dct['_alignments'] = alignments
+            serials = Part.makeCompound(serials)
+            dct['_serials'] = serials.exportBrepToString()
             pyth.append(dct)
         state['Pyth'] = pyth
 

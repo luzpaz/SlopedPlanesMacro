@@ -144,7 +144,7 @@ class _PyFace(_Py):
         '''__getstate__(self)
         Serializes the complementary python objects.'''
 
-        wireList = []
+        wireList, serialList = [], []
         for pyWire in self.wires:
             dct = pyWire.__dict__.copy()
             dct['_coordinates'] = [[v.x, v.y, v.z] for v in pyWire.coordinates]
@@ -200,10 +200,8 @@ class _PyFace(_Py):
             dct['_planes'] = planeList
 
             if serialize:
-                ww = Part.Wire(edgeList)
-                forBack.append(ww)
-                serial = Part.Compound(forBack)
-                dct['_serial'] = serial.exportBrepToString()
+                ww = Part.Wire(edgeList + forBack)
+                serialList.append(ww)
 
             reflexList = []
             for pyReflex in pyWire.reflexs:
@@ -221,7 +219,7 @@ class _PyFace(_Py):
             dct = {}
             alignList.append(dct)
 
-        return wireList, alignList
+        return wireList, alignList, serialList
 
     def __setstate__(self, wires, alignments, serialize):
 
