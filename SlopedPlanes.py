@@ -673,16 +673,11 @@ class _SlopedPlanes(_Py):
             numFace += 1
             dct = pyFace.__dict__.copy()
             wires, alignments, serials = pyFace.__getstate__(serialize)
-            # print 'serials ', serials
             dct['_shapeGeom'] = []
             dct['_wires'] = wires
             dct['_alignments'] = alignments
             face = faceList[numFace]
             serials = Part.makeCompound([face] + serials)
-            # print 'serials ', serials
-            # print serials.Wires
-            # print serials.Edges
-            # print serials.Compounds
             dct['_serials'] = serials.exportBrepToString()
             pyth.append(dct)
         state['Pyth'] = pyth
@@ -718,12 +713,6 @@ class _SlopedPlanes(_Py):
             try:
                 compound = Part.Compound([])
                 compound.importBrepFromString(dct['_serials'])
-                # print compound
-                # print compound.Wires
-                # print compound.Edges
-                # print compound.Faces
-                # print compound.Compounds
-
                 face = compound.Faces[0]
                 faceList.append(face)
                 compound = compound.removeShape([face])

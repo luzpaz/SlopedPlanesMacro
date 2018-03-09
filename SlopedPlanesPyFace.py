@@ -202,9 +202,6 @@ class _PyFace(_Py):
             if serialize:
                 ww = Part.Wire(edgeList)
                 ss = Part.Compound([ww] + forBack)
-                # print 'ss ', ss
-                # print ss.Wires
-                # print ss.Edges
                 serialList.append(ss)
 
             reflexList = []
@@ -223,7 +220,6 @@ class _PyFace(_Py):
             dct = {}
             alignList.append(dct)
 
-        # print 'serialList ', serialList
         return wireList, alignList, serialList
 
     def __setstate__(self, wires, alignments, serialize, compound):
@@ -235,17 +231,12 @@ class _PyFace(_Py):
         wireList = []
         numWire = -1
 
+        # provisionally
         if compound:
 
-            # print 'compound ', compound
-            # print compound.Wires
-            # print compound.Edges
             ww = compound.Wires[:]
             compound = compound.removeShape(ww)
-            # print ww
-            # print compound
             forBack = compound.Edges
-            ###
             nf = -1
 
         for dct in wires:
@@ -271,7 +262,6 @@ class _PyFace(_Py):
                     edgeList = wire.Edges
 
                 else:
-                    # provisionally
                     serial = Part.Shape()
                     serial.importBrepFromString(dct['_serial'])
 
