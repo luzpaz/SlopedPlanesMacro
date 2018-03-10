@@ -585,12 +585,10 @@ class _Py(object):
             geom = Part.ArcOfParabola(curve.Parabola, startParam, endParam)
 
         elif isinstance(curve, Part.Hyperbola):
-            # geom = Part.ArcOfHyperbola(curve, startParam, endParam)
-            pass
+            geom = Part.ArcOfHyperbola(curve, startParam, endParam)
 
         elif isinstance(curve, Part.ArcOfHyperbola):
-            # geom = Part.ArcOfHyperbola(curve.Hyperbola, startParam, endParam)
-            pass
+            geom = Part.ArcOfHyperbola(curve.Hyperbola, startParam, endParam)
 
         elif isinstance(curve, Part.BSplineCurve):
             pass
@@ -604,7 +602,7 @@ class _Py(object):
 
         ''''''
 
-        geomAligned = self.geomAligned.Edges[0]
+        geomAligned = self.geomAligned.Edges[0]     # ???
         curve = geomAligned.Curve
         startParam = geomAligned.parameterAt(geomAligned.firstVertex(True))
         endParam = geomAligned.parameterAt(geomAligned.lastVertex(True))

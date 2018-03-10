@@ -654,6 +654,8 @@ class _PyPlane(_Py):
             # print 'no seed'
 
             direction, geom = self.direction(pyWire, numGeom)
+            # print 'geom ', geom
+            # print 'direction ', direction
 
             firstParam = geom.FirstParameter
             lastParam = geom.LastParameter
@@ -673,7 +675,7 @@ class _PyPlane(_Py):
             geomCopy.translate(-1 * _Py.size * direction)
 
             # print '# big'
-            scale = 100
+            scale = 5
             bigPlane =\
                 self.doPlane(direction, geomCopy, firstParam,
                              lastParam, scale)
@@ -683,7 +685,7 @@ class _PyPlane(_Py):
             if self.reflexed:
 
                 # print '# enormous'
-                scale = 10000
+                scale = 50
                 enormousPlane =\
                     self.doPlane(direction, geomCopy, firstParam,
                                  lastParam, scale)
@@ -757,18 +759,22 @@ class _PyPlane(_Py):
         # print 'upScale ', upScale
 
         if isinstance(geom, (Part.LineSegment,
-                             Part.ArcOfParabola)):
+                             Part.ArcOfParabola,
+                             Part.ArcOfHyperbola)):
+            # print 'a'
 
             startParam = firstParam - leftScale
             endParam = lastParam + rightScale
 
         elif isinstance(geom, (Part.ArcOfCircle,
                                Part.ArcOfEllipse)):
+            # print 'b'
 
             startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
             endParam = startParam + 2 * pi
 
-        elif isinstance(geom, Part.ArcOfHyperbola):
+        elif isinstance(geom, (Part.Circle,
+                               Part.Ellipse)):
 
             pass
 
@@ -776,14 +782,16 @@ class _PyPlane(_Py):
 
             pass
 
-        else:
-
-            pass
+        # print 'startParam ', startParam
+        # print 'endParam ', endParam
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
+        # print 'extendGeom ', extendGeom
+        # TODO problem with ArcOfHiperbola
         extendShape = extendGeom.toShape()
 
         if self.sweepCurve:
+            # print 'A'
 
             extendShape = Part.Wire(extendShape)
 
@@ -796,6 +804,7 @@ class _PyPlane(_Py):
             plane = path.makePipeShell([extendShape])
 
         else:
+            # print 'B'
 
             plane = extendShape.extrude(direction*upScale)
 

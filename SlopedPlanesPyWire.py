@@ -490,6 +490,7 @@ class _PyWire(_Py):
                 if cutterList:
                     # print 'D cutterList shape'
                     pyPlane.cuttingPyth(cutterList)
+                    # print 'shape ', pyPlane.shape
 
                 if cutList:
                     # print 'E cutList simulatedShape'
