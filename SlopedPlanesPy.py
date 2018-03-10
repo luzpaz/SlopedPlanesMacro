@@ -48,20 +48,6 @@ class _Py(object):
     slopedPlanes = None
     upList = []
 
-    # provisionally
-
-    def setstate(self, fList):
-
-        '''setstate(self, fList)'''
-
-        faceList = []
-        for string in fList:
-            shape = Part.Shape()
-            shape.importBrepFromString(string)
-            faceList.append(shape.Faces[0])
-
-        return faceList
-
     def addValue(self, prop, value, direction='forward'):
 
         '''addValue(self, prop, value, direction='forward')'''
