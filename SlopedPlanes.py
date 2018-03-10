@@ -725,7 +725,6 @@ class _SlopedPlanes(_Py):
             pyFace.__dict__ = dct
             pyth.append(pyFace)
         self.Pyth = pyth
-
         self.faceList = faceList
 
         self.Serialize = serialize
