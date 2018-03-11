@@ -24,10 +24,8 @@
 
 import math
 import FreeCAD
-
-if FreeCAD.GuiUp:
-    import FreeCADGui
-    from PySide import QtGui, QtCore
+import FreeCADGui
+from PySide import QtGui, QtCore
 
 
 __title__ = "SlopedPlanesMacro"
