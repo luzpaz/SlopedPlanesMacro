@@ -1,18 +1,11 @@
-print 'hello world'
-import sys
-sys.path.append('/usr/lib/freecad-daily/lib')
 import FreeCAD
+print 'hello world'
 FreeCAD.openDocument('/home/travis/SlopedPlanesTest/hello_world.fcstd')
 doc = FreeCAD.ActiveDocument
 for obj in doc.Objects:
     if hasattr(obj, 'Proxy'):
         if obj.Proxy.Type == 'SlopedPlanes':
             oldShape = obj.Shape.copy()
-
-            '''obj.Proxy.faceList = []
-            for pyFace in obj.Proxy.Pyth:
-                pyFace.reset = True'''
-
             obj.touch()
             print obj.Name
             doc.recompute()
@@ -24,3 +17,4 @@ for obj in doc.Objects:
                len(newShape.Edges) != len(oldShape.Edges) or\
                len(newShape.Vertexes) != len(oldShape.Vertexes):
                 print '????????????????????????? ERROR'
+exit()
