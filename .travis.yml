@@ -8,7 +8,6 @@ before_install:
     - pwd
     - dir --all
     - which freecad-daily
-
 script:
     - cd /home/travis
     - mkdir .FreeCAD
@@ -16,5 +15,6 @@ script:
     - mkdir Mod
     - cd Mod
     - mkdir SlopedPlanesMacro
+    - cp /home/travis/build/caceres/SlopedPlanesMacro/* /home/travis/.FreeCAD/Mod/SlopedPlanesMacro
     - cd /home/travis/build/caceres/SlopedPlanesMacro
     - python pytest.py
