@@ -1,2 +1,2 @@
 print 'hello world!'
-import FreeCAD
+import os
