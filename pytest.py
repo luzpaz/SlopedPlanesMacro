@@ -1,5 +1,4 @@
 import FreeCAD
-print 'hello world'
 FreeCAD.openDocument('/home/travis/SlopedPlanesTest/hello_world.fcstd')
 doc = FreeCAD.ActiveDocument
 for obj in doc.Objects:
@@ -7,7 +6,7 @@ for obj in doc.Objects:
         if obj.Proxy.Type == 'SlopedPlanes':
             oldShape = obj.Shape.copy()
             obj.touch()
-            print obj.Name
+            print '### ', obj.Name
             doc.recompute()
             newShape = obj.Shape
             cut = oldShape.copy().cut(newShape)
@@ -17,4 +16,5 @@ for obj in doc.Objects:
                len(newShape.Edges) != len(oldShape.Edges) or\
                len(newShape.Vertexes) != len(oldShape.Vertexes):
                 print '????????????????????????? ERROR'
+FreeCAD.closeDocument('/home/travis/SlopedPlanesTest/hello_world.fcstd')
 exit()
