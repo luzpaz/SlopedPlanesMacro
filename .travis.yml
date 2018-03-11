@@ -14,5 +14,5 @@ script:
     - cd Mod
     - mkdir SlopedPlanesMacro
     - cd /home/travis/build/caceres/SlopedPlanesMacro
-    - cp .* /home/travis/.FreeCAD/Mod/SlopedPlanesMacro
+    - cp ./* /home/travis/.FreeCAD/Mod/SlopedPlanesMacro
     - python pytest.py
