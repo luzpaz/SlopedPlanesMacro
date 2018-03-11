@@ -13,7 +13,7 @@ for obj in doc.Objects:
                 pyFace.reset = True'''
 
             obj.touch()
-            print obj.Name
+            FreeCAD.Console.PrintWarning(obj.Name)
             doc.recompute()
             newShape = obj.Shape
             cut = oldShape.copy().cut(newShape)
@@ -22,4 +22,4 @@ for obj in doc.Objects:
                cc.Area != 0 or\
                len(newShape.Edges) != len(oldShape.Edges) or\
                len(newShape.Vertexes) != len(oldShape.Vertexes):
-                print '?????????????????????????????????? ERROR'
+                FreeCAD.Console.PrintWarning('????????????????????????? ERROR')
