@@ -6,11 +6,11 @@ before_install:
     - sudo apt-get update
     - sudo apt-get install -y freecad-daily
     - pwd
-    - dir
+    - dir --all
     - which freecad-daily
 
 script:
     - cd ~
-    - dir
+    - dir --all
     - cd /home/travis/build/caceres/SlopedPlanesMacro
     - python pytest.py
