@@ -5,6 +5,8 @@ before_install:
     - sudo add-apt-repository -y ppa:freecad-maintainers/freecad-daily
     - sudo apt-get update
     - sudo apt-get install -y freecad-daily
+    - pwd
     - dir
+    - which freecad-daily
 script:
     - python pytest.py
