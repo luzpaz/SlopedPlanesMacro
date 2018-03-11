@@ -14,6 +14,10 @@ script:
     - dir --all
     - cd ~
     - dir --all
-    - find / -type d -name .FreeCAD
+    - cd build
+    - dir -all
+    - cd ..
+    - cd virtualenv
+    - dir --all
     - cd /home/travis/build/caceres/SlopedPlanesMacro
     - python pytest.py
