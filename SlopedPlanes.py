@@ -25,13 +25,14 @@
 from os import path
 from math import degrees
 import FreeCAD
-import FreeCADGui
 import Part
 from SlopedPlanesPy import _Py
 from SlopedPlanesPyFace import _PyFace
 from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyPlane import _PyPlane
-from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
+if FreeCAD.GuiUp:
+    import FreeCADGui
+    from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 
 
 __title__ = "SlopedPlanes Macro"
