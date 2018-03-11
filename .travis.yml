@@ -10,14 +10,11 @@ before_install:
     - which freecad-daily
 
 script:
-    - cd /
-    - dir --all
-    - cd ~
-    - dir --all
-    - cd build
-    - dir -all
-    - cd ..
-    - cd virtualenv
-    - dir --all
+    - cd /home/travis
+    - mkdir .FreeCAD
+    - cd .FreeCAD
+    - mkdir Mod
+    - cd Mod
+    - mkdir SlopedPlanesMacro
     - cd /home/travis/build/caceres/SlopedPlanesMacro
     - python pytest.py
