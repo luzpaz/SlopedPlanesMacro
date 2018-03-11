@@ -10,7 +10,10 @@ before_install:
     - which freecad-daily
 
 script:
+    - cd /
+    - dir --all
     - cd ~
     - dir --all
+    - find / -type d -name .FreeCAD
     - cd /home/travis/build/caceres/SlopedPlanesMacro
     - python pytest.py
