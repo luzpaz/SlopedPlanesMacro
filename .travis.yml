@@ -10,6 +10,7 @@ before_install:
     - which freecad-daily
 script:
     - cd /home/travis
+    - git clone https://github.com/caceres/SlopedPlanesTest.git
     - mkdir .FreeCAD
     - cd .FreeCAD
     - mkdir Mod
