@@ -2,8 +2,11 @@ import FreeCAD
 import os
 
 for directory in os.walk('/home/travis/SlopedPlanesTest'):
+    print 'directory ', directory
     for filename in directory[1]:
+        print 'filename ', filename
         if filename.endswith('.fcstd'):
+            print 'open'
             FreeCAD.openDocument('/home/travis/SlopedPlanesTest/' +
                                  directory[0] + filename)
 
