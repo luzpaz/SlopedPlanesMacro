@@ -16,4 +16,4 @@ script:
     - cd /home/travis/build/caceres/SlopedPlanesMacro
     - cp ./* /home/travis/.FreeCAD/Mod/SlopedPlanesMacro
     - freecad-daily --console pytest.py
-    - exit()
+    - sleep 10 && pkill freecad-daily
