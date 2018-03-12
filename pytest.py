@@ -1,7 +1,7 @@
 import FreeCAD
 import os
 
-for directory in os.walk('/home/travis/SlopedPlanesTest/Test/regulars'):
+for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
     # print 'directory ', directory
     for filename in directory[2]:
         # print 'filename ', filename
