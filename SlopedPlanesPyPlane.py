@@ -793,7 +793,9 @@ class _PyPlane(_Py):
         if self.sweepCurve:
             # print 'A'
 
-            extendShape = Part.Wire(extendShape)
+            plane = extendShape.extrude(direction*upScale)
+
+            '''extendShape = Part.Wire(extendShape)
 
             point = extendGeom.StartPoint
             secondPoint = point.add(direction * upScale)
@@ -801,7 +803,7 @@ class _PyPlane(_Py):
             path = ll.toShape()
             path = Part.Wire(path)
 
-            plane = path.makePipeShell([extendShape])
+            plane = path.makePipeShell([extendShape])'''
 
         else:
             # print 'B'
