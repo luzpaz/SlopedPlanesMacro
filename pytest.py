@@ -41,13 +41,13 @@ for doc in FreeCAD.listDocuments().values():
                    len(newShape.Vertexes) != len(oldShape.Vertexes):
 
                     numError += 1
-                    geometricList.append((doc.name, obj.name))
+                    geometricList.append((doc.Name, obj.Name))
                     # print '????????????????????????? geometric ERROR'
 
                 elif obj.State[0] == 'Invalid':
 
                     numError += 1
-                    executionList.append((doc.name, obj.name))
+                    executionList.append((doc.Name, obj.Name))
                     # print '????????????????????????? execution ERROR'
 
                 else:
