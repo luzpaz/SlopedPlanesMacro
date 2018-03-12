@@ -165,6 +165,11 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanes", doc)
 
+        doc = "SweepCurves"
+
+        slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
+                                 "SlopedPlanes", doc)
+
         self.State = True
 
         slopedPlanes.Slope = 45.0
@@ -189,6 +194,12 @@ class _SlopedPlanes(_Py):
 
         '''execute(self, slopedPlanes)
         Builds the shape of the slopedPlanes object.'''
+
+        # provisionally
+        if not hasattr(slopedPlanes, 'SweepCurves'):
+            doc = "SweepCurves"
+            slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
+                                     "SlopedPlanes", doc)
 
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
