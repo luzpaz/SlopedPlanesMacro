@@ -46,7 +46,7 @@ for doc in FreeCAD.listDocuments().values():
 
                 else:
 
-                    print '# okey'
+                    print '### okey'
 
 print 'files ', numDoc
 print 'objects ', numObj
