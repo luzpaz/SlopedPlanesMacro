@@ -2,20 +2,22 @@ import FreeCAD
 import os
 
 for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
-    print 'directory ', directory
+    # print 'directory ', directory
     for filename in directory[2]:
-        print 'filename ', filename
+        # print 'filename ', filename
         if filename.endswith('.fcstd'):
-            print 'open'
+            # print 'open'
             FreeCAD.openDocument(directory[0] + '/' + filename)
 
 numDoc = 0
 numObj = 0
 numError = 0
+geometricList = []
+executionList = []
 
 for doc in FreeCAD.listDocuments().values():
     numDoc += 1
-    print '######### ', doc.Name
+    # print '######### ', doc.Name
     for obj in doc.Objects:
         if hasattr(obj, 'Proxy'):
             if obj.Proxy.Type == 'SlopedPlanes':
@@ -27,7 +29,7 @@ for doc in FreeCAD.listDocuments().values():
                     pyFace.reset = True'''
 
                 obj.touch()
-                print '####### ', obj.Name
+                # print '####### ', obj.Name
                 doc.recompute()
                 newShape = obj.Shape
                 cut = oldShape.copy().cut(newShape)
@@ -39,17 +41,22 @@ for doc in FreeCAD.listDocuments().values():
                    len(newShape.Vertexes) != len(oldShape.Vertexes):
 
                     numError += 1
-                    print '????????????????????????? geometric ERROR'
+                    geometricList.append((doc.name, obj.name))
+                    # print '????????????????????????? geometric ERROR'
 
                 elif obj.State[0] == 'Invalid':
 
                     numError += 1
-                    print '????????????????????????? execution ERROR'
+                    executionList.append((doc.name, obj.name))
+                    # print '????????????????????????? execution ERROR'
 
                 else:
 
-                    print '### okey'
+                    pass
+                    # print '### okey'
 
 print 'files ', numDoc
 print 'objects ', numObj
 print 'erros ', numError
+print 'geometry errors ', geometricList
+print 'execution errors ', executionList
