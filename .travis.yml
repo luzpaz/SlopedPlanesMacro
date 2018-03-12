@@ -16,4 +16,3 @@ script:
     - cd /home/travis/build/caceres/SlopedPlanesMacro
     - cp ./* /home/travis/.FreeCAD/Mod/SlopedPlanesMacro
     - freecad-daily --console --run pytest
-    - --log-file /tmp/sloped_planes.log
