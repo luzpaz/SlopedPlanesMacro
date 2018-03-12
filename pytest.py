@@ -7,7 +7,7 @@ for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
         print 'filename ', filename
         if filename.endswith('.fcstd'):
             print 'open'
-            FreeCAD.openDocument(directory[0] + filename)
+            FreeCAD.openDocument(directory[0] + '/' + filename)
 
 numDoc = 0
 numObj = 0
