@@ -665,6 +665,16 @@ class _Py(object):
         # print 'ran ', ran
         return ran
 
+    def sweepSketch(self):
+
+        ''''''
+
+        pySketch =\
+            FreeCAD.ActiveDocument.addObject('Sketcher::SketchObjectPython',
+                                             'SweepSketch')
+
+        _PySketch(pySketch)
+
     def refine(self, faceOne, faceTwo):
 
         ''''''
@@ -701,3 +711,14 @@ class _Py(object):
         face = Part.makeFace(wire, "Part::FaceMakerSimple")
 
         return face
+
+
+class _PySketch():
+
+    ''''''
+
+    def __init__(self, sketch):
+
+        ''''''
+
+        self.sketch = sketch

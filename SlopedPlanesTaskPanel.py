@@ -392,8 +392,7 @@ class _TaskPanel_SlopedPlanes():
 
                                 button = _NewCurve()
                                 button.setParent(self.tree)
-                                button.obj = slopedPlanes
-                                button.edge = pyPlane.geom
+                                button.plane = pyPlane
                                 button.setText('New')
                                 self.tree.setItemWidget(item, 10, button)
                                 button.clicked.connect(button.onClicked)
@@ -708,5 +707,5 @@ class _NewCurve(QtGui.QPushButton):
 
         ''''''
 
-        slopedPlanes = self.obj
-        edge = self.edge
+        pyPlane = self.plane
+        pyPlane.sweepSketch()
