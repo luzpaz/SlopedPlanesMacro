@@ -386,11 +386,13 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 9, doubleSpinBox)
 
-                                button = QtGui.QPushButton(self.tree)
+                                button = _NewCurve()
+                                button.setParent(self.tree)
                                 button.setText('New')
                                 self.tree.setItemWidget(item, 10, button)
 
-                                combo = QtGui.QComboBox(self.tree)
+                                combo = _SelectCurve()
+                                combo.setParent(self.tree)
                                 self.tree.setItemWidget(item, 11, combo)
 
                                 item.setText(12, str(numSlope))
@@ -702,3 +704,25 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         ''''''
 
         return run / math.cos(angle)
+
+
+class _NewCurve(QtGui.QPushButton):
+
+    ''''''
+
+    def __init__(self):
+
+        ''''''
+
+        super(_NewCurve, self).__init__()
+
+
+class _SelectCurve(QtGui.QComboBox):
+
+    ''''''
+
+    def __init__(self):
+
+        ''''''
+
+        super(_SelectCurve, self).__init__()
