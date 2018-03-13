@@ -165,7 +165,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanes", doc)
 
-        doc = "SweepCurves"
+        doc = "Available curves to sweep"
 
         slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
                                  "SlopedPlanes", doc)
@@ -194,12 +194,6 @@ class _SlopedPlanes(_Py):
 
         '''execute(self, slopedPlanes)
         Builds the shape of the slopedPlanes object.'''
-
-        # provisionally
-        if not hasattr(slopedPlanes, 'SweepCurves'):
-            doc = "SweepCurves"
-            slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
-                                     "SlopedPlanes", doc)
 
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
@@ -432,13 +426,6 @@ class _SlopedPlanes(_Py):
                         pyPlane.control = [pyPlane.numGeom]
                         pyPlane.solved = False
                         pyPlane.reallySolved = False
-
-                        # provisionally
-
-                        try:
-                            pyPlane.sweepCurve
-                        except AttributeError:
-                            pyPlane.sweepCurve = None
 
             pyFace.parsing()
 

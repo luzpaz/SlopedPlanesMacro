@@ -194,6 +194,9 @@ class _TaskPanel_SlopedPlanes():
 
         if slopedPlanes:
 
+            linkList = [o.Name for o in slopedPlanes.SweepCurves]
+            linkList.insert(0, None)
+
             up = slopedPlanes.Up
 
             pyFaceList = slopedPlanes.Proxy.Pyth
@@ -389,13 +392,13 @@ class _TaskPanel_SlopedPlanes():
 
                                 button = _NewCurve()
                                 button.setParent(self.tree)
+                                button.obj = slopedPlanes
+                                button.edge = pyPlane.geom
                                 button.setText('New')
                                 self.tree.setItemWidget(item, 10, button)
                                 button.clicked.connect(button.onClicked)
 
                                 combo = QtGui.QComboBox(self.tree)
-                                linkList = [o.Name for o in slopedPlanes.SweepCurves]
-                                linkList.insert(0, None)
                                 combo.addItems(linkList)
                                 try:
                                     index = linkList.index(sweepCurve)
@@ -705,4 +708,5 @@ class _NewCurve(QtGui.QPushButton):
 
         ''''''
 
-        pass
+        slopedPlanes = self.obj
+        edge = self.edge
