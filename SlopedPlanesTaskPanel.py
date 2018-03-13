@@ -227,6 +227,7 @@ class _TaskPanel_SlopedPlanes():
                         charge = False
                         numAngle = pyPlane.numGeom
                         # print '# numGeom ', numAngle
+                        sweepCurve = pyPlane.sweepCurve
                         angle = pyPlane.angle
                         if [numWire, numAngle] not in originList:
 
@@ -390,9 +391,17 @@ class _TaskPanel_SlopedPlanes():
                                 button.setParent(self.tree)
                                 button.setText('New')
                                 self.tree.setItemWidget(item, 10, button)
+                                button.clicked.connect(button.onClicked)
 
-                                combo = _SelectCurve()
-                                combo.setParent(self.tree)
+                                combo = QtGui.QComboBox(self.tree)
+                                linkList = [o.Name for o in slopedPlanes.SweepCurves]
+                                linkList.insert(0, None)
+                                combo.addItems(linkList)
+                                try:
+                                    index = linkList.index(sweepCurve)
+                                    combo.setCurrentIndex(index)
+                                except ValueError:
+                                    combo.setCurrentIndex(0)
                                 self.tree.setItemWidget(item, 11, combo)
 
                                 item.setText(12, str(numSlope))
@@ -512,6 +521,10 @@ class _TaskPanel_SlopedPlanes():
                             right = doubleSpinBox.value()
                             pyPlane.rightWidth = right
 
+                            comboBox = self.tree.itemWidget(it, 11)
+                            sweepCurve = comboBox.currentText()
+                            pyPlane.sweepCurve = sweepCurve
+
                 value = 0
                 if upFace:
                     value += 1
@@ -536,34 +549,6 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         ''''''
 
         super(_DoubleSpinBox, self).__init__()
-
-    @property
-    def item(self):
-
-        ''''''
-
-        return self._item
-
-    @item.setter
-    def item(self, item):
-
-        ''''''
-
-        self._item = item
-
-    @property
-    def parent(self):
-
-        ''''''
-
-        return self._parent
-
-    @parent.setter
-    def parent(self, parent):
-
-        ''''''
-
-        self._parent = parent
 
     def changeAngle(self, angle):
 
@@ -716,13 +701,8 @@ class _NewCurve(QtGui.QPushButton):
 
         super(_NewCurve, self).__init__()
 
-
-class _SelectCurve(QtGui.QComboBox):
-
-    ''''''
-
-    def __init__(self):
+    def onClicked(self):
 
         ''''''
 
-        super(_SelectCurve, self).__init__()
+        pass
