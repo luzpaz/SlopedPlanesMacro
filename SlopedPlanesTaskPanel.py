@@ -95,7 +95,10 @@ class _TaskPanel_SlopedPlanes():
                                        ("OverhangHeight"),
                                        ("OverhangRun"),
                                        ("Left Width"),
-                                       ("Right Width")])
+                                       ("Right Width"),
+                                       ("Curves"),
+                                       ("Sweep Curve"),
+                                       ("Face")])
         else:
             self.tree.setHeaderLabels([("Face"),
                                        ("Angle")])
@@ -159,7 +162,7 @@ class _TaskPanel_SlopedPlanes():
         ''''''
 
         if self.advancedOptions.isChecked():
-            self.tree.setColumnCount(10)
+            self.tree.setColumnCount(13)
             self.tree.header().resizeSection(0, 60)
             self.tree.header().resizeSection(1, 120)
             self.tree.header().resizeSection(2, 120)
@@ -170,6 +173,9 @@ class _TaskPanel_SlopedPlanes():
             self.tree.header().resizeSection(7, 120)
             self.tree.header().resizeSection(8, 120)
             self.tree.header().resizeSection(9, 120)
+            self.tree.header().resizeSection(10, 60)
+            self.tree.header().resizeSection(11, 180)
+            self.tree.header().resizeSection(12, 60)
 
         else:
             self.tree.setColumnCount(2)
@@ -379,6 +385,15 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setValue(pyPlane.rightWidth)
                                 doubleSpinBox.setSuffix(" mm")
                                 self.tree.setItemWidget(item, 9, doubleSpinBox)
+
+                                button = QtGui.QPushButton(self.tree)
+                                button.setText('New')
+                                self.tree.setItemWidget(item, 10, button)
+
+                                combo = QtGui.QComboBox(self.tree)
+                                self.tree.setItemWidget(item, 11, combo)
+
+                                item.setText(12, str(numSlope))
 
                 value = 0
                 if upFace:
