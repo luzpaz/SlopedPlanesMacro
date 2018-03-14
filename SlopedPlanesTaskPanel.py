@@ -407,6 +407,8 @@ class _TaskPanel_SlopedPlanes():
                                     combo.setCurrentIndex(0)
                                 self.tree.setItemWidget(item, 11, combo)
 
+                                button.combo = combo
+
                                 item.setText(12, str(numSlope))
 
                 value = 0
@@ -541,6 +543,33 @@ class _TaskPanel_SlopedPlanes():
         slopedPlanes.touch()
         FreeCAD.ActiveDocument.recompute()
         self.update()
+
+
+class _NewCurve(QtGui.QPushButton):
+
+    ''''''
+
+    def __init__(self):
+
+        ''''''
+
+        super(_NewCurve, self).__init__()
+
+    def onClicked(self):
+
+        ''''''
+
+        pyPlane = self.plane
+        slopedPlanes = self.slopedPlanes
+        pyPlane.makeSweepSketch(slopedPlanes)
+        # TODO
+
+
+class _SelectPlane(QtGui.QComboBox):
+
+    ''''''
+
+    pass
 
 
 class _DoubleSpinBox(QtGui.QDoubleSpinBox):
@@ -692,22 +721,3 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         ''''''
 
         return run / math.cos(angle)
-
-
-class _NewCurve(QtGui.QPushButton):
-
-    ''''''
-
-    def __init__(self):
-
-        ''''''
-
-        super(_NewCurve, self).__init__()
-
-    def onClicked(self):
-
-        ''''''
-
-        pyPlane = self.plane
-        slopedPlanes = self.slopedPlanes
-        pyPlane.makeSweepSketch(slopedPlanes)

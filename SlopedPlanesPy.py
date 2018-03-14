@@ -22,9 +22,10 @@
 # *****************************************************************************
 
 
+import math
 import FreeCAD
 import Part
-import math
+import Sketcher
 
 
 __title__ = "SlopedPlanes Macro"
@@ -720,6 +721,8 @@ class _Py(object):
         linkList.append(pySketch)
         slopedPlanes.SweepCurves = linkList
 
+        return pySketch
+
 
 class _PySketch(_Py):
 
@@ -730,6 +733,27 @@ class _PySketch(_Py):
         ''''''
 
         sketch.Proxy = self
+
+        vectorA = FreeCAD.Vector(-707.107, -707.107, 0)
+        vectorB = FreeCAD.Vector(0, 0, 0)
+        vectorC = FreeCAD.Vector(1414.21, 1414.21, 0)
+
+        lineA = Part.LineSegment(vectorA, vectorB)
+        lineA.Construction = True
+        lineB = Part.LineSegment(vectorA, vectorC)
+        lineB.Construction = True
+
+        sketch.Geometry = [lineA, lineB]
+
+        constrA = Sketcher.Constraint('Coincident', 0, 2, 1, 1)
+
+        constrB = Sketcher.Constraint('Coincident', 0, 2, -1, 1)
+
+        constrC = Sketcher.Constraint('Parallel', 0, 1)
+
+        constrD = Sketcher.Constraint('Angle', -1, 1, 1, 1, 0.785398)
+
+        sketch.Constraints = [constrA, constrB, constrC, constrD]
 
     def execute(self, sketch):
 
@@ -764,6 +788,12 @@ class _PySketch(_Py):
         sketch.Placement.Base = ffPoint
 
         # TODO slopedPlanes base sketch placement
+
+    def slope(self, sketch, plane):
+
+        ''''''
+
+        pass
 
 
 class _ViewProviderPySketch():
