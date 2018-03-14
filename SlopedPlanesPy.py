@@ -716,6 +716,7 @@ class _Py(object):
         _ViewProviderPySketch(pySketch.ViewObject)
 
         pySketch.Proxy.locate(pySketch, self)
+        pySketch.Proxy.slope(pySketch, self)
 
         linkList = slopedPlanes.SweepCurves
         linkList.append(pySketch)
@@ -793,7 +794,8 @@ class _PySketch(_Py):
 
         ''''''
 
-        pass
+        angle = plane.angle
+        sketch.setDatum(3, math.radians(angle))
 
 
 class _ViewProviderPySketch():
