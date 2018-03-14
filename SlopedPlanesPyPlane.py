@@ -23,6 +23,7 @@
 
 
 from math import pi
+import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
 
@@ -633,6 +634,13 @@ class _PyPlane(_Py):
 
         ''''''
 
+        try:
+            oldCurve = self.sweepCurve
+            if oldCurve != sweepCurve:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
         self._sweepCurve = sweepCurve
 
     def planning(self, pyWire):
@@ -792,17 +800,10 @@ class _PyPlane(_Py):
         if self.sweepCurve:
             # print 'A'
 
-            plane = extendShape.extrude(direction*upScale)
-
-            '''extendShape = Part.Wire(extendShape)
-
-            point = extendGeom.StartPoint
-            secondPoint = point.add(direction * upScale)
-            ll = Part.LineSegment(point, secondPoint)
-            path = ll.toShape()
-            path = Part.Wire(path)
-
-            plane = path.makePipeShell([extendShape])'''
+            sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
+            wire = sweepSketch.Shape
+            extendShape = Part.Wire(extendShape)
+            plane = wire.makePipeShell([extendShape])
 
         else:
             # print 'B'
