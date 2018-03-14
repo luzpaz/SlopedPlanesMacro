@@ -24,6 +24,7 @@
 
 import FreeCAD
 import Part
+import math
 
 
 __title__ = "SlopedPlanes Macro"
@@ -665,16 +666,6 @@ class _Py(object):
         # print 'ran ', ran
         return ran
 
-    def sweepSketch(self):
-
-        ''''''
-
-        pySketch =\
-            FreeCAD.ActiveDocument.addObject('Sketcher::SketchObjectPython',
-                                             'SweepSketch')
-
-        _PySketch(pySketch)
-
     def refine(self, faceOne, faceTwo):
 
         ''''''
@@ -712,8 +703,25 @@ class _Py(object):
 
         return face
 
+    def makeSweepSketch(self, slopedPlanes):
 
-class _PySketch():
+        ''''''
+
+        pySketch =\
+            FreeCAD.ActiveDocument.addObject('Sketcher::SketchObjectPython',
+                                             'SweepSketch')
+
+        _PySketch(pySketch)
+        _ViewProviderPySketch(pySketch.ViewObject)
+
+        pySketch.Proxy.locate(pySketch, self)
+
+        linkList = slopedPlanes.SweepCurves
+        linkList.append(pySketch)
+        slopedPlanes.SweepCurves = linkList
+
+
+class _PySketch(_Py):
 
     ''''''
 
@@ -721,4 +729,49 @@ class _PySketch():
 
         ''''''
 
-        self.sketch = sketch
+        sketch.Proxy = self
+
+    def execute(self, sketch):
+
+        ''''''
+
+        sketch.recompute()
+
+    def locate(self, sketch, plane):
+
+        ''''''
+
+        geomShape = plane.geomShape
+        ffPoint = geomShape.firstVertex(True).Point
+        llPoint = geomShape.lastVertex(True).Point
+        direction = llPoint.sub(ffPoint)
+        perpend = self.rotateVector(direction, _Py.normal, 90)
+        ang = direction.getAngle(FreeCAD.Vector(1, 0, 0)) + math.pi / 2
+
+        rotation = FreeCAD.Rotation()
+        rotation.Axis = _Py.normal
+        rotation.Angle = ang
+
+        sketch.Placement.Rotation = rotation
+
+        rotation = FreeCAD.Rotation()
+        rotation.Axis = perpend
+        rotation.Angle = math.pi / 2
+
+        sketch.Placement.Rotation =\
+            rotation.multiply(sketch.Placement.Rotation)
+
+        sketch.Placement.Base = ffPoint
+
+        # TODO slopedPlanes base sketch placement
+
+
+class _ViewProviderPySketch():
+
+    ''''''
+
+    def __init__(self, vobj):
+
+        ''''''
+
+        vobj.Proxy = self
