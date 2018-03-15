@@ -441,20 +441,27 @@ class _PyFace(_Py):
                                             # print 'distStart > distEnd'
                                             pyPlane.lineInto = lineInto
                                     rearF =\
-                                        self.findRear(pyWire, pyPrePlane, 'forward')
+                                        self.findRear(pyWire, pyPrePlane,
+                                                      'forward')
                                     rearB =\
-                                        self.findRear(pyWire, pyPlane, 'backward')
+                                        self.findRear(pyWire, pyPlane,
+                                                      'backward')
                                     pyReflex =\
-                                        self.doReflex(pyWire, pyPrePlane, pyPlane)
-                                    pyReflex.addValue('rear', rearF, 'forward')
-                                    pyReflex.addValue('rear', rearB, 'backward')
+                                        self.doReflex(pyWire, pyPrePlane,
+                                                      pyPlane)
+                                    pyReflex.addValue('rear', rearF,
+                                                      'forward')
+                                    pyReflex.addValue('rear', rearB,
+                                                      'backward')
 
                             else:
                                 # print 'no alignament'
                                 rearF =\
-                                    self.findRear(pyWire, pyPrePlane, 'forward')
+                                    self.findRear(pyWire, pyPrePlane,
+                                                  'forward')
                                 rearB =\
-                                    self.findRear(pyWire, pyPlane, 'backward')
+                                    self.findRear(pyWire, pyPlane,
+                                                  'backward')
                                 pyReflex =\
                                     self.doReflex(pyWire, pyPrePlane, pyPlane)
                                 pyReflex.addValue('rear', rearF, 'forward')
@@ -495,9 +502,11 @@ class _PyFace(_Py):
                                 # print 'distEnd ', distEnd
 
                                 if distStart < distEnd:
-                                    into, lineInto = self.into(lineEnd, edgeStart)
+                                    into, lineInto = self.into(lineEnd,
+                                                               edgeStart)
                                 else:
-                                    into, lineInto = self.into(lineEnd, edgeEnd)
+                                    into, lineInto = self.into(lineEnd,
+                                                               edgeEnd)
 
                                 if into:
                                     lineEnd = edgeEnd
@@ -581,14 +590,6 @@ class _PyFace(_Py):
                                         if corner == 'reflex':
                                             # print '111311'
 
-                                            # esto sobra ???
-                                            '''if ref:
-                                                # print 'ref'
-                                                self.findRear(pyWire, pyPlane,
-                                                              'backward')
-                                                self.findRear(pyWire, pyPlane,
-                                                              'forward')'''
-
                                             ref = True
 
                                         break
@@ -655,7 +656,8 @@ class _PyFace(_Py):
                                 if pyAlignment not in pyAlignmentList:
                                     # print 'pyPlane no chop of firstPlane'
                                     pyReflex =\
-                                        self.doReflex(pyWire, pyPlane, firstPlane)
+                                        self.doReflex(pyWire, pyPlane,
+                                                      firstPlane)
 
                     # this reflex hasn't rear
                     if pyReflex:
@@ -1326,7 +1328,8 @@ class _PyFace(_Py):
                                 sim = aa.base.shape.copy()
                                 geomShape = aa.geomAligned
                                 if baseList:
-                                    sim = self.cutting(sim, baseList, geomShape)
+                                    sim = self.cutting(sim, baseList,
+                                                       geomShape)
                                 aL.append(sim)
                             # print 'aL ', aL
                             cutList.extend(aL)
