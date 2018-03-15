@@ -271,10 +271,7 @@ class _PyAlignment(_Py):
         rangoChop = self.rango
         rangoCopy = rangoChop[:]
         chops = self.chops
-
         rangoRear = self.rangoRear
-
-        # rangoChop
 
         numChop = -1
         for rChop in rangoChop:
@@ -467,7 +464,7 @@ class _PyAlignment(_Py):
                 pyCont.cuttingPyth([pyTwo.enormousShape])
 
             # TODO falseAlignment base and continuation don't cut opp rango
-            # pero si con rear entre rears
+            # pero si con rear y entre rears
 
     def priorLater(self):
 
