@@ -267,18 +267,6 @@ class _PyAlignment(_Py):
         pr = pyPrior.numGeom
         lat = pyLater.numGeom
         w1 = pyPrior.numWire
-        w2 = pyLater.numWire
-
-        '''# rangoRear
-        if w1 == w2:
-            pyWire = pyWireList[w1]
-            rangoRear = self.rang(pyWire, lat, pr, 'forward')
-            rangoRear.insert(0, lat)
-            rangoRear.append(pr)
-        else:
-            rangoRear = []
-        self.rangoRear = rangoRear
-        # print 'rangoRear ', rangoRear'''
 
         rangoChop = self.rango
         rangoCopy = rangoChop[:]
@@ -293,19 +281,8 @@ class _PyAlignment(_Py):
             numChop += 1
 
             [pyOne, pyTwo] = chops[numChop]
-
-            # rango of the chops
-
-            totalRango = []
-            num = -1
-            for pyPlane in [pyOne, pyTwo]:
-                num += 1
-                if num == 0:
-                    rangoOne = pyPlane.rango[-1]
-                    totalRango.extend(rangoOne)
-                else:
-                    rangoTwo = pyPlane.rango[0]
-                    totalRango.extend(rangoTwo)
+            rangoOne = pyOne.rango[-1]
+            rangoTwo = pyTwo.rango[0]
 
             # the two rangos don't cut between them
 
