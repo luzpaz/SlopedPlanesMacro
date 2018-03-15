@@ -288,6 +288,7 @@ class _PyAlignment(_Py):
 
             nW = pyOne.numWire
             pyPlList = pyWireList[nW].planes
+            rC = []
 
             if nW == pyTwo.numWire:
 
@@ -313,62 +314,60 @@ class _PyAlignment(_Py):
                     if r not in control:
                         control.append(r)
 
-            # rChop: trimming bigShape
+                # rChop: trimming bigShape
 
-            if falsify:
-                cutList = [enormousBase, enormousCont]
-            else:
-                cutList = [enormousBase]
+                if falsify:
+                    cutList = [enormousBase, enormousCont]
+                else:
+                    cutList = [enormousBase]
 
-            rC = []
+                for nG in rChop:
+                    pyPl = pyPlList[nG]
+                    if not pyPl.aligned:
 
-            for nG in rChop:
-                pyPl = pyPlList[nG]
-                if not pyPl.aligned:
+                        bPl = pyPl.bigShape
+                        gS = pyPl.geomShape
+                        bPl = self.cutting(bPl, cutList, gS)
+                        pyPl.bigShape = bPl
+                        pyPl.fronted = True
 
-                    bPl = pyPl.bigShape
-                    gS = pyPl.geomShape
-                    bPl = self.cutting(bPl, cutList, gS)
-                    pyPl.bigShape = bPl
-                    pyPl.fronted = True
+                        rC.append(bPl)
 
-                    rC.append(bPl)
+                        control = pyPl.control
 
-                    control = pyPl.control
+                        # rChop doesn't cut with rangoRear
+                        if w1 == nW:
+                            for r in rangoRear:
+                                if r not in control:
+                                    control.append(r)
 
-                    # rChop doesn't cut with rangoRear
-                    if w1 == nW:
-                        for r in rangoRear:
-                            if r not in control:
-                                control.append(r)
+                        # rChop is not cutted by alignment
+                        control.append(numGeom)
+                        if falsify:
+                            control.append(nGeom)
 
-                    # rChop is not cutted by alignment
-                    control.append(numGeom)
-                    if falsify:
-                        control.append(nGeom)
+                        # the aligment is not cutted by rChop
+                        baseControl.append(nG)
+                        if falsify:
+                            pyCont.control.append(nG)
 
-                    # the aligment is not cutted by rChop
-                    baseControl.append(nG)
-                    if falsify:
-                        pyCont.control.append(nG)
+                        # pyOne and pyTwo don't cut rChop
+                        pyOne.control.append(nG)
+                        pyTwo.control.append(nG)
 
-                    # pyOne and pyTwo don't cut rChop
-                    pyOne.control.append(nG)
-                    pyTwo.control.append(nG)
+                        # rChop doesn't cut with other rChop
+                        # chops doesn't cut with other rChop
 
-                    # rChop doesn't cut with other rChop
-                    # chops doesn't cut with other rChop
-
-                    num = -1
-                    for rr in rangoCopy:
-                        num += 1
-                        if num != numChop:
-                            [pyO, pyT] = chops[num]
-                            if pyO.numWire == nW:
-                                for nn in rr:
-                                    pyOne.control.append(nn)
-                                    pyTwo.control.append(nn)
-                                    control.append(nn)
+                        num = -1
+                        for rr in rangoCopy:
+                            num += 1
+                            if num != numChop:
+                                [pyO, pyT] = chops[num]
+                                if pyO.numWire == nW:
+                                    for nn in rr:
+                                        pyOne.control.append(nn)
+                                        pyTwo.control.append(nn)
+                                        control.append(nn)
 
             # the rango of the chop are cutted by the chop,
             # and perhaps by the base or the continuation
@@ -387,7 +386,6 @@ class _PyAlignment(_Py):
                 # print 'rango ', rango
 
                 # the cross
-                notCross = True
                 if pyPlane.virtualized:
                     aliList = self.selectAlignments(pyPlane.numWire,
                                                     pyPlane.numGeom)
@@ -395,9 +393,8 @@ class _PyAlignment(_Py):
                         gA = pyA.geomAligned.copy()
                         gA = gA.cut([geomAligned], tolerance)
                         if len(gA.Edges) == 2:
-                            notCross = False
                             pyPlane.cross = True
-                # print 'notCross ', notCross
+                # print 'cross ', pyPlane.cross
 
                 consecutive = False
                 for nG in rango:
@@ -409,7 +406,7 @@ class _PyAlignment(_Py):
                         if not pyPl.aligned and not pyPl.choped:
                             # print '# nG ', nG
 
-                            if notCross:
+                            if not pyPlane.cross:
                                 # print 'A'
 
                                 if consecutive:
@@ -420,7 +417,8 @@ class _PyAlignment(_Py):
 
                                     cList = [enormousShape]
 
-                                    if nG not in baseRear and nG not in contRear:
+                                    if nG not in baseRear and\
+                                       nG not in contRear:
                                         # print 'a'
                                         if nG not in [pr, lat]:
                                             # print 'aa'
