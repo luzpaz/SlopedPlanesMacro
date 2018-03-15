@@ -238,7 +238,7 @@ class _PyAlignment(_Py):
     def trimming(self):
 
         '''trimming(self)
-        The alignment blocks the progress of the planes
+        The alignment blocks the path to the planes
         in its front and laterals.'''
 
         # print '###### trimming base ', (self.base.numWire, self.base.numGeom)
@@ -266,10 +266,10 @@ class _PyAlignment(_Py):
         pyLater = self.later
         pr = pyPrior.numGeom
         lat = pyLater.numGeom
-
-        # rangoRear
         w1 = pyPrior.numWire
         w2 = pyLater.numWire
+
+        '''# rangoRear
         if w1 == w2:
             pyWire = pyWireList[w1]
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
@@ -278,11 +278,13 @@ class _PyAlignment(_Py):
         else:
             rangoRear = []
         self.rangoRear = rangoRear
-        # print 'rangoRear ', rangoRear
+        # print 'rangoRear ', rangoRear'''
 
         rangoChop = self.rango
         rangoCopy = rangoChop[:]
         chops = self.chops
+
+        rangoRear = self.rangoRear
 
         # rangoChop
 
@@ -1518,3 +1520,22 @@ class _PyAlignment(_Py):
             else:
                 rangoChop = []
             self.addValue('rango', rangoChop, 'backward')
+
+        # rangoRear
+
+        pyPrior = self.prior
+        pyLater = self.later
+        pr = pyPrior.numGeom
+        lat = pyLater.numGeom
+        w1 = pyPrior.numWire
+        w2 = pyLater.numWire
+
+        if w1 == w2:
+            pyWire = pyWireList[w1]
+            rangoRear = self.rang(pyWire, lat, pr, 'forward')
+            rangoRear.insert(0, lat)
+            rangoRear.append(pr)
+        else:
+            rangoRear = []
+        self.rangoRear = rangoRear
+        # print 'rangoRear ', rangoRear
