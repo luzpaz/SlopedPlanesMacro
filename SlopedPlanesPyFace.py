@@ -308,6 +308,7 @@ class _PyFace(_Py):
         self.parsing()
 
         self.planning()
+        # self.printSummary()
 
         self.upping()
 
@@ -320,6 +321,7 @@ class _PyFace(_Py):
         self.simulating()
 
         self.reflexing()
+        # self.printControl('reflexing')
 
         self.ordinaries()
 
@@ -1107,8 +1109,6 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        # self.printSummary()
-
     def upping(self):
 
         '''upping(self)'''
@@ -1217,7 +1217,6 @@ class _PyFace(_Py):
         for pyWire in self.wires:
             if pyWire.reflexs:
                 pyWire.reflexing()
-        # self.printControl('reflexing')
 
     def ordinaries(self):
 
