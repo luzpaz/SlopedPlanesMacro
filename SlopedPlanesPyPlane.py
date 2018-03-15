@@ -649,16 +649,16 @@ class _PyPlane(_Py):
         '''
 
         numGeom = self.numGeom
-        print '### planning ', numGeom
+        # print '### planning ', numGeom
 
         if self.seedShape:
-            print 'seed'
+            # print 'seed'
 
             self.shape = self.seedShape.copy()
             self.bigShape = self.seedBigShape.copy()
 
         else:
-            print 'no seed'
+            # print 'no seed'
 
             direction, geom = self.direction(pyWire, numGeom)
             # print 'geom ', geom
@@ -671,7 +671,7 @@ class _PyPlane(_Py):
             if not self.sweepCurve:
                 geomCopy.translate(-1 * self.overhang * direction)
 
-            print '# normal'
+            # print '# normal'
             scale = 1
             plane =\
                 self.doPlane(direction, geomCopy, firstParam,
@@ -683,7 +683,7 @@ class _PyPlane(_Py):
             if not self.sweepCurve:
                 geomCopy.translate(-1 * _Py.size * direction)
 
-            print '# big'
+            # print '# big'
             scale = 5
             bigPlane =\
                 self.doPlane(direction, geomCopy, firstParam,
@@ -693,7 +693,7 @@ class _PyPlane(_Py):
 
             if self.reflexed:
 
-                print '# enormous'
+                # print '# enormous'
                 scale = 50
                 enormousPlane =\
                     self.doPlane(direction, geomCopy, firstParam,
@@ -727,7 +727,7 @@ class _PyPlane(_Py):
         '''doPlane(self, direction, geom, firstParam, lastParam, scale)
         '''
 
-        print 'scale ', scale
+        # print 'scale ', scale
 
         size = _Py.size
         width = size
@@ -795,12 +795,12 @@ class _PyPlane(_Py):
         # print 'endParam ', endParam
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
-        print 'extendGeom ', extendGeom
+        # print 'extendGeom ', extendGeom
         # TODO problem with ArcOfHiperbola
         extendShape = extendGeom.toShape()
 
         if self.sweepCurve:
-            print 'A'
+            # print 'A'
 
             sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
             wire = sweepSketch.Shape
@@ -808,7 +808,7 @@ class _PyPlane(_Py):
             plane = wire.makePipeShell([extendShape])
 
         else:
-            print 'B'
+            # print 'B'
 
             plane = extendShape.extrude(direction*upScale)
 

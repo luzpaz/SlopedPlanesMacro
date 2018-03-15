@@ -427,27 +427,7 @@ class _SlopedPlanes(_Py):
                         pyPlane.solved = False
                         pyPlane.reallySolved = False
 
-            pyFace.parsing()
-
-            pyFace.planning()
-
-            pyFace.upping()
-
-            pyFace.virtualizing()
-
-            pyFace.trimming()
-
-            pyFace.priorLater()
-
-            pyFace.simulating()
-
-            pyFace.reflexing()
-
-            pyFace.ordinaries()
-
-            pyFace.betweenWires()
-
-            pyFace.aligning()  # '''
+            pyFace.faceManager()
 
         if onChanged:
             # print 'AAA'

@@ -301,6 +301,32 @@ class _PyFace(_Py):
 
         return wireList, alignList, geomShapeFace
 
+    def faceManager(self):
+
+        ''''''
+
+        self.parsing()
+
+        self.planning()
+
+        self.upping()
+
+        self.virtualizing()
+
+        self.trimming()
+
+        self.priorLater()
+
+        self.simulating()
+
+        self.reflexing()
+
+        self.ordinaries()
+
+        self.betweenWires()
+
+        self.aligning()  # '''
+
     def parsing(self):
 
         '''parsing(self)
