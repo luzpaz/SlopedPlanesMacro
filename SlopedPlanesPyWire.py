@@ -169,6 +169,7 @@ class _PyWire(_Py):
         tolerance = _Py.tolerance
 
         for pyReflex in self.reflexs:
+
             num = -1
             for pyPlane in pyReflex.planes:
                 num += 1
@@ -180,19 +181,19 @@ class _PyWire(_Py):
 
                 pyOppPlane = pyReflex.planes[num - 1]
 
-                rango = []
-                oppRango = []
-                nextRango = []
+                rango, oppRango, nextRango = [], [], []
 
                 if num == 0:
                     # print 'A'
 
                     rear = pyReflex.rear[0]
                     oppRear = pyReflex.rear[1]
+
                     if rear is not None:
                         # print 'A1'
                         rango = pyPlane.rango[0]
                         forward = pyPlane.forward
+
                     if oppRear is not None:
                         # print 'A2'
                         oppRango = pyOppPlane.rango[-1]
@@ -223,11 +224,12 @@ class _PyWire(_Py):
                                 pyPlane.cuttingPyth([pl])
                                 pyPlane.control.append(rr)
 
-                else:   # num > 0
+                else:
                     # print 'B'
 
                     rear = pyReflex.rear[1]
                     oppRear = pyReflex.rear[0]
+
                     if rear is not None:
                         # print 'B1'
                         rango = pyPlane.rango[-1]
@@ -237,6 +239,7 @@ class _PyWire(_Py):
                         else:
                             # print 'B12'
                             forward = pyPlane.backward
+
                     if oppRear is not None:
                         # print 'B2'
                         oppRango = pyOppPlane.rango[0]
@@ -288,14 +291,14 @@ class _PyWire(_Py):
                         lastParam = geom.LastParameter
                         geomCopy = geom.copy()
                         geomCopy.translate(-1 * _Py.size * direction)
-                        scale = 1000000
+                        scale = 500
                         giantPlane =\
                             pyRearPl.doPlane(direction, geomCopy, firstParam,
                                              lastParam, scale)
                         gS = pyPlane.geomShape
                         enormousShape =\
                             self.cutting(enormousShape, [giantPlane], gS)
-                        # no esta completo : preProcessTwo
+                        # no esta completo: preProcessTwo
 
                 for nG in rango:
                     pyPl = pyPlaneList[nG]
