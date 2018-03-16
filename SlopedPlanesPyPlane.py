@@ -1113,9 +1113,11 @@ class _PyPlane(_Py):
                         control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList
-            plane = self.shape
+            # print 'cutterList ', cutterList, [sh.Area for sh in cutterList]
+            plane = self.shape.copy()
             gS = self.geomShape
+
+            # self.printPlaneSummary()
 
             if self.reflexed and not self.aligned:
                 # print '1'
@@ -1153,8 +1155,8 @@ class _PyPlane(_Py):
 
             else:
                 # print '2'
+
                 self.cuttingPyth(cutterList)
-                # print 'plane ', self
 
         # print 'shape ', self.shape
 

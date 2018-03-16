@@ -316,6 +316,9 @@ class _SlopedPlanes(_Py):
                 coordinates = [coordinates]
                 coordinates.extend(coordinatesInnerOrdered)
 
+                if not self.Serialize:
+                    pyFace.reset = True
+
                 pyWireListOld = pyFace.wires
                 pyWireListNew = []
                 geomShapeFace = []
@@ -714,6 +717,8 @@ class _SlopedPlanes(_Py):
             # if the geometry change after loading, recompute
         else:
             self.OnChanged = True
+
+        # self.printSerialSummary()
 
 
 class _ViewProvider_SlopedPlanes():

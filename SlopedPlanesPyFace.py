@@ -192,6 +192,7 @@ class _PyFace(_Py):
                     dd['_geomAligned'] = None
                     dd['_forward'] = None
                     dd['_backward'] = None
+                    # TODO también quitar rear y rangos para recalcular todo
 
                 planeList.append(dd)
             dct['_planes'] = planeList

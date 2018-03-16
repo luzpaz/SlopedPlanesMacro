@@ -411,21 +411,30 @@ class _PyWire(_Py):
                 cutterList = []     # shape
                 cutList = []        # simulatedShape
 
-                if pyPlane.arrow:
+                if pyPlane.arrow:       # and reflex?
                     # print 'A arrow'
-                    # podría ser necesario averifguar que reflex provoca la flecha
 
                     if prior not in control:
                         if not pyPrior.reflexed:
                             # print '1'
                             cutterList.append(bigPrior)
                             control.append(prior)
+                        else:
+                            nn = self.sliceIndex(prior - 1, lenWire)
+                            pyPl = pyPlaneList[nn]
+                            if numGeom not in pyPl.rear:
+                                cutterList.append(bigPrior)
 
                     if later not in control:
                         if not pyLater.reflexed:
                             # print '2'
                             cutterList.append(bigLater)
                             control.append(later)
+                        else:
+                            nn = self.sliceIndex(later + 1, lenWire)
+                            pyPl = pyPlaneList[nn]
+                            if numGeom not in pyPl.rear:
+                                cutterList.append(bigLater)
 
                 elif pyPlane.reflexed:
                     # print 'B reflexed'
@@ -549,5 +558,5 @@ class _PyWire(_Py):
             if not (pyPlane.choped and not pyPlane.aligned):
                 if pyPlane.shape:
                     if not pyPlane.fronted:
-                        # print '###### ordinaries ', (pyPlane.numWire, pyPlane.numGeom)
+                        # print '############ ordinaries ', (pyPlane.numWire, pyPlane.numGeom), pyPlane.shape
                         pyPlane.ordinaries(self)
