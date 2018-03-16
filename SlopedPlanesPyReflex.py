@@ -920,30 +920,32 @@ class _PyReflex(_Py):
                 lines = Part.makeCompound([gS, forward, forwardOpp])
 
                 for pyReflex in pyWire.reflexs:
-                    if pyReflex != self:
-                        for pyPl in pyReflex.planes:
-                            if pyPl.numGeom not in control:
-                                if pyPl not in refList:
-                                    pl = pyPl.shape
-                                    if pyPl.isSolved():
+                    #if pyReflex != self:
+                    for pyPl in pyReflex.planes:
+                        if pyPl.numGeom not in control:
+                            #if pyPl not in refList:
+                            # print 'pyPl.numGeom ', pyPl.numGeom
+                            pl = pyPl.shape
+                            if pyPl.isSolved():
+                                # print 'solved'
 
-                                        fo = pyPl.forward
-                                        section = fo.section([lines], tolerance)
-                                        if section.Vertexes:
-                                            # print 'cutter ', pyPl.numGeom
-                                            conflictList = pyPl.isReallySolved(pyWire, pyReflex)
-                                            # print 'conflictList ', [p.numGeom for p in conflictList]
+                                fo = pyPl.forward
+                                section = fo.section([lines], tolerance)
+                                if section.Vertexes:
+                                    # print 'cutter ', pyPl.numGeom
+                                    conflictList = pyPl.isReallySolved(pyWire, pyReflex)
+                                    # print 'conflictList ', [p.numGeom for p in conflictList]
 
-                                            if pyPlane in conflictList:
-                                                # print 'A'
-                                                pyPlane.cuttingPyth([pl])
-                                                control.append(pyPl.numGeom)
-                                                pyPl.reallySolved.remove(pyPlane)   ###
+                                    if pyPlane in conflictList:
+                                        # print 'A'
+                                        pyPlane.cuttingPyth([pl])
+                                        control.append(pyPl.numGeom)
+                                        pyPl.reallySolved.remove(pyPlane)
 
-                                            elif not conflictList:
-                                                # print 'B'
-                                                pyPlane.cuttingPyth([pl])
-                                                control.append(pyPl.numGeom)
+                                    elif not conflictList:
+                                        # print 'B'
+                                        pyPlane.cuttingPyth([pl])
+                                        control.append(pyPl.numGeom)
 
             pyOppPlane = refList[0]
 
@@ -969,68 +971,68 @@ class _PyReflex(_Py):
 
             cutterList = []
             for pyReflex in pyWire.reflexs:
-                if pyReflex != self:
-                    for pyPl in pyReflex.planes:
-                        if pyPl.numGeom not in control:
-                            if pyPl not in refList:
+                #if pyReflex != self:
+                for pyPl in pyReflex.planes:
+                    if pyPl.numGeom not in control:
+                        #if pyPl not in refList:
 
-                                if pyPl.isSolved():
-                                    # print 'pyPl solved', pyPl.numGeom
-                                    pl = pyPl.shape
-                                    if len(pl.Faces) == 1:
-                                        # print 'A'
-                                        conflictList = pyPl.isReallySolved(pyWire, pyReflex)
-                                        cList = []
-                                        for pyP in conflictList:
-                                            if pyP.isSolved():
-                                                cList.append(pyP)
-                                                pyPl.reallySolved.remove(pyP)   ###
-                                            else:
-                                                break
-                                        else:
-                                            for pyP in cList:
-                                                # print 'pyP ', pyP.numGeom
-                                                pyPl.cuttingPyth([pyP.shape])
-                                                pyPl.control.append(pyP.numGeom)
-                                            # print 'AA'
-                                            cutterList.append(pyPl.shape)
-                                            control.append(pyPl.numGeom)
+                        if pyPl.isSolved():
+                            # print 'pyPl solved', pyPl.numGeom
+                            pl = pyPl.shape
+                            if len(pl.Faces) == 1:
+                                # print 'A'
+                                conflictList = pyPl.isReallySolved(pyWire, pyReflex)
+                                cList = []
+                                for pyP in conflictList:
+                                    if pyP.isSolved():
+                                        cList.append(pyP)
+                                        pyPl.reallySolved.remove(pyP)   ###
                                     else:
-                                        # print 'B'
+                                        break
+                                else:
+                                    for pyP in cList:
+                                        # print 'pyP ', pyP.numGeom
+                                        pyPl.cuttingPyth([pyP.shape])
+                                        pyPl.control.append(pyP.numGeom)
+                                    # print 'AA'
+                                    cutterList.append(pyPl.shape)
+                                    control.append(pyPl.numGeom)
+                            else:
+                                # print 'B'
+                                cutterList.append(pl)
+                                control.append(pyPl.numGeom)
+
+                        else:
+                            # print 'pyPl no solved', pyPl.numGeom
+                            if pyPl.numGeom in rangoInter:
+                                # print 'a'
+
+                                section = plane.section([forward], tolerance)
+                                if section.Edges:
+                                    # print 'b'
+
+                                    rear = pyPlane.rear[0]
+                                    pyRearPlane = pyPlaneList[rear]
+                                    rearPl = pyRearPlane.shape
+                                    if rear not in control:
+                                        cutterList.append(rearPl)
+                                        control.append(rearPl)
+
+                                    oppRear = pyOppPlane.rear[-1]
+                                    if oppRear not in control:
+                                        pyOppRearPlane = pyPlaneList[oppRear]
+                                        oppRearPl = pyOppRearPlane.shape
+                                        cutterList.append(oppRearPl)
+                                        control.append(oppRearPl)
+
+                                    pl = pyPl.shape
+                                    section = pl.section([rearPl], tolerance)
+
+                                    if section.Edges:
+                                        # print 'c'
+
                                         cutterList.append(pl)
                                         control.append(pyPl.numGeom)
-
-                                else:
-                                    # print 'pyPl no solved', pyPl.numGeom
-                                    if pyPl.numGeom in rangoInter:
-                                        # print 'a'
-
-                                        section = plane.section([forward], tolerance)
-                                        if section.Edges:
-                                            # print 'b'
-
-                                            rear = pyPlane.rear[0]
-                                            pyRearPlane = pyPlaneList[rear]
-                                            rearPl = pyRearPlane.shape
-                                            if rear not in control:
-                                                cutterList.append(rearPl)
-                                                control.append(rearPl)
-
-                                            oppRear = pyOppPlane.rear[-1]
-                                            if oppRear not in control:
-                                                pyOppRearPlane = pyPlaneList[oppRear]
-                                                oppRearPl = pyOppRearPlane.shape
-                                                cutterList.append(oppRearPl)
-                                                control.append(oppRearPl)
-
-                                            pl = pyPl.shape
-                                            section = pl.section([rearPl], tolerance)
-
-                                            if section.Edges:
-                                                # print 'c'
-
-                                                cutterList.append(pl)
-                                                control.append(pyPl.numGeom)
 
             # print 'cutterList', cutterList
 

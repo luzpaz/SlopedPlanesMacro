@@ -1213,6 +1213,7 @@ class _PyPlane(_Py):
         '''isSolved(self)'''
 
         if self.solved:
+            # print 'memory'
             return True
 
         tolerance = _Py.tolerance
@@ -1221,8 +1222,10 @@ class _PyPlane(_Py):
         plane = self.shape
         section = plane.section([forward, backward], tolerance)
         if section.Edges:
+            # print 'edges'
             return False
         else:
+            # print 'no edges'
             self.solved = True
             return True
 
@@ -1239,23 +1242,23 @@ class _PyPlane(_Py):
 
         pyReflexList = pyWire.reflexs
         for pyRef in pyReflexList:
-            if pyRef != pyReflex:
-                for pyPlane in pyRef.planes:
-                    if pyPlane != self:
-                        # print pyPlane.numGeom
-                        plane = pyPlane.shape
-                        shape = self.shape.copy()
-                        shape = shape.cut([plane], tolerance)
-                        if len(shape.Faces) == 2:
-                            conf = []
-                            for ff in shape.Faces:
-                                # print 'a'
-                                common = ff.common([simul], tolerance)
-                                if common.Area:
-                                    # print 'b'
-                                    conf.append(pyPlane)
-                            if len(conf) == 1:
-                                conflictList.extend(conf)
+            #if pyRef != pyReflex:
+            for pyPlane in pyRef.planes:
+                if pyPlane != self:
+                    # print pyPlane.numGeom
+                    plane = pyPlane.shape
+                    shape = self.shape.copy()
+                    shape = shape.cut([plane], tolerance)
+                    if len(shape.Faces) == 2:
+                        conf = []
+                        for ff in shape.Faces:
+                            # print 'a'
+                            common = ff.common([simul], tolerance)
+                            if common.Area:
+                                # print 'b'
+                                conf.append(pyPlane)
+                        if len(conf) == 1:
+                            conflictList.extend(conf)
 
         self.reallySolved = conflictList
 

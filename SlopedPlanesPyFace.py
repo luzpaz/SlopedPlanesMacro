@@ -330,7 +330,7 @@ class _PyFace(_Py):
 
         self.betweenWires()
 
-        self.aligning()  #
+        self.aligning()  #'''
 
     def parsing(self):
 

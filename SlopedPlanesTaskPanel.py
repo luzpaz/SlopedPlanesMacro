@@ -188,6 +188,8 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
+        # print 'update'
+
         self.updating = True
         self.tree.clear()
         slopedPlanes = self.obj
@@ -425,6 +427,8 @@ class _TaskPanel_SlopedPlanes():
     def resetObject(self, remove=None):
 
         ''''''
+
+        # print 'resetObject'
 
         slopedPlanes = self.obj
 
