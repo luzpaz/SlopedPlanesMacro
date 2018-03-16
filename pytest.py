@@ -35,7 +35,12 @@ for doc in FreeCAD.listDocuments().values():
                 cut = oldShape.copy().cut(newShape)
                 cc = newShape.copy().cut(oldShape)
 
-                if cut.Area != 0 or\
+                if obj.State[0] == 'Invalid':
+                    numError += 1
+                    executionList.append((doc.Name, obj.Name))
+                    # print '????????????????????????? execution ERROR'
+
+                elif cut.Area != 0 or\
                    cc.Area != 0 or\
                    len(newShape.Edges) != len(oldShape.Edges) or\
                    len(newShape.Vertexes) != len(oldShape.Vertexes):
@@ -44,14 +49,7 @@ for doc in FreeCAD.listDocuments().values():
                     geometricList.append((doc.Name, obj.Name))
                     # print '????????????????????????? geometric ERROR'
 
-                elif obj.State[0] == 'Invalid':
-
-                    numError += 1
-                    executionList.append((doc.Name, obj.Name))
-                    # print '????????????????????????? execution ERROR'
-
                 else:
-
                     pass
                     # print '### okey'
 

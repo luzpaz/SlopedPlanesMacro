@@ -1046,13 +1046,13 @@ class _PyPlane(_Py):
         if self.aligned:
 
             pyAlignList = self.selectAlignments(numWire, self.numGeom)
-            # print 'pyAlignList ', pyAlignList
+            print 'pyAlignList ', pyAlignList
 
             rr = []
             for pyA in pyAlignList:
-                # print 'pyA.rangoRear ', pyA.rangoRear
+                print 'pyA.rangoRear ', pyA.rangoRear
                 rr.extend(pyA.rangoRear)
-            # print 'rr ', rr
+            print 'rr ', rr
 
         cutterList = []
         for pyPl in pyPlaneList:
@@ -1060,19 +1060,19 @@ class _PyPlane(_Py):
             if nGeom not in control:
                 pl = pyPl.shape
                 if pl:
-                    # print '### numGeom ', pyPl.numGeom
+                    print '### numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
-                        # print 'a'
+                        print 'a'
 
                         pyAli = self.selectAlignmentBase(numWire, nGeom)
                         if pyAli:
-                            # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                            print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                             ll = pyAli.geomAligned
                             simulAlign = pyAli.simulatedAlignment
 
                             if self.aligned:
-                                # print 'a1'
+                                print 'a1'
                                 for pyAlign in pyAlignList:
 
                                     line = pyAlign.geomAligned
@@ -1083,45 +1083,45 @@ class _PyPlane(_Py):
                                         section = base.section([pl], tolerance)
                                         if section.Edges:
                                             common = base.common(simulAlign, tolerance)
-                                            # print 'area ', common.Area
+                                            print 'area ', common.Area
                                             if not common.Area:
-                                                # print 'a11'
+                                                print 'a11'
                                                 cutterList.extend(pyAli.simulatedAlignment)
 
                             else:
-                                # print 'a2'
+                                print 'a2'
                                 cutterList.extend(pyAli.simulatedAlignment)
 
                     elif pyPl.choped:
-                        # print 'b'
+                        print 'b'
                         pass
 
                     elif pyPl.fronted:
-                        # print 'c'
+                        print 'c'
                         if self.aligned:
-                            # print 'c1'
+                            print 'c1'
                             if nGeom in rr:
                                 pl = pyPl.bigShape
                                 cutterList.append(pl)
                         else:
-                            # print 'c2'
+                            print 'c2'
                             pass
 
                     else:
-                        # print 'd'
+                        print 'd'
                         cutterList.append(pl)
                         control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList
+            print 'cutterList ', cutterList
             plane = self.shape
             gS = self.geomShape
 
             if self.reflexed and not self.aligned:
-                # print '1'
+                print '1'
 
                 if len(plane.Faces) == 1:
-                    # print '11'
+                    print '11'
                     plane = plane.cut(cutterList, tolerance)
                     ff = self.selectFace(plane.Faces, gS)
                     fList = [ff]
@@ -1133,11 +1133,11 @@ class _PyPlane(_Py):
                             break
                     compound = Part.makeCompound(fList)
                     self.shape = compound
-                    # print 'fList ', fList
-                    # print 'compound ', compound
+                    print 'fList ', fList
+                    print 'compound ', compound
 
                 else:
-                    # print '12'
+                    print '12'
                     ff = plane.Faces[0]
                     ff = self.cutting(ff, cutterList, gS)
                     fList = [ff]
@@ -1148,13 +1148,15 @@ class _PyPlane(_Py):
 
                     compound = Part.makeCompound(fList)
                     self.shape = compound
-                    # print 'fList ', fList
-                    # print 'compound ', compound
+                    print 'fList ', fList
+                    print 'compound ', compound
 
             else:
-                # print '2'
+                print '2'
                 self.cuttingPyth(cutterList)
-                # print 'plane ', self
+                print 'plane ', self
+
+        print 'shape ', self.shape
 
     def rangging(self, pyWire, direction, pyReflex=None):
 

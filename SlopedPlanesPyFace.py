@@ -308,7 +308,7 @@ class _PyFace(_Py):
         self.parsing()
 
         self.planning()
-        # self.printSummary()
+        self.printSummary()
 
         self.upping()
 
@@ -317,17 +317,19 @@ class _PyFace(_Py):
         self.trimming()
 
         self.priorLater()
+        self.printControl('priorLater')
 
         self.simulating()
+        self.printControl('simulating')
 
         self.reflexing()
-        # self.printControl('reflexing')
+        self.printControl('reflexing')
 
         self.ordinaries()
 
         self.betweenWires()
 
-        self.aligning()  # '''
+        self.aligning()  #
 
     def parsing(self):
 
@@ -1204,8 +1206,6 @@ class _PyFace(_Py):
 
         for pyAlign in self.alignments:
             pyAlign.simulatingAlignment()
-
-        # self.printControl('simulating')
 
     def reflexing(self):
 

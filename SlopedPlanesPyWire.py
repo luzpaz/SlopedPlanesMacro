@@ -413,6 +413,7 @@ class _PyWire(_Py):
 
                 if pyPlane.arrow:
                     # print 'A arrow'
+                    # podría ser necesario averifguar que reflex provoca la flecha
 
                     if prior not in control:
                         if not pyPrior.reflexed:
@@ -548,5 +549,5 @@ class _PyWire(_Py):
             if not (pyPlane.choped and not pyPlane.aligned):
                 if pyPlane.shape:
                     if not pyPlane.fronted:
-                        # print '###### ordinaries ', (pyPlane.numWire, pyPlane.numGeom)
+                        print '###### ordinaries ', (pyPlane.numWire, pyPlane.numGeom)
                         pyPlane.ordinaries(self)
