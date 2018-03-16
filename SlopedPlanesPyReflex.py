@@ -920,10 +920,8 @@ class _PyReflex(_Py):
                 lines = Part.makeCompound([gS, forward, forwardOpp])
 
                 for pyReflex in pyWire.reflexs:
-                    #if pyReflex != self:
                     for pyPl in pyReflex.planes:
                         if pyPl.numGeom not in control:
-                            #if pyPl not in refList:
                             # print 'pyPl.numGeom ', pyPl.numGeom
                             pl = pyPl.shape
                             if pyPl.isSolved():
@@ -971,10 +969,8 @@ class _PyReflex(_Py):
 
             cutterList = []
             for pyReflex in pyWire.reflexs:
-                #if pyReflex != self:
                 for pyPl in pyReflex.planes:
                     if pyPl.numGeom not in control:
-                        #if pyPl not in refList:
 
                         if pyPl.isSolved():
                             # print 'pyPl solved', pyPl.numGeom
@@ -986,7 +982,7 @@ class _PyReflex(_Py):
                                 for pyP in conflictList:
                                     if pyP.isSolved():
                                         cList.append(pyP)
-                                        pyPl.reallySolved.remove(pyP)   ###
+                                        pyPl.reallySolved.remove(pyP)
                                     else:
                                         break
                                 else:

@@ -394,8 +394,6 @@ class _SlopedPlanes(_Py):
                                     pyPlane.angle = angle
                                 pyPlane.lineInto = None
                                 pyPlane.cross = False
-                                #pyPlane.solved = False
-                                #pyPlane.reallySolved = False
 
                         except IndexError:
                             # print '2'

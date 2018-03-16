@@ -1242,7 +1242,6 @@ class _PyPlane(_Py):
 
         pyReflexList = pyWire.reflexs
         for pyRef in pyReflexList:
-            #if pyRef != pyReflex:
             for pyPlane in pyRef.planes:
                 if pyPlane != self:
                     # print pyPlane.numGeom
