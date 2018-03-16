@@ -308,7 +308,7 @@ class _PyFace(_Py):
         self.parsing()
 
         self.planning()
-        self.printSummary()
+        # self.printSummary()
 
         self.upping()
 
@@ -317,13 +317,13 @@ class _PyFace(_Py):
         self.trimming()
 
         self.priorLater()
-        self.printControl('priorLater')
+        # self.printControl('priorLater')
 
         self.simulating()
-        self.printControl('simulating')
+        # self.printControl('simulating')
 
         self.reflexing()
-        self.printControl('reflexing')
+        # self.printControl('reflexing')
 
         self.ordinaries()
 

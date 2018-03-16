@@ -214,7 +214,7 @@ class _SlopedPlanes(_Py):
             onChanged = True
 
         if onChanged:
-            print 'A'
+            # print 'A'
 
             face = Part.makeFace(shape, faceMaker)
             fList = face.Faces
@@ -248,7 +248,7 @@ class _SlopedPlanes(_Py):
             self.faceList = faceList
 
         else:
-            print 'B'
+            # print 'B'
 
             faceList = self.faceList
 
@@ -259,14 +259,14 @@ class _SlopedPlanes(_Py):
         numFace = -1
         for face in faceList:
             numFace += 1
-            print '######### numFace ', numFace
+            # print '######### numFace ', numFace
 
             size = face.BoundBox.DiagonalLength
             _Py.size = size
             _Py.face = face
 
             if onChanged:
-                print 'AA'
+                # print 'AA'
 
                 # elaborates complementary python objects of a face
 
@@ -322,7 +322,7 @@ class _SlopedPlanes(_Py):
                 numWire = -1
                 for wire in wireList:
                     numWire += 1
-                    print '###### numWire ', numWire
+                    # print '###### numWire ', numWire
                     coo = coordinates[numWire]
                     for pyWire in pyWireListOld:
                         oldCoo = pyWire.coordinates
@@ -354,15 +354,15 @@ class _SlopedPlanes(_Py):
                     numGeom = -1
                     for geom in geomWire:
                         numGeom += 1
-                        print '### numGeom ', numGeom
+                        # print '### numGeom ', numGeom
                         try:
                             pyPlane = pyPlaneListOld[numGeom]
                             pyPlaneListNew.append(pyPlane)
                             pyPlane.numGeom = numGeom
-                            print '1'
+                            # print '1'
 
                             if pyWire.reset:
-                                print '11'
+                                # print '11'
                                 pyPlane.angle = 45
                                 pyPlane.rightWidth = size
                                 pyPlane.leftWidth = size
@@ -371,7 +371,7 @@ class _SlopedPlanes(_Py):
                                 pyPlane.sweepCurve = None
 
                             if pyFace.reset:
-                                print '111'
+                                # print '111'
                                 pyPlane.rear = []
                                 pyPlane.secondRear = []
                                 pyPlane.under = []
@@ -395,7 +395,7 @@ class _SlopedPlanes(_Py):
                                 pyPlane.reallySolved = False
 
                         except IndexError:
-                            print '2'
+                            # print '2'
                             pyPlane = _PyPlane(numWire, numGeom)
                             pyPlaneListNew.append(pyPlane)
 
@@ -415,7 +415,7 @@ class _SlopedPlanes(_Py):
                 pyFace.wires = pyWireListNew
 
             else:
-                print 'BB'
+                # print 'BB'
 
                 pyFace = self.Pyth[numFace]
                 _Py.pyFace = pyFace
@@ -430,10 +430,10 @@ class _SlopedPlanes(_Py):
             pyFace.faceManager()
 
         if onChanged:
-            print 'AAA'
+            # print 'AAA'
             self.Pyth = pyFaceListNew
         else:
-            print 'BBB'
+            # print 'BBB'
             pyFaceListNew = self.Pyth
 
         self.OnChanged = True
