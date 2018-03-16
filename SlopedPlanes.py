@@ -394,8 +394,8 @@ class _SlopedPlanes(_Py):
                                     pyPlane.angle = angle
                                 pyPlane.lineInto = None
                                 pyPlane.cross = False
-                                pyPlane.solved = False
-                                pyPlane.reallySolved = False
+                                #pyPlane.solved = False
+                                #pyPlane.reallySolved = False
 
                         except IndexError:
                             # print '2'
@@ -409,6 +409,8 @@ class _SlopedPlanes(_Py):
                         geomShapeWire.append(gS)
 
                         pyPlane.control = [numGeom]
+                        pyPlane.solved = False
+                        pyPlane.reallySolved = False
 
                     pyWire.planes = pyPlaneListNew
                     pyWire.shapeGeom = geomShapeWire
