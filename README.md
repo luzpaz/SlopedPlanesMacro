@@ -8,6 +8,7 @@ FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 ## Versions
 
     alpha: February 2018 (FreeCAD 0.17)
+    beta: March 2018 (FreeCAD 0.17)
     master: updated every month (FreeCAD 0.18)
 
 ## Installation
