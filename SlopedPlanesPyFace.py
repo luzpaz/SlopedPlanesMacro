@@ -482,6 +482,9 @@ class _PyFace(_Py):
                         # print '1 Reflex: does look for alignments'
 
                         if not pyPlane.forward:
+                            # podrìa incluir esto en el break de falso alineamiento si a continuación hay otro alineamiento
+                            # el problema es debido a la aparición de falso alineamiento con alineamiento concatenado
+                            # en una ejecucion que será con resetFace False
                             self.forBack(pyPlane, 'forward')
                         forward = pyPlane.forward
                         section = forward.section(shapeGeomFace, tolerance)

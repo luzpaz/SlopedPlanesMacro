@@ -822,6 +822,9 @@ class _PyReflex(_Py):
         forward = pyR.forward
         backward = pyR.backward
 
+        # podría incluir en isSolved la detención de sobrantes en planos de una cara
+        # que tienen un vertice en la planta (tres vertices en total)
+
         if pyOppR.isSolved():
             # print 'A'
 
