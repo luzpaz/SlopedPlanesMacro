@@ -474,9 +474,9 @@ class _PyFace(_Py):
 
                             ref = False
 
-                        if corner == 'reflex':
+                    if corner == 'reflex':
 
-                            self.forBack(pyPlane, 'forward')
+                        self.forBack(pyPlane, 'forward')
 
                     if corner == 'reflex':
                         # print '1 Reflex: does look for alignments'
