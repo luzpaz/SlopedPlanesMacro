@@ -330,7 +330,7 @@ class _PyFace(_Py):
 
         self.betweenWires()
 
-        self.aligning()  #'''
+        self.aligning()  # '''
 
     def parsing(self):
 
@@ -474,13 +474,15 @@ class _PyFace(_Py):
 
                             ref = False
 
-                    if corner == 'reflex':
+                        if corner == 'reflex':
 
-                        self.forBack(pyPlane, 'forward')
+                            self.forBack(pyPlane, 'forward')
 
                     if corner == 'reflex':
                         # print '1 Reflex: does look for alignments'
 
+                        if not pyPlane.forward:
+                            self.forBack(pyPlane, 'forward')
                         forward = pyPlane.forward
                         section = forward.section(shapeGeomFace, tolerance)
 
