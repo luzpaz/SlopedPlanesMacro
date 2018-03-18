@@ -1503,11 +1503,16 @@ class _PyAlignment(_Py):
         w2 = pyLater.numWire
 
         if w1 == w2:
+
+            
+
             pyWire = pyWireList[w1]
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
             rangoRear.insert(0, lat)
             rangoRear.append(pr)
+
         else:
             rangoRear = []
+
         self.rangoRear = rangoRear
         # print 'rangoRear ', rangoRear

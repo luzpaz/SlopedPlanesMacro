@@ -956,6 +956,8 @@ class _PyReflex(_Py):
 
         # print '### postProcessTwo'
 
+        # TODO unir los dos postProcess
+
         tolerance = _Py.tolerance
         pyPlaneList = pyWire.planes
 
@@ -978,9 +980,12 @@ class _PyReflex(_Py):
                         if pyPl.isSolved():
                             # print 'pyPl solved', pyPl.numGeom
                             pl = pyPl.shape
+
                             if len(pl.Faces) == 1:
                                 # print 'A'
+
                                 conflictList = pyPl.isReallySolved(pyWire, pyReflex)
+
                                 cList = []
                                 for pyP in conflictList:
                                     if pyP.isSolved():
@@ -996,6 +1001,7 @@ class _PyReflex(_Py):
                                     # print 'AA'
                                     cutterList.append(pyPl.shape)
                                     control.append(pyPl.numGeom)
+
                             else:
                                 # print 'B'
                                 cutterList.append(pl)
