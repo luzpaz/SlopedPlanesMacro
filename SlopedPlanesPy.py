@@ -306,6 +306,7 @@ class _Py(object):
             # print 'shape ', pyAlignment.base.shape
             print 'falsify ', pyAlignment.falsify
             print 'rangoChop ', pyAlignment.rango
+            print 'rangoRear ', pyAlignment.rangoRear
             print 'prior ', pyAlignment.prior.numGeom
             print 'later ', pyAlignment.later.numGeom
 

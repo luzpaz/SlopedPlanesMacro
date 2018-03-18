@@ -309,7 +309,7 @@ class _PyFace(_Py):
         self.parsing()
 
         self.planning()
-        # self.printSummary()
+        #self.printSummary()
 
         self.upping()
 
@@ -327,6 +327,7 @@ class _PyFace(_Py):
         # self.printControl('reflexing')
 
         self.ordinaries()
+        #self.printControl('ordinaries')
 
         self.betweenWires()
 
@@ -1231,7 +1232,6 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             pyWire.ordinaries()
-        # self.printControl('ordinaries')
 
     def betweenWires(self):
 

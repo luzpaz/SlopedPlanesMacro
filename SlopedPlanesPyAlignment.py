@@ -281,15 +281,15 @@ class _PyAlignment(_Py):
             rangoOne = pyOne.rango[-1]
             rangoTwo = pyTwo.rango[0]
 
-            # the two rangos don't cut between them
-
             nW = pyOne.numWire
             pyPlList = pyWireList[nW].planes
             rC = []
 
             if nW == pyTwo.numWire:
 
-                for nG in rangoOne:
+                # the two rangos don't cut between them
+
+                '''for nG in rangoOne:
                     pyPl = pyPlList[nG]
                     control = pyPl.control
                     for r in rangoTwo:
@@ -309,7 +309,7 @@ class _PyAlignment(_Py):
                     # and opp chop
                     r = pyOne.numGeom
                     if r not in control:
-                        control.append(r)
+                        control.append(r)'''
 
                 # rChop: trimming bigShape
 
@@ -876,6 +876,7 @@ class _PyAlignment(_Py):
 
             if numTwo == numOne:
                 if pyOne.rear and pyTwo.rear:
+                    
                     between = self.rang(pyWireOne, rearTwo, rearOne, 'forward')
                     # print 'between ', between
                     cList = self.processBetween(between, pyPlaneListOne)
@@ -1503,9 +1504,6 @@ class _PyAlignment(_Py):
         w2 = pyLater.numWire
 
         if w1 == w2:
-
-            
-
             pyWire = pyWireList[w1]
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
             rangoRear.insert(0, lat)
