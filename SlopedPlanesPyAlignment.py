@@ -279,7 +279,9 @@ class _PyAlignment(_Py):
 
             [pyOne, pyTwo] = chops[numChop]
             rangoOne = pyOne.rango[-1][:]
+            rearOne = pyOne.rear[-1]
             rangoTwo = pyTwo.rango[0][:]
+            rearTwo = pyTwo.rear[0]
 
             for nn in rangoOne:
                 if nn in rangoTwo:
@@ -295,26 +297,28 @@ class _PyAlignment(_Py):
                 # the two rangos don't cut between them
 
                 for nG in rangoOne:
-                    pyPl = pyPlList[nG]
-                    control = pyPl.control
-                    for r in rangoTwo:
+                    if nG is not rearTwo:
+                        pyPl = pyPlList[nG]
+                        control = pyPl.control
+                        for r in rangoTwo:
+                            if r not in control and r is not rearOne:
+                                control.append(r)
+                        # and opp Chop
+                        r = pyTwo.numGeom
                         if r not in control:
                             control.append(r)
-                    # and opp Chop
-                    r = pyTwo.numGeom
-                    if r not in control:
-                        control.append(r)
 
                 for nG in rangoTwo:
-                    pyPl = pyPlList[nG]
-                    control = pyPl.control
-                    for r in rangoOne:
+                    if nG is not rearOne:
+                        pyPl = pyPlList[nG]
+                        control = pyPl.control
+                        for r in rangoOne:
+                            if r not in control and r is not rearTwo:
+                                control.append(r)
+                        # and opp chop
+                        r = pyOne.numGeom
                         if r not in control:
                             control.append(r)
-                    # and opp chop
-                    r = pyOne.numGeom
-                    if r not in control:
-                        control.append(r)
 
                 # rChop: trimming bigShape
 
