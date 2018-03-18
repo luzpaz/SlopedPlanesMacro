@@ -586,8 +586,7 @@ class _PyFace(_Py):
                                             ref = False
 
                                             if len(section.Edges) > 2:
-                                                self.forBack(pyPlane,
-                                                             'forward')
+                                                self.forBack(pyPl, 'forward')
 
                                             break
 
