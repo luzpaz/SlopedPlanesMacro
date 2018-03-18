@@ -22,7 +22,6 @@
 # *****************************************************************************
 
 
-from os import path
 from math import degrees
 import FreeCAD
 import Part
@@ -32,6 +31,7 @@ from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyPlane import _PyPlane
 if FreeCAD.GuiUp:
     import FreeCADGui
+    from os import path
     from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 
 
