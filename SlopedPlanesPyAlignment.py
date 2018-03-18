@@ -279,9 +279,15 @@ class _PyAlignment(_Py):
 
             [pyOne, pyTwo] = chops[numChop]
             rangoOne = pyOne.rango[-1][:]
-            rearOne = pyOne.rear[-1]
+            if pyOne.rear:
+                rearOne = pyOne.rear[-1]
+            else:
+                rearOne = None
             rangoTwo = pyTwo.rango[0][:]
-            rearTwo = pyTwo.rear[0]
+            if pyTwo.rear:
+                rearTwo = pyTwo.rear[0]
+            else:
+                rearTwo = None
 
             for nn in rangoOne:
                 if nn in rangoTwo:
