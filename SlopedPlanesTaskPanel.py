@@ -298,8 +298,10 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
                                 length = pyPlane.length
+                                ll = FreeCAD.Units.Quantity(length,FreeCAD.Units.Length)
+                                print ll
                                 doubleSpinBox.setValue(length)
-                                doubleSpinBox.setSuffix(" mm")
+                                doubleSpinBox.setSuffix(' mm')
                                 self.tree.setItemWidget(item, 2, doubleSpinBox)
 
                                 doubleSpinBox.item = item

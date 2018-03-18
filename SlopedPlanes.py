@@ -211,6 +211,7 @@ class _SlopedPlanes(_Py):
 
         onChanged = self.OnChanged
         if not self.faceList:
+            # print 'faceList'
             onChanged = True
 
         if onChanged:
@@ -366,6 +367,7 @@ class _SlopedPlanes(_Py):
 
                             if pyWire.reset:
                                 # print '11'
+
                                 pyPlane.angle = 45
                                 pyPlane.rightWidth = size
                                 pyPlane.leftWidth = size
@@ -375,6 +377,7 @@ class _SlopedPlanes(_Py):
 
                             if pyFace.reset:
                                 # print '111'
+
                                 pyPlane.rear = []
                                 pyPlane.secondRear = []
                                 pyPlane.under = []
@@ -386,12 +389,20 @@ class _SlopedPlanes(_Py):
                                 pyPlane.virtuals = []
                                 pyPlane.reflexed = False
                                 pyPlane.fronted = False
-                                pyPlane.seedShape = None
+
+                                pyPlane.rightWidth =\
+                                    slopedPlanes.FactorWidth * size
+                                pyPlane.leftWidth =\
+                                    slopedPlanes.FactorWidth * size
+                                pyPlane.length =\
+                                    slopedPlanes.FactorLength * size
+
                                 angle = pyPlane.angle
                                 if isinstance(angle, list):
                                     angle = self.selectPlane(angle[0],
                                                              angle[1]).angle
                                     pyPlane.angle = angle
+
                                 pyPlane.lineInto = None
                                 pyPlane.cross = False
 

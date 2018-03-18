@@ -652,13 +652,13 @@ class _PyPlane(_Py):
         # print '### planning ', numGeom
 
         if self.seedShape:
-            # print 'seed'
+            # print '### seed'
 
             self.shape = self.seedShape.copy()
             self.bigShape = self.seedBigShape.copy()
 
         else:
-            # print 'no seed'
+            # print '### no seed'
 
             direction, geom = self.direction(pyWire, numGeom)
             # print 'geom ', geom
@@ -794,6 +794,7 @@ class _PyPlane(_Py):
         # print 'startParam ', startParam
         # print 'endParam ', endParam
 
+        # TODO quitar makeGeom y hacer aquí mismo
         extendGeom = self.makeGeom(geom, startParam, endParam)
         # print 'extendGeom ', extendGeom
         # TODO problem with ArcOfHiperbola
@@ -810,7 +811,8 @@ class _PyPlane(_Py):
         else:
             # print 'B'
 
-            plane = extendShape.extrude(direction*upScale)
+            # print 'direction*upscale ', direction*upScale
+            plane = extendShape.extrude(direction * upScale)
 
         return plane
 
