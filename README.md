@@ -11,12 +11,11 @@ FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
     beta: March 2018 (FreeCAD 0.17)
     master: updated every month (FreeCAD 0.18)
 
-Build Status <img src="https://blog.travis-ci.com/images/travis-mascot-200px.png" height="30"/>
-------------
+## Build Status <img src="https://blog.travis-ci.com/images/travis-mascot-200px.png" height="30"/>
 
 | master | develop |
 |:------:|:-------:|
-|[![master][SlopedPlanesMacro-master-status]][travis-branches]|[![develop][SlopedPlanesMacro-develop-status]][travis-branches]
+|[![master][SlopedPlanesMacro-master-status]][travis-branches]|[![develop][SlopedPlanesMacro-develop-status]][travis-branches]|
 
 ## Installation
 To use this macro, please:
