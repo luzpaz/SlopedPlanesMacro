@@ -17,6 +17,11 @@ FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 |:------:|:-------:|
 |[![master][SlopedPlanesMacro-master-status]][travis-branches]|[![develop][SlopedPlanesMacro-develop-status]][travis-branches]|
 
+[SlopedPlanesMacro-master-status]: https://travis-ci.org/caceres/SlopedPlanesMacro.svg?branch=master
+[SlopedPlanesMacro-develop-status]: https://travis-ci.org/caceres/SlopedPlanesMacro.svg?branch=develop
+[travis-branches]: https://travis-ci.org/caceres/SlopedPlanesMacro/branches
+[travis-builds]: https://travis-ci.org/caceres/SlopedPlanesMacro/builds
+
 ## Installation
 To use this macro, please:
 
