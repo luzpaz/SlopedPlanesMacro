@@ -76,9 +76,9 @@ class _SlopedPlanes(_Py):
 
         - four flags
             Type: object recognition
-            State: indicates the loading file
+            State: jumps onChanged at the loading file
             OnChanged: faster execute from property and task panels
-            Serialize: Slower loading file and faster execute with State = True
+            Serialize: Slower loading file and faster execute
 
         - two lists:
             Pyth: the complementary python objects
