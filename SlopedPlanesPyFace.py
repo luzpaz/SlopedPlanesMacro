@@ -309,7 +309,7 @@ class _PyFace(_Py):
         self.parsing()
 
         self.planning()
-        #self.printSummary()
+        # self.printSummary()
 
         self.upping()
 
@@ -483,6 +483,7 @@ class _PyFace(_Py):
                         # print '1 Reflex: does look for alignments'
 
                         if not pyPlane.forward:
+                            # due to falseAlignment concatenated with alignment
                             self.forBack(pyPlane, 'forward')
 
                         forward = pyPlane.forward

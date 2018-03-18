@@ -278,8 +278,13 @@ class _PyAlignment(_Py):
             numChop += 1
 
             [pyOne, pyTwo] = chops[numChop]
-            rangoOne = pyOne.rango[-1]
-            rangoTwo = pyTwo.rango[0]
+            rangoOne = pyOne.rango[-1][:]
+            rangoTwo = pyTwo.rango[0][:]
+
+            for nn in rangoOne:
+                if nn in rangoTwo:
+                    rangoOne.remove(nn)
+                    rangoTwo.remove(nn)
 
             nW = pyOne.numWire
             pyPlList = pyWireList[nW].planes
@@ -289,7 +294,7 @@ class _PyAlignment(_Py):
 
                 # the two rangos don't cut between them
 
-                '''for nG in rangoOne:
+                for nG in rangoOne:
                     pyPl = pyPlList[nG]
                     control = pyPl.control
                     for r in rangoTwo:
@@ -309,7 +314,7 @@ class _PyAlignment(_Py):
                     # and opp chop
                     r = pyOne.numGeom
                     if r not in control:
-                        control.append(r)'''
+                        control.append(r)
 
                 # rChop: trimming bigShape
 
