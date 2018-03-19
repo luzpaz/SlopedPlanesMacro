@@ -524,6 +524,8 @@ class _PyFace(_Py):
                                 if distStart < distEnd and into:
                                     # print '1111 aligment'
 
+                                    pyPlMemo = pyPl
+
                                     point = self.roundVector(edgeStart)
                                     (nWire, nGeom) = self.findAlignment(point)
                                     pyW = self.wires[nWire]
@@ -566,7 +568,7 @@ class _PyFace(_Py):
                                             # print '111112 falseAlignment'
                                             if numEdge > 0:
                                                 pyAlign =\
-                                                    self.doAlignment(pyPlane)
+                                                    self.doAlignment(pyPlMemo)
                                             pyAlign.falsify = True
 
                                         pyAlign.geomAligned = eGeomShape
