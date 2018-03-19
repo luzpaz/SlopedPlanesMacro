@@ -316,6 +316,7 @@ class _PyFace(_Py):
         self.virtualizing()
 
         self.trimming()
+        # self.printControl('trimming')
 
         self.priorLater()
         # self.printControl('priorLater')

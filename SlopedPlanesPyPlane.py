@@ -1061,58 +1061,59 @@ class _PyPlane(_Py):
             nGeom = pyPl.numGeom
             if nGeom not in control:
                 pl = pyPl.shape
-                if pl:
-                    # print '### numGeom ', pyPl.numGeom
+                ### if pl:
+                # print '### numGeom ', pyPl.numGeom
 
-                    if pyPl.aligned:
-                        # print 'a'
+                if pyPl.aligned:
+                    # print 'a'
 
-                        pyAli = self.selectAlignmentBase(numWire, nGeom)
-                        if pyAli:
-                            # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
-                            ll = pyAli.geomAligned
-                            simulAlign = pyAli.simulatedAlignment
+                    pyAli = self.selectAlignmentBase(numWire, nGeom)
 
-                            if self.aligned:
-                                # print 'a1'
-                                for pyAlign in pyAlignList:
+                    if pyAli:
+                        # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                        ll = pyAli.geomAligned
+                        simulAlign = pyAli.simulatedAlignment
 
-                                    line = pyAlign.geomAligned
-                                    base = pyAlign.base.shape
+                        if self.aligned:
+                            # print 'a1'
+                            for pyAlign in pyAlignList:
 
-                                    section = line.section([ll], tolerance)
-                                    if not section.Vertexes:
-                                        section = base.section([pl], tolerance)
-                                        if section.Edges:
-                                            common = base.common(simulAlign, tolerance)
-                                            # print 'area ', common.Area
-                                            if not common.Area:
-                                                # print 'a11'
-                                                cutterList.extend(pyAli.simulatedAlignment)
+                                line = pyAlign.geomAligned
+                                base = pyAlign.base.shape
 
-                            else:
-                                # print 'a2'
-                                cutterList.extend(pyAli.simulatedAlignment)
+                                section = line.section([ll], tolerance)
+                                if not section.Vertexes:
+                                    section = base.section([pl], tolerance)
+                                    if section.Edges:
+                                        common = base.common(simulAlign, tolerance)
+                                        # print 'area ', common.Area
+                                        if not common.Area:
+                                            # print 'a11'
+                                            cutterList.extend(pyAli.simulatedAlignment)
 
-                    elif pyPl.choped:
-                        # print 'b'
+                        else:
+                            # print 'a2'
+                            cutterList.extend(pyAli.simulatedAlignment)
+
+                elif pyPl.choped:
+                    # print 'b'
+                    pass
+
+                elif pyPl.fronted:
+                    # print 'c'
+                    if self.aligned:
+                        # print 'c1'
+                        if nGeom in rr:
+                            pl = pyPl.bigShape
+                            cutterList.append(pl)
+                    else:
+                        # print 'c2'
                         pass
 
-                    elif pyPl.fronted:
-                        # print 'c'
-                        if self.aligned:
-                            # print 'c1'
-                            if nGeom in rr:
-                                pl = pyPl.bigShape
-                                cutterList.append(pl)
-                        else:
-                            # print 'c2'
-                            pass
-
-                    else:
-                        # print 'd'
-                        cutterList.append(pl)
-                        control.append(pyPl.numGeom)
+                else:
+                    # print 'd'
+                    cutterList.append(pl)
+                    control.append(pyPl.numGeom)
 
         if cutterList:
             # print 'cutterList '     # , cutterList, [sh.Area for sh in cutterList]
