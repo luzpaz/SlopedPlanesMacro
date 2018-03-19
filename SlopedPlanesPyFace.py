@@ -722,7 +722,7 @@ class _PyFace(_Py):
                 pyAliBase = self.selectAlignmentBase(numWire, numGeom)
 
                 if pyAliBase:
-                    # finds an alignment backward
+                    # print 'finds an alignment backward'
                     if not pyAliBase.falsify:
                         jumpChop = True
                         pp = pyAliBase.aligns[-1]
@@ -751,14 +751,42 @@ class _PyFace(_Py):
             pyAli = None
         else:
             pyPl.shape = None
-            pyAli = self.selectAlignmentBase(nWire, nGeom)
-            if pyAli:
-                # finds an alignment forward
+            #pyAli = self.selectAlignmentBase(nWire, nGeom)
+
+            pyAliList = self.selectAlignments(nWire, nGeom)
+            # print pyAliList
+
+            if len(pyAliList) > 1:
+
+                for pyA in pyAliList:
+                    if pyA is not pyAlign:
+                        # print 'finds an alignment forward'
+
+                        if not pyA.falsify:
+                            # print 'not falsify'
+                            bL = pyA.aligns
+                            alignList.extend(bL)
+                            for b in bL:
+                                b.angle = [numWire, numGeom]
+                            pyAli = pyA
+
+                        else:
+                            # print 'falsify'
+                            pyA.base = pyAlign.base
+                            if not pyAli:
+                                pyAli = pyA
+
+            else:
+
+                pyAli = None
+
+            '''if pyAli:
+                # print 'finds an alignment forward'
                 if not pyAli.falsify:
                     bL = pyAli.aligns
                     alignList.extend(bL)
                     for b in bL:
-                        b.angle = [numWire, numGeom]
+                        b.angle = [numWire, numGeom]'''
 
         pyAlign.aligns = alignList
 

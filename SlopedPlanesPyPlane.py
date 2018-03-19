@@ -1115,7 +1115,7 @@ class _PyPlane(_Py):
                         control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList, [sh.Area for sh in cutterList]
+            # print 'cutterList '     # , cutterList, [sh.Area for sh in cutterList]
             plane = self.shape.copy()
             gS = self.geomShape
 
