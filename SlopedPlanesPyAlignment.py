@@ -507,49 +507,6 @@ class _PyAlignment(_Py):
         bigPrior = pyPrior.bigShape
         bigLater = pyLater.bigShape
 
-        cutterList = []
-
-        if pyPrior.aligned:
-
-            # print '10'
-            pyA = self.selectAlignmentBase(pyPrior.numWire, pr)
-            # print 'pyA.later ', pyA.later.numGeom
-            if pyA and pyA.later.numGeom == numGeom:
-                # print '101'
-                cutterList.append(pyA.base.bigShape)
-                control.append(pr)
-
-        elif ((not pyPrior.reflexed) or
-              (pyPrior.choped) or
-              (not pyPrior.rear)):
-
-            # print '1'
-            cutterList.append(bigPrior)
-            if not pyBase.choped:
-                # print '11'
-                control.append(pr)
-
-        if pyLater.aligned:
-
-            # print '20'
-            pyA = self.selectAlignmentBase(pyLater.numWire, lat)
-            # print 'pyA.prior ', pyA.prior.numGeom
-            if pyA and pyA.prior.numGeom == numGeom:
-                # print '201'
-                cutterList.append(pyA.base.bigShape)
-                control.append(lat)
-
-        elif ((not pyLater.reflexed) or
-              (pyLater.choped) or
-              (not pyLater.rear)):
-
-            # print '2'
-            cutterList.append(bigLater)
-            if not self.falsify:
-                if not pyBase.choped:
-                    # print '21'
-                    control.append(lat)
-
         if falsify:
             # print 'A'
 
@@ -579,6 +536,49 @@ class _PyAlignment(_Py):
 
         else:
             # print 'B'
+
+            cutterList = []
+
+            if pyPrior.aligned:
+
+                # print '10'
+                pyA = self.selectAlignmentBase(pyPrior.numWire, pr)
+                # print 'pyA.later ', pyA.later.numGeom
+                if pyA and pyA.later.numGeom == numGeom:
+                    # print '101'
+                    cutterList.append(pyA.base.bigShape)
+                    control.append(pr)
+
+            elif ((not pyPrior.reflexed) or
+                  (pyPrior.choped) or
+                  (not pyPrior.rear)):
+
+                # print '1'
+                cutterList.append(bigPrior)
+                if not pyBase.choped:
+                    # print '11'
+                    control.append(pr)
+
+            if pyLater.aligned:
+
+                # print '20'
+                pyA = self.selectAlignmentBase(pyLater.numWire, lat)
+                # print 'pyA.prior ', pyA.prior.numGeom
+                if pyA and pyA.prior.numGeom == numGeom:
+                    # print '201'
+                    cutterList.append(pyA.base.bigShape)
+                    control.append(lat)
+
+            elif ((not pyLater.reflexed) or
+                  (pyLater.choped) or
+                  (not pyLater.rear)):
+
+                # print '2'
+                cutterList.append(bigLater)
+                if not self.falsify:
+                    if not pyBase.choped:
+                        # print '21'
+                        control.append(lat)
 
             if cutterList:
                 # print 'BB'
