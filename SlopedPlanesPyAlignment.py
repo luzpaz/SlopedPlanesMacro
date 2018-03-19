@@ -614,7 +614,7 @@ class _PyAlignment(_Py):
 
         '''simulatingChops(self)'''
 
-        # print '###### simulatingChops ', (self.base.numWire, self.base.numGeom)
+        # print '###### simulatingChops ', (self.base.numWire, self.base.numGeom, self.falsify)
 
         tolerance = _Py.tolerance
         pyFace = _Py.pyFace
@@ -723,7 +723,7 @@ class _PyAlignment(_Py):
 
         '''simulatingAlignment(self)'''
 
-        # print '###### simulatingAlignment ', (self.base.numWire, self.base.numGeom)
+        # print '###### simulatingAlignment ', (self.base.numWire, self.base.numGeom, self.falsify)
 
         chops = self.chops
         simulatedChops = self.simulatedChops

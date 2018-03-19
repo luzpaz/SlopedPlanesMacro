@@ -327,7 +327,7 @@ class _PyFace(_Py):
         # self.printControl('reflexing')
 
         self.ordinaries()
-        #self.printControl('ordinaries')
+        # self.printControl('ordinaries')
 
         self.betweenWires()
 
@@ -749,10 +749,12 @@ class _PyFace(_Py):
 
         if pyAlign.falsify:
             pyAli = None
+
         else:
             pyPl.shape = None
-            #pyAli = self.selectAlignmentBase(nWire, nGeom)
+            pyAli = self.selectAlignmentBase(nWire, nGeom)
 
+            '''pyAli = None
             pyAliList = self.selectAlignments(nWire, nGeom)
             # print pyAliList
 
@@ -774,19 +776,15 @@ class _PyFace(_Py):
                             # print 'falsify'
                             pyA.base = pyAlign.base
                             if not pyAli:
-                                pyAli = pyA
+                                pyAli = pyA'''
 
-            else:
-
-                pyAli = None
-
-            '''if pyAli:
+            if pyAli:
                 # print 'finds an alignment forward'
                 if not pyAli.falsify:
                     bL = pyAli.aligns
                     alignList.extend(bL)
                     for b in bL:
-                        b.angle = [numWire, numGeom]'''
+                        b.angle = [numWire, numGeom]
 
         pyAlign.aligns = alignList
 
