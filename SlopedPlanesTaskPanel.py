@@ -318,6 +318,7 @@ class _TaskPanel_SlopedPlanes():
                                 height = length * math.sin(angle)
                                 ll = FreeCAD.Units.Quantity(height,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
+                                suffix = ' ' + nn[2]
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
@@ -335,6 +336,7 @@ class _TaskPanel_SlopedPlanes():
                                 run = length * math.cos(angle)
                                 ll = FreeCAD.Units.Quantity(run,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
+                                suffix = ' ' + nn[2]
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
@@ -352,6 +354,7 @@ class _TaskPanel_SlopedPlanes():
                                 length = pyPlane.overhang
                                 ll = FreeCAD.Units.Quantity(length,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
+                                suffix = ' ' + nn[2]
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
@@ -369,6 +372,7 @@ class _TaskPanel_SlopedPlanes():
                                 height = length * math.sin(angle)
                                 ll = FreeCAD.Units.Quantity(height,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
+                                suffix = ' ' + nn[2]
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
@@ -386,6 +390,7 @@ class _TaskPanel_SlopedPlanes():
                                 run = length * math.cos(angle)
                                 ll = FreeCAD.Units.Quantity(run,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
+                                suffix = ' ' + nn[2]
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
@@ -402,6 +407,7 @@ class _TaskPanel_SlopedPlanes():
                                 leftWidth = pyPlane.leftWidth
                                 ll = FreeCAD.Units.Quantity(leftWidth,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
+                                suffix = ' ' + nn[2]
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
@@ -414,6 +420,7 @@ class _TaskPanel_SlopedPlanes():
                                 rigthWidth = pyPlane.rightWidth
                                 ll = FreeCAD.Units.Quantity(rigthWidth,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
+                                suffix = ' ' + nn[2]
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
