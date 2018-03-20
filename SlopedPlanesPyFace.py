@@ -393,6 +393,10 @@ class _PyFace(_Py):
                 if not pyPlane.geomAligned:
                     # print 'A'
 
+                    if not pyPlane.forward:
+                        # due to falseAlignment concatenated with alignment
+                        self.forBack(pyPlane, 'forward')
+
                     ref = False
 
                 else:

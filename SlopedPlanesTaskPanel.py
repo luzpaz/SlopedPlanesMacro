@@ -299,9 +299,11 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setMinimum(-2000*size)
                                 length = pyPlane.length
                                 ll = FreeCAD.Units.Quantity(length,FreeCAD.Units.Length)
-                                print ll
-                                doubleSpinBox.setValue(length)
-                                doubleSpinBox.setSuffix(' mm')
+                                nn = ll.getUserPreferred()
+                                value = float(nn[0].split()[0].replace(',', '.'))
+                                suffix = ' ' + nn[2]
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 self.tree.setItemWidget(item, 2, doubleSpinBox)
 
                                 doubleSpinBox.item = item
@@ -314,8 +316,11 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
                                 height = length * math.sin(angle)
-                                doubleSpinBox.setValue(height)
-                                doubleSpinBox.setSuffix(" mm")
+                                ll = FreeCAD.Units.Quantity(height,FreeCAD.Units.Length)
+                                nn = ll.getUserPreferred()
+                                value = float(nn[0].split()[0].replace(',', '.'))
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 self.tree.setItemWidget(item, 3, doubleSpinBox)
 
                                 doubleSpinBox.item = item
@@ -328,8 +333,11 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
                                 run = length * math.cos(angle)
-                                doubleSpinBox.setValue(run)
-                                doubleSpinBox.setSuffix(" mm")
+                                ll = FreeCAD.Units.Quantity(run,FreeCAD.Units.Length)
+                                nn = ll.getUserPreferred()
+                                value = float(nn[0].split()[0].replace(',', '.'))
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 self.tree.setItemWidget(item, 4, doubleSpinBox)
 
                                 doubleSpinBox.item = item
@@ -342,8 +350,11 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
                                 length = pyPlane.overhang
-                                doubleSpinBox.setValue(length)
-                                doubleSpinBox.setSuffix(" mm")
+                                ll = FreeCAD.Units.Quantity(length,FreeCAD.Units.Length)
+                                nn = ll.getUserPreferred()
+                                value = float(nn[0].split()[0].replace(',', '.'))
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 self.tree.setItemWidget(item, 5, doubleSpinBox)
 
                                 doubleSpinBox.item = item
@@ -356,8 +367,11 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
                                 height = length * math.sin(angle)
-                                doubleSpinBox.setValue(height)
-                                doubleSpinBox.setSuffix(" mm")
+                                ll = FreeCAD.Units.Quantity(height,FreeCAD.Units.Length)
+                                nn = ll.getUserPreferred()
+                                value = float(nn[0].split()[0].replace(',', '.'))
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 self.tree.setItemWidget(item, 6, doubleSpinBox)
 
                                 doubleSpinBox.item = item
@@ -370,8 +384,11 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
                                 run = length * math.cos(angle)
-                                doubleSpinBox.setValue(run)
-                                doubleSpinBox.setSuffix(" mm")
+                                ll = FreeCAD.Units.Quantity(run,FreeCAD.Units.Length)
+                                nn = ll.getUserPreferred()
+                                value = float(nn[0].split()[0].replace(',', '.'))
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 self.tree.setItemWidget(item, 7, doubleSpinBox)
 
                                 doubleSpinBox.item = item
@@ -382,16 +399,24 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setToolTip("The left width of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
-                                doubleSpinBox.setValue(pyPlane.leftWidth)
-                                doubleSpinBox.setSuffix(" mm")
+                                leftWidth = pyPlane.leftWidth
+                                ll = FreeCAD.Units.Quantity(leftWidth,FreeCAD.Units.Length)
+                                nn = ll.getUserPreferred()
+                                value = float(nn[0].split()[0].replace(',', '.'))
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 self.tree.setItemWidget(item, 8, doubleSpinBox)
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
                                 doubleSpinBox.setToolTip("The right width of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
-                                doubleSpinBox.setValue(pyPlane.rightWidth)
-                                doubleSpinBox.setSuffix(" mm")
+                                rigthWidth = pyPlane.rightWidth
+                                ll = FreeCAD.Units.Quantity(rigthWidth,FreeCAD.Units.Length)
+                                nn = ll.getUserPreferred()
+                                value = float(nn[0].split()[0].replace(',', '.'))
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 self.tree.setItemWidget(item, 9, doubleSpinBox)
 
                                 button = _NewCurve()
@@ -518,19 +543,24 @@ class _TaskPanel_SlopedPlanes():
 
                             doubleSpinBox = self.tree.itemWidget(it, 2)
                             length = doubleSpinBox.value()
-                            pyPlane.length = length
+                            suffix = doubleSpinBox.suffix()
+                            length = FreeCAD.Units.Quantity(str(length) + suffix)
+                            pyPlane.length = length.Value
 
                             doubleSpinBox = self.tree.itemWidget(it, 5)
                             overhang = doubleSpinBox.value()
-                            pyPlane.overhang = overhang
+                            overhang = FreeCAD.Units.Quantity(str(overhang) + suffix)
+                            pyPlane.overhang = overhang.Value
 
                             doubleSpinBox = self.tree.itemWidget(it, 8)
                             left = doubleSpinBox.value()
-                            pyPlane.leftWidth = left
+                            left = FreeCAD.Units.Quantity(str(left) + suffix)
+                            pyPlane.leftWidth = left.Value
 
                             doubleSpinBox = self.tree.itemWidget(it, 9)
                             right = doubleSpinBox.value()
-                            pyPlane.rightWidth = right
+                            right = FreeCAD.Units.Quantity(str(right) + suffix)
+                            pyPlane.rightWidth = right.Value
 
                             comboBox = self.tree.itemWidget(it, 11)
                             sweepCurve = comboBox.currentText()
