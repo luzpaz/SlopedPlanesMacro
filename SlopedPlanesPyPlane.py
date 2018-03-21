@@ -823,6 +823,8 @@ class _PyPlane(_Py):
 
         if self.aligned:
 
+            # print '# virtualizing ', (self.numWire, self.numGeom)
+
             [numWire, numGeom] = [self.numWire, self.numGeom]
             plane = self.shape
             seedShape = self.seedShape

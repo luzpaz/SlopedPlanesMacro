@@ -92,6 +92,8 @@ class _PyReflex(_Py):
 
         '''virtualizing(self)'''
 
+        # print '###### virtualizing reflex'
+
         [pyReflex, pyOppReflex] = self.planes
 
         pyR = pyReflex.virtualizing()

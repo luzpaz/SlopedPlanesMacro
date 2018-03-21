@@ -1341,7 +1341,7 @@ class _PyFace(_Py):
                 chopList = [pyPl.simulatedShape for pyPl in chopList]
 
                 numWire = pyWire.numWire
-                # print 'numWire ', numWire
+                # print '### numWire ', numWire
 
                 for pyPlane in pyWire.planes:
                     cutList = cutterList[:]

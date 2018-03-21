@@ -154,6 +154,8 @@ class _PyWire(_Py):
 
         '''virtualizing(self)'''
 
+        # print '###### virtualizing wire', (self.numWire)
+
         for pyReflex in self.reflexs:
             pyReflex.virtualizing()
 
