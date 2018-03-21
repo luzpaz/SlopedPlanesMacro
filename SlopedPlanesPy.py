@@ -371,6 +371,10 @@ class _Py(object):
 
         pyPlane = self.selectPlane(numWire, numGeom)
 
+        shape = pyPlane.shape
+        if shape:
+            Part.show(shape, self.slopedPlanes.Name+' shape '+str(numWire)+' '+str(numGeom))
+
         simulatedShape = pyPlane.simulatedShape
         if simulatedShape:
             simulatedShape.Placement = placement

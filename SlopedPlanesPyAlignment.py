@@ -826,7 +826,6 @@ class _PyAlignment(_Py):
 
         tolerance = _Py.tolerance
         pyWireList = _Py.pyFace.wires
-        # pyPlaneList = pyWireList[0].planes
 
         falsify = self.falsify
 
@@ -872,8 +871,6 @@ class _PyAlignment(_Py):
                 rearTwo = pyTwo.rear[0]
                 pyPlTwo = pyPlaneListTwo[rearTwo]
 
-            cutList = []
-
             rCOne, cListOne, oppCListOne =\
                 self.processRango(rangoOne, pyPlaneListOne, pyOne,
                                   numOne, enormousBase)
@@ -884,27 +881,30 @@ class _PyAlignment(_Py):
                                   numTwo, enormousBase)
             # print rCTwo, cListTwo, oppCListTwo
 
+            cutList = []
+
             if pyOne.rear:
                 # print 'rearOne ', rearOne
-                plOne = self.processRear(rearOne, pyPlOne, pyOne, numOne)
+                plOne = self.processRear(rearOne, pyPlOne, numOne)
                 if plOne:
                     cutList.extend(plOne)
                     # print plOne
             if pyTwo.rear:
                 # print 'rearTwo ', rearTwo
-                plTwo = self.processRear(rearTwo, pyPlTwo, pyTwo, numTwo)
+                plTwo = self.processRear(rearTwo, pyPlTwo, numTwo)
                 if plTwo:
                     cutList.extend(plTwo)
                     # print plTwo
 
             if numTwo == numOne:
                 if pyOne.rear and pyTwo.rear:
-                    
                     between = self.rang(pyWireOne, rearTwo, rearOne, 'forward')
                     # print 'between ', between
                     cList = self.processBetween(between, pyPlaneListOne)
                     cutList.extend(cList)
                     # print cList
+
+            # print 'cutList ', cutList
 
             num = -1
             for pyPlane in [pyOne, pyTwo]:
@@ -1267,18 +1267,15 @@ class _PyAlignment(_Py):
         # print 'oppCutList ', oppCutList
         return rC, cutList, oppCutList
 
-    def processRear(self, rear, pyPl, pyPlane, numWire):
+    def processRear(self, rear, pyPl, numWire):
 
-        '''processRear(self, rear, pyPl, pyPlane, numWire)'''
+        '''processRear(self, rear, pyPl, numWire)'''
 
         pl = None
 
         if pyPl.aligned:
             # print 'r1'
 
-            '''if pyPlane.virtualized:
-                pl = None
-            else:'''
             pyAli = self.selectAlignmentBase(numWire, rear)
             if pyAli and pyAli != self:
                 # print 'pyAli ', pyAli.base.numGeom

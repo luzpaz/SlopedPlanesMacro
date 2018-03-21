@@ -1280,6 +1280,8 @@ class _PyFace(_Py):
             pop = pyWL.pop(0)
             pyWL.append(pop)
 
+            # print 'wires ', [pyW.numWire for pyW in pyWL]
+
             tolerance = self.tolerance
 
             alignments = self.alignments
@@ -1290,6 +1292,7 @@ class _PyFace(_Py):
 
             chopFace = []
             cutterFace = []
+
             for pyW in pyWL:
                 # print '### nW', pyW.numWire
                 chopList = []
@@ -1297,7 +1300,7 @@ class _PyFace(_Py):
                 pyPlaneList = pyW.planes
                 for pyPl in pyPlaneList:
                     if pyPl.shape:
-                        # print '# nG ', pyPl.numGeom, pyPl.fronted
+                        # print '# nG ', pyPl.numGeom
                         if not pyPl.choped and\
                            not pyPl.fronted and\
                            not pyPl.aligned:
@@ -1311,29 +1314,34 @@ class _PyFace(_Py):
                 cutterFace.append(cutterList)
 
             # print 'cutterFace ', cutterFace
+            # print 'chopFace ', chopFace
 
-            numWire = -1
+            num = -1
             for pyWire in pyWL:
-                numWire += 1
-                # print '### numWire ', numWire
+                num += 1
 
-                pop = cutterFace.pop(numWire)
+                # print '### num ', num
+
+                pop = cutterFace.pop(num)
                 cutterList = []
                 for cL in cutterFace:
                     cutterList.extend(cL)
-                cutterFace.insert(numWire, pop)
+                cutterFace.insert(num, pop)
                 # print 'cutterList ', cutterList
 
                 cutterList = [pyPl.shape for pyPl in cutterList]
 
-                pop = chopFace.pop(numWire)
+                pop = chopFace.pop(num)
                 chopList = []
                 for cL in chopFace:
                     chopList.extend(cL)
-                chopFace.insert(numWire, pop)
+                chopFace.insert(num, pop)
                 # print 'chopList ', chopList
 
                 chopList = [pyPl.simulatedShape for pyPl in chopList]
+
+                numWire = pyWire.numWire
+                # print 'numWire ', numWire
 
                 for pyPlane in pyWire.planes:
                     cutList = cutterList[:]
@@ -1350,11 +1358,13 @@ class _PyFace(_Py):
                             # print 'A'
                             aList = alignments[:]
                             # print 'aList ', aList
+
                             pyAlignList =\
                                 self.selectAlignmentsChop(numWire,
                                                           pyPlane.numGeom)
                             # print 'pyAlignList ', pyAlignList
                             baseList = []
+
                             for pyA in pyAlignList:
                                 aList.remove(pyA)
                                 baseList.append(pyA.base.enormousShape)
@@ -1376,7 +1386,7 @@ class _PyFace(_Py):
                             pyAlign =\
                                 self.selectAlignmentBase(numWire,
                                                          pyPlane.numGeom)
-                            if pyAlign:     # ???
+                            if pyAlign:
                                 line = pyAlign.geomAligned
                                 simulAlign =\
                                     Part.makeShell(pyAlign.simulatedAlignment)
