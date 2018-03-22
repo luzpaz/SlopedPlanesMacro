@@ -146,14 +146,11 @@ class _TaskPanel_SlopedPlanes():
             self.resetObject()
             self.obj.Placement = placement
 
-        if button == QtGui.QDialogButtonBox.Close:
-
-            FreeCADGui.Selection.removeObserver(self)
-
     def reject(self):
 
         ''''''
 
+        FreeCADGui.Selection.removeObserver(self)
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
         return True
@@ -162,6 +159,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
+        FreeCADGui.Selection.removeObserver(self)
         self.resetObject()
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
@@ -610,6 +608,8 @@ class _TaskPanel_SlopedPlanes():
         self.update()
 
     def addSelection(self, doc, obj, sub, pnt=None):
+
+        ''''''
 
         # print 'addSelection'
         # print(doc, obj, sub, pnt)
