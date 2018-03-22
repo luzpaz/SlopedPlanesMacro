@@ -51,7 +51,10 @@ class _TaskPanel_SlopedPlanes():
         self.grid.setObjectName("grid")
         self.title = QtGui.QLabel(self.form)
         self.grid.addWidget(self.title, 0, 0, 1, 2)
-        self.tree = QtGui.QTreeWidget(self.form)
+
+        self.tree = _TreeWidget()
+        self.tree.setParent(self.form)
+
         self.grid.addWidget(self.tree, 1, 0, 1, 2)
 
         self.advancedOptions = QtGui.QCheckBox(self.form)
@@ -67,6 +70,8 @@ class _TaskPanel_SlopedPlanes():
                                QtCore.SIGNAL("itemChanged(QTreeWidgetItem *,\
                                              int)"),
                                self.edit)
+
+        self.tree.currentItemChanged.connect(self.tree.changeCurrentItem)
 
         self.update()
 
@@ -180,6 +185,7 @@ class _TaskPanel_SlopedPlanes():
         ''''''
 
         if self.advancedOptions.isChecked():
+
             self.tree.setColumnCount(13)
             self.tree.header().resizeSection(0, 60)
             self.tree.header().resizeSection(1, 120)
@@ -211,6 +217,7 @@ class _TaskPanel_SlopedPlanes():
         self.updating = True
         self.tree.clear()
         slopedPlanes = self.obj
+        self.tree.obj = slopedPlanes
 
         if slopedPlanes:
 
@@ -287,8 +294,6 @@ class _TaskPanel_SlopedPlanes():
                             # print 'numSlope ', numSlope
 
                             item = QtGui.QTreeWidgetItem(self.tree)
-                            item.setFlags(item.flags() |
-                                          QtCore.Qt.ItemIsEditable)
                             item.setText(0, str(numSlope))
 
                             doubleSpinBox = _DoubleSpinBox()
@@ -487,7 +492,7 @@ class _TaskPanel_SlopedPlanes():
 
         pyFaceList = slopedPlanes.Proxy.Pyth
         numSlope, num = 0, 0
-        compound = self.obj.Shape
+        compound = slopedPlanes.Shape
         upFace = False
         for pyFace in pyFaceList:
             originList = []
@@ -604,14 +609,48 @@ class _TaskPanel_SlopedPlanes():
         FreeCAD.ActiveDocument.recompute()
         self.update()
 
-    def addSelection(self, doc, obj, sub, pnt):
+    def addSelection(self, doc, obj, sub, pnt=None):
 
         # print 'addSelection'
         # print(doc, obj, sub, pnt)
 
+        reset = True
+
         if doc == self.obj.Document.Name:
             if obj == self.obj.Name:
-                print '1'
+                if sub.startswith('Face'):
+                    num = int(sub[4:])
+                    item = self.tree.findItems(str(num),
+                                               QtCore.Qt.MatchExactly, 0)[0]
+                    self.tree.setCurrentItem(item)
+                    reset = False
+
+        if reset:
+            self.tree.setCurrentItem(None)
+
+
+class _TreeWidget(QtGui.QTreeWidget):
+
+    ''''''
+
+    def __init__(self):
+
+        ''''''
+
+        super(_TreeWidget, self).__init__()
+
+    def changeCurrentItem(self, current, previous):
+
+        ''''''
+
+        # print 'currentItemChanged'
+
+        if current:
+            num = self.indexFromItem(current).data()
+            FreeCADGui.Selection.clearSelection()
+            obj = self.obj
+            sub = 'Face' + str(num)
+            FreeCADGui.Selection.addSelection(obj, [sub])
 
 
 class _NewCurve(QtGui.QPushButton):
