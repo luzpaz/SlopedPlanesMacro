@@ -123,7 +123,6 @@ class _TaskPanel_SlopedPlanes():
 
         return False
 
-
     def getStandardButtons(self):
 
         ''''''
@@ -476,7 +475,7 @@ class _TaskPanel_SlopedPlanes():
         self.retranslateUi(self.form)
         self.updating = False
 
-    def resetObject(self, remove=None):
+    def resetObject(self):
 
         ''''''
 
@@ -604,6 +603,15 @@ class _TaskPanel_SlopedPlanes():
         slopedPlanes.touch()
         FreeCAD.ActiveDocument.recompute()
         self.update()
+
+    def addSelection(self, doc, obj, sub, pnt):
+
+        # print 'addSelection'
+        # print(doc, obj, sub, pnt)
+
+        if doc == self.obj.Document.Name:
+            if obj == self.obj.Name:
+                print '1'
 
 
 class _NewCurve(QtGui.QPushButton):
