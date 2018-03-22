@@ -70,6 +70,8 @@ class _TaskPanel_SlopedPlanes():
 
         self.update()
 
+        FreeCADGui.Selection.addObserver(self)
+
     def retranslateUi(self, taskPanel):
 
         ''''''
@@ -115,6 +117,13 @@ class _TaskPanel_SlopedPlanes():
 
         return True
 
+    def isAllowedAlterDocument(self):
+
+        ''''''
+
+        return False
+
+
     def getStandardButtons(self):
 
         ''''''
@@ -133,6 +142,10 @@ class _TaskPanel_SlopedPlanes():
             self.resetObject()
             self.obj.Placement = placement
 
+        if button == QtGui.QDialogButtonBox.Close:
+
+            FreeCADGui.Selection.removeObserver(self)
+
     def reject(self):
 
         ''''''
@@ -149,6 +162,12 @@ class _TaskPanel_SlopedPlanes():
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
         return True
+
+    def helpRequested(self):
+
+        ''''''
+
+        pass
 
     def edit(self, item, column):
 
@@ -168,9 +187,9 @@ class _TaskPanel_SlopedPlanes():
             self.tree.header().resizeSection(2, 120)
             self.tree.header().resizeSection(3, 120)
             self.tree.header().resizeSection(4, 120)
-            self.tree.header().resizeSection(5, 120)
-            self.tree.header().resizeSection(6, 120)
-            self.tree.header().resizeSection(7, 120)
+            self.tree.header().resizeSection(5, 130)
+            self.tree.header().resizeSection(6, 130)
+            self.tree.header().resizeSection(7, 130)
             self.tree.header().resizeSection(8, 120)
             self.tree.header().resizeSection(9, 120)
             self.tree.header().resizeSection(10, 60)
@@ -271,7 +290,6 @@ class _TaskPanel_SlopedPlanes():
                             item = QtGui.QTreeWidgetItem(self.tree)
                             item.setFlags(item.flags() |
                                           QtCore.Qt.ItemIsEditable)
-                            item.setTextAlignment(0, QtCore.Qt.AlignLeft)
                             item.setText(0, str(numSlope))
 
                             doubleSpinBox = _DoubleSpinBox()
