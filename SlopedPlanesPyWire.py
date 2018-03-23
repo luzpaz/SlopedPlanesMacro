@@ -503,12 +503,12 @@ class _PyWire(_Py):
                                 control.append(later)
 
                 if cutterList:
-                    # print 'D cutterList shape'
+                    # print 'D cutterList shape ', cutterList
                     pyPlane.cuttingPyth(cutterList)
-                    # print 'shape ', pyPlane.shape
+                    # print 'pyPlane.shape ', pyPlane.shape
 
                 if cutList:
-                    # print 'E cutList simulatedShape'
+                    # print 'E cutList simulatedShape ', cutList
                     simulated = pyPlane.simulatedShape
                     simulated = self.cutting(simulated, cutList, gS)
                     pyPlane.simulatedShape = simulated

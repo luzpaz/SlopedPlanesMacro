@@ -584,6 +584,7 @@ class _PyAlignment(_Py):
                 # print 'BB'
 
                 pyBase.cuttingPyth(cutterList)
+                # print 'pyBase.shape ', pyBase.shape
 
         # cuts pyPrior and pyLater
 
@@ -595,6 +596,7 @@ class _PyAlignment(_Py):
 
                 pyPrior.trimming(enormousBase)
                 pyPrior.control.append(numGeom)
+                # print 'pyPrior.shape ', pyPrior.shape
 
                 if falsify:
                     # print 'a11'
@@ -610,6 +612,7 @@ class _PyAlignment(_Py):
 
                     pyLater.trimming(enormousBase)
                     pyLater.control.append(numGeom)
+                    # print 'pyLater.shape ', pyLater.shape
 
                 else:
                     # print 'b2'
@@ -617,6 +620,7 @@ class _PyAlignment(_Py):
                     pyLater.trimming(enormousCont)
                     pyLater.control.append(nGeom)
                     pyLater.control.append(numGeom)
+                    # print 'pyLater.shape ', pyLater.shape
 
     def simulatingChops(self):
 
