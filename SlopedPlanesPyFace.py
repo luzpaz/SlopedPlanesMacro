@@ -1031,7 +1031,8 @@ class _PyFace(_Py):
         lastParam = geom.LastParameter
 
         if isinstance(geom, (Part.LineSegment,
-                             Part.ArcOfParabola)):
+                             Part.ArcOfParabola,
+                             Part.ArcOfHyperbola)):
 
             startParam = lastParam
             endParam = lastParam + _Py.size
@@ -1052,7 +1053,9 @@ class _PyFace(_Py):
             sParam = 2 * pi - firstParam
             eParam = sParam + half
 
-        elif isinstance(geom, Part.ArcOfHyperbola):
+        elif isinstance(geom, (Part.Circle,
+                               Part.Ellipse)):
+
             pass
 
         elif isinstance(geom, Part.BSplineCurve):
