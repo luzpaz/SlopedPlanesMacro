@@ -619,11 +619,18 @@ class _TaskPanel_SlopedPlanes():
         if doc == self.obj.Document.Name:
             if obj == self.obj.Name:
                 if sub.startswith('Face'):
-                    num = int(sub[4:])
-                    item = self.tree.findItems(str(num),
-                                               QtCore.Qt.MatchExactly, 0)[0]
-                    self.tree.setCurrentItem(item)
-                    reset = False
+                    num = sub[4:]
+
+                    # provisionally
+
+                    try:
+                        item =\
+                            self.tree.findItems(num,
+                                                QtCore.Qt.MatchExactly, 0)[0]
+                        self.tree.setCurrentItem(item)
+                        reset = False
+                    except:
+                        pass
 
         if reset:
             self.tree.setCurrentItem(None)

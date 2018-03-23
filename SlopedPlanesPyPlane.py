@@ -260,7 +260,9 @@ class _PyPlane(_Py):
     @property
     def seed(self):
 
-        ''''''
+        '''used in PyReflex, allowed location for a second face'''
+
+        # TODO change name
 
         return self._seed
 

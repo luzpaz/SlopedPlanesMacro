@@ -55,8 +55,10 @@ def makeSlopedPlanes(sketch):
 
     slopedPlanes =\
         FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "SlopedPlanes")
+
     _SlopedPlanes(slopedPlanes)
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
+
     slopedPlanes.Base = sketch
 
     return slopedPlanes
