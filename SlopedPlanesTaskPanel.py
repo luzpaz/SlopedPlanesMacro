@@ -43,39 +43,36 @@ class _TaskPanel_SlopedPlanes():
         ''''''
 
         self.updating = False
-
         self.obj = None
-        self.form = QtGui.QWidget()
-        self.form.setObjectName("TaskPanel")
-        self.grid = QtGui.QGridLayout(self.form)
-        self.grid.setObjectName("grid")
-        self.title = QtGui.QLabel(self.form)
-        self.grid.addWidget(self.title, 0, 0, 1, 2)
 
-        self.tree = _TreeWidget()
-        self.tree.setParent(self.form)
+        form = QtGui.QWidget()
+        self.form = form
+        form.setObjectName("TaskPanel")
 
-        self.grid.addWidget(self.tree, 1, 0, 1, 2)
+        grid = QtGui.QGridLayout(form)
+        self.grid = grid
+        grid.setObjectName("grid")
 
-        self.advancedOptions = QtGui.QCheckBox(self.form)
-        self.advancedOptions.setObjectName("AdvancedOptions")
-        self.grid.addWidget(self.advancedOptions, 3, 0, 1, 1)
-        self.advancedOptions.clicked.connect(self.advanced)
+        title = QtGui.QLabel(form)
+        self.title = title
+        grid.addWidget(title, 0, 0, 1, 2)
 
-        self.tree.setColumnCount(2)
-        self.tree.header().resizeSection(0, 60)
-        self.tree.header().resizeSection(1, 60)
+        tree = _TreeWidget()
+        self.tree = tree
+        tree.setParent(form)
+        grid.addWidget(tree, 1, 0, 1, 2)
+        tree.itemChanged.connect(self.edit)
+        tree.currentItemChanged.connect(tree.changeCurrentItem)
 
-        QtCore.QObject.connect(self.tree,
-                               QtCore.SIGNAL("itemChanged(QTreeWidgetItem *,\
-                                             int)"),
-                               self.edit)
-
-        self.tree.currentItemChanged.connect(self.tree.changeCurrentItem)
-
-        self.update()
+        advancedOptions = QtGui.QCheckBox(form)
+        self.advancedOptions = advancedOptions
+        advancedOptions.setObjectName("AdvancedOptions")
+        grid.addWidget(advancedOptions, 3, 0, 1, 1)
+        advancedOptions.clicked.connect(self.advanced)
 
         FreeCADGui.Selection.addObserver(self)
+
+        self.update()
 
     def retranslateUi(self, taskPanel):
 
@@ -182,27 +179,29 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
+        tree = self.tree
+
         if self.advancedOptions.isChecked():
 
-            self.tree.setColumnCount(13)
-            self.tree.header().resizeSection(0, 60)
-            self.tree.header().resizeSection(1, 120)
-            self.tree.header().resizeSection(2, 120)
-            self.tree.header().resizeSection(3, 120)
-            self.tree.header().resizeSection(4, 120)
-            self.tree.header().resizeSection(5, 130)
-            self.tree.header().resizeSection(6, 130)
-            self.tree.header().resizeSection(7, 130)
-            self.tree.header().resizeSection(8, 120)
-            self.tree.header().resizeSection(9, 120)
-            self.tree.header().resizeSection(10, 60)
-            self.tree.header().resizeSection(11, 180)
-            self.tree.header().resizeSection(12, 60)
+            tree.setColumnCount(13)
+            tree.header().resizeSection(0, 60)
+            tree.header().resizeSection(1, 120)
+            tree.header().resizeSection(2, 120)
+            tree.header().resizeSection(3, 120)
+            tree.header().resizeSection(4, 120)
+            tree.header().resizeSection(5, 130)
+            tree.header().resizeSection(6, 130)
+            tree.header().resizeSection(7, 130)
+            tree.header().resizeSection(8, 120)
+            tree.header().resizeSection(9, 120)
+            tree.header().resizeSection(10, 60)
+            tree.header().resizeSection(11, 180)
+            tree.header().resizeSection(12, 60)
 
         else:
-            self.tree.setColumnCount(2)
-            self.tree.header().resizeSection(0, 60)
-            self.tree.header().resizeSection(1, 60)
+            tree.setColumnCount(2)
+            tree.header().resizeSection(0, 60)
+            tree.header().resizeSection(1, 60)
 
         self.update()
 
@@ -213,9 +212,12 @@ class _TaskPanel_SlopedPlanes():
         # print 'update'
 
         self.updating = True
-        self.tree.clear()
+
         slopedPlanes = self.obj
-        self.tree.obj = slopedPlanes
+
+        tree = self.tree
+        tree.clear()
+        tree.obj = slopedPlanes
 
         if slopedPlanes:
 
@@ -291,29 +293,29 @@ class _TaskPanel_SlopedPlanes():
 
                             # print 'numSlope ', numSlope
 
-                            item = QtGui.QTreeWidgetItem(self.tree)
+                            item = QtGui.QTreeWidgetItem(tree)
                             item.setText(0, str(numSlope))
 
                             doubleSpinBox = _DoubleSpinBox()
-                            doubleSpinBox.setParent(self.tree)
+                            doubleSpinBox.setParent(tree)
                             doubleSpinBox.setToolTip("The angle of the related face")
                             doubleSpinBox.setMaximum(1000.00)
                             doubleSpinBox.setMinimum(-1000.00)
                             doubleSpinBox.setValue(angle)
                             deg = u"\u00b0"
                             doubleSpinBox.setSuffix(" "+deg)
-                            self.tree.setItemWidget(item, 1, doubleSpinBox)
+                            tree.setItemWidget(item, 1, doubleSpinBox)
 
                             if self.advancedOptions.isChecked():
 
                                 doubleSpinBox.item = item
-                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeAngle)
 
                                 angle = math.radians(angle)
 
                                 doubleSpinBox = _DoubleSpinBox()
-                                doubleSpinBox.setParent(self.tree)
+                                doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The length of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
@@ -324,14 +326,14 @@ class _TaskPanel_SlopedPlanes():
                                 suffix = ' ' + nn[2]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                self.tree.setItemWidget(item, 2, doubleSpinBox)
+                                tree.setItemWidget(item, 2, doubleSpinBox)
 
                                 doubleSpinBox.item = item
-                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeLength)
 
                                 doubleSpinBox = _DoubleSpinBox()
-                                doubleSpinBox.setParent(self.tree)
+                                doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The height of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
@@ -342,14 +344,14 @@ class _TaskPanel_SlopedPlanes():
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                self.tree.setItemWidget(item, 3, doubleSpinBox)
+                                tree.setItemWidget(item, 3, doubleSpinBox)
 
                                 doubleSpinBox.item = item
-                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeHeight)
 
                                 doubleSpinBox = _DoubleSpinBox()
-                                doubleSpinBox.setParent(self.tree)
+                                doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The run of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
@@ -360,14 +362,14 @@ class _TaskPanel_SlopedPlanes():
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                self.tree.setItemWidget(item, 4, doubleSpinBox)
+                                tree.setItemWidget(item, 4, doubleSpinBox)
 
                                 doubleSpinBox.item = item
-                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeRun)
 
                                 doubleSpinBox = _DoubleSpinBox()
-                                doubleSpinBox.setParent(self.tree)
+                                doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The overhang length of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
@@ -378,14 +380,14 @@ class _TaskPanel_SlopedPlanes():
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                self.tree.setItemWidget(item, 5, doubleSpinBox)
+                                tree.setItemWidget(item, 5, doubleSpinBox)
 
                                 doubleSpinBox.item = item
-                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeOverhangLength)
 
                                 doubleSpinBox = _DoubleSpinBox()
-                                doubleSpinBox.setParent(self.tree)
+                                doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The overhang height of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
@@ -396,14 +398,14 @@ class _TaskPanel_SlopedPlanes():
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                self.tree.setItemWidget(item, 6, doubleSpinBox)
+                                tree.setItemWidget(item, 6, doubleSpinBox)
 
                                 doubleSpinBox.item = item
-                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeOverhangHeight)
 
                                 doubleSpinBox = _DoubleSpinBox()
-                                doubleSpinBox.setParent(self.tree)
+                                doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The overhang run of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
@@ -414,13 +416,13 @@ class _TaskPanel_SlopedPlanes():
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                self.tree.setItemWidget(item, 7, doubleSpinBox)
+                                tree.setItemWidget(item, 7, doubleSpinBox)
 
                                 doubleSpinBox.item = item
-                                doubleSpinBox.parent = self.tree
+                                doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeOverhangRun)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox = QtGui.QDoubleSpinBox(tree)
                                 doubleSpinBox.setToolTip("The left width of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
@@ -431,9 +433,9 @@ class _TaskPanel_SlopedPlanes():
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                self.tree.setItemWidget(item, 8, doubleSpinBox)
+                                tree.setItemWidget(item, 8, doubleSpinBox)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(self.tree)
+                                doubleSpinBox = QtGui.QDoubleSpinBox(tree)
                                 doubleSpinBox.setToolTip("The right width of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
@@ -444,24 +446,24 @@ class _TaskPanel_SlopedPlanes():
                                 value = float(nn[0].split()[0].replace(',', '.'))
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                self.tree.setItemWidget(item, 9, doubleSpinBox)
+                                tree.setItemWidget(item, 9, doubleSpinBox)
 
                                 button = _NewCurve()
-                                button.setParent(self.tree)
+                                button.setParent(tree)
                                 button.plane = pyPlane
                                 button.slopedPlanes = slopedPlanes
                                 button.setText('New')
-                                self.tree.setItemWidget(item, 10, button)
+                                tree.setItemWidget(item, 10, button)
                                 button.clicked.connect(button.onClicked)
 
-                                combo = QtGui.QComboBox(self.tree)
+                                combo = QtGui.QComboBox(tree)
                                 combo.addItems(linkList)
                                 try:
                                     index = linkList.index(sweepCurve)
                                     combo.setCurrentIndex(index)
                                 except ValueError:
                                     combo.setCurrentIndex(0)
-                                self.tree.setItemWidget(item, 11, combo)
+                                tree.setItemWidget(item, 11, combo)
 
                                 button.combo = combo
 
@@ -558,38 +560,40 @@ class _TaskPanel_SlopedPlanes():
 
                         # print 'numSlope ', numSlope
 
-                        it = self.tree.findItems(str(numSlope),
-                                                 QtCore.Qt.MatchExactly, 0)[0]
+                        tree = self.tree
 
-                        doubleSpinBox = self.tree.itemWidget(it, 1)
+                        it = tree.findItems(str(numSlope),
+                                            QtCore.Qt.MatchExactly, 0)[0]
+
+                        doubleSpinBox = tree.itemWidget(it, 1)
                         value = doubleSpinBox.value()
                         # print 'value ', value
                         pyPlane.angle = value
 
                         if self.advancedOptions.isChecked():
 
-                            doubleSpinBox = self.tree.itemWidget(it, 2)
+                            doubleSpinBox = tree.itemWidget(it, 2)
                             length = doubleSpinBox.value()
                             suffix = doubleSpinBox.suffix()
                             length = FreeCAD.Units.Quantity(str(length) + suffix)
                             pyPlane.length = length.Value
 
-                            doubleSpinBox = self.tree.itemWidget(it, 5)
+                            doubleSpinBox = tree.itemWidget(it, 5)
                             overhang = doubleSpinBox.value()
                             overhang = FreeCAD.Units.Quantity(str(overhang) + suffix)
                             pyPlane.overhang = overhang.Value
 
-                            doubleSpinBox = self.tree.itemWidget(it, 8)
+                            doubleSpinBox = tree.itemWidget(it, 8)
                             left = doubleSpinBox.value()
                             left = FreeCAD.Units.Quantity(str(left) + suffix)
                             pyPlane.leftWidth = left.Value
 
-                            doubleSpinBox = self.tree.itemWidget(it, 9)
+                            doubleSpinBox = tree.itemWidget(it, 9)
                             right = doubleSpinBox.value()
                             right = FreeCAD.Units.Quantity(str(right) + suffix)
                             pyPlane.rightWidth = right.Value
 
-                            comboBox = self.tree.itemWidget(it, 11)
+                            comboBox = tree.itemWidget(it, 11)
                             sweepCurve = comboBox.currentText()
                             pyPlane.sweepCurve = sweepCurve
 
@@ -615,13 +619,13 @@ class _TaskPanel_SlopedPlanes():
         # print(doc, obj, sub, pnt)
 
         reset = True
+        slopedPlanes = self.obj
 
-        if doc == self.obj.Document.Name:
-            if obj == self.obj.Name:
+
+        if doc == slopedPlanes.Document.Name:
+            if obj == slopedPlanes.Name:
                 if sub.startswith('Face'):
                     num = sub[4:]
-
-                    # provisionally
 
                     try:
                         item =\
@@ -645,6 +649,9 @@ class _TreeWidget(QtGui.QTreeWidget):
         ''''''
 
         super(_TreeWidget, self).__init__()
+        self.setColumnCount(2)
+        self.header().resizeSection(0, 60)
+        self.header().resizeSection(1, 60)
 
     def changeCurrentItem(self, current, previous):
 
@@ -705,9 +712,13 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         tree = self.parent
 
         length = tree.itemWidget(item, 2).value()
+        # print 'length ', length
         angle = math.radians(angle)
+        # print 'angle ', angle
         height = self.height(angle, length)
+        # print 'height ', height
         run = self.run(angle, length)
+        # print 'run ', run
         tree.itemWidget(item, 3).changeHeight(height, False)
         tree.itemWidget(item, 4).changeRun(run, False)
 
@@ -829,10 +840,22 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        return height / math.sin(angle)
+        try:
+            length = height / math.sin(angle)
+
+        except ZeroDivisionError:
+            length = 0
+
+        return length
 
     def lengthRun(self, angle, run):
 
         ''''''
 
-        return run / math.cos(angle)
+        try:
+            length = run / math.cos(angle)
+
+        except ZeroDivisionError:
+            length = 0
+
+        return length
