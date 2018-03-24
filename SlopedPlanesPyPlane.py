@@ -1114,8 +1114,18 @@ class _PyPlane(_Py):
                             # print 'c2'
                             pass
 
-                    else:
+                    elif pyPl.reflexed:
                         # print 'd'
+                        if pyPl.isSolved():
+                            # print 'd1'
+                            cutterList.append(pl)
+                            control.append(pyPl.numGeom)
+                        else:
+                            # print 'd2'
+                            cutterList.append(pyPl.simulatedShape)
+
+                    else:
+                        # print 'e'
                         cutterList.append(pl)
                         control.append(pyPl.numGeom)
 

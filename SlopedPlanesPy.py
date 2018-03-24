@@ -373,10 +373,13 @@ class _Py(object):
 
         shape = pyPlane.shape
         if shape:
+
+            shape.Placement = placement
             Part.show(shape, self.slopedPlanes.Name+' shape '+str(numWire)+' '+str(numGeom))
 
         simulatedShape = pyPlane.simulatedShape
         if simulatedShape:
+
             simulatedShape.Placement = placement
             Part.show(simulatedShape, self.slopedPlanes.Name+' simulatedShape '+str(numWire)+' '+str(numGeom))
 
@@ -404,6 +407,7 @@ class _Py(object):
         if pyPlane.aligned:
             pyAli = self.selectAlignmentBase(numWire, numGeom)
             if pyAli:
+
                 compound = Part.makeCompound(pyAli.simulatedAlignment)
                 compound.Placement = placement
                 Part.show(compound, self.slopedPlanes.Name+' simulatedAlignment '+str(numWire)+' '+str(numGeom))
@@ -411,8 +415,10 @@ class _Py(object):
         virtuals = pyPlane.virtuals
         if virtuals:
             for pyP in virtuals:
+
                 Part.show(pyP.shape, self.slopedPlanes.Name+' shape '+str(numWire)+' '+str(numGeom))
                 compound = Part.makeCompound(pyP.under)
+                compound.Placement = placement
                 Part.show(compound, self.slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))
 
     def printControl(self, text):
