@@ -136,7 +136,6 @@ class _PyReflex(_Py):
             pyRearPlane = pyPlaneList[rear]
             rearPlane = pyRearPlane.selectShape()
 
-
             pyOppRearPlane = pyPlaneList[oppRear]
             oppRearPlane = pyOppRearPlane.selectShape()
 
@@ -204,7 +203,7 @@ class _PyReflex(_Py):
                                         # print 'ddd2'
                                         cList.append(pyPl.simulatedShape)
 
-                if not pyPlane.reflexed:
+                if not pyPlane.reflexed and not pyPlane.fronted:
                     # print 'B'
                     if pyOppR.rear and pyR.rear:
                         cutList = []
