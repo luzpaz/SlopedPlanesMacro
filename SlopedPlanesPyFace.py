@@ -1059,9 +1059,7 @@ class _PyFace(_Py):
             pass
 
         elif isinstance(geom, Part.BSplineCurve):
-            pass
 
-        else:
             pass
 
         forwardLine = self.makeGeom(geom, startParam, endParam)

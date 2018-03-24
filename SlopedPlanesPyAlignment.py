@@ -347,11 +347,14 @@ class _PyAlignment(_Py):
 
                         control = pyPl.control
 
-                        # rChop doesn't cut with rangoRear
+                        # rChop doesn't cut with rangoRear and viceversa
                         if w1 == nW:
                             for r in rangoRear:
                                 if r not in control:
                                     control.append(r)
+                                pyPlR = pyPlList[r]
+                                if nG not in pyPlR.control:
+                                    pyPlR.control.append(nG)
 
                         # rChop is not cutted by alignment
                         control.append(numGeom)

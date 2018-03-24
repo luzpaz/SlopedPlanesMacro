@@ -621,7 +621,6 @@ class _TaskPanel_SlopedPlanes():
         reset = True
         slopedPlanes = self.obj
 
-
         if doc == slopedPlanes.Document.Name:
             if obj == slopedPlanes.Name:
                 if sub.startswith('Face'):
