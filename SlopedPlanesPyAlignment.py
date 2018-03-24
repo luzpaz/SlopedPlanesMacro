@@ -353,8 +353,9 @@ class _PyAlignment(_Py):
                                 if r not in control:
                                     control.append(r)
                                 pyPlR = pyPlList[r]
-                                if nG not in pyPlR.control:
-                                    pyPlR.control.append(nG)
+                                if not pyPlR.aligned:
+                                    if nG not in pyPlR.control:
+                                        pyPlR.control.append(nG)
 
                         # rChop is not cutted by alignment
                         control.append(numGeom)
