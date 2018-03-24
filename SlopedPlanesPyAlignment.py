@@ -267,6 +267,7 @@ class _PyAlignment(_Py):
         pr = pyPrior.numGeom
         lat = pyLater.numGeom
         w1 = pyPrior.numWire
+        pyPlaneList = pyWireList[w1].planes
 
         rangoChop = self.rango
         rangoCopy = rangoChop[:]
@@ -347,11 +348,12 @@ class _PyAlignment(_Py):
 
                         control = pyPl.control
 
-                        # rChop doesn't cut with rangoRear and viceversa
+                        # rChop doesn't cut with rangoRear and viceversa if not aligned
                         if w1 == nW:
                             for r in rangoRear:
                                 if r not in control:
                                     control.append(r)
+
                                 pyPlR = pyPlList[r]
                                 if not pyPlR.aligned:
                                     if nG not in pyPlR.control:
@@ -482,7 +484,7 @@ class _PyAlignment(_Py):
             else:
                 pyCont.cuttingPyth([pyTwo.enormousShape])
 
-            # TODO falseAlignment base and continuation don't cut opp rango
+            # TODO falseAlignment base and continuation don't cut opp rango ???
             # pero si con rear y entre rears
 
     def priorLater(self):
