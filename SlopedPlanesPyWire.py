@@ -325,7 +325,7 @@ class _PyWire(_Py):
 
                             pass
 
-                        else:   # reflexs and chops
+                        else:
                             # print 'c'
 
                             gS = pyPl.geomShape

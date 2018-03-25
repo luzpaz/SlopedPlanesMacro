@@ -267,7 +267,6 @@ class _PyAlignment(_Py):
         pr = pyPrior.numGeom
         lat = pyLater.numGeom
         w1 = pyPrior.numWire
-        pyPlaneList = pyWireList[w1].planes
 
         rangoChop = self.rango
         rangoCopy = rangoChop[:]
@@ -277,6 +276,7 @@ class _PyAlignment(_Py):
         numChop = -1
         for rChop in rangoChop:
             numChop += 1
+            # print 'numChop ', numChop
 
             [pyOne, pyTwo] = chops[numChop]
             rangoOne = pyOne.rango[-1][:]
@@ -294,6 +294,9 @@ class _PyAlignment(_Py):
                 if nn in rangoTwo:
                     rangoOne.remove(nn)
                     rangoTwo.remove(nn)
+
+            # print 'rangoOne ', rangoOne
+            # print 'rangoTwo ', rangoTwo
 
             nW = pyOne.numWire
             pyPlList = pyWireList[nW].planes

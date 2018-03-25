@@ -333,6 +333,8 @@ class _PyReflex(_Py):
 
         '''processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR)'''
 
+        # print 'processOppRear'
+
         pyPlaneList = pyWire.planes
         tolerance = _Py.tolerance
         control = pyR.control
@@ -357,9 +359,10 @@ class _PyReflex(_Py):
         else:
             nGeom = oppRear[1]
 
-        if nGeom not in control:
+        pyOppRear = pyPlaneList[nGeom]
+        # podría quitar el condicional
+        if nGeom not in control or pyOppR.choped:
 
-            pyOppRear = pyPlaneList[nGeom]
             oppRearPl = pyOppRear.selectShape()
             oppRearPl = oppRearPl.copy()
             oppRearPl = oppRearPl.cut([oppReflexEnormous], tolerance)
