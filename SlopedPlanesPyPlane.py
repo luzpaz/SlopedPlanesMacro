@@ -936,6 +936,7 @@ class _PyPlane(_Py):
         plane = self.shape
 
         if not self.isSolved():
+            # TODO C
             # print 'fo'
             forward = self.forward
             section = plane.section([forward], tolerance)
@@ -956,13 +957,13 @@ class _PyPlane(_Py):
         oppPlane = pyOppPlane.shape
         # print 'pyOppPlane ', pyOppPlane.numGeom
 
-        if self.choped:
+        '''if self.choped:
             if pyOppPlane.aligned:
                 # print 'a'
                 rear = rear[1]
             else:
                 # print 'b'
-                rear = rear[0]
+                rear = rear[0]'''
 
         pyRearPl = pyPlaneList[rear]
         # print 'pyRearPl ', rear
