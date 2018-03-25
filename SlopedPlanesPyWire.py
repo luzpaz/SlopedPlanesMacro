@@ -320,7 +320,7 @@ class _PyWire(_Py):
                             pyPl.trimming(enormousShape)
                             control.append(numGeom)
 
-                        elif pyPl.aligned:
+                        elif pyPl.aligned or pyPl.choped:
                             # print 'b'
 
                             pass
