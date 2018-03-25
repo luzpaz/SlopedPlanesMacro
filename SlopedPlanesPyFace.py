@@ -332,7 +332,21 @@ class _PyFace(_Py):
 
         self.betweenWires()
 
-        self.aligning()  # '''
+        pyAlignList = self.alignments
+
+        for pyAlign in pyAlignList:
+            if pyAlign.falsify:
+                pyAlign.aligning()
+
+        for pyAlign in pyAlignList:
+            if not pyAlign.falsify:
+                pyAlign.aligning()
+
+        # self.printControl('aligning')
+
+        for pyAlign in pyAlignList:
+            pyAlign.postProcess()
+        # self.printControl('postProcess')
 
     def parsing(self):
 
@@ -1451,27 +1465,3 @@ class _PyFace(_Py):
                                 pyPlane.cuttingPyth(cutList)
 
                             # print 'pyPlane.shape ', pyPlane.shape
-
-    def aligning(self):
-
-        '''aligning(self)
-        Transfers to PyAlignment.'''
-
-        # print '######### aligning'
-
-        pyAlignList = self.alignments
-
-        for pyAlign in pyAlignList:
-            if pyAlign.falsify:
-                pyAlign.aligning()
-
-        for pyAlign in pyAlignList:
-            if not pyAlign.falsify:
-                pyAlign.aligning()
-
-        # self.printControl('aligning')
-
-        for pyAlign in pyAlignList:
-            pyAlign.end()
-
-        # self.printControl('end')

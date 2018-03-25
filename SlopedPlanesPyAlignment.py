@@ -1327,9 +1327,9 @@ class _PyAlignment(_Py):
 
         return cutList
 
-    def end(self):
+    def postProcess(self):
 
-        '''end(self)'''
+        '''postProcess(self)'''
 
         # print '# self.Base ', self.base.numGeom
 
