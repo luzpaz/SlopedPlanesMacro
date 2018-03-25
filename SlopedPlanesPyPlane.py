@@ -936,8 +936,12 @@ class _PyPlane(_Py):
         plane = self.shape
 
         if not self.isSolved():
-            # print 'foo'
-            return
+            # print 'fo'
+            forward = self.forward
+            section = plane.section([forward], tolerance)
+            if section.Edges:
+                # print 'fofo'
+                return
 
         pyPlaneList = pyWire.planes
 
