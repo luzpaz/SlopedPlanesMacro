@@ -807,6 +807,8 @@ class _PySketch(_Py):
 
         ''''''
 
+        sketch.Placement = FreeCAD.Placement()
+
         geomShape = plane.geomShape
         ffPoint = geomShape.firstVertex(True).Point
         llPoint = geomShape.lastVertex(True).Point

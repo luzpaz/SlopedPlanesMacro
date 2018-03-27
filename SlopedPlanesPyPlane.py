@@ -806,6 +806,7 @@ class _PyPlane(_Py):
             # print 'A'
 
             sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
+            sweepSketch.Proxy.locate(sweepSketch, self)
             wire = sweepSketch.Shape
             extendShape = Part.Wire(extendShape)
             plane = wire.makePipeShell([extendShape])
