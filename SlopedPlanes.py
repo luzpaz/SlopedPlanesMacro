@@ -30,8 +30,8 @@ from SlopedPlanesPyFace import _PyFace
 from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyPlane import _PyPlane
 if FreeCAD.GuiUp:
-    import FreeCADGui
     from os import path
+    import FreeCADGui
     from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 
 
@@ -799,6 +799,7 @@ class _ViewProvider_SlopedPlanes():
         ''''''
 
         taskd = _TaskPanel_SlopedPlanes()
+        self.task = taskd
         taskd.obj = self.Object
         taskd.update()
         FreeCADGui.Control.showDialog(taskd)

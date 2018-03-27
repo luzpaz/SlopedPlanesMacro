@@ -62,7 +62,7 @@ class _TaskPanel_SlopedPlanes():
         tree.setParent(form)
         grid.addWidget(tree, 1, 0, 1, 2)
         tree.itemChanged.connect(self.edit)
-        tree.currentItemChanged.connect(tree.changeCurrentItem)
+        # tree.currentItemChanged.connect(tree.changeCurrentItem)
 
         advancedOptions = QtGui.QCheckBox(form)
         self.advancedOptions = advancedOptions
@@ -103,6 +103,7 @@ class _TaskPanel_SlopedPlanes():
                                        ("Curves"),
                                        ("Sweep Curve"),
                                        ("Face")])
+
         else:
             self.tree.setHeaderLabels([("Face"),
                                        ("Angle")])
@@ -652,18 +653,22 @@ class _TreeWidget(QtGui.QTreeWidget):
         self.header().resizeSection(0, 60)
         self.header().resizeSection(1, 60)
 
-    def changeCurrentItem(self, current, previous):
+    '''def changeCurrentItem(self, current, previous):
 
         ''''''
 
-        # print 'currentItemChanged'
+        print 'currentItemChanged'
 
         if current:
+            number = self.indexFromItem(previous).data()
+            print 'number ', number
             num = self.indexFromItem(current).data()
-            FreeCADGui.Selection.clearSelection()
-            obj = self.obj
-            sub = 'Face' + str(num)
-            FreeCADGui.Selection.addSelection(obj, [sub])
+            print 'num ', num
+            if num != number:
+                FreeCADGui.Selection.clearSelection()
+                obj = self.obj
+                sub = 'Face' + str(num)
+                FreeCADGui.Selection.addSelection(obj, [sub])'''
 
 
 class _NewCurve(QtGui.QPushButton):
@@ -679,6 +684,8 @@ class _NewCurve(QtGui.QPushButton):
     def onClicked(self):
 
         ''''''
+
+        print 'onClicked _NewCurve'
 
         pyPlane = self.plane
         slopedPlanes = self.slopedPlanes
