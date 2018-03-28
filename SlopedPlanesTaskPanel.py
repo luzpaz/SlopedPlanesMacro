@@ -691,7 +691,7 @@ class _NewCurve(QtGui.QPushButton):
         slopedPlanes = self.slopedPlanes
         pyPlane.makeSweepSketch(slopedPlanes)
         # TODO
-
+        # reload
 
 class _SelectPlane(QtGui.QComboBox):
 

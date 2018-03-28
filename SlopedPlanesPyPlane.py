@@ -22,7 +22,7 @@
 # *****************************************************************************
 
 
-from math import pi
+from math import pi, degrees, radians
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
@@ -806,8 +806,39 @@ class _PyPlane(_Py):
             # print 'A'
 
             sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
-            sweepSketch.Proxy.locate(sweepSketch, self)
-            wire = sweepSketch.Shape
+            direct = sweepSketch.Direction
+
+            wire = sweepSketch.Shape.copy()
+
+            wire.Placement.Base = FreeCAD.Vector(0, 0, 0)
+            wire.Placement.Rotation.Axis = FreeCAD.Vector(0, 0, 1)
+            wire.Placement.Rotation.Angle = 0
+
+            angleConstraint = degrees(sweepSketch.Constraints[3].Value)
+            angle = self.angle
+            ang = angle - angleConstraint
+            wire.rotate(FreeCAD.Vector(0 , 0, 0), FreeCAD.Vector(0, 0, 1), ang)
+
+            geomShape = self.geomShape
+            ffPoint = geomShape.firstVertex(True).Point
+            llPoint = geomShape.lastVertex(True).Point
+            aa = direct.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
+            if ffPoint.y > llPoint.y:
+                aa = aa + pi
+
+            rotation = FreeCAD.Rotation()
+            rotation.Axis = FreeCAD.Vector(1, 0, 0)
+            rotation.Angle = pi / 2
+            wire.Placement.Rotation = rotation.multiply(wire.Placement.Rotation)
+
+            rotation = FreeCAD.Rotation()
+            rotation.Axis = _Py.normal
+            rotation.Angle = aa
+            wire.Placement.Rotation =\
+                rotation.multiply(wire.Placement.Rotation)
+
+            wire.Placement.Base = ffPoint
+
             extendShape = Part.Wire(extendShape)
             plane = wire.makePipeShell([extendShape])
 

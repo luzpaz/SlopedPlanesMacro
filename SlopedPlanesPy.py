@@ -774,6 +774,8 @@ class _PySketch(_Py):
 
         ''''''
 
+        sketch.addProperty('App::PropertyVector', 'Direction', 'SlopedPlanes')
+
         sketch.Proxy = self
 
         vectorA = FreeCAD.Vector(-707.107, -707.107, 0)
@@ -807,25 +809,30 @@ class _PySketch(_Py):
 
         ''''''
 
-        sketch.Placement = FreeCAD.Placement()
-
         geomShape = plane.geomShape
         ffPoint = geomShape.firstVertex(True).Point
         llPoint = geomShape.lastVertex(True).Point
         direction = llPoint.sub(ffPoint)
-        perpend = self.rotateVector(direction, _Py.normal, 90)
-        ang = direction.getAngle(FreeCAD.Vector(1, 0, 0)) + math.pi / 2
+        sketch.Direction = direction
+        # print 'ffPoint ', ffPoint
+        # print 'llPoint ', llPoint
+        # print 'direction ', direction
+
+        angle = direction.getAngle(FreeCAD.Vector(1, 0, 0)) + math.pi / 2
+        # print 'angle ', angle
+
+        if ffPoint.y > llPoint.y:
+            angle = angle + math.pi
+            # print 'angle ', angle
 
         rotation = FreeCAD.Rotation()
-        rotation.Axis = _Py.normal
-        rotation.Angle = ang
-
+        rotation.Axis = FreeCAD.Vector(1, 0, 0)
+        rotation.Angle = math.pi / 2
         sketch.Placement.Rotation = rotation
 
         rotation = FreeCAD.Rotation()
-        rotation.Axis = perpend
-        rotation.Angle = math.pi / 2
-
+        rotation.Axis = _Py.normal
+        rotation.Angle = angle
         sketch.Placement.Rotation =\
             rotation.multiply(sketch.Placement.Rotation)
 
