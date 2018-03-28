@@ -13,8 +13,7 @@ FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 
 ## Build Status <img src="https://blog.travis-ci.com/images/travis-mascot-200px.png" height="30"/>
 
-The macro is tested with a set of examples which can be watched in the repository SlopedPlanesTest
-https://github.com/caceres/SlopedPlanesTest.git
+The macro is tested with a set of examples. Please, see at https://github.com/caceres/SlopedPlanesTest.git
 
 | master | develop |
 |:------:|:-------:|
