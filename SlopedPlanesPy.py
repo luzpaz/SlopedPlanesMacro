@@ -774,8 +774,6 @@ class _PySketch(_Py):
 
         ''''''
 
-        sketch.addProperty('App::PropertyVector', 'Direction', 'SlopedPlanes')
-
         sketch.Proxy = self
 
         vectorA = FreeCAD.Vector(-707.107, -707.107, 0)
@@ -813,7 +811,6 @@ class _PySketch(_Py):
         ffPoint = geomShape.firstVertex(True).Point
         llPoint = geomShape.lastVertex(True).Point
         direction = llPoint.sub(ffPoint)
-        sketch.Direction = direction
         # print 'ffPoint ', ffPoint
         # print 'llPoint ', llPoint
         # print 'direction ', direction
