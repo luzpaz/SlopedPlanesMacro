@@ -26,6 +26,8 @@ import math
 import FreeCAD
 import Part
 import Sketcher
+if FreeCAD.GuiUp:
+    import FreeCADGui
 
 
 __title__ = "SlopedPlanes Macro"
@@ -762,6 +764,12 @@ class _Py(object):
         linkList = slopedPlanes.SweepCurves
         linkList.append(pySketch)
         slopedPlanes.SweepCurves = linkList
+
+        if FreeCAD.GuiUp:
+            slopedPlanes.ViewObject.Proxy.task.reject()
+            FreeCADGui.activeDocument().setEdit(pySketch.Name)
+
+        self.sweepCurve = pySketch.Name
 
         return pySketch
 

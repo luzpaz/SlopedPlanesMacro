@@ -685,13 +685,11 @@ class _NewCurve(QtGui.QPushButton):
 
         ''''''
 
-        print 'onClicked _NewCurve'
+        # print 'onClicked _NewCurve'
 
         pyPlane = self.plane
         slopedPlanes = self.slopedPlanes
         pyPlane.makeSweepSketch(slopedPlanes)
-        # TODO
-        # reload
 
 class _SelectPlane(QtGui.QComboBox):
 
