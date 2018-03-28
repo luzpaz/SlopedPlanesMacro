@@ -713,7 +713,9 @@ class _PyPlane(_Py):
         '''direction(self, pyWire, numGeom)'''
 
         coordinates = pyWire.coordinates
+
         geom = self.doGeom()
+
         eje = coordinates[numGeom + 1].sub(coordinates[numGeom])
         direction = self.rotateVector(eje, _Py.normal, 90)
         angle = self.angle
@@ -783,11 +785,6 @@ class _PyPlane(_Py):
 
             startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
             endParam = startParam + 2 * pi
-
-        elif isinstance(geom, (Part.Circle,
-                               Part.Ellipse)):
-
-            pass
 
         elif isinstance(geom, Part.BSplineCurve):
 

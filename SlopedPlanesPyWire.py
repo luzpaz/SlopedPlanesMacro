@@ -141,12 +141,16 @@ class _PyWire(_Py):
         Transfers to PyPlane.
         Arranges the reflex range and its planes ranges.'''
 
-        for pyPlane in self.planes:
-            if pyPlane.geomAligned:
-                pyPlane.planning(self)
+        if len(self.coordinates) == 2:
+            pyPlane = self.planes[0]
+            curve = pyPlane.geomAligned.Curve
 
-        reset = _Py.pyFace.reset
-        if reset:
+        else:
+            for pyPlane in self.planes:
+                if pyPlane.geomAligned:
+                    pyPlane.planning(self)
+
+        if _Py.pyFace.reset:
             for pyReflex in self.reflexs:
                 pyReflex.rangging(self)
 
