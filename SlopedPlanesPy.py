@@ -488,7 +488,11 @@ class _Py(object):
 
         orderVert = wire.OrderedVertexes
 
+        if len(orderVert) == 1:
+            return orderVert
+
         orderPoint = [vert.Point for vert in orderVert]
+
         geometryList = self.geometries(orderPoint)
         edges = [line.toShape() for line in geometryList]
         wire = Part.Wire(edges)
@@ -571,6 +575,10 @@ class _Py(object):
 
         ''''''
 
+        if len(coordinates) == 0:
+            edge = face.OuterWire.Edges[0]
+            return [edge.Curve]
+
         coordinates.append(coordinates[0])
         first = coordinates[0]
         second = coordinates[1]
@@ -609,13 +617,13 @@ class _Py(object):
         if isinstance(curve, (Part.Line, Part.LineSegment)):
             geom = Part.LineSegment(curve, startParam, endParam)
 
-        elif isinstance(curve, Part.Circle):
+        elif isinstance(curve, Part.Circle):    # ???
             geom = Part.ArcOfCircle(curve, startParam, endParam)
 
         elif isinstance(curve, Part.ArcOfCircle):
             geom = Part.ArcOfCircle(curve.Circle, startParam, endParam)
 
-        elif isinstance(curve, Part.Ellipse):
+        elif isinstance(curve, Part.Ellipse):   # ???
             geom = Part.ArcOfEllipse(curve, startParam, endParam)
 
         elif isinstance(curve, Part.ArcOfEllipse):
@@ -645,11 +653,18 @@ class _Py(object):
 
         ''''''
 
-        geomAligned = self.geomAligned.Edges[0]     # ???
+        if not self.aligned:
+            if self.geom:
+                return self.geom
+
+        geomAligned = self.geomAligned
         curve = geomAligned.Curve
         startParam = geomAligned.parameterAt(geomAligned.firstVertex(True))
         endParam = geomAligned.parameterAt(geomAligned.lastVertex(True))
         geom = self.makeGeom(curve, startParam, endParam)
+
+        if not self.aligned:
+            self.geom = geom
 
         return geom
 

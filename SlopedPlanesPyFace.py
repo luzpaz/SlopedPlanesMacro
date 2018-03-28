@@ -309,7 +309,7 @@ class _PyFace(_Py):
         self.parsing()
 
         self.planning()
-        # self.printSummary()
+        #self.printSummary()
 
         self.upping()
 
@@ -393,11 +393,15 @@ class _PyFace(_Py):
 
             pyPlaneList = pyWire.planes
             coord = pyWire.coordinates
+
             eje = coord[1].sub(coord[0])
 
             for pyPlane in pyPlaneList:
                 numGeom = pyPlane.numGeom
                 # print '### numGeom ', numGeom, ' angle ', pyPlane.angle
+
+                if len(coord) == 2:
+                    break
 
                 nextEje = coord[numGeom + 2].sub(coord[numGeom + 1])
                 corner = self.convexReflex(eje, nextEje)
@@ -662,7 +666,7 @@ class _PyFace(_Py):
                 # print 'alignments ', self.alignments
 
             if resetFace:
-                if numWire > 0:
+                if numWire > 0 and len(coord) > 2:
                     # print 'firstPlane'
 
                     firstPlane = pyPlaneList[0]
