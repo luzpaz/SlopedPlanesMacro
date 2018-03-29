@@ -207,7 +207,8 @@ class _SlopedPlanes(_Py):
         shape.Placement = FreeCAD.Placement()
 
         _Py.slopedPlanes = slopedPlanes
-        _Py.tolerance = slopedPlanes.Tolerance
+        tolerance = slopedPlanes.Tolerance
+        _Py.tolerance = tolerance
         _Py.reverse = slopedPlanes.Reverse
         _Py.upList = []
 
@@ -577,6 +578,16 @@ class _SlopedPlanes(_Py):
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
+
+        if slopedPlanes.Group:
+            for obj in slopedPlanes.Group:
+                if hasattr(obj, "Proxy"):
+                    if obj.Proxy.Type == "SlopedPlanes":
+                        childShape = obj.Shape.copy()
+                        common = endShape.common([childShape], tolerance)
+                        endShape = endShape.cut([common], tolerance)
+                        childShape = childShape.cut([common], tolerance)
+                        endShape = Part.Compound([endShape, childShape])
 
         # endShape.removeInternalWires(True)
 

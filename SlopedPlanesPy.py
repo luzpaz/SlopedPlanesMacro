@@ -725,6 +725,32 @@ class _Py(object):
         # print 'ran ', ran
         return ran
 
+    def makeSweepSketch(self, slopedPlanes):
+
+        ''''''
+
+        pySketch =\
+            FreeCAD.ActiveDocument.addObject('Sketcher::SketchObjectPython',
+                                             'SweepSketch')
+
+        _PySketch(pySketch)
+        _ViewProviderPySketch(pySketch.ViewObject)
+
+        pySketch.Proxy.locate(pySketch, self)
+        pySketch.Proxy.slope(pySketch, self)
+
+        linkList = slopedPlanes.SweepCurves
+        linkList.append(pySketch)
+        slopedPlanes.SweepCurves = linkList
+
+        if FreeCAD.GuiUp:
+            slopedPlanes.ViewObject.Proxy.task.reject()
+            FreeCADGui.activeDocument().setEdit(pySketch.Name)
+
+        self.sweepCurve = pySketch.Name
+
+        return pySketch
+
     def refine(self, faceOne, faceTwo):
 
         ''''''
@@ -761,32 +787,6 @@ class _Py(object):
         face = Part.makeFace(wire, "Part::FaceMakerSimple")
 
         return face
-
-    def makeSweepSketch(self, slopedPlanes):
-
-        ''''''
-
-        pySketch =\
-            FreeCAD.ActiveDocument.addObject('Sketcher::SketchObjectPython',
-                                             'SweepSketch')
-
-        _PySketch(pySketch)
-        _ViewProviderPySketch(pySketch.ViewObject)
-
-        pySketch.Proxy.locate(pySketch, self)
-        pySketch.Proxy.slope(pySketch, self)
-
-        linkList = slopedPlanes.SweepCurves
-        linkList.append(pySketch)
-        slopedPlanes.SweepCurves = linkList
-
-        if FreeCAD.GuiUp:
-            slopedPlanes.ViewObject.Proxy.task.reject()
-            FreeCADGui.activeDocument().setEdit(pySketch.Name)
-
-        self.sweepCurve = pySketch.Name
-
-        return pySketch
 
 
 class _PySketch(_Py):
