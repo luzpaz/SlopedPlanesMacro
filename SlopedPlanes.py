@@ -172,6 +172,8 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
                                  "SlopedPlanes", doc)
 
+        slopedPlanes.addExtension("App::GroupExtensionPython", self)
+
         self.State = True
 
         slopedPlanes.Slope = 45.0
@@ -743,6 +745,7 @@ class _ViewProvider_SlopedPlanes():
 
         ''''''
 
+        vobj.addExtension("Gui::ViewProviderGroupExtensionPython", self)
         vobj.Proxy = self
 
     def getIcon(self):
@@ -785,7 +788,8 @@ class _ViewProvider_SlopedPlanes():
 
         obj = self.Object
         base = obj.Base
-        return [base]
+
+        return [base] + obj.Group
 
     def unsetEdit(self, vobj, mode):
 
