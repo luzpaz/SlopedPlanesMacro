@@ -564,6 +564,16 @@ class _SlopedPlanes(_Py):
 
         endShape = Part.makeCompound(shellList)
 
+        if slopedPlanes.Group:
+            for obj in slopedPlanes.Group:
+                if hasattr(obj, "Proxy"):
+                    if obj.Proxy.Type == "SlopedPlanes":
+                        childShape = obj.Shape.copy()
+                        common = endShape.common([childShape], tolerance)
+                        endShape = endShape.cut([common], tolerance)
+                        childShape = childShape.cut([common], tolerance)
+                        endShape = Part.Compound([endShape, childShape])
+
         if not slopedPlanes.Complement:
             endShape.complement()
 
@@ -578,16 +588,6 @@ class _SlopedPlanes(_Py):
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
-
-        if slopedPlanes.Group:
-            for obj in slopedPlanes.Group:
-                if hasattr(obj, "Proxy"):
-                    if obj.Proxy.Type == "SlopedPlanes":
-                        childShape = obj.Shape.copy()
-                        common = endShape.common([childShape], tolerance)
-                        endShape = endShape.cut([common], tolerance)
-                        childShape = childShape.cut([common], tolerance)
-                        endShape = Part.Compound([endShape, childShape])
 
         # endShape.removeInternalWires(True)
 
