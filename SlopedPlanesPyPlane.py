@@ -645,7 +645,7 @@ class _PyPlane(_Py):
 
         self._sweepCurve = sweepCurve
 
-    def planning(self, pyWire):
+    def planning(self, pyWire, closed=False):
 
         '''planning(self, pyWire)
         '''
@@ -661,6 +661,10 @@ class _PyPlane(_Py):
 
         else:
             # print '### no seed'
+
+            if closed:
+                print 'closed'
+                return
 
             direction, geom = self.direction(pyWire, numGeom)
             # print 'geom ', geom

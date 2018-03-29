@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+import Part
 from SlopedPlanesPy import _Py
 
 
@@ -142,17 +143,19 @@ class _PyWire(_Py):
         Arranges the reflex range and its planes ranges.'''
 
         if len(self.coordinates) == 2:
+
             pyPlane = self.planes[0]
-            curve = pyPlane.geomAligned.Curve
+            pyPlane.planning(self, True)
 
         else:
+
             for pyPlane in self.planes:
                 if pyPlane.geomAligned:
                     pyPlane.planning(self)
 
-        if _Py.pyFace.reset:
-            for pyReflex in self.reflexs:
-                pyReflex.rangging(self)
+            if _Py.pyFace.reset:
+                for pyReflex in self.reflexs:
+                    pyReflex.rangging(self)
 
     def virtualizing(self):
 
