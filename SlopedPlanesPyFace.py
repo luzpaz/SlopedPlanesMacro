@@ -309,7 +309,7 @@ class _PyFace(_Py):
         self.parsing()
 
         self.planning()
-        #self.printSummary()
+        # self.printSummary()
 
         self.upping()
 
@@ -431,6 +431,7 @@ class _PyFace(_Py):
                         if ref:
                             # print 'ref'
                             self.forBack(pyPlane, 'backward')
+
                             forward = pyPlane.forward
                             section = forward.section(shapeGeomFace, tolerance)
 
@@ -511,6 +512,8 @@ class _PyFace(_Py):
 
                         forward = pyPlane.forward
                         section = forward.section(shapeGeomFace, tolerance)
+                        # print 'forward ', forward, forward.Curve
+                        # print 'shapeGeomFace ', shapeGeomFace, [e.Curve for e in shapeGeomFace]
 
                         if section.Edges:
                             # print '11 possible alignment'
@@ -563,21 +566,24 @@ class _PyFace(_Py):
 
                                         fAng = self.findAngle(numWire, numGeom)
                                         sAng = self.findAngle(nWire, nGeom)
+
                                         fGeom = pyPlane.doGeom()
                                         sGeom = pyPl.doGeom()
-
-                                        # TODO curved
 
                                         forwardLine = forward.Curve
 
                                         startParam = fGeom.FirstParameter
-                                        endPoint = sGeom.EndPoint
+                                        endPoint =\
+                                            sGeom.value(sGeom.LastParameter)
                                         endParam =\
                                             forwardLine.parameter(endPoint)
-                                        eGeom =\
-                                            Part.LineSegment(fGeom,
-                                                             startParam,
-                                                             endParam)
+
+                                        eGeom = self.makeGeom(fGeom,
+                                                              startParam,
+                                                              endParam)
+
+                                        # print eGeom
+
                                         eGeomShape = eGeom.toShape()
 
                                         if fAng == sAng:
