@@ -22,7 +22,7 @@
 # *****************************************************************************
 
 
-from math import pi, degrees, radians
+from math import pi, degrees, radians, tan, sqrt
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
@@ -653,6 +653,12 @@ class _PyPlane(_Py):
         numGeom = self.numGeom
         # print '### planning ', numGeom
 
+        if self.reflexed:
+            self.simulatedShape = None
+            self.cutter = []
+            self.under = []
+            self.seed = []
+
         if self.seedShape:
             # print '### seed'
 
@@ -663,10 +669,18 @@ class _PyPlane(_Py):
             # print '### no seed'
 
             if closed:
-                print 'closed'
-                return
+                geom = self.makeGeom(self.geomShape.Curve, 0, 2 * pi)
+                angle = self.angle
+                radius = geom.Radius
+                height = radius * tan(radians(angle))
+                pointA = self.geomShape.Vertexes[0].Point
+                pointB = geom.Location + FreeCAD.Vector(0, 0, height)
+                direction = pointB.sub(pointA)
+                direction.normalize()
 
-            direction, geom = self.direction(pyWire, numGeom)
+            else:
+                direction, geom = self.direction(pyWire, numGeom)
+
             # print 'geom ', geom
             # print 'direction ', direction
 
@@ -674,26 +688,26 @@ class _PyPlane(_Py):
             lastParam = geom.LastParameter
 
             geomCopy = geom.copy()
-            if not self.sweepCurve:
+            if not (self.sweepCurve or closed):
                 geomCopy.translate(-1 * self.overhang * direction)
 
             # print '# normal'
             scale = 1
             plane =\
                 self.doPlane(direction, geomCopy, firstParam,
-                             lastParam, scale)
+                             lastParam, scale, closed)
             self.shape = plane
             self.seedShape = plane.copy()
 
             geomCopy = geom.copy()
-            if not self.sweepCurve:
+            if not (self.sweepCurve or closed):
                 geomCopy.translate(-1 * _Py.size * direction)
 
             # print '# big'
             scale = 5
             bigPlane =\
                 self.doPlane(direction, geomCopy, firstParam,
-                             lastParam, scale)
+                             lastParam, scale, closed)
             self.bigShape = bigPlane
             self.seedBigShape = bigPlane.copy()
 
@@ -703,14 +717,8 @@ class _PyPlane(_Py):
                 scale = 50
                 enormousPlane =\
                     self.doPlane(direction, geomCopy, firstParam,
-                                 lastParam, scale)
+                                 lastParam, scale, closed)
                 self.enormousShape = enormousPlane
-
-        if self.reflexed:
-            self.simulatedShape = None
-            self.cutter = []
-            self.under = []
-            self.seed = []
 
     def direction(self, pyWire, numGeom):
 
@@ -730,7 +738,7 @@ class _PyPlane(_Py):
 
         return direction, geom
 
-    def doPlane(self, direction, geom, firstParam, lastParam, scale):
+    def doPlane(self, direction, geom, firstParam, lastParam, scale, closed):
 
         '''doPlane(self, direction, geom, firstParam, lastParam, scale)
         '''
@@ -790,6 +798,11 @@ class _PyPlane(_Py):
             startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
             endParam = startParam + 2 * pi
 
+        elif isinstance(geom, (Part.Circle, Part.Ellipse)):
+
+            startParam = 0
+            endParam = 2 * pi
+
         elif isinstance(geom, Part.BSplineCurve):
 
             pass
@@ -797,7 +810,6 @@ class _PyPlane(_Py):
         # print 'startParam ', startParam
         # print 'endParam ', endParam
 
-        # TODO quitar makeGeom y hacer aquí mismo
         extendGeom = self.makeGeom(geom, startParam, endParam)
         # print 'extendGeom ', extendGeom
         # TODO problem with ArcOfHiperbola
@@ -849,8 +861,22 @@ class _PyPlane(_Py):
         else:
             # print 'B'
 
-            # print 'direction*upscale ', direction*upScale
-            plane = extendShape.extrude(direction * upScale)
+            if closed:
+
+                point = geom.Location
+                angle = self.angle
+                radius = geom.Radius
+                height = radius * tan(radians(angle))
+                length = sqrt(radius ** 2 + height ** 2)
+                pointA = self.geomShape.Vertexes[0].Point
+                pointB = geom.Location + FreeCAD.Vector(0, 0, height)
+                revolCurve = Part.makeLine(pointA, pointB)
+
+                plane = Part.makeRevolution(revolCurve, 0, length, 360, point,
+                                            FreeCAD.Vector(0, 0, 1),).Faces[0]
+
+            else:
+                plane = extendShape.extrude(direction * upScale)
 
         return plane
 

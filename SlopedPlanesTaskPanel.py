@@ -630,7 +630,8 @@ class _TaskPanel_SlopedPlanes():
                     sketchBase = sketch.Placement.Base
                     sketchAxis = sketch.Placement.Rotation.Axis
                     sketchAngle = sketch.Placement.Rotation.Angle
-                    shape.rotate(sketchBase, sketchAxis, math.degrees(-1 * sketchAngle))
+                    shape.rotate(sketchBase, sketchAxis,
+                                 math.degrees(-1 * sketchAngle))
                     shape.translate(-1 * sketchBase)
 
                     originList = []

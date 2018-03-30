@@ -619,13 +619,13 @@ class _Py(object):
         if isinstance(curve, (Part.Line, Part.LineSegment)):
             geom = Part.LineSegment(curve, startParam, endParam)
 
-        elif isinstance(curve, Part.Circle):    # ???
+        elif isinstance(curve, Part.Circle):
             geom = Part.ArcOfCircle(curve, startParam, endParam)
 
         elif isinstance(curve, Part.ArcOfCircle):
             geom = Part.ArcOfCircle(curve.Circle, startParam, endParam)
 
-        elif isinstance(curve, Part.Ellipse):   # ???
+        elif isinstance(curve, Part.Ellipse):
             geom = Part.ArcOfEllipse(curve, startParam, endParam)
 
         elif isinstance(curve, Part.ArcOfEllipse):
