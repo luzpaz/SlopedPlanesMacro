@@ -618,6 +618,7 @@ class _TaskPanel_SlopedPlanes():
         slopedPlanes = self.obj
 
         shape = slopedPlanes.Shape.copy()
+        shape.Placement = FreeCAD.Placement()
 
         if doc == slopedPlanes.Document.Name:
             if obj == slopedPlanes.Name:
