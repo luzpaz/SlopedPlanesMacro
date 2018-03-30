@@ -38,12 +38,12 @@ class _TaskPanel_SlopedPlanes():
 
     ''''''
 
-    def __init__(self):
+    def __init__(self, slopedPlanes):
 
         ''''''
 
         self.updating = False
-        self.obj = None
+        self.obj = slopedPlanes
 
         form = QtGui.QWidget()
         self.form = form
@@ -78,15 +78,10 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        taskPanel.setWindowTitle("SlopedPlanes")
-        self.title.setText("SlopedPlanes parameters")
-        titleToolTip = ('The angles correspond with the faces of the SlopedPlanes shape.\n'
-                        'The numeration start at the LowerLeft corner and increase counter clockwise for exterior wires,\n'
-                        'and at the UpperLeft corner and increase clockwise for the interior wires.')
-        self.title.setToolTip(titleToolTip)
+        taskPanel.setWindowTitle(self.obj.Label)
 
         self.advancedOptions.setText("Advanced Options")
-        advancedOptionsToolTip = '''More parameters to control the faces of the SlopedPlanes.'''
+        advancedOptionsToolTip = '''More parameters to control the faces.'''
         self.advancedOptions.setToolTip(advancedOptionsToolTip)
 
         if self.advancedOptions.isChecked():
@@ -622,19 +617,52 @@ class _TaskPanel_SlopedPlanes():
         reset = True
         slopedPlanes = self.obj
 
+        shape = slopedPlanes.Shape.copy()
+
         if doc == slopedPlanes.Document.Name:
             if obj == slopedPlanes.Name:
                 if sub.startswith('Face'):
-                    num = sub[4:]
 
-                    try:
-                        item =\
-                            self.tree.findItems(num,
-                                                QtCore.Qt.MatchExactly, 0)[0]
-                        self.tree.setCurrentItem(item)
-                        reset = False
-                    except:
-                        pass
+                    sketch = slopedPlanes.Base
+                    sketchBase = sketch.Placement.Base
+                    sketchAxis = sketch.Placement.Rotation.Axis
+                    sketchAngle = sketch.Placement.Rotation.Angle
+                    shape.rotate(sketchBase, sketchAxis, math.degrees(-1 * sketchAngle))
+                    shape.translate(-1 * sketchBase)
+
+                    originList = []
+
+                    num = int(sub[4:])
+                    ff = shape.Faces[num - 1]
+                    number = 0
+                    for pyFace in slopedPlanes.Proxy.Pyth:
+                        if not reset:
+                            break
+                        for pyWire in pyFace.wires:
+                            numWire = pyWire.numWire
+                            if not reset:
+                                break
+                            for pyPlane in pyWire.planes:
+
+                                number += 1
+                                geomShape = pyPlane.geomShape
+                                section = ff.section(geomShape)
+
+                                if section.Edges:
+                                    item =\
+                                        self.tree.findItems(str(number),
+                                                            QtCore.Qt.MatchExactly,
+                                                            0)[0]
+                                    self.tree.setCurrentItem(item)
+                                    reset = False
+                                    break
+
+                                if [numWire, number - 1] in originList:
+                                    number -= 1
+
+                                if isinstance(pyPlane.angle, list):
+                                    [nW, nG] = pyPlane.angle
+                                    originList.append([nW, nG])
 
         if reset:
             self.tree.setCurrentItem(None)
@@ -690,12 +718,6 @@ class _NewCurve(QtGui.QPushButton):
         pyPlane = self.plane
         slopedPlanes = self.slopedPlanes
         pyPlane.makeSweepSketch(slopedPlanes)
-
-class _SelectPlane(QtGui.QComboBox):
-
-    ''''''
-
-    pass
 
 
 class _DoubleSpinBox(QtGui.QDoubleSpinBox):

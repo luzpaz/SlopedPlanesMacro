@@ -813,9 +813,8 @@ class _ViewProvider_SlopedPlanes():
 
         ''''''
 
-        taskd = _TaskPanel_SlopedPlanes()
+        taskd = _TaskPanel_SlopedPlanes(self.Object)
         self.task = taskd
-        taskd.obj = self.Object
         taskd.update()
         FreeCADGui.Control.showDialog(taskd)
         return True
