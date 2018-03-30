@@ -233,6 +233,7 @@ class _TaskPanel_SlopedPlanes():
                 size = pyFace.size
                 # print '### numFace ', numFace
                 shell = compound.Shells[numFace]
+                lenShell = len(shell.Faces)
                 numSlope += num
                 num, lenFace = 0, 0
 
@@ -470,7 +471,7 @@ class _TaskPanel_SlopedPlanes():
                     value += 1
                     upFace = False
 
-                num = len(shell.Faces) - value - lenFace
+                num = lenShell - value - lenFace
                 # print 'num ', num
 
         self.retranslateUi(self.form)
@@ -497,6 +498,7 @@ class _TaskPanel_SlopedPlanes():
             numFace = pyFace.numFace
             # print '### numFace', numFace
             shell = compound.Shells[numFace]
+            lenShell = len(shell.Faces)
 
             pyWireList = pyFace.wires
             for pyWire in pyWireList:
@@ -598,7 +600,7 @@ class _TaskPanel_SlopedPlanes():
                     value += 1
                     upFace = False
 
-                num = len(shell.Faces) - value - lenFace
+                num = lenShell - value - lenFace
                 # print 'num ', num
 
         slopedPlanes.Proxy.OnChanged = False
