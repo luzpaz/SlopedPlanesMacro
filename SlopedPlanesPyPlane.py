@@ -875,6 +875,8 @@ class _PyPlane(_Py):
                 plane = Part.makeRevolution(revolCurve, 0, length, 360, point,
                                             FreeCAD.Vector(0, 0, 1),).Faces[0]
 
+                # TODO para la ellipse hacerlo con sweep
+
             else:
                 plane = extendShape.extrude(direction * upScale)
 
