@@ -303,7 +303,7 @@ class _PyWire(_Py):
                         scale = 500
                         giantPlane =\
                             pyRearPl.doPlane(direction, geomCopy, firstParam,
-                                             lastParam, scale)
+                                             lastParam, scale, False)
                         gS = pyPlane.geomShape
                         enormousShape =\
                             self.cutting(enormousShape, [giantPlane], gS)
