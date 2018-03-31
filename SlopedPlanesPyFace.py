@@ -141,7 +141,7 @@ class _PyFace(_Py):
 
     def __getstate__(self, serialize):
 
-        '''__getstate__(self)
+        '''__getstate__(self, serialize)
         Serializes the complementary python objects.'''
 
         wireList, serialList = [], []
@@ -222,7 +222,7 @@ class _PyFace(_Py):
 
     def __setstate__(self, wires, alignments, serialize, compound):
 
-        '''__setstate__(self, wires, alignments)
+        '''__setstate__(self, wires, alignments, serialize, compound)
         Deserializes the complementary python objects.'''
 
         geomShapeFace = []
@@ -304,7 +304,7 @@ class _PyFace(_Py):
 
     def faceManager(self):
 
-        ''''''
+        '''faceManager(self)'''
 
         self.parsing()
 
@@ -403,6 +403,7 @@ class _PyFace(_Py):
                 # print '### numGeom ', numGeom, ' angle ', pyPlane.angle
 
                 if len(coord) == 2:
+                    # print 'circle or ellipse'
                     break
 
                 nextEje = coord[numGeom + 2].sub(coord[numGeom + 1])
@@ -514,8 +515,6 @@ class _PyFace(_Py):
 
                         forward = pyPlane.forward
                         section = forward.section(shapeGeomFace, tolerance)
-                        # print 'forward ', forward, forward.Curve
-                        # print 'shapeGeomFace ', shapeGeomFace, [e.Curve for e in shapeGeomFace]
 
                         if section.Edges:
                             # print '11 possible alignment'
@@ -592,7 +591,6 @@ class _PyFace(_Py):
                                             # print '111111 alignment'
                                             pyPl.geomAligned = None
                                             pyPl.angle = [numWire, numGeom]
-
                                             pyPlane.geomAligned = eGeomShape
 
                                         else:
@@ -674,7 +672,7 @@ class _PyFace(_Py):
                 # print 'alignments ', self.alignments
 
             if resetFace:
-                if numWire > 0 and len(coord) > 2:
+                if numWire > 0:
                     # print 'firstPlane'
 
                     firstPlane = pyPlaneList[0]
@@ -786,30 +784,6 @@ class _PyFace(_Py):
         else:
             pyPl.shape = None
             pyAli = self.selectAlignmentBase(nWire, nGeom)
-
-            '''pyAli = None
-            pyAliList = self.selectAlignments(nWire, nGeom)
-            # print pyAliList
-
-            if len(pyAliList) > 1:
-
-                for pyA in pyAliList:
-                    if pyA is not pyAlign:
-                        # print 'finds an alignment forward'
-
-                        if not pyA.falsify:
-                            # print 'not falsify'
-                            bL = pyA.aligns
-                            alignList.extend(bL)
-                            for b in bL:
-                                b.angle = [numWire, numGeom]
-                            pyAli = pyA
-
-                        else:
-                            # print 'falsify'
-                            pyA.base = pyAlign.base
-                            if not pyAli:
-                                pyAli = pyA'''
 
             if pyAli:
                 # print 'finds an alignment forward'
@@ -1016,7 +990,7 @@ class _PyFace(_Py):
 
     def findAngle(self, numWire, numGeom):
 
-        '''findAngle(self, nW, nG)'''
+        '''findAngle(self, numWire, numGeom)'''
 
         angle = self.wires[numWire].planes[numGeom].angle
 

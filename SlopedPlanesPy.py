@@ -66,7 +66,8 @@ class _Py(object):
     def selectAlignments(self, numWire, numGeom):
 
         '''selectAlignment(self, numWire, numGeom)
-        selects a list of alignments which includes the plane (numWire, numGeom)
+        selects a list of alignments which includes
+        the plane (numWire, numGeom)
         as base plane or in its aligned planes and return it.
         A maximum of two alignments'''
 
@@ -91,10 +92,7 @@ class _Py(object):
         selects an unique alignment which base plane is (numWire, numGeom),
         and return it, or None.'''
 
-        # pyPlane = self.selectPlane(numWire, numGeom)
-
         for pyAlign in _Py.pyFace.alignments:
-            # if pyAlign.base == pyPlane:
             if pyAlign.base.numWire == numWire and\
                pyAlign.base.numGeom == numGeom:
                 return pyAlign
@@ -103,7 +101,7 @@ class _Py(object):
 
     def selectAlignmentsChop(self, numWire, numGeom):
 
-        '''selectAllAlignmentChop(self, numWire, numGeom)
+        '''selectAlignmentsChop(self, numWire, numGeom)
         selects all alignment which the plane (numWire, numGeom)
         is in their chops, and return them.'''
 
@@ -151,15 +149,14 @@ class _Py(object):
     def selectPlane(self, numWire, numGeom):
 
         '''selectPlane(self, numWire, numGeom)
-        Selects the plane numWire and numGeom.
-        '''
+        Selects the plane numWire and numGeom.'''
 
         return _Py.pyFace.wires[numWire].planes[numGeom]
 
     def selectBasePlane(self, numWire, numGeom):
 
         '''selectBasePlane(self, numWire, numGeom)
-        Selects the plane numWire and numGeom, or if this allow of shape
+        Selects the plane numWire and numGeom, or if this lacks of shape
         selects the base plane of the alignment.'''
 
         pyPlane = self.selectPlane(numWire, numGeom)
@@ -172,8 +169,7 @@ class _Py(object):
 
     def cutting(self, cutted, cutter, geomShape):
 
-        '''cutting(self, cutted, cutter, geomShape)
-        '''
+        '''cutting(self, cutted, cutter, geomShape)'''
 
         cutted = cutted.cut(cutter, _Py.tolerance)
         cutted = self.selectFace(cutted.Faces, geomShape)
@@ -182,8 +178,7 @@ class _Py(object):
 
     def cuttingPyth(self, cutter):
 
-        '''
-        '''
+        '''cuttingPyth(self, cutter)'''
 
         cutted = self.shape
         if cutted:
@@ -195,8 +190,7 @@ class _Py(object):
 
     def selectFace(self, faceList, geomShape):
 
-        '''selectFace(self, faceList, geomShape)
-        '''
+        '''selectFace(self, faceList, geomShape)'''
 
         for face in faceList:
             section = face.section([geomShape], _Py.tolerance)
@@ -207,7 +201,7 @@ class _Py(object):
 
     def selectFacePoint(self, shape, point):
 
-        ''''''
+        '''selectFacePoint(self, shape, point)'''
 
         vertex = Part.Vertex(point)
         for ff in shape.Faces:
@@ -239,7 +233,7 @@ class _Py(object):
 
     def convexReflex(self, eje, nextEje):
 
-        ''''''
+        '''convexReflex(self, eje, nextEje)'''
 
         cross = eje.cross(nextEje)
         corner = None
@@ -255,7 +249,7 @@ class _Py(object):
 
     def sliceIndex(self, index, lenWire):
 
-        ''''''
+        '''sliceIndex(self, index, lenWire)'''
 
         if index >= lenWire:
             index = index - lenWire
@@ -440,7 +434,7 @@ class _Py(object):
 
     def roundVector(self, vector):
 
-        ''''''
+        '''roundVector(self, vector)'''
 
         precision = 1 / _Py.tolerance
         precision = str(precision)
@@ -452,7 +446,7 @@ class _Py(object):
 
     def rotateVector(self, vector, axis, angle):
 
-        ''''''
+        '''rotateVector(self, vector, axis, angle)'''
 
         line = Part.LineSegment(origin, vector)
         rotation = FreeCAD.Rotation(axis, angle)
@@ -463,14 +457,14 @@ class _Py(object):
 
     def faceNormal(self, face):
 
-        ''''''
+        '''faceNormal(self, face)'''
 
         normal = face.normalAt(0, 0)
         return self.roundVector(normal)
 
     def geometries(self, pointList):
 
-        ''''''
+        '''geometries(self, pointList)'''
 
         pointList.append(pointList[0])
         geometryList = []
@@ -486,7 +480,7 @@ class _Py(object):
 
     def orientedVertixes(self, wire, normal):
 
-        ''''''
+        '''orientedVertixes(self, wire, normal)'''
 
         orderVert = wire.OrderedVertexes
 
@@ -509,7 +503,7 @@ class _Py(object):
 
     def orientedPoints(self, wire, normal):
 
-        ''''''
+        '''orientedPoints(self, wire, normal)'''
 
         orientVert = self.orientedVertixes(wire, normal)
         orientPoint = [vert.Point for vert in orientVert]
@@ -519,7 +513,7 @@ class _Py(object):
 
     def facePoints(self, face, normal):
 
-        ''''''
+        '''facePoints(self, face, normal)'''
 
         wire = face.OuterWire
         orientPoint = self.orientedPoints(wire, normal)
@@ -527,11 +521,9 @@ class _Py(object):
 
     def faceDatas(self, face):
 
-        ''''''
+        '''faceDatas(self, face)'''
 
-        # print '_Py.normal ', _Py.normal
         normal = self.faceNormal(face)
-        # print 'faceData normal ', normal
         coordinates = self.facePoints(face, normal)
         if normal == _Py.normal:
             index = self.lowerLeftPoint(coordinates)
@@ -539,13 +531,11 @@ class _Py(object):
             index = self.upperLeftPoint(coordinates)
         coordinates = coordinates[index:] + coordinates[:index]
 
-        # print coordinates
-
         return coordinates
 
     def upperLeftPoint(self, coordinates):
 
-        ''''''
+        '''upperLeftPoint(self, coordinates)'''
 
         orig = coordinates[0]
         n = -1
@@ -560,7 +550,7 @@ class _Py(object):
 
     def lowerLeftPoint(self, coordinates):
 
-        ''''''
+        '''lowerLeftPoint(self, coordinates)'''
 
         orig = coordinates[0]
         n = -1
@@ -575,7 +565,7 @@ class _Py(object):
 
     def arcGeometries(self, face, coordinates):
 
-        ''''''
+        '''arcGeometries(self, face, coordinates)'''
 
         if len(coordinates) == 0:
             edge = face.OuterWire.Edges[0]
@@ -614,7 +604,7 @@ class _Py(object):
 
     def makeGeom(self, curve, startParam, endParam):
 
-        ''''''
+        '''makeGeom(self, curve, startParam, endParam)'''
 
         if isinstance(curve, (Part.Line, Part.LineSegment)):
             geom = Part.LineSegment(curve, startParam, endParam)
@@ -653,7 +643,7 @@ class _Py(object):
 
     def doGeom(self):
 
-        ''''''
+        '''doGeom(self)'''
 
         if not self.aligned:
             if self.geom:
@@ -672,7 +662,7 @@ class _Py(object):
 
     def rang(self, pyWire, numGeom, nGeom, direction, reflex=False):
 
-        ''''''
+        '''rang(self, pyWire, numGeom, nGeom, direction, reflex=False)'''
 
         # print 'rang ', (numGeom, nGeom, reflex)
 
@@ -727,7 +717,7 @@ class _Py(object):
 
     def makeSweepSketch(self, slopedPlanes):
 
-        ''''''
+        '''makeSweepSketch(self, slopedPlanes)'''
 
         pySketch =\
             FreeCAD.ActiveDocument.addObject('Sketcher::SketchObjectPython',
@@ -753,7 +743,7 @@ class _Py(object):
 
     def refine(self, faceOne, faceTwo):
 
-        ''''''
+        '''refine(self, faceOne, faceTwo)'''
 
         coordOne = self.faceDatas(faceOne)
         coordTwo = self.faceDatas(faceTwo)

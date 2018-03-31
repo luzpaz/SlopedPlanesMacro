@@ -116,16 +116,12 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyBool", "Down",
                                  "SlopedPlanes", doc)
 
-        doc = ('Gives a plane on top of the SlopedPlanes.\n'
-               'The Up could break the interior wires planes numeration.\n'
-               'First give the angles and later apply Up.')
+        doc = "Gives a plane on top of the SlopedPlanes."
 
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanes", doc)
 
-        doc = ('Gives a thickness to the SlopedPlanes.\n'
-               'The Thickness breaks the planes numeration.\n'
-               'First give the angles and later apply thickness.')
+        doc = "Gives a thickness to the SlopedPlanes."
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
@@ -763,8 +759,7 @@ class _ViewProvider_SlopedPlanes():
 
         ''''''
 
-        pth = path.dirname(__file__)
-        return pth + "/SlopedPlanes_Tree.svg"
+        return path.dirname(__file__) + "/SlopedPlanes_Tree.svg"
 
     def getDefaultDisplayMode(self):
 
@@ -789,7 +784,6 @@ class _ViewProvider_SlopedPlanes():
         ''''''
 
         self.Object = vobj.Object
-
         obj = self.Object
         obj.Proxy.State = False
 
@@ -798,9 +792,7 @@ class _ViewProvider_SlopedPlanes():
         ''''''
 
         obj = self.Object
-        base = obj.Base
-
-        return [base] + obj.Group
+        return [obj.Base] + obj.Group
 
     def unsetEdit(self, vobj, mode):
 
