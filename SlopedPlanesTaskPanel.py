@@ -637,39 +637,48 @@ class _TaskPanel_SlopedPlanes():
             if obj == slopedPlanes.Name:
                 if sub.startswith('Face'):
 
-                    num = int(sub[4:])
-                    ff = shape.Faces[num - 1]
+                    num = int(sub[4:]) -1
+                    ff = shape.Faces[num]
 
                     originList = []
-                    number = 0
+                    numSlope = 0
+
                     for pyFace in slopedPlanes.Proxy.Pyth:
                         if not reset:
                             break
+
                         for pyWire in pyFace.wires:
-                            numWire = pyWire.numWire
                             if not reset:
                                 break
+
+                            numWire = pyWire.numWire
+
                             for pyPlane in pyWire.planes:
 
-                                number += 1
+                                numGeom = pyPlane.numGeom
+                                angle = pyPlane.angle
+
+                                if [numWire, numGeom] not in originList:
+
+                                    if isinstance(angle, float):
+                                        numSlope += 1
+
+                                    else:
+                                        if angle not in originList:
+                                            originList.append(angle)
+                                            numSlope += 1
+
                                 geomShape = pyPlane.geomShape
                                 section = ff.section(geomShape)
 
                                 if section.Edges:
                                     item =\
-                                        self.tree.findItems(str(number),
+                                        self.tree.findItems(str(numSlope),
                                                             QtCore.Qt.MatchExactly,
                                                             0)[0]
                                     self.tree.setCurrentItem(item)
                                     reset = False
                                     break
-
-                                if [numWire, number - 1] in originList:
-                                    number -= 1
-
-                                if isinstance(pyPlane.angle, list):
-                                    [nW, nG] = pyPlane.angle
-                                    originList.append([nW, nG])
 
         if reset:
             self.tree.setCurrentItem(None)
