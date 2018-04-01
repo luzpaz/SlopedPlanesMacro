@@ -45,6 +45,19 @@ class _TaskPanel_SlopedPlanes():
         self.updating = False
         self.obj = slopedPlanes
 
+        shape = slopedPlanes.Shape.copy()
+        shape.Placement = FreeCAD.Placement()
+
+        sketch = slopedPlanes.Base
+        sketchBase = sketch.Placement.Base
+        sketchAxis = sketch.Placement.Rotation.Axis
+        sketchAngle = sketch.Placement.Rotation.Angle
+
+        shape.rotate(sketchBase, sketchAxis, math.degrees(-1 * sketchAngle))
+        shape.translate(-1 * sketchBase)
+
+        self.shape = shape
+
         form = QtGui.QWidget()
         self.form = form
         form.setObjectName("TaskPanel")
@@ -618,26 +631,16 @@ class _TaskPanel_SlopedPlanes():
 
         reset = True
         slopedPlanes = self.obj
-
-        shape = slopedPlanes.Shape.copy()
-        shape.Placement = FreeCAD.Placement()
+        shape = self.shape
 
         if doc == slopedPlanes.Document.Name:
             if obj == slopedPlanes.Name:
                 if sub.startswith('Face'):
 
-                    sketch = slopedPlanes.Base
-                    sketchBase = sketch.Placement.Base
-                    sketchAxis = sketch.Placement.Rotation.Axis
-                    sketchAngle = sketch.Placement.Rotation.Angle
-                    shape.rotate(sketchBase, sketchAxis,
-                                 math.degrees(-1 * sketchAngle))
-                    shape.translate(-1 * sketchBase)
-
-                    originList = []
-
                     num = int(sub[4:])
                     ff = shape.Faces[num - 1]
+
+                    originList = []
                     number = 0
                     for pyFace in slopedPlanes.Proxy.Pyth:
                         if not reset:
