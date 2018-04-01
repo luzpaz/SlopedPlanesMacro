@@ -631,6 +631,18 @@ class _SlopedPlanes(_Py):
             prop = "seedShape"
             self.overWritePyProp(prop, value)
 
+        elif prop == "SweepCurves":
+
+            curvesList = slopedPlanes.SweepCurves
+
+            for pyFace in self.Pyth:
+                for pyWire in pyFace.wires:
+                    for pyPlane in pyWire.planes:
+                        sw = pyPlane.sweepCurve
+                        if sw:
+                            if sw not in curvesList:
+                                pyPlane.sweepCurve = None
+
     def overWritePyProp(self, prop, value):
 
         '''overWritePyProp(self, prop, value)'''
