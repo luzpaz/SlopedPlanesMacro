@@ -672,10 +672,10 @@ class _TaskPanel_SlopedPlanes():
                                 section = ff.section(geomShape)
 
                                 if section.Edges:
+                                    match = QtCore.Qt.MatchExactly
                                     item =\
                                         self.tree.findItems(str(numSlope),
-                                                            QtCore.Qt.MatchExactly,
-                                                            0)[0]
+                                                            match, 0)[0]
                                     self.tree.setCurrentItem(item)
                                     reset = False
                                     break
