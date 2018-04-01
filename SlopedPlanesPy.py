@@ -726,7 +726,7 @@ class _Py(object):
         _PySketch(pySketch)
         _ViewProviderPySketch(pySketch.ViewObject)
 
-        pySketch.Proxy.locate(pySketch, self)
+        pySketch.Proxy.locate(pySketch, self, slopedPlanes)
         pySketch.Proxy.slope(pySketch, self)
 
         linkList = slopedPlanes.SweepCurves
@@ -816,7 +816,7 @@ class _PySketch(_Py):
 
         sketch.recompute()
 
-    def locate(self, sketch, plane):
+    def locate(self, sketch, plane, slopedPlanes):
 
         ''''''
 
@@ -848,7 +848,14 @@ class _PySketch(_Py):
 
         sketch.Placement.Base = ffPoint
 
-        # TODO slopedPlanes base sketch placement
+        baseSketch = slopedPlanes.Base
+        placement = baseSketch.Placement
+
+        sketch.Placement = placement.multiply(sketch.Placement)
+
+        placement = slopedPlanes.Placement
+
+        sketch.Placement = placement.multiply(sketch.Placement)
 
     def slope(self, sketch, plane):
 

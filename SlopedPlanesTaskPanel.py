@@ -208,6 +208,7 @@ class _TaskPanel_SlopedPlanes():
             tree.header().resizeSection(12, 60)
 
         else:
+
             tree.setColumnCount(2)
             tree.header().resizeSection(0, 60)
             tree.header().resizeSection(1, 60)
