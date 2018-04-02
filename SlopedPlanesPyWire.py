@@ -22,7 +22,6 @@
 # *****************************************************************************
 
 
-import Part
 from SlopedPlanesPy import _Py
 
 
@@ -226,7 +225,8 @@ class _PyWire(_Py):
                                 pyPl.control.append(numGeom)
 
                                 pl = pyPl.shape.copy()
-                                pl = pl.cut([pyOppPlane.enormousShape], tolerance)
+                                pl = pl.cut([pyOppPlane.enormousShape],
+                                            tolerance)
                                 point = self.coordinates[rr + 1]
                                 pl = self.selectFacePoint(pl, point)
 
@@ -272,7 +272,8 @@ class _PyWire(_Py):
                                 pyPl.control.append(numGeom)
 
                                 pl = pyPl.shape.copy()
-                                pl = pl.cut([pyOppPlane.enormousShape], tolerance)
+                                pl = pl.cut([pyOppPlane.enormousShape],
+                                            tolerance)
                                 point = self.coordinates[rr]
                                 pl = self.selectFacePoint(pl, point)
 
@@ -360,7 +361,8 @@ class _PyWire(_Py):
                                             # print '3'
                                             fo = pyP.forward
                                             section =\
-                                                fo.section([forward], tolerance)     # no deberia seleccionar C?
+                                                fo.section([forward],
+                                                           tolerance)     # no deberia seleccionar C?
                                             if section.Vertexes:
                                                 # print '4'
                                                 procc = False

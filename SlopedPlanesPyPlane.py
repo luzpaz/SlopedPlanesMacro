@@ -875,7 +875,8 @@ class _PyPlane(_Py):
                 plane = Part.makeRevolution(revolCurve, 0, length, 360, point,
                                             FreeCAD.Vector(0, 0, 1),).Faces[0]
 
-                # TODO para la ellipse hacerlo con sweep
+                # TODO para la ellipse hacerlo con sweep ??
+                # y los angulos igual o mayor que 90 ??
 
             else:
                 plane = extendShape.extrude(direction * upScale)
@@ -1021,14 +1022,6 @@ class _PyPlane(_Py):
         oppPlane = pyOppPlane.shape
         # print 'pyOppPlane ', pyOppPlane.numGeom
 
-        '''if self.choped:
-            if pyOppPlane.aligned:
-                # print 'a'
-                rear = rear[1]
-            else:
-                # print 'b'
-                rear = rear[0]'''
-
         pyRearPl = pyPlaneList[rear]
         # print 'pyRearPl ', rear
 
@@ -1158,7 +1151,8 @@ class _PyPlane(_Py):
                                     if not section.Vertexes:
                                         section = base.section([pl], tolerance)
                                         if section.Edges:
-                                            common = base.common(simulAlign, tolerance)
+                                            common = base.common(simulAlign,
+                                                                 tolerance)
                                             # print 'area ', common.Area
                                             if not common.Area:
                                                 # print 'a11'

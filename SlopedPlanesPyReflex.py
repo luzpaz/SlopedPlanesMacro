@@ -255,7 +255,6 @@ class _PyReflex(_Py):
         '''twin(self, pyWire, pyR, pyOppR, direction)'''
 
         pyPlaneList = pyWire.planes
-        numWire = pyWire.numWire
         control = pyR.control
 
         rangoCorner = []
@@ -609,7 +608,8 @@ class _PyReflex(_Py):
             if oppRear:
                 oppRS = None
                 if oppRr.aligned:
-                    pyA = self.selectAlignmentBase(oppRr.numWire, oppRr.numGeom)
+                    pyA = self.selectAlignmentBase(oppRr.numWire,
+                                                   oppRr.numGeom)
                     if pyA:
                         oppRS = pyA.simulatedAlignment
                 else:
@@ -786,7 +786,8 @@ class _PyReflex(_Py):
                                             if enormous:
                                                 # print 'e111'
                                                 common =\
-                                                    ff.common([seed], tolerance)
+                                                    ff.common([seed],
+                                                              tolerance)
                                                 if common.Area:
                                                     # print 'e1111'
                                                     bList.append(ff)
@@ -939,7 +940,8 @@ class _PyReflex(_Py):
                                 section = fo.section([lines], tolerance)
                                 if section.Vertexes:
                                     # print 'cutter ', pyPl.numGeom
-                                    conflictList = pyPl.isReallySolved(pyWire, pyReflex)
+                                    conflictList =\
+                                        pyPl.isReallySolved(pyWire, pyReflex)
                                     # print 'conflictList ', [p.numGeom for p in conflictList]
 
                                     if pyPlane in conflictList:
@@ -989,7 +991,8 @@ class _PyReflex(_Py):
                             if len(pl.Faces) == 1:
                                 # print 'A'
 
-                                conflictList = pyPl.isReallySolved(pyWire, pyReflex)
+                                conflictList = pyPl.isReallySolved(pyWire,
+                                                                   pyReflex)
 
                                 cList = []
                                 for pyP in conflictList:

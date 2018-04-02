@@ -977,7 +977,8 @@ class _PyAlignment(_Py):
 
                     if pyPlane.virtualized and not pyPlane.cross:
                         # print 'virtualized plane ', (pyPlane.numWire, pyPlane.numGeom)
-                        pyP = self.selectPlane(pyPlane.numWire, pyPlane.numGeom)
+                        pyP = self.selectPlane(pyPlane.numWire,
+                                               pyPlane.numGeom)
 
                         if isinstance(pyP.angle, list):
                             # print 'virt B'
