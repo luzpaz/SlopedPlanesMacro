@@ -211,11 +211,13 @@ class _PyReflex(_Py):
                             # print 'a'
                             cutList.append(oppRearPlane)
                             if not pyOppRearPlane.reflexed:
+                                # print 'aa'
                                 control.append(oppRear)
                         if rear not in control:
                             # print 'b'
                             cutList.append(rearPlane)
                             if not pyRearPlane.reflexed:
+                                # print 'bb'
                                 control.append(rear)
                         cList.extend(cutList)
 
@@ -223,6 +225,7 @@ class _PyReflex(_Py):
                     # print 'cList', cList
                     pyPlane.cuttingPyth(cList)
                     # print 'plane ', pyPlane.shape
+                    # print 'control ', pyPlane.control
 
             if pyOppR.rear and pyR.rear:
 
@@ -234,6 +237,9 @@ class _PyReflex(_Py):
                 mm = oppRear
                 oppRear = nn
                 rear = mm
+
+                pyRearPlane = pyPlaneList[rear]
+                pyOppRearPlane = pyPlaneList[oppRear]
 
             pyR = refPlanes[-1]
             rango = pyR.rango[-1]
