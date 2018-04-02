@@ -231,8 +231,9 @@ class _PyReflex(_Py):
                 rearPlane = rr
 
                 nn = rear
-                oppRear = rear
-                rear = nn
+                mm = oppRear
+                oppRear = nn
+                rear = mm
 
             pyR = refPlanes[-1]
             rango = pyR.rango[-1]
