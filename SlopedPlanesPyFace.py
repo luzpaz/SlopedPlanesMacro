@@ -348,6 +348,8 @@ class _PyFace(_Py):
             pyAlign.postProcess()
         # self.printControl('postProcess')
 
+        # self.printSummary()
+
         # '''
 
     def parsing(self):

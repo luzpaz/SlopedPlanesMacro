@@ -157,7 +157,7 @@ class _TaskPanel_SlopedPlanes():
         ''''''
 
         FreeCADGui.Selection.removeObserver(self)
-        FreeCAD.ActiveDocument.recompute()
+        #FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
         return True
 
@@ -167,7 +167,7 @@ class _TaskPanel_SlopedPlanes():
 
         FreeCADGui.Selection.removeObserver(self)
         self.resetObject()
-        FreeCAD.ActiveDocument.recompute()
+        #FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
         return True
 
@@ -639,6 +639,7 @@ class _TaskPanel_SlopedPlanes():
                 if sub.startswith('Face'):
 
                     num = int(sub[4:]) -1
+                    print '###### num ', num
                     ff = shape.Faces[num]
 
                     originList = []
@@ -658,14 +659,17 @@ class _TaskPanel_SlopedPlanes():
 
                                 numGeom = pyPlane.numGeom
                                 angle = pyPlane.angle
+                                print '### numGeom, angle ', (numGeom, angle)
 
                                 if [numWire, numGeom] not in originList:
 
                                     if isinstance(angle, float):
+                                        print 'a'
                                         numSlope += 1
 
                                     else:
                                         if angle not in originList:
+                                            print 'b'
                                             originList.append(angle)
                                             numSlope += 1
 
@@ -673,6 +677,7 @@ class _TaskPanel_SlopedPlanes():
                                 section = ff.section(geomShape)
 
                                 if section.Edges:
+                                    print '# numGeom, numSlope ', (numGeom, numSlope)
                                     match = QtCore.Qt.MatchExactly
                                     item =\
                                         self.tree.findItems(str(numSlope),
