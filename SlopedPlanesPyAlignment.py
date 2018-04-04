@@ -1429,10 +1429,12 @@ class _PyAlignment(_Py):
 
         for r in rangoRear:
             pyPl = pyPlaneList[r]
-            if pyPl.choped or pyPl.aligned:
-                break
-            pl = pyPl.shape
-            rearList.append(pl)
+            '''if pyPl.choped or pyPl.aligned:
+                break'''
+            # esto debería estar hecho desde el principio
+            if not (pyPl.choped or pyPl.aligned):
+                pl = pyPl.shape
+                rearList.append(pl)
 
         if rearList:
             # print 'rearList ', rearList
