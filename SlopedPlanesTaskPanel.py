@@ -45,7 +45,7 @@ class _TaskPanel_SlopedPlanes():
         self.updating = False
         self.obj = slopedPlanes
 
-        shape = slopedPlanes.Shape.copy()
+        '''shape = slopedPlanes.Shape.copy()
         shape.Placement = FreeCAD.Placement()
 
         sketch = slopedPlanes.Base
@@ -56,7 +56,7 @@ class _TaskPanel_SlopedPlanes():
         shape.rotate(sketchBase, sketchAxis, math.degrees(-1 * sketchAngle))
         shape.translate(-1 * sketchBase)
 
-        self.shape = shape
+        self.shape = shape'''
 
         form = QtGui.QWidget()
         self.form = form
@@ -151,14 +151,17 @@ class _TaskPanel_SlopedPlanes():
             placement = self.obj.Placement
             self.resetObject()
             self.obj.Placement = placement
+            FreeCAD.ActiveDocument.recompute()
+            self.update()
+            self.obj.Proxy.printSummary()
 
     def reject(self):
 
         ''''''
 
         FreeCADGui.Selection.removeObserver(self)
-        #FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
+        self.obj.Proxy.printSummary()
         return True
 
     def accept(self):
@@ -167,8 +170,10 @@ class _TaskPanel_SlopedPlanes():
 
         FreeCADGui.Selection.removeObserver(self)
         self.resetObject()
-        #FreeCAD.ActiveDocument.recompute()
+        self.obj.touch()
+        FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
+        self.obj.Proxy.printSummary()
         return True
 
     def helpRequested(self):
@@ -619,10 +624,6 @@ class _TaskPanel_SlopedPlanes():
 
         slopedPlanes.Proxy.OnChanged = False
 
-        slopedPlanes.touch()
-        FreeCAD.ActiveDocument.recompute()
-        self.update()
-
     def addSelection(self, doc, obj, sub, pnt=None):
 
         ''''''
@@ -632,7 +633,18 @@ class _TaskPanel_SlopedPlanes():
 
         reset = True
         slopedPlanes = self.obj
-        shape = self.shape
+        # shape = self.shape
+
+        shape = slopedPlanes.Shape.copy()
+        shape.Placement = FreeCAD.Placement()
+
+        sketch = slopedPlanes.Base
+        sketchBase = sketch.Placement.Base
+        sketchAxis = sketch.Placement.Rotation.Axis
+        sketchAngle = sketch.Placement.Rotation.Angle
+
+        shape.rotate(sketchBase, sketchAxis, math.degrees(-1 * sketchAngle))
+        shape.translate(-1 * sketchBase)
 
         if doc == slopedPlanes.Document.Name:
             if obj == slopedPlanes.Name:
@@ -674,6 +686,8 @@ class _TaskPanel_SlopedPlanes():
                                             numSlope += 1
 
                                 geomShape = pyPlane.geomShape
+                                print (pyPlane.roundVector(geomShape.firstVertex(True).Point), pyPlane.roundVector(geomShape.lastVertex(True).Point))
+
                                 section = ff.section(geomShape)
 
                                 if section.Edges:
