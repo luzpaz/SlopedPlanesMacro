@@ -44,19 +44,7 @@ class _TaskPanel_SlopedPlanes():
 
         self.updating = False
         self.obj = slopedPlanes
-
-        '''shape = slopedPlanes.Shape.copy()
-        shape.Placement = FreeCAD.Placement()
-
-        sketch = slopedPlanes.Base
-        sketchBase = sketch.Placement.Base
-        sketchAxis = sketch.Placement.Rotation.Axis
-        sketchAngle = sketch.Placement.Rotation.Angle
-
-        shape.rotate(sketchBase, sketchAxis, math.degrees(-1 * sketchAngle))
-        shape.translate(-1 * sketchBase)
-
-        self.shape = shape'''
+        self.shaping()
 
         form = QtGui.QWidget()
         self.form = form
@@ -153,7 +141,7 @@ class _TaskPanel_SlopedPlanes():
             self.obj.Placement = placement
             FreeCAD.ActiveDocument.recompute()
             self.update()
-            self.obj.Proxy.printSummary()
+            self.shaping()
 
     def reject(self):
 
@@ -161,7 +149,6 @@ class _TaskPanel_SlopedPlanes():
 
         FreeCADGui.Selection.removeObserver(self)
         FreeCADGui.ActiveDocument.resetEdit()
-        self.obj.Proxy.printSummary()
         return True
 
     def accept(self):
@@ -173,7 +160,6 @@ class _TaskPanel_SlopedPlanes():
         self.obj.touch()
         FreeCAD.ActiveDocument.recompute()
         FreeCADGui.ActiveDocument.resetEdit()
-        self.obj.Proxy.printSummary()
         return True
 
     def helpRequested(self):
@@ -633,25 +619,14 @@ class _TaskPanel_SlopedPlanes():
 
         reset = True
         slopedPlanes = self.obj
-        # shape = self.shape
-
-        shape = slopedPlanes.Shape.copy()
-        shape.Placement = FreeCAD.Placement()
-
-        sketch = slopedPlanes.Base
-        sketchBase = sketch.Placement.Base
-        sketchAxis = sketch.Placement.Rotation.Axis
-        sketchAngle = sketch.Placement.Rotation.Angle
-
-        shape.rotate(sketchBase, sketchAxis, math.degrees(-1 * sketchAngle))
-        shape.translate(-1 * sketchBase)
+        shape = self.shape
 
         if doc == slopedPlanes.Document.Name:
             if obj == slopedPlanes.Name:
                 if sub.startswith('Face'):
 
                     num = int(sub[4:]) -1
-                    print '###### num ', num
+                    # print '###### num ', num
                     ff = shape.Faces[num]
 
                     originList = []
@@ -671,27 +646,25 @@ class _TaskPanel_SlopedPlanes():
 
                                 numGeom = pyPlane.numGeom
                                 angle = pyPlane.angle
-                                print '### numGeom, angle ', (numGeom, angle)
+                                # print '### numGeom, angle ', (numGeom, angle)
 
                                 if [numWire, numGeom] not in originList:
 
                                     if isinstance(angle, float):
-                                        print 'a'
+                                        # print 'a'
                                         numSlope += 1
 
                                     else:
                                         if angle not in originList:
-                                            print 'b'
+                                            # print 'b'
                                             originList.append(angle)
                                             numSlope += 1
 
                                 geomShape = pyPlane.geomShape
-                                print (pyPlane.roundVector(geomShape.firstVertex(True).Point), pyPlane.roundVector(geomShape.lastVertex(True).Point))
-
                                 section = ff.section(geomShape)
 
                                 if section.Edges:
-                                    print '# numGeom, numSlope ', (numGeom, numSlope)
+                                    # print '# numGeom, numSlope ', (numGeom, numSlope)
                                     match = QtCore.Qt.MatchExactly
                                     item =\
                                         self.tree.findItems(str(numSlope),
@@ -702,6 +675,25 @@ class _TaskPanel_SlopedPlanes():
 
         if reset:
             self.tree.setCurrentItem(None)
+
+    def shaping(self):
+
+        ''''''
+
+        slopedPlanes = self.obj
+
+        shape = slopedPlanes.Shape.copy()
+        shape.Placement = FreeCAD.Placement()
+
+        sketch = slopedPlanes.Base
+        sketchBase = sketch.Placement.Base
+        sketchAxis = sketch.Placement.Rotation.Axis
+        sketchAngle = sketch.Placement.Rotation.Angle
+
+        shape.rotate(sketchBase, sketchAxis, math.degrees(-1 * sketchAngle))
+        shape.translate(-1 * sketchBase)
+
+        self.shape = shape
 
 
 class _TreeWidget(QtGui.QTreeWidget):
@@ -721,13 +713,13 @@ class _TreeWidget(QtGui.QTreeWidget):
 
         ''''''
 
-        print 'currentItemChanged'
+        # print 'currentItemChanged'
 
         if current:
             number = self.indexFromItem(previous).data()
-            print 'number ', number
+            # print 'number ', number
             num = self.indexFromItem(current).data()
-            print 'num ', num
+            # print 'num ', num
             if num != number:
                 FreeCADGui.Selection.clearSelection()
                 obj = self.obj
