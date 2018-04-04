@@ -1436,6 +1436,7 @@ class _PyAlignment(_Py):
 
                 pl = pyPl.shape
                 rearList.append(pl)
+
         if rearList:
             # print 'rearList ', rearList
 
