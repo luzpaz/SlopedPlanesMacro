@@ -1432,10 +1432,10 @@ class _PyAlignment(_Py):
             '''if pyPl.choped or pyPl.aligned:
                 break'''
             # esto debería estar hecho desde el principio
-            if not (pyPl.choped or pyPl.aligned or pyPl.fronted):
+            if not (pyPl.choped or pyPl.aligned or pyPl.fronted): # fronted me rompe la cruz
+
                 pl = pyPl.shape
                 rearList.append(pl)
-
         if rearList:
             # print 'rearList ', rearList
 
