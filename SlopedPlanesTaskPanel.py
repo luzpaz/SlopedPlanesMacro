@@ -507,45 +507,6 @@ class _TaskPanel_SlopedPlanes():
                     angle = pyPlane.angle
                     # print '# numAngle ', numAngle, ' angle ', angle
 
-                    '''charge = False
-
-                    if [numWire, numAngle] not in originList:
-
-                        if isinstance(angle, float):
-                            # print 'A'
-                            charge = True
-                            numSlope += 1
-
-                        else:
-                            # print 'B'
-                            alfa, beta = angle[0], angle[1]
-                            if [alfa, beta] not in originList:
-                                # print 'BB'
-                                originList.append([alfa, beta])
-
-                                if alfa == numWire:
-                                    # print 'BB1'
-
-                                    if beta > numAngle:
-                                        # print 'BB11'
-                                        charge = True
-                                        numSlope += 1
-                                        pyPlane = pyWireList[alfa].planes[beta]
-
-                                elif alfa > numWire:
-                                    # print 'BB2'
-                                    charge = True
-                                    numSlope += 1
-                                    pyPlane = pyWireList[alfa].planes[beta]
-
-                                elif alfa < numWire:
-                                    # print 'BB3'
-                                    pass
-
-                    if charge:
-
-                        # print 'numSlope ', numSlope'''
-
                     if [numWire, numAngle] not in originList and\
                        angle not in originList:
 
