@@ -489,6 +489,35 @@ class _SlopedPlanes(_Py):
                                     # print 'a2'
                                     planeWireList.append(plane)
 
+                                originList.append([numWire, numAngle])
+
+                            else:
+                                if angle not in originList:
+                                    # print 'b'
+
+                                    pyPl =\
+                                        pyFace.selectPlane(angle[0], angle[1])
+                                    pl = pyPl.shape
+                                    planeWireList.append(pl)
+
+                                    originList.append(angle)
+
+                        '''if [numWire, numAngle] not in originList:
+
+                            if isinstance(angle, float):
+                                # print 'a'
+
+                                plane = pyPlane.shape
+
+                                if isinstance(plane, Part.Compound):
+                                    # print 'a1'
+                                    planeWireList.append(plane.Faces[0])
+                                    secondaries.extend(plane.Faces[1:])
+
+                                else:
+                                    # print 'a2'
+                                    planeWireList.append(plane)
+
                             else:
                                 # print 'b'
 
@@ -513,7 +542,7 @@ class _SlopedPlanes(_Py):
 
                                     elif alfa < numWire:
                                         # print 'b3'
-                                        pass
+                                        pass'''
 
                 if slopedPlanes.Up:
                     upPlaneCopy = _Py.upList[numFace].copy()

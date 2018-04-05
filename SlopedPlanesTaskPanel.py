@@ -625,7 +625,7 @@ class _TaskPanel_SlopedPlanes():
             if obj == slopedPlanes.Name:
                 if sub.startswith('Face'):
 
-                    num = int(sub[4:]) -1
+                    num = int(sub[4:]) - 1
                     print '###### num ', num
                     ff = shape.Faces[num]
 
@@ -665,7 +665,8 @@ class _TaskPanel_SlopedPlanes():
                                 section = ff.section(geomShape)
 
                                 if section.Edges:
-                                    print '# numGeom, numSlope ', (numGeom, numSlope)
+                                    print '# numGeom, numSlope ', (numGeom,
+                                                                   numSlope)
                                     match = QtCore.Qt.MatchExactly
                                     item =\
                                         self.tree.findItems(str(numSlope),
