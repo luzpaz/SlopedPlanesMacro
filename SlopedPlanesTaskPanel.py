@@ -256,11 +256,12 @@ class _TaskPanel_SlopedPlanes():
 
                     for pyPlane in pyPlaneList:
 
-                        charge = False
+                        '''charge = False
                         numAngle = pyPlane.numGeom
                         # print '# numGeom ', numAngle
                         sweepCurve = pyPlane.sweepCurve
                         angle = pyPlane.angle
+
                         if [numWire, numAngle] not in originList:
 
                             if isinstance(angle, float):
@@ -293,7 +294,28 @@ class _TaskPanel_SlopedPlanes():
 
                         if charge:
 
-                            # print 'numSlope ', numSlope
+                            # print 'numSlope ', numSlope'''
+
+                        # print '# numGeom ', numAngle
+                        numAngle = pyPlane.numGeom
+                        angle = pyPlane.angle
+                        sweepCurve = pyPlane.sweepCurve
+
+                        if [numWire, numAngle] not in originList and\
+                           angle not in originList:
+
+                            numSlope += 1
+
+                            if isinstance(angle, float):
+                                # print 'a'
+                                originList.append([numWire, numAngle])
+
+                            else:
+                                # print 'b'
+                                originList.append(angle)
+
+                                pyW = pyWireList[angle[0]]
+                                angle = pyW.planes[angle[1]].angle
 
                             item = QtGui.QTreeWidgetItem(tree)
                             item.setText(0, str(numSlope))

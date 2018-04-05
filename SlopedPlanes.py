@@ -502,48 +502,6 @@ class _SlopedPlanes(_Py):
 
                                     originList.append(angle)
 
-                        '''if [numWire, numAngle] not in originList:
-
-                            if isinstance(angle, float):
-                                # print 'a'
-
-                                plane = pyPlane.shape
-
-                                if isinstance(plane, Part.Compound):
-                                    # print 'a1'
-                                    planeWireList.append(plane.Faces[0])
-                                    secondaries.extend(plane.Faces[1:])
-
-                                else:
-                                    # print 'a2'
-                                    planeWireList.append(plane)
-
-                            else:
-                                # print 'b'
-
-                                alfa, beta = angle[0], angle[1]
-
-                                if [alfa, beta] not in originList:
-                                    originList.append([alfa, beta])
-
-                                    if alfa == numWire:
-                                        # print 'b1'
-                                        if beta > numAngle:
-                                            pyPl =\
-                                                pyFace.selectPlane(alfa, beta)
-                                            pl = pyPl.shape
-                                            planeWireList.append(pl)
-
-                                    elif alfa > numWire:
-                                        # print 'b2'
-                                        pyPl = pyFace.selectPlane(alfa, beta)
-                                        pl = pyPl.shape
-                                        planeWireList.append(pl)
-
-                                    elif alfa < numWire:
-                                        # print 'b3'
-                                        pass'''
-
                 if slopedPlanes.Up:
                     upPlaneCopy = _Py.upList[numFace].copy()
                     cut = upPlaneCopy.cut(planeWireList, _Py.tolerance)
