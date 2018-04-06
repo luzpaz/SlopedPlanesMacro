@@ -768,52 +768,66 @@ class _PyReflex(_Py):
 
                 bList = []
                 for ff in reflex.Faces:
+
+
+
+
+
                     # print 'a'
                     section = ff.section(cutterList, tolerance)
                     if section.Edges:
+
+
+
+
+
                         # print 'b'
                         section = ff.section([simul], tolerance)
                         if not section.Edges:
                             # print 'c'
-                            section = ff.section(aList, tolerance)
+                            '''section = ff.section(aList, tolerance)
                             if not section.Edges:
                                 # print 'd'
-                                section = ff.section(corn, tolerance)
+                            '''
+
+
+                            section = ff.section(corn, tolerance)
+                            if section.Edges:
+                                # print 'e'
+
+
+                                section = ff.section([forward, backward],
+                                                     tolerance)
+
                                 if section.Edges:
-                                    # print 'e'
-
-                                    section = ff.section([forward, backward],
-                                                         tolerance)
-
-                                    if section.Edges:
-                                        # print 'e1'
-                                        section = ff.section(aList, tolerance)
-                                        if len(section.Vertexes) == 1:
-                                            # print 'e11'
-                                            if enormous:
-                                                # print 'e111'
-                                                common =\
-                                                    ff.common([seed],
-                                                              tolerance)
-                                                if common.Area:
-                                                    # print 'e1111'
-                                                    bList.append(ff)
-                                            else:
-                                                # print 'e12'
-                                                bList.append(ff)
-
-                                    else:
-                                        # print 'e2'
+                                    # print 'e1'
+                                    section = ff.section(aList, tolerance)
+                                    if len(section.Vertexes) == 1:
+                                        # print 'e11'
                                         if enormous:
-                                            # print 'e21'
+                                            # print 'e111'
                                             common =\
-                                                ff.common([seed], tolerance)
+                                                ff.common([seed],
+                                                          tolerance)
                                             if common.Area:
-                                                # print 'e211'
+                                                # print 'e1111'
                                                 bList.append(ff)
                                         else:
-                                            # print 'e22'
+                                            # print 'e12'
                                             bList.append(ff)
+
+                                else:
+                                    # print 'e2'
+                                    if enormous:
+                                        # print 'e21'
+                                        common =\
+                                            ff.common([seed], tolerance)
+                                        if common.Area:
+                                            # print 'e211'
+                                            bList.append(ff)
+                                    else:
+                                        # print 'e22'
+                                        bList.append(ff)
 
                 # print 'bList ', bList
 
