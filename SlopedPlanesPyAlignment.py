@@ -1469,7 +1469,8 @@ class _PyAlignment(_Py):
                         # print 'chopList ', chopList
                         for r in rangoRear:
                             pyPl = pyPlaneList[r]
-                            if not pyPl.choped: # and not pyPl.aligned:
+                            # if not pyPl.choped: # and not pyPl.aligned:
+                            if not (pyPl.choped or pyPl.fronted):
                                 pl = pyPl.cuttingPyth(chopList)
 
         # into rangoChop
