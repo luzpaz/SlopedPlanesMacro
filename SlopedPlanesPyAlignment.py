@@ -1443,7 +1443,8 @@ class _PyAlignment(_Py):
             '''if pyPl.choped or pyPl.aligned:
                 break'''
             # esto debería estar hecho desde el principio
-            if not (pyPl.choped or pyPl.aligned or pyPl.fronted): # fronted me rompe la cruz
+            # if not (pyPl.choped or pyPl.aligned or pyPl.fronted): # fronted me rompe la cruz
+            if not (pyPl.choped or pyPl.fronted) and pyPl.shape:
 
                 pl = pyPl.shape
                 rearList.append(pl)
@@ -1468,7 +1469,7 @@ class _PyAlignment(_Py):
                         # print 'chopList ', chopList
                         for r in rangoRear:
                             pyPl = pyPlaneList[r]
-                            if not pyPl.choped and not pyPl.aligned:
+                            if not pyPl.choped: # and not pyPl.aligned:
                                 pl = pyPl.cuttingPyth(chopList)
 
         # into rangoChop
