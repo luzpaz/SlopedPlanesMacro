@@ -276,7 +276,7 @@ class _PyAlignment(_Py):
         numChop = -1
         for rChop in rangoChop:
             numChop += 1
-            # print 'numChop ', numChop
+            # print '### numChop ', numChop
 
             [pyOne, pyTwo] = chops[numChop]
             rangoOne = pyOne.rango[-1][:]
@@ -334,6 +334,8 @@ class _PyAlignment(_Py):
                         if r not in control:
                             control.append(r)
 
+                # self.printControl(str(self.base.numGeom))
+
                 # rChop: trimming bigShape
 
                 if falsify:
@@ -358,8 +360,8 @@ class _PyAlignment(_Py):
                         # rChop doesn't cut with rangoRear and viceversa, if not aligned
                         if w1 == nW:
                             for r in rangoRear:
-                                if r not in control:
-                                    control.append(r)
+                                '''if r not in control:
+                                    control.append(r)'''
 
                                 pyPlR = pyPlList[r]
                                 if not pyPlR.aligned:
@@ -393,6 +395,8 @@ class _PyAlignment(_Py):
                                         pyOne.control.append(nn)
                                         pyTwo.control.append(nn)
                                         control.append(nn)
+
+                # self.printControl(str(self.base.numGeom))
 
             # the rango of the chop are cutted by the chop,
             # and perhaps by the base or the continuation
