@@ -304,7 +304,7 @@ class _PyAlignment(_Py):
 
             if nW == pyTwo.numWire:
 
-                # the two rangos don't cut between them
+                # the two rangos don't cut between them, if not aligned
 
                 for nG in rangoOne:
                     if nG is not rearTwo:
@@ -312,7 +312,9 @@ class _PyAlignment(_Py):
                         control = pyPl.control
                         for r in rangoTwo:
                             if r not in control and r is not rearOne:
-                                control.append(r)
+                                pyPr = pyPlList[r]
+                                if not pyPr.aligned:
+                                    control.append(r)
                         # and opp Chop
                         r = pyTwo.numGeom
                         if r not in control:
@@ -324,7 +326,9 @@ class _PyAlignment(_Py):
                         control = pyPl.control
                         for r in rangoOne:
                             if r not in control and r is not rearTwo:
-                                control.append(r)
+                                pyPr = pyPlList[r]
+                                if not pyPr.aligned:
+                                    control.append(r)
                         # and opp chop
                         r = pyOne.numGeom
                         if r not in control:
@@ -351,7 +355,7 @@ class _PyAlignment(_Py):
 
                         control = pyPl.control
 
-                        # rChop doesn't cut with rangoRear and viceversa if not aligned
+                        # rChop doesn't cut with rangoRear and viceversa, if not aligned
                         if w1 == nW:
                             for r in rangoRear:
                                 if r not in control:
@@ -417,6 +421,7 @@ class _PyAlignment(_Py):
                             pyPlane.cross = True
                 # print 'cross ', pyPlane.cross
 
+                # consecutives
                 consecutive = False
                 for nG in rango:
                     pyPl = pyPlList[nG]
@@ -489,6 +494,8 @@ class _PyAlignment(_Py):
 
             # TODO falseAlignment base and continuation don't cut opp rango ???
             # pero si con rear y entre rears
+
+        # self.printControl(str(self.base.numGeom))
 
     def priorLater(self):
 
