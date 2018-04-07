@@ -568,6 +568,6 @@ class _PyWire(_Py):
         for pyPlane in self.planes:
             if not (pyPlane.choped and not pyPlane.aligned):
                 if pyPlane.shape:
-                    # if not pyPlane.fronted:
-                    # print '############ ordinaries ', (pyPlane.numWire, pyPlane.numGeom), pyPlane.shape
-                    pyPlane.ordinaries(self)
+                    if not pyPlane.fronted:
+                        # print '############ ordinaries ', (pyPlane.numWire, pyPlane.numGeom), pyPlane.shape
+                        pyPlane.ordinaries(self)

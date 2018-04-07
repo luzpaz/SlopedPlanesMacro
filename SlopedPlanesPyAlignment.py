@@ -360,8 +360,8 @@ class _PyAlignment(_Py):
                         # rChop doesn't cut with rangoRear and viceversa, if not aligned
                         if w1 == nW:
                             for r in rangoRear:
-                                '''if r not in control:
-                                    control.append(r)'''
+                                if r not in control:
+                                    control.append(r)
 
                                 pyPlR = pyPlList[r]
                                 if not pyPlR.aligned:

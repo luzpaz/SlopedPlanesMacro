@@ -1162,40 +1162,38 @@ class _PyPlane(_Py):
                                 # print 'a2'
                                 cutterList.extend(pyAli.simulatedAlignment)
 
-                    elif not self.fronted:
+                    elif pyPl.choped:
+                        # print 'b'
+                        pass
 
-                        if pyPl.choped:
-                            # print 'b'
+                    elif pyPl.fronted:
+                        # print 'c'
+                        if self.aligned:
+                            # print 'c1'
+                            if nGeom in rr:
+                                pl = pyPl.bigShape
+                                cutterList.append(pl)
+                        else:
+                            # print 'c2'
                             pass
 
-                        elif pyPl.fronted:
-                            # print 'c'
-                            if self.aligned:
-                                # print 'c1'
-                                if nGeom in rr:
-                                    pl = pyPl.bigShape
-                                    cutterList.append(pl)
-                            else:
-                                # print 'c2'
-                                pass
-
-                        elif pyPl.reflexed:
-                            # print 'd'
-                            if pyPl.isSolved():
-                                # print 'd1'
-                                cutterList.append(pl)
-                                control.append(pyPl.numGeom)
-                            else:
-                                # print 'd2'
-                                cutterList.append(pyPl.simulatedShape)
-
-                        else:
-                            # print 'e'
+                    elif pyPl.reflexed:
+                        # print 'd'
+                        if pyPl.isSolved():
+                            # print 'd1'
                             cutterList.append(pl)
                             control.append(pyPl.numGeom)
+                        else:
+                            # print 'd2'
+                            cutterList.append(pyPl.simulatedShape)
+
+                    else:
+                        # print 'e'
+                        cutterList.append(pl)
+                        control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList, [sh.Area for sh in cutterList]
+            # print 'cutterList ', cutterList,  # [sh.Area for sh in cutterList]
             plane = self.shape.copy()
             gS = self.geomShape
 
