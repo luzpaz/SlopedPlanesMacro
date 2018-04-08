@@ -348,6 +348,8 @@ class _PyFace(_Py):
             pyAlign.postProcess()
         # self.printControl('postProcess')
 
+        self.postProcess()
+
         # self.printSummary()
 
         # '''
@@ -1453,3 +1455,25 @@ class _PyFace(_Py):
                                 pyPlane.cuttingPyth(cutList)
 
                             # print 'pyPlane.shape ', pyPlane.shape
+
+    def postProcess(self):
+
+        ''''''
+
+        alignList = self.alignments[:]
+
+        '''cutterList = []
+        for pyAlign in self.alignments:
+            for rC in pyAlign.rangoChop:
+                for r in rC:
+                    pass
+
+        number = -1
+        for pyAlign in self.alignments:
+            number += 1
+            pop = alignList.pop(number)
+            cutterList = []
+            for pyA in alignList:
+                
+                pass
+            alignList.insert(number, pop)'''
