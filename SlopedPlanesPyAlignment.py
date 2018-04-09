@@ -655,6 +655,8 @@ class _PyAlignment(_Py):
         pyWireList = pyFace.wires
         falsify = self.falsify
 
+        enormous = self.base.enormousShape
+
         rangoChop = self.rango
         simulatedChops = []
 
@@ -714,6 +716,11 @@ class _PyAlignment(_Py):
                     else:
                         if rr not in rrList:
                             pl = pyPl.bigShape
+                            cutList.append(pl)
+                        else:
+                            pl = pyPl.shape.copy()
+                            '''gS = pyPl.geomShape
+                            pl = self.cutting(pl, enormous, gS)'''
                             cutList.append(pl)
 
             cList = []

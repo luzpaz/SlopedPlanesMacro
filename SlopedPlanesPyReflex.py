@@ -268,7 +268,7 @@ class _PyReflex(_Py):
         rangoNext = []
 
         rear = pyR.rear
-
+        # tal vez pueda quitar el pyR.choped
         if pyR.rear:
 
             if direction == 'forward':
