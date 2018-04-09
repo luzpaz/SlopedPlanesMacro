@@ -671,6 +671,9 @@ class _PyAlignment(_Py):
             numChop += 1
             # print '### chops ', (pyOne.numGeom, pyTwo.numGeom)
 
+            enormousOne = pyOne.enormousShape
+            enormousTwo = pyTwo.enormousShape
+
             if falsify:
 
                 pyOne.simulating([enormousBase])
@@ -694,12 +697,6 @@ class _PyAlignment(_Py):
                     else:
                         pyT.simulating([enormousBase])
 
-            rrList = []
-            if len(pyOne.rear) > 1:
-                rrList.extend(pyOne.rango[0])
-            if len(pyTwo.rear) > 1:
-                rrList.extend(pyTwo.rango[1])
-
             rChop = rangoChop[numChop]
 
             pyW = pyWireList[pyOne.numWire]
@@ -714,14 +711,12 @@ class _PyAlignment(_Py):
                         cutList.append(pl)
 
                     else:
-                        if rr not in rrList:
-                            pl = pyPl.bigShape
-                            cutList.append(pl)
-                        else:
-                            pl = pyPl.shape.copy()
-                            '''gS = pyPl.geomShape
-                            pl = self.cutting(pl, enormous, gS)'''
-                            cutList.append(pl)
+                        pl = pyPl.shape.copy()
+                        gS = pyPl.geomShape
+                        pl = self.cutting(pl,
+                                          [enormous, enormousOne, enormousTwo],
+                                          gS)
+                        cutList.append(pl)
 
             cList = []
 
