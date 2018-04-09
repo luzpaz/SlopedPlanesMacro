@@ -692,11 +692,11 @@ class _PyAlignment(_Py):
                     else:
                         pyT.simulating([enormousBase])
 
-            '''rrList = []
+            rrList = []
             if len(pyOne.rear) > 1:
                 rrList.extend(pyOne.rango[0])
             if len(pyTwo.rear) > 1:
-                rrList.extend(pyTwo.rango[1])'''
+                rrList.extend(pyTwo.rango[1])
 
             rChop = rangoChop[numChop]
 
@@ -709,12 +709,12 @@ class _PyAlignment(_Py):
 
                     if pyPl.reflexed:
                         pl = pyPl.simulatedShape
+                        cutList.append(pl)
 
                     else:
-                        # if rr not in rrList:
-                        pl = pyPl.bigShape
-
-                    cutList.append(pl)
+                        if rr not in rrList:
+                            pl = pyPl.bigShape
+                            cutList.append(pl)
 
             cList = []
 
