@@ -711,11 +711,7 @@ class _PyAlignment(_Py):
                         cutList.append(pl)
 
                     else:
-                        pl = pyPl.shape.copy()
-                        gS = pyPl.geomShape
-                        pl = self.cutting(pl,
-                                          [enormous, enormousOne, enormousTwo],
-                                          gS)
+                        pl = pyPl.bigShape
                         cutList.append(pl)
 
             cList = []
