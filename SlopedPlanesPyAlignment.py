@@ -793,6 +793,8 @@ class _PyAlignment(_Py):
             cutterList.extend([one, two])
             shapeList.extend([one, two])
 
+        # print 'shapeList ', shapeList
+
         if falsify:
 
             pyCont = self.aligns[-1]
@@ -823,6 +825,8 @@ class _PyAlignment(_Py):
 
             if pyLater.numGeom not in pyBase.control:
                 cutterList.append(pyLater.bigShape)
+
+            # print 'cutterList ', cutterList
 
             geomList = [pyP.geomShape for pyP in self.aligns]
             geomList.insert(0, pyBase.geomShape)

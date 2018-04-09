@@ -532,17 +532,6 @@ class _TaskPanel_SlopedPlanes():
 
                         numSlope += 1
 
-                        if isinstance(angle, float):
-                            # print 'a'
-                            originList.append([numWire, numAngle])
-
-                        else:
-                            # print 'b'
-                            originList.append(angle)
-
-                            pyW = pyWireList[angle[0]]
-                            angle = pyW.planes[angle[1]].angle
-
                         tree = self.tree
 
                         it = tree.findItems(str(numSlope),
@@ -552,6 +541,17 @@ class _TaskPanel_SlopedPlanes():
                         value = doubleSpinBox.value()
                         # print 'value ', value
                         pyPlane.angle = value
+
+                        if isinstance(angle, float):
+                            # print 'a'
+                            originList.append([numWire, numAngle])
+
+                        else:
+                            # print 'b'
+                            originList.append(angle)
+
+                            pyPl = pyPlane.selectPlane(angle[0], angle[1])
+                            pyPl.angle = value
 
                         if self.advancedOptions.isChecked():
 
