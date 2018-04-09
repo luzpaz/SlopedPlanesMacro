@@ -755,7 +755,7 @@ class _PyAlignment(_Py):
 
         '''simulatingAlignment(self)'''
 
-        # print '###### simulatingAlignment ', (self.base.numWire, self.base.numGeom, self.falsify)
+        # print '###### simulatingAlignment ', (self.base.numWire, self.base.numGeom, self.falsify, self.base.virtualized)
 
         chops = self.chops
         simulatedChops = self.simulatedChops
@@ -793,6 +793,7 @@ class _PyAlignment(_Py):
             cutterList.extend([one, two])
             shapeList.extend([one, two])
 
+        # print 'cutterList ', cutterList
         # print 'shapeList ', shapeList
 
         if falsify:
@@ -833,12 +834,13 @@ class _PyAlignment(_Py):
             # print geomList
 
             base = base.cut(cutterList, _Py.tolerance)
-            # print 'base.Faces ', base.Faces
+            # print 'base.Faces ', base.Faces, [f.Area for f in base.Faces]
             for ff in base.Faces:
                 section = ff.section(geomList, _Py.tolerance)
                 if section.Edges:
                     # print 'section'
                     shapeList.append(ff)
+
             # print 'shapeList ', shapeList
 
         self.simulatedAlignment = shapeList
