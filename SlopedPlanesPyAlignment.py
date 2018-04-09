@@ -709,14 +709,14 @@ class _PyAlignment(_Py):
 
                     if pyPl.reflexed:
                         pl = pyPl.simulatedShape
-                        cutList.append(pl)
 
                     else:
-
                         if rr not in rrList:
-
                             pl = pyPl.bigShape
-                            cutList.append(pl)
+                        else:
+                            pl = pyPl.shape
+
+                    cutList.append(pl)
 
             cList = []
 
