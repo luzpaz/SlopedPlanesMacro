@@ -669,19 +669,25 @@ class _PyAlignment(_Py):
             numChop += 1
             # print '### chops ', (pyOne.numGeom, pyTwo.numGeom)
 
-            pyReflexListOne = self.selectAllReflex(pyOne.numWire, pyOne.numGeom)
-            if pyReflexListOne:
-                pyReflexOne = pyReflexListOne[0]
-                pyOppOne = pyReflexOne.planes[1]
-                oppEnormousOne = pyOppOne.enormousShape
-                rrOne = pyOne.rango[0]
+            rrOne = []
+            if pyOne.rear:
+                pyReflexListOne = self.selectAllReflex(pyOne.numWire,
+                                                       pyOne.numGeom)
+                if pyReflexListOne:
+                    pyReflexOne = pyReflexListOne[0]
+                    pyOppOne = pyReflexOne.planes[1]
+                    oppEnormousOne = pyOppOne.enormousShape
+                    rrOne = pyOne.rango[0]
 
-            pyReflexListTwo = self.selectAllReflex(pyTwo.numWire, pyTwo.numGeom)
-            if pyReflexListTwo:
-                pyReflexTwo = pyReflexListTwo[0]
-                pyOppTwo = pyReflexTwo[0]
-                oppEnormousTwo = pyOppTwo.enormousShape
-                rrTwo = pyTwo.rango[1]
+            rrTwo = []
+            if pyTwo.rear:
+                pyReflexListTwo = self.selectAllReflex(pyTwo.numWire,
+                                                       pyTwo.numGeom)
+                if pyReflexListTwo:
+                    pyReflexTwo = pyReflexListTwo[0]
+                    pyOppTwo = pyReflexTwo.planes[0]
+                    oppEnormousTwo = pyOppTwo.enormousShape
+                    rrTwo = pyTwo.rango[1]
 
             if falsify:
 
@@ -723,10 +729,10 @@ class _PyAlignment(_Py):
                         pl = pyPl.bigShape.copy()
                         gS = pyPl.geomShape
 
-                        if pyReflexListOne and rr in rrOne:
+                        if rr in rrOne:
                             pl = self.cutting(pl, [oppEnormousOne], gS)
 
-                        if pyReflexListTwo and rr in rrTwo:
+                        if rr in rrTwo:
                             pl = self.cutting(pl, [oppEnormousTwo], gS)
 
                         cutList.append(pl)
