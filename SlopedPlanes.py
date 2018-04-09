@@ -173,7 +173,7 @@ class _SlopedPlanes(_Py):
         self.State = True
 
         slopedPlanes.Slope = 45.0
-        slopedPlanes.FactorWidth = 1
+        slopedPlanes.FactorWidth = 1    # 1.2
         slopedPlanes.FactorLength = 2
         slopedPlanes.Overhang = 0
         slopedPlanes.Up = 0

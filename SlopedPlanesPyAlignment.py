@@ -378,9 +378,10 @@ class _PyAlignment(_Py):
                         if falsify:
                             pyCont.control.append(nG)
 
-                        # pyOne and pyTwo don't cut rChop
-                        pyOne.control.append(nG)
-                        pyTwo.control.append(nG)
+                        # pyOne and pyTwo don't cut rChop, if not reflexed
+                        if not pyPl.reflexed:
+                            pyOne.control.append(nG)
+                            pyTwo.control.append(nG)
 
                         # rChop doesn't cut with other rChop
                         # chops doesn't cut with other rChop

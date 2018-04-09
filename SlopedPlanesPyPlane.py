@@ -1025,7 +1025,8 @@ class _PyPlane(_Py):
         pyRearPl = pyPlaneList[rear]
         # print 'pyRearPl ', rear
 
-        if not (pyRearPl.aligned or pyRearPl.choped):
+        # if not (pyRearPl.aligned or pyRearPl.choped):
+        if not pyRearPl.aligned:
 
             gS = pyRearPl.geomShape
             rearPl = pyRearPl.shape
