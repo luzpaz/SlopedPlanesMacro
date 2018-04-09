@@ -1248,8 +1248,8 @@ class _PyFace(_Py):
         for pyAlign in self.alignments:
             pyAlign.simulatingChops()
 
-        for pyAlign in self.alignments:
-            pyAlign.simulatingAlignment()
+        '''for pyAlign in self.alignments:
+            pyAlign.simulatingAlignment()'''
 
     def reflexing(self):
 

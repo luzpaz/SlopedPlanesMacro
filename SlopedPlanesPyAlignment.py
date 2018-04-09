@@ -692,6 +692,12 @@ class _PyAlignment(_Py):
                     else:
                         pyT.simulating([enormousBase])
 
+            rrList = []
+            if len(pyOne.rear) > 1:
+                rrList.extend(pyOne.rango[0])
+            if len(pyTwo.rear) > 1:
+                rrList.extend(pyTwo.rango[1])
+
             rChop = rangoChop[numChop]
 
             pyW = pyWireList[pyOne.numWire]
@@ -700,11 +706,17 @@ class _PyAlignment(_Py):
             for rr in rChop:
                 pyPl = pyPlList[rr]
                 if not pyPl.aligned and not pyPl.choped:
+
                     if pyPl.reflexed:
                         pl = pyPl.simulatedShape
+                        cutList.append(pl)
+
                     else:
-                        pl = pyPl.bigShape
-                    cutList.append(pl)
+
+                        if rr not in rrList:
+
+                            pl = pyPl.bigShape
+                            cutList.append(pl)
 
             cList = []
 

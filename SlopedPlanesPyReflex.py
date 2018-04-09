@@ -278,7 +278,7 @@ class _PyReflex(_Py):
                 nGeom = rear[-1]
                 rangoCorner = pyR.rango[-1]
 
-            if nGeom not in control:
+            if nGeom not in control or pyR.choped:
 
                 rearPyPl = pyPlaneList[nGeom]
                 rearPl = rearPyPl.selectShape()
@@ -300,7 +300,7 @@ class _PyReflex(_Py):
 
                 nGeom = oppRear[0]
 
-                if nGeom not in control:
+                if nGeom not in control or pyR.choped:
 
                     pyOppRear = pyPlaneList[nGeom]
                     oppRearPl = pyOppRear.selectShape()
@@ -315,7 +315,7 @@ class _PyReflex(_Py):
 
         # print 'rangoCorner ', rangoCorner
         for nn in rangoCorner:
-            if nn not in control:
+            if nn not in control or pyR.choped:
                 if nn not in oppRear:
                     self.processRango(pyWire, pyR, pyOppR, nn,
                                       'rangoCorner', direction)
@@ -323,7 +323,7 @@ class _PyReflex(_Py):
         # print 'rangoNext ', rangoNext
         if len(rear) == 1:
             for nn in rangoNext:
-                if nn not in control:
+                if nn not in control or pyR.choped:
                     if nn not in oppRear:
                         self.processRango(pyWire, pyR, pyOppR, nn,
                                           'rangoNext', direction)
@@ -331,7 +331,7 @@ class _PyReflex(_Py):
         rangoInter = self.rango
         # print 'rangoInter ', rangoInter
         for nn in rangoInter:
-            if nn not in control:
+            if nn not in control or pyR.choped:
                 self.processRango(pyWire, pyR, pyOppR, nn,
                                   'rangoInter', direction)
 
