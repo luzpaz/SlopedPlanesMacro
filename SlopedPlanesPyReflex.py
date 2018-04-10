@@ -554,10 +554,10 @@ class _PyReflex(_Py):
         else:
             # print '1'
             secondaries = []
-            # if not pyR.aligned:
-            # print '11'
-            # print 'pyR.cutter ', pyR.cutter
-            cutList.extend(pyR.cutter)
+            if not pyR.aligned or pyR.virtualized:
+                # print '11'
+                # print 'pyR.cutter ', pyR.cutter
+                cutList.extend(pyR.cutter)
 
         # print 'cutList ', cutList
 
