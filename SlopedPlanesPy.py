@@ -412,10 +412,10 @@ class _Py(object):
         if virtuals:
             for pyP in virtuals:
 
-                Part.show(pyP.shape, self.slopedPlanes.Name+' shape '+str(numWire)+' '+str(numGeom))
+                Part.show(pyP.shape, self.slopedPlanes.Name+' virtual shape '+str(numWire)+' '+str(numGeom))
                 compound = Part.makeCompound(pyP.under)
                 compound.Placement = placement
-                Part.show(compound, self.slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))
+                Part.show(compound, self.slopedPlanes.Name+' virtual under '+str(numWire)+' '+str(numGeom))
 
     def printControl(self, text):
 

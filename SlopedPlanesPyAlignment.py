@@ -669,6 +669,8 @@ class _PyAlignment(_Py):
             numChop += 1
             # print '### chops ', (pyOne.numGeom, pyTwo.numGeom)
 
+            # REFACT !!! rangos and cuts
+
             rrOne = []
             if pyOne.rear:
                 pyReflexListOne = self.selectAllReflex(pyOne.numWire,

@@ -995,7 +995,7 @@ class _PyPlane(_Py):
 
         '''rearing(self, pyWire, pyReflex, direction)'''
 
-        # print '### rearing ', (self.numWire, self.numGeom), direction
+        # print '### rearing ', (self.numWire, self.numGeom, direction, self.virtualized)
 
         tolerance = _Py.tolerance
         plane = self.shape
