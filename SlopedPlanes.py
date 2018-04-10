@@ -352,6 +352,7 @@ class _SlopedPlanes(_Py):
 
                     falseFace = falseFaceList[numWire]
                     geomWire = self.arcGeometries(falseFace, coo[:-2])
+                    # print 'geomWire ', geomWire
 
                     pyPlaneListOld = pyWire.planes
                     pyPlaneListNew = []
