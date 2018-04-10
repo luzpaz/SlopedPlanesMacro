@@ -277,7 +277,7 @@ class _PyReflex(_Py):
                 nGeom = rear[-1]
                 rangoCorner = pyR.rango[-1]
 
-            if nGeom not in control or pyR.choped or pyR.aligned:
+            if nGeom not in control or pyR.choped:  # or pyR.aligned:
 
                 rearPyPl = pyPlaneList[nGeom]
                 rearPl = rearPyPl.selectShape()
@@ -299,7 +299,7 @@ class _PyReflex(_Py):
 
                 nGeom = oppRear[0]
 
-                if nGeom not in control or pyR.choped or pyR.aligned:
+                if nGeom not in control or pyR.choped:  # or pyR.aligned:
 
                     pyOppRear = pyPlaneList[nGeom]
                     oppRearPl = pyOppRear.selectShape()
@@ -314,7 +314,7 @@ class _PyReflex(_Py):
 
         # print 'rangoCorner ', rangoCorner
         for nn in rangoCorner:
-            if nn not in control or pyR.choped or pyR.aligned:
+            if nn not in control or pyR.choped:  # or pyR.aligned:
                 if nn not in oppRear:
                     self.processRango(pyWire, pyR, pyOppR, nn,
                                       'rangoCorner', direction)
@@ -322,7 +322,7 @@ class _PyReflex(_Py):
         # print 'rangoNext ', rangoNext
         if len(rear) == 1:
             for nn in rangoNext:
-                if nn not in control or pyR.choped or pyR.aligned:
+                if nn not in control or pyR.choped:  # or pyR.aligned:
                     if nn not in oppRear:
                         self.processRango(pyWire, pyR, pyOppR, nn,
                                           'rangoNext', direction)
@@ -330,7 +330,7 @@ class _PyReflex(_Py):
         rangoInter = self.rango
         # print 'rangoInter ', rangoInter
         for nn in rangoInter:
-            if nn not in control or pyR.choped or pyR.aligned:
+            if nn not in control or pyR.choped:  # or pyR.aligned:
                 self.processRango(pyWire, pyR, pyOppR, nn,
                                   'rangoInter', direction)
 
@@ -366,7 +366,7 @@ class _PyReflex(_Py):
 
         pyOppRear = pyPlaneList[nGeom]
         # podría quitar el condicional
-        if nGeom not in control or pyOppR.choped or pyOppR.aligned:
+        if nGeom not in control or pyOppR.choped:  # or pyOppR.aligned:
 
             oppRearPl = pyOppRear.selectShape()
             oppRearPl = oppRearPl.copy()
@@ -554,7 +554,7 @@ class _PyReflex(_Py):
         else:
             # print '1'
             secondaries = []
-            if not pyR.aligned or pyR.virtualized:
+            if not pyR.aligned:  # or pyR.virtualized:
                 # print '11'
                 # print 'pyR.cutter ', pyR.cutter
                 cutList.extend(pyR.cutter)
@@ -1095,9 +1095,9 @@ class _PyReflex(_Py):
 
         direction = "forward"
         for pyPlane in self.planes:
-            # if not pyPlane.aligned:
-            if pyPlane.rear:
-                pyPlane.rearing(pyWire, self, direction)
+            if not pyPlane.aligned:
+                if pyPlane.rear:
+                    pyPlane.rearing(pyWire, self, direction)
             direction = "backward"
 
     def rangging(self, pyWire):
