@@ -440,7 +440,11 @@ class _PyFace(_Py):
                             self.forBack(pyPlane, 'backward')
 
                             forward = pyPlane.forward
+                            # print 'forward ', (forward.firstVertex(True).Point, forward.lastVertex(True).Point)
+                            # print 'shapeGeomFace ', shapeGeomFace
+                            # print [[e.firstVertex(True).Point, e.lastVertex(True).Point] for e in shapeGeomFace]
                             section = forward.section(shapeGeomFace, tolerance)
+                            # print section.Vertexes, section.Edges
 
                             if section.Edges:
                                 # print 'edges'
@@ -466,7 +470,10 @@ class _PyFace(_Py):
                                     into, lineInto =\
                                         self.into(lineStart, edgeEnd)
 
-                                if distStart > distEnd and into:
+                                # print 'into ', into
+                                # print 'lineInto ', lineInto, (lineInto.firstVertex(True).Point, lineInto.lastVertex(True).Point)
+
+                                if distStart < distEnd and into:
                                     # print 'alignment'
                                     pass
 
@@ -725,6 +732,8 @@ class _PyFace(_Py):
         lineInto = Part.LineSegment(pointOne, pointTwo)
         lIS = lineInto.toShape()
         sect = face.section([lIS], tolerance)
+        # print sect.Edges
+        # print sect.Vertexes
         if sect.Edges:
             if len(sect.Vertexes) == 2:
                 into = True
