@@ -559,7 +559,7 @@ class _PyFace(_Py):
                                 if into:
                                     lineEnd = edgeEnd
 
-                                if distStart < distEnd and into:
+                                if distStart > distEnd and into:
                                     # print '1111 aligment'
 
                                     pyPlMemo = pyPl
