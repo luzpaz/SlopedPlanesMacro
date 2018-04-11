@@ -1,5 +1,6 @@
 import FreeCAD
 import os
+import time
 
 for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
     # print 'directory ', directory
@@ -58,3 +59,4 @@ print 'objects ', numObj
 print 'erros ', numError
 print 'geometry errors ', geometricList
 print 'execution errors ', executionList
+print time.clock()
