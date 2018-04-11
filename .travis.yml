@@ -1,12 +1,10 @@
-dist: xenial
 language: python
 python:
     - "2.7"
 before_install:
-    - sudo apt-get install libgnutls28-dev
-    - sudo add-apt-repository -y ppa:freecad-maintainers/freecad-stable
+    - sudo add-apt-repository -y ppa:freecad-maintainers/freecad-daily
     - sudo apt-get update
-    - sudo apt-get install -y freecad
+    - sudo apt-get install -y freecad-daily
 script:
     - cd /home/travis
     - git clone https://github.com/caceres/SlopedPlanesTest.git
@@ -17,4 +15,4 @@ script:
     - mkdir SlopedPlanesMacro
     - cd /home/travis/build/caceres/SlopedPlanesMacro
     - cp ./* /home/travis/.FreeCAD/Mod/SlopedPlanesMacro
-    - travis_wait freecad --console --run pytest
+    - travis_wait freecad-daily --console --run pytest
