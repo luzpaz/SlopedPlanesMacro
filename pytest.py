@@ -25,9 +25,9 @@ for doc in FreeCAD.listDocuments().values():
                 numObj += 1
                 oldShape = obj.Shape.copy()
 
-                obj.Proxy.faceList = []
+                '''obj.Proxy.faceList = []
                 for pyFace in obj.Proxy.Pyth:
-                    pyFace.reset = True
+                    pyFace.reset = True'''
 
                 obj.touch()
                 # print '####### ', obj.Name
