@@ -309,7 +309,7 @@ class _PyFace(_Py):
         self.parsing()
 
         self.planning()
-        self.printSummary()
+        # self.printSummary()
 
         self.upping()
 
@@ -372,7 +372,6 @@ class _PyFace(_Py):
         tolerance = _Py.tolerance
 
         if resetFace:
-            shapeGeomFace = Part.Wire(shapeGeomFace)    # earthquake in migration to occ 7.2
             for pyWire in pyWireList:
                 pyWire.reflexs = []  # reset reflexs
 

@@ -425,6 +425,11 @@ class _SlopedPlanes(_Py):
                         pyPlane.reallySolved = False
 
                     pyWire.planes = pyPlaneListNew
+
+                    # earthquake in migration to occ 7.2
+                    wire = Part.Wire(geomShapeWire)
+                    geomShapeWire = wire.Edges
+
                     pyWire.shapeGeom = geomShapeWire
                     geomShapeFace.extend(geomShapeWire)
 
