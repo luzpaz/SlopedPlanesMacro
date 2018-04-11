@@ -426,7 +426,7 @@ class _SlopedPlanes(_Py):
 
                     pyWire.planes = pyPlaneListNew
 
-                    # earthquake in migration to occ 7.2 and freecad 0.17
+                    # earthquake in migration to occ 7.2 and freecad 0.17. Plus general reset and recompute
                     wire = Part.Wire(geomShapeWire)
                     geomShapeWire = wire.Edges
 
