@@ -338,7 +338,7 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
-        for pyAlign in pyAlignList:
+        for pyAlign in pyAlignList[:1]:
             if not pyAlign.falsify:
                 pyAlign.aligning()
 
@@ -364,11 +364,14 @@ class _PyFace(_Py):
         resetFace = self.reset
         # print 'resetFace ', resetFace
 
+        face = self.face
+
         if not resetFace and not self.alignments:
             return
 
         pyWireList = self.wires
         shapeGeomFace = self.shapeGeom
+        compoundFace = Part.Compound(shapeGeomFace)
         tolerance = _Py.tolerance
 
         if resetFace:
@@ -441,49 +444,44 @@ class _PyFace(_Py):
 
                             forward = pyPlane.forward
                             # print 'forward ', (forward.firstVertex(True).Point, forward.lastVertex(True).Point)
-                            # print 'shapeGeomFace ', shapeGeomFace
                             # print [[e.firstVertex(True).Point, e.lastVertex(True).Point] for e in shapeGeomFace]
                             section = forward.section(shapeGeomFace, tolerance)
                             # print section.Vertexes, section.Edges
 
                             if section.Edges:
                                 # print 'edges'
-                                edge = section.Edges[0]
-
-                                edgeStart = edge.firstVertex(True).Point
-                                # print 'edgeStart ', edgeStart
-                                edgeEnd = edge.lastVertex(True).Point
-                                # print 'edgeEnd ', edgeEnd
 
                                 lineStart = coord[numGeom]
                                 # print 'lineStart ', lineStart
 
-                                distStart = edgeStart.sub(lineStart).Length
-                                # print 'distStart ', distStart
-                                distEnd = edgeEnd.sub(lineStart).Length
-                                # print 'distEnd ', distEnd
+                                edge = section.Edges[0]
+                                edgeStart = edge.firstVertex(True).Point
+                                point = self.roundVector(edgeStart)
+                                # print 'point ', point
 
-                                if distStart < distEnd:
-                                    into, lineInto =\
-                                        self.into(lineStart, edgeStart)
-                                else:
-                                    into, lineInto =\
-                                        self.into(lineStart, edgeEnd)
+                                sect = compoundFace.section([edge], tolerance)
+                                ed = sect.Edges[0]
+                                edStart = ed.lastVertex(True).Point
+                                pp = self.roundVector(edStart)
+                                # print 'pp ', pp
 
-                                # print 'into ', into
+                                lineInto = Part.LineSegment(lineStart, edgeStart).toShape()
                                 # print 'lineInto ', lineInto, (lineInto.firstVertex(True).Point, lineInto.lastVertex(True).Point)
+                                ss = len(lineInto.section([face], tolerance).Vertexes)
+                                # print 'ss ', ss
 
-                                if distStart < distEnd and into:
+                                if point == pp and ss == 2:
                                     # print 'alignment'
+
                                     pass
 
                                 else:
                                     # print 'no alignment '
-                                    if not into:
-                                        # print 'no into'
-                                        if distStart > distEnd:
-                                            # print 'distStart > distEnd'
-                                            pyPlane.lineInto = lineInto
+
+                                    if ss is not 2:
+
+                                        pyPlane.lineInto = lineInto
+
                                     rearF =\
                                         self.findRear(pyWire, pyPrePlane,
                                                       'forward')
@@ -525,7 +523,10 @@ class _PyFace(_Py):
                             self.forBack(pyPlane, 'forward')
 
                         forward = pyPlane.forward
+                        # print 'forward ', (forward.firstVertex(True).Point, forward.lastVertex(True).Point)
+                        # print [[e.firstVertex(True).Point, e.lastVertex(True).Point] for e in shapeGeomFace]
                         section = forward.section(shapeGeomFace, tolerance)
+                        # print section.Vertexes, section.Edges
 
                         if section.Edges:
                             # print '11 possible alignment'
@@ -541,26 +542,24 @@ class _PyFace(_Py):
 
                                 edgeStart = edge.firstVertex(True).Point
                                 # print 'edgeStart ', edgeStart
-                                edgeEnd = edge.lastVertex(True).Point
-                                # print 'edgeEnd ', edgeEnd
+                                point = self.roundVector(edgeStart)
 
-                                distStart = edgeStart.sub(lineEnd).Length
-                                # print 'distStart ', distStart
-                                distEnd = edgeEnd.sub(lineEnd).Length
-                                # print 'distEnd ', distEnd
+                                sect = compoundFace.section([edge], tolerance)
+                                ed = sect.Edges[0]
+                                edStart = ed.firstVertex(True).Point
+                                pp = self.roundVector(edStart)
 
-                                if distStart < distEnd:
-                                    into, lineInto = self.into(lineEnd,
-                                                               edgeStart)
-                                else:
-                                    into, lineInto = self.into(lineEnd,
-                                                               edgeEnd)
+                                lineInto = Part.LineSegment(lineEnd, edgeStart).toShape()
+                                ss = len(lineInto.section([face], tolerance).Vertexes)
 
-                                if into:
-                                    lineEnd = edgeEnd
 
-                                if distStart < distEnd and into:
+                                if point == pp and ss == 2:
                                     # print '1111 aligment'
+
+                                    edgeEnd = edge.lastVertex(True).Point
+                                    # print 'edgeEnd ', edgeEnd
+
+                                    lineEnd = edgeEnd
 
                                     pyPlMemo = pyPl
 
@@ -628,11 +627,10 @@ class _PyFace(_Py):
                                             ref = False
                                             break
 
-                                elif not into:
+                                elif ss is not 2:
                                     # print '1112 interference'
                                     ref = True
-                                    if distStart < distEnd:
-                                        pyPl.lineInto = lineInto
+                                    pyPl.lineInto = lineInto
                                     break
 
                                 else:
@@ -719,26 +717,7 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-    def into(self, pointOne, pointTwo):
 
-        '''into(self, pointOne, pointTwo)'''
-
-        # print 'pointOne ', pointOne
-        # print 'pointTwo ', pointTwo
-
-        tolerance = _Py.tolerance
-        into = False
-        face = self.face
-        lineInto = Part.LineSegment(pointOne, pointTwo)
-        lIS = lineInto.toShape()
-        sect = face.section([lIS], tolerance)
-        # print sect.Edges
-        # print sect.Vertexes
-        if sect.Edges:
-            if len(sect.Vertexes) == 2:
-                into = True
-
-        return into, lIS
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
@@ -979,7 +958,7 @@ class _PyFace(_Py):
             nGeom = coord.index(self.roundVector(vertex.Point))
             # print 'on vertex'
 
-            if edge:
+            '''if edge:
                 if direction == 'forward':
                     # print 'aa'
                     nGeom = self.sliceIndex(nGeom - 1, lenWire)
@@ -987,7 +966,7 @@ class _PyFace(_Py):
             else:
                 if direction == 'backward':
                     # print 'bb'
-                    nGeom = self.sliceIndex(nGeom - 1, lenWire)
+                    nGeom = self.sliceIndex(nGeom - 1, lenWire)'''
 
         except ValueError:
             # print 'not in vertex (edge False)'

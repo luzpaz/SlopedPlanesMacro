@@ -59,4 +59,4 @@ print 'objects ', numObj
 print 'erros ', numError
 print 'geometry errors ', geometricList
 print 'execution errors ', executionList
-print time.clock()
+print 'time.clock() ', time.clock()

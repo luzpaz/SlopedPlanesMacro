@@ -973,7 +973,7 @@ class _PyAlignment(_Py):
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
-                # print '# pyPlane ', (pyPlane.numWire, pyPlane.numGeom)
+                # print '# pyPlane ', (pyPlane.numWire, pyPlane.numGeom, pyPlane.virtualized, pyPlane.cross)
                 gS = pyPlane.geomShape
                 plane = pyPlane.shape
 
