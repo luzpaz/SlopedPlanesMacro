@@ -338,7 +338,7 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
-        for pyAlign in pyAlignList[:1]:
+        for pyAlign in pyAlignList:
             if not pyAlign.falsify:
                 pyAlign.aligning()
 
@@ -443,10 +443,7 @@ class _PyFace(_Py):
                             self.forBack(pyPlane, 'backward')
 
                             forward = pyPlane.forward
-                            # print 'forward ', (forward.firstVertex(True).Point, forward.lastVertex(True).Point)
-                            # print [[e.firstVertex(True).Point, e.lastVertex(True).Point] for e in shapeGeomFace]
                             section = forward.section(shapeGeomFace, tolerance)
-                            # print section.Vertexes, section.Edges
 
                             if section.Edges:
                                 # print 'edges'
@@ -466,7 +463,6 @@ class _PyFace(_Py):
                                 # print 'pp ', pp
 
                                 lineInto = Part.LineSegment(lineStart, edgeStart).toShape()
-                                # print 'lineInto ', lineInto, (lineInto.firstVertex(True).Point, lineInto.lastVertex(True).Point)
                                 ss = len(lineInto.section([face], tolerance).Vertexes)
                                 # print 'ss ', ss
 
@@ -523,10 +519,7 @@ class _PyFace(_Py):
                             self.forBack(pyPlane, 'forward')
 
                         forward = pyPlane.forward
-                        # print 'forward ', (forward.firstVertex(True).Point, forward.lastVertex(True).Point)
-                        # print [[e.firstVertex(True).Point, e.lastVertex(True).Point] for e in shapeGeomFace]
                         section = forward.section(shapeGeomFace, tolerance)
-                        # print section.Vertexes, section.Edges
 
                         if section.Edges:
                             # print '11 possible alignment'
@@ -717,8 +710,6 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-
-
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
         '''seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl)
@@ -870,13 +861,13 @@ class _PyFace(_Py):
 
             edge = True
 
-            if direction == 'forward':
+            if pyPlane.aligned or pyPlane.choped:
                 # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
 
             else:
                 # print 'b2'
-                vertex = section.Edges[-1].Vertexes[1]
+                vertex = section.Edges[0].Vertexes[1]
 
         else:
             # print 'c'
@@ -922,12 +913,12 @@ class _PyFace(_Py):
         # print 'point ', vertex.Point
         # print 'edge ', edge
 
-        nGeom = self.findGeomRear(pyWire, direction, vertex, edge)
+        nGeom = self.findGeomRear(pyWire, pyPlane, direction, vertex, edge)
         pyPlane.addValue('rear', nGeom, direction)
         # print 'nGeom ', nGeom
 
         if secondRear:
-            sGeom = self.findGeomRear(pyWire, direction, vert, edge)
+            sGeom = self.findGeomRear(pyWire, pyPlane, direction, vert, edge)
             pyPlane.addValue('secondRear', sGeom, direction)
             # print 'sGeom ', sGeom
 
@@ -945,7 +936,7 @@ class _PyFace(_Py):
 
         return nGeom
 
-    def findGeomRear(self, pyWire, direction, vertex, edge=False):
+    def findGeomRear(self, pyWire, pyPlane, direction, vertex, edge=False):
 
         '''findGeomRear(self, pyWire, direction, vertex, edge=False)'''
 
@@ -958,15 +949,18 @@ class _PyFace(_Py):
             nGeom = coord.index(self.roundVector(vertex.Point))
             # print 'on vertex'
 
-            '''if edge:
+            if edge:
                 if direction == 'forward':
                     # print 'aa'
                     nGeom = self.sliceIndex(nGeom - 1, lenWire)
+                '''else:
+                    # print 'aaa'
+                    nGeom = self.sliceIndex(nGeom + 1, lenWire)'''
 
             else:
                 if direction == 'backward':
                     # print 'bb'
-                    nGeom = self.sliceIndex(nGeom - 1, lenWire)'''
+                    nGeom = self.sliceIndex(nGeom - 1, lenWire)
 
         except ValueError:
             # print 'not in vertex (edge False)'
