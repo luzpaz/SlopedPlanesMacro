@@ -876,7 +876,7 @@ class _PyFace(_Py):
                 # print 'c1'
                 vertex = section.Vertexes[1]
 
-            else:
+            else:   # esto hay que revisarlo
                 # print 'c2'
 
                 lS = lineShape.copy()
