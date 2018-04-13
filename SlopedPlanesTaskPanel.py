@@ -308,7 +308,6 @@ class _TaskPanel_SlopedPlanes():
                                 length = pyPlane.length
                                 ll = FreeCAD.Units.Quantity(length,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
-                                # value = float(nn[0].split()[0].replace(',', '.'))
                                 value = length / nn[1]
                                 suffix = ' ' + nn[2]
                                 doubleSpinBox.setValue(value)
@@ -328,7 +327,6 @@ class _TaskPanel_SlopedPlanes():
                                 ll = FreeCAD.Units.Quantity(height,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
-                                # value = float(nn[0].split()[0].replace(',', '.'))
                                 value = height / nn[1]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
@@ -347,7 +345,6 @@ class _TaskPanel_SlopedPlanes():
                                 ll = FreeCAD.Units.Quantity(run,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
-                                # value = float(nn[0].split()[0].replace(',', '.'))
                                 value = run / nn[1]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
@@ -381,7 +378,7 @@ class _TaskPanel_SlopedPlanes():
                                 ll = FreeCAD.Units.Quantity(length,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
-                                value = float(nn[0].split()[0].replace(',', '.'))
+                                value = length / nn[1]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 6, doubleSpinBox)
@@ -399,7 +396,7 @@ class _TaskPanel_SlopedPlanes():
                                 ll = FreeCAD.Units.Quantity(height,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
-                                value = float(nn[0].split()[0].replace(',', '.'))
+                                value = height / nn[1]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 7, doubleSpinBox)
@@ -417,7 +414,7 @@ class _TaskPanel_SlopedPlanes():
                                 ll = FreeCAD.Units.Quantity(run,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
-                                value = float(nn[0].split()[0].replace(',', '.'))
+                                value = run / nn[1]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 8, doubleSpinBox)
@@ -434,7 +431,7 @@ class _TaskPanel_SlopedPlanes():
                                 ll = FreeCAD.Units.Quantity(leftWidth,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
-                                value = float(nn[0].split()[0].replace(',', '.'))
+                                value = leftWidth / nn[1]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 9, doubleSpinBox)
@@ -443,11 +440,11 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setToolTip("The right width of the related face")
                                 doubleSpinBox.setMaximum(1000*size)
                                 doubleSpinBox.setMinimum(-1000*size)
-                                rigthWidth = pyPlane.rightWidth
-                                ll = FreeCAD.Units.Quantity(rigthWidth,FreeCAD.Units.Length)
+                                rightWidth = pyPlane.rightWidth
+                                ll = FreeCAD.Units.Quantity(rightWidth,FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
-                                value = float(nn[0].split()[0].replace(',', '.'))
+                                value = rightWidth / nn[1]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 10, doubleSpinBox)
@@ -739,15 +736,15 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         super(_DoubleSpinBox, self).__init__()
 
-    def changeAngle(self, angle, update=True, R=[]):
+    def changeAngle(self, angle, aa=True, A=[]):
 
         ''''''
 
-        # print '### changeAngle'
+        # print '### changeAngle ', angle, aa, A
 
-        if R:
-            # print 'R'
-            R.pop()
+        if A:
+            # print 'A'
+            A.pop()
             return
 
         item = self.item
@@ -770,7 +767,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         tree.itemWidget(item, 3).changeHeight(height, False)
         tree.itemWidget(item, 4).changeRun(run, False)
 
-        if update:
+        if aa:
+            # print 'aA'
 
             slope = 100 * math.tan(angle)
             # print 'slope ', slope
@@ -778,30 +776,31 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             tree.itemWidget(item, 5).changeSlope(slope, False)
 
         else:
+            # print 'bA'
 
             deg = u"\u00b0"
             suffix = " " + deg
             # print 'suffix ', suffix
             # print 'slope ', slope
             angle = math.degrees(angle)
-            R.append(angle)
+            A.append(angle)
 
             self.setValue(angle)
             self.setSuffix(suffix)
 
-    def changeSlope(self, slope, update=True, R=[]):
+    def changeSlope(self, slope, ss=True, S=[]):
 
         ''''''
 
-        # print '### changeSlope'
+        # print '### changeSlope ',slope, ss, S
 
-        if R:
-            # print 'R'
-            R.pop()
+        if S:
+            # print 'S'
+            S.pop()
             return
 
-        if update:
-            # print 'a'
+        if ss:
+            # print 'aS'
 
             item = self.item
             tree = self.parent
@@ -812,29 +811,29 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             tree.itemWidget(item, 1).changeAngle(angle, False)
 
         else:
-            # print 'b'
+            # print 'bS'
 
             suffix = ' %'
             # print 'suffix ', suffix
             # print 'slope ', slope
-            R.append(slope)
+            S.append(slope)
 
             self.setValue(slope)
             self.setSuffix(suffix)
 
-    def changeLength(self, length, update=True, R=[]):
+    def changeLength(self, length, ll=True, L=[]):
 
         ''''''
 
-        # print '### changeLength'
+        # print '### changeLength ', length, ll, L
 
-        if R:
-            # print 'R'
-            R.pop()
+        if L:
+            # print 'L'
+            L.pop()
             return
 
-        if update:
-            # print 'a'
+        if ll:
+            # print 'aL'
 
             suffix = self.suffix()
             # print 'suffix ', suffix
@@ -858,7 +857,7 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             tree.itemWidget(item, 4).changeRun(run, False)
 
         else:
-            # print 'b'
+            # print 'bL'
 
             suffix = 'mm'
             # print 'suffix ', suffix
@@ -869,25 +868,28 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             # print nn
             length = length.Value
             # print 'length ', length
-            R.append(length)
             value = length / nn[1]
             suffix = ' ' + nn[2]
+
+            if round(value, 2) != self.value():
+                L.append(length)
+
             self.setValue(value)
             self.setSuffix(suffix)
 
-    def changeHeight(self, height, update=True, R=[]):
+    def changeHeight(self, height, hh=True, H=[]):
 
         ''''''
 
-        # print '### changeHeight'
+        # print '### changeHeight ', height, hh, H
 
-        if R:
-            # print 'R'
-            R.pop()
+        if H:
+            # print 'H'
+            H.pop()
             return
 
-        if update:
-            # print 'a'
+        if hh:
+            # print 'aH'
 
             suffix = self.suffix()
             # print 'suffix ', suffix
@@ -911,7 +913,7 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             tree.itemWidget(item, 4).changeRun(run, False)
 
         else:
-            # print 'b'
+            # print 'bH'
 
             suffix = 'mm'
             # print 'suffix ', suffix
@@ -922,25 +924,28 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             # print nn
             height = height.Value
             # print 'height ', height
-            R.append(height)
             value = height / nn[1]
             suffix = ' ' + nn[2]
+
+            if round(value, 2) != self.value():
+                H.append(height)
+
             self.setValue(value)
             self.setSuffix(suffix)
 
-    def changeRun(self, run, update=True, R=[]):
+    def changeRun(self, run, rr=True, R=[]):
 
         ''''''
 
-        # print '### changeRun'
+        # print '### changeRun ', run, rr, R
 
         if R:
             # print 'R'
             R.pop()
             return
 
-        if update:
-            # print 'a'
+        if rr:
+            # print 'aR'
 
             suffix = self.suffix()
             # print 'suffix ', suffix
@@ -964,7 +969,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             tree.itemWidget(item, 3).changeHeight(height, False)
 
         else:
-            # print 'b'
+            # print 'bR'
+
 
             suffix = 'mm'
             # print 'suffix ', suffix
@@ -975,9 +981,13 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             # print nn
             run = run.Value
             # print 'run ', run
-            R.append(run)
+
             value = run / nn[1]
             suffix = ' ' + nn[2]
+
+            if round(value, 2) != self.value():
+                R.append(run)
+
             self.setValue(value)
             self.setSuffix(suffix)
 
