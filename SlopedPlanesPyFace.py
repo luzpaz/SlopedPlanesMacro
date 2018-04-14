@@ -343,6 +343,8 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
             pyAlign.simulatingChops()
+
+        for pyAlign in pyAlignList:
             pyAlign.simulatingAlignment()
 
         for pyWire in pyWireList:
@@ -354,8 +356,6 @@ class _PyFace(_Py):
         # self.printControl('ordinaries')
 
         self.betweenWires()
-
-        pyAlignList = self.alignments
 
         for pyAlign in pyAlignList:
             if pyAlign.falsify:
