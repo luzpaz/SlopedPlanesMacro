@@ -313,18 +313,40 @@ class _PyFace(_Py):
 
         self.upping()
 
-        self.virtualizing()
+        for pyWire in self.wires:
+            pyWire.virtualizing()
 
-        self.trimming()
-        # self.printControl('trimming')
+        for pyAlign in self.alignments:
+            pyAlign.virtualizing()
 
-        self.priorLater()
-        # self.printControl('priorLater')
+        for pyWire in self.wires:
+            pyWire.trimming()
+        # self.printControl('trimming reflexs')
 
-        self.simulating()
-        # self.printControl('simulating')
+        for pyAlign in self.alignments:
+            pyAlign.trimming()
+        # self.printControl('trimming alignments')
 
-        self.reflexing()
+        for pyWire in self.wires:
+            pyWire.priorLater()
+        # self.printControl('priorLater wires')
+
+        for pyAlign in self.alignments:
+            pyAlign.priorLater()
+        # self.printControl('priorLater alignments')
+
+        for pyWire in self.wires:
+            pyWire.simulating()
+
+        for pyAlign in self.alignments:
+            pyAlign.simulatingChops()
+
+        for pyAlign in self.alignments:
+            pyAlign.simulatingAlignment()
+
+        for pyWire in self.wires:
+            if pyWire.reflexs:
+                pyWire.reflexing()
         # self.printControl('reflexing')
 
         self.ordinaries()
@@ -1173,76 +1195,6 @@ class _PyFace(_Py):
             for pyWire in self.wires:
                 for pyPlane in pyWire.planes:
                     pyPlane.cuttingPyth([upPlane])
-
-    def virtualizing(self):
-
-        '''virtualizing(self)
-        Transfers to PyWire and PyAlignment.'''
-
-        # print '######### virtualizing'
-
-        for pyWire in self.wires:
-            pyWire.virtualizing()
-
-        for pyAlign in self.alignments:
-            pyAlign.virtualizing()
-
-    def trimming(self):
-
-        '''trimming(self)
-        Transfers to PyWire and PyAlignment.'''
-
-        # print '######### trimming'
-
-        for pyWire in self.wires:
-            pyWire.trimming()
-        # self.printControl('trimming reflexs')
-
-        for pyAlign in self.alignments:
-            pyAlign.trimming()
-        # self.printControl('trimming alignments')
-
-    def priorLater(self):
-
-        '''priorLater(self)
-        Transfers to PyWire and PyAlignment.'''
-
-        # print '######### priorLater'
-
-        for pyWire in self.wires:
-            pyWire.priorLater()
-        # self.printControl('priorLater wires')
-
-        for pyAlign in self.alignments:
-            pyAlign.priorLater()
-        # self.printControl('priorLater alignments')
-
-    def simulating(self):
-
-        '''simulating(self)
-        Transfers to PyWire and PyAlignment.'''
-
-        # print '######### simulating'
-
-        for pyWire in self.wires:
-            pyWire.simulating()
-
-        for pyAlign in self.alignments:
-            pyAlign.simulatingChops()
-
-        for pyAlign in self.alignments:
-            pyAlign.simulatingAlignment()
-
-    def reflexing(self):
-
-        '''reflexing(self)
-        Transfers to PyWire.'''
-
-        # print '######### reflexing'
-
-        for pyWire in self.wires:
-            if pyWire.reflexs:
-                pyWire.reflexing()
 
     def ordinaries(self):
 
