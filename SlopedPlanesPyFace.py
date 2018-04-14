@@ -308,13 +308,19 @@ class _PyFace(_Py):
 
         self.parsing()
 
-        self.planning()
+        pyAlignList = self.alignments
+        pyWireList = self.wires
+
+        for pyWire in pyWireList:
+            pyWire.planning()
+
+        for pyAlign in pyAlignList:
+            pyAlign.rangging(self.reset)
+
+        self.reset = False
         # self.printSummary()
 
         self.upping()
-
-        pyAlignList = self.alignments
-        pyWireList = self.wires
 
         for pyWire in pyWireList:
             pyWire.virtualizing()
@@ -352,7 +358,8 @@ class _PyFace(_Py):
                 pyWire.reflexing()
         # self.printControl('reflexing')
 
-        self.ordinaries()
+        for pyWire in pyWireList:
+            pyWire.ordinaries()
         # self.printControl('ordinaries')
 
         self.betweenWires()
@@ -892,7 +899,7 @@ class _PyFace(_Py):
 
             edge = True
 
-            if pyPlane.aligned or pyPlane.choped:   # esto no esta bien ???
+            if pyPlane.aligned or pyPlane.choped:   # TODO esto no esta bien ???
                 # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
 
@@ -907,7 +914,7 @@ class _PyFace(_Py):
                 # print 'c1'
                 vertex = section.Vertexes[1]
 
-            else:   # esto hay que revisarlo
+            else:   # TODO esto hay que revisarlo
                 # print 'c2'
 
                 lS = lineShape.copy()
@@ -1148,23 +1155,6 @@ class _PyFace(_Py):
             pyAlign.prior = pyPrior
             pyAlign.later = pyLater
 
-    def planning(self):
-
-        '''planning(self)
-        Transfers to PyWire.
-        Arranges the alignment ranges.
-        Rearmes the face reset system.'''
-
-        # print '######### planning'
-
-        for pyWire in self.wires:
-            pyWire.planning()
-
-        for pyAlign in self.alignments:
-            pyAlign.rangging(self.reset)
-
-        self.reset = False
-
     def upping(self):
 
         '''upping(self)'''
@@ -1201,16 +1191,6 @@ class _PyFace(_Py):
             for pyWire in self.wires:
                 for pyPlane in pyWire.planes:
                     pyPlane.cuttingPyth([upPlane])
-
-    def ordinaries(self):
-
-        '''ordinaries(self)
-        Transfers to PyWire.'''
-
-        # print '######### ordinaries'
-
-        for pyWire in self.wires:
-            pyWire.ordinaries()
 
     def betweenWires(self):
 
