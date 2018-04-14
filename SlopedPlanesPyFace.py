@@ -313,38 +313,39 @@ class _PyFace(_Py):
 
         self.upping()
 
-        for pyWire in self.wires:
+        pyAlignList = self.alignments
+        pyWireList = self.wires
+
+        for pyWire in pyWireList:
             pyWire.virtualizing()
 
-        for pyAlign in self.alignments:
+        for pyAlign in pyAlignList:
             pyAlign.virtualizing()
 
-        for pyWire in self.wires:
+        for pyWire in pyWireList:
             pyWire.trimming()
         # self.printControl('trimming reflexs')
 
-        for pyAlign in self.alignments:
+        for pyAlign in pyAlignList:
             pyAlign.trimming()
         # self.printControl('trimming alignments')
 
-        for pyWire in self.wires:
+        for pyWire in pyWireList:
             pyWire.priorLater()
         # self.printControl('priorLater wires')
 
-        for pyAlign in self.alignments:
+        for pyAlign in pyAlignList:
             pyAlign.priorLater()
         # self.printControl('priorLater alignments')
 
-        for pyWire in self.wires:
+        for pyWire in pyWireList:
             pyWire.simulating()
 
-        for pyAlign in self.alignments:
+        for pyAlign in pyAlignList:
             pyAlign.simulatingChops()
-
-        for pyAlign in self.alignments:
             pyAlign.simulatingAlignment()
 
-        for pyWire in self.wires:
+        for pyWire in pyWireList:
             if pyWire.reflexs:
                 pyWire.reflexing()
         # self.printControl('reflexing')
@@ -353,8 +354,6 @@ class _PyFace(_Py):
         # self.printControl('ordinaries')
 
         self.betweenWires()
-
-        pyAlignList = self.alignments
 
         for pyAlign in pyAlignList:
             if pyAlign.falsify:
