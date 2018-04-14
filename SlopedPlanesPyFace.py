@@ -380,8 +380,6 @@ class _PyFace(_Py):
 
         self.postProcess()
 
-        # self.printSummary()
-
         # '''
 
     def parsing(self):
