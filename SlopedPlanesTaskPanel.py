@@ -195,7 +195,7 @@ class _TaskPanel_SlopedPlanes():
             tree.header().resizeSection(7, 130)
             tree.header().resizeSection(8, 120)
             tree.header().resizeSection(9, 120)
-            tree.header().resizeSection(10,120)
+            tree.header().resizeSection(10, 120)
             tree.header().resizeSection(11, 60)
             tree.header().resizeSection(12, 180)
             tree.header().resizeSection(13, 60)
@@ -560,16 +560,19 @@ class _TaskPanel_SlopedPlanes():
 
                             doubleSpinBox = tree.itemWidget(it, 6)
                             overhang = doubleSpinBox.value()
+                            suffix = doubleSpinBox.suffix()
                             overhang = FreeCAD.Units.Quantity(str(overhang) + suffix)
                             pyPlane.overhang = overhang.Value
 
                             doubleSpinBox = tree.itemWidget(it, 9)
                             left = doubleSpinBox.value()
+                            suffix = doubleSpinBox.suffix()
                             left = FreeCAD.Units.Quantity(str(left) + suffix)
                             pyPlane.leftWidth = left.Value
 
                             doubleSpinBox = tree.itemWidget(it, 10)
                             right = doubleSpinBox.value()
+                            suffix = doubleSpinBox.suffix()
                             right = FreeCAD.Units.Quantity(str(right) + suffix)
                             pyPlane.rightWidth = right.Value
 
@@ -749,8 +752,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         item = self.item
         tree = self.parent
-        itemW = tree.itemWidget(item, 2)
 
+        itemW = tree.itemWidget(item, 2)
         length = itemW.value()
         suffix = itemW.suffix()
         length = FreeCAD.Units.Quantity(str(length) + suffix)
@@ -766,6 +769,20 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         # print 'run ', run
         tree.itemWidget(item, 3).changeHeight(height, False)
         tree.itemWidget(item, 4).changeRun(run, False)
+
+        itemW = tree.itemWidget(item, 6)
+        overhangLength = itemW.value()
+        suffix = itemW.suffix()
+        overhangLength = FreeCAD.Units.Quantity(str(overhangLength) + suffix)
+        overhangLength = overhangLength.Value
+        # print 'overhangLength ', overhangLength
+
+        overhangHeight = self.height(angle, overhangLength)
+        # print 'overhangHeight ', overhangHeight
+        overhangRun = self.run(angle, overhangLength)
+        # print 'overhangRun ', overhangRun
+        tree.itemWidget(item, 7).changeOverhangHeight(overhangHeight, False)
+        tree.itemWidget(item, 8).changeOverhangRun(overhangRun, False)
 
         if aa:
             # print 'aA'
@@ -991,56 +1008,174 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             self.setValue(value)
             self.setSuffix(suffix)
 
-    def changeOverhangLength(self, length, update=True):
+    def changeOverhangLength(self, overhangLength, lo=True, LO=[]):
 
         ''''''
 
-        item = self.item
-        tree = self.parent
+        # print '### changeOverhangLength ', overhangLength, lo, LO
 
-        if update:
+        if LO:
+            # print 'LO'
+            LO.pop()
+            return
+
+        if lo:
+            # print 'aLO'
+
+            suffix = self.suffix()
+            # print 'suffix ', suffix
+            # print 'overhangLength ', overhangLength
+            overhangLength = FreeCAD.Units.Quantity(str(overhangLength) + suffix)
+
+            item = self.item
+            tree = self.parent
+
             angle = tree.itemWidget(item, 1).value()
             angle = math.radians(angle)
-            height = self.height(angle, length)
-            run = self.run(angle, length)
-            tree.itemWidget(item, 6).changeOverhangHeight(height, False)
-            tree.itemWidget(item, 7).changeOverhangRun(run, False)
-        else:
-            tree.itemWidget(item, 5).setValue(length)
 
-    def changeOverhangHeight(self, height, update=True):
+            overhangLength = overhangLength.Value
+            # print 'overhangLength ', overhangLength
+
+            overhangHeight = self.height(angle, overhangLength)
+            # print 'overhangHeight ', overhangHeight
+            overhangRun = self.run(angle, overhangLength)
+            # print 'overhangRun ', overhangRun
+            tree.itemWidget(item, 7).changeOverhangHeight(overhangHeight, False)
+            tree.itemWidget(item, 8).changeOverhangRun(overhangRun, False)
+
+        else:
+            # print 'bLO'
+
+            suffix = 'mm'
+            # print 'suffix ', suffix
+            # print 'overhangLength ', overhangLength
+            overhangLength = FreeCAD.Units.Quantity(str(overhangLength) + suffix)
+
+            nn = overhangLength.getUserPreferred()
+            # print nn
+            overhangLength = overhangLength.Value
+            # print 'overhangLength ', overhangLength
+            value = overhangLength / nn[1]
+            suffix = ' ' + nn[2]
+
+            if round(value, 2) != self.value():
+                LO.append(overhangLength)
+
+            self.setValue(value)
+            self.setSuffix(suffix)
+
+    def changeOverhangHeight(self, overhangHeight, ho=True, HO=[]):
 
         ''''''
 
-        item = self.item
-        tree = self.parent
+        # print '### changeOverhangHeight ', overhangHeight, ho, HO
 
-        if update:
+        if HO:
+            # print 'HO'
+            HO.pop()
+            return
+
+        if ho:
+            # print 'aHO'
+
+            suffix = self.suffix()
+            # print 'suffix ', suffix
+            # print 'overhangHeight ', overhangHeight
+            overhangHeight = FreeCAD.Units.Quantity(str(overhangHeight) + suffix)
+
+            item = self.item
+            tree = self.parent
+
             angle = tree.itemWidget(item, 1).value()
             angle = math.radians(angle)
-            length = self.lengthHeight(angle, height)
-            run = self.run(angle, length)
-            tree.itemWidget(item, 5).changeOverhangLength(length, False)
-            tree.itemWidget(item, 7).changeOverhangRun(run, False)
-        else:
-            tree.itemWidget(item, 6).setValue(height)
 
-    def changeOverhangRun(self, run, update=True):
+            overhangHeight = overhangHeight.Value
+            # print 'overhangHeight ', overhangHeight
+
+            overhangLength = self.lengthHeight(angle, overhangHeight)
+            # print 'length ', length
+            overhangRun = self.run(angle, overhangHeight)
+            # print 'run ', run
+            tree.itemWidget(item, 6).changeOverhangLength(overhangLength, False)
+            tree.itemWidget(item, 8).changeOverhangRun(overhangRun, False)
+
+        else:
+            # print 'bHO'
+
+            suffix = 'mm'
+            # print 'suffix ', suffix
+            # print 'overhangHeight ', overhangHeight
+            overhangHeight = FreeCAD.Units.Quantity(str(overhangHeight) + suffix)
+
+            nn = overhangHeight.getUserPreferred()
+            # print nn
+            overhangHeight = overhangHeight.Value
+            # print 'overhangHeight ', overhangHeight
+            value = overhangHeight / nn[1]
+            suffix = ' ' + nn[2]
+
+            if round(value, 2) != self.value():
+                HO.append(overhangHeight)
+
+            self.setValue(value)
+            self.setSuffix(suffix)
+
+    def changeOverhangRun(self, overhangRun, hr=True, HR=[]):
 
         ''''''
 
-        item = self.item
-        tree = self.parent
+        # print '### changeOverhangRun ', overhangRun, hr, HR
 
-        if update:
+        if HR:
+            # print 'HR'
+            HR.pop()
+            return
+
+        if hr:
+            # print 'aHR'
+
+            suffix = self.suffix()
+            # print 'suffix ', suffix
+            # print 'run ', run
+            overhangRun = FreeCAD.Units.Quantity(str(overhangRun) + suffix)
+
+            item = self.item
+            tree = self.parent
+
             angle = tree.itemWidget(item, 1).value()
             angle = math.radians(angle)
-            length = self.lengthRun(angle, run)
-            height = self.height(angle, length)
-            tree.itemWidget(item, 5).changeOverhangLength(length, False)
-            tree.itemWidget(item, 6).changeOverhangHeight(height, False)
+
+            overhangRun = overhangRun.Value
+            # print 'overhangRun ', overhangRun
+
+            overhangLength = self.lengthRun(angle, overhangRun)
+            # print 'overhangLength ', overhangLength
+            overhangHeight = self.height(angle, overhangRun)
+            # print 'overhangHeight ', overhangHeight
+            tree.itemWidget(item, 6).changeOverhangLength(overhangLength, False)
+            tree.itemWidget(item, 7).changeOverhangHeight(overhangHeight, False)
+
         else:
-            tree.itemWidget(item, 7).setValue(run)
+            # print 'bHR'
+
+            suffix = 'mm'
+            # print 'suffix ', suffix
+            # print 'overhangRun ', overhangRun
+            overhangRun = FreeCAD.Units.Quantity(str(overhangRun) + suffix)
+
+            nn = overhangRun.getUserPreferred()
+            # print nn
+            overhangRun = overhangRun.Value
+            # print 'overhangRun ', overhangRun
+
+            value = overhangRun / nn[1]
+            suffix = ' ' + nn[2]
+
+            if round(value, 2) != self.value():
+                HR.append(overhangRun)
+
+            self.setValue(value)
+            self.setSuffix(suffix)
 
     def height(self, angle, length):
 
