@@ -362,8 +362,12 @@ class _Py(object):
 
         '''printAssociatedShapes(self, numWire, numGeom)'''
 
-        sketch = self.slopedPlanes.Base
-        placement = sketch.Placement
+        slopedPlanes = self.slopedPlanes
+        sketch = slopedPlanes.Base
+
+        pl = sketch.Placement
+        place = slopedPlanes.Placement
+        placement = pl.multiply(place)
 
         pyPlane = self.selectPlane(numWire, numGeom)
 
@@ -371,34 +375,34 @@ class _Py(object):
         if shape:
 
             shape.Placement = placement
-            Part.show(shape, self.slopedPlanes.Name+' shape '+str(numWire)+' '+str(numGeom))
+            Part.show(shape, slopedPlanes.Name+' shape '+str(numWire)+' '+str(numGeom))
 
         simulatedShape = pyPlane.simulatedShape
         if simulatedShape:
 
             simulatedShape.Placement = placement
-            Part.show(simulatedShape, self.slopedPlanes.Name+' simulatedShape '+str(numWire)+' '+str(numGeom))
+            Part.show(simulatedShape, slopedPlanes.Name+' simulatedShape '+str(numWire)+' '+str(numGeom))
 
         cutter = pyPlane.cutter
         if cutter:
 
             compound = Part.makeCompound(cutter)
             compound.Placement = placement
-            Part.show(compound, self.slopedPlanes.Name+' cutter '+str(numWire)+' '+str(numGeom))
+            Part.show(compound, slopedPlanes.Name+' cutter '+str(numWire)+' '+str(numGeom))
 
         under = pyPlane.under
         if under:
 
             compound = Part.makeCompound(under)
             compound.Placement = placement
-            Part.show(compound, self.slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))
+            Part.show(compound, slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))
 
         seed = pyPlane.seed
         if seed:
 
             compound = Part.makeCompound(seed)
             compound.Placement = placement
-            Part.show(compound, self.slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))
+            Part.show(compound, slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))
 
         if pyPlane.aligned:
             pyAli = self.selectAlignmentBase(numWire, numGeom)
@@ -406,16 +410,31 @@ class _Py(object):
 
                 compound = Part.makeCompound(pyAli.simulatedAlignment)
                 compound.Placement = placement
-                Part.show(compound, self.slopedPlanes.Name+' simulatedAlignment '+str(numWire)+' '+str(numGeom))
+                Part.show(compound, slopedPlanes.Name+' simulatedAlignment '+str(numWire)+' '+str(numGeom))
 
         virtuals = pyPlane.virtuals
         if virtuals:
             for pyP in virtuals:
 
-                Part.show(pyP.shape, self.slopedPlanes.Name+' virtual shape '+str(numWire)+' '+str(numGeom))
-                compound = Part.makeCompound(pyP.under)
-                compound.Placement = placement
-                Part.show(compound, self.slopedPlanes.Name+' virtual under '+str(numWire)+' '+str(numGeom))
+                shape = pyP.shape
+                if shape:
+
+                    shape.Placement = placement
+                    Part.show(pyP.shape, slopedPlanes.Name+' virtual shape '+str(numWire)+' '+str(numGeom))
+
+                under = pyP.under
+                if under:
+
+                    compound = Part.makeCompound(pyP.under)
+                    compound.Placement = placement
+                    Part.show(compound, slopedPlanes.Name+' virtual under '+str(numWire)+' '+str(numGeom))
+
+                cutter = pyP.cutter
+                if cutter:
+
+                    compound = Part.makeCompound(cutter)
+                    compound.Placement = placement
+                    Part.show(compound, slopedPlanes.Name+' cutter '+str(numWire)+' '+str(numGeom))
 
     def printControl(self, text):
 
