@@ -355,6 +355,8 @@ class _PyFace(_Py):
 
         self.betweenWires()
 
+        pyAlignList = self.alignments
+
         for pyAlign in pyAlignList:
             if pyAlign.falsify:
                 pyAlign.aligning()
@@ -483,8 +485,12 @@ class _PyFace(_Py):
                                 pp = self.roundVector(edStart)
                                 # print 'pp ', pp
 
-                                lineInto = Part.LineSegment(lineStart, edgeStart).toShape()
-                                ss = len(lineInto.section([face], tolerance).Vertexes)
+                                lineInto =\
+                                    Part.LineSegment(lineStart,
+                                                     edgeStart).toShape()
+                                ss =\
+                                    len(lineInto.section([face],
+                                                         tolerance).Vertexes)
                                 # print 'ss ', ss
 
                                 if point == pp and ss == 2:
@@ -555,17 +561,21 @@ class _PyFace(_Py):
                                 # print '111 edge by edge'
 
                                 edgeStart = edge.firstVertex(True).Point
-                                # print 'edgeStart ', edgeStart
                                 point = self.roundVector(edgeStart)
+                                # print 'point ', point
 
                                 sect = compoundFace.section([edge], tolerance)
                                 ed = sect.Edges[0]
                                 edStart = ed.firstVertex(True).Point
                                 pp = self.roundVector(edStart)
+                                # print 'pp ', pp
 
-                                lineInto = Part.LineSegment(lineEnd, edgeStart).toShape()
-                                ss = len(lineInto.section([face], tolerance).Vertexes)
-
+                                lineInto =\
+                                    Part.LineSegment(lineEnd,
+                                                     edgeStart).toShape()
+                                ss =\
+                                    len(lineInto.section([face],
+                                                         tolerance).Vertexes)
 
                                 if point == pp and ss == 2:
                                     # print '1111 aligment'
@@ -974,9 +984,6 @@ class _PyFace(_Py):
                 if direction == 'forward':
                     # print 'aa'
                     nGeom = self.sliceIndex(nGeom - 1, lenWire)
-                '''else:
-                    # print 'aaa'
-                    nGeom = self.sliceIndex(nGeom + 1, lenWire)'''
 
             else:
                 if direction == 'backward':
