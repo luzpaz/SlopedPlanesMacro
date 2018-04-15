@@ -908,6 +908,9 @@ class _PyPlane(_Py):
             angle = self.angle
             fronted = self.fronted
 
+            # control ???
+            # control = self.control
+
             if not plane:
                 (nWire, nGeom) = angle
                 pyPl = self.selectPlane(nWire, nGeom)
@@ -995,18 +998,18 @@ class _PyPlane(_Py):
 
         '''rearing(self, pyWire, pyReflex, direction)'''
 
-        # print '### rearing ', (self.numWire, self.numGeom, direction, self.virtualized)
+        print '### rearing ', (self.numWire, self.numGeom, direction, self.virtualized)
 
         tolerance = _Py.tolerance
         plane = self.shape
 
         if not self.isSolved():
             # TODO C
-            # print 'fo'
+            print 'fo'
             forward = self.forward
             section = plane.section([forward], tolerance)
             if section.Edges:
-                # print 'fofo'
+                print 'fofo'
                 return
 
         pyPlaneList = pyWire.planes
