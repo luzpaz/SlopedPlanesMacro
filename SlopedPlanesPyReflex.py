@@ -112,17 +112,22 @@ class _PyReflex(_Py):
                 aligns = pyAli.aligns[:]
                 aligns.insert(0, pyBase)
                 chops = pyAli.chops
+                rangoChop = pyAli.rango
 
                 control = pyPlane.control
 
-                for chop in chops:
-                    for pyPl in chop:
-                        if pyPl.numWire == nW:
-                            control.append(pyPl.numGeom)
-
+                num = -1
                 for pyPl in aligns:
+                    num += 1
                     if pyPl.numWire == nW:
                         control.append(pyPl.numGeom)
+                        try:
+                            for pyPl in chops[num]:
+                                control.append(pyPl.numGeom)
+                            for nn in rangoChop[num]:
+                                control.append(nn)
+                        except IndexError:
+                            pass
 
     def simulating(self, force=False):
 
