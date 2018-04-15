@@ -318,6 +318,7 @@ class _PyFace(_Py):
             pyAlign.rangging(self.reset)
 
         self.reset = False
+
         # self.printSummary()
 
         self.upping()
@@ -352,6 +353,8 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
             pyAlign.simulatingAlignment()
+
+        # self.printControl('simulating')
 
         for pyWire in pyWireList:
             if pyWire.reflexs:
@@ -897,7 +900,8 @@ class _PyFace(_Py):
 
             edge = True
 
-            if pyPlane.aligned or pyPlane.choped:   # TODO esto no esta bien ???
+            # if pyPlane.aligned or pyPlane.choped:   # TODO esto no esta bien ???
+            if pyPlane.choped:
                 # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
 

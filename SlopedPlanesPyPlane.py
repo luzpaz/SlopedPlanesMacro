@@ -1001,16 +1001,22 @@ class _PyPlane(_Py):
         plane = self.shape
 
         if not self.isSolved():
-            # TODO C
             # print 'fo'
+
             forward = self.forward
+            # TODO C
+
+            # alignments with reflexs
+            if self.virtualized:
+                if direction == 'backward':
+                    forward = self.backward
+
             section = plane.section([forward], tolerance)
             if section.Edges:
                 # print 'fofo'
                 return
 
-        pyPlaneList = pyWire.planes
-
+        # TODO C AND REFACT
         if direction == "forward":
             pyOppPlane = pyReflex.planes[1]
             rear = self.rear[0]
@@ -1018,6 +1024,8 @@ class _PyPlane(_Py):
         else:
             pyOppPlane = pyReflex.planes[0]
             rear = self.rear[-1]
+
+        pyPlaneList = pyWire.planes
 
         oppPlane = pyOppPlane.shape
         # print 'pyOppPlane ', pyOppPlane.numGeom

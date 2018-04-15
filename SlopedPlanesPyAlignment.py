@@ -256,7 +256,9 @@ class _PyAlignment(_Py):
         baseRear = pyBase.rear
         baseControl = pyBase.control
 
-        pyCont = self.aligns[-1]
+        aligns = self.aligns
+
+        pyCont = aligns[-1]
         cont = pyCont.shape
         nGeom = pyCont.numGeom
         enormousCont = pyCont.enormousShape
@@ -279,6 +281,7 @@ class _PyAlignment(_Py):
             # print '### numChop ', numChop
 
             [pyOne, pyTwo] = chops[numChop]
+
             rangoOne = pyOne.rango[-1][:]
             if pyOne.rear:
                 rearOne = pyOne.rear[-1]
@@ -1136,6 +1139,7 @@ class _PyAlignment(_Py):
             pyTwo.shape = compound
 
             chopList.append([pyOne, pyTwo])
+        # print 'chopList ', chopList
 
         # the alignments
 

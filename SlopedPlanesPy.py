@@ -432,6 +432,14 @@ class _Py(object):
                 cutter = pyP.cutter
                 if cutter:
 
+                    # print 'cutter ', cutter
+                    # print[ff.Placement for ff in cutter]
+
+                    cero = FreeCAD.Placement()  # no se en que momento se desplazan con el sketch
+
+                    for ff in cutter:
+                        ff.Placement = cero
+
                     compound = Part.makeCompound(cutter)
                     compound.Placement = placement
                     Part.show(compound, slopedPlanes.Name+' cutter '+str(numWire)+' '+str(numGeom))
