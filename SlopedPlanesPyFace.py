@@ -900,7 +900,8 @@ class _PyFace(_Py):
 
             edge = True
 
-            if pyPlane.aligned or pyPlane.choped:   # TODO esto no esta bien ???
+            # if pyPlane.aligned or pyPlane.choped:   # TODO esto no esta bien ???
+            if pyPlane.choped:
                 # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
 
