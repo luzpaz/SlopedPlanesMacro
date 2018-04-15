@@ -319,7 +319,7 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        self.printSummary()
+        # self.printSummary()
 
         self.upping()
 
@@ -354,14 +354,14 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             pyAlign.simulatingAlignment()
 
-        self.printControl('simulating')
+        # self.printControl('simulating')
 
         for pyWire in pyWireList:
             if pyWire.reflexs:
                 pyWire.reflexing()
         # self.printControl('reflexing')
 
-        '''for pyWire in pyWireList:
+        for pyWire in pyWireList:
             pyWire.ordinaries()
         # self.printControl('ordinaries')
 

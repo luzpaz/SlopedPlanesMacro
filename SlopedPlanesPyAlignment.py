@@ -282,16 +282,6 @@ class _PyAlignment(_Py):
 
             [pyOne, pyTwo] = chops[numChop]
 
-            # base don't cut cont and viseversa
-            # y si son mas de dos edges???
-
-            ali = aligns[numChop]
-            if ali.numWire == pyBase.numWire and not ali.shape:
-                baseControl.append(ali.numGeom)
-                ali.control.append(numGeom)
-                ali.control.append(pyOne.numGeom)
-                ali.control.append(pyTwo.numGeom)
-
             rangoOne = pyOne.rango[-1][:]
             if pyOne.rear:
                 rearOne = pyOne.rear[-1]
@@ -1149,6 +1139,7 @@ class _PyAlignment(_Py):
             pyTwo.shape = compound
 
             chopList.append([pyOne, pyTwo])
+        # print 'chopList ', chopList
 
         # the alignments
 

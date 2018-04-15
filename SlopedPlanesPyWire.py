@@ -542,7 +542,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.reflexing(self)
 
-        '''for pyReflex in self.reflexs:
+        for pyReflex in self.reflexs:
             pyReflex.solveReflex(self)
         # self.printControl('solveReflex')
 
