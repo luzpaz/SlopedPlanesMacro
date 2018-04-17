@@ -938,8 +938,7 @@ class _PyFace(_Py):
         if len(section.Vertexes) > 2:
             # print 'secondRear'
 
-            oo = forward.firstVert
-            ex(True)
+            oo = forward.firstVertex(True)
             pp = oo.Point
 
             edgeList = []

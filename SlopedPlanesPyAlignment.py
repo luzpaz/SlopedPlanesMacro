@@ -412,9 +412,11 @@ class _PyAlignment(_Py):
 
                 if num == 0:
                     rango = rangoOne
+                    secondRear = pyOne.secondRear
                     pyPlList = pyWireList[pyOne.numWire].planes
                 else:
                     rango = rangoTwo
+                    secondRear = pyTwo.secondRear
                     pyPlList = pyWireList[pyTwo.numWire].planes
                 # print 'rango ', rango
 
@@ -432,6 +434,8 @@ class _PyAlignment(_Py):
                 # consecutives
                 consecutive = False
                 for nG in rango:
+                    if nG in secondRear:
+                        break
                     pyPl = pyPlList[nG]
                     if pyPl.aligned or pyPl.choped:  # reflexed?
                         consecutive = True
