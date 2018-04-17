@@ -938,9 +938,8 @@ class _PyFace(_Py):
         if len(section.Vertexes) > 2:
             # print 'secondRear'
 
-            # ordena los vertixes y edges por distancia
-
-            oo = forward.firstVertex(True)
+            oo = forward.firstVert
+            ex(True)
             pp = oo.Point
 
             edgeList = []
@@ -972,7 +971,10 @@ class _PyFace(_Py):
                 if vert.Point in edgeList:
                     edge = True
                 else:
-                    pass
+                    if not pyPlane.choped:
+                        point = self.roundVector(vv.Point)
+                        if point in coord:
+                            edge = True
 
                 sGeom = self.findGeomRear(pyWire, pyPlane, direction, vert, edge)
                 pyPlane.addValue('secondRear', sGeom, direction)
