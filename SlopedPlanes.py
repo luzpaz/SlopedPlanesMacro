@@ -370,7 +370,7 @@ class _SlopedPlanes(_Py):
                             if pyWire.reset:
                                 # print '11'
 
-                                pyPlane.angle = 45
+                                pyPlane.angle = 45.0
                                 pyPlane.rightWidth = size
                                 pyPlane.leftWidth = size
                                 pyPlane.length = 2 * size
@@ -461,17 +461,21 @@ class _SlopedPlanes(_Py):
 
         figList = []
         for pyFace in pyFaceListNew:
+            # print pyFace.numFace
             numFace = pyFace.numFace
             secondaries = []
             planeFaceList = []
             originList = []
             wireList = []
             for pyWire in pyFace.wires:
+                # print pyWire.numWire
                 numWire = pyWire.numWire
                 planeWireList = []
                 for pyPlane in pyWire.planes:
+                    # print pyPlane.numGeom
                     numAngle = pyPlane.numGeom
                     angle = pyPlane.angle
+                    # print 'angle ', angle
                     # some figures (a few of them) break the planes numeration
 
                     if pyPlane.length:
