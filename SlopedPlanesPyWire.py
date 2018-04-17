@@ -50,6 +50,7 @@ class _PyWire(_Py):
         self.coordinates = []
         self.shapeGeom = []
         self.reset = True
+        self.wire = None
 
     @property
     def numWire(self):
@@ -134,6 +135,20 @@ class _PyWire(_Py):
         ''''''
 
         self._reset = reset
+
+    @property
+    def wire(self):
+
+        ''''''
+
+        return self._wire
+
+    @wire.setter
+    def wire(self, wire):
+
+        ''''''
+
+        self._wire = wire
 
     def planning(self):
 

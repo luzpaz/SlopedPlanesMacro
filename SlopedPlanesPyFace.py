@@ -149,6 +149,7 @@ class _PyFace(_Py):
             dct = pyWire.__dict__.copy()
             dct['_coordinates'] = [[v.x, v.y, v.z] for v in pyWire.coordinates]
             dct['_shapeGeom'] = []
+            dct['_wire'] = None
 
             if serialize:
                 edgeList = []
@@ -188,11 +189,11 @@ class _PyFace(_Py):
                         dd['_backward'] = 'backward'
 
                 else:
+
                     dd['_geomShape'] = None
                     dd['_geomAligned'] = None
                     dd['_forward'] = None
                     dd['_backward'] = None
-                    # TODO también quitar rear y rangos para recalcular todo
 
                 planeList.append(dd)
             dct['_planes'] = planeList
@@ -434,6 +435,11 @@ class _PyFace(_Py):
             pyPlaneList = pyWire.planes
             coord = pyWire.coordinates
 
+            if resetFace:
+                shapeGeomWire = pyWire.shapeGeom
+                wire = Part.Wire(shapeGeomWire)
+                pyWire.wire = wire
+
             eje = coord[1].sub(coord[0])
 
             for pyPlane in pyPlaneList:
@@ -502,7 +508,7 @@ class _PyFace(_Py):
                                 # print 'ss ', ss
 
                                 if point == pp and ss == 2:
-                                    # print 'alignment'
+                                    #print 'alignment'
 
                                     pass
 
@@ -581,9 +587,14 @@ class _PyFace(_Py):
                                 lineInto =\
                                     Part.LineSegment(lineEnd,
                                                      edgeStart).toShape()
+
+                                # print 'lineInto ', Part.LineSegment(lineEnd, edgeStart)
+
                                 ss =\
                                     len(lineInto.section([face],
                                                          tolerance).Vertexes)
+
+                                # print 'ss ', ss
 
                                 if point == pp and ss == 2:
                                     # print '1111 aligment'
@@ -870,37 +881,36 @@ class _PyFace(_Py):
         # print '### findRear ', (pyPlane.numWire, pyPlane.numGeom)
 
         tolerance = _Py.tolerance
-        shapeGeomWire = pyWire.shapeGeom
-        sGW = Part.Wire(shapeGeomWire)
         numWire = pyWire.numWire
         lenWire = len(pyWire.planes)
         numGeom = pyPlane.numGeom
         coord = pyWire.coordinates
         # print 'coord ', coord
-        secondRear = False
+        sGW = pyWire.wire
+        shapeGeomWire = pyWire.shapeGeom
 
-        lineShape = pyPlane.forward
-        section = lineShape.section([sGW], tolerance)
-        # print 'section ', [x.Point for x in section.Vertexes]
+        forward = pyPlane.forward
+        section = forward.section([sGW], tolerance)
+        # print 'section ', section.Edges, [x.Point for x in section.Vertexes]
 
         if len(section.Vertexes) == 1:
             # print 'return'
             return
 
         edge = False
+        if section.Edges:
+            edge = True
 
-        if pyPlane.lineInto:
+        lineInto = pyPlane.lineInto
+
+        if lineInto:
             # print 'a'
-
-            section = pyPlane.lineInto.section([sGW], tolerance)
-            vertex = section.Vertexes[1]
+            sect = lineInto.section([sGW], tolerance)
+            vertex = sect.Vertexes[1]
 
         elif section.Edges:
             # print 'b'
 
-            edge = True
-
-            # if pyPlane.aligned or pyPlane.choped:   # TODO esto no esta bien ???
             if pyPlane.choped:
                 # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
@@ -912,38 +922,9 @@ class _PyFace(_Py):
         else:
             # print 'c'
 
-            if len(section.Vertexes) == 2:
-                # print 'c1'
-                vertex = section.Vertexes[1]
+            vertex = section.Vertexes[1]
 
-            else:   # TODO esto hay que revisarlo
-                # print 'c2'
-
-                lS = lineShape.copy()
-                cut = lS.cut(shapeGeomWire, tolerance)
-                # print 'cut ', [x.Point for x in cut.Vertexes]
-                # print 'cut ', cut.Edges
-                wire = Part.Wire(cut.Edges)
-                orderedVertexes = wire.OrderedVertexes
-
-                if direction == 'forward':
-                    pp = coord[numGeom + 1]
-                else:
-                    pp = coord[numGeom]
-                # print 'pp ', pp
-
-                if pp == self.roundVector(orderedVertexes[0].Point):
-                    vertex = orderedVertexes[1]
-                    vert = orderedVertexes[2]
-                else:
-                    vertex = orderedVertexes[0]
-                    vert = orderedVertexes[1]
-
-                # print 'second rear'
-
-                secondRear = True
-
-            if not pyPlane.choped:  # ???
+            if not pyPlane.choped:
 
                 point = self.roundVector(vertex.Point)
                 if point in coord:
@@ -957,10 +938,39 @@ class _PyFace(_Py):
         pyPlane.addValue('rear', nGeom, direction)
         # print 'nGeom ', nGeom
 
-        if secondRear:
-            sGeom = self.findGeomRear(pyWire, pyPlane, direction, vert, edge)
-            pyPlane.addValue('secondRear', sGeom, direction)
-            # print 'sGeom ', sGeom
+        # second rear
+
+        if len(section.Vertexes) > 2:
+            # print 'secondRear'
+
+            # ordena los puntos por distancia
+
+            oo = forward.firstVertex(True)
+            pp = oo.Point
+
+            vertList = []
+            distList = []
+            for vv in section.Vertexes:
+                dist = vv.Point.sub(pp).Length
+                num = -1
+                for dd in distList:
+                    num += 1
+                    if dd > dist:
+                        distList.insert(num, dist)
+                        vertList.insert(num, vv)
+                        break
+                else:
+                    distList.append(dist)
+                    vertList.append(vv)
+
+            # print vertList, [v.Point for v in vertList]
+            # print distList
+
+            for vert in vertList[2:]:
+
+                sGeom = self.findGeomRear(pyWire, pyPlane, direction, vert, edge)
+                pyPlane.addValue('secondRear', sGeom, direction)
+                # print 'sGeom ', sGeom
 
         # arrow
 
@@ -979,6 +989,8 @@ class _PyFace(_Py):
     def findGeomRear(self, pyWire, pyPlane, direction, vertex, edge=False):
 
         '''findGeomRear(self, pyWire, direction, vertex, edge=False)'''
+
+        # print '#findGeomRear ', direction, edge
 
         coord = pyWire.coordinates
         lenWire = len(pyWire.planes)
@@ -1000,7 +1012,7 @@ class _PyFace(_Py):
                     nGeom = self.sliceIndex(nGeom - 1, lenWire)
 
         except ValueError:
-            # print 'not in vertex (edge False)'
+            # print 'not in vertex'
 
             nGeom = -1
             for geomShape in shapeGeomWire:

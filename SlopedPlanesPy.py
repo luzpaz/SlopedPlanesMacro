@@ -278,7 +278,8 @@ class _Py(object):
                 print 'rear reflex', pyReflex.rear
                 for pyPlane in pyReflex.planes:
                     print 'numGeom ', pyPlane.numGeom
-                    print 'rear plane', pyPlane.rear
+                    print 'rear plane ', pyPlane.rear
+                    print 'secondRear ', pyPlane.secondRear
                     print 'rango ', pyPlane.rango
                     '''forward = pyPlane.forward
                     print 'forward ',\
@@ -301,6 +302,7 @@ class _Py(object):
             # print 'geomAligned ', pyAlignment.base.geomAligned
             # print 'shape ', pyAlignment.base.shape
             print 'falsify ', pyAlignment.falsify
+            print 'virtualized ', pyAlignment.base.virtualized
             print 'rangoChop ', pyAlignment.rango
             print 'rangoRear ', pyAlignment.rangoRear
             print 'prior ', pyAlignment.prior.numGeom
@@ -311,16 +313,20 @@ class _Py(object):
                                  for [x, y] in pyAlignment.chops]
             for chop in pyAlignment.chops:
                 for pyPlane in chop:
-                    print(pyPlane.numWire, pyPlane.numGeom), ' ',\
-                        pyPlane.rear,\
-                        pyPlane.rango
+                    print(pyPlane.numWire, pyPlane.numGeom)
+                    print 'rear ', pyPlane.rear
+                    print 'secondRear ', pyPlane.secondRear
+                    print 'rango ', pyPlane.rango
+                    print 'virtualized ', pyPlane.virtualized
 
             print '*** aligns ', [(x.numWire, x.numGeom) for x in pyAlignment.aligns]
             for align in pyAlignment.aligns:
                 print(align.numWire, align.numGeom)
                 print 'rear ', align.rear
+                print 'secondRear ', align.secondRear
                 print 'rango ', align.rango
                 print 'angle ', align.angle
+                print 'virtualized ', align.virtualized
                 # print 'geom ', align.geom
                 # print 'geomAligned ', align.geomAligned
                 # print 'shape ', align.shape
