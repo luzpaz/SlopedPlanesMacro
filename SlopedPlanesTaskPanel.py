@@ -387,6 +387,8 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeOverhangLength)
 
+                                # TODO limit overhang with size
+
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The overhang height of the related face")

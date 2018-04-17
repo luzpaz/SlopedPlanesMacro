@@ -128,6 +128,8 @@ class _SlopedPlanes(_Py):
 
         doc = "Gives an overhang to all planes of the SlopedPlanes"
 
+        # TODO change to FactorOverhangwith maximum 1
+
         slopedPlanes.addProperty("App::PropertyLength", "Overhang",
                                  "SlopedPlanes", doc)
 
@@ -173,7 +175,7 @@ class _SlopedPlanes(_Py):
         self.State = True
 
         slopedPlanes.Slope = 45.0
-        slopedPlanes.FactorWidth = 1    # 1.2
+        slopedPlanes.FactorWidth = 1    # 1.2 también habría que cambiar en doPlane (line 747)
         slopedPlanes.FactorLength = 2
         slopedPlanes.Overhang = 0
         slopedPlanes.Up = 0
