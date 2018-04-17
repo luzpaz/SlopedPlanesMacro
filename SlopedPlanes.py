@@ -427,6 +427,7 @@ class _SlopedPlanes(_Py):
                     pyWire.planes = pyPlaneListNew
 
                     pyWire.shapeGeom = geomShapeWire
+                    pyWire.wire = wire
                     geomShapeFace.extend(geomShapeWire)
 
                 pyFace.shapeGeom = geomShapeFace
