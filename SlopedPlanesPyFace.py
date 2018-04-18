@@ -1163,6 +1163,8 @@ class _PyFace(_Py):
         # print '¡¡¡ reflex done !!!'
         pyReflex.planes.append(pyPlane)
         pyReflex.planes.append(pyPl)
+        pyPlane.reflexedList.append(pyReflex)
+        pyPl.reflexedList.append(pyReflex)
         return pyReflex
 
     def doAlignment(self, pyPlane, numAlignment):
