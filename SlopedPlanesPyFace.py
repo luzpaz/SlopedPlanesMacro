@@ -178,6 +178,10 @@ class _PyFace(_Py):
                 dd['_virtuals'] = []
                 dd['_reallySolved'] = False
 
+                dd['_alignedList'] = []
+                dd['_chopedList'] = []
+                dd['_frontedList'] = []
+
                 if serialize:
 
                     edgeList.append(pyPlane.geomShape)

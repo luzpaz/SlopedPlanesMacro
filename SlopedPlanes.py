@@ -411,6 +411,8 @@ class _SlopedPlanes(_Py):
                                 pyPlane.lineInto = None
                                 pyPlane.cross = False
 
+                                pyPlane.reflexedList = []
+
                         except IndexError:
                             # print '2'
                             pyPlane = _PyPlane(numWire, numGeom)
@@ -425,6 +427,10 @@ class _SlopedPlanes(_Py):
                         pyPlane.control = [numGeom]
                         pyPlane.solved = False
                         pyPlane.reallySolved = False
+
+                        pyPlane.alignedList = []
+                        pyPlane.chopedList = []
+                        pyPlane.frontedList = []
 
                     pyWire.planes = pyPlaneListNew
 
@@ -447,6 +453,10 @@ class _SlopedPlanes(_Py):
                         pyPlane.control = [pyPlane.numGeom]
                         pyPlane.solved = False
                         pyPlane.reallySolved = False
+
+                        pyPlane.alignedList = []
+                        pyPlane.chopedList = []
+                        pyPlane.frontedList = []
 
             pyFace.faceManager()
 

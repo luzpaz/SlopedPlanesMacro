@@ -43,6 +43,11 @@ class _PyPlane(_Py):
 
         ''''''
 
+        self.alignedList = []
+        self.chopedList = []
+        self.frontedList = []
+        self.reflexedList = []
+
         self.numWire = numWire
         self.numGeom = numGeom
         self.angle = 45.0
@@ -81,6 +86,62 @@ class _PyPlane(_Py):
         self.solved = False
         self.reallySolved = False
         self.sweepCurve = None
+
+    @property
+    def alignedList(self):
+
+        ''''''
+
+        return self._alignedList
+
+    @alignedList.setter
+    def alignedList(self, alignedList):
+
+        ''''''
+
+        self._alignedList = alignedList
+
+    @property
+    def chopedList(self):
+
+        ''''''
+
+        return self._chopedList
+
+    @chopedList.setter
+    def chopedList(self, chopedList):
+
+        ''''''
+
+        self._chopedList = chopedList
+
+    @property
+    def frontedList(self):
+
+        ''''''
+
+        return self._frontedList
+
+    @frontedList.setter
+    def frontedList(self, frontedList):
+
+        ''''''
+
+        self._frontedList = frontedList
+
+    @property
+    def reflexedList(self):
+
+        ''''''
+
+        return self._reflexedList
+
+    @reflexedList.setter
+    def reflexedList(self, reflexedList):
+
+        ''''''
+
+        self._reflexedList = reflexedList
 
     @property
     def numWire(self):
