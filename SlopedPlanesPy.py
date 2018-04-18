@@ -63,32 +63,6 @@ class _Py(object):
             valueList.append(value)
         setattr(self, prop, valueList)
 
-    def selectAlignments(self, numWire, numGeom):
-
-        '''selectAlignment(self, numWire, numGeom)
-        selects a list of alignments which includes
-        the plane (numWire, numGeom)
-        as base plane or in its aligned planes and return it.
-        A maximum of two alignments'''
-
-        '''aliList = []
-
-        for pyAlign in _Py.pyFace.alignments:
-            if pyAlign.base.numWire == numWire and\
-               pyAlign.base.numGeom == numGeom:
-                aliList.append(pyAlign)
-            else:
-                for pyPlane in pyAlign.aligns:
-                    if pyPlane.numWire == numWire and\
-                       pyPlane.numGeom == numGeom:
-                        aliList.append(pyAlign)
-                        break
-
-        return aliList'''
-
-        pyPlane = self.selectPlane(numWire, numGeom)
-        return pyPlane.alignedList
-
     def selectAlignmentBase(self, numWire, numGeom):
 
         '''selectAlignmentBase(self, numWire, numGeom)
@@ -218,7 +192,7 @@ class _Py(object):
 
         if self.aligned:
             # print 'a'
-            aliList = self.selectAlignments(self.numWire, self.numGeom)
+            aliList = self.alignedList
             shape = []
             for pyA in aliList:
                 shape.extend(pyA.simulatedAlignment)

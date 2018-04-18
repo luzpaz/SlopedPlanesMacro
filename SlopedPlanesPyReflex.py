@@ -104,7 +104,7 @@ class _PyReflex(_Py):
         for pyPlane in [pyR, pyOppR]:
             if pyPlane.virtualized:
                 nW = pyPlane.numWire
-                pyAliList = self.selectAlignments(nW, pyPlane.numGeom)
+                pyAliList = self.alignedList
 
                 pyAli = pyAliList[0]
 

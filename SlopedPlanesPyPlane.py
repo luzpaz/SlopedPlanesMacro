@@ -1198,7 +1198,7 @@ class _PyPlane(_Py):
 
         if self.aligned:
 
-            pyAlignList = self.selectAlignments(numWire, self.numGeom)
+            pyAlignList = self.alignedList
             # print 'pyAlignList ', pyAlignList
 
             rr = []

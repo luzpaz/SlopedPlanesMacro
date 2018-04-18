@@ -437,8 +437,7 @@ class _PyAlignment(_Py):
 
                 # the cross
                 if pyPlane.virtualized:
-                    aliList = self.selectAlignments(pyPlane.numWire,
-                                                    pyPlane.numGeom)
+                    aliList = self.alignedList
                     for pyA in aliList:
                         gA = pyA.geomAligned.copy()
                         gA = gA.cut([geomAligned], tolerance)
