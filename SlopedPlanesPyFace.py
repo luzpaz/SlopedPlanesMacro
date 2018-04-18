@@ -858,7 +858,7 @@ class _PyFace(_Py):
                 chopList.extend(dL)
                 self.removeAlignment(pyAli)  # joined in one alignment
 
-                pyAli.Base.alignedList.remove(pyAli)
+                pyAli.base.alignedList.remove(pyAli)
                 for ali in pyAli.aligns:
                     ali.alignedList.remove(pyAli)
                 for chop in pyAli.chops:
