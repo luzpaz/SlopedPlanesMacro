@@ -46,6 +46,7 @@ class _PyPlane(_Py):
         self.alignedList = []
         self.chopedList = []
         self.frontedList = []
+        self.rearedList = []
         self.reflexedList = []
 
         self.numWire = numWire
@@ -128,6 +129,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._frontedList = frontedList
+
+    @property
+    def rearedList(self):
+
+        ''''''
+
+        return self._rearedList
+
+    @rearedList.setter
+    def rearedList(self, rearedList):
+
+        ''''''
+
+        self._rearedList = rearedList
 
     @property
     def reflexedList(self):

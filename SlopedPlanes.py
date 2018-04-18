@@ -431,6 +431,7 @@ class _SlopedPlanes(_Py):
                         pyPlane.alignedList = []
                         pyPlane.chopedList = []
                         pyPlane.frontedList = []
+                        pyPlane.rearedList =[]
 
                     pyWire.planes = pyPlaneListNew
 
@@ -457,6 +458,7 @@ class _SlopedPlanes(_Py):
                         pyPlane.alignedList = []
                         pyPlane.chopedList = []
                         pyPlane.frontedList = []
+                        pyPlane.rearedList = []
 
             pyFace.faceManager()
 

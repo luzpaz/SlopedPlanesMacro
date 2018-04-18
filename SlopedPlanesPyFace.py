@@ -181,6 +181,7 @@ class _PyFace(_Py):
                 dd['_alignedList'] = []
                 dd['_chopedList'] = []
                 dd['_frontedList'] = []
+                dd['_rearedList'] = []
 
                 if serialize:
 
