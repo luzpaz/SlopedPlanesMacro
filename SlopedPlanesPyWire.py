@@ -476,7 +476,8 @@ class _PyWire(_Py):
                         else:
                             if not pyPrior.aligned:
                                 pyRPrior =\
-                                    self.selectReflex(numWire, numGeom, prior)
+                                    pyPlane.selectReflex(prior)
+
                                 if not pyRPrior:
                                     # print 'reflex successives prior'
                                     cutterList.append(bigPrior)
@@ -496,7 +497,8 @@ class _PyWire(_Py):
                         else:
                             if not pyLater.aligned:
                                 pyRLater =\
-                                    self.selectReflex(numWire, numGeom, later)
+                                    pyPlane.selectReflex(later)
+
                                 if not pyRLater:
                                     # print 'reflex succesives later'
                                     cutterList.append(bigLater)

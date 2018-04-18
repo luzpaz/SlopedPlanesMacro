@@ -76,33 +76,17 @@ class _Py(object):
 
         return None
 
-    def selectAllReflex(self, numWire, numGeom):
-
-        '''selectAllReflex(self, numWire, numGeom)
-        selects all reflex corner (cero, one or two) in the wire numWire,
-        which envolve the plane numGeom, and return them.'''
-
-        pyRList = []
-        for pyReflex in _Py.pyFace.wires[numWire].reflexs:
-            [pyPlane, pyPl] = pyReflex.planes
-            [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
-            if numGeom in [nn, mm]:
-                pyRList.append(pyReflex)
-
-        return pyRList
-
-    def selectReflex(self, numWire, numGeom, nGeom):
+    def selectReflex(self, nGeom):
 
         '''selectReflex(self, numWire, numGeom, nGeom)
         selects an unique reflex corner in the wire numWire,
         which envolves the planes numGeom and nGeom,
         and return it, or None.'''
 
-        for pyReflex in _Py.pyFace.wires[numWire].reflexs:
-            [pyPlane, pyPl] = pyReflex.planes
-            [nn, mm] = [pyPlane.numGeom, pyPl.numGeom]
-            if [nn, mm] == [numGeom, nGeom] or [nn, mm] == [nGeom, numGeom]:
-                return pyReflex
+        for pyReflex in self.reflexedList:
+            for pyPlane in pyReflex.planes:
+                if nGeom == pyPlane.numGeom:
+                    return pyReflex
 
         return None
 
