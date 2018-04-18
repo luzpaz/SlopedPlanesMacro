@@ -219,8 +219,7 @@ class _PyReflex(_Py):
                                     cList.append(pyPl.simulatedShape)
                                 else:
                                     # print 'ddd'
-                                    pyReflexList =\
-                                        self.selectAllReflex(numWire, nG)
+                                    pyReflexList = pyPl.reflexedList
                                     for pyReflex in pyReflexList:
                                         [pyOne, pyTwo] = pyReflex.planes
                                         if pyPlane.numGeom in\
@@ -451,7 +450,7 @@ class _PyReflex(_Py):
 
             rear = pyPl.rear
 
-            pyReflexList = self.selectAllReflex(numWire, nn)
+            pyReflexList = pyPl.reflexedList
             ref = False
             for pyReflex in pyReflexList:
                 for pyPlane in pyReflex.planes:
@@ -746,8 +745,7 @@ class _PyReflex(_Py):
 
             if not pyOppR.rear:
 
-                rList =\
-                    self.selectAllReflex(pyOppR.numWire, pyOppR.numGeom)
+                rList = pyOppR.reflexedList
                 if len(rList) == 2:
                     cList.append(pyOppR.enormousShape)
 

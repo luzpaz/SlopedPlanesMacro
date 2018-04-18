@@ -362,8 +362,7 @@ class _PyWire(_Py):
                                 # print 'c1'
 
                                 procc = True
-                                pyRList =\
-                                    self.selectAllReflex(numWire, nG)
+                                pyRList = pyPl.reflexedList
                                 # print pyRList
 
                                 for pyR in pyRList:

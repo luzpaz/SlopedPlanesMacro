@@ -694,8 +694,7 @@ class _PyAlignment(_Py):
 
             rrOne = []
             if pyOne.rear:
-                pyReflexListOne = self.selectAllReflex(pyOne.numWire,
-                                                       pyOne.numGeom)
+                pyReflexListOne = pyOne.reflexedList
                 if pyReflexListOne:
                     pyReflexOne = pyReflexListOne[0]
                     pyOppOne = pyReflexOne.planes[1]
@@ -704,8 +703,7 @@ class _PyAlignment(_Py):
 
             rrTwo = []
             if pyTwo.rear:
-                pyReflexListTwo = self.selectAllReflex(pyTwo.numWire,
-                                                       pyTwo.numGeom)
+                pyReflexListTwo = pyTwo.reflexedList
                 if pyReflexListTwo:
                     pyReflexTwo = pyReflexListTwo[0]
                     pyOppTwo = pyReflexTwo.planes[0]
