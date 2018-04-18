@@ -856,23 +856,25 @@ class _PyFace(_Py):
 
         if pyAli:
             if not pyAli.falsify:
+                # print 'pyAli ', pyAli
                 dL = pyAli.chops
                 chopList.extend(dL)
                 self.removeAlignment(pyAli)  # joined in one alignment
 
                 pyAli.base.alignedList.remove(pyAli)
                 for ali in pyAli.aligns:
+                    # print 'a'
                     ali.alignedList.remove(pyAli)
                 for chop in pyAli.chops:
                     for pyP in chop:
+                        # print 'b'
                         pyP.chopedList.remove(pyAli)
 
         pyAlign.chops = chopList
 
         pyPl.alignedList.append(pyAlign)
-        for chop in chopList:
-            for pyP in chop:
-                pyP.chopedList.append(pyAlign)
+        pyOne.chopedList.append(pyAlign)
+        pyTwo.chopedList.append(pyAlign)
 
         if self.reset:
 

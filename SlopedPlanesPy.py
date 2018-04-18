@@ -237,7 +237,7 @@ class _Py(object):
                 print 'rangoInter ', pyReflex.rango
                 print 'rear reflex', pyReflex.rear
                 for pyPlane in pyReflex.planes:
-                    print 'numGeom ', pyPlane.numGeom
+                    print 'numGeom ', pyPlane.numGeom, pyPlane.reflexedList
                     print 'rear plane ', pyPlane.rear
                     print 'secondRear ', pyPlane.secondRear
                     print 'rango ', pyPlane.rango
@@ -254,7 +254,7 @@ class _Py(object):
         for pyAlignment in _Py.pyFace.alignments:
 
             print '****** base'
-            print(pyAlignment.base.numWire, pyAlignment.base.numGeom)
+            print(pyAlignment.base.numWire, pyAlignment.base.numGeom, pyAlignment.base.alignedList)
             print 'angle ', pyAlignment.base.angle
             print 'rear ', pyAlignment.base.rear
             print 'rango ', pyAlignment.base.rango
@@ -273,7 +273,7 @@ class _Py(object):
                                  for [x, y] in pyAlignment.chops]
             for chop in pyAlignment.chops:
                 for pyPlane in chop:
-                    print(pyPlane.numWire, pyPlane.numGeom)
+                    print(pyPlane.numWire, pyPlane.numGeom, pyPlane.chopedList)
                     print 'rear ', pyPlane.rear
                     print 'secondRear ', pyPlane.secondRear
                     print 'rango ', pyPlane.rango
@@ -281,7 +281,7 @@ class _Py(object):
 
             print '*** aligns ', [(x.numWire, x.numGeom) for x in pyAlignment.aligns]
             for align in pyAlignment.aligns:
-                print(align.numWire, align.numGeom)
+                print(align.numWire, align.numGeom, align.alignedList)
                 print 'rear ', align.rear
                 print 'secondRear ', align.secondRear
                 print 'rango ', align.rango
