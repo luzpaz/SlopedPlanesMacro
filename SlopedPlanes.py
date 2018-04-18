@@ -126,11 +126,12 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = "Gives an overhang to all planes of the SlopedPlanes"
+        doc = ('Applies over all planes overhang length,\n'
+               'multiplied by the diagonal \n'
+               'length of the SlopedPlanes base.\n'
+               'It \'s limited to 1')
 
-        # TODO change to FactorOverhangwith maximum 1
-
-        slopedPlanes.addProperty("App::PropertyLength", "Overhang",
+        slopedPlanes.addProperty("App::PropertyFloatConstraint", "FactorOverhang",
                                  "SlopedPlanes", doc)
 
         doc = ('Applies over all planes angles.\n'
@@ -177,7 +178,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.Slope = 45.0
         slopedPlanes.FactorWidth = 1    # 1.2 también habría que cambiar en doPlane (line 747)
         slopedPlanes.FactorLength = 2
-        slopedPlanes.Overhang = 0
+        slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)
         slopedPlanes.Up = 0
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
@@ -626,10 +627,10 @@ class _SlopedPlanes(_Py):
             prop = "width"
             self.overWritePyProp(prop, value)
 
-        elif prop == "Overhang":
+        elif prop == "FactorOverhang":
 
-            overhang = slopedPlanes.Overhang
-            value = overhang.Value
+            overhang = slopedPlanes.FactorOverhang
+            value = overhang
             prop = "overhang"
             self.overWritePyProp(prop, value)
 
@@ -659,7 +660,7 @@ class _SlopedPlanes(_Py):
 
             size = pyFace.size
 
-            if prop in ["length", "width"]:
+            if prop in ["length", "width", "overhang"]:
                 newValue = value * size
             else:
                 newValue = value
