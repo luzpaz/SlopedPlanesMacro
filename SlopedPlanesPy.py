@@ -76,23 +76,6 @@ class _Py(object):
 
         return None
 
-    def selectAlignmentsChop(self, numWire, numGeom):
-
-        '''selectAlignmentsChop(self, numWire, numGeom)
-        selects all alignment which the plane (numWire, numGeom)
-        is in their chops, and return them.'''
-
-        pyAlignList = []
-
-        for pyAlign in _Py.pyFace.alignments:
-            for chop in pyAlign.chops:
-                for pyPlane in chop:
-                    if pyPlane.numWire == numWire and\
-                       pyPlane.numGeom == numGeom:
-                        pyAlignList.append(pyAlign)
-
-        return pyAlignList
-
     def selectAllReflex(self, numWire, numGeom):
 
         '''selectAllReflex(self, numWire, numGeom)

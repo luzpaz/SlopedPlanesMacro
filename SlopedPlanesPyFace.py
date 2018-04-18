@@ -750,8 +750,7 @@ class _PyFace(_Py):
                                 self.doReflex(pyWire, pyPlane, firstPlane)
 
                         else:
-                            pyAlignmentList =\
-                                self.selectAlignmentsChop(numWire, numGeom)
+                            pyAlignmentList = pyPlane.chopedList
                             pyAlignment = self.selectAlignmentBase(numWire, 0)
                             if pyAlignment:
                                 if pyAlignment not in pyAlignmentList:
@@ -1331,9 +1330,7 @@ class _PyFace(_Py):
                             aList = alignments[:]
                             # print 'aList ', aList
 
-                            pyAlignList =\
-                                self.selectAlignmentsChop(numWire,
-                                                          pyPlane.numGeom)
+                            pyAlignList = pyPlane.chopedList
                             # print 'pyAlignList ', pyAlignList
                             baseList = []
 
