@@ -858,7 +858,19 @@ class _PyFace(_Py):
                 chopList.extend(dL)
                 self.removeAlignment(pyAli)  # joined in one alignment
 
+                pyAli.Base.alignedList.remove(pyAli)
+                for ali in pyAli.aligns:
+                    ali.alignedList.remove(pyAli)
+                for chop in pyAli.chops:
+                    for pyP in chop:
+                        pyP.chopedList.remove(pyAli)
+
         pyAlign.chops = chopList
+
+        pyPl.alignedList.append(pyAlign)
+        for chop in chopList:
+            for pyP in chop:
+                pyP.chopedList.append(pyAlign)
 
         if self.reset:
 
@@ -1157,6 +1169,7 @@ class _PyFace(_Py):
         self.alignments.append(pyAlign)
         # print '¡¡¡ alignment done !!!'
         pyAlign.base = pyPlane
+        pyPlane.alignedList.append(pyAlign)
 
         return pyAlign
 
