@@ -38,10 +38,11 @@ class _PyAlignment(_Py):
     is formed by two or more edges of the SlopedPlanes base which have
     the same direction. The edges could belong to different wires.'''
 
-    def __init__(self):
+    def __init__(self, numAlignment):
 
         ''''''
 
+        self.numAligment = numAlignment
         self.base = None
         self.aligns = []
         self.chops = []
@@ -53,6 +54,20 @@ class _PyAlignment(_Py):
         self.simulatedChops = []
         self.prior = None
         self.later = None
+
+    @property
+    def numAlignment(self):
+
+        ''''''
+
+        return self._numAlignment
+
+    @numAlignment.setter
+    def numAlignment(self, numAlignment):
+
+        ''''''
+
+        self._numAlignment = numAlignment
 
     @property
     def base(self):

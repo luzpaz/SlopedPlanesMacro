@@ -425,6 +425,8 @@ class _PyFace(_Py):
 
         refList = []    # covers the reflexs conected with alignment
 
+        numAlignment = 0
+
         for pyWire in pyWireList:
             numWire = pyWire.numWire
             # print '###### numWire ', numWire
@@ -611,7 +613,9 @@ class _PyFace(_Py):
 
                                         if numEdge == 0:
                                             pyAlign =\
-                                                self.doAlignment(pyPlane)
+                                                self.doAlignment(pyPlane,
+                                                                 numAlignment)
+                                            numAlignment += 1
 
                                         fAng = self.findAngle(numWire, numGeom)
                                         sAng = self.findAngle(nWire, nGeom)
@@ -645,7 +649,9 @@ class _PyFace(_Py):
                                             # print '111112 falseAlignment'
                                             if numEdge > 0:
                                                 pyAlign =\
-                                                    self.doAlignment(pyPlMemo)
+                                                    self.doAlignment(pyPlMemo,
+                                                                     numAlignment)
+                                                numAlignment += 1
                                             pyAlign.falsify = True
 
                                         pyAlign.geomAligned = eGeomShape
@@ -1136,11 +1142,11 @@ class _PyFace(_Py):
         pyReflex.planes.append(pyPl)
         return pyReflex
 
-    def doAlignment(self, pyPlane):
+    def doAlignment(self, pyPlane, numAlignment):
 
         '''doAlignment(self, pyPlane)'''
 
-        pyAlign = _PyAlignment()
+        pyAlign = _PyAlignment(numAlignment)
         self.alignments.append(pyAlign)
         # print '¡¡¡ alignment done !!!'
         pyAlign.base = pyPlane
