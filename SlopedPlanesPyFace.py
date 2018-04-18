@@ -182,6 +182,7 @@ class _PyFace(_Py):
                 dd['_chopedList'] = []
                 dd['_frontedList'] = []
                 dd['_rearedList'] = []
+                dd['_reflexedList'] = []
 
                 if serialize:
 
@@ -257,6 +258,7 @@ class _PyFace(_Py):
                 edgeList = wire.Edges
 
             for dd in dct['_planes']:
+                dd['_reflexedList'] = []  # provisionally
                 numGeom += 1
                 pyPlane = _PyPlane(numWire, numGeom)
                 pyPlane.__dict__ = dd
@@ -284,6 +286,7 @@ class _PyFace(_Py):
                 for [numWire, numGeom] in dd['_planes']:
                     pyPlane = planeList[numGeom]
                     pyReflex.planes.append(pyPlane)
+                    pyPlane.reflexedList.append(pyReflex)
                 dd['_planes'] = pyReflex.planes
                 pyReflex.__dict__ = dd
                 reflexList.append(pyReflex)

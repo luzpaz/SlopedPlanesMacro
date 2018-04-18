@@ -42,7 +42,7 @@ class _PyAlignment(_Py):
 
         ''''''
 
-        self.numAligment = numAlignment
+        self.numAligment = numAlignment     # quitar?
         self.base = None
         self.aligns = []
         self.chops = []
