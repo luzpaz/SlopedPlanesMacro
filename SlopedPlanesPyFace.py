@@ -301,8 +301,10 @@ class _PyFace(_Py):
             wireList.append(pyWire)
 
         alignList = []
+        numAlignment = -1
         for dct in alignments:
-            pyAlignment = _PyAlignment()
+            numAlignment += 1
+            pyAlignment = _PyAlignment(numAlignment)
             alignList.append(pyAlignment)
 
         return wireList, alignList, geomShapeFace
