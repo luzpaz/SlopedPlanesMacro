@@ -71,7 +71,7 @@ class _Py(object):
         as base plane or in its aligned planes and return it.
         A maximum of two alignments'''
 
-        aliList = []
+        '''aliList = []
 
         for pyAlign in _Py.pyFace.alignments:
             if pyAlign.base.numWire == numWire and\
@@ -84,7 +84,10 @@ class _Py(object):
                         aliList.append(pyAlign)
                         break
 
-        return aliList
+        return aliList'''
+
+        pyPlane = self.selectPlane(numWire, numGeom)
+        return pyPlane.alignedList
 
     def selectAlignmentBase(self, numWire, numGeom):
 
