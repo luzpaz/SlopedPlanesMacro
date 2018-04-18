@@ -964,6 +964,8 @@ class _PyPlane(_Py):
 
         if self.aligned:
 
+            # TODO change to copy dictionary
+
             # print '# virtualizing ', (self.numWire, self.numGeom)
 
             [numWire, numGeom] = [self.numWire, self.numGeom]
@@ -981,6 +983,12 @@ class _PyPlane(_Py):
             rango = self.rango
             angle = self.angle
             fronted = self.fronted
+
+            alignedList = self.alignedList
+            chopedList = self.chopedList
+            reflexedList = self.reflexedList
+            rearedList = self.rearedList
+            frontedList = self.frontedList
 
             if not plane:
                 (nWire, nGeom) = angle
@@ -1011,6 +1019,12 @@ class _PyPlane(_Py):
             pyPlane.enormousShape = enormous
             pyPlane.simulatedShape = simulated
             pyPlane.virtualized = True
+
+            pyPlane.alignedList = alignedList
+            pyPlane.chopedList = chopedList
+            pyPlane.reflexedList = reflexedList
+            pyPlane.rearedList = rearedList
+            pyPlane.frontedList = frontedList
 
             self.virtuals.append(pyPlane)
 
