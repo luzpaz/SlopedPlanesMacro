@@ -354,7 +354,7 @@ class _SlopedPlanes(_Py):
                     pyWire.coordinates = coo
 
                     falseFace = falseFaceList[numWire]
-                    geomWire = self.geometries(falseFace, coo[:-2])
+                    geomWire = self.geometries(falseFace, coo[:-2])     # CAMBIAR
                     # print 'geomWire ', geomWire
 
                     pyPlaneListOld = pyWire.planes

@@ -174,34 +174,6 @@ class _Py(object):
 
         return shape
 
-    def convexReflex(self, eje, nextEje):
-
-        '''convexReflex(self, eje, nextEje)'''
-
-        cross = eje.cross(nextEje)
-        corner = None
-        if cross != origin:
-            cross.normalize()
-
-            if cross == _Py.normal:
-                corner = 'convex'
-            else:
-                corner = 'reflex'
-
-        return corner
-
-    def sliceIndex(self, index, lenWire):
-
-        '''sliceIndex(self, index, lenWire)'''
-
-        if index >= lenWire:
-            index = index - lenWire
-
-        elif index < 0:
-            index = index + lenWire
-
-        return index
-
     def printSummary(self):
 
         '''printSummary(self)'''
@@ -408,6 +380,34 @@ class _Py(object):
 
         print '###############################################################'
 
+    def convexReflex(self, eje, nextEje):
+
+        '''convexReflex(self, eje, nextEje)'''
+
+        cross = eje.cross(nextEje)
+        corner = None
+        if cross != origin:
+            cross.normalize()
+
+            if cross == _Py.normal:
+                corner = 'convex'
+            else:
+                corner = 'reflex'
+
+        return corner
+
+    def sliceIndex(self, index, lenWire):
+
+        '''sliceIndex(self, index, lenWire)'''
+
+        if index >= lenWire:
+            index = index - lenWire
+
+        elif index < 0:
+            index = index + lenWire
+
+        return index
+
     def roundVector(self, vector):
 
         '''roundVector(self, vector)'''
@@ -479,12 +479,50 @@ class _Py(object):
         orientPoint = self.orientedPoints(wire, normal)
         return orientPoint
 
+    '''def faceDatas(self, face):
+
+        normal = self.faceNormal(face)
+        coordinates = self.facePoints(face, normal)
+        if normal == _Py.normal:
+            index = self.lowerLeftPoint(coordinates)
+        else:
+            index = self.upperLeftPoint(coordinates)
+        coordinates = coordinates[index:] + coordinates[:index]
+
+        return coordinates'''
+
     def faceDatas(self, face):
 
         '''faceDatas(self, face)'''
 
         normal = self.faceNormal(face)
-        coordinates = self.facePoints(face, normal)
+
+        wire = face.OuterWire
+
+        orderVert = wire.OrderedVertexes
+
+        if len(orderVert) == 1:
+            orientVert = orderVert
+
+        else:
+            orderPoint = [vert.Point for vert in orderVert]
+
+            geometryList = self.geometries(orderPoint)
+            edges = [line.toShape() for line in geometryList]
+            wire = Part.Wire(edges)
+            face = Part.makeFace(wire, "Part::FaceMakerSimple")
+            norm = self.faceNormal(face)
+
+            if normal == norm.negative():
+                orderVert.reverse()
+            orientVert = orderVert
+
+        orientPoint = [vert.Point for vert in orientVert]
+        orientRoundPoint = [self.roundVector(vector)
+                            for vector in orientPoint]
+
+        coordinates = orientRoundPoint
+
         if normal == _Py.normal:
             index = self.lowerLeftPoint(coordinates)
         else:
