@@ -174,6 +174,11 @@ class _Py(object):
 
         return shape
 
+
+
+
+
+
     def printSummary(self):
 
         '''printSummary(self)'''
@@ -461,7 +466,6 @@ class _Py(object):
             wire = Part.Wire(edges)
             face = Part.makeFace(wire, "Part::FaceMakerSimple")
             norm = self.faceNormal(face)
-            # TODO QUITAR
             if normal == norm.negative():
                 orderVert.reverse()
                 geometryList.reverse()
@@ -537,19 +541,13 @@ class _Py(object):
                     break
         edgeList = edgeList[number:] + edgeList[:number]
 
-        # print 'edgeList ', edgeList
-
         geometries = []
         number = -1
         for edge in edgeList:
             number += 1
-            # print 'number ', number
             curve = edge.Curve
-            # print curve
-            # print (coordinates[number], coordinates[number+1])
             startParam = curve.parameter(coordinates[number])
             endParam = curve.parameter(coordinates[number+1])
-            # print (startParam, endParam)
 
             geom = self.makeGeom(curve, startParam, endParam)
 
