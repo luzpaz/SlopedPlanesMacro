@@ -240,7 +240,7 @@ class _SlopedPlanes(_Py):
             lowerLeft = [cc[0] for cc in coordinatesOuter]
             faceList = []
             falseFaceOuter = []
-            coordinatesOuterOrdered = []
+            coordinatesOuterOrdered, geomOuterOrdered = [], []
             while lowerLeft:
                 index = self.lowerLeftPoint(lowerLeft)
                 lowerLeft.pop(index)
@@ -250,6 +250,10 @@ class _SlopedPlanes(_Py):
                 faceList.append(pop)
                 pop = fFaceOuter.pop(index)
                 falseFaceOuter.append(pop)
+                pop = geomOuter.pop(index)
+                geomOuterOrdered.append(pop)
+
+            # print 'geomOuterOrdered ', geomOuterOrdered
 
             self.faceList = faceList
 
@@ -306,7 +310,7 @@ class _SlopedPlanes(_Py):
                 upperLeft = [cc[0] for cc in coordinatesInner]
                 wireList = []
                 falseFaceList = []
-                coordinatesInnerOrdered = []
+                coordinatesInnerOrdered, geomInnerOrdered = [], []
                 while upperLeft:
                     index = self.upperLeftPoint(upperLeft)
                     upperLeft.pop(index)
@@ -316,9 +320,19 @@ class _SlopedPlanes(_Py):
                     wireList.append(pop)
                     pop = fFaceList.pop(index)
                     falseFaceList.append(pop)
+                    pop = geomInner.pop(index)
+                    geomInnerOrdered.append(pop)
 
                 wireList.insert(0, face.OuterWire)
                 falseFaceList.insert(0, falseFaceOuter[numFace])
+                # print falseFaceList
+
+                # print geomOuterOrdered[numFace]
+                # print geomInnerOrdered
+
+                gList = [geomOuterOrdered[numFace]]
+                gList.extend(geomInnerOrdered)
+                # print gList
 
                 coordinates = [coordinates]
                 coordinates.extend(coordinatesInnerOrdered)
@@ -355,8 +369,9 @@ class _SlopedPlanes(_Py):
                         pyFace.reset = True
                     pyWire.coordinates = coo
 
-                    falseFace = falseFaceList[numWire]
-                    geomWire = self.geometries(falseFace, coo[:-2])     # CAMBIAR
+                    geomWire = gList[numWire]
+                    '''falseFace = falseFaceList[numWire]
+                    geomWire = self.geometries(falseFace, coo[:-2])     # CAMBIAR'''
                     # print 'geomWire ', geomWire
 
                     pyPlaneListOld = pyWire.planes

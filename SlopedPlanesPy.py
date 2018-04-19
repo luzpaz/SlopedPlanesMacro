@@ -507,14 +507,17 @@ class _Py(object):
         else:
             orderPoint = [vert.Point for vert in orderVert]
 
+            # print orderPoint
+
             geometryList = self.geometries(face, orderPoint)
             edges = [line.toShape() for line in geometryList]
             wire = Part.Wire(edges)
             face = Part.makeFace(wire, "Part::FaceMakerSimple")
             norm = self.faceNormal(face)
-
+            # TODO QUITAR
             if normal == norm.negative():
                 orderVert.reverse()
+                geometryList.reverse()
             orientVert = orderVert
 
         orientPoint = [vert.Point for vert in orientVert]
@@ -528,6 +531,9 @@ class _Py(object):
         else:
             index = self.upperLeftPoint(coordinates)
         coordinates = coordinates[index:] + coordinates[:index]
+        geometryList = geometryList[index:] + geometryList[:index]
+
+        # print coordinates, geometryList
 
         return coordinates, geometryList
 
@@ -577,20 +583,26 @@ class _Py(object):
         number = -1
         for edge in edgeList:
             number += 1
-            start = self.roundVector(edge.Vertexes[0].Point)
+            start = edge.Vertexes[0].Point
             if start == first or start == second:
-                end = self.roundVector(edge.Vertexes[1].Point)
+                end = edge.Vertexes[1].Point
                 if end == first or end == second:
                     break
         edgeList = edgeList[number:] + edgeList[:number]
+
+        # print 'edgeList ', edgeList
 
         geometries = []
         number = -1
         for edge in edgeList:
             number += 1
+            # print 'number ', number
             curve = edge.Curve
+            # print curve
+            # print (coordinates[number], coordinates[number+1])
             startParam = curve.parameter(coordinates[number])
             endParam = curve.parameter(coordinates[number+1])
+            # print (startParam, endParam)
 
             geom = self.makeGeom(curve, startParam, endParam)
 
