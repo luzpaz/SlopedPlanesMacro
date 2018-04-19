@@ -754,7 +754,7 @@ class _PyFace(_Py):
 
                         else:
                             pyAlignmentList = pyPlane.chopedList
-                            pyAlignment = self.selectAlignmentBase(numWire, 0)
+                            pyAlignment = firstPlane.selectAlignmentBase()
                             if pyAlignment:
                                 if pyAlignment not in pyAlignmentList:
                                     # print 'pyPlane no chop of firstPlane'
@@ -793,7 +793,7 @@ class _PyFace(_Py):
         jumpChop = False
         if pyAlign.falsify:
             if pyPlane.aligned:
-                pyAliBase = self.selectAlignmentBase(numWire, numGeom)
+                pyAliBase = pyPlane.selectAlignmentBase()
 
                 if pyAliBase:
                     # print 'finds an alignment backward'
@@ -826,7 +826,7 @@ class _PyFace(_Py):
 
         else:
             pyPl.shape = None
-            pyAli = self.selectAlignmentBase(nWire, nGeom)
+            pyAli = pyPl.selectAlignmentBase()
 
             if pyAli:
                 # print 'finds an alignment forward'
@@ -1359,9 +1359,7 @@ class _PyFace(_Py):
 
                         elif pyPlane.aligned:
                             # print 'B'
-                            pyAlign =\
-                                self.selectAlignmentBase(numWire,
-                                                         pyPlane.numGeom)
+                            pyAlign = pyPlane.selectAlignmentBase()
                             if pyAlign:
                                 line = pyAlign.geomAligned
                                 simulAlign =\

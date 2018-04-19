@@ -584,7 +584,7 @@ class _PyAlignment(_Py):
             if pyPrior.aligned:
 
                 # print '10'
-                pyA = self.selectAlignmentBase(pyPrior.numWire, pr)
+                pyA = pyPrior.selectAlignmentBase()
                 # print 'pyA.later ', pyA.later.numGeom
                 if pyA and pyA.later.numGeom == numGeom:
                     # print '101'
@@ -604,7 +604,7 @@ class _PyAlignment(_Py):
             if pyLater.aligned:
 
                 # print '20'
-                pyA = self.selectAlignmentBase(pyLater.numWire, lat)
+                pyA = pyLater.selectAlignmentBase()
                 # print 'pyA.prior ', pyA.prior.numGeom
                 if pyA and pyA.prior.numGeom == numGeom:
                     # print '201'
@@ -1324,7 +1324,7 @@ class _PyAlignment(_Py):
                     # print 'a'
 
                     if not pyPlane.virtualized:
-                        pyAli = self.selectAlignmentBase(numWire, nn)
+                        pyAli = pyPl.selectAlignmentBase()
                         if pyAli and pyAli != self:
                             pl = pyAli.simulatedAlignment
                             cutList.extend(pl)
@@ -1361,7 +1361,7 @@ class _PyAlignment(_Py):
         if pyPl.aligned:
             # print 'r1'
 
-            pyAli = self.selectAlignmentBase(numWire, rear)
+            pyAli = pyPl.selectAlignmentBase()
             if pyAli and pyAli != self:
                 # print 'pyAli ', pyAli.base.numGeom
                 pl = pyAli.simulatedAlignment

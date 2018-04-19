@@ -1236,7 +1236,7 @@ class _PyPlane(_Py):
                     if pyPl.aligned:
                         # print 'a'
 
-                        pyAli = self.selectAlignmentBase(numWire, nGeom)
+                        pyAli = pyPl.selectAlignmentBase()
 
                         if pyAli:
                             # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)

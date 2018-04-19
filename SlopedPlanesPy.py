@@ -63,15 +63,14 @@ class _Py(object):
             valueList.append(value)
         setattr(self, prop, valueList)
 
-    def selectAlignmentBase(self, numWire, numGeom):
+    def selectAlignmentBase(self):
 
         '''selectAlignmentBase(self, numWire, numGeom)
         selects an unique alignment which base plane is (numWire, numGeom),
         and return it, or None.'''
 
-        for pyAlign in _Py.pyFace.alignments:
-            if pyAlign.base.numWire == numWire and\
-               pyAlign.base.numGeom == numGeom:
+        for pyAlign in self.alignedList:
+            if pyAlign.base == self:
                 return pyAlign
 
         return None
@@ -355,7 +354,7 @@ class _Py(object):
             Part.show(compound, slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))
 
         if pyPlane.aligned:
-            pyAli = self.selectAlignmentBase(numWire, numGeom)
+            pyAli = pyPlane.selectAlignmentBase()
             if pyAli:
 
                 compound = Part.makeCompound(pyAli.simulatedAlignment)

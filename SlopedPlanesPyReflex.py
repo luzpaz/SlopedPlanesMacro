@@ -208,7 +208,7 @@ class _PyReflex(_Py):
                             elif pyPl.aligned:
                                 # print 'c'
                                 pyAli =\
-                                    self.selectAlignmentBase(numWire, nG)
+                                    pyPl.selectAlignmentBase()
                                 if pyAli:
                                     cList.extend(pyAli.simulatedAlignment)
 
@@ -432,7 +432,7 @@ class _PyReflex(_Py):
 
         if pyPl.aligned:
             # print 'A'
-            pyAlign = self.selectAlignmentBase(numWire, nn)
+            pyAlign = pyPl.selectAlignmentBase()
             if pyAlign:
                 pl = pyAlign.simulatedAlignment
                 pyR.cutter.extend(pl)
@@ -636,7 +636,7 @@ class _PyReflex(_Py):
 
             rrS = None
             if rr.aligned:
-                pyA = self.selectAlignmentBase(rr.numWire, rr.numGeom)
+                pyA = rr.selectAlignmentBase()
                 if pyA:
                     rrS = pyA.simulatedAlignment
             else:
@@ -650,8 +650,7 @@ class _PyReflex(_Py):
             if oppRear:
                 oppRS = None
                 if oppRr.aligned:
-                    pyA = self.selectAlignmentBase(oppRr.numWire,
-                                                   oppRr.numGeom)
+                    pyA = pyOppR.selectAlignmentBase()
                     if pyA:
                         oppRS = pyA.simulatedAlignment
                 else:
@@ -666,7 +665,7 @@ class _PyReflex(_Py):
                 pyPl = pyPlaneList[nn]
                 if pyPl.aligned:
                     # print 'a'
-                    pyAlign = self.selectAlignmentBase(pyWire.numWire, nn)
+                    pyAlign = pyPl.selectAlignmentBase()
                     if pyAlign:
                         pl = pyAlign.simulatedAlignment
                         corn.append(pl)
