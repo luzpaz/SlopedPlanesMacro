@@ -523,9 +523,9 @@ class _Py(object):
                     orig = col
         return coordinates.index(orig)
 
-    def arcGeometries(self, face, coordinates):
+    def geometries(self, face, coordinates):
 
-        '''arcGeometries(self, face, coordinates)'''
+        '''geometries(self, face, coordinates)'''
 
         if len(coordinates) == 0:
             edge = face.OuterWire.Edges[0]
@@ -708,8 +708,8 @@ class _Py(object):
         coordOne = self.faceDatas(faceOne)
         coordTwo = self.faceDatas(faceTwo)
 
-        geomOne = self.arcGeometries(faceOne, coordOne)
-        geomTwo = self.arcGeometries(faceTwo, coordTwo)
+        geomOne = self.geometries(faceOne, coordOne)
+        geomTwo = self.geometries(faceTwo, coordTwo)
 
         numOne = -1
         for cc in coordOne:
