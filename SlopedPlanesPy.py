@@ -529,7 +529,7 @@ class _Py(object):
             index = self.upperLeftPoint(coordinates)
         coordinates = coordinates[index:] + coordinates[:index]
 
-        return coordinates
+        return coordinates, geometryList
 
     def upperLeftPoint(self, coordinates):
 

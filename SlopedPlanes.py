@@ -227,14 +227,15 @@ class _SlopedPlanes(_Py):
             # gathers the exterior wires. Lower Left criteria
 
             fFaceOuter = []
-            coordinatesOuter = []
+            coordinatesOuter, geomOuter = [], []
             for face in fList:
                 outerWire = face.OuterWire
                 falseFace = Part.makeFace(outerWire, "Part::FaceMakerSimple")
                 fFaceOuter.append(falseFace)
-                coordinates = self.faceDatas(falseFace)
+                coordinates, geometryList = self.faceDatas(falseFace)
                 coordinates.extend(coordinates[0:2])
                 coordinatesOuter.append(coordinates)
+                geomOuter.append(geometryList)
 
             lowerLeft = [cc[0] for cc in coordinatesOuter]
             faceList = []
@@ -292,14 +293,15 @@ class _SlopedPlanes(_Py):
                 # gathers the interior wires. Upper Left criteria
 
                 wList = face.Wires[1:]
-                coordinatesInner = []
+                coordinatesInner, geomInner = [], []
                 fFaceList = []
                 for wire in wList:
                     falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
                     fFaceList.append(falseFace)
-                    coord = self.faceDatas(falseFace)
+                    coord, geomList = self.faceDatas(falseFace)
                     coord.extend(coord[0:2])
                     coordinatesInner.append(coord)
+                    geomInner.append(geomList)
 
                 upperLeft = [cc[0] for cc in coordinatesInner]
                 wireList = []
