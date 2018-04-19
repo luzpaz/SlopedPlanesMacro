@@ -47,6 +47,7 @@ class _PyAlignment(_Py):
         self.chops = []
         self.geomAligned = None
         self.rango = []
+        self.rangoPy = []
         self.rangoRear = []
         self.falsify = False
         self.simulatedAlignment = []
@@ -123,6 +124,20 @@ class _PyAlignment(_Py):
         ''''''
 
         self._rango = rango
+
+    @property
+    def rangoPy(self):
+
+        ''''''
+
+        return self._rangoPy
+
+    @rangoPy.setter
+    def rangoPy(self, rangoPy):
+
+        ''''''
+
+        self._rangoPy = rangoPy
 
     @property
     def rangoRear(self):
@@ -355,6 +370,8 @@ class _PyAlignment(_Py):
                         bPl = self.cutting(bPl, cutList, gS)
                         pyPl.bigShape = bPl
                         pyPl.fronted = True
+
+                        pyPl.frontedList.append(self)
 
                         rC.append(bPl)
 
@@ -1585,9 +1602,14 @@ class _PyAlignment(_Py):
                 numGeom = pyPlane.numGeom
                 nGeom = pyPl.numGeom
                 rangoChop = self.rang(pyWire, numGeom, nGeom, 'forward')
+                planeList = pyWire.planes
+                ran = [planeList[nn] for nn in rangoChop]
             else:
                 rangoChop = []
+                ran = []
+
             self.addValue('rango', rangoChop, 'backward')
+            self.addValue('rangoPy', ran, 'backward')
 
         # rangoRear
 
@@ -1608,4 +1630,4 @@ class _PyAlignment(_Py):
             rangoRear = []
 
         self.rangoRear = rangoRear
-        # print 'rangoRear ', rangoRear
+        print 'rangoRear ', rangoRear
