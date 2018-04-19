@@ -48,7 +48,7 @@ class _PyAlignment(_Py):
         self.geomAligned = None
         self.rango = []
         self.rangoPy = []
-        self.rangoRear = []
+        self.rangoRear = ()
         self.falsify = False
         self.simulatedAlignment = []
         self.simulatedChops = []
@@ -379,7 +379,7 @@ class _PyAlignment(_Py):
 
                         # rChop doesn't cut with rangoRear and viceversa, if not aligned
                         if w1 == nW:
-                            for r in rangoRear:
+                            for r in rangoRear[0]:
                                 if r not in control:
                                     control.append(r)
 
@@ -739,8 +739,6 @@ class _PyAlignment(_Py):
             rChop = rangoChop[numChop]
             rChopPy = rangoChopPy[numChop]
 
-            pyW = pyWireList[pyOne.numWire]
-            pyPlList = pyW.planes
             cutList = []
             for rr, pyPl in map(None, rChop, rChopPy):
                 if not pyPl.aligned and not pyPl.choped:
@@ -1500,8 +1498,7 @@ class _PyAlignment(_Py):
 
         rearList = []
 
-        for r in rangoRear:
-            pyPl = pyPlaneList[r]
+        for pyPl in rangoRear[1]:
             '''if pyPl.choped or pyPl.aligned:
                 break'''
             # esto debería estar hecho desde el principio
@@ -1529,8 +1526,7 @@ class _PyAlignment(_Py):
 
                     if chopList:
                         # print 'chopList ', chopList
-                        for r in rangoRear:
-                            pyPl = pyPlaneList[r]
+                        for pyPl in rangoRear[1]:
                             # if not pyPl.choped: # and not pyPl.aligned:
                             if not (pyPl.choped or pyPl.fronted):
                                 pl = pyPl.cuttingPyth(chopList)
@@ -1560,9 +1556,7 @@ class _PyAlignment(_Py):
         # alignment with choped rangoRear
 
         rearList = []
-        for r in rangoRear:
-            # print 'r ', r
-            pyPl = pyPlaneList[r]
+        for pyPl in rangoRear[1]:
             if pyPl.choped:
                 # print 'a'
                 pl = pyPl.shape
@@ -1626,8 +1620,13 @@ class _PyAlignment(_Py):
             rangoRear.insert(0, lat)
             rangoRear.append(pr)
 
+            pyPlaneList = pyWire.planes
+            ran = [pyPlaneList[nn] for nn in rangoRear]
+
+            rangoRear = (rangoRear, ran)
+
         else:
-            rangoRear = []
+            rangoRear = ()
 
         self.rangoRear = rangoRear
         # print 'rangoRear ', rangoRear

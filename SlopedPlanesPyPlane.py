@@ -1222,7 +1222,7 @@ class _PyPlane(_Py):
             rr = []
             for pyA in pyAlignList:
                 # print 'pyA.rangoRear ', pyA.rangoRear
-                rr.extend(pyA.rangoRear)
+                rr.extend(pyA.rangoRear[0])
             # print 'rr ', rr
 
         cutterList = []
