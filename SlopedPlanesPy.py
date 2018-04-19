@@ -507,7 +507,7 @@ class _Py(object):
         else:
             orderPoint = [vert.Point for vert in orderVert]
 
-            geometryList = self.geometries(orderPoint)
+            geometryList = self.geometries(face, orderPoint)
             edges = [line.toShape() for line in geometryList]
             wire = Part.Wire(edges)
             face = Part.makeFace(wire, "Part::FaceMakerSimple")
