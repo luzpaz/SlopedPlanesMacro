@@ -1310,8 +1310,7 @@ class _PyFace(_Py):
 
                 chopList = [pyPl.simulatedShape for pyPl in chopList]
 
-                numWire = pyWire.numWire
-                # print '### numWire ', numWire
+                # print '### numWire ', pyWire.numWire
 
                 for pyPlane in pyWire.planes:
                     cutList = cutterList[:]
@@ -1373,7 +1372,12 @@ class _PyFace(_Py):
 
                         else:
                             # print 'C'
-                            cutList.extend(aliList)
+                            aList = []
+                            for ali in alignments:
+                                if ali in pyPlane.rearedList:
+                                    aList.append(ali.simulatedAlignment)
+                            cutList.extend(aList)
+                            #cutList.extend(aliList)
                             cutList.extend(chopList)
 
                         if cutList:
@@ -1421,20 +1425,23 @@ class _PyFace(_Py):
 
         ''''''
 
-        alignList = self.alignments[:]
-
-        '''cutterList = []
-        for pyAlign in self.alignments:
-            for rC in pyAlign.rangoChop:
-                for r in rC:
-                    pass
-
-        number = -1
-        for pyAlign in self.alignments:
-            number += 1
-            pop = alignList.pop(number)
-            cutterList = []
-            for pyA in alignList:
-                
-                pass
-            alignList.insert(number, pop)'''
+        for pyWire in self.wires:
+            for pyPlane in pyWire.planes:
+                if not (pyPlane.fronted or pyPlane.reflexed):
+                    # print pyPlane.numGeom
+                    aList = []
+                    rearedList = pyPlane.rearedList
+                    # print rearedList
+                    for ali in self.alignments:
+                        if ali not in rearedList:
+                            aList.append(ali.base.shape)    # esto hay que recolectarlo antes !!!
+                            for aa in ali.aligns:
+                                if aa.shape:
+                                    aList.append(aa.shape)
+                            for cc in ali.chops:
+                                for c in cc:
+                                    if c.shape:
+                                        aList.append(c.shape)
+                    if aList:
+                        # print aList
+                        pyPlane.cuttingPyth(aList)
