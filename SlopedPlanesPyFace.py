@@ -305,10 +305,8 @@ class _PyFace(_Py):
             wireList.append(pyWire)
 
         alignList = []
-        numAlignment = -1
         for dct in alignments:
-            numAlignment += 1
-            pyAlignment = _PyAlignment(numAlignment)
+            pyAlignment = _PyAlignment()
             alignList.append(pyAlignment)
 
         return wireList, alignList, geomShapeFace
@@ -434,8 +432,6 @@ class _PyFace(_Py):
         self.alignments = []  # always reset alignments
 
         refList = []    # covers the reflexs conected with alignment
-
-        numAlignment = 0
 
         for pyWire in pyWireList:
             numWire = pyWire.numWire
@@ -623,9 +619,7 @@ class _PyFace(_Py):
 
                                         if numEdge == 0:
                                             pyAlign =\
-                                                self.doAlignment(pyPlane,
-                                                                 numAlignment)
-                                            numAlignment += 1
+                                                self.doAlignment(pyPlane)
 
                                         fAng = self.findAngle(numWire, numGeom)
                                         sAng = self.findAngle(nWire, nGeom)
@@ -659,9 +653,7 @@ class _PyFace(_Py):
                                             # print '111112 falseAlignment'
                                             if numEdge > 0:
                                                 pyAlign =\
-                                                    self.doAlignment(pyPlMemo,
-                                                                     numAlignment)
-                                                numAlignment += 1
+                                                    self.doAlignment(pyPlMemo)
                                             pyAlign.falsify = True
 
                                         pyAlign.geomAligned = eGeomShape
@@ -1167,11 +1159,11 @@ class _PyFace(_Py):
         pyPl.reflexedList.append(pyReflex)
         return pyReflex
 
-    def doAlignment(self, pyPlane, numAlignment):
+    def doAlignment(self, pyPlane):
 
         '''doAlignment(self, pyPlane)'''
 
-        pyAlign = _PyAlignment(numAlignment)
+        pyAlign = _PyAlignment()
         self.alignments.append(pyAlign)
         # print '¡¡¡ alignment done !!!'
         pyAlign.base = pyPlane

@@ -290,6 +290,7 @@ class _SlopedPlanes(_Py):
                 # gathers the interior wires. Upper Left criteria
 
                 wList = face.Wires[1:]
+
                 coordinatesInner, geomInner = [], []
                 for wire in wList:
                     falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")

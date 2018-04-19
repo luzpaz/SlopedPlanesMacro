@@ -63,9 +63,9 @@ class _PyPlane(_Py):
         self.seed = []
         self.rango = []
         self.reflexed = False
-        self.aligned = False
-        self.choped = False
-        self.fronted = False
+        self.aligned = False  # quitar
+        self.choped = False  # quitar
+        self.fronted = False  # quitar
         self.arrow = False
         self.geom = None
         self.geomShape = None
