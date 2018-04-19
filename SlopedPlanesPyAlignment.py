@@ -379,12 +379,13 @@ class _PyAlignment(_Py):
 
                         # rChop doesn't cut with rangoRear and viceversa, if not aligned
                         if w1 == nW:
-                            for r in rangoRear[0]:
+                            for r, pyPlR in map(None, rangoRear[0],
+                                                rangoRear[1]):
                                 if r not in control:
                                     control.append(r)
 
-                                pyPlR = pyPlList[r]
                                 if not pyPlR.aligned:
+                                    pyPlR.rearedList.append(self)
                                     if nG not in pyPlR.control:
                                         pyPlR.control.append(nG)
 
@@ -675,7 +676,6 @@ class _PyAlignment(_Py):
         tolerance = _Py.tolerance
         pyFace = _Py.pyFace
         face = pyFace.face
-        pyWireList = pyFace.wires
         falsify = self.falsify
 
         rangoChop = self.rango
