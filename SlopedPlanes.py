@@ -253,8 +253,6 @@ class _SlopedPlanes(_Py):
                 pop = geomOuter.pop(index)
                 geomOuterOrdered.append(pop)
 
-            # print 'geomOuterOrdered ', geomOuterOrdered
-
             self.faceList = faceList
 
         else:
@@ -298,10 +296,8 @@ class _SlopedPlanes(_Py):
 
                 wList = face.Wires[1:]
                 coordinatesInner, geomInner = [], []
-                fFaceList = []
                 for wire in wList:
                     falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
-                    fFaceList.append(falseFace)
                     coord, geomList = self.faceDatas(falseFace)
                     coord.extend(coord[0:2])
                     coordinatesInner.append(coord)
@@ -309,7 +305,6 @@ class _SlopedPlanes(_Py):
 
                 upperLeft = [cc[0] for cc in coordinatesInner]
                 wireList = []
-                falseFaceList = []
                 coordinatesInnerOrdered, geomInnerOrdered = [], []
                 while upperLeft:
                     index = self.upperLeftPoint(upperLeft)
@@ -318,17 +313,10 @@ class _SlopedPlanes(_Py):
                     coordinatesInnerOrdered.append(pop)
                     pop = wList.pop(index)
                     wireList.append(pop)
-                    pop = fFaceList.pop(index)
-                    falseFaceList.append(pop)
                     pop = geomInner.pop(index)
                     geomInnerOrdered.append(pop)
 
                 wireList.insert(0, face.OuterWire)
-                falseFaceList.insert(0, falseFaceOuter[numFace])
-                # print falseFaceList
-
-                # print geomOuterOrdered[numFace]
-                # print geomInnerOrdered
 
                 gList = [geomOuterOrdered[numFace]]
                 gList.extend(geomInnerOrdered)
@@ -370,8 +358,6 @@ class _SlopedPlanes(_Py):
                     pyWire.coordinates = coo
 
                     geomWire = gList[numWire]
-                    '''falseFace = falseFaceList[numWire]
-                    geomWire = self.geometries(falseFace, coo[:-2])     # CAMBIAR'''
                     # print 'geomWire ', geomWire
 
                     pyPlaneListOld = pyWire.planes
@@ -449,7 +435,7 @@ class _SlopedPlanes(_Py):
                         pyPlane.alignedList = []
                         pyPlane.chopedList = []
                         pyPlane.frontedList = []
-                        pyPlane.rearedList =[]
+                        pyPlane.rearedList = []
 
                     pyWire.planes = pyPlaneListNew
 

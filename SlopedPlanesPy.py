@@ -438,59 +438,6 @@ class _Py(object):
         normal = face.normalAt(0, 0)
         return self.roundVector(normal)
 
-    def orientedVertixes(self, wire, normal):
-
-        '''orientedVertixes(self, wire, normal)'''
-
-        orderVert = wire.OrderedVertexes
-
-        if len(orderVert) == 1:
-            return orderVert
-
-        orderPoint = [vert.Point for vert in orderVert]
-
-        geometryList = self.geometries(orderPoint)
-        edges = [line.toShape() for line in geometryList]
-        wire = Part.Wire(edges)
-        face = Part.makeFace(wire, "Part::FaceMakerSimple")
-        norm = self.faceNormal(face)
-
-        if normal == norm.negative():
-            orderVert.reverse()
-        orientVert = orderVert
-
-        return orientVert
-
-    def orientedPoints(self, wire, normal):
-
-        '''orientedPoints(self, wire, normal)'''
-
-        orientVert = self.orientedVertixes(wire, normal)
-        orientPoint = [vert.Point for vert in orientVert]
-        orientRoundPoint = [self.roundVector(vector)
-                            for vector in orientPoint]
-        return orientRoundPoint
-
-    def facePoints(self, face, normal):
-
-        '''facePoints(self, face, normal)'''
-
-        wire = face.OuterWire
-        orientPoint = self.orientedPoints(wire, normal)
-        return orientPoint
-
-    '''def faceDatas(self, face):
-
-        normal = self.faceNormal(face)
-        coordinates = self.facePoints(face, normal)
-        if normal == _Py.normal:
-            index = self.lowerLeftPoint(coordinates)
-        else:
-            index = self.upperLeftPoint(coordinates)
-        coordinates = coordinates[index:] + coordinates[:index]
-
-        return coordinates'''
-
     def faceDatas(self, face):
 
         '''faceDatas(self, face)'''
