@@ -438,22 +438,6 @@ class _Py(object):
         normal = face.normalAt(0, 0)
         return self.roundVector(normal)
 
-    def geometries(self, pointList):
-
-        '''geometries(self, pointList)'''
-
-        pointList.append(pointList[0])
-        geometryList = []
-        num = 0
-        while num < len(pointList) - 1:
-            pointA = pointList[num]
-            pointB = pointList[num+1]
-            lineSegment = Part.LineSegment(pointA, pointB)
-            geometryList.append(lineSegment)
-            num += 1
-        pointList.pop()
-        return geometryList
-
     def orientedVertixes(self, wire, normal):
 
         '''orientedVertixes(self, wire, normal)'''
