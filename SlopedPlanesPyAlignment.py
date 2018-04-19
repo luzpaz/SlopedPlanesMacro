@@ -287,11 +287,12 @@ class _PyAlignment(_Py):
 
         rangoChop = self.rango
         rangoCopy = rangoChop[:]
+        rangoChopPy = self.rangoPy
         chops = self.chops
         rangoRear = self.rangoRear
 
         numChop = -1
-        for rChop in rangoChop:
+        for rChop, rChopPy in map(None, rangoChop, rangoChopPy):
             numChop += 1
             # print '### numChop ', numChop
 
@@ -361,8 +362,8 @@ class _PyAlignment(_Py):
                 else:
                     cutList = [enormousBase]
 
-                for nG in rChop:
-                    pyPl = pyPlList[nG]
+                for nG, pyPl in map(None, rChop, rChopPy):
+                    ###pyPl = pyPlList[nG]
                     if not pyPl.aligned:
 
                         bPl = pyPl.bigShape
@@ -1630,4 +1631,4 @@ class _PyAlignment(_Py):
             rangoRear = []
 
         self.rangoRear = rangoRear
-        print 'rangoRear ', rangoRear
+        # print 'rangoRear ', rangoRear
