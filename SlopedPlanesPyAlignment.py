@@ -1626,7 +1626,7 @@ class _PyAlignment(_Py):
             rangoRear = (rangoRear, ran)
 
         else:
-            rangoRear = ()
+            rangoRear = ([], [])
 
         self.rangoRear = rangoRear
         # print 'rangoRear ', rangoRear
