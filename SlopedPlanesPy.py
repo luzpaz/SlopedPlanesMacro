@@ -174,11 +174,6 @@ class _Py(object):
 
         return shape
 
-
-
-
-
-
     def printSummary(self):
 
         '''printSummary(self)'''
