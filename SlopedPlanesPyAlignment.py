@@ -363,7 +363,6 @@ class _PyAlignment(_Py):
                     cutList = [enormousBase]
 
                 for nG, pyPl in map(None, rChop, rChopPy):
-                    ###pyPl = pyPlList[nG]
                     if not pyPl.aligned:
 
                         bPl = pyPl.bigShape
@@ -680,6 +679,7 @@ class _PyAlignment(_Py):
         falsify = self.falsify
 
         rangoChop = self.rango
+        rangoChopPy = self.rangoPy
         simulatedChops = []
 
         geomList = [pyP.geomShape for pyP in self.aligns]
@@ -737,12 +737,12 @@ class _PyAlignment(_Py):
                         pyT.simulating([enormousBase])
 
             rChop = rangoChop[numChop]
+            rChopPy = rangoChopPy[numChop]
 
             pyW = pyWireList[pyOne.numWire]
             pyPlList = pyW.planes
             cutList = []
-            for rr in rChop:
-                pyPl = pyPlList[rr]
+            for rr, pyPl in map(None, rChop, rChopPy):
                 if not pyPl.aligned and not pyPl.choped:
 
                     if pyPl.reflexed:
@@ -920,6 +920,7 @@ class _PyAlignment(_Py):
         enormousBase = pyBase.enormousShape
         aligns = self.aligns
         rangoChop = self.rango
+        rangoChopPy = self.rangoPy
         simulatedChops = self.simulatedChops
 
         pyCont = aligns[-1]
@@ -933,8 +934,6 @@ class _PyAlignment(_Py):
         for [pyOne, pyTwo] in self.chops:
             numChop += 1
             # print '### [pyOne, pyTwo]', [(pyOne.numWire, pyOne.numGeom), (pyTwo.numWire, pyTwo.numGeom)]
-
-            rChop = rangoChop[numChop]
 
             simulatedC = simulatedChops[numChop]
             # print 'simulatedC ', simulatedC
@@ -1217,6 +1216,7 @@ class _PyAlignment(_Py):
 
                 [pyOne, pyTwo] = chopList[numChop]
                 rChop = rangoChop[numChop]
+                rChopPy = rangoChopPy[numChop]
 
                 nW = pyOne.numWire
                 pyW = pyWireList[nW]
@@ -1306,9 +1306,8 @@ class _PyAlignment(_Py):
                     pyBase = aligns[numChop]
 
                 # rChop with base and cont
-                for nn in rChop:
-                    pyPl = pyPlList[nn]
-                    if not pyPl.choped and not pyPl.aligned:
+                for nn, pyPl in map(None, rChop, rChopPy):
+                    if not (pyPl.choped or pyPl.aligned):
                         pyPl.cuttingPyth(cutList)
                         # print 'rangoChop ', nn
 
