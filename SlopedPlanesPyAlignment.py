@@ -594,15 +594,18 @@ class _PyAlignment(_Py):
                     cutterList.append(pyA.base.bigShape)
                     control.append(pr)
 
-            elif ((not pyPrior.reflexed) or
+                '''elif ((not pyPrior.reflexed) or
                   (pyPrior.choped) or
-                  (not pyPrior.rear)):
+                  (not pyPrior.rear)):'''
+
+            elif not pyPrior.reflexed or pyPrior.choped:
 
                 # print '1'
                 cutterList.append(bigPrior)
                 if not pyBase.choped:
-                    # print '11'
-                    control.append(pr)
+                    if pyBase.numWire == pyLater.numWire:
+                        # print '11'
+                        control.append(pr)
 
             if pyLater.aligned:
 
@@ -614,16 +617,19 @@ class _PyAlignment(_Py):
                     cutterList.append(pyA.base.bigShape)
                     control.append(lat)
 
-            elif ((not pyLater.reflexed) or
-                  (pyLater.choped) or
-                  (not pyLater.rear)):
+                '''elif ((not pyLater.reflexed) or
+                      (pyLater.choped) or
+                      (not pyLater.rear)):'''
+
+            elif not pyLater.reflexed or pyLater.choped:
 
                 # print '2'
                 cutterList.append(bigLater)
                 if not self.falsify:
                     if not pyBase.choped:
-                        # print '21'
-                        control.append(lat)
+                        if pyBase.numWire == pyLater.numWire:
+                            # print '21'
+                            control.append(lat)
 
             if cutterList:
                 # print 'BB'
