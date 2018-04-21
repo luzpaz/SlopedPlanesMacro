@@ -279,6 +279,8 @@ class _PyAlignment(_Py):
         enormousCont = pyCont.enormousShape
         contRear = pyCont.rear
 
+        totalRear = baseRear + contRear
+
         pyPrior = self.prior
         pyLater = self.later
         pr = pyPrior.numGeom
@@ -441,7 +443,7 @@ class _PyAlignment(_Py):
                 if pyPlane.virtualized:
                     aliList = pyPlane.alignedList
                     pyA = aliList[0]
-                    # for pyA in aliList:
+                    # for pyA in aliList:   no borrar de momento
                     gA = pyA.geomAligned.copy()
                     gA = gA.cut([geomAligned], tolerance)
                     if len(gA.Edges) == 2:
@@ -454,11 +456,11 @@ class _PyAlignment(_Py):
                     if nG in secondRear:
                         break
                     pyPl = pyPlList[nG]
-                    if pyPl.aligned or pyPl.choped:  # reflexed?
+                    if pyPl.aligned or pyPl.choped:
                         consecutive = True
                     control = pyPl.control
                     if pyPlane.numGeom not in control:
-                        if not pyPl.aligned and not pyPl.choped:
+                        if not (pyPl.aligned or pyPl.choped):
                             # print '# nG ', nG
 
                             if not pyPlane.cross:
@@ -472,8 +474,7 @@ class _PyAlignment(_Py):
 
                                     cList = [enormousShape]
 
-                                    if nG not in baseRear and\
-                                       nG not in contRear:
+                                    if nG not in totalRear:
                                         # print 'a'
                                         if nG not in [pr, lat]:
                                             # print 'aa'
