@@ -1009,6 +1009,8 @@ class _PyPlane(_Py):
             rearedList = self.rearedList
             frontedList = self.frontedList
 
+            rangoPy = self.rangoPy
+
             if not plane:
                 (nWire, nGeom) = angle
                 pyPl = self.selectPlane(nWire, nGeom)
@@ -1044,6 +1046,8 @@ class _PyPlane(_Py):
             pyPlane.reflexedList = reflexedList
             pyPlane.rearedList = rearedList
             pyPlane.frontedList = frontedList
+
+            pyPlane.rangoPy = rangoPy
 
             self.virtuals.append(pyPlane)
 

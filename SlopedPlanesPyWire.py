@@ -183,6 +183,8 @@ class _PyWire(_Py):
                             c.append(pyPl)
                         cc.append(c)
                     pyPlane.rangoPy = cc
+                    # print 'rango ', pyPlane.rango
+                    # print 'rangoPy ', pyPlane.rangoPy
 
     def virtualizing(self):
 
@@ -311,6 +313,7 @@ class _PyWire(_Py):
 
                 # print 'rear ', rear
                 # print 'rango ', rango
+                # print 'rangoPy ', rangoPy
                 # print 'forward ', (self.roundVector(forward.firstVertex(True).Point), self.roundVector(forward.lastVertex(True).Point))
                 # print 'oppRear ', oppRear
                 # print 'oppRango ', oppRango
