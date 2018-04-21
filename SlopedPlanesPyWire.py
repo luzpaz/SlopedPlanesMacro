@@ -171,7 +171,18 @@ class _PyWire(_Py):
                 for pyReflex in self.reflexs:
                     pyReflex.rangging(self)
 
+            pyPlaneList = self.planes
 
+            for pyReflex in self.reflex:
+                for pyPlane in pyReflex.planes:
+                    cc = []
+                    for ran in pyPlane.rango:
+                        c = []
+                        for nn in ran:
+                            pyPl = pyPlaneList[nn]
+                            c.append(pyPl)
+                        cc.append(c)
+                    pyPlane.rangoPy = cc
 
     def virtualizing(self):
 
