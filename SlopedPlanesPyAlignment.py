@@ -1231,6 +1231,13 @@ class _PyAlignment(_Py):
 
                 cutterList = [shapeOne, shapeTwo]
 
+                if numChop == 0:
+
+                    shapePrior = self.prior.shape
+                    shapeLater = self.later.shape
+
+                    cutterList.extend([shapePrior, shapeLater])
+
                 simulatedC = simulatedChops[numChop]
 
                 cutterList.extend(simulatedC)

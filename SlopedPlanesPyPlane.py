@@ -1288,8 +1288,8 @@ class _PyPlane(_Py):
                     elif pyPl.reflexed:
                         # print 'd'
 
-                        '''if self.aligned:
-                            if pyPl not in (self.prior, self.later):
+                        if self.aligned:
+                            if pyPl not in [pyAlign.prior, pyAlign.later]:
 
                                 if pyPl.isSolved():
                                     # print 'd1'
@@ -1299,15 +1299,15 @@ class _PyPlane(_Py):
                                     # print 'd2'
                                     cutterList.append(pyPl.simulatedShape)
 
-                        else:'''
-
-                        if pyPl.isSolved():
-                            # print 'd1'
-                            cutterList.append(pl)
-                            control.append(pyPl.numGeom)
                         else:
-                            # print 'd2'
-                            cutterList.append(pyPl.simulatedShape)
+
+                            if pyPl.isSolved():
+                                # print 'd1'
+                                cutterList.append(pl)
+                                control.append(pyPl.numGeom)
+                            else:
+                                # print 'd2'
+                                cutterList.append(pyPl.simulatedShape)
 
                     else:
                         # print 'e'
