@@ -62,6 +62,7 @@ class _PyPlane(_Py):
         self.under = []
         self.seed = []
         self.rango = []
+        self.rangoPy = []
         self.reflexed = False
         self.aligned = False  # quitar
         self.choped = False  # quitar
@@ -364,6 +365,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._rango = rango
+
+    @property
+    def rangoPy(self):
+
+        ''''''
+
+        return self._rangoPy
+
+    @rangoPy.setter
+    def rangoPy(self, rangoPy):
+
+        ''''''
+
+        self._rangoPy = rangoPy
 
     @property
     def reflexed(self):

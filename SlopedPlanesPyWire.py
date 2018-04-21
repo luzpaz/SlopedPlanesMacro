@@ -171,7 +171,7 @@ class _PyWire(_Py):
                 for pyReflex in self.reflexs:
                     pyReflex.rangging(self)
 
-            # TODO rangoPy
+
 
     def virtualizing(self):
 

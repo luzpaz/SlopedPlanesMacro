@@ -47,7 +47,7 @@ class _PyAlignment(_Py):
         self.chops = []
         self.geomAligned = None
         self.rango = []
-        self.rangoPy = []   # TODO podría unir rango y rangoPy en un sola propiedad
+        self.rangoPy = []   # TODO podría unir rango y rangoPy en un sola propiedad como en rangoRear
         self.rangoRear = ()
         self.falsify = False
         self.simulatedAlignment = []
@@ -1624,7 +1624,9 @@ class _PyAlignment(_Py):
             nWire = pyPl.numWire
 
             pyWire = pyWireList[numWire]
+            pyPlaneList = pyWire.planes
             pyW = pyWireList[nWire]
+            pyPlList = pyW.planes
 
             if reset:
 
@@ -1632,6 +1634,24 @@ class _PyAlignment(_Py):
                     pyPlane.rangging(pyWire, 'backward')
                 if not pyPl.rango:
                     pyPl.rangging(pyW, 'forward')
+
+            cc = []
+            for ran in pyPlane.rango:
+                c = []
+                for nn in ran:
+                    pyP = pyPlaneList[nn]
+                    c.append(pyP)
+                cc.append(c)
+            pyPlane.rangoPy = cc
+
+            cc = []
+            for ran in pyPl.rango:
+                c = []
+                for nn in ran:
+                    pyP = pyPlList[nn]
+                    c.append(pyP)
+                cc.append(c)
+            pyPl.rangoPy = cc
 
             if numWire == nWire:
                 numGeom = pyPlane.numGeom

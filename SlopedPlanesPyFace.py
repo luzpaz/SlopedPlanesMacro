@@ -184,6 +184,8 @@ class _PyFace(_Py):
                 dd['_rearedList'] = []
                 dd['_reflexedList'] = []
 
+                dd['_rangoPy'] = []
+
                 if serialize:
 
                     edgeList.append(pyPlane.geomShape)
