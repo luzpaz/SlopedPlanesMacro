@@ -1164,6 +1164,27 @@ class _PyAlignment(_Py):
             chopList.append([pyOne, pyTwo])
         # print 'chopList ', chopList
 
+        # between chops
+
+        if len(pyWireList) > 1:
+
+            cList = chopList[:]
+            num = -1
+            for [pyO, pyT] in chopList:
+                num += 1
+                pop = cList.pop(num)
+                cutList = []
+                for cc in cList:
+                    for c in cc:
+                        cutList.append(c.shape)
+
+                if cutList:
+
+                    pyO.cuttingPyth(cutList)
+                    pyT.cuttingPyth(cutList)
+
+                cList.insert(num, pop)
+
         # the alignments
 
         if self.falsify:
