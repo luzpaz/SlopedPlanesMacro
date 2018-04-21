@@ -1216,14 +1216,18 @@ class _PyPlane(_Py):
 
         if self.aligned:
 
+            # SOLO PUEDE HABER UN ALINEAMIENTO !!! SHAPE
+
             pyAlignList = self.alignedList
             # print 'pyAlignList ', pyAlignList
 
-            rr = []
+            pyAlign = pyAlignList[0]
+
+            '''rr = []
             for pyA in pyAlignList:
                 # print 'pyA.rangoRear ', pyA.rangoRear
                 rr.extend(pyA.rangoRear[0])
-            # print 'rr ', rr
+            # print 'rr ', rr'''
 
         cutterList = []
         for pyPl in pyPlaneList:
@@ -1245,21 +1249,21 @@ class _PyPlane(_Py):
 
                             if self.aligned:
                                 # print 'a1'
-                                for pyAlign in pyAlignList:
+                                # for pyAlign in pyAlignList:
 
-                                    line = pyAlign.geomAligned
-                                    base = pyAlign.base.shape
+                                line = pyAlign.geomAligned
+                                base = pyAlign.base.shape
 
-                                    section = line.section([ll], tolerance)
-                                    if not section.Vertexes:
-                                        section = base.section([pl], tolerance)
-                                        if section.Edges:
-                                            common = base.common(simulAlign,
-                                                                 tolerance)
-                                            # print 'area ', common.Area
-                                            if not common.Area:
-                                                # print 'a11'
-                                                cutterList.extend(pyAli.simulatedAlignment)
+                                section = line.section([ll], tolerance)
+                                if not section.Vertexes:
+                                    section = base.section([pl], tolerance)
+                                    if section.Edges:
+                                        common = base.common(simulAlign,
+                                                             tolerance)
+                                        # print 'area ', common.Area
+                                        if not common.Area:
+                                            # print 'a11'
+                                            cutterList.extend(pyAli.simulatedAlignment)
 
                             else:
                                 # print 'a2'
@@ -1282,6 +1286,20 @@ class _PyPlane(_Py):
 
                     elif pyPl.reflexed:
                         # print 'd'
+
+                        '''if self.aligned:
+                            if pyPl not in (self.prior, self.later):
+
+                                if pyPl.isSolved():
+                                    # print 'd1'
+                                    cutterList.append(pl)
+                                    control.append(pyPl.numGeom)
+                                else:
+                                    # print 'd2'
+                                    cutterList.append(pyPl.simulatedShape)
+
+                        else:'''
+
                         if pyPl.isSolved():
                             # print 'd1'
                             cutterList.append(pl)
