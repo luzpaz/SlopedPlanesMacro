@@ -150,11 +150,11 @@ class _PyReflex(_Py):
         # print '### preProcess'
 
         pyPlaneList = pyWire.planes
-        numWire = pyWire.numWire
         refPlanes = self.planes
 
         pyR = refPlanes[0]
         rango = pyR.rango[0]
+        rangoPy = pyR.rangoPy[0]
         pyOppR = refPlanes[-1]
 
         if pyOppR.rear and pyR.rear:
@@ -173,9 +173,7 @@ class _PyReflex(_Py):
             # print 'rear ', rear
             # print 'oppRear ', oppRear
 
-            pyRango = [pyPlaneList[nG] for nG in rango]
-
-            for pyPlane in pyRango:
+            for pyPlane in rangoPy:
                 # print 'pyPlane.numGeom ', pyPlane.numGeom
                 cList = []
                 control = pyPlane.control
@@ -193,7 +191,7 @@ class _PyReflex(_Py):
                     for nG in rango:
                         num += 1
                         if nG not in total:
-                            pyPl = pyRango[num]
+                            pyPl = rangoPy[num]
                             # print 'pyPl.numGeom ', nG
 
                             if not pyPl.reflexed:
@@ -230,7 +228,7 @@ class _PyReflex(_Py):
                                         # print 'ddd2'
                                         cList.append(pyPl.simulatedShape)
 
-                if not pyPlane.reflexed and not pyPlane.fronted:
+                if not (pyPlane.reflexed or pyPlane.fronted):
                     # print 'B'
                     if pyOppR.rear and pyR.rear:
                         cutList = []
@@ -270,6 +268,7 @@ class _PyReflex(_Py):
 
             pyR = refPlanes[-1]
             rango = pyR.rango[-1]
+            rangoPy = pyR.rangoPy[-1]
             pyOppR = refPlanes[0]
 
     def reflexing(self, pyWire):
