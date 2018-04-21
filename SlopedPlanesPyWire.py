@@ -214,7 +214,7 @@ class _PyWire(_Py):
                 # print '### cutter ', pyPlane.numGeom
 
                 numGeom = pyPlane.numGeom
-                enormousShape = pyPlane.enormousShape.copy()
+                enormousShape = pyPlane.enormousShape
 
                 pyOppPlane = pyReflex.planes[num - 1]
 
@@ -235,6 +235,7 @@ class _PyWire(_Py):
                     if oppRear is not None:
                         # print 'A2'
                         oppRango = pyOppPlane.rango[-1]
+                        oppRangoPy = pyOppPlane.rango[-1]
 
                         if len(pyOppPlane.rango) > 1:
                             nextRango = pyOppPlane.rango[0]
@@ -283,6 +284,7 @@ class _PyWire(_Py):
                     if oppRear is not None:
                         # print 'B2'
                         oppRango = pyOppPlane.rango[0]
+                        oppRangoPy = pyOppPlane.rangoPy[0]
 
                         if len(pyOppPlane.rango) > 1:
                             nextRango = pyOppPlane.rango[-1]
@@ -317,6 +319,7 @@ class _PyWire(_Py):
                 # print 'forward ', (self.roundVector(forward.firstVertex(True).Point), self.roundVector(forward.lastVertex(True).Point))
                 # print 'oppRear ', oppRear
                 # print 'oppRango ', oppRango
+                # print 'oppRangoPy ', oppRangoPy
                 # print 'nextRango ', nextRango
 
                 if pyPlane.secondRear:
@@ -338,6 +341,7 @@ class _PyWire(_Py):
                             pyRearPl.doPlane(direction, geomCopy, firstParam,
                                              lastParam, scale, False)
                         gS = pyPlane.geomShape
+                        enormousShape = enormousShape.copy()
                         enormousShape =\
                             self.cutting(enormousShape, [giantPlane], gS)
                         # no esta completo: preProcessTwo
@@ -351,6 +355,7 @@ class _PyWire(_Py):
 
                         if nG in nextRango:
                             # print '0'
+                            # rango doesn't cut with nextRango G
                             control.append(numGeom)
                             pyPlane.control.append(nG)
 
@@ -382,6 +387,7 @@ class _PyWire(_Py):
                                 pyRList = pyPl.reflexedList
                                 # print pyRList
 
+                                # interference between reflexs
                                 for pyR in pyRList:
                                     # print '1'
                                     if not procc:
@@ -414,9 +420,8 @@ class _PyWire(_Py):
 
                     # rango doesn't cut with oppRango
                     if not pyPl.reflexed:
-                        for nn in oppRango:
+                        for nn, pyP in zip(oppRango, oppRangoPy):
                             if nn not in control:
-                                pyP = pyPlaneList[nn]
                                 if not pyP.reflexed:
                                     control.append(nn)
 

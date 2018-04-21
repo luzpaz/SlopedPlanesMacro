@@ -573,10 +573,13 @@ class _SlopedPlanes(_Py):
                 if hasattr(obj, "Proxy"):
                     if obj.Proxy.Type == "SlopedPlanes":
                         childShape = obj.Shape.copy()
+
                         common = endShape.common([childShape], tolerance)
                         endShape = endShape.cut([common], tolerance)
                         childShape = childShape.cut([common], tolerance)
                         endShape = Part.Compound([endShape, childShape])
+
+                        # TODO
 
         if not slopedPlanes.Complement:
             endShape.complement()

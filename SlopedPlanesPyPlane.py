@@ -62,7 +62,7 @@ class _PyPlane(_Py):
         self.under = []
         self.seed = []
         self.rango = []
-        self.rangoPy = []
+        self.rangoPy = []   # TODO unir rangos
         self.reflexed = False
         self.aligned = False  # quitar
         self.choped = False  # quitar
