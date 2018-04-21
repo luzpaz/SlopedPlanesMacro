@@ -1216,19 +1216,11 @@ class _PyPlane(_Py):
 
         if self.aligned:
 
-            # SOLO PUEDE HABER UN ALINEAMIENTO !!! SHAPE
-
             pyAlignList = self.alignedList
             # print 'pyAlignList ', pyAlignList
 
             pyAlign = pyAlignList[0]
             rr = pyAlign.rangoRear[0]
-
-            '''rr = []
-            for pyA in pyAlignList:
-                # print 'pyA.rangoRear ', pyA.rangoRear
-                rr.extend(pyA.rangoRear[0])
-            # print 'rr ', rr'''
 
         cutterList = []
         for pyPl in pyPlaneList:

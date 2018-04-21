@@ -1232,11 +1232,15 @@ class _PyAlignment(_Py):
                 cutterList = [shapeOne, shapeTwo]
 
                 if numChop == 0:
-
-                    shapePrior = self.prior.shape
-                    shapeLater = self.later.shape
-
-                    cutterList.extend([shapePrior, shapeLater])
+                    # se podría seleccionar con control
+                    prior = self.prior
+                    later = self.later
+                    if not (prior.aligned or prior.choped or prior.fronted):
+                        shapePrior = prior.shape
+                        cutterList.append(shapePrior)
+                    if not (later.aligned or later.choped or later.fronted):
+                        shapeLater = later.shape
+                        cutterList.append(shapeLater)
 
                 simulatedC = simulatedChops[numChop]
 
