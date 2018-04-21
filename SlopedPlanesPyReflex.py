@@ -294,8 +294,8 @@ class _PyReflex(_Py):
 
         numWire = pyWire.numWire
 
-        rangoCorner = []
-        rangoNext = []
+        rangoCorner, rangoCornerPy = [], []
+        rangoNext, rangoNextPy = [], []
 
         rear = pyR.rear
         if pyR.rear:
