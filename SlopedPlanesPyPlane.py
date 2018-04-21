@@ -1009,11 +1009,7 @@ class _PyPlane(_Py):
             rearedList = self.rearedList
             frontedList = self.frontedList
 
-            # provisionally
-            try:
-                rangoPy = self.rangoPy
-            except AttributeError:
-                rangoPy = []
+            rangoPy = self.rangoPy
 
             if not plane:
                 (nWire, nGeom) = angle
