@@ -303,9 +303,11 @@ class _PyReflex(_Py):
             if direction == 'forward':
                 nGeom = rear[0]
                 rangoCorner = pyR.rango[0]
+                rangoCornerPy = pyR.rangoPy[0]
             else:
                 nGeom = rear[-1]
                 rangoCorner = pyR.rango[-1]
+                rangoCornerPy = pyR.rangoPy[-1]
 
             if nGeom not in control or pyR.choped:  # or pyR.aligned:
 
@@ -324,8 +326,10 @@ class _PyReflex(_Py):
 
             if direction == 'forward':
                 rangoNext = pyOppR.rango[-1]
+                rangoNextPy = pyOppR.rangoPy[-1]
             else:
                 rangoNext = pyOppR.rango[0]
+                rangoNextPy = pyOppR.rangoPy[0]
 
             if len(oppRear) == 1:
 
@@ -345,20 +349,20 @@ class _PyReflex(_Py):
                 self.processOppRear(oppRear, direction, pyWire, pyR, pyOppR)
 
         # print 'rangoCorner ', rangoCorner
-        for nn in rangoCorner:
+        for nn, pyPl in zip(rangoCorner, rangoCornerPy):
             if nn not in control or pyR.choped:  # or pyR.aligned:
                 if nn not in oppRear:
                     # print nn
-                    self.processRango(pyWire, pyR, pyOppR, nn,
+                    self.processRango(pyWire, pyR, pyOppR, pyPl,
                                       'rangoCorner', direction)
 
         # print 'rangoNext ', rangoNext
         if len(rear) == 1:
-            for nn in rangoNext:
+            for nn, pyPl in zip(rangoNext, rangoNextPy):
                 if nn not in control or pyR.choped:  # or pyR.aligned:
                     if nn not in oppRear:
                         # print nn
-                        self.processRango(pyWire, pyR, pyOppR, nn,
+                        self.processRango(pyWire, pyR, pyOppR, pyPl,
                                           'rangoNext', direction)
 
         rangoInter = self.rango
@@ -366,7 +370,9 @@ class _PyReflex(_Py):
         for nn in rangoInter:
             if nn not in control or pyR.choped:  # or pyR.aligned:
                 # print nn
-                self.processRango(pyWire, pyR, pyOppR, nn,
+                pyPlaneList = pyWire.planes  # provisionally
+                pyPl = pyPlaneList[nn]
+                self.processRango(pyWire, pyR, pyOppR, pyPl,
                                   'rangoInter', direction)
 
     def processOppRear(self, oppRear, direction, pyWire, pyR, pyOppR):
@@ -417,9 +423,9 @@ class _PyReflex(_Py):
             pyR.cutter.append(ff)
             # print 'included oppRear rectified ', (pyWire.numWire, nGeom)
 
-    def processRango(self, pyWire, pyR, pyOppR, nn, kind, direction):
+    def processRango(self, pyWire, pyR, pyOppR, pyPl, kind, direction):
 
-        '''processRango(self, pyWire, pyR, pyOppR, nn, kind, direction)'''
+        '''processRango(self, pyWire, pyR, pyOppR, pyPl, kind, direction)'''
 
         tolerance = _Py.tolerance
         numWire = pyWire.numWire
@@ -427,7 +433,9 @@ class _PyReflex(_Py):
         numGeom = pyR.numGeom
         oppReflexEnormous = pyOppR.enormousShape
 
-        pyPl = pyPlaneList[nn]
+        nn = pyPl.numGeom
+
+        # pyPl = pyPlaneList[nn]
         gS = pyPl.geomShape
 
         if pyPl.aligned:
