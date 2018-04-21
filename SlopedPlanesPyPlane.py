@@ -1211,7 +1211,6 @@ class _PyPlane(_Py):
 
         tolerance = _Py.tolerance
         pyPlaneList = pyWire.planes
-        numWire = pyWire.numWire
         control = self.control
 
         if self.aligned:
