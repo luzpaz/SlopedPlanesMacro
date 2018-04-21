@@ -917,13 +917,12 @@ class _PyAlignment(_Py):
         tolerance = _Py.tolerance
         pyWireList = _Py.pyFace.wires
 
-        lenW = len(pyWireList)
-
         falsify = self.falsify
 
         pyBase = self.base
         base = pyBase.shape
         enormousBase = pyBase.enormousShape
+        control = pyBase.control
         aligns = self.aligns
         rangoChop = self.rango
         rangoChopPy = self.rangoPy
@@ -1233,16 +1232,19 @@ class _PyAlignment(_Py):
 
                 cutterList = [shapeOne, shapeTwo]
 
-                if numChop == 0 and lenW > 1:
-                    # se podría y debería seleccionar con control
+                if numChop == 0:
                     prior = self.prior
                     later = self.later
-                    if not (prior.aligned or prior.choped or prior.fronted):
-                        shapePrior = prior.shape
-                        cutterList.append(shapePrior)
-                    if not (later.aligned or later.choped or later.fronted):
-                        shapeLater = later.shape
-                        cutterList.append(shapeLater)
+                    if prior.numWire == pyBase.numWire:
+                        if prior.numGeom not in control:
+                            if not (prior.aligned or prior.choped or prior.fronted):
+                                shapePrior = prior.shape
+                                cutterList.append(shapePrior)
+                    if later.numWire == pyBase.numWire:
+                        if later.numGeom not in control:
+                            if not (later.aligned or later.choped or later.fronted):
+                                shapeLater = later.shape
+                                cutterList.append(shapeLater)
 
                 simulatedC = simulatedChops[numChop]
 
