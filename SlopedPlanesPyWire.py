@@ -150,7 +150,7 @@ class _PyWire(_Py):
 
         self._wire = wire
 
-    def planning(self):
+    def planning(self, reset):
 
         '''planning(self):
         Transfers to PyPlane.
@@ -167,9 +167,11 @@ class _PyWire(_Py):
                 if pyPlane.geomAligned:
                     pyPlane.planning(self)
 
-            if _Py.pyFace.reset:
+            if reset:
                 for pyReflex in self.reflexs:
                     pyReflex.rangging(self)
+
+            # TODO rangoPy
 
     def virtualizing(self):
 
@@ -199,7 +201,6 @@ class _PyWire(_Py):
                 # print '### cutter ', pyPlane.numGeom
 
                 numGeom = pyPlane.numGeom
-                numWire = pyPlane.numWire
                 enormousShape = pyPlane.enormousShape.copy()
 
                 pyOppPlane = pyReflex.planes[num - 1]

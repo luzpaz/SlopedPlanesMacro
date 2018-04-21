@@ -320,11 +320,13 @@ class _PyFace(_Py):
         pyAlignList = self.alignments
         pyWireList = self.wires
 
+        reset = self.reset
+
         for pyWire in pyWireList:
-            pyWire.planning()
+            pyWire.planning(reset)
 
         for pyAlign in pyAlignList:
-            pyAlign.rangging(self.reset)
+            pyAlign.rangging(reset)
 
         self.reset = False
 

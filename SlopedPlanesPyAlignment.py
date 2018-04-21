@@ -47,7 +47,7 @@ class _PyAlignment(_Py):
         self.chops = []
         self.geomAligned = None
         self.rango = []
-        self.rangoPy = []
+        self.rangoPy = []   # TODO podría unir rango y rangoPy en un sola propiedad
         self.rangoRear = ()
         self.falsify = False
         self.simulatedAlignment = []
@@ -259,9 +259,9 @@ class _PyAlignment(_Py):
         # print '###### trimming base ', (self.base.numWire, self.base.numGeom)
 
         pyWireList = _Py.pyFace.wires
-        falsify = self.falsify
         tolerance = _Py.tolerance
 
+        falsify = self.falsify
         geomAligned = self.geomAligned
 
         pyBase = self.base
@@ -292,7 +292,7 @@ class _PyAlignment(_Py):
         rangoRear = self.rangoRear
 
         numChop = -1
-        for rChop, rChopPy in map(None, rangoChop, rangoChopPy):
+        for rChop, rChopPy in zip(rangoChop, rangoChopPy):
             numChop += 1
             # print '### numChop ', numChop
 
@@ -303,6 +303,7 @@ class _PyAlignment(_Py):
                 rearOne = pyOne.rear[-1]
             else:
                 rearOne = None
+
             rangoTwo = pyTwo.rango[0][:]
             if pyTwo.rear:
                 rearTwo = pyTwo.rear[0]
@@ -362,7 +363,7 @@ class _PyAlignment(_Py):
                 else:
                     cutList = [enormousBase]
 
-                for nG, pyPl in map(None, rChop, rChopPy):
+                for nG, pyPl in zip(rChop, rChopPy):
                     if not pyPl.aligned:
 
                         bPl = pyPl.bigShape
@@ -370,7 +371,6 @@ class _PyAlignment(_Py):
                         bPl = self.cutting(bPl, cutList, gS)
                         pyPl.bigShape = bPl
                         pyPl.fronted = True
-
                         pyPl.frontedList.append(self)
 
                         rC.append(bPl)
@@ -379,8 +379,7 @@ class _PyAlignment(_Py):
 
                         # rChop doesn't cut with rangoRear and viceversa, if not aligned
                         if w1 == nW:
-                            for r, pyPlR in map(None, rangoRear[0],
-                                                rangoRear[1]):
+                            for r, pyPlR in zip(rangoRear[0], rangoRear[1]):
                                 if r not in control:
                                     control.append(r)
 
@@ -441,11 +440,12 @@ class _PyAlignment(_Py):
                 # the cross
                 if pyPlane.virtualized:
                     aliList = pyPlane.alignedList
-                    for pyA in aliList:
-                        gA = pyA.geomAligned.copy()
-                        gA = gA.cut([geomAligned], tolerance)
-                        if len(gA.Edges) == 2:
-                            pyPlane.cross = True
+                    pyA = aliList[0]
+                    # for pyA in aliList:
+                    gA = pyA.geomAligned.copy()
+                    gA = gA.cut([geomAligned], tolerance)
+                    if len(gA.Edges) == 2:
+                        pyPlane.cross = True
                 # print 'cross ', pyPlane.cross
 
                 # consecutives
@@ -523,8 +523,6 @@ class _PyAlignment(_Py):
 
             # TODO falseAlignment base and continuation don't cut opp rango ???
             # pero si con rear y entre rears
-
-        # self.printControl(str(self.base.numGeom))
 
     def priorLater(self):
 
