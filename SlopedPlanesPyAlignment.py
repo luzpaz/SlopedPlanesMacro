@@ -593,10 +593,6 @@ class _PyAlignment(_Py):
                     cutterList.append(pyA.base.bigShape)
                     control.append(pr)
 
-                '''elif ((not pyPrior.reflexed) or
-                  (pyPrior.choped) or
-                  (not pyPrior.rear)):'''
-
             elif not pyPrior.reflexed or pyPrior.choped:
 
                 # print '1'
@@ -615,10 +611,6 @@ class _PyAlignment(_Py):
                     # print '201'
                     cutterList.append(pyA.base.bigShape)
                     control.append(lat)
-
-                '''elif ((not pyLater.reflexed) or
-                      (pyLater.choped) or
-                      (not pyLater.rear)):'''
 
             elif not pyLater.reflexed or pyLater.choped:
 

@@ -458,7 +458,7 @@ class _PyWire(_Py):
                 cutterList = []     # shape
                 cutList = []        # simulatedShape
 
-                if pyPlane.arrow:       # and reflex?
+                if pyPlane.arrow:
                     # print 'A arrow'
 
                     if prior not in control:
