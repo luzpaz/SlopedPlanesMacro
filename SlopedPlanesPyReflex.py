@@ -598,6 +598,7 @@ class _PyReflex(_Py):
 
         enorm = []    # auxiliar to clean the figure bottom
         rangoCorner = None
+        rangoCorrnerPy = None
         rear = pyR.rear
         oppRear = pyOppR.rear
 
@@ -608,6 +609,7 @@ class _PyReflex(_Py):
                 if oppRear:
                     oppRr = pyPlaneList[oppRear[-1]]
                 rangoCorner = pyR.rango[0]
+                rangoCornerPy = pyR.rangoPy[0]
                 forward = pyR.forward
                 backward = pyR.backward
 
@@ -616,6 +618,7 @@ class _PyReflex(_Py):
                 if oppRear:
                     oppRr = pyPlaneList[oppRear[0]]
                 rangoCorner = pyR.rango[-1]
+                rangoCornerPy = pyR.rangoPy[-1]
                 if len(rear) == 1:
                     forward = pyR.forward
                     backward = pyR.backward
@@ -659,9 +662,8 @@ class _PyReflex(_Py):
                     enormous.extend(oppRS)
 
             corn = []    # auxiliar to look for extra faces
-            for nn in rangoCorner:
+            for nn, pyPl in zip(rangoCorner, rangoCornerPy):
                 # print 'rangoCorner nn ', nn
-                pyPl = pyPlaneList[nn]
                 if pyPl.aligned:
                     # print 'a'
                     pyAlign = pyPl.selectAlignmentBase()
