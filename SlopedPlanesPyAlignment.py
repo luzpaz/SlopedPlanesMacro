@@ -1653,6 +1653,7 @@ class _PyAlignment(_Py):
                 cc.append(c)
             pyPl.rangoPy = cc
 
+
             if numWire == nWire:
                 numGeom = pyPlane.numGeom
                 nGeom = pyPl.numGeom

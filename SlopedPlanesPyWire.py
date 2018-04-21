@@ -227,6 +227,7 @@ class _PyWire(_Py):
                     if rear is not None:
                         # print 'A1'
                         rango = pyPlane.rango[0]
+                        rangoPy = pyPlane.rangoPy[0]
                         forward = pyPlane.forward
 
                     if oppRear is not None:
@@ -269,6 +270,7 @@ class _PyWire(_Py):
                     if rear is not None:
                         # print 'B1'
                         rango = pyPlane.rango[-1]
+                        rangoPy = pyPlane.rangoPy[-1]
                         if len(pyPlane.rango) == 1:
                             # print 'B11'
                             forward = pyPlane.forward
@@ -337,8 +339,8 @@ class _PyWire(_Py):
                             self.cutting(enormousShape, [giantPlane], gS)
                         # no esta completo: preProcessTwo
 
-                for nG in rango:
-                    pyPl = pyPlaneList[nG]
+                for nG, pyPl in zip(rango, rangoPy):
+                    # pyPl = pyPlaneList[nG]
                     control = pyPl.control
 
                     if numGeom not in control:
