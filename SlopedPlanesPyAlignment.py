@@ -917,6 +917,8 @@ class _PyAlignment(_Py):
         tolerance = _Py.tolerance
         pyWireList = _Py.pyFace.wires
 
+        lenW = len(pyWireList)
+
         falsify = self.falsify
 
         pyBase = self.base
@@ -1231,8 +1233,8 @@ class _PyAlignment(_Py):
 
                 cutterList = [shapeOne, shapeTwo]
 
-                if numChop == 0:
-                    # se podría seleccionar con control
+                if numChop == 0 and lenW > 1:
+                    # se podría y debería seleccionar con control
                     prior = self.prior
                     later = self.later
                     if not (prior.aligned or prior.choped or prior.fronted):
