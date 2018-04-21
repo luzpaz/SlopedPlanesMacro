@@ -216,7 +216,7 @@ class _PyWire(_Py):
 
                 pyOppPlane = pyReflex.planes[num - 1]
 
-                rango, oppRango, nextRango = [], [], []
+                rango, rangoPy, oppRango, nextRango = [], [], [], []
 
                 if num == 0:
                     # print 'A'
