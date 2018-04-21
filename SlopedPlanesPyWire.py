@@ -235,7 +235,7 @@ class _PyWire(_Py):
                     if oppRear is not None:
                         # print 'A2'
                         oppRango = pyOppPlane.rango[-1]
-                        oppRangoPy = pyOppPlane.rango[-1]
+                        oppRangoPy = pyOppPlane.rangoPy[-1]
 
                         if len(pyOppPlane.rango) > 1:
                             nextRango = pyOppPlane.rango[0]
