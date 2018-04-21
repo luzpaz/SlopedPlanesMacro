@@ -598,7 +598,7 @@ class _PyReflex(_Py):
 
         enorm = []    # auxiliar to clean the figure bottom
         rangoCorner = None
-        rangoCorrnerPy = None
+        rangoCornerPy = None
         rear = pyR.rear
         oppRear = pyOppR.rear
 
