@@ -1260,7 +1260,8 @@ class _PyPlane(_Py):
 
                             else:
                                 # print 'a2'
-                                cutterList.extend(pyAli.simulatedAlignment)
+                                if pyAli in self.rearedList:
+                                    cutterList.extend(pyAli.simulatedAlignment)
 
                     elif pyPl.choped:
                         # print 'b'
@@ -1310,8 +1311,6 @@ class _PyPlane(_Py):
             # print 'cutterList ', cutterList,  # [sh.Area for sh in cutterList]
             plane = self.shape.copy()
             gS = self.geomShape
-
-            # self.printPlaneSummary()
 
             if self.reflexed and not self.aligned:
                 # print '1'
