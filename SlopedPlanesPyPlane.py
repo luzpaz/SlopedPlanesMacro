@@ -1222,6 +1222,7 @@ class _PyPlane(_Py):
             # print 'pyAlignList ', pyAlignList
 
             pyAlign = pyAlignList[0]
+            rr = pyAlign.rangoRear[0]
 
             '''rr = []
             for pyA in pyAlignList:
