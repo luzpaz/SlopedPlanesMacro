@@ -943,6 +943,7 @@ class _PyAlignment(_Py):
             # print 'simulatedC ', simulatedC
 
             rangoOne = pyOne.rango[-1]
+            rangoOnePy = pyOne.rangoPy[-1]
             # print 'rangoOne ', rangoOne
             numOne = pyOne.numWire
             pyWireOne = pyWireList[numOne]
@@ -952,6 +953,7 @@ class _PyAlignment(_Py):
                 pyPlOne = pyPlaneListOne[rearOne]
 
             rangoTwo = pyTwo.rango[0]
+            rangoTwoPy = pyTwo.rangoPy[0]
             # print 'rangoTwo ', rangoTwo
             numTwo = pyTwo.numWire
             pyWireTwo = pyWireList[numTwo]
@@ -961,12 +963,12 @@ class _PyAlignment(_Py):
                 pyPlTwo = pyPlaneListTwo[rearTwo]
 
             rCOne, cListOne, oppCListOne =\
-                self.processRango(rangoOne, pyPlaneListOne, pyOne,
+                self.processRango(rangoOne, rangoOnePy, pyOne,
                                   numOne, enormousBase)
             # print rCOne, cListOne, oppCListOne
 
             rCTwo, cListTwo, oppCListTwo =\
-                self.processRango(rangoTwo, pyPlaneListTwo, pyTwo,
+                self.processRango(rangoTwo, rangoTwoPy, pyTwo,
                                   numTwo, enormousBase)
             # print rCTwo, cListTwo, oppCListTwo
 
@@ -1350,16 +1352,15 @@ class _PyAlignment(_Py):
                         pyPl.cuttingPyth(cutList)
                         # print 'rangoChop ', nn
 
-    def processRango(self, rango, pyPlaneList, pyPlane, numWire, enormousBase):
+    def processRango(self, rango, rangoPy, pyPlane, numWire, enormousBase):
 
         '''processRango(self, rango, pyPlaneList, pyPlane, numWire, enormousBase)'''
 
         control = pyPlane.control
         rC, cutList, oppCutList = [], [], []
-        for nn in rango:
+        for nn, pyPl in zip(rango, rangoPy):
             # print 'nn ',nn
             if nn not in control:
-                pyPl = pyPlaneList[nn]
 
                 if pyPl.aligned:
                     # print 'a'
