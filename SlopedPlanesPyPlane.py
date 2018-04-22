@@ -1111,33 +1111,31 @@ class _PyPlane(_Py):
         tolerance = _Py.tolerance
         plane = self.shape
 
+        forward = self.forward
+
         if direction == "forward":
             pyOppPlane = pyReflex.planes[1]
             rear = self.rear[0]
-            rr = pyReflex.rear[0]
 
-            # print(rr, rear)
+            if len(self.rear) > 1:
 
-            if rr == rear:
-                # print 'forw'
-                forward = self.forward
-            else:
-                # print 'backw'
-                forward = self.backward
+                rr = pyReflex.rear[0]
+                # print(rr, rear)
+                if rr != rear:
+                    # print 'backw'
+                    forward = self.backward
 
         else:
             pyOppPlane = pyReflex.planes[0]
             rear = self.rear[-1]
-            rr = pyReflex.rear[-1]
 
-            # print(rr, rear)
+            if len(self.rear) > 1:
 
-            if rr == rear:
-                # print 'backw'
-                forward = self.backward
-            else:
-                # print 'forw'
-                forward = self.forward
+                rr = pyReflex.rear[-1]
+                # print(rr, rear)
+                if rr == rear:
+                    # print 'backw'
+                    forward = self.backward
 
         pyPlaneList = pyWire.planes
 
@@ -1149,14 +1147,6 @@ class _PyPlane(_Py):
 
         if not self.isSolved():
             # print 'fo'
-
-            '''forward = self.forward
-            # TODO C
-
-            # alignments with reflexs
-            if self.virtualized:
-                if direction == 'backward':
-                    forward = self.backward'''
 
             section = plane.section([forward], tolerance)
             if section.Edges:
