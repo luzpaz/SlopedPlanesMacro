@@ -44,7 +44,7 @@ __version__ = ""
 def makeSlopedPlanes(sketch):
 
     '''makeSlopedPlanes(sketch)
-    makes the SlopedPlanes object from a sketch or a DWire'''
+    makes the SlopedPlanes object from a sketch or a DWire.'''
 
     if hasattr(sketch, 'Proxy'):
         if sketch.Proxy.Type != 'Wire':
