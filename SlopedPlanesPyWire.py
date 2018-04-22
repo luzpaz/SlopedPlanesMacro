@@ -586,7 +586,7 @@ class _PyWire(_Py):
         # self.printControl('solveReflex')
 
         for pyReflex in self.reflexs:
-            pyReflex.postProcess(self) 
+            pyReflex.postProcess(self)
         # self.printControl('postProcess')
 
         for pyReflex in self.reflexs:
