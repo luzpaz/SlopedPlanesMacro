@@ -1111,6 +1111,8 @@ class _PyPlane(_Py):
         tolerance = _Py.tolerance
         plane = self.shape
 
+        # TODO pasar forward backward para PyReflex
+
         forward = self.forward
 
         if direction == "forward":
@@ -1129,7 +1131,11 @@ class _PyPlane(_Py):
             pyOppPlane = pyReflex.planes[0]
             rear = self.rear[-1]
 
-            if len(self.rear) > 1:
+            # alignments with reflexs
+            if self.virtualized:
+                forward = self.backward
+
+            elif len(self.rear) > 1:
 
                 rr = pyReflex.rear[-1]
                 # print(rr, rear)
