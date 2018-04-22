@@ -348,13 +348,12 @@ class _PyWire(_Py):
                         # no esta completo: preProcessTwo
 
                 for nG, pyPl in zip(rango, rangoPy):
-                    # pyPl = pyPlaneList[nG]
                     control = pyPl.control
 
                     if numGeom not in control:
                         # print '# cutted ', nG
 
-                        if nG in nextRango:
+                        if not pyPl.aligned and nG in nextRango:
                             # print '0'
                             # rango doesn't cut with nextRango G
                             control.append(numGeom)

@@ -1245,7 +1245,7 @@ class _PyPlane(_Py):
             nGeom = pyPl.numGeom
             if nGeom not in control:
                 pl = pyPl.shape
-                if pl:  # ???
+                if pl:
                     # print '### numGeom ', pyPl.numGeom
 
                     if pyPl.aligned:
@@ -1313,11 +1313,11 @@ class _PyPlane(_Py):
                         else:
 
                             if pyPl.isSolved():
-                                # print 'd1'
+                                # print 'd11'
                                 cutterList.append(pl)
                                 control.append(pyPl.numGeom)
                             else:
-                                # print 'd2'
+                                # print 'd22'
                                 cutterList.append(pyPl.simulatedShape)
 
                     else:
