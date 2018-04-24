@@ -45,6 +45,7 @@ class _PyReflex(_Py):
         self.planes = []
         self.rango = []
         self.rear = []
+        self.lines = []
 
     @property
     def planes(self):
@@ -87,6 +88,20 @@ class _PyReflex(_Py):
         ''''''
 
         self._rear = rear
+
+    @property
+    def lines(self):
+
+        ''''''
+
+        return self._lines
+
+    @lines.setter
+    def lines(self, lines):
+
+        ''''''
+
+        self._lines = lines
 
     def virtualizing(self):
 

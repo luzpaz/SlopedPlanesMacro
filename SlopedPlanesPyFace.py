@@ -151,6 +151,9 @@ class _PyFace(_Py):
             dct['_shapeGeom'] = []
             dct['_wire'] = None
 
+            for pyReflex in pyWire.reflexs:
+                pyReflex.lines = []
+
             if serialize:
                 edgeList = []
                 forBack = []

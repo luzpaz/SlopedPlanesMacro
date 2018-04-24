@@ -175,6 +175,9 @@ class _PyWire(_Py):
 
             for pyReflex in self.reflexs:
                 for pyPlane in pyReflex.planes:
+
+
+
                     cc = []
                     for ran in pyPlane.rango:
                         c = []
