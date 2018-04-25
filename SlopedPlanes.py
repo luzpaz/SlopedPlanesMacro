@@ -618,11 +618,16 @@ class _SlopedPlanes(_Py):
                             childShape = childShape.cut([common], tolerance)
 
                             for ff in zip(sPEdges, objEdges):
-                                
+                                pass
+
+                        # makes a shell for every planes list, compunds them, and the end
+
+                        '''shellList = []
+                        for planeList in figList:
+                            shell = Part.makeShell(planeList)
+                            shellList.append(shell)'''
 
                         endShape = Part.Compound([endShape, childShape])
-
-                        # TODO
 
         if not slopedPlanes.Complement:
             endShape.complement()
