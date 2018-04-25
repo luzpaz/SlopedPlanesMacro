@@ -371,7 +371,7 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             pyAlign.simulatingChops()
 
-        ''''for pyAlign in pyAlignList:
+        for pyAlign in pyAlignList:
             pyAlign.simulatingAlignment()
 
         # self.printControl('simulating')
@@ -410,7 +410,7 @@ class _PyFace(_Py):
         '''parsing(self)
         Splits the pyFace object finding its reflex corners and alignments.'''
 
-        print '######### parsing'
+        # print '######### parsing'
 
         resetFace = self.reset
         # print 'resetFace ', resetFace

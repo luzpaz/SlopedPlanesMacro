@@ -231,7 +231,7 @@ class _PyAlignment(_Py):
         Virtualizes the base of falsify alignnments which belongs to
         other alignment.'''
 
-        print '###### virtualizing alignment', (self.base.numWire, self.base.numGeom)
+        # print '###### virtualizing alignment', (self.base.numWire, self.base.numGeom)
 
         virtualizedChops = []
         for [pyChopOne, pyChopTwo] in self.chops:
@@ -723,23 +723,23 @@ class _PyAlignment(_Py):
                 pyTwo.simulating([enormousBase])
 
             if pyOne.virtualized:
-                pyO = self.selectPlane(pyOne.numWire, pyOne.numGeom)
+                pyO = self.selectBasePlane(pyOne.numWire, pyOne.numGeom)
                 # print 'pyO', (pyO.numWire, pyO.numGeom)
-                if pyO.shape:
-                    # print '1'
-                    pyO.simulating([enormousBase])
+                #if pyO.shape:
+                # print '1'
+                pyO.simulating([enormousBase])
 
             if pyTwo.virtualized:
-                pyT = self.selectPlane(pyTwo.numWire, pyTwo.numGeom)
+                pyT = self.selectBasePlane(pyTwo.numWire, pyTwo.numGeom)
                 # print 'pyT', (pyT.numWire, pyT.numGeom)
-                if pyT.shape:
-                    # print '2'
-                    if falsify:
-                        # print '21'
-                        pyT.simulating([enormousCont])
-                    else:
-                        # print '22'
-                        pyT.simulating([enormousBase])
+                #if pyT.shape:
+                # print '2'
+                if falsify:
+                    # print '21'
+                    pyT.simulating([enormousCont])
+                else:
+                    # print '22'
+                    pyT.simulating([enormousBase])
 
             rChop = rangoChop[numChop]
             rChopPy = rangoChopPy[numChop]
@@ -804,16 +804,16 @@ class _PyAlignment(_Py):
                 pyTwo.cuttingPyth(cutList)
 
                 if pyOne.virtualized:
-                    if pyO.shape:
-                        # print 'pyO'
-                        pyO.cuttingPyth(cutList)
-                        pyO.simulating(cutList)
+                    #if pyO.shape:
+                    # print 'pyO'
+                    pyO.cuttingPyth(cutList)
+                    pyO.simulating(cutList)
 
                 if pyTwo.virtualized:
-                    if pyT.shape:
-                        # print 'pyT'
-                        pyT.cuttingPyth(cutList)
-                        pyT.simulating(cutList)
+                    #if pyT.shape:
+                    # print 'pyT'
+                    pyT.cuttingPyth(cutList)
+                    pyT.simulating(cutList)
 
             simulatedChops.append(cList)
             # print 'cList ', cList
