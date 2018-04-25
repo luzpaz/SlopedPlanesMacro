@@ -258,6 +258,8 @@ class _PyAlignment(_Py):
 
         # print '###### trimming base ', (self.base.numWire, self.base.numGeom)
 
+        # self.printControl(str(self.base.numGeom))
+
         pyWireList = _Py.pyFace.wires
         tolerance = _Py.tolerance
 
@@ -722,36 +724,48 @@ class _PyAlignment(_Py):
 
             if pyOne.virtualized:
                 pyO = self.selectPlane(pyOne.numWire, pyOne.numGeom)
+                # print 'pyO', (pyO.numWire, pyO.numGeom)
                 if pyO.shape:
+                    # print '1'
                     pyO.simulating([enormousBase])
 
             if pyTwo.virtualized:
                 pyT = self.selectPlane(pyTwo.numWire, pyTwo.numGeom)
+                # print 'pyT', (pyT.numWire, pyT.numGeom)
                 if pyT.shape:
+                    # print '2'
                     if falsify:
+                        # print '21'
                         pyT.simulating([enormousCont])
                     else:
+                        # print '22'
                         pyT.simulating([enormousBase])
 
             rChop = rangoChop[numChop]
             rChopPy = rangoChopPy[numChop]
+
+            # print 'rChop ', rChop
 
             cutList = []
             for rr, pyPl in map(None, rChop, rChopPy):
                 if not pyPl.aligned and not pyPl.choped:
 
                     if pyPl.reflexed:
+                        # print 'pyPl.numGeom reflexed ', pyPl.numGeom
                         pl = pyPl.simulatedShape
                         cutList.append(pl)
 
                     else:
+                        # print 'pyPl.numGeom ', pyPl.numGeom
                         pl = pyPl.bigShape.copy()
                         gS = pyPl.geomShape
 
                         if rr in rrOne:
+                            # print 'rrOne'
                             pl = self.cutting(pl, [oppEnormousOne], gS)
 
                         if rr in rrTwo:
+                            # print 'rrTwo'
                             pl = self.cutting(pl, [oppEnormousTwo], gS)
 
                         cutList.append(pl)
@@ -759,6 +773,7 @@ class _PyAlignment(_Py):
             cList = []
 
             if cutList:
+                # print 'cutList ', cutList
 
                 bb = self.base.seedShape.copy()
 
@@ -790,15 +805,18 @@ class _PyAlignment(_Py):
 
                 if pyOne.virtualized:
                     if pyO.shape:
+                        # print 'pyO'
                         pyO.cuttingPyth(cutList)
                         pyO.simulating(cutList)
 
                 if pyTwo.virtualized:
                     if pyT.shape:
+                        # print 'pyT'
                         pyT.cuttingPyth(cutList)
                         pyT.simulating(cutList)
 
             simulatedChops.append(cList)
+            # print 'cList ', cList
 
         self.simulatedChops = simulatedChops
 

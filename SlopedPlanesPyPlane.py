@@ -751,6 +751,8 @@ class _PyPlane(_Py):
             self.cutter = []
             self.under = []
             self.seed = []
+            self.virtuals = []
+            self.virtualized = False
 
         if self.seedShape:
             # print '### seed'

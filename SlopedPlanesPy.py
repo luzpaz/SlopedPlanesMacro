@@ -218,6 +218,7 @@ class _Py(object):
             # print 'shape ', pyAlignment.base.shape
             print 'falsify ', pyAlignment.falsify
             print 'virtualized ', pyAlignment.base.virtualized
+            print 'cross ', pyAlignment.base.cross
             print 'rangoChop ', pyAlignment.rango
             print 'rangoRear ', pyAlignment.rangoRear[0]
             print 'prior ', pyAlignment.prior.numGeom
@@ -233,6 +234,7 @@ class _Py(object):
                     print 'secondRear ', pyPlane.secondRear
                     print 'rango ', pyPlane.rango
                     print 'virtualized ', pyPlane.virtualized
+                    print 'cross ', pyPlane.cross
 
             print '*** aligns ', [(x.numWire, x.numGeom) for x in pyAlignment.aligns]
             for align in pyAlignment.aligns:
@@ -242,6 +244,7 @@ class _Py(object):
                 print 'rango ', align.rango
                 print 'angle ', align.angle
                 print 'virtualized ', align.virtualized
+                print 'cross ', align.cross
                 # print 'geom ', align.geom
                 # print 'geomAligned ', align.geomAligned
                 # print 'shape ', align.shape

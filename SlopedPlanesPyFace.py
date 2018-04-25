@@ -345,6 +345,8 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             pyAlign.virtualizing()
 
+        # self.printSummary()
+
         for pyWire in pyWireList:
             pyWire.trimming()
         # self.printControl('trimming reflexs')
@@ -360,6 +362,8 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             pyAlign.priorLater()
         # self.printControl('priorLater alignments')
+
+        # self.printSummary()
 
         for pyWire in pyWireList:
             pyWire.simulating()
