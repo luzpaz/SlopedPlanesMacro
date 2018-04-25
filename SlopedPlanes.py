@@ -449,6 +449,10 @@ class _SlopedPlanes(_Py):
                 _Py.pyFace = pyFace
 
                 for pyWire in pyFace.wires:
+
+                    wire = Part.Wire(pyWire.shapeGeom)
+                    pyWire.wire = wire
+
                     for pyPlane in pyWire.planes:
                         pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
