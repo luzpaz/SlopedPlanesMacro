@@ -164,7 +164,6 @@ class _PyWire(_Py):
         else:
 
             for pyPlane in self.planes:
-                # if pyPlane.geomAligned:
                 pyPlane.planning(self)
 
             if reset:

@@ -724,15 +724,11 @@ class _PyAlignment(_Py):
 
             if pyOne.virtualized:
                 pyO = self.selectBasePlane(pyOne.numWire, pyOne.numGeom)
-                # print 'pyO', (pyO.numWire, pyO.numGeom)
-                #if pyO.shape:
                 # print '1'
                 pyO.simulating([enormousBase])
 
             if pyTwo.virtualized:
                 pyT = self.selectBasePlane(pyTwo.numWire, pyTwo.numGeom)
-                # print 'pyT', (pyT.numWire, pyT.numGeom)
-                #if pyT.shape:
                 # print '2'
                 if falsify:
                     # print '21'
@@ -804,13 +800,11 @@ class _PyAlignment(_Py):
                 pyTwo.cuttingPyth(cutList)
 
                 if pyOne.virtualized:
-                    #if pyO.shape:
                     # print 'pyO'
                     pyO.cuttingPyth(cutList)
                     pyO.simulating(cutList)
 
                 if pyTwo.virtualized:
-                    #if pyT.shape:
                     # print 'pyT'
                     pyT.cuttingPyth(cutList)
                     pyT.simulating(cutList)
