@@ -575,8 +575,51 @@ class _SlopedPlanes(_Py):
                         childShape = obj.Shape.copy()
 
                         common = endShape.common([childShape], tolerance)
-                        endShape = endShape.cut([common], tolerance)
-                        childShape = childShape.cut([common], tolerance)
+
+                        if common.Area:
+
+                            sPEdges = []
+                            objEdges = []
+
+                            for ff in common.Faces:
+
+                                oEdges = []
+                                for pyFace in obj.Proxy.Pyth:
+                                    for pyWire in pyFace.wires:
+                                        for pyPl in pyWire.planes:
+                                            gS = pyPl.geomShape
+                                            if gS:
+                                                section = ff.section([gS],
+                                                                     tolerance)
+                                                if section.Edges:
+                                                    oEdges.append(pyPl.numGeom)
+
+                                objEdges.append(oEdges)
+                                # print 'oEdges ', oEdges
+
+                                sEdges = []
+                                for pyFace in slopedPlanes.Proxy.Pyth:
+                                    for pyWire in pyFace.wires:
+                                        for pyPl in pyWire.planes:
+                                            gS = pyPl.geomShape
+                                            if gS:
+                                                section = ff.section([gS],
+                                                                     tolerance)
+                                                if section.Edges:
+                                                    sEdges.append(pyPl.numGeom)
+
+                                sPEdges.append(sEdges)
+                                # print 'sEdges ', sEdges
+
+                            print 'sPEdges ', sPEdges
+                            print 'objEdges ', objEdges
+
+                            endShape = endShape.cut([common], tolerance)
+                            childShape = childShape.cut([common], tolerance)
+
+                            for ff in zip(sPEdges, objEdges):
+                                
+
                         endShape = Part.Compound([endShape, childShape])
 
                         # TODO
