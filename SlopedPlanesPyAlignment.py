@@ -231,7 +231,7 @@ class _PyAlignment(_Py):
         Virtualizes the base of falsify alignnments which belongs to
         other alignment.'''
 
-        # print '###### virtualizing alignment', (self.base.numWire, self.base.numGeom)
+        print '###### virtualizing alignment', (self.base.numWire, self.base.numGeom)
 
         virtualizedChops = []
         for [pyChopOne, pyChopTwo] in self.chops:

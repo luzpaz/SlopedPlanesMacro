@@ -744,15 +744,19 @@ class _PyPlane(_Py):
         '''
 
         numGeom = self.numGeom
-        # print '### planning ', numGeom
+        print '### planning ', numGeom
 
         if self.reflexed:
+            print 'reflexed'
             self.simulatedShape = None
             self.cutter = []
             self.under = []
             self.seed = []
             self.virtuals = []
             self.virtualized = False
+
+        if not self.geomAligned:
+            return
 
         if self.seedShape:
             # print '### seed'
@@ -987,7 +991,7 @@ class _PyPlane(_Py):
 
             # TODO change to copy dictionary
 
-            # print '# virtualizing ', (self.numWire, self.numGeom)
+            print '# virtualizing ', (self.numWire, self.numGeom)
 
             [numWire, numGeom] = [self.numWire, self.numGeom]
             plane = self.shape
