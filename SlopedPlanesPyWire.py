@@ -358,6 +358,7 @@ class _PyWire(_Py):
                         if not pyPl.aligned and nG in nextRango:
                             # print '0'
                             # rango doesn't cut with nextRango G
+                            # incomplete
                             control.append(numGeom)
                             pyPlane.control.append(nG)
 
