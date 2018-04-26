@@ -1007,6 +1007,8 @@ class _PyFace(_Py):
                 pyPlane.addValue('secondRear', sGeom, direction)
                 # print 'sGeom ', sGeom
 
+        # TODO backRear
+
         # arrow
 
         if direction == 'forward':

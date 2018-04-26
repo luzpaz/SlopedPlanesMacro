@@ -152,7 +152,7 @@ class _PyWire(_Py):
 
     def planning(self, reset):
 
-        '''planning(self):
+        '''planning(self, reset):
         Transfers to PyPlane.
         Arranges the reflex range and its planes ranges.'''
 
@@ -163,16 +163,18 @@ class _PyWire(_Py):
 
         else:
 
+            reflexList = self.reflexs
+
             for pyPlane in self.planes:
                 pyPlane.planning(self)
 
             if reset:
-                for pyReflex in self.reflexs:
+                for pyReflex in reflexList:
                     pyReflex.rangging(self)
 
             pyPlaneList = self.planes
 
-            for pyReflex in self.reflexs:
+            for pyReflex in reflexList:
                 for pyPlane in pyReflex.planes:
 
                     cc = []
@@ -192,12 +194,12 @@ class _PyWire(_Py):
 
         # print '###### virtualizing wire', (self.numWire)
 
-        refList = self.reflexs[:]
-        refList.reverse()
+        reflexList = self.reflexs[:]
+        reflexList.reverse()
 
         controlList = []
 
-        for pyReflex in refList:
+        for pyReflex in reflexList:
 
             [pyR, pyOppR] = pyReflex.planes
 
