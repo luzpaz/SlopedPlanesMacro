@@ -438,7 +438,7 @@ class _PyWire(_Py):
         numWire = self.numWire
 
         for pyPlane in pyPlaneList:
-            if not (pyPlane.aligned or pyPlane.choped):
+            if not pyPlane.aligned:
 
                 numGeom = pyPlane.numGeom
                 control = pyPlane.control
