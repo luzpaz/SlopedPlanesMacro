@@ -417,11 +417,16 @@ class _PyWire(_Py):
                                     # print '1'
                                     if not procc:
                                         break
+                                    nn = -1
                                     for pyP in pyR.planes:
+                                        nn += 1
                                         # print '2'
                                         if pyP != pyPl:
                                             # print '3'
-                                            fo = pyP.forward
+                                            # fo = pyP.forward
+
+                                            fo = pyR.lines[nn]
+
                                             section =\
                                                 fo.section([forward],
                                                            tolerance)     # no deberia seleccionar C?
