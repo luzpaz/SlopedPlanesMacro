@@ -200,9 +200,7 @@ class _SlopedPlanes(_Py):
 
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
-        sketchBase = sketch.Placement.Base
-        sketchAxis = sketch.Placement.Rotation.Axis
-        sketchAngle = sketch.Placement.Rotation.Angle
+        placement = sketch.Placement
         shape.Placement = FreeCAD.Placement()
 
         _Py.slopedPlanes = slopedPlanes
@@ -557,9 +555,7 @@ class _SlopedPlanes(_Py):
                 planeFaceList.extend(mirror.Faces)
 
             for plane in planeFaceList:
-                plane.rotate(FreeCAD.Vector(0, 0, 0), sketchAxis,
-                             degrees(sketchAngle))
-                plane.translate(sketchBase)
+                plane.Placement = placement
 
             figList.append(planeFaceList)
 

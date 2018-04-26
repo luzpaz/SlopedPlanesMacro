@@ -636,6 +636,7 @@ class _PyReflex(_Py):
                     oppRr = pyPlaneList[oppRear[0]]
                 rangoCorner = pyR.rango[-1]
                 rangoCornerPy = pyR.rangoPy[-1]
+
                 if len(rear) == 1:
                     forward = pyR.forward
                     backward = pyR.backward

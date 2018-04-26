@@ -429,7 +429,7 @@ class _PyWire(_Py):
 
                                             section =\
                                                 fo.section([forward],
-                                                           tolerance)     # no deberia seleccionar C?
+                                                           tolerance)
                                             if section.Vertexes:
                                                 # print '4'
                                                 procc = False
