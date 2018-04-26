@@ -247,11 +247,13 @@ class _PyWire(_Py):
                     rear = pyReflex.rear[0]
                     oppRear = pyReflex.rear[1]
 
+                    forward = pyReflex.lines[0]
+
                     if rear is not None:
                         # print 'A1'
                         rango = pyPlane.rango[0]
                         rangoPy = pyPlane.rangoPy[0]
-                        forward = pyPlane.forward
+                        # forward = pyPlane.forward
 
                     if oppRear is not None:
                         # print 'A2'
@@ -291,16 +293,18 @@ class _PyWire(_Py):
                     rear = pyReflex.rear[1]
                     oppRear = pyReflex.rear[0]
 
+                    forward = pyReflex.lines[-1]
+
                     if rear is not None:
                         # print 'B1'
                         rango = pyPlane.rango[-1]
                         rangoPy = pyPlane.rangoPy[-1]
-                        if len(pyPlane.rango) == 1:
+                        '''if len(pyPlane.rango) == 1:
                             # print 'B11'
                             forward = pyPlane.forward
                         else:
                             # print 'B12'
-                            forward = pyPlane.backward
+                            forward = pyPlane.backward'''
 
                     if oppRear is not None:
                         # print 'B2'
