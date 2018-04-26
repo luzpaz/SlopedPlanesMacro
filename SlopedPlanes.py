@@ -326,7 +326,7 @@ class _SlopedPlanes(_Py):
                 pyWireListNew = []
                 geomShapeFace = []
                 numWire = -1
-                for wire in wireList:
+                for wire, geomWire in zip(wireList, gList):
                     numWire += 1
                     # print '###### numWire ', numWire
                     coo = coordinates[numWire]
@@ -351,8 +351,8 @@ class _SlopedPlanes(_Py):
                         pyFace.reset = True
                     pyWire.coordinates = coo
 
-                    geomWire = gList[numWire]
-                    # print 'geomWire ', geomWire
+                    '''geomWire = gList[numWire]
+                    # print 'geomWire ', geomWire'''
 
                     pyPlaneListOld = pyWire.planes
                     pyPlaneListNew = []
