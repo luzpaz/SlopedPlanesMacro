@@ -65,7 +65,7 @@ class _Py(object):
 
     def selectAlignmentBase(self):
 
-        '''selectAlignmentBase(self, numWire, numGeom)
+        '''selectAlignmentBase(self)
         selects an unique alignment which base plane is (numWire, numGeom),
         and return it, or None.'''
 
@@ -77,7 +77,7 @@ class _Py(object):
 
     def selectReflex(self, nGeom):
 
-        '''selectReflex(self, numWire, numGeom, nGeom)
+        '''selectReflex(self, nGeom)
         selects an unique reflex corner in the wire numWire,
         which envolves the planes numGeom and nGeom,
         and return it, or None.'''

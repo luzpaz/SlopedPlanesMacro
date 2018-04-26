@@ -351,9 +351,6 @@ class _SlopedPlanes(_Py):
                         pyFace.reset = True
                     pyWire.coordinates = coo
 
-                    '''geomWire = gList[numWire]
-                    # print 'geomWire ', geomWire'''
-
                     pyPlaneListOld = pyWire.planes
                     pyPlaneListNew = []
                     geomShapeWire = []
