@@ -296,11 +296,11 @@ class _PyAlignment(_Py):
         rangoRear = self.rangoRear
 
         numChop = -1
-        for rChop, rChopPy in zip(rangoChop, rangoChopPy):
+        for rChop, rChopPy, [pyOne, pyTwo] in zip(rangoChop, rangoChopPy, chops):
             numChop += 1
             # print '### numChop ', numChop
 
-            [pyOne, pyTwo] = chops[numChop]
+            # [pyOne, pyTwo] = chops[numChop]
 
             rangoOne = pyOne.rango[-1][:]
             if pyOne.rear:
