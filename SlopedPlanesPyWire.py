@@ -248,7 +248,6 @@ class _PyWire(_Py):
 
                     rear = pyReflex.rear[0]
                     oppRear = pyReflex.rear[1]
-
                     forward = pyReflex.lines[0]
 
                     if rear is not None:
@@ -294,19 +293,12 @@ class _PyWire(_Py):
 
                     rear = pyReflex.rear[1]
                     oppRear = pyReflex.rear[0]
-
                     forward = pyReflex.lines[-1]
 
                     if rear is not None:
                         # print 'B1'
                         rango = pyPlane.rango[-1]
                         rangoPy = pyPlane.rangoPy[-1]
-                        '''if len(pyPlane.rango) == 1:
-                            # print 'B11'
-                            forward = pyPlane.forward
-                        else:
-                            # print 'B12'
-                            forward = pyPlane.backward'''
 
                     if oppRear is not None:
                         # print 'B2'
@@ -379,10 +371,11 @@ class _PyWire(_Py):
                     if numGeom not in control:
                         # print '# cutted ', nG
 
+                        # TODO backRear
+
                         if not pyPl.aligned and nG in nextRango:
                             # print '0'
                             # rango doesn't cut with nextRango G
-                            # incomplete
                             control.append(numGeom)
                             pyPlane.control.append(nG)
 
@@ -401,7 +394,7 @@ class _PyWire(_Py):
                             # print 'c'
 
                             gS = pyPl.geomShape
-                            forw = pyPl.forward     # no deberia seleccionar C?
+                            forw = pyPl.forward
 
                             section =\
                                 forward.section([forw, gS], tolerance)
@@ -425,10 +418,8 @@ class _PyWire(_Py):
                                         # print '2'
                                         if pyP != pyPl:
                                             # print '3'
-                                            # fo = pyP.forward
 
                                             fo = pyR.lines[nn]
-
                                             section =\
                                                 fo.section([forward],
                                                            tolerance)
@@ -529,8 +520,7 @@ class _PyWire(_Py):
 
                         else:
                             if not pyPrior.aligned:
-                                pyRPrior =\
-                                    pyPlane.selectReflex(prior)
+                                pyRPrior = pyPlane.selectReflex(prior)
 
                                 if not pyRPrior:
                                     # print 'reflex successives prior'
@@ -550,8 +540,7 @@ class _PyWire(_Py):
 
                         else:
                             if not pyLater.aligned:
-                                pyRLater =\
-                                    pyPlane.selectReflex(later)
+                                pyRLater = pyPlane.selectReflex(later)
 
                                 if not pyRLater:
                                     # print 'reflex succesives later'
