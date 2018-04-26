@@ -175,8 +175,6 @@ class _PyWire(_Py):
             for pyReflex in self.reflexs:
                 for pyPlane in pyReflex.planes:
 
-
-
                     cc = []
                     for ran in pyPlane.rango:
                         c = []
@@ -194,7 +192,27 @@ class _PyWire(_Py):
 
         # print '###### virtualizing wire', (self.numWire)
 
-        for pyReflex in self.reflexs:
+        refList = self.reflexs[:]
+        refList.reverse()
+
+        controlList = []
+
+        for pyReflex in refList:
+
+            [pyR, pyOppR] = pyReflex.planes
+
+            if pyOppR in controlList:
+
+                pyReflex.addValue('lines', pyR.forward, 'forward')
+                pyReflex.addValue('lines', pyOppR.backward, 'backward')
+
+            else:
+
+                pyReflex.addValue('lines', pyR.forward, 'forward')
+                pyReflex.addValue('lines', pyOppR.forward, 'backward')
+
+            controlList.append(pyR)
+
             pyReflex.virtualizing()
 
     def trimming(self):

@@ -117,6 +117,7 @@ class _PyReflex(_Py):
         self.planes = [pyR, pyOppR]
 
         for pyPlane in [pyR, pyOppR]:
+
             if pyPlane.virtualized:
                 nW = pyPlane.numWire
                 pyAliList = pyPlane.alignedList
@@ -134,6 +135,7 @@ class _PyReflex(_Py):
                 num = -1
                 for pyPl in aligns:
                     num += 1
+
                     if pyPl.numWire == nW:
                         control.append(pyPl.numGeom)
                         try:
