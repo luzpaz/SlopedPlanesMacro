@@ -601,13 +601,9 @@ class _PyFace(_Py):
                                 lineInto =\
                                     Part.LineSegment(lineEnd,
                                                      edgeStart).toShape()
-
-                                # print 'lineInto ', Part.LineSegment(lineEnd, edgeStart)
-
                                 ss =\
                                     len(lineInto.section([face],
                                                          tolerance).Vertexes)
-
                                 # print 'ss ', ss
 
                                 if point == pp and ss == 2:
@@ -1027,7 +1023,7 @@ class _PyFace(_Py):
 
     def findGeomRear(self, pyWire, pyPlane, direction, vertex, edge=False):
 
-        '''findGeomRear(self, pyWire, direction, vertex, edge=False)'''
+        '''findGeomRear(self, pyWire, pyPlane, direction, vertex, edge=False)'''
 
         # print '#findGeomRear ', (direction, edge)
 
@@ -1282,9 +1278,7 @@ class _PyFace(_Py):
                 for pyPl in pyPlaneList:
                     if pyPl.shape:
                         # print '# nG ', pyPl.numGeom
-                        if not pyPl.choped and\
-                           not pyPl.fronted and\
-                           not pyPl.aligned:
+                        if not (pyPl.choped or pyPl.fronted or pyPl.aligned):
                             # print 'a'
                             cutterList.append(pyPl)
                         elif pyPl.choped:
