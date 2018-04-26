@@ -300,8 +300,6 @@ class _PyAlignment(_Py):
             numChop += 1
             # print '### numChop ', numChop
 
-            # [pyOne, pyTwo] = chops[numChop]
-
             rangoOne = pyOne.rango[-1][:]
             if pyOne.rear:
                 rearOne = pyOne.rear[-1]
