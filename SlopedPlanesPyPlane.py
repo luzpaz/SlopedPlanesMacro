@@ -740,7 +740,7 @@ class _PyPlane(_Py):
 
     def planning(self, pyWire, closed=False):
 
-        '''planning(self, pyWire)
+        '''planning(self, pyWire, closed=False)
         '''
 
         numGeom = self.numGeom
