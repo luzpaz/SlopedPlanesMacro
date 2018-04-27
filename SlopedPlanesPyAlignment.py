@@ -256,9 +256,9 @@ class _PyAlignment(_Py):
         The alignment blocks the path to the planes
         in its front and laterals.'''
 
-        # print '###### trimming base ', (self.base.numWire, self.base.numGeom)
+        print '###### trimming base ', (self.base.numWire, self.base.numGeom)
 
-        # self.printControl(str(self.base.numGeom))
+        self.printControl(str(self.base.numGeom))
 
         pyWireList = _Py.pyFace.wires
         tolerance = _Py.tolerance
@@ -328,7 +328,7 @@ class _PyAlignment(_Py):
 
                 # the two rangos don't cut between them, if not aligned
 
-                for nG in rangoOne:
+                '''for nG in rangoOne:
                     if nG is not rearTwo:
                         pyPl = pyPlList[nG]
                         control = pyPl.control
@@ -354,9 +354,9 @@ class _PyAlignment(_Py):
                         # and opp chop
                         r = pyOne.numGeom
                         if r not in control:
-                            control.append(r)
+                            control.append(r)'''
 
-                # self.printControl(str(self.base.numGeom))
+                self.printControl(str(self.base.numGeom))
 
                 # rChop: trimming bigShape
 
@@ -934,6 +934,11 @@ class _PyAlignment(_Py):
         rangoChopPy = self.rangoPy
         simulatedChops = self.simulatedChops
 
+        pyPrior = self.prior
+        pyLater = self.later
+        priorShape = pyPrior.selectShape()
+        laterShape = pyLater.selectShape()
+
         pyCont = aligns[-1]
         cont = pyCont.shape
         enormousCont = pyCont.enormousShape
@@ -1259,7 +1264,7 @@ class _PyAlignment(_Py):
                 shapeOne = pyOne.shape
                 shapeTwo = pyTwo.shape
 
-                cutterList = [shapeOne, shapeTwo]
+                cutterList = [shapeOne, shapeTwo, priorShape, laterShape]
 
                 if numChop == 0:
                     prior = self.prior

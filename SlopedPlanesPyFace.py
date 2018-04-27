@@ -349,11 +349,11 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
             pyWire.trimming()
-        # self.printControl('trimming reflexs')
+        self.printControl('trimming reflexs')
 
         for pyAlign in pyAlignList:
             pyAlign.trimming()
-        # self.printControl('trimming alignments')
+        self.printControl('trimming alignments')
 
         for pyWire in pyWireList:
             pyWire.priorLater()
@@ -361,7 +361,7 @@ class _PyFace(_Py):
 
         for pyAlign in pyAlignList:
             pyAlign.priorLater()
-        # self.printControl('priorLater alignments')
+        self.printControl('priorLater alignments')
 
         # self.printSummary()
 
@@ -383,7 +383,7 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
             pyWire.ordinaries()
-        # self.printControl('ordinaries')
+        self.printControl('ordinaries')
 
         self.betweenWires()
 
