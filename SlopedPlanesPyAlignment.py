@@ -460,13 +460,14 @@ class _PyAlignment(_Py):
                         consecutive = True
                     control = pyPl.control
                     if pyPlane.numGeom not in control:
-                        if not (pyPl.aligned or pyPl.choped):
+                       if not (pyPl.aligned or pyPl.choped):
                             # print '# nG ', nG
 
                             if not pyPlane.cross:
                                 # print 'A'
 
                                 if consecutive:
+                                    # print 'a'
 
                                     pyPl.trimming(enormousShape)
 
@@ -475,18 +476,18 @@ class _PyAlignment(_Py):
                                     cList = [enormousShape]
 
                                     if nG not in totalRear:
-                                        # print 'a'
+                                        # print 'aa'
                                         if nG not in [pr, lat]:
-                                            # print 'aa'
+                                            # print 'aaa'
 
                                             if falsify:
-                                                # print 'aa1'
+                                                # print 'aaa1'
                                                 if num == 0:
-                                                    # print 'aa11'
+                                                    # print 'aaa11'
                                                     cList.append(enormousBase)
                                                     control.append(numGeom)
                                                 else:
-                                                    # print 'aa12'
+                                                    # print 'aaa12'
                                                     cList.append(enormousCont)
                                                     control.append(nGeom)
 
@@ -585,13 +586,15 @@ class _PyAlignment(_Py):
 
             if pyPrior.aligned:
 
-                # print '10'
+                pass
+
+                '''# print '10'
                 pyA = pyPrior.selectAlignmentBase()
                 # print 'pyA.later ', pyA.later.numGeom
                 if pyA and pyA.later.numGeom == numGeom:
                     # print '101'
                     cutterList.append(pyA.base.bigShape)
-                    control.append(pr)
+                    control.append(pr)'''
 
             elif not pyPrior.reflexed or pyPrior.choped:
 
@@ -604,13 +607,15 @@ class _PyAlignment(_Py):
 
             if pyLater.aligned:
 
-                # print '20'
+                pass
+
+                '''# print '20'
                 pyA = pyLater.selectAlignmentBase()
                 # print 'pyA.prior ', pyA.prior.numGeom
                 if pyA and pyA.prior.numGeom == numGeom:
                     # print '201'
                     cutterList.append(pyA.base.bigShape)
-                    control.append(lat)
+                    control.append(lat)'''
 
             elif not pyLater.reflexed or pyLater.choped:
 
@@ -865,13 +870,13 @@ class _PyAlignment(_Py):
             # prior and later
 
             cList = cutterList[:]
-            if pyPrior.numGeom not in pyBase.control:
+            if pyPrior.numGeom not in pyBase.control and not pyPrior.aligned:
                 cList.append(pyPrior.bigShape)
             gS = pyBase.geomShape
             base = self.cutting(base, cList, gS)
 
             cList = cutterList[:]
-            if pyLater.numGeom not in pyCont.control:
+            if pyLater.numGeom not in pyCont.control and not pyLater.aligned:
                 cList.append(pyLater.bigShape)
             gS = pyCont.geomShape
             cont = self.cutting(cont, cList, gS)
@@ -882,10 +887,10 @@ class _PyAlignment(_Py):
 
             # prior and later
 
-            if pyPrior.numGeom not in pyBase.control:
+            if pyPrior.numGeom not in pyBase.control and not pyPrior.aligned:
                 cutterList.append(pyPrior.bigShape)
 
-            if pyLater.numGeom not in pyBase.control:
+            if pyLater.numGeom not in pyBase.control and not pyLater.aligned:
                 cutterList.append(pyLater.bigShape)
 
             # print 'cutterList ', cutterList
