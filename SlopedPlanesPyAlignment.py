@@ -1264,7 +1264,13 @@ class _PyAlignment(_Py):
                 shapeOne = pyOne.shape
                 shapeTwo = pyTwo.shape
 
-                cutterList = [shapeOne, shapeTwo, priorShape, laterShape]
+                cutterList = [shapeOne, shapeTwo]
+
+                if not numChop:
+                    if pyPrior.aligned:
+                        cutterList.append(priorShape)
+                    if pyLater.aligned:
+                        cutterList.append(laterShape)
 
                 if numChop == 0:
                     prior = self.prior
