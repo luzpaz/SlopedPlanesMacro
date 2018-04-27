@@ -1269,15 +1269,15 @@ class _PyAlignment(_Py):
                         if prior.numGeom not in control:
                             if not (prior.aligned or prior.choped or prior.fronted):
                                 cutterList.append(prior.shape)
-                            elif prior.aligned and not prior.cross:
-                                cutterList.append(prior.selectShape())
+                            '''elif prior.aligned and not prior.cross:
+                                cutterList.append(prior.selectShape())'''
 
                     if later.numWire == pyBase.numWire:
                         if later.numGeom not in control:
                             if not (later.aligned or later.choped or later.fronted):
                                 cutterList.append(later.shape)
-                            elif later.aligned and not later.cross:
-                                cutterList.append(later.selectShape())
+                            '''elif later.aligned and not later.cross:
+                                cutterList.append(later.selectShape())'''
 
                 simulatedC = simulatedChops[numChop]
 
