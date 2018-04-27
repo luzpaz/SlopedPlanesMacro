@@ -328,7 +328,7 @@ class _PyAlignment(_Py):
 
                 # the two rangos don't cut between them, if not aligned
 
-                '''for nG in rangoOne:
+                for nG in rangoOne:
                     if nG is not rearTwo:
                         pyPl = pyPlList[nG]
                         control = pyPl.control
@@ -354,7 +354,7 @@ class _PyAlignment(_Py):
                         # and opp chop
                         r = pyOne.numGeom
                         if r not in control:
-                            control.append(r)'''
+                            control.append(r)
 
                 # self.printControl(str(self.base.numGeom))
 
