@@ -328,7 +328,7 @@ class _PyAlignment(_Py):
 
                 # the two rangos don't cut between them, if not aligned
 
-                for nG in rangoOne:
+                '''for nG in rangoOne:
                     if nG is not rearTwo:
                         pyPl = pyPlList[nG]
                         control = pyPl.control
@@ -354,7 +354,7 @@ class _PyAlignment(_Py):
                         # and opp chop
                         r = pyOne.numGeom
                         if r not in control:
-                            control.append(r)
+                            control.append(r)'''
 
                 # self.printControl(str(self.base.numGeom))
 
@@ -1264,19 +1264,24 @@ class _PyAlignment(_Py):
                 if numChop == 0:
                     prior = self.prior
                     later = self.later
+                    # cross = pyBase.cross
 
                     if prior.numWire == pyBase.numWire:
                         if prior.numGeom not in control:
-                            if not (prior.aligned or prior.choped or prior.fronted):
+                            if prior.choped or prior.fronted:
+                                pass
+                            elif not prior.aligned:
                                 cutterList.append(prior.shape)
-                            '''elif prior.aligned and not prior.cross:
+                            '''elif prior.aligned and not (prior.cross or cross):
                                 cutterList.append(prior.selectShape())'''
 
                     if later.numWire == pyBase.numWire:
                         if later.numGeom not in control:
-                            if not (later.aligned or later.choped or later.fronted):
+                            if later.choped or later.fronted:
+                                pass
+                            elif not later.aligned:
                                 cutterList.append(later.shape)
-                            '''elif later.aligned and not later.cross:
+                            '''elif later.aligned and not (later.cross or cross):
                                 cutterList.append(later.selectShape())'''
 
                 simulatedC = simulatedChops[numChop]
