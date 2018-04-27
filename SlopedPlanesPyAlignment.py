@@ -1271,7 +1271,7 @@ class _PyAlignment(_Py):
                                 pass
                             elif not prior.aligned:
                                 cutterList.append(prior.shape)
-                            elif prior.aligned:
+                            elif prior.aligned and not pyBase.choped:
                                 cutterList.append(prior.seedShape)
 
                     if later.numWire == pyBase.numWire:
@@ -1280,7 +1280,7 @@ class _PyAlignment(_Py):
                                 pass
                             elif not later.aligned:
                                 cutterList.append(later.shape)
-                            elif later.aligned:
+                            elif later.aligned and not pyBase.choped:
                                 cutterList.append(later.seedShape)
 
                 simulatedC = simulatedChops[numChop]
