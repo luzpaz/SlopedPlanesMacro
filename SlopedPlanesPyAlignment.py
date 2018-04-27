@@ -934,11 +934,6 @@ class _PyAlignment(_Py):
         rangoChopPy = self.rangoPy
         simulatedChops = self.simulatedChops
 
-        pyPrior = self.prior
-        pyLater = self.later
-        priorShape = pyPrior.selectShape()
-        laterShape = pyLater.selectShape()
-
         pyCont = aligns[-1]
         cont = pyCont.shape
         enormousCont = pyCont.enormousShape
@@ -1266,25 +1261,23 @@ class _PyAlignment(_Py):
 
                 cutterList = [shapeOne, shapeTwo]
 
-                '''if not numChop:
-                    if pyPrior.aligned:
-                        cutterList.append(priorShape)
-                    if pyLater.aligned:
-                        cutterList.append(laterShape)'''
-
                 if numChop == 0:
                     prior = self.prior
                     later = self.later
+
                     if prior.numWire == pyBase.numWire:
                         if prior.numGeom not in control:
                             if not (prior.aligned or prior.choped or prior.fronted):
-                                shapePrior = prior.shape
-                                cutterList.append(shapePrior)
+                                cutterList.append(prior.shape)
+                            elif prior.aligned:
+                                cutterList.append(prior.selectShape())
+
                     if later.numWire == pyBase.numWire:
                         if later.numGeom not in control:
                             if not (later.aligned or later.choped or later.fronted):
-                                shapeLater = later.shape
-                                cutterList.append(shapeLater)
+                                cutterList.append(later.shape)
+                            elif later.aligned:
+                                cutterList.append(later.selectShape())
 
                 simulatedC = simulatedChops[numChop]
 
