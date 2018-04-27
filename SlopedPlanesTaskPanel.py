@@ -549,7 +549,7 @@ class _TaskPanel_SlopedPlanes():
                             # print 'b'
                             originList.append(angle)
 
-                            pyPl = pyPlane.selectPlane(angle[0], angle[1])
+                            pyPl = pyFace.wires[angle[0]].planes[angle[1]]
                             pyPl.angle = value
 
                         if self.advancedOptions.isChecked():
