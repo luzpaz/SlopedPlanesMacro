@@ -589,10 +589,12 @@ class _SlopedPlanes(_Py):
                                                 section = ff.section([gS],
                                                                      tolerance)
                                                 if section.Edges:
-                                                    oEdges.append(pyPl.numGeom)
+                                                    oEdges.append([pyPl.numWire, pyPl.numGeom])
 
                                 objEdges.append(oEdges)
                                 # print 'oEdges ', oEdges
+
+
 
                                 sEdges = []
                                 for pyFace in slopedPlanes.Proxy.Pyth:
@@ -603,10 +605,15 @@ class _SlopedPlanes(_Py):
                                                 section = ff.section([gS],
                                                                      tolerance)
                                                 if section.Edges:
-                                                    sEdges.append(pyPl.numGeom)
+                                                    sEdges.append([pyPl.numWire, pyPl.numGeom])
 
                                 sPEdges.append(sEdges)
                                 # print 'sEdges ', sEdges
+
+
+
+                                # prior
+                                # later
 
                             print 'sPEdges ', sPEdges
                             print 'objEdges ', objEdges

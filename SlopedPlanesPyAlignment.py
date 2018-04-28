@@ -301,24 +301,31 @@ class _PyAlignment(_Py):
             # print '### numChop ', numChop
 
             rangoOne = pyOne.rango[-1][:]
+            rangoOnePy = pyOne.rangoPy[-1][:]
             if pyOne.rear:
                 rearOne = pyOne.rear[-1]
             else:
                 rearOne = None
 
             rangoTwo = pyTwo.rango[0][:]
+            rangoTwoPy = pyTwo.rangoPy[-1][:]
             if pyTwo.rear:
                 rearTwo = pyTwo.rear[0]
             else:
                 rearTwo = None
 
-            for nn in rangoOne:
+            # print 'rangoOne ', rangoOne  # , rangoOnePy
+            # print 'rangoTwo ', rangoTwo  # , rangoTwoPy
+
+            for nn, pyP in zip(rangoOne, rangoOnePy):
                 if nn in rangoTwo:
                     rangoOne.remove(nn)
                     rangoTwo.remove(nn)
+                    rangoOnePy.remove(pyP)
+                    rangoTwoPy.remove(pyP)
 
-            # print 'rangoOne ', rangoOne
-            # print 'rangoTwo ', rangoTwo
+            # print 'rangoOne ', rangoOne  # , rangoOnePy
+            # print 'rangoTwo ', rangoTwo  # , rangoTwoPy
 
             nW = pyOne.numWire
             pyPlList = pyWireList[nW].planes
@@ -328,13 +335,13 @@ class _PyAlignment(_Py):
 
                 # the two rangos don't cut between them, if not aligned
 
-                for nG in rangoOne:
+                for nG, pyPl in zip(rangoOne, rangoOnePy):
                     if nG is not rearTwo:
-                        pyPl = pyPlList[nG]
+                        # pyPl = pyPlList[nG]
                         control = pyPl.control
-                        for r in rangoTwo:
+                        for r, pyPr in zip(rangoTwo, rangoTwoPy):
                             if r not in control and r is not rearOne:
-                                pyPr = pyPlList[r]
+                                #pyPr = pyPlList[r]
                                 if not pyPr.aligned:
                                     control.append(r)
                         # and opp Chop
@@ -342,13 +349,13 @@ class _PyAlignment(_Py):
                         if r not in control:
                             control.append(r)
 
-                for nG in rangoTwo:
+                for nG, pyPl in zip(rangoTwo, rangoTwoPy):
                     if nG is not rearOne:
-                        pyPl = pyPlList[nG]
+                        # pyPl = pyPlList[nG]
                         control = pyPl.control
-                        for r in rangoOne:
+                        for r, pyPr in zip(rangoOne, rangoOnePy):
                             if r not in control and r is not rearTwo:
-                                pyPr = pyPlList[r]
+                                # pyPr = pyPlList[r]
                                 if not pyPr.aligned:
                                     control.append(r)
                         # and opp chop
