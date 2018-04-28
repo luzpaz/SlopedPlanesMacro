@@ -256,9 +256,9 @@ class _PyAlignment(_Py):
         The alignment blocks the path to the planes
         in its front and laterals.'''
 
-        # print '###### trimming base ', (self.base.numWire, self.base.numGeom)
+        print '###### trimming base ', (self.base.numWire, self.base.numGeom)
 
-        # self.printControl(str(self.base.numGeom))
+        self.printControl(str(self.base.numGeom))
 
         pyWireList = _Py.pyFace.wires
         tolerance = _Py.tolerance
@@ -336,30 +336,42 @@ class _PyAlignment(_Py):
                 # the two rangos don't cut between them, if not aligned
 
                 for nG, pyPl in zip(rangoOne, rangoOnePy):
-                    if nG is not rearTwo and not pyPl.aligned:
+                    if nG is not rearTwo:
                         control = pyPl.control
                         for r, pyPr in zip(rangoTwo, rangoTwoPy):
                             if r not in control and r is not rearOne:
                                 if not pyPr.aligned:
-                                    control.append(r)
+                                    # control.append(r)
+                                    if pyPl.aligned:
+                                        align = pyPl.alignedList[0]
+                                        if r not in align.rangoRear[0]:
+                                            control.append(r)
+                                    else:
+                                        control.append(r)
                         # and opp Chop
                         r = pyTwo.numGeom
                         if r not in control:
                             control.append(r)
 
                 for nG, pyPl in zip(rangoTwo, rangoTwoPy):
-                    if nG is not rearOne and not pyPl.aligned:
+                    if nG is not rearOne:
                         control = pyPl.control
                         for r, pyPr in zip(rangoOne, rangoOnePy):
                             if r not in control and r is not rearTwo:
                                 if not pyPr.aligned:
-                                    control.append(r)
+                                    # control.append(r)
+                                    if pyPl.aligned:
+                                        align = pyPl.alignedList[0]
+                                        if r not in align.rangoRear[0]:
+                                            control.append(r)
+                                    else:
+                                        control.append(r)
                         # and opp chop
                         r = pyOne.numGeom
                         if r not in control:
                             control.append(r)
 
-                # self.printControl(str(self.base.numGeom))
+                self.printControl(str(self.base.numGeom))
 
                 # rChop: trimming bigShape
 
