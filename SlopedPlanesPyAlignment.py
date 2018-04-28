@@ -341,7 +341,6 @@ class _PyAlignment(_Py):
                         for r, pyPr in zip(rangoTwo, rangoTwoPy):
                             if r not in control and r is not rearOne:
                                 if not pyPr.aligned:
-                                    # control.append(r)
                                     if pyPl.aligned and not pyPl.choped:
                                         pass
                                     else:
@@ -357,7 +356,6 @@ class _PyAlignment(_Py):
                         for r, pyPr in zip(rangoOne, rangoOnePy):
                             if r not in control and r is not rearTwo:
                                 if not pyPr.aligned:
-                                    #control.append(r)
                                     if pyPl.aligned and not pyPl.choped:
                                         pass
                                     else:
