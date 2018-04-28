@@ -340,7 +340,7 @@ class _PyAlignment(_Py):
                         control = pyPl.control
                         for r, pyPr in zip(rangoTwo, rangoTwoPy):
                             if r not in control and r is not rearOne:
-                                if not (pyPr.aligned or pyPl.aligned):
+                                if not pyPr.aligned:
                                     control.append(r)
                         # and opp Chop
                         r = pyTwo.numGeom
@@ -352,7 +352,7 @@ class _PyAlignment(_Py):
                         control = pyPl.control
                         for r, pyPr in zip(rangoOne, rangoOnePy):
                             if r not in control and r is not rearTwo:
-                                if not (pyPr.aligned or pyPl.aligned):
+                                if not pyPr.aligned:
                                     control.append(r)
                         # and opp chop
                         r = pyOne.numGeom
