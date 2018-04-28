@@ -397,7 +397,7 @@ class _PyFace(_Py):
 
         # self.printControl('aligning')
 
-        '''for pyAlign in pyAlignList:
+        for pyAlign in pyAlignList:
             pyAlign.postProcess()
         # self.printControl('postProcess')
 
