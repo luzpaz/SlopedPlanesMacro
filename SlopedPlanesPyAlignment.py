@@ -341,11 +341,11 @@ class _PyAlignment(_Py):
                         for r, pyPr in zip(rangoTwo, rangoTwoPy):
                             if r not in control and r is not rearOne:
                                 if not pyPr.aligned:
-                                    control.append(r)
-                                    '''if pyPl.aligned:
+                                    # control.append(r)
+                                    if pyPl.aligned and not pyPl.choped:
                                         pass
                                     else:
-                                        control.append(r)'''
+                                        control.append(r)
                         # and opp Chop
                         r = pyTwo.numGeom
                         if r not in control:
@@ -357,11 +357,11 @@ class _PyAlignment(_Py):
                         for r, pyPr in zip(rangoOne, rangoOnePy):
                             if r not in control and r is not rearTwo:
                                 if not pyPr.aligned:
-                                    control.append(r)
-                                    '''if pyPl.aligned:
+                                    #control.append(r)
+                                    if pyPl.aligned and not pyPl.choped:
                                         pass
                                     else:
-                                        control.append(r)'''
+                                        control.append(r)
                         # and opp chop
                         r = pyOne.numGeom
                         if r not in control:
@@ -1709,20 +1709,6 @@ class _PyAlignment(_Py):
             self.addValue('rangoPy', ran, 'backward')
 
         # rangoRear
-
-        '''pyBase = self.base
-        numWire = pyBase.numWire
-        numGeom = pyBase.numGeom
-        lenWire = len(pyPlaneList)
-
-        pr = self.sliceIndex(numGeom - 1, lenWire)
-
-        pyPl = self.aligns[-1]
-        [nW, nG] = [pyPl.numWire, pyPl.numGeom]
-        pyW = pyWireList[nW]
-        lenW = len(pyW.planes)
-
-        lat = self.sliceIndex(nG + 1, lenW)'''
 
         pyPrior = self.prior
         if pyPrior.aligned:
