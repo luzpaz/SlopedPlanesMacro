@@ -1710,7 +1710,7 @@ class _PyAlignment(_Py):
 
         # rangoRear
 
-        pyBase = self.base
+        '''pyBase = self.base
         numWire = pyBase.numWire
         numGeom = pyBase.numGeom
         lenWire = len(pyPlaneList)
@@ -1722,18 +1722,18 @@ class _PyAlignment(_Py):
         pyW = pyWireList[nW]
         lenW = len(pyW.planes)
 
-        lat = self.sliceIndex(nG + 1, lenW)
+        lat = self.sliceIndex(nG + 1, lenW)'''
 
-        '''pyPrior = self.prior
+        pyPrior = self.prior
+        if pyPrior.aligned:
+            ali = pyPrior.selectAlignmentBase()
+            pyPrior = ali.aligns[-1]
         pyLater = self.later
 
         pr = pyPrior.numGeom
         lat = pyLater.numGeom
         w1 = pyPrior.numWire
-        w2 = pyLater.numWire'''
-
-        w1 = numWire
-        w2 = nW
+        w2 = pyLater.numWire
 
         if w1 == w2:
             pyWire = pyWireList[w1]
