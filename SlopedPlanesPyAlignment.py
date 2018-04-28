@@ -460,8 +460,9 @@ class _PyAlignment(_Py):
                         consecutive = True
                     control = pyPl.control
                     if pyPlane.numGeom not in control:
-                       if not (pyPl.aligned or pyPl.choped):
-                            # print '# nG ', nG
+                        # print '# nG ', nG
+                        if not (pyPl.aligned or pyPl.choped or pyPl.fronted):
+                            # print '1'
 
                             if not pyPlane.cross:
                                 # print 'A'
@@ -505,6 +506,11 @@ class _PyAlignment(_Py):
 
                                 pyPl.trimmingTwo(enormousShape)
                                 baseControl.append(nG)
+
+                        elif pyPl.fronted:
+                            # print '2'
+                            control.append(pyPlane.numGeom)
+                            pyPlane.control.append(nG)
 
         if falsify:
             # the base and cont are cutted by a chop
@@ -1393,9 +1399,11 @@ class _PyAlignment(_Py):
                     pl = pyPl.shape.copy()
 
                     if not pyPl.fronted:
+                        # print 'b1'
                         oppCutList.append(pl)
 
                     if pyPl.arrow:
+                        # print 'b2'
                         gShape = pyPl.geomShape
                         pl = self.cutting(pl, [enormousBase], gShape)
 
