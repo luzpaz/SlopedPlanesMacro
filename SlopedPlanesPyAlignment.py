@@ -343,9 +343,7 @@ class _PyAlignment(_Py):
                                 if not pyPr.aligned:
                                     # control.append(r)
                                     if pyPl.aligned:
-                                        align = pyPl.alignedList[0]
-                                        if r not in align.rangoRear[0]:
-                                            control.append(r)
+                                        pass
                                     else:
                                         control.append(r)
                         # and opp Chop
@@ -361,9 +359,7 @@ class _PyAlignment(_Py):
                                 if not pyPr.aligned:
                                     # control.append(r)
                                     if pyPl.aligned:
-                                        align = pyPl.alignedList[0]
-                                        if r not in align.rangoRear[0]:
-                                            control.append(r)
+                                        pass
                                     else:
                                         control.append(r)
                         # and opp chop
