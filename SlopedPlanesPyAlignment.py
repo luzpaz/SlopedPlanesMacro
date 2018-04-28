@@ -441,6 +441,7 @@ class _PyAlignment(_Py):
 
                 # the cross
                 if pyPlane.virtualized:
+                    # print 'virtualized'
                     aliList = pyPlane.alignedList
                     pyA = aliList[0]
                     # for pyA in aliList:   no borrar de momento
@@ -458,11 +459,12 @@ class _PyAlignment(_Py):
                     pyPl = pyPlList[nG]
                     if pyPl.aligned or pyPl.choped:
                         consecutive = True
+                    # print 'consecutive ', consecutive
+
                     control = pyPl.control
                     if pyPlane.numGeom not in control:
                         # print '# nG ', nG
-                        if not (pyPl.aligned or pyPl.choped or pyPl.fronted):
-                            # print '1'
+                        if not (pyPl.aligned or pyPl.choped):
 
                             if not pyPlane.cross:
                                 # print 'A'
@@ -470,7 +472,14 @@ class _PyAlignment(_Py):
                                 if consecutive:
                                     # print 'a'
 
-                                    pyPl.trimming(enormousShape)
+                                    if pyPl.fronted:
+
+                                        control.append(numGeom)
+                                        pyPlane.control.append(nG)
+
+                                    else:
+
+                                        pyPl.trimming(enormousShape)
 
                                 else:
 
@@ -506,11 +515,6 @@ class _PyAlignment(_Py):
 
                                 pyPl.trimmingTwo(enormousShape)
                                 baseControl.append(nG)
-
-                        elif pyPl.fronted:
-                            # print '2'
-                            control.append(pyPlane.numGeom)
-                            pyPlane.control.append(nG)
 
         if falsify:
             # the base and cont are cutted by a chop
