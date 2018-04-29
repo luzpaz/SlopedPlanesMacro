@@ -607,14 +607,6 @@ class _PyAlignment(_Py):
 
                 pass
 
-                '''# print '10'
-                pyA = pyPrior.selectAlignmentBase()
-                # print 'pyA.later ', pyA.later.numGeom
-                if pyA and pyA.later.numGeom == numGeom:
-                    # print '101'
-                    cutterList.append(pyA.base.bigShape)
-                    control.append(pr)'''
-
             elif not pyPrior.reflexed or pyPrior.choped:
 
                 # print '1'
@@ -627,14 +619,6 @@ class _PyAlignment(_Py):
             if pyLater.aligned:
 
                 pass
-
-                '''# print '20'
-                pyA = pyLater.selectAlignmentBase()
-                # print 'pyA.prior ', pyA.prior.numGeom
-                if pyA and pyA.prior.numGeom == numGeom:
-                    # print '201'
-                    cutterList.append(pyA.base.bigShape)
-                    control.append(lat)'''
 
             elif not pyLater.reflexed or pyLater.choped:
 
