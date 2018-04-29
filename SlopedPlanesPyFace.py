@@ -1346,12 +1346,15 @@ class _PyFace(_Py):
                             aL = []
                             # print 'aList ', aList
                             for aa in aList:
+                                # print '1'
                                 sim = aa.base.shape.copy()
                                 geomShape = aa.geomAligned
                                 if baseList:
+                                    # print '11'
                                     sim = self.cutting(sim, baseList,
                                                        geomShape)
-                                aL.append(sim)
+                                if sim:
+                                    aL.append(sim)
                             # print 'aL ', aL
                             cutList.extend(aL)
 
