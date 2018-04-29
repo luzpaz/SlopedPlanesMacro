@@ -611,14 +611,17 @@ class _TaskPanel_SlopedPlanes():
                     # print '###### num ', num
                     ff = shape.Faces[num]
 
-                    originList = []
                     numSlope = 0
 
                     for pyFace in slopedPlanes.Proxy.Pyth:
+                        # print '###### numFace ', pyFace.numFace
                         if not reset:
                             break
 
+                        originList = []
+
                         for pyWire in pyFace.wires:
+                            # print '###### numWire ', pyWire.numWire
                             if not reset:
                                 break
 
@@ -629,6 +632,7 @@ class _TaskPanel_SlopedPlanes():
                                 numGeom = pyPlane.numGeom
                                 angle = pyPlane.angle
                                 # print '### numGeom, angle ', (numGeom, angle)
+                                # print 'originList ', originList
 
                                 if [numWire, numGeom] not in originList:
 
