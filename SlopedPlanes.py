@@ -592,12 +592,10 @@ class _SlopedPlanes(_Py):
                                                 section = ff.section([gS],
                                                                      tolerance)
                                                 if section.Edges:
-                                                    oEdges.append([pyPl.numWire, pyPl.numGeom])
+                                                    oEdges.append([pyPl, pyFace])
 
                                 objEdges.append(oEdges)
                                 # print 'oEdges ', oEdges
-
-
 
                                 sEdges = []
                                 for pyFace in slopedPlanes.Proxy.Pyth:
@@ -608,31 +606,92 @@ class _SlopedPlanes(_Py):
                                                 section = ff.section([gS],
                                                                      tolerance)
                                                 if section.Edges:
-                                                    sEdges.append([pyPl.numWire, pyPl.numGeom])
+                                                    sEdges.append([pyPl, pyFace])
 
                                 sPEdges.append(sEdges)
                                 # print 'sEdges ', sEdges
 
-
-
-                                # prior
-                                # later
-
-                            # print 'sPEdges ', sPEdges
-                            # print 'objEdges ', objEdges
+                            print 'sPEdges ', sPEdges
+                            print 'objEdges ', objEdges
 
                             endShape = endShape.cut([common], tolerance)
                             childShape = childShape.cut([common], tolerance)
 
-                            for ff in zip(sPEdges, objEdges):
-                                pass
+                            num = -1
+                            for edgeOne, edgeTwo in zip(sPEdges, objEdges):
+                                num += 1
 
-                        # makes a shell for every planes list, compunds them, and the end
+                                pyOne = edgeOne[num][0]
+                                numGeom = pyOne.numGeom
+                                numWire = pyOne.numWire
+                                pyFace = edgeOne[num][1]
+                                pyWireList = pyFace.wires
+                                pyWire = pyWireList[numWire]
+                                lenWire = len(pyWire.planes)
 
-                        '''shellList = []
-                        for planeList in figList:
-                            shell = Part.makeShell(planeList)
-                            shellList.append(shell)'''
+                                priorOne = self.sliceIndex(numGeom - 1, lenWire)
+                                priorOne = self.selectPlane(numWire, priorOne, pyFace)
+                                laterOne = self.sliceIndex(numGeom + 1, lenWire)
+                                laterOne = self.selectPlane(numWire, laterOne, pyFace)
+
+                                pyTwo = edgeTwo[num][0]
+                                numGeom = pyTwo.numGeom
+                                numWire = pyTwo.numWire
+                                pyFace = edgeTwo[num][1]
+                                pyWireList = pyFace.wires
+                                pyWire = pyWireList[numWire]
+                                lenWire = len(pyWire.planes)
+
+                                priorTwo = self.sliceIndex(numGeom - 1, lenWire)
+                                priorTwo = self.selectPlane(numWire, priorTwo, pyFace)
+                                laterTwo = self.sliceIndex(numGeom + 1, lenWire)
+                                laterTwo = self.selectPlane(numWire, laterTwo, pyFace)
+
+                                seedOne = priorOne.seedShape
+                                seedTwo = laterTwo.seedShape
+                                common = seedOne.common(seedTwo)
+
+                                if common.Area:
+                                    nn = -1
+                                    for ff in endShape.Faces:
+                                        nn += 1
+                                        common = ff.common(seedOne)
+                                        if common.Area:
+                                            break
+
+                                    mm = -1
+                                    for gg in childShape.Faces:
+                                        mm += 1
+                                        common = gg.common(seedTwo)
+                                        if common.Area:
+                                            break
+
+                                    print (ff, nn), (gg, mm)
+
+                                    
+
+
+
+                                seedOne = laterOne.seedShape
+                                seedTwo = priorTwo.seedShape
+                                common = seedOne.common(seedTwo)
+
+                                if common.Area:
+                                    nn = -1
+                                    for ff in endShape.Faces:
+                                        nn += 1
+                                        common = ff.common(seedOne)
+                                        if common.Area:
+                                            break
+
+                                    mm = -1
+                                    for gg in childShape.Faces:
+                                        mm += 1
+                                        common = gg.common(seedTwo)
+                                        if common.Area:
+                                            break
+
+                                    print (ff, nn), (gg, mm)
 
                         endShape = Part.Compound([endShape, childShape])
 
