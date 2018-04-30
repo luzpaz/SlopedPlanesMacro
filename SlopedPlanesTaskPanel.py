@@ -210,7 +210,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        # print 'update'
+        print 'update'
 
         self.updating = True
         slopedPlanes = self.obj
@@ -230,11 +230,13 @@ class _TaskPanel_SlopedPlanes():
                 originList = []
                 pyWireList = pyFace.wires
                 size = pyFace.size
-                # print '### numFace ', pyFace.numFace
+                print '### numFace ', pyFace.numFace
+
+                lenWires = len(pyWireList)
 
                 for pyWire in pyWireList:
                     numWire = pyWire.numWire
-                    # print '## numWire ', numWire
+                    print '## numWire ', numWire
                     pyPlaneList = pyWire.planes
 
                     if up:
@@ -246,9 +248,9 @@ class _TaskPanel_SlopedPlanes():
                         numAngle = pyPlane.numGeom
                         angle = pyPlane.angle
                         sweepCurve = pyPlane.sweepCurve
-                        # print '# numAngle, angle ', (numAngle, angle)
+                        print '# numAngle, angle ', (numAngle, angle)
 
-                        # print 'originList ', originList
+                        print 'originList ', originList
 
                         if [numWire, numAngle] not in originList and\
                            angle not in originList:
@@ -256,17 +258,17 @@ class _TaskPanel_SlopedPlanes():
                             numSlope += 1
 
                             if isinstance(angle, float):
-                                # print 'a'
+                                print 'a'
                                 originList.append([numWire, numAngle])
 
                             else:
-                                # print 'b'
+                                print 'b'
                                 originList.append(angle)
 
                                 pyW = pyWireList[angle[0]]
                                 angle = pyW.planes[angle[1]].angle
 
-                            # print 'NUMSLOPE ', numSlope
+                            print 'NUMSLOPE ', numSlope
 
                             item = QtGui.QTreeWidgetItem(tree)
                             item.setText(0, str(numSlope))
@@ -461,6 +463,10 @@ class _TaskPanel_SlopedPlanes():
 
                                 item.setText(13, str(numSlope))
 
+                if up:
+                    if lenWires == 1:
+                        numSlope += 1
+
         self.retranslateUi(self.form)
         self.updating = False
 
@@ -480,6 +486,7 @@ class _TaskPanel_SlopedPlanes():
             # print '### numFace', pyFace.numFace
 
             pyWireList = pyFace.wires
+            lenWires = len(pyWireList)
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
                 # print '## numWire', numWire
@@ -552,6 +559,10 @@ class _TaskPanel_SlopedPlanes():
                             sweepCurve = comboBox.currentText()
                             pyPlane.sweepCurve = sweepCurve
 
+            if up:
+                if lenWires == 1:
+                    numSlope += 1
+
         slopedPlanes.Proxy.OnChanged = False
 
     def addSelection(self, doc, obj, sub, pnt=None):
@@ -590,7 +601,10 @@ class _TaskPanel_SlopedPlanes():
 
                         originList = []
 
-                        for pyWire in pyFace.wires:
+                        pyWireList = pyFace.wires
+                        lenWires = len(pyWireList)
+
+                        for pyWire in pyWireList:
                             # print '###### numWire ', pyWire.numWire
                             if not reset:
                                 break
@@ -637,6 +651,10 @@ class _TaskPanel_SlopedPlanes():
                                     self.tree.setCurrentItem(item)
                                     reset = False
                                     break
+
+                        if up:
+                            if lenWires == 1:
+                                numSlope += 1
 
         if reset:
             # print 'reset'
