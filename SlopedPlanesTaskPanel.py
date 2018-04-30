@@ -210,12 +210,10 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        print 'update'
+        # print 'update'
 
         self.updating = True
-
         slopedPlanes = self.obj
-
         tree = self.tree
         tree.clear()
         tree.obj = slopedPlanes
@@ -224,42 +222,33 @@ class _TaskPanel_SlopedPlanes():
 
             linkList = [o.Name for o in slopedPlanes.SweepCurves]
             linkList.insert(0, None)
-
             up = slopedPlanes.Up
-
             pyFaceList = slopedPlanes.Proxy.Pyth
-            numSlope, num = 0, 0
-            compound = slopedPlanes.Shape
-            upFace = False
+            numSlope = 0
+
             for pyFace in pyFaceList:
                 originList = []
                 pyWireList = pyFace.wires
-                numFace = pyFace.numFace
                 size = pyFace.size
-                print '### numFace ', numFace
-                shell = compound.Shells[numFace]
-                lenShell = len(shell.Faces)
-                numSlope += num
-                num, lenFace = 0, 0
+                # print '### numFace ', pyFace.numFace
 
                 for pyWire in pyWireList:
                     numWire = pyWire.numWire
-                    print '## numWire ', numWire
+                    # print '## numWire ', numWire
                     pyPlaneList = pyWire.planes
-                    lenWire = len(pyPlaneList)
-                    lenFace += lenWire
 
                     if up:
                         if numWire == 1:
                             numSlope += 1
-                            upFace = True
 
                     for pyPlane in pyPlaneList:
 
                         numAngle = pyPlane.numGeom
                         angle = pyPlane.angle
                         sweepCurve = pyPlane.sweepCurve
-                        print '# numAngle, angle ', (numAngle, angle)
+                        # print '# numAngle, angle ', (numAngle, angle)
+
+                        # print 'originList ', originList
 
                         if [numWire, numAngle] not in originList and\
                            angle not in originList:
@@ -267,15 +256,17 @@ class _TaskPanel_SlopedPlanes():
                             numSlope += 1
 
                             if isinstance(angle, float):
-                                print 'a'
+                                # print 'a'
                                 originList.append([numWire, numAngle])
 
                             else:
-                                print 'b'
+                                # print 'b'
                                 originList.append(angle)
 
                                 pyW = pyWireList[angle[0]]
                                 angle = pyW.planes[angle[1]].angle
+
+                            # print 'NUMSLOPE ', numSlope
 
                             item = QtGui.QTreeWidgetItem(tree)
                             item.setText(0, str(numSlope))
@@ -470,14 +461,6 @@ class _TaskPanel_SlopedPlanes():
 
                                 item.setText(13, str(numSlope))
 
-                value = 0
-                if upFace:
-                    value += 1
-                    upFace = False
-
-                num = lenShell - value - lenFace
-                print 'num ', num
-
         self.retranslateUi(self.form)
         self.updating = False
 
@@ -488,36 +471,25 @@ class _TaskPanel_SlopedPlanes():
         # print 'resetObject'
 
         slopedPlanes = self.obj
-
         up = slopedPlanes.Up
-
         pyFaceList = slopedPlanes.Proxy.Pyth
-        numSlope, num = 0, 0
-        compound = slopedPlanes.Shape
-        upFace = False
+        numSlope = 0
+
         for pyFace in pyFaceList:
             originList = []
-            numSlope += num
-            num, lenFace = 0, 0
-            numFace = pyFace.numFace
-            # print '### numFace', numFace
-            shell = compound.Shells[numFace]
-            lenShell = len(shell.Faces)
+            # print '### numFace', pyFace.numFace
 
             pyWireList = pyFace.wires
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
                 # print '## numWire', numWire
-                pyPlaneList = pyWire.planes
-                lenWire = len(pyPlaneList)
-                lenFace += lenWire
+
                 numAngle = -1
                 pyPlaneList = pyWire.planes
 
                 if up:
                     if numWire == 1:
                         numSlope += 1
-                        upFace = True
 
                 for pyPlane in pyPlaneList:
                     numAngle += 1
@@ -580,68 +552,65 @@ class _TaskPanel_SlopedPlanes():
                             sweepCurve = comboBox.currentText()
                             pyPlane.sweepCurve = sweepCurve
 
-                value = 0
-                if upFace:
-                    value += 1
-                    upFace = False
-
-                num = lenShell - value - lenFace
-                # print 'num ', num
-
         slopedPlanes.Proxy.OnChanged = False
 
     def addSelection(self, doc, obj, sub, pnt=None):
 
         ''''''
 
-        print 'addSelection'
-        print(doc, obj, sub, pnt)
+        # print 'addSelection'
+        # print(doc, obj, sub, pnt)
 
         reset = True
         slopedPlanes = self.obj
         shape = self.shape
+        up = slopedPlanes.Up
 
         if doc == slopedPlanes.Document.Name:
             if obj == slopedPlanes.Name:
                 if sub.startswith('Face'):
 
                     num = int(sub[4:]) - 1
-                    print '###### num ', num
+                    # print '###### num ', num
                     ff = shape.Faces[num]
 
                     numSlope = 0
 
                     for pyFace in slopedPlanes.Proxy.Pyth:
-                        print '###### numFace ', pyFace.numFace
+                        # print '###### numFace ', pyFace.numFace
                         if not reset:
                             break
 
                         originList = []
 
                         for pyWire in pyFace.wires:
-                            print '###### numWire ', pyWire.numWire
+                            # print '###### numWire ', pyWire.numWire
                             if not reset:
                                 break
 
                             numWire = pyWire.numWire
 
+                            if up:
+                                if numWire == 1:
+                                    numSlope += 1
+
                             for pyPlane in pyWire.planes:
 
                                 numGeom = pyPlane.numGeom
                                 angle = pyPlane.angle
-                                print '### numGeom, angle ', (numGeom, angle)
-                                print 'originList ', originList
+                                # print '### numGeom, angle ', (numGeom, angle)
+                                # print 'originList ', originList
 
                                 if [numWire, numGeom] not in originList:
 
                                     if isinstance(angle, float):
-                                        print 'a'
+                                        # print 'a'
                                         originList.append([numWire, numGeom])
                                         numSlope += 1
 
                                     else:
                                         if angle not in originList:
-                                            print 'b'
+                                            # print 'b'
                                             originList.append(angle)
                                             numSlope += 1
 
@@ -649,7 +618,7 @@ class _TaskPanel_SlopedPlanes():
                                 section = ff.section(geomShape)
 
                                 if section.Edges:
-                                    print '# numGeom, numSlope ', (numGeom, numSlope)
+                                    # print '# numGeom, numSlope ', (numGeom, numSlope)
                                     match = QtCore.Qt.MatchExactly
                                     item =\
                                         self.tree.findItems(str(numSlope),
