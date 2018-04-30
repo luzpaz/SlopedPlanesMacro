@@ -516,11 +516,14 @@ class _SlopedPlanes(_Py):
                                     # print 'b'
 
                                     pyPl =\
-                                        pyFace.selectPlane(angle[0], angle[1])
+                                        pyFace.selectPlane(angle[0], angle[1],
+                                                           pyFace)
                                     pl = pyPl.shape
                                     planeWireList.append(pl)
 
                                     originList.append(angle)
+
+                    # print 'originList ', originList
 
                 if slopedPlanes.Up:
                     upPlaneCopy = _Py.upList[numFace].copy()
@@ -615,8 +618,8 @@ class _SlopedPlanes(_Py):
                                 # prior
                                 # later
 
-                            print 'sPEdges ', sPEdges
-                            print 'objEdges ', objEdges
+                            # print 'sPEdges ', sPEdges
+                            # print 'objEdges ', objEdges
 
                             endShape = endShape.cut([common], tolerance)
                             childShape = childShape.cut([common], tolerance)

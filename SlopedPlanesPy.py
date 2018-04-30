@@ -89,12 +89,15 @@ class _Py(object):
 
         return None
 
-    def selectPlane(self, numWire, numGeom):
+    def selectPlane(self, numWire, numGeom, pyFace=None):
 
         '''selectPlane(self, numWire, numGeom)
         Selects the plane numWire and numGeom.'''
 
-        return _Py.pyFace.wires[numWire].planes[numGeom]
+        if not pyFace:
+            pyFace = _Py.pyFace
+
+        return pyFace.wires[numWire].planes[numGeom]
 
     def selectBasePlane(self, numWire, numGeom):
 
