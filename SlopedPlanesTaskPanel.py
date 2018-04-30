@@ -565,6 +565,7 @@ class _TaskPanel_SlopedPlanes():
         slopedPlanes = self.obj
         shape = self.shape
         up = slopedPlanes.Up
+        tolerance = slopedPlanes.Tolerance
 
         if doc == slopedPlanes.Document.Name:
             if obj == slopedPlanes.Name:
@@ -573,6 +574,13 @@ class _TaskPanel_SlopedPlanes():
                     num = int(sub[4:]) - 1
                     # print '###### num ', num
                     ff = shape.Faces[num]
+                    # print ff.Area, ff.BoundBox
+
+                    bound = ff.BoundBox
+                    if bound.ZMax == bound.ZMin:
+                        # print 'reset'
+                        self.tree.setCurrentItem(None)
+                        return
 
                     numSlope = 0
 
@@ -614,8 +622,12 @@ class _TaskPanel_SlopedPlanes():
                                             originList.append(angle)
                                             numSlope += 1
 
+                                # print 'NUMSLOPE ', numSlope
+
                                 geomShape = pyPlane.geomShape
-                                section = ff.section(geomShape)
+                                # print geomShape, geomShape.Curve, geomShape.firstVertex(True).Point, geomShape.lastVertex(True).Point
+                                section = geomShape.section([ff], tolerance)
+                                # print section.Edges
 
                                 if section.Edges:
                                     # print '# numGeom, numSlope ', (numGeom, numSlope)
@@ -628,6 +640,7 @@ class _TaskPanel_SlopedPlanes():
                                     break
 
         if reset:
+            # print 'reset'
             self.tree.setCurrentItem(None)
 
     def shaping(self):
