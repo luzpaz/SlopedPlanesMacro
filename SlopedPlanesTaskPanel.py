@@ -565,7 +565,6 @@ class _TaskPanel_SlopedPlanes():
         slopedPlanes = self.obj
         shape = self.shape
         up = slopedPlanes.Up
-        tolerance = slopedPlanes.Tolerance
 
         if doc == slopedPlanes.Document.Name:
             if obj == slopedPlanes.Name:
@@ -626,7 +625,7 @@ class _TaskPanel_SlopedPlanes():
 
                                 geomShape = pyPlane.geomShape
                                 # print geomShape, geomShape.Curve, geomShape.firstVertex(True).Point, geomShape.lastVertex(True).Point
-                                section = geomShape.section([ff], tolerance)
+                                section = ff.section(geomShape) # false positive, OCCT bug, see above bound
                                 # print section.Edges
 
                                 if section.Edges:
