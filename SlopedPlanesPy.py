@@ -91,7 +91,7 @@ class _Py(object):
 
     def selectPlane(self, numWire, numGeom, pyFace=None):
 
-        '''selectPlane(self, numWire, numGeom)
+        '''selectPlane(self, numWire, numGeom, pyFace=None)
         Selects the plane numWire and numGeom.'''
 
         if not pyFace:
@@ -187,7 +187,7 @@ class _Py(object):
         for pyWire in _Py.pyFace.wires:
 
             print '****** numWire ', pyWire.numWire
-            # print '*** coordinates ', pyWire.coordinates
+            print '*** coordinates ', pyWire.coordinates
             print '*** reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
 
@@ -216,9 +216,9 @@ class _Py(object):
             print 'angle ', pyAlignment.base.angle
             print 'rear ', pyAlignment.base.rear
             print 'rango ', pyAlignment.base.rango
-            # print 'geom ', pyAlignment.base.geom
-            # print 'geomAligned ', pyAlignment.base.geomAligned
-            # print 'shape ', pyAlignment.base.shape
+            print 'geom ', pyAlignment.base.geom
+            print 'geomAligned ', pyAlignment.base.geomAligned
+            print 'shape ', pyAlignment.base.shape
             print 'falsify ', pyAlignment.falsify
             print 'virtualized ', pyAlignment.base.virtualized
             print 'cross ', pyAlignment.base.cross
@@ -248,9 +248,9 @@ class _Py(object):
                 print 'angle ', align.angle
                 print 'virtualized ', align.virtualized
                 print 'cross ', align.cross
-                # print 'geom ', align.geom
-                # print 'geomAligned ', align.geomAligned
-                # print 'shape ', align.shape
+                print 'geom ', align.geom
+                print 'geomAligned ', align.geomAligned
+                print 'shape ', align.shape
 
         print '###############################################################'
 
@@ -358,9 +358,6 @@ class _Py(object):
 
                 cutter = pyP.cutter
                 if cutter:
-
-                    # print 'cutter ', cutter
-                    # print[ff.Placement for ff in cutter]
 
                     cero = FreeCAD.Placement()  # no se en que momento se desplazan con el sketch
 
@@ -485,7 +482,7 @@ class _Py(object):
         coordinates = coordinates[index:] + coordinates[:index]
         geometryList = geometryList[index:] + geometryList[:index]
 
-        print coordinates, geometryList
+        # print coordinates, geometryList
 
         return coordinates, geometryList
 
@@ -671,6 +668,171 @@ class _Py(object):
         # print 'ran ', ran
         return ran
 
+    def refine(self, sPEdges, objEdges, endShape, childShape):
+
+        '''refine(self, sPEdges, objEdges, endShape, childShape)'''
+
+        # print 'sPEdges ', sPEdges
+        # print 'objEdges ', objEdges
+
+        num = -1
+        for edgeOne, edgeTwo in zip(sPEdges, objEdges):
+            num += 1
+
+            pyOne = edgeOne[num][0]
+            numGeom = pyOne.numGeom
+            numWire = pyOne.numWire
+            pyFace = edgeOne[num][1]
+            pyWireList = pyFace.wires
+            pyWire = pyWireList[numWire]
+            lenWire = len(pyWire.planes)
+
+            priorOne = self.sliceIndex(numGeom - 1, lenWire)
+            priorOne = self.selectPlane(numWire, priorOne, pyFace)
+            laterOne = self.sliceIndex(numGeom + 1, lenWire)
+            laterOne = self.selectPlane(numWire, laterOne, pyFace)
+
+            pyTwo = edgeTwo[num][0]
+            numGeom = pyTwo.numGeom
+            numWire = pyTwo.numWire
+            pyFace = edgeTwo[num][1]
+            pyWireList = pyFace.wires
+            pyWire = pyWireList[numWire]
+            lenWire = len(pyWire.planes)
+
+            priorTwo = self.sliceIndex(numGeom - 1, lenWire)
+            priorTwo = self.selectPlane(numWire, priorTwo, pyFace)
+            laterTwo = self.sliceIndex(numGeom + 1, lenWire)
+            laterTwo = self.selectPlane(numWire, laterTwo, pyFace)
+
+            seedOne = priorOne.seedShape
+            seedTwo = laterTwo.seedShape
+            common = seedOne.common(seedTwo)
+
+            if common.Area:
+
+                nn = -1
+                for ff in endShape.Faces:
+                    nn += 1
+                    common = ff.common(seedOne)
+                    if common.Area:
+                        # print ff.Area
+                        break
+
+                mm = -1
+                for gg in childShape.Faces:
+                    mm += 1
+                    common = gg.common(seedTwo)
+                    if common.Area:
+                        # print gg.Area
+                        childShape = childShape.removeShape([gg])
+                        break
+
+                # print (ff, nn), (gg, mm)
+
+                faceOne = ff.copy()
+                faceTwo = gg.copy()
+
+                coordOne, geomOne = self.faceDatas(faceOne)
+                # print coordOne, geomOne
+                coordTwo, geomTwo = self.faceDatas(faceTwo)
+                # print coordTwo, geomTwo
+
+                numOne = -1
+                for cc in coordOne:
+                    numOne += 1
+                    if cc in coordTwo:
+                        numTwo = coordTwo.index(cc)
+                        break
+
+                # print 'NUMONE, NUMTWO', (numOne, numTwo)
+
+                aa = geomOne[:numOne]
+                # print 'aa ', aa
+
+                bb = geomTwo[numTwo:-1]
+                # print 'bb ', bb
+
+                cc = geomTwo[:numTwo]
+                # print 'cc ', cc
+
+                dd = geomOne[numOne+1:]
+                # print 'dd ', dd
+
+                edgeList = aa + bb + cc + dd
+                # print 'edgeList ', edgeList
+                edgeList = [e.toShape() for e in edgeList]
+                wire = Part.Wire(edgeList)
+                face = Part.makeFace(wire, "Part::FaceMakerSimple")
+                # print face.Area
+
+                endShape = endShape.replaceShape([(ff, face)])
+
+            seedOne = laterOne.seedShape
+            seedTwo = priorTwo.seedShape
+            common = seedOne.common(seedTwo)
+
+            if common.Area:
+
+                nn = -1
+                for ff in endShape.Faces:
+                    nn += 1
+                    common = ff.common(seedOne)
+                    if common.Area:
+                        # print ff.Area
+                        break
+
+                mm = -1
+                for gg in childShape.Faces:
+                    mm += 1
+                    common = gg.common(seedTwo)
+                    if common.Area:
+                        childShape = childShape.removeShape([gg])
+                        # print gg.Area
+                        break
+
+                # print (ff, nn), (gg, mm)
+
+                faceOne = ff.copy()
+                faceTwo = gg.copy()
+
+                coordOne, geomOne = self.faceDatas(faceOne)
+                # print coordOne, geomOne
+                coordTwo, geomTwo = self.faceDatas(faceTwo)
+                # print coordTwo, geomTwo
+
+                numOne = -1
+                for cc in coordOne:
+                    numOne += 1
+                    if cc in coordTwo:
+                        numTwo = coordTwo.index(cc)
+                        break
+
+                # print 'NUMONE, NUMTWO', (numOne, numTwo)
+
+                aa = geomOne[:numOne]
+                # print 'aa ', aa
+
+                bb = geomTwo[numTwo:-1]
+                # print 'bb ', bb
+
+                cc = geomTwo[:numTwo]
+                # print 'cc ', cc
+
+                dd = geomOne[numOne+1:]
+                # print 'dd ', dd
+
+                edgeList = aa + bb + cc + dd
+                # print 'edgeList ', edgeList
+                edgeList = [e.toShape() for e in edgeList]
+                wire = Part.Wire(edgeList)
+                face = Part.makeFace(wire, "Part::FaceMakerSimple")
+                # print face.Area
+
+                endShape = endShape.replaceShape([(ff, face)])
+
+        return endShape, childShape
+
     def makeSweepSketch(self, slopedPlanes):
 
         '''makeSweepSketch(self, slopedPlanes)'''
@@ -703,7 +865,7 @@ class _PySketch(_Py):
 
     def __init__(self, sketch):
 
-        ''''''
+        '''__init__(self, sketch)'''
 
         sketch.Proxy = self
 
@@ -730,13 +892,13 @@ class _PySketch(_Py):
 
     def execute(self, sketch):
 
-        ''''''
+        '''execute(self, sketch)'''
 
         sketch.recompute()
 
     def locate(self, sketch, plane, slopedPlanes):
 
-        ''''''
+        '''locate(self, sketch, plane, slopedPlanes)'''
 
         geomShape = plane.geomShape
         ffPoint = geomShape.firstVertex(True).Point
@@ -777,7 +939,7 @@ class _PySketch(_Py):
 
     def slope(self, sketch, plane):
 
-        ''''''
+        '''slope(self, sketch, plane)'''
 
         angle = plane.angle
         sketch.setDatum(3, math.radians(angle))
@@ -789,6 +951,6 @@ class _ViewProviderPySketch():
 
     def __init__(self, vobj):
 
-        ''''''
+        '''__init__(self, vobj)'''
 
         vobj.Proxy = self
