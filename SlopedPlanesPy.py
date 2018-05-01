@@ -485,7 +485,7 @@ class _Py(object):
         coordinates = coordinates[index:] + coordinates[:index]
         geometryList = geometryList[index:] + geometryList[:index]
 
-        # print coordinates, geometryList
+        print coordinates, geometryList
 
         return coordinates, geometryList
 
@@ -696,44 +696,6 @@ class _Py(object):
         self.sweepCurve = pySketch.Name
 
         return pySketch
-
-    def refine(self, faceOne, faceTwo):
-
-        '''refine(self, faceOne, faceTwo)'''
-
-        coordOne = self.faceDatas(faceOne)
-        coordTwo = self.faceDatas(faceTwo)
-
-        geomOne = self.geometries(faceOne, coordOne)
-        geomTwo = self.geometries(faceTwo, coordTwo)
-
-        numOne = -1
-        for cc in coordOne:
-            numOne += 1
-            if cc in coordTwo:
-                numTwo = coordTwo.index(cc)
-                break
-
-        aa = geomOne[:numOne]
-
-        if numTwo + 1 > len(geomTwo):
-            bb = 0
-        else:
-            bb = geomTwo[numTwo+1:]
-
-        cc = geomTwo[:numTwo]
-
-        if numOne + 1 > len(geomTwo):
-            dd = 0
-        else:
-            dd = geomOne[numOne+1:]
-
-        edgeList = aa + bb + cc + dd
-        wire = Part.Wire(edgeList)
-        face = Part.makeFace(wire, "Part::FaceMakerSimple")
-
-        return face
-
 
 class _PySketch(_Py):
 

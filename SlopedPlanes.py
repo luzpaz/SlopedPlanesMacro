@@ -578,6 +578,9 @@ class _SlopedPlanes(_Py):
 
                         if common.Area:
 
+                            endShape = endShape.cut([common], tolerance)
+                            childShape = childShape.cut([common], tolerance)
+
                             sPEdges = []
                             objEdges = []
 
@@ -611,11 +614,8 @@ class _SlopedPlanes(_Py):
                                 sPEdges.append(sEdges)
                                 # print 'sEdges ', sEdges
 
-                            print 'sPEdges ', sPEdges
-                            print 'objEdges ', objEdges
-
-                            endShape = endShape.cut([common], tolerance)
-                            childShape = childShape.cut([common], tolerance)
+                            # print 'sPEdges ', sPEdges
+                            # print 'objEdges ', objEdges
 
                             num = -1
                             for edgeOne, edgeTwo in zip(sPEdges, objEdges):
@@ -652,11 +652,14 @@ class _SlopedPlanes(_Py):
                                 common = seedOne.common(seedTwo)
 
                                 if common.Area:
+
                                     nn = -1
                                     for ff in endShape.Faces:
                                         nn += 1
                                         common = ff.common(seedOne)
                                         if common.Area:
+                                            # print ff.Area
+                                            # endShape = endShape.removeShape([ff])
                                             break
 
                                     mm = -1
@@ -664,24 +667,63 @@ class _SlopedPlanes(_Py):
                                         mm += 1
                                         common = gg.common(seedTwo)
                                         if common.Area:
+                                            # print gg.Area
+                                            childShape = childShape.removeShape([gg])
                                             break
 
-                                    print (ff, nn), (gg, mm)
+                                    # print (ff, nn), (gg, mm)
 
-                                    
+                                    faceOne = ff.copy()
+                                    faceTwo = gg.copy()
 
+                                    coordOne, geomOne = self.faceDatas(faceOne)
+                                    # print coordOne, geomOne
+                                    coordTwo, geomTwo = self.faceDatas(faceTwo)
+                                    # print coordTwo, geomTwo
 
+                                    numOne = -1
+                                    for cc in coordOne:
+                                        numOne += 1
+                                        if cc in coordTwo:
+                                            numTwo = coordTwo.index(cc)
+                                            break
+
+                                    # print 'NUMONE, NUMTWO', (numOne, numTwo)
+
+                                    aa = geomOne[:numOne]
+                                    # print 'aa ', aa
+
+                                    bb = geomTwo[numTwo:-1]
+                                    # print 'bb ', bb
+
+                                    cc = geomTwo[:numTwo]
+                                    # print 'cc ', cc
+
+                                    dd = geomOne[numOne+1:]
+                                    # print 'dd ', dd
+
+                                    edgeList = aa + bb + cc + dd
+                                    # print 'edgeList ', edgeList
+                                    edgeList =[e.toShape() for e in edgeList]
+                                    wire = Part.Wire(edgeList)
+                                    face = Part.makeFace(wire, "Part::FaceMakerSimple")
+                                    # print face.Area
+                                    face.complement()
+
+                                    endShape = endShape.replaceShape([(ff, face)])
 
                                 seedOne = laterOne.seedShape
                                 seedTwo = priorTwo.seedShape
                                 common = seedOne.common(seedTwo)
 
                                 if common.Area:
+
                                     nn = -1
                                     for ff in endShape.Faces:
                                         nn += 1
                                         common = ff.common(seedOne)
                                         if common.Area:
+                                            endShape = endShape.removeShape([ff])
                                             break
 
                                     mm = -1
@@ -689,9 +731,12 @@ class _SlopedPlanes(_Py):
                                         mm += 1
                                         common = gg.common(seedTwo)
                                         if common.Area:
+                                            childShape = childShape.removeShape([gg])
                                             break
 
-                                    print (ff, nn), (gg, mm)
+                                    # print (ff, nn), (gg, mm)
+
+                                    
 
                         endShape = Part.Compound([endShape, childShape])
 
