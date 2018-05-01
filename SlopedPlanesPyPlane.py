@@ -793,7 +793,7 @@ class _PyPlane(_Py):
             # print '# normal'
             scale = 1
             plane =\
-                self.doPlane(direction, geomCopy, firstParam,
+                self.doPlane(direction, pyWire, geomCopy, firstParam,
                              lastParam, scale, closed)
             self.shape = plane
             self.seedShape = plane.copy()
@@ -805,7 +805,7 @@ class _PyPlane(_Py):
             # print '# big'
             scale = 5
             bigPlane =\
-                self.doPlane(direction, geomCopy, firstParam,
+                self.doPlane(direction, pyWire, geomCopy, firstParam,
                              lastParam, scale, closed)
             self.bigShape = bigPlane
             self.seedBigShape = bigPlane.copy()
@@ -815,7 +815,7 @@ class _PyPlane(_Py):
                 # print '# enormous'
                 scale = 50
                 enormousPlane =\
-                    self.doPlane(direction, geomCopy, firstParam,
+                    self.doPlane(direction, pyWire, geomCopy, firstParam,
                                  lastParam, scale, closed)
                 self.enormousShape = enormousPlane
 
@@ -837,9 +837,10 @@ class _PyPlane(_Py):
 
         return direction, geom
 
-    def doPlane(self, direction, geom, firstParam, lastParam, scale, closed):
+    def doPlane(self, direction, pyWire, geom, firstParam, lastParam,
+                scale, closed):
 
-        '''doPlane(self, direction, geom, firstParam, lastParam, scale)
+        '''doPlane(self, pyWire, direction, geom, firstParam, lastParam, scale)
         '''
 
         # print 'scale ', scale
@@ -894,8 +895,40 @@ class _PyPlane(_Py):
                                Part.ArcOfEllipse)):
             # print 'b'
 
-            startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
-            endParam = startParam + 2 * pi
+            # print 'firstParam ', firstParam
+            # print 'lastParam ', lastParam
+
+            rear = self.rear
+            if rear:
+                # print 'reflex'
+
+                if len(rear) == 1:
+
+                    pyReflex = self.reflexedList[0]
+
+                    if rear[0] == pyReflex.rear[0]:
+
+                        startParam = firstParam
+                        endParam = startParam + 2 * pi
+
+                    else:
+
+                        startParam = lastParam
+                        endParam = startParam - 2 * pi
+
+                else:
+
+                    startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
+                    endParam = startParam + 2 * pi
+
+            else:
+                # print 'no reflex'
+
+                startParam = firstParam
+                endParam = lastParam
+
+            # print 'startParam ', startParam
+            # print 'endParam ', endParam
 
         elif isinstance(geom, (Part.Circle, Part.Ellipse)):
 
@@ -961,6 +994,7 @@ class _PyPlane(_Py):
             # print 'B'
 
             if closed:
+                # print 'B1'
 
                 point = geom.Location
                 angle = self.angle
@@ -978,6 +1012,8 @@ class _PyPlane(_Py):
                 # y los angulos igual o mayor que 90 ??
 
             else:
+                # print 'B2'
+
                 plane = extendShape.extrude(direction * upScale)
 
         return plane
