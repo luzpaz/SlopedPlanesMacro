@@ -357,7 +357,7 @@ class _PyWire(_Py):
                         geomCopy.translate(-1 * _Py.size * direction)
                         scale = 500
                         giantPlane =\
-                            pyRearPl.doPlane(direction, geomCopy, firstParam,
+                            pyRearPl.doPlane(direction, self, geomCopy, firstParam,
                                              lastParam, scale, False)
                         gS = pyPlane.geomShape
                         enormousShape = enormousShape.copy()

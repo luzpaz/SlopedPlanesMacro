@@ -587,10 +587,18 @@ class _Py(object):
             geom = Part.ArcOfHyperbola(curve.Hyperbola, startParam, endParam)
 
         elif isinstance(curve, Part.BSplineCurve):
-            pass
+
+            pointOne = curve.value(startParam)
+            pointTwo = curve.value(endParam)
+
+            geom = Part.LineSegment(pointOne, pointTwo)
 
         else:
-            pass
+
+            pointOne = curve.value(startParam)
+            pointTwo = curve.value(endParam)
+
+            geom = Part.LineSegment(pointOne, pointTwo)
 
         return geom
 

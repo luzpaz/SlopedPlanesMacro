@@ -840,7 +840,7 @@ class _PyPlane(_Py):
     def doPlane(self, direction, pyWire, geom, firstParam, lastParam,
                 scale, closed):
 
-        '''doPlane(self, pyWire, direction, geom, firstParam, lastParam, scale)
+        '''doPlane(self, direction, pyWire, geom, firstParam, lastParam, scale)
         '''
 
         # print 'scale ', scale
@@ -899,6 +899,7 @@ class _PyPlane(_Py):
             # print 'lastParam ', lastParam
 
             rear = self.rear
+
             if rear:
                 # print 'reflex'
 
@@ -937,7 +938,13 @@ class _PyPlane(_Py):
 
         elif isinstance(geom, Part.BSplineCurve):
 
-            pass
+            startParam = firstParam - leftScale
+            endParam = lastParam + rightScale
+
+        else:
+
+            startParam = firstParam - leftScale
+            endParam = lastParam + rightScale
 
         # print 'startParam ', startParam
         # print 'endParam ', endParam
@@ -950,45 +957,53 @@ class _PyPlane(_Py):
         if self.sweepCurve:
             # print 'A'
 
-            sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
-            wire = sweepSketch.Shape.copy()
+            if closed:
+                # print 'A1'
 
-            wire.Placement = FreeCAD.Placement()
+                pass
 
-            try:
-                constraint = degrees(sweepSketch.Constraints[3].Value)
-            except IndexError:
-                constraint = 45
+            else:
+                # print 'A2'
 
-            angleConstraint = constraint
-            angle = self.angle
-            ang = angle - angleConstraint
-            wire.rotate(FreeCAD.Vector(0, 0, 0), FreeCAD.Vector(0, 0, 1), ang)
+                sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
+                wire = sweepSketch.Shape.copy()
 
-            geomShape = self.geomShape
-            ffPoint = geomShape.firstVertex(True).Point
-            llPoint = geomShape.lastVertex(True).Point
-            direct = llPoint.sub(ffPoint)
-            aa = direct.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
-            if ffPoint.y > llPoint.y:
-                aa = aa + pi
+                wire.Placement = FreeCAD.Placement()
 
-            rotation = FreeCAD.Rotation()
-            rotation.Axis = FreeCAD.Vector(1, 0, 0)
-            rotation.Angle = pi / 2
-            wire.Placement.Rotation =\
-                rotation.multiply(wire.Placement.Rotation)
+                try:
+                    constraint = degrees(sweepSketch.Constraints[3].Value)
+                except IndexError:
+                    constraint = 45
 
-            rotation = FreeCAD.Rotation()
-            rotation.Axis = _Py.normal
-            rotation.Angle = aa
-            wire.Placement.Rotation =\
-                rotation.multiply(wire.Placement.Rotation)
+                angleConstraint = constraint
+                angle = self.angle
+                ang = angle - angleConstraint
+                wire.rotate(FreeCAD.Vector(0, 0, 0), FreeCAD.Vector(0, 0, 1), ang)
 
-            wire.Placement.Base = ffPoint
+                geomShape = self.geomShape
+                ffPoint = geomShape.firstVertex(True).Point
+                llPoint = geomShape.lastVertex(True).Point
+                direct = llPoint.sub(ffPoint)
+                aa = direct.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
+                if ffPoint.y > llPoint.y:
+                    aa = aa + pi
 
-            extendShape = Part.Wire(extendShape)
-            plane = wire.makePipeShell([extendShape])
+                rotation = FreeCAD.Rotation()
+                rotation.Axis = FreeCAD.Vector(1, 0, 0)
+                rotation.Angle = pi / 2
+                wire.Placement.Rotation =\
+                    rotation.multiply(wire.Placement.Rotation)
+
+                rotation = FreeCAD.Rotation()
+                rotation.Axis = _Py.normal
+                rotation.Angle = aa
+                wire.Placement.Rotation =\
+                    rotation.multiply(wire.Placement.Rotation)
+
+                wire.Placement.Base = ffPoint
+
+                extendShape = Part.Wire(extendShape)
+                plane = wire.makePipeShell([extendShape])
 
         else:
             # print 'B'
