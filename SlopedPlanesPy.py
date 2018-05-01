@@ -453,6 +453,7 @@ class _Py(object):
 
         if len(orderVert) == 1:
             orientVert = orderVert
+            geometryList = [wire.Edges[0].Curve]
 
         else:
             orderPoint = [vert.Point for vert in orderVert]
