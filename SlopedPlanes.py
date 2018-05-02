@@ -469,7 +469,7 @@ class _SlopedPlanes(_Py):
 
         self.OnChanged = True
 
-        # elaborates a list of planes for every face
+        # elaborates a list of planes for every face and makes a shell
 
         figList = []
         for pyFace in pyFaceListNew:
@@ -553,8 +553,6 @@ class _SlopedPlanes(_Py):
                 plane.Placement = placement
 
             figList.extend(planeFaceList)
-
-        # makes a shell
 
         endShape = Part.makeShell(figList)
 

@@ -427,12 +427,9 @@ class _Py(object):
 
         '''rotateVector(self, vector, axis, angle)'''
 
-        line = Part.LineSegment(origin, vector)
         rotation = FreeCAD.Rotation(axis, angle)
         placement = FreeCAD.Placement(origin, rotation)
-        line.rotate(placement)
-        vector = line.EndPoint
-        return vector
+        return placement.multVec(vector)
 
     def faceNormal(self, face):
 
