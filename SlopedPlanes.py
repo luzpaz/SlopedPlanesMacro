@@ -552,16 +552,11 @@ class _SlopedPlanes(_Py):
             for plane in planeFaceList:
                 plane.Placement = placement
 
-            figList.append(planeFaceList)
+            figList.extend(planeFaceList)
 
-        # makes a shell for every planes list, compunds them, and the end
+        # makes a shell
 
-        shellList = []
-        for planeList in figList:
-            shell = Part.makeShell(planeList)
-            shellList.append(shell)
-
-        endShape = Part.makeCompound(shellList)
+        endShape = Part.makeShell(figList)
 
         if slopedPlanes.Group:
             for obj in slopedPlanes.Group:
@@ -576,8 +571,7 @@ class _SlopedPlanes(_Py):
                             endShape = endShape.cut([common], tolerance)
                             childShape = childShape.cut([common], tolerance)
 
-                        endShape = Part.Compound([endShape, childShape])
-                        shell = Part.Shell(endShape.Faces)
+                        shell = Part.Shell(endShape.Faces + childShape.Faces)
                         shell = shell.removeSplitter()
                         endShape = shell
 
