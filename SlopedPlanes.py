@@ -576,46 +576,10 @@ class _SlopedPlanes(_Py):
                             endShape = endShape.cut([common], tolerance)
                             childShape = childShape.cut([common], tolerance)
 
-                            sPEdges = []
-                            objEdges = []
-
-                            for ff in common.Faces:
-
-                                oEdges = []
-                                for pyFace in obj.Proxy.Pyth:
-                                    for pyWire in pyFace.wires:
-                                        for pyPl in pyWire.planes:
-                                            gS = pyPl.geomShape
-                                            if gS:
-                                                section = ff.section([gS],
-                                                                     tolerance)
-                                                if section.Edges:
-                                                    oEdges.append([pyPl,
-                                                                   pyFace])
-
-                                objEdges.append(oEdges)
-                                # print 'oEdges ', oEdges
-
-                                sEdges = []
-                                for pyFace in slopedPlanes.Proxy.Pyth:
-                                    for pyWire in pyFace.wires:
-                                        for pyPl in pyWire.planes:
-                                            gS = pyPl.geomShape
-                                            if gS:
-                                                section = ff.section([gS],
-                                                                     tolerance)
-                                                if section.Edges:
-                                                    sEdges.append([pyPl,
-                                                                   pyFace])
-
-                                sPEdges.append(sEdges)
-                                # print 'sEdges ', sEdges
-
-                            endShape, childShape =\
-                                self.refine(sPEdges, objEdges,
-                                            endShape, childShape)
-
                         endShape = Part.Compound([endShape, childShape])
+                        shell = Part.Shell(endShape.Faces)
+                        shell = shell.removeSplitter()
+                        endShape = shell
 
         if not slopedPlanes.Complement:
             endShape.complement()
