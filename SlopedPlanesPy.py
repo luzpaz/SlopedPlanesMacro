@@ -52,6 +52,10 @@ class _Py(object):
     slopedPlanes = None
     upList = []
 
+    precision = 1 / tolerance
+    precision = str(precision)
+    precision = precision[:].find('.')
+
     def addValue(self, prop, value, direction='forward'):
 
         '''addValue(self, prop, value, direction='forward')'''
@@ -415,9 +419,7 @@ class _Py(object):
 
         '''roundVector(self, vector)'''
 
-        precision = 1 / _Py.tolerance
-        precision = str(precision)
-        precision = precision[:].find('.')
+        precision = _Py.precision
 
         return FreeCAD.Vector(round(vector.x, precision),
                               round(vector.y, precision),
@@ -435,8 +437,7 @@ class _Py(object):
 
         '''faceNormal(self, face)'''
 
-        normal = face.normalAt(0, 0)
-        return self.roundVector(normal)
+        return self.roundVector(face.normalAt(0, 0))
 
     def faceDatas(self, face):
 
