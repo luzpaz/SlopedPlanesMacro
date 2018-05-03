@@ -22,7 +22,7 @@
 # *****************************************************************************
 
 
-from math import pi, degrees, radians, tan, sqrt
+from math import pi, degrees, radians, tan, cos, sin
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
@@ -770,7 +770,10 @@ class _PyPlane(_Py):
             if closed:
                 geom = self.makeGeom(self.geomShape.Curve, 0, 2 * pi)
                 angle = self.angle
-                radius = geom.Radius
+                if isinstance(geom, Part.ArcOfEllipse):
+                    radius = geom.MajorRadius
+                else:
+                    radius = geom.Radius
                 height = radius * tan(radians(angle))
                 pointA = self.geomShape.Vertexes[0].Point
                 pointB = geom.Location + FreeCAD.Vector(0, 0, height)
@@ -957,53 +960,48 @@ class _PyPlane(_Py):
         if self.sweepCurve:
             # print 'A'
 
-            if closed:
-                # print 'A1'
+            # TODO reverse
+            # TODO closed
+            angle = self.angle
 
-                pass
+            sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
+            wire = sweepSketch.Shape.copy()
 
-            else:
-                # print 'A2'
+            wire.Placement = FreeCAD.Placement()
 
-                sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
-                wire = sweepSketch.Shape.copy()
+            try:
+                constraint = degrees(sweepSketch.Constraints[3].Value)
+            except IndexError:
+                constraint = 45
 
-                wire.Placement = FreeCAD.Placement()
+            angleConstraint = constraint
+            ang = angle - angleConstraint
+            wire.rotate(FreeCAD.Vector(0, 0, 0), FreeCAD.Vector(0, 0, 1), ang)
 
-                try:
-                    constraint = degrees(sweepSketch.Constraints[3].Value)
-                except IndexError:
-                    constraint = 45
+            geomShape = self.geomShape
+            ffPoint = geomShape.firstVertex(True).Point
+            llPoint = geomShape.lastVertex(True).Point
+            direct = llPoint.sub(ffPoint)
+            aa = direct.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
+            if ffPoint.y > llPoint.y:
+                aa = aa + pi
 
-                angleConstraint = constraint
-                angle = self.angle
-                ang = angle - angleConstraint
-                wire.rotate(FreeCAD.Vector(0, 0, 0), FreeCAD.Vector(0, 0, 1), ang)
+            rotation = FreeCAD.Rotation()
+            rotation.Axis = FreeCAD.Vector(1, 0, 0)
+            rotation.Angle = pi / 2
+            wire.Placement.Rotation =\
+                rotation.multiply(wire.Placement.Rotation)
 
-                geomShape = self.geomShape
-                ffPoint = geomShape.firstVertex(True).Point
-                llPoint = geomShape.lastVertex(True).Point
-                direct = llPoint.sub(ffPoint)
-                aa = direct.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
-                if ffPoint.y > llPoint.y:
-                    aa = aa + pi
+            rotation = FreeCAD.Rotation()
+            rotation.Axis = _Py.normal
+            rotation.Angle = aa
+            wire.Placement.Rotation =\
+                rotation.multiply(wire.Placement.Rotation)
 
-                rotation = FreeCAD.Rotation()
-                rotation.Axis = FreeCAD.Vector(1, 0, 0)
-                rotation.Angle = pi / 2
-                wire.Placement.Rotation =\
-                    rotation.multiply(wire.Placement.Rotation)
+            wire.Placement.Base = ffPoint
 
-                rotation = FreeCAD.Rotation()
-                rotation.Axis = _Py.normal
-                rotation.Angle = aa
-                wire.Placement.Rotation =\
-                    rotation.multiply(wire.Placement.Rotation)
-
-                wire.Placement.Base = ffPoint
-
-                extendShape = Part.Wire(extendShape)
-                plane = wire.makePipeShell([extendShape])
+            extendShape = Part.Wire(extendShape)
+            plane = wire.makePipeShell([extendShape])
 
         else:
             # print 'B'
@@ -1011,20 +1009,153 @@ class _PyPlane(_Py):
             if closed:
                 # print 'B1'
 
-                point = geom.Location
                 angle = self.angle
-                radius = geom.Radius
-                height = radius * tan(radians(angle))
-                length = sqrt(radius ** 2 + height ** 2)
-                pointA = self.geomShape.Vertexes[0].Point
-                pointB = geom.Location + FreeCAD.Vector(0, 0, height)
-                revolCurve = Part.makeLine(pointA, pointB)
+                # print 'angle ', angle
+                point = geom.Location
+                # print 'point ', point
+                length = self.length
+                # print 'length ', length
 
-                plane = Part.makeRevolution(revolCurve, 0, length, 360, point,
-                                            FreeCAD.Vector(0, 0, 1),).Faces[0]
+                # print 'geom'
 
-                # TODO para la ellipse hacerlo con sweep ??
-                # y los angulos igual o mayor que 90 ??
+                if isinstance(geom, Part.ArcOfEllipse):
+                    # print 'ellipse'
+                    major = geom.MajorRadius
+                    minor = geom.MinorRadius
+                    radius = major
+
+                else:
+                    # print 'circle'
+                    radius = geom.Radius
+                    # print 'radius ', radius
+
+                angle = abs(angle) % 360
+                # print 'angle ', angle
+
+                if angle == 0:
+                    # print 'A'
+
+                    slopedPlanes = _Py.slopedPlanes
+                    faceMaker = slopedPlanes.FaceMaker
+
+                    if pyWire.numWire == 0:
+                        plane = Part.makeFace(geom.toShape(),
+                                              faceMaker)
+                    else:
+                        rr = radius + length
+                        circle = Part.makeCircle(rr)
+                        circle.translate(point)
+                        plane = Part.makeFace([extendShape,
+                                               circle],
+                                              faceMaker)
+
+                elif angle == 90:
+                    # print 'B'
+
+                    plane = Part.makeCylinder(radius, length, point)
+
+                elif angle == 180:
+                    # print 'BB'
+
+                    slopedPlanes = _Py.slopedPlanes
+                    faceMaker = slopedPlanes.FaceMaker
+
+                    if pyWire.numWire > 0:
+                        # print 'BB1'
+
+                        plane = Part.makeFace(extendShape,
+                                              faceMaker)
+                        plane.translate(point)
+
+                    else:
+                        # print 'BB2'
+
+                        rr = radius + length
+                        circle = Part.makeCircle(rr)
+                        circle.translate(point)
+                        plane = Part.makeFace([extendShape,
+                                               circle],
+                                              faceMaker)
+
+                elif angle > 90:
+                    # print 'C'
+
+                    radiusBottom = radius
+                    ang = angle - 90
+                    # print 'ang ', ang
+
+                    if pyWire.numWire == 0:
+                        radiusTop = radiusBottom + length * sin(radians(ang))
+
+                    else:
+                        ll = radius / cos(radians(ang))
+                        # print 'll ', ll
+                        if ll <= length:
+                            radiusTop = 0
+                        else:
+                            radiusTop = radiusBottom - length * sin(radians(ang))
+
+                    height = length * cos(radians(ang))
+
+                    # print 'radiusBottom ', radiusBottom
+                    # print 'radiusTop ', radiusTop
+                    # print 'height ', height
+
+                    plane = Part.makeCone(radiusBottom, radiusTop, height,
+                                          point)
+
+                else:
+                    # print 'D'
+
+                    radiusBottom = radius
+                    ll = radius / cos(radians(angle))
+                    # print 'll ', ll
+
+                    if ll <= length:
+                        # print 'D1'
+                        if pyWire.numWire == 0:
+                            # print 'D11'
+                            height = radius * tan(radians(angle))
+                            radiusTop = 0
+                        else:
+                            # print 'D12'
+                            height = length * sin(radians(angle))
+                            radiusTop = radiusBottom + length * cos(radians(angle))
+
+                    else:
+                        # print 'D2'
+                        if pyWire.numWire == 0:
+                            # print 'D21'
+                            height = length * sin(radians(angle))
+                            radiusTop = radiusBottom - length * cos(radians(angle))
+                        else:
+                            # print 'D22'
+                            height = radius * tan(radians(angle))
+                            radiusTop = radiusBottom + length * cos(radians(angle))
+
+                    # print 'radiusBottom ', radiusBottom
+                    # print 'radiusTop ', radiusTop
+                    # print 'height ', height
+
+                    plane = Part.makeCone(radiusBottom, radiusTop, height,
+                                          point)
+
+                if self.angle < 0 and _Py.reverse:
+                    pass
+
+                elif self.angle < 0 or _Py.reverse:
+                    # print 'negative'
+                    plane = plane.mirror(FreeCAD.Vector(0, 0, 0),
+                                         FreeCAD.Vector(0, 0, -1))
+
+                if isinstance(geom, Part.ArcOfEllipse):
+                    # print 'ellipse'
+                    matrix = FreeCAD.Matrix()
+                    coef = minor / major
+                    matrix.scale(FreeCAD.Vector(1, coef, 1))
+                    plane = plane.transformGeometry(matrix)
+
+                plane = plane.Faces[0]
 
             else:
                 # print 'B2'

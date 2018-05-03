@@ -734,7 +734,7 @@ class _PyFace(_Py):
                 # print 'alignments ', self.alignments
 
             if resetFace:
-                if numWire > 0:
+                if numWire > 0 and len(coord) > 2:
                     # print 'firstPlane'
 
                     firstPlane = pyPlaneList[0]
