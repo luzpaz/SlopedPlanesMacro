@@ -1012,7 +1012,7 @@ class _PyPlane(_Py):
                 angle = self.angle
                 # print 'angle ', angle
                 point = geom.Location
-                # print 'point ', point
+                print 'point ', point
                 length = self.length
                 # print 'length ', length
 
@@ -1140,6 +1140,15 @@ class _PyPlane(_Py):
                     plane = Part.makeCone(radiusBottom, radiusTop, height,
                                           point)
 
+                if isinstance(geom, Part.ArcOfEllipse):
+                    # print 'ellipse'
+                    matrix = FreeCAD.Matrix()
+                    coef = minor / major
+                    matrix.scale(FreeCAD.Vector(1, coef, 1))
+                    plane.translate(-1 * point)
+                    plane = plane.transformGeometry(matrix)
+                    plane.translate(point)
+
                 if self.angle < 0 and _Py.reverse:
                     pass
 
@@ -1147,13 +1156,6 @@ class _PyPlane(_Py):
                     # print 'negative'
                     plane = plane.mirror(FreeCAD.Vector(0, 0, 0),
                                          FreeCAD.Vector(0, 0, -1))
-
-                if isinstance(geom, Part.ArcOfEllipse):
-                    # print 'ellipse'
-                    matrix = FreeCAD.Matrix()
-                    coef = minor / major
-                    matrix.scale(FreeCAD.Vector(1, coef, 1))
-                    plane = plane.transformGeometry(matrix)
 
                 plane = plane.Faces[0]
 
