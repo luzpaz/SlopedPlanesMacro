@@ -1229,7 +1229,7 @@ class _PyAlignment(_Py):
                         cutterList.append(prior.selectShape())
 
             if later.numWire == pyCont.numWire:
-                if later.numGeom not in control:
+                if later.numGeom not in pyCont.control:
                     if later.choped or later.fronted:
                         pass
                     elif not later.aligned:
