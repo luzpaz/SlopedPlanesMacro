@@ -263,7 +263,7 @@ class _PyFace(_Py):
                 edgeList = wire.Edges
 
             for dd in dct['_planes']:
-                dd['_reflexedList'] = []  # provisionally
+                ### dd['_reflexedList'] = []  # provisionally
                 numGeom += 1
                 pyPlane = _PyPlane(numWire, numGeom)
                 pyPlane.__dict__ = dd
@@ -858,7 +858,8 @@ class _PyFace(_Py):
                 # print 'pyAli ', pyAli
                 dL = pyAli.chops
                 chopList.extend(dL)
-                self.removeAlignment(pyAli)  # joined in one alignment
+                #self.removeAlignment(pyAli)  # joined in one alignment
+                self.alignments.remove(pyAlign)  # joined in one alignment
 
                 pyAli.base.alignedList.remove(pyAli)
                 for ali in pyAli.aligns:
@@ -1128,7 +1129,7 @@ class _PyFace(_Py):
         elif isinstance(geom, (Part.Circle,
                                Part.Ellipse)):
 
-            pass
+            pass  # TODO llevar a ArcOfParabola y seleccionar por valor de parametros
 
         elif isinstance(geom, Part.BSplineCurve):
 
