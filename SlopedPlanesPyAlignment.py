@@ -1228,13 +1228,13 @@ class _PyAlignment(_Py):
                         # cutterList.append(prior.seedShape)
                         cutterList.append(prior.selectShape())
 
-            if later.numWire == pyBase.numWire:
+            if later.numWire == pyCont.numWire:
                 if later.numGeom not in control:
                     if later.choped or later.fronted:
                         pass
                     elif not later.aligned:
                         cutterList.append(later.shape)
-                    elif later.aligned and not pyBase.choped:
+                    elif later.aligned and not pyCont.choped:
                         # cutterList.append(later.seedShape)
                         cutterList.append(later.selectShape())
 
