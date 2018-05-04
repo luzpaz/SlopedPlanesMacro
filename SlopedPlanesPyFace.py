@@ -858,8 +858,7 @@ class _PyFace(_Py):
                 # print 'pyAli ', pyAli
                 dL = pyAli.chops
                 chopList.extend(dL)
-                #self.removeAlignment(pyAli)  # joined in one alignment
-                self.alignments.remove(pyAlign)  # joined in one alignment
+                self.alignments.remove(pyAli)  # joined in one alignment
 
                 pyAli.base.alignedList.remove(pyAli)
                 for ali in pyAli.aligns:
@@ -1086,14 +1085,6 @@ class _PyFace(_Py):
                 pass
 
         return (numWire, numGeom)
-
-    def removeAlignment(self, pyAlign):
-
-        '''removeAlignment(self, pyAlign)'''
-
-        pyAlignList = self.alignments
-        pyAlignList.remove(pyAlign)
-        self.alignments = pyAlignList
 
     def forBack(self, pyPlane, direction):
 

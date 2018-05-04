@@ -190,7 +190,9 @@ class _PyWire(_Py):
 
     def virtualizing(self):
 
-        '''virtualizing(self)'''
+        '''virtualizing(self)
+        Assigns the forward and backward or the reflexs.
+        Transfers to PyReflex'''
 
         # print '###### virtualizing wire', (self.numWire)
 
@@ -357,13 +359,14 @@ class _PyWire(_Py):
                         geomCopy.translate(-1 * _Py.size * direction)
                         scale = 500
                         giantPlane =\
-                            pyRearPl.doPlane(direction, self, geomCopy, firstParam,
-                                             lastParam, scale, False)
+                            pyRearPl.doPlane(direction, self, geomCopy,
+                                             firstParam, lastParam,
+                                             scale, False)
                         gS = pyPlane.geomShape
                         enormousShape = enormousShape.copy()
                         enormousShape =\
                             self.cutting(enormousShape, [giantPlane], gS)
-                        # no esta completo: preProcessTwo
+                        # TODO no esta completo: preProcessTwo
 
                 for nG, pyPl in zip(rango, rangoPy):
                     control = pyPl.control
