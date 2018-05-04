@@ -1215,6 +1215,29 @@ class _PyAlignment(_Py):
 
             cutterList.extend(simulatedC)
 
+            prior = self.prior
+            later = self.later
+
+            if prior.numWire == pyBase.numWire:
+                if prior.numGeom not in control:
+                    if prior.choped or prior.fronted:
+                        pass
+                    elif not prior.aligned:
+                        cutterList.append(prior.shape)
+                    elif prior.aligned and not pyBase.choped:
+                        # cutterList.append(prior.seedShape)
+                        cutterList.append(prior.selectShape())
+
+            if later.numWire == pyBase.numWire:
+                if later.numGeom not in control:
+                    if later.choped or later.fronted:
+                        pass
+                    elif not later.aligned:
+                        cutterList.append(later.shape)
+                    elif later.aligned and not pyBase.choped:
+                        # cutterList.append(later.seedShape)
+                        cutterList.append(later.selectShape())
+
             if cutterList:
 
                 base = pyBase.cuttingPyth(cutterList)

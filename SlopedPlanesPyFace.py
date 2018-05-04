@@ -744,7 +744,7 @@ class _PyFace(_Py):
                         pyReflex = self.doReflex(pyWire, pyPlane, firstPlane)
 
                     else:
-                        # print 'firstPlane no aligned'
+                        # print 'firstPlane aligned'
 
                         if not pyPlane.choped:
                             # print 'pyPlane no choped'
