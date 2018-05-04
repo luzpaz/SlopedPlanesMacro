@@ -890,7 +890,7 @@ class _PyReflex(_Py):
         # podría incluir en isSolved la detención de sobrantes en planos de una cara
         # que tienen un vertice en la planta (tres vertices en total)
 
-        if pyR.numWire > 1:
+        if pyR.numWire > 0:
             oppReflex = pyOppR.bigShape
 
         if pyOppR.isSolved():
