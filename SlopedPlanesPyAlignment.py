@@ -1406,15 +1406,13 @@ class _PyAlignment(_Py):
                     shapeOne = Part.makeCompound(fList)
                     pyOne.shape = shapeOne
 
-                    ##if numChop < total:
-
                     pyBase = aligns[numChop]
 
                 # rChop with base and cont
-                '''for nn, pyPl in map(None, rChop, rChopPy):
+                for nn, pyPl in map(None, rChop, rChopPy):
                     if not (pyPl.choped or pyPl.aligned):
                         pyPl.cuttingPyth(cutList)
-                        # print 'rangoChop ', nn'''
+                        # print 'rangoChop ', nn
 
     def processRango(self, rango, rangoPy, pyPlane, numWire, enormousBase):
 
