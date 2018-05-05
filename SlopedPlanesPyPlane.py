@@ -901,6 +901,9 @@ class _PyPlane(_Py):
             # print 'firstParam ', firstParam
             # print 'lastParam ', lastParam
 
+            # TODO hay que revisar los puntos y parametros de comienzo y fin
+            # hay que llegar al menos a 180 para resolver bien inclinaciones mayores de 90º
+
             rear = self.rear
 
             if rear:
@@ -936,6 +939,8 @@ class _PyPlane(_Py):
 
         elif isinstance(geom, (Part.Circle, Part.Ellipse)):
 
+            # TODO hay que revisar los puntos y parametros de comienzo y fin
+
             startParam = 0
             endParam = 2 * pi
 
@@ -961,7 +966,7 @@ class _PyPlane(_Py):
             # print 'A'
 
             # TODO reverse
-            # TODO closed
+            # TODO closed con revolve
             angle = self.angle
 
             sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
@@ -1012,7 +1017,7 @@ class _PyPlane(_Py):
                 angle = self.angle
                 # print 'angle ', angle
                 point = geom.Location
-                print 'point ', point
+                # print 'point ', point
                 length = self.length
                 # print 'length ', length
 
@@ -1142,12 +1147,21 @@ class _PyPlane(_Py):
 
                 if isinstance(geom, Part.ArcOfEllipse):
                     # print 'ellipse'
+
+                    angleXU = geom.AngleXU
+
                     matrix = FreeCAD.Matrix()
                     coef = minor / major
                     matrix.scale(FreeCAD.Vector(1, coef, 1))
                     plane.translate(-1 * point)
+                    plane.rotate(FreeCAD.Vector(0, 0, 0),
+                                 FreeCAD.Vector(0, 0, 1),
+                                 -1 * degrees(angleXU))
                     plane = plane.transformGeometry(matrix)
                     plane.translate(point)
+                    plane.rotate(FreeCAD.Vector(0, 0, 0),
+                                 FreeCAD.Vector(0, 0, 1),
+                                 degrees(angleXU))
 
                 if self.angle < 0 and _Py.reverse:
                     pass
