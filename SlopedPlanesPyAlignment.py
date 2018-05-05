@@ -1225,7 +1225,6 @@ class _PyAlignment(_Py):
                     elif not prior.aligned:
                         cutterList.append(prior.shape)
                     elif prior.aligned and not pyBase.choped:
-                        # cutterList.append(prior.seedShape)
                         cutterList.append(prior.selectShape())
 
             if later.numWire == pyCont.numWire:
@@ -1235,7 +1234,6 @@ class _PyAlignment(_Py):
                     elif not later.aligned:
                         cutterList.append(later.shape)
                     elif later.aligned and not pyCont.choped:
-                        # cutterList.append(later.seedShape)
                         cutterList.append(later.selectShape())
 
             if cutterList:
@@ -1282,6 +1280,8 @@ class _PyAlignment(_Py):
             numChop = -1
             for pyCont in aligns:
                 numChop += 1
+
+                base = pyBase.shape
 
                 [pyOne, pyTwo] = chopList[numChop]
                 rChop = rangoChop[numChop]
@@ -1337,15 +1337,16 @@ class _PyAlignment(_Py):
                 # print 'base.Faces ', base.Faces, len(base.Faces)
 
                 gA = self.geomAligned
-                number = -1
+                # print 'geomAligned ', gA, (gA.firstVertex(True).Point, gA.lastVertex(True).Point)
+                number = 0
                 for ff in base.Faces:
                     section = ff.section([gA], tolerance)
                     if section.Edges:
                         number += 1
                 # print 'number ', number
 
-                if number <= 1:
-                    # print 'a'
+                if number <= 2:
+                    # print 'a no divide'
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
@@ -1371,7 +1372,7 @@ class _PyAlignment(_Py):
                             pyTwo.shape = shapeTwo
 
                 else:
-                    # print 'b'
+                    # print 'b divide'
 
                     gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
@@ -1405,13 +1406,15 @@ class _PyAlignment(_Py):
                     shapeOne = Part.makeCompound(fList)
                     pyOne.shape = shapeOne
 
+                    ##if numChop < total:
+
                     pyBase = aligns[numChop]
 
                 # rChop with base and cont
-                for nn, pyPl in map(None, rChop, rChopPy):
+                '''for nn, pyPl in map(None, rChop, rChopPy):
                     if not (pyPl.choped or pyPl.aligned):
                         pyPl.cuttingPyth(cutList)
-                        # print 'rangoChop ', nn
+                        # print 'rangoChop ', nn'''
 
     def processRango(self, rango, rangoPy, pyPlane, numWire, enormousBase):
 
