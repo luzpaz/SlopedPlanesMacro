@@ -1315,18 +1315,18 @@ class _PyAlignment(_Py):
                                 cutterList.append(prior.selectShape())
 
                     if later.numWire == lastAling.numWire:
-                        # if later.numGeom not in control:
-                        if later.choped or later.fronted:
-                            pass
-                        elif not later.aligned:
-                            ll = later.shape.copy()
-                            if cL:
-                                gS = later.geomShape
-                                ll = self.cutting(ll, cL, gS)
-                            # print 'later'
-                            cutterList.append(ll)
-                        elif later.aligned and not pyBase.choped:
-                            cutterList.append(later.selectShape())
+                        if later.numGeom not in lastAling.control:
+                            if later.choped or later.fronted:
+                                pass
+                            elif not later.aligned:
+                                ll = later.shape.copy()
+                                if cL:
+                                    gS = later.geomShape
+                                    ll = self.cutting(ll, cL, gS)
+                                # print 'later'
+                                cutterList.append(ll)
+                            elif later.aligned and not pyBase.choped:
+                                cutterList.append(later.selectShape())
 
                 simulatedC = simulatedChops[numChop]
 
