@@ -268,6 +268,7 @@ class _PyAlignment(_Py):
 
         pyBase = self.base
         base = pyBase.shape
+        numWire = pyBase.numWire
         numGeom = pyBase.numGeom
         enormousBase = pyBase.enormousShape
         baseRear = pyBase.rear
@@ -405,9 +406,10 @@ class _PyAlignment(_Py):
                             control.append(nGeom)
 
                         # the aligment is not cutted by rChop
-                        baseControl.append(nG)
-                        if falsify:
-                            pyCont.control.append(nG)
+                        if numWire == nW:
+                            baseControl.append(nG)
+                            if falsify:
+                                pyCont.control.append(nG)
 
                         # pyOne and pyTwo don't cut rChop, if not reflexed
                         if not pyPl.reflexed:
