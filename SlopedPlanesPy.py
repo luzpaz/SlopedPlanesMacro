@@ -228,8 +228,8 @@ class _Py(object):
             print 'cross ', pyAlignment.base.cross
             print 'rangoChop ', pyAlignment.rango
             print 'rangoRear ', pyAlignment.rangoRear[0]
-            print 'prior ', pyAlignment.prior.numGeom
-            print 'later ', pyAlignment.later.numGeom
+            print 'prior ', (pyAlignment.prior.numWire, pyAlignment.prior.numGeom)
+            print 'later ', (pyAlignment.later.numWire, pyAlignment.later.numGeom)
 
             print '*** chops ', [[(x.numWire, x.numGeom),
                                   (y.numWire, y.numGeom)]

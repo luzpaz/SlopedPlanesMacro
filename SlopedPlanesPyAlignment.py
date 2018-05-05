@@ -1270,6 +1270,15 @@ class _PyAlignment(_Py):
 
             cutList = []
 
+            cL = []
+            if len(pyFace.wires) > 1:
+                for ch in chopList:
+                    for p in ch:
+                        cL.append(p.shape)
+            # print cL
+
+            lastAling = aligns[-1]
+
             numChop = -1
             for pyCont in aligns:
                 numChop += 1
@@ -1296,20 +1305,28 @@ class _PyAlignment(_Py):
                             if prior.choped or prior.fronted:
                                 pass
                             elif not prior.aligned:
-                                cutterList.append(prior.shape)
+                                pp = prior.shape.copy()
+                                if cL:
+                                    gS = prior.geomShape
+                                    pp = self.cutting(pp, cL, gS)
+                                # print 'prior'
+                                cutterList.append(pp)
                             elif prior.aligned and not pyBase.choped:
-                                # cutterList.append(prior.seedShape)
                                 cutterList.append(prior.selectShape())
 
-                    if later.numWire == pyBase.numWire:
-                        if later.numGeom not in control:
-                            if later.choped or later.fronted:
-                                pass
-                            elif not later.aligned:
-                                cutterList.append(later.shape)
-                            elif later.aligned and not pyBase.choped:
-                                # cutterList.append(later.seedShape)
-                                cutterList.append(later.selectShape())
+                    if later.numWire == lastAling.numWire:
+                        # if later.numGeom not in control:
+                        if later.choped or later.fronted:
+                            pass
+                        elif not later.aligned:
+                            ll = later.shape.copy()
+                            if cL:
+                                gS = later.geomShape
+                                ll = self.cutting(ll, cL, gS)
+                            # print 'later'
+                            cutterList.append(ll)
+                        elif later.aligned and not pyBase.choped:
+                            cutterList.append(later.selectShape())
 
                 simulatedC = simulatedChops[numChop]
 

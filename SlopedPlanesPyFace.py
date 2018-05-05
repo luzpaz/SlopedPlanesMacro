@@ -1298,6 +1298,7 @@ class _PyFace(_Py):
                 cutterFace.insert(num, pop)
                 # print 'cutterList ', cutterList
 
+                checkList = cutterList[:]   # TODO
                 cutterList = [pyPl.shape for pyPl in cutterList]
 
                 pop = chopFace.pop(num)
@@ -1313,6 +1314,7 @@ class _PyFace(_Py):
 
                 for pyPlane in pyWire.planes:
                     cutList = cutterList[:]
+                    chList = checkList[:]
                     plane = pyPlane.shape
                     if plane:
                         # print '# numGeom ', pyPlane.numGeom
@@ -1352,8 +1354,22 @@ class _PyFace(_Py):
 
                         elif pyPlane.aligned:
                             # print 'B'
+
+                            # print cutList
+                            # print chList
+
                             pyAlign = pyPlane.selectAlignmentBase()
                             if pyAlign:
+
+                                prL = [pyAlign.prior, pyAlign.later]
+
+                                nn = -1
+                                for pyP in chList:
+                                    nn += 1
+                                    if pyP in prL:
+                                        chList.remove(pyP)
+                                        cutList.pop(nn)
+
                                 line = pyAlign.geomAligned
                                 simulAlign =\
                                     Part.makeShell(pyAlign.simulatedAlignment)
@@ -1370,6 +1386,7 @@ class _PyFace(_Py):
                                             simulAlign.common([simulA], tolerance)
                                         if not common.Area:
                                             aL.extend(pyA.simulatedAlignment)
+                                # print 'aL ', aL
                                 cutList.extend(aL)
 
                         else:
@@ -1380,7 +1397,7 @@ class _PyFace(_Py):
                                     aList.append(ali.simulatedAlignment)
                             cutList.extend(aList)
                             #cutList.extend(aliList)
-                            cutList.extend(chopList)
+                            # cutList.extend(chopList)
 
                         if cutList:
                             # print 'cutList ', cutList
