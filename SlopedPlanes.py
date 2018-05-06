@@ -205,6 +205,10 @@ class _SlopedPlanes(_Py):
         _Py.slopedPlanes = slopedPlanes
         tolerance = slopedPlanes.Tolerance
         _Py.tolerance = tolerance
+        precision = 1 / tolerance
+        precision = str(precision)
+        precision = precision[:].find('.')
+        _Py.precision = precision
         _Py.reverse = slopedPlanes.Reverse
         _Py.upList = []
 
@@ -244,6 +248,9 @@ class _SlopedPlanes(_Py):
                 faceList.append(pop)
                 pop = geomOuter.pop(index)
                 geomOuterOrdered.append(pop)
+
+            # print 'outer geom ', geomOuterOrdered
+            # print 'coordinatesOuterOrdered ', coordinatesOuterOrdered
 
             self.faceList = faceList
 
@@ -308,6 +315,8 @@ class _SlopedPlanes(_Py):
                     wireList.append(pop)
                     pop = geomInner.pop(index)
                     geomInnerOrdered.append(pop)
+
+                # print 'inner geom ', geomInnerOrdered
 
                 wireList.insert(0, face.OuterWire)
 
@@ -550,7 +559,7 @@ class _SlopedPlanes(_Py):
                 planeFaceList.extend(mirror.Faces)
 
             for plane in planeFaceList:
-                plane.Placement = placement
+                plane.Placement = placement.multiply(plane.Placement)
 
             figList.extend(planeFaceList)
 

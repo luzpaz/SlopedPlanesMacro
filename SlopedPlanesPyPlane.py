@@ -768,7 +768,10 @@ class _PyPlane(_Py):
             # print '### no seed'
 
             if closed:
-                geom = self.makeGeom(self.geomShape.Curve, 0, 2 * pi)
+                # print 'closed'
+                geom = self.geom
+                if not geom:
+                    geom = self.makeGeom(self.geomShape.Curve, 0, 2 * pi)
                 angle = self.angle
                 if isinstance(geom, Part.ArcOfEllipse):
                     radius = geom.MajorRadius
@@ -781,6 +784,7 @@ class _PyPlane(_Py):
                 direction.normalize()
 
             else:
+                # print 'no closed'
                 direction, geom = self.direction(pyWire, numGeom)
 
             # print 'geom ', geom
@@ -846,6 +850,8 @@ class _PyPlane(_Py):
         '''doPlane(self, direction, pyWire, geom, firstParam, lastParam, scale)
         '''
 
+        # print '# doPlane'
+
         # print 'scale ', scale
 
         size = _Py.size
@@ -886,23 +892,25 @@ class _PyPlane(_Py):
         # print 'rightScale ', rightScale
         # print 'upScale ', upScale
 
+        # print 'firstParam ', firstParam
+        # print 'lastParam ', lastParam
+
         if isinstance(geom, (Part.LineSegment,
-                             Part.ArcOfParabola,
-                             Part.ArcOfHyperbola)):
+                             Part.ArcOfParabola)):
             # print 'a'
 
             startParam = firstParam - leftScale
             endParam = lastParam + rightScale
 
+        if isinstance(geom, (Part.ArcOfHyperbola)):
+            # print 'aa'
+
+            startParam = firstParam
+            endParam = lastParam
+
         elif isinstance(geom, (Part.ArcOfCircle,
                                Part.ArcOfEllipse)):
             # print 'b'
-
-            # print 'firstParam ', firstParam
-            # print 'lastParam ', lastParam
-
-            # TODO hay que revisar los puntos y parametros de comienzo y fin
-            # hay que llegar al menos a 180 para resolver bien inclinaciones mayores de 90º
 
             rear = self.rear
 
@@ -910,20 +918,24 @@ class _PyPlane(_Py):
                 # print 'reflex'
 
                 if len(rear) == 1:
+                    # print 'b1'
 
                     pyReflex = self.reflexedList[0]
 
                     if rear[0] == pyReflex.rear[0]:
+                        # print 'b11'
 
                         startParam = firstParam
                         endParam = startParam + 2 * pi
 
                     else:
+                        # print 'b12'
 
                         startParam = lastParam
                         endParam = startParam - 2 * pi
 
                 else:
+                    # print 'b2'
 
                     startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
                     endParam = startParam + 2 * pi
@@ -931,35 +943,33 @@ class _PyPlane(_Py):
             else:
                 # print 'no reflex'
 
-                startParam = firstParam
-                endParam = lastParam
+                dist = abs(lastParam - firstParam)
+                # print 'dist ', dist
 
-            # print 'startParam ', startParam
-            # print 'endParam ', endParam
+                if dist >= pi:
+                    # print '2pi o more'
 
-        elif isinstance(geom, (Part.Circle, Part.Ellipse)):
+                    startParam = firstParam
+                    endParam = lastParam
 
-            # TODO hay que revisar los puntos y parametros de comienzo y fin
+                else:
+                    # print 'less 2pi'
 
-            startParam = 0
-            endParam = 2 * pi
+                    center = (lastParam - firstParam) / 2 + firstParam
+                    # print 'center ', center
+                    startParam = center - pi / 2
+                    endParam = center + pi / 2
 
         elif isinstance(geom, Part.BSplineCurve):
+            # print 'c'
 
-            startParam = firstParam - leftScale
-            endParam = lastParam + rightScale
-
-        else:
-
-            startParam = firstParam - leftScale
-            endParam = lastParam + rightScale
+            pass
 
         # print 'startParam ', startParam
         # print 'endParam ', endParam
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
         # print 'extendGeom ', extendGeom
-        # TODO problem with ArcOfHiperbola
         extendShape = extendGeom.toShape()
 
         if self.sweepCurve:
@@ -1148,20 +1158,12 @@ class _PyPlane(_Py):
                 if isinstance(geom, Part.ArcOfEllipse):
                     # print 'ellipse'
 
-                    angleXU = geom.AngleXU
-
                     matrix = FreeCAD.Matrix()
                     coef = minor / major
                     matrix.scale(FreeCAD.Vector(1, coef, 1))
                     plane.translate(-1 * point)
-                    plane.rotate(FreeCAD.Vector(0, 0, 0),
-                                 FreeCAD.Vector(0, 0, 1),
-                                 -1 * degrees(angleXU))
                     plane = plane.transformGeometry(matrix)
                     plane.translate(point)
-                    plane.rotate(FreeCAD.Vector(0, 0, 0),
-                                 FreeCAD.Vector(0, 0, 1),
-                                 degrees(angleXU))
 
                 if self.angle < 0 and _Py.reverse:
                     pass
@@ -1172,6 +1174,10 @@ class _PyPlane(_Py):
                                          FreeCAD.Vector(0, 0, -1))
 
                 plane = plane.Faces[0]
+                angleXU = geom.AngleXU
+                # print 'angleXU ', angleXU
+                plane.Placement.Rotation =\
+                    FreeCAD.Rotation(FreeCAD.Vector(0, 0, 1), degrees(angleXU))
 
             else:
                 # print 'B2'

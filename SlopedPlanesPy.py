@@ -44,6 +44,7 @@ class _Py(object):
     '''A functional Class bequeaths methods and class variables'''
 
     tolerance = 1e-7
+    precision = 1e7
     reverse = False
     size = 0
     normal = FreeCAD.Vector(0, 0, 1)
@@ -51,10 +52,6 @@ class _Py(object):
     pyFace = None
     slopedPlanes = None
     upList = []
-
-    precision = 1 / tolerance
-    precision = str(precision)
-    precision = precision[:].find('.')
 
     def addValue(self, prop, value, direction='forward'):
 
@@ -443,6 +440,8 @@ class _Py(object):
 
         '''faceDatas(self, face)'''
 
+        print '###### faceDatas'
+
         normal = self.faceNormal(face)
 
         wire = face.OuterWire
@@ -450,13 +449,18 @@ class _Py(object):
         orderVert = wire.OrderedVertexes
 
         if len(orderVert) == 1:
-            orientVert = orderVert
-            geometryList = [wire.Edges[0].Curve]
+            # print 'closed'
+
+            curve = wire.Edges[0].Curve
+            startParam = 0
+            endParam = 2 * math.pi
+            geom = self.makeGeom(curve, startParam, endParam)
+            geometryList = [geom]
 
         else:
-            orderPoint = [vert.Point for vert in orderVert]
+            # print 'no closed'
 
-            # print orderPoint
+            orderPoint = [vert.Point for vert in orderVert]
 
             geometryList = self.geometries(face, orderPoint)
             edges = [line.toShape() for line in geometryList]
@@ -466,13 +470,10 @@ class _Py(object):
             if normal == norm.negative():
                 orderVert.reverse()
                 geometryList.reverse()
-            orientVert = orderVert
 
-        orientPoint = [vert.Point for vert in orientVert]
-        orientRoundPoint = [self.roundVector(vector)
+        orientPoint = [vert.Point for vert in orderVert]
+        coordinates = [self.roundVector(vector)
                             for vector in orientPoint]
-
-        coordinates = orientRoundPoint
 
         if normal == _Py.normal:
             index = self.lowerLeftPoint(coordinates)
@@ -519,6 +520,8 @@ class _Py(object):
 
         '''geometries(self, face, coordinates)'''
 
+        # print '###### geometries'
+
         if len(coordinates) == 0:
             edge = face.OuterWire.Edges[0]
             return [edge.Curve]
@@ -558,52 +561,73 @@ class _Py(object):
 
         '''makeGeom(self, curve, startParam, endParam)'''
 
+        # print '###### makeGeom'
+
         if isinstance(curve, (Part.Line, Part.LineSegment)):
+            # print '1'
             geom = Part.LineSegment(curve, startParam, endParam)
 
         elif isinstance(curve, Part.Circle):
+            # print '2'
+            angleXU = curve.AngleXU
             geom = Part.ArcOfCircle(curve, startParam, endParam)
+            geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfCircle):
+            # print '3'
+            angleXU = curve.AngleXU
             geom = Part.ArcOfCircle(curve.Circle, startParam, endParam)
+            geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.Ellipse):
+            # print '4'
+            angleXU = curve.AngleXU
             geom = Part.ArcOfEllipse(curve, startParam, endParam)
+            geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfEllipse):
+            # print '5'
+            angleXU = curve.AngleXU
             geom = Part.ArcOfEllipse(curve.Ellipse, startParam, endParam)
+            geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.Parabola):
+            # print '6'
+            angleXU = curve.AngleXU
             geom = Part.ArcOfParabola(curve, startParam, endParam)
+            geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfParabola):
+            # print '7'
+            angleXU = curve.AngleXU
             geom = Part.ArcOfParabola(curve.Parabola, startParam, endParam)
+            geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.Hyperbola):
+            # print '8'
+            angleXU = curve.AngleXU
             geom = Part.ArcOfHyperbola(curve, startParam, endParam)
+            geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfHyperbola):
+            # print '9'
+            angleXU = curve.AngleXU
             geom = Part.ArcOfHyperbola(curve.Hyperbola, startParam, endParam)
+            geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.BSplineCurve):
+            # print '10'
+            pass
 
-            pointOne = curve.value(startParam)
-            pointTwo = curve.value(endParam)
-
-            geom = Part.LineSegment(pointOne, pointTwo)
-
-        else:
-
-            pointOne = curve.value(startParam)
-            pointTwo = curve.value(endParam)
-
-            geom = Part.LineSegment(pointOne, pointTwo)
+        # print 'geom ', geom
 
         return geom
 
     def doGeom(self):
 
         '''doGeom(self)'''
+
+        # print '###### doGeom'
 
         if not self.aligned:
             if self.geom:

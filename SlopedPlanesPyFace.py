@@ -1117,11 +1117,6 @@ class _PyFace(_Py):
             sParam = 2 * pi - firstParam
             eParam = sParam + half
 
-        elif isinstance(geom, (Part.Circle,
-                               Part.Ellipse)):
-
-            pass  # TODO llevar a ArcOfParabola y seleccionar por valor de parametros
-
         elif isinstance(geom, Part.BSplineCurve):
 
             pass
