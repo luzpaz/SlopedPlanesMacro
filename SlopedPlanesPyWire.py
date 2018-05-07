@@ -241,7 +241,6 @@ class _PyWire(_Py):
                 enormousShape = pyPlane.enormousShape
 
                 pyOppPlane = pyReflex.planes[num - 1]
-                oRear = pyOppPlane.rear
 
                 rango, rangoPy, oppRango, oppRangoPy, nextRango =\
                     [], [], [], [], []
@@ -342,7 +341,6 @@ class _PyWire(_Py):
                 # print 'oppRango ', oppRango
                 # print 'oppRangoPy ', oppRangoPy
                 # print 'nextRango ', nextRango
-                # print 'oRear ', oRear
 
                 if pyPlane.secondRear:
 
@@ -372,7 +370,7 @@ class _PyWire(_Py):
                 for nG, pyPl in zip(rango, rangoPy):
                     control = pyPl.control
 
-                    if numGeom not in control and nG not in oRear:
+                    if numGeom not in control:
                         # print '# cutted ', nG
 
                         # TODO backRear
