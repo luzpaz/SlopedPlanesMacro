@@ -15,4 +15,4 @@ script:
     - mkdir SlopedPlanesMacro
     - cd /home/travis/build/caceres/SlopedPlanesMacro
     - cp ./* /home/travis/.FreeCAD/Mod/SlopedPlanesMacro
-    - travis_wait 30 freecad --console --run pytest
+    - travis_wait 40 freecad --console --run pytest

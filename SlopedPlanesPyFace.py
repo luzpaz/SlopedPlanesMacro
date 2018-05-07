@@ -362,8 +362,6 @@ class _PyFace(_Py):
             pyAlign.priorLater()
         # self.printControl('priorLater alignments')
 
-        # self.printSummary()
-
         for pyWire in pyWireList:
             pyWire.simulating()
 
