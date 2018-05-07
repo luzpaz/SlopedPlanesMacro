@@ -483,7 +483,7 @@ class _PyWire(_Py):
                 cutterList = []     # shape
                 cutList = []        # simulatedShape
 
-                if pyPlane.arrow:
+                if pyPlane.arrow and not pyPlane.reflexed:
                     # print 'A arrow'
 
                     if prior not in control:
@@ -492,9 +492,11 @@ class _PyWire(_Py):
                             cutterList.append(bigPrior)
                             control.append(prior)
                         else:
+                            # print '11'
                             nn = self.sliceIndex(prior - 1, lenWire)
                             pyPl = pyPlaneList[nn]
                             if numGeom not in pyPl.rear:
+                                # print '111'
                                 cutterList.append(bigPrior)
 
                     if later not in control:
@@ -503,9 +505,11 @@ class _PyWire(_Py):
                             cutterList.append(bigLater)
                             control.append(later)
                         else:
+                            # print '21'
                             nn = self.sliceIndex(later + 1, lenWire)
                             pyPl = pyPlaneList[nn]
                             if numGeom not in pyPl.rear:
+                                # print '211'
                                 cutterList.append(bigLater)
 
                 elif pyPlane.reflexed:
