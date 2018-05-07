@@ -263,7 +263,6 @@ class _PyFace(_Py):
                 edgeList = wire.Edges
 
             for dd in dct['_planes']:
-                ### dd['_reflexedList'] = []  # provisionally
                 numGeom += 1
                 pyPlane = _PyPlane(numWire, numGeom)
                 pyPlane.__dict__ = dd
@@ -1256,12 +1255,10 @@ class _PyFace(_Py):
                 aliList.extend(ali.simulatedAlignment)
             # print 'aliList ', aliList
 
-            chopFace = []
             cutterFace = []
 
             for pyW in pyWL:
                 # print '### nW', pyW.numWire
-                chopList = []
                 cutterList = []
                 pyPlaneList = pyW.planes
                 for pyPl in pyPlaneList:
@@ -1270,15 +1267,10 @@ class _PyFace(_Py):
                         if not (pyPl.choped or pyPl.fronted or pyPl.aligned):
                             # print 'a'
                             cutterList.append(pyPl)
-                        elif pyPl.choped:
-                            # print 'b'
-                            chopList.append(pyPl)
 
-                chopFace.append(chopList)
                 cutterFace.append(cutterList)
 
             # print 'cutterFace ', cutterFace
-            # print 'chopFace ', chopFace
 
             num = -1
             for pyWire in pyWL:
@@ -1295,15 +1287,6 @@ class _PyFace(_Py):
 
                 checkList = cutterList[:]   # TODO
                 cutterList = [pyPl.shape for pyPl in cutterList]
-
-                pop = chopFace.pop(num)
-                chopList = []
-                for cL in chopFace:
-                    chopList.extend(cL)
-                chopFace.insert(num, pop)
-                # print 'chopList ', chopList
-
-                chopList = [pyPl.simulatedShape for pyPl in chopList]
 
                 # print '### numWire ', pyWire.numWire
 
@@ -1391,8 +1374,6 @@ class _PyFace(_Py):
                                 if ali in pyPlane.rearedList:
                                     aList.append(ali.simulatedAlignment)
                             cutList.extend(aList)
-                            #cutList.extend(aliList)
-                            # cutList.extend(chopList)
 
                         if cutList:
                             # print 'cutList ', cutList
