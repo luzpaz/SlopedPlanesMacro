@@ -440,7 +440,7 @@ class _Py(object):
 
         '''faceDatas(self, face)'''
 
-        print '###### faceDatas'
+        # print '###### faceDatas'
 
         normal = self.faceNormal(face)
 

@@ -931,7 +931,6 @@ class _PyAlignment(_Py):
         falsify = self.falsify
 
         pyBase = self.base
-        base = pyBase.shape
         enormousBase = pyBase.enormousShape
         control = pyBase.control
         aligns = self.aligns
@@ -1202,6 +1201,8 @@ class _PyAlignment(_Py):
 
         if self.falsify:
             # print 'AA'
+
+            base = pyBase.shape
 
             rChop = rangoChop[0]
             pyCont = aligns[0]
