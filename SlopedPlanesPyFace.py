@@ -1438,7 +1438,8 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             for pyPlane in pyWire.planes:
-                if not (pyPlane.fronted or pyPlane.reflexed):
+                #if not (pyPlane.fronted or pyPlane.reflexed):
+                if not (pyPlane.fronted or pyPlane.choped or pyPlane.aligned):
                     # print pyPlane.numGeom
                     rearedList = pyPlane.rearedList
                     # print rearedList
