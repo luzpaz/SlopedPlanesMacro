@@ -1471,6 +1471,12 @@ class _PyAlignment(_Py):
             # print 'r1'
 
             pyAli = pyPl.selectAlignmentBase()
+            if not pyAli:
+                pyAliList = pyPl.alignedList
+                try:
+                    pyAli = pyAliList[0]
+                except IndexError:
+                    pass
             if pyAli and pyAli != self:
                 # print 'pyAli ', pyAli.base.numGeom
                 pl = pyAli.simulatedAlignment
