@@ -1470,8 +1470,6 @@ class _PyPlane(_Py):
         for pyPl in pyPlaneList:
             nGeom = pyPl.numGeom
             if nGeom not in control:
-                if pyPl.aligned and pyPl.virtuals:
-                    pyPl = pyPl.virtuals[0]
 
                 pl = pyPl.shape
                 if pl:
@@ -1480,9 +1478,11 @@ class _PyPlane(_Py):
                     if pyPl.aligned:
                         # print 'a'
 
-                        pyAli = pyPl.selectAlignmentBase()
+                        pyAliList = pyPl.alignedList
+                        pyAli = pyAliList[0]
+                        # pyAli = pyPl.selectAlignmentBase()
 
-                        if pyAli:
+                        if pyAli:       # podría quitarlo?
                             # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
                             ll = pyAli.geomAligned
                             simulAlign = pyAli.simulatedAlignment
