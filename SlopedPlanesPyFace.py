@@ -1418,23 +1418,34 @@ class _PyFace(_Py):
 
         ''''''
 
+        # the planes not fronted not reflexed are cutted by alignments not included in their rearedList
+
+        if not self.alignments:
+            return
+
+        aList = []
+        for ali in self.alignments:
+            aL = []
+            aL.append(ali.base.shape)
+            for aa in ali.aligns:
+                if aa.shape:
+                    aL.append(aa.shape)
+            for cc in ali.chops:
+                for c in cc:
+                    if c.shape:
+                        aL.append(c.shape)
+            aList.append(aL)
+
         for pyWire in self.wires:
             for pyPlane in pyWire.planes:
                 if not (pyPlane.fronted or pyPlane.reflexed):
                     # print pyPlane.numGeom
-                    aList = []
                     rearedList = pyPlane.rearedList
                     # print rearedList
-                    for ali in self.alignments:
+                    cutList = []
+                    for ali, aa in zip(self.alignments, aList):
                         if ali not in rearedList:
-                            aList.append(ali.base.shape)    # esto hay que recolectarlo antes !!!
-                            for aa in ali.aligns:
-                                if aa.shape:
-                                    aList.append(aa.shape)
-                            for cc in ali.chops:
-                                for c in cc:
-                                    if c.shape:
-                                        aList.append(c.shape)
-                    if aList:
+                            cutList.extend(aa)
+                    if cutList:
                         # print aList
-                        pyPlane.cuttingPyth(aList)
+                        pyPlane.cuttingPyth(cutList)

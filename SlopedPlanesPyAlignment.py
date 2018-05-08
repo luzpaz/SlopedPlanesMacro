@@ -1520,7 +1520,7 @@ class _PyAlignment(_Py):
 
         # print '# self.Base ', self.base.numGeom
 
-        # recolects
+        # recolects   esto esta repetido en el final de aligning
 
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
