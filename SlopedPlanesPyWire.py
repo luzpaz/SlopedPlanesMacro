@@ -498,7 +498,6 @@ class _PyWire(_Py):
                         else:
                             # print '11'
 
-
                             if not pyPrior.aligned:
 
                                 pyRPrior = pyPlane.selectReflex(prior)
