@@ -370,7 +370,7 @@ class _PyWire(_Py):
                 for nG, pyPl in zip(rango, rangoPy):
                     control = pyPl.control
 
-                    if numGeom not in control:
+                    if numGeom not in control:      # creo que este control sobra
                         # print '# cutted ', nG
 
                         # TODO backRear

@@ -348,7 +348,21 @@ class _Py(object):
                 if shape:
 
                     shape.Placement = placement
-                    Part.show(pyP.shape, slopedPlanes.Name+' virtual shape '+str(numWire)+' '+str(numGeom))
+                    Part.show(shape, slopedPlanes.Name+' virtual shape '+str(numWire)+' '+str(numGeom))
+
+                simulatedShape = pyP.simulatedShape
+                if simulatedShape:
+
+                    simulatedShape.Placement = placement
+                    Part.show(simulatedShape, slopedPlanes.Name+'virtual simulatedShape '+str(numWire)+' '+str(numGeom))
+
+                if pyP.aligned:
+                    pyAli = pyP.selectAlignmentBase()
+                    if pyAli:
+
+                        compound = Part.makeCompound(pyAli.simulatedAlignment)
+                        compound.Placement = placement
+                        Part.show(compound, slopedPlanes.Name+'virtual simulatedAlignment '+str(numWire)+' '+str(numGeom))
 
                 under = pyP.under
                 if under:

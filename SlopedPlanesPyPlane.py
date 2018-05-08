@@ -1470,6 +1470,9 @@ class _PyPlane(_Py):
         for pyPl in pyPlaneList:
             nGeom = pyPl.numGeom
             if nGeom not in control:
+                if pyPl.aligned and pyPl.virtuals:
+                    pyPl = pyPl.virtuals[0]
+
                 pl = pyPl.shape
                 if pl:
                     # print '### numGeom ', pyPl.numGeom
@@ -1486,7 +1489,6 @@ class _PyPlane(_Py):
 
                             if self.aligned:
                                 # print 'a1'
-                                # for pyAlign in pyAlignList:
 
                                 line = pyAlign.geomAligned
                                 base = pyAlign.base.shape
@@ -1552,7 +1554,7 @@ class _PyPlane(_Py):
                         control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList,  # [sh.Area for sh in cutterList]
+            # print 'cutterList ', cutterList
             plane = self.shape.copy()
             gS = self.geomShape
 
