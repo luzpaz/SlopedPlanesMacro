@@ -1418,7 +1418,7 @@ class _PyFace(_Py):
 
         ''''''
 
-        # the planes not fronted not reflexed are cutted by alignments not included in their rearedList
+        # the planes not fronted not aligned not choped are cutted by alignments not included in their rearedList
 
         if not self.alignments:
             return
@@ -1438,7 +1438,7 @@ class _PyFace(_Py):
 
         for pyWire in self.wires:
             for pyPlane in pyWire.planes:
-                #if not (pyPlane.fronted or pyPlane.reflexed):
+                #if not (pyPlane.fronted or pyPlane.reflexed):  # cambiado para corregir alignments_holes. podría ser lenWire > 1
                 if not (pyPlane.fronted or pyPlane.choped or pyPlane.aligned):
                     # print pyPlane.numGeom
                     rearedList = pyPlane.rearedList

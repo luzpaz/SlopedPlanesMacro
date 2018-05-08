@@ -991,6 +991,7 @@ class _PyAlignment(_Py):
                 if plOne:
                     cutList.extend(plOne)
                     # print plOne
+
             if pyTwo.rear:
                 # print 'rearTwo ', rearTwo
                 plTwo = self.processRear(rearTwo, pyPlTwo, numTwo)
@@ -1005,6 +1006,31 @@ class _PyAlignment(_Py):
                     cList = self.processBetween(between, pyPlaneListOne)
                     cutList.extend(cList)
                     # print cList
+
+            else:
+                if pyTwo.rear:
+                    pyPlaneListTwo = pyWireTwo.planes
+                    mm = self.sliceIndex(pyTwo.numGeom - 1,
+                                         len(pyPlaneListTwo))
+                    rr = self.rang(pyWireTwo, mm, rearTwo, 'backward')
+                    # print 'rr ', rr
+
+                    for r in rr:
+                        pyPl = pyPlaneListTwo[r]
+                        if not pyPl.reflexed:
+                            cListTwo.append(pyPl.shape)
+
+                if pyOne.rear:
+                    pyPlaneListOne = pyWireOne.planes
+                    mm = self.sliceIndex(pyOne.numGeom + 1,
+                                         len(pyPlaneListOne))
+                    rr = self.rang(pyWireOne, mm, rearOne, 'forward')
+                    # print 'rr ', rr
+
+                    for r in rr:
+                        pyPl = pyPlaneListOne[r]
+                        if not pyPl.reflexed:
+                            cListOne.append(pyPl.shape)
 
             # print 'cutList ', cutList
 
