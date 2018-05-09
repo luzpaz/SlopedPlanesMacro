@@ -478,7 +478,7 @@ class _SlopedPlanes(_Py):
 
         self.OnChanged = True
 
-        # elaborates a list of planes for every face and makes a shell
+        # elaborates a list of planes for every face
 
         figList = []
         for pyFace in pyFaceListNew:
