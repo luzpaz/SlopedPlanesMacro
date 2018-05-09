@@ -1,16 +1,16 @@
-# SlopedPlanes Macro for FreeCAD
+## SlopedPlanes Macro for FreeCAD
 A geometric factory. Build figures controlling the slopes of their faces.
 
 FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 
-## Versions
+### Versions
 
     alpha: February 2018 (FreeCAD 0.17)
     beta: March 2018 (FreeCAD 0.17)
     1.0: May 2018 (FreeCAD 0.17)
     master: updated every month (FreeCAD 0.18)
 
-## Build Status <img src="https://blog.travis-ci.com/images/travis-mascot-200px.png" height="30"/>
+### Build Status <img src="https://blog.travis-ci.com/images/travis-mascot-200px.png" height="30"/>
 
 The macro is tested with a set of examples. Please, see at https://github.com/caceres/SlopedPlanesTest.git
 
@@ -24,15 +24,15 @@ The macro is tested with a set of examples. Please, see at https://github.com/ca
 [travis-branches]: https://travis-ci.org/caceres/SlopedPlanesMacro/branches
 [travis-builds]: https://travis-ci.org/caceres/SlopedPlanesMacro/builds
 
-## Installation
+### Installation
 To use this macro, please:
 
 * Download the ZIP file of the desired version 
 * Extract it at "~/.FreeCAD/Mod"
 * Copy the file "SlopedPlanes.FCMacro" at "~/.FreeCAD"
 
-# Feedback
+### Feedback
 Please, send feedback via the dedicated SlopedPlanes [FreeCAD forum thread](https://forum.freecadweb.org/viewtopic.php?f=24&t=25337). 
 
-# Developer
+## Developer
 Damian Caceres Moreno AKA @caceres 
