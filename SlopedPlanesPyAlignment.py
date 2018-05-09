@@ -1711,6 +1711,20 @@ class _PyAlignment(_Py):
                 if pyPl.shape:
                     pyPl.cuttingPyth(rearList)
 
+        # everyone no reflexed with fronted
+
+        cc = []
+        for rC in self.rangoPy:
+            for r in rC:
+                if r.shape:
+                    cc.append(r.shape)
+
+        for wire in pyWireList:
+            for plane in wire.planes:
+                if not plane.reflexed:
+                    if self not in plane.frontedList:
+                        plane.cuttingPyth(cc)
+
     def rangging(self, reset):
 
         '''rangging(self)
