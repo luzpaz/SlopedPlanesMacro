@@ -739,6 +739,7 @@ class _Py(object):
 
         return pySketch
 
+
 class _PySketch(_Py):
 
     ''''''
@@ -783,7 +784,15 @@ class _PySketch(_Py):
         geomShape = plane.geomShape
         ffPoint = geomShape.firstVertex(True).Point
         llPoint = geomShape.lastVertex(True).Point
-        direction = llPoint.sub(ffPoint)
+
+        if ffPoint == llPoint:
+            edge = slopedPlanes.Shape.Edges[1]
+            aa = ffPoint
+            bb = edge.firstVertex(True).Point
+            direction = bb.sub(aa)
+        else:
+            direction = llPoint.sub(ffPoint)
+
         # print 'ffPoint ', ffPoint
         # print 'llPoint ', llPoint
         # print 'direction ', direction
@@ -800,11 +809,18 @@ class _PySketch(_Py):
         rotation.Angle = math.pi / 2
         sketch.Placement.Rotation = rotation
 
-        rotation = FreeCAD.Rotation()
-        rotation.Axis = _Py.normal
-        rotation.Angle = angle
-        sketch.Placement.Rotation =\
+        if ffPoint == llPoint:
+            rotation = FreeCAD.Rotation()
+            rotation.Axis = FreeCAD.Vector(0, 0, 1)
+            rotation.Angle = math.pi
+            sketch.Placement.Rotation =\
             rotation.multiply(sketch.Placement.Rotation)
+        else:
+            rotation = FreeCAD.Rotation()
+            rotation.Axis = _Py.normal
+            rotation.Angle = angle
+            sketch.Placement.Rotation =\
+                rotation.multiply(sketch.Placement.Rotation)
 
         sketch.Placement.Base = ffPoint
 

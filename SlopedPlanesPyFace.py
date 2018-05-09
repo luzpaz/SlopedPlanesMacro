@@ -1450,3 +1450,20 @@ class _PyFace(_Py):
                     if cutList:
                         # print aList
                         pyPlane.cuttingPyth(cutList)
+
+        # everyone no reflexed with fronted. REFACT!!!
+
+        for pyAlignment in self.alignments:
+
+            cc = []
+            for rC in pyAlignment.rangoPy:
+                for r in rC:
+                    if r.shape:
+                        cc.append(r.shape)
+
+            if cc:
+                for wire in self.wires:
+                    for plane in wire.planes:
+                        if not plane.reflexed:
+                            if pyAlignment not in plane.frontedList:
+                                plane.cuttingPyth(cc)

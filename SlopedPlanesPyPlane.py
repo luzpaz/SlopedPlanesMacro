@@ -972,8 +972,9 @@ class _PyPlane(_Py):
         # print 'extendGeom ', extendGeom
         extendShape = extendGeom.toShape()
 
-        if self.sweepCurve:
-            # print 'A'
+        if self.sweepCurve and not\
+           FreeCAD.ActiveDocument.getObject(self.sweepCurve).Shape.isNull():
+            print 'A'
 
             # TODO reverse
             # TODO closed con revolve
@@ -996,6 +997,9 @@ class _PyPlane(_Py):
             geomShape = self.geomShape
             ffPoint = geomShape.firstVertex(True).Point
             llPoint = geomShape.lastVertex(True).Point
+
+
+
             direct = llPoint.sub(ffPoint)
             aa = direct.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
             if ffPoint.y > llPoint.y:

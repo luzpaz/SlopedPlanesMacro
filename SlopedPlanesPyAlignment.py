@@ -1711,7 +1711,7 @@ class _PyAlignment(_Py):
                 if pyPl.shape:
                     pyPl.cuttingPyth(rearList)
 
-        # everyone no reflexed with fronted
+        '''# everyone no reflexed with fronted
 
         cc = []
         for rC in self.rangoPy:
@@ -1723,7 +1723,7 @@ class _PyAlignment(_Py):
             for plane in wire.planes:
                 if not plane.reflexed:
                     if self not in plane.frontedList:
-                        plane.cuttingPyth(cc)
+                        plane.cuttingPyth(cc)'''
 
     def rangging(self, reset):
 
@@ -1766,7 +1766,6 @@ class _PyAlignment(_Py):
                     c.append(pyP)
                 cc.append(c)
             pyPl.rangoPy = cc
-
 
             if numWire == nWire:
                 numGeom = pyPlane.numGeom
