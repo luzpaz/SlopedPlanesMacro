@@ -563,7 +563,10 @@ class _SlopedPlanes(_Py):
 
             figList.extend(planeFaceList)
 
-        endShape = Part.makeShell(figList)
+        if len(figList) > 1:
+            endShape = Part.makeShell(figList)
+        else:
+            endShape = figList[0]
 
         if slopedPlanes.Group:
             for obj in slopedPlanes.Group:

@@ -974,7 +974,7 @@ class _PyPlane(_Py):
 
         if self.sweepCurve and not\
            FreeCAD.ActiveDocument.getObject(self.sweepCurve).Shape.isNull():
-            print 'A'
+            # print 'A'
 
             # TODO reverse
             # TODO closed con revolve
@@ -998,10 +998,15 @@ class _PyPlane(_Py):
             ffPoint = geomShape.firstVertex(True).Point
             llPoint = geomShape.lastVertex(True).Point
 
+            if ffPoint == llPoint:
+                edge = _Py.slopedPlanes.Shape.Edges[1]
+                aa = ffPoint
+                bb = edge.firstVertex(True).Point
+                direction = bb.sub(aa)
+            else:
+                direction = llPoint.sub(ffPoint)
 
-
-            direct = llPoint.sub(ffPoint)
-            aa = direct.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
+            aa = direction.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
             if ffPoint.y > llPoint.y:
                 aa = aa + pi
 
@@ -1011,16 +1016,50 @@ class _PyPlane(_Py):
             wire.Placement.Rotation =\
                 rotation.multiply(wire.Placement.Rotation)
 
-            rotation = FreeCAD.Rotation()
-            rotation.Axis = _Py.normal
-            rotation.Angle = aa
-            wire.Placement.Rotation =\
-                rotation.multiply(wire.Placement.Rotation)
+            if ffPoint == llPoint:
+                rotation = FreeCAD.Rotation()
+                rotation.Axis = FreeCAD.Vector(0, 0, 1)
+                rotation.Angle = pi
+                wire.Placement.Rotation =\
+                    rotation.multiply(wire.Placement.Rotation)
 
-            wire.Placement.Base = ffPoint
+                wire.Placement.Base = ffPoint
+                edge = wire.Edges[0]
+                # print 'edge ', edge.Curve
+                # print edge.firstVertex(True).Point
+                # print edge.lastVertex(True).Point
 
-            extendShape = Part.Wire(extendShape)
-            plane = wire.makePipeShell([extendShape])
+                plane = edge.revolve(FreeCAD.Vector(0, 0, 0), FreeCAD.Vector(0, 0, 1))
+                # print plane
+                # print plane.Area
+
+                if isinstance(geom, Part.ArcOfEllipse):
+                    # print 'ellipse'
+
+                    point = geom.Location
+                    major = geom.MajorRadius
+                    minor = geom.MinorRadius
+
+                    matrix = FreeCAD.Matrix()
+                    coef = minor / major
+                    matrix.scale(FreeCAD.Vector(1, coef, 1))
+                    plane.translate(-1 * point)
+                    plane = plane.transformGeometry(matrix)
+                    plane.translate(point)
+
+                    plane = plane.Faces[0]
+
+            else:
+                rotation = FreeCAD.Rotation()
+                rotation.Axis = _Py.normal
+                rotation.Angle = aa
+                wire.Placement.Rotation =\
+                    rotation.multiply(wire.Placement.Rotation)
+
+                wire.Placement.Base = ffPoint
+
+                extendShape = Part.Wire(extendShape)
+                plane = wire.makePipeShell([extendShape])
 
         else:
             # print 'B'
