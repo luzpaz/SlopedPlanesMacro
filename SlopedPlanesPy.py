@@ -749,6 +749,7 @@ class _PySketch(_Py):
         '''__init__(self, sketch)'''
 
         sketch.Proxy = self
+        self.Type = "SweepSketch"
 
         vectorA = FreeCAD.Vector(-707.107, -707.107, 0)
         vectorB = FreeCAD.Vector(0, 0, 0)
@@ -777,6 +778,20 @@ class _PySketch(_Py):
 
         sketch.recompute()
 
+    def __getstate__(self):
+
+        ''''''
+
+        state = dict()
+        state['Type'] = self.Type
+        return state
+
+    def __setstate__(self, state):
+
+        ''''''
+
+        self.Type = state['Type']
+
     def locate(self, sketch, plane, slopedPlanes):
 
         '''locate(self, sketch, plane, slopedPlanes)'''
@@ -785,16 +800,20 @@ class _PySketch(_Py):
         ffPoint = geomShape.firstVertex(True).Point
         llPoint = geomShape.lastVertex(True).Point
 
+        # print 'ffPoint ', ffPoint
+        # print 'llPoint ', llPoint
+
         if ffPoint == llPoint:
+            # print 'a'
             edge = slopedPlanes.Shape.Edges[1]
             aa = ffPoint
             bb = edge.firstVertex(True).Point
             direction = bb.sub(aa)
+
         else:
+            # print 'b'
             direction = llPoint.sub(ffPoint)
 
-        # print 'ffPoint ', ffPoint
-        # print 'llPoint ', llPoint
         # print 'direction ', direction
 
         angle = direction.getAngle(FreeCAD.Vector(1, 0, 0)) + math.pi / 2
@@ -810,12 +829,17 @@ class _PySketch(_Py):
         sketch.Placement.Rotation = rotation
 
         if ffPoint == llPoint:
+            # print 'aa'
             rotation = FreeCAD.Rotation()
             rotation.Axis = FreeCAD.Vector(0, 0, 1)
-            rotation.Angle = math.pi
+            angleXU = geomShape.Curve.AngleXU
+            # print angleXU
+            rotation.Angle = math.pi + angleXU
             sketch.Placement.Rotation =\
-            rotation.multiply(sketch.Placement.Rotation)
+                rotation.multiply(sketch.Placement.Rotation)
+
         else:
+            # print 'bb'
             rotation = FreeCAD.Rotation()
             rotation.Axis = _Py.normal
             rotation.Angle = angle
