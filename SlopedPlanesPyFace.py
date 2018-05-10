@@ -221,6 +221,7 @@ class _PyFace(_Py):
                           for pyPlane in pyReflex.planes]
                 dd['_planes'] = planes
                 reflexList.append(dd)
+
             dct['_reflexs'] = reflexList
 
             wireList.append(dct)
@@ -276,24 +277,26 @@ class _PyFace(_Py):
                         pyPlane.backward = forBack[nf]
 
                     geomShape = edgeList[numGeom]
-
                     pyPlane.geomShape = geomShape
-
                     geomShapeWire.append(geomShape)
 
                 planeList.append(pyPlane)
+
             dct['_planes'] = planeList
 
             reflexList = []
             for dd in dct['_reflexs']:
                 pyReflex = _PyReflex()
+
                 for [numWire, numGeom] in dd['_planes']:
                     pyPlane = planeList[numGeom]
                     pyReflex.planes.append(pyPlane)
                     pyPlane.reflexedList.append(pyReflex)
+
                 dd['_planes'] = pyReflex.planes
                 pyReflex.__dict__ = dd
                 reflexList.append(pyReflex)
+
             dct['_reflexs'] = reflexList
 
             coord = dct['_coordinates']
