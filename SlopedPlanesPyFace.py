@@ -46,7 +46,7 @@ class _PyFace(_Py):
 
     def __init__(self, numFace):
 
-        ''''''
+        '''__init__(self, numFace)'''
 
         self.numFace = numFace
         self.wires = []
@@ -58,84 +58,84 @@ class _PyFace(_Py):
     @property
     def numFace(self):
 
-        ''''''
+        '''numFace(self)'''
 
         return self._numFace
 
     @numFace.setter
     def numFace(self, numFace):
 
-        ''''''
+        '''numFace(self, numFace)'''
 
         self._numFace = numFace
 
     @property
     def wires(self):
 
-        ''''''
+        '''wires(self)'''
 
         return self._wires
 
     @wires.setter
     def wires(self, wires):
 
-        ''''''
+        '''wires(self, wires)'''
 
         self._wires = wires
 
     @property
     def alignments(self):
 
-        ''''''
+        '''alignments(self)'''
 
         return self._alignments
 
     @alignments.setter
     def alignments(self, alignments):
 
-        ''''''
+        '''alignments(self, alignments)'''
 
         self._alignments = alignments
 
     @property
     def reset(self):
 
-        ''''''
+        '''reset(self)'''
 
         return self._reset
 
     @reset.setter
     def reset(self, reset):
 
-        ''''''
+        '''reset(self, reset)'''
 
         self._reset = reset
 
     @property
     def shapeGeom(self):
 
-        ''''''
+        '''shapeGeom(self)'''
 
         return self._shapeGeom
 
     @shapeGeom.setter
     def shapeGeom(self, shapeGeom):
 
-        ''''''
+        '''shapeGeom(self, shapeGeom)'''
 
         self._shapeGeom = shapeGeom
 
     @property
     def size(self):
 
-        ''''''
+        '''size(self)'''
 
         return self._size
 
     @size.setter
     def size(self, size):
 
-        ''''''
+        '''size(self, size)'''
 
         self._size = size
 
@@ -165,21 +165,20 @@ class _PyFace(_Py):
                 dd['_shape'] = None
                 dd['_bigShape'] = None
                 dd['_enormousShape'] = None
-                dd['_geom'] = None
-                dd['_cutter'] = []
-                dd['_simulatedShape'] = None
-
-                dd['_geomAligned'] = None
 
                 dd['_seedShape'] = None
                 dd['_seedBigShape'] = None
+
+                dd['_simulatedShape'] = None
+
+                dd['_geom'] = None
                 dd['_lineInto'] = None
 
+                dd['_cutter'] = []
                 dd['_under'] = []
                 dd['_seed'] = []
 
                 dd['_virtuals'] = []
-                dd['_reallySolved'] = False
 
                 dd['_alignedList'] = []
                 dd['_chopedList'] = []
@@ -192,19 +191,20 @@ class _PyFace(_Py):
                 if serialize:
 
                     edgeList.append(pyPlane.geomShape)
-                    dd['_geomShape'] = None
 
                     if pyPlane.forward:
+
                         forBack.extend([pyPlane.forward, pyPlane.backward])
                         dd['_forward'] = 'forward'
                         dd['_backward'] = 'backward'
 
                 else:
 
-                    dd['_geomShape'] = None
-                    dd['_geomAligned'] = None
                     dd['_forward'] = None
                     dd['_backward'] = None
+
+                dd['_geomShape'] = None
+                dd['_geomAligned'] = None
 
                 planeList.append(dd)
             dct['_planes'] = planeList
