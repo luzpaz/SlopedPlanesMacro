@@ -455,8 +455,7 @@ class _SlopedPlanes(_Py):
 
                 for pyWire in pyFace.wires:
 
-                    wire = Part.Wire(pyWire.shapeGeom)
-                    pyWire.wire = wire
+                    pyWire.wire = Part.Wire(pyWire.shapeGeom)
 
                     for pyPlane in pyWire.planes:
                         pyPlane.geomAligned = pyPlane.geomShape
@@ -527,8 +526,7 @@ class _SlopedPlanes(_Py):
                                     pyPl =\
                                         pyFace.selectPlane(angle[0], angle[1],
                                                            pyFace)
-                                    pl = pyPl.shape
-                                    planeWireList.append(pl)
+                                    planeWireList.append(pyPl.shape)
 
                                     originList.append(angle)
 
@@ -684,7 +682,7 @@ class _SlopedPlanes(_Py):
 
     def __getstate__(self):
 
-        ''''''
+        '''__getstate__(self)'''
 
         state = dict()
 
@@ -718,7 +716,7 @@ class _SlopedPlanes(_Py):
 
     def __setstate__(self, state):
 
-        ''''''
+        '''__setstate__(self, state)'''
 
         self.Type = state['Type']
 
@@ -773,38 +771,38 @@ class _ViewProvider_SlopedPlanes():
 
     def __init__(self, vobj):
 
-        ''''''
+        '''__init__(self, vobj)'''
 
         vobj.addExtension("Gui::ViewProviderGroupExtensionPython", self)
         vobj.Proxy = self
 
     def getIcon(self):
 
-        ''''''
+        '''getIcon(self)'''
 
         return path.dirname(__file__) + "/SlopedPlanes_Tree.svg"
 
     def getDefaultDisplayMode(self):
 
-        ''''''
+        '''getDefaultDisplayMode(self)'''
 
         return "FlatLines"
 
     def __getstate__(self):
 
-        ''''''
+        '''__getstate__(self)'''
 
         return None
 
     def __setstate__(self, state):
 
-        ''''''
+        '''__setstate__(self, state)'''
 
         return None
 
     def attach(self, vobj):
 
-        ''''''
+        '''attach(self, vobj)'''
 
         self.Object = vobj.Object
         obj = self.Object
@@ -812,21 +810,21 @@ class _ViewProvider_SlopedPlanes():
 
     def claimChildren(self):
 
-        ''''''
+        '''claimChildren(self)'''
 
         obj = self.Object
         return [obj.Base] + obj.Group
 
     def unsetEdit(self, vobj, mode):
 
-        ''''''
+        '''unsetEdit(self, vobj, mode)'''
 
         FreeCADGui.Control.closeDialog()
         return
 
     def setEdit(self, vobj, mode=0):
 
-        ''''''
+        '''setEdit(self, vobj, mode=0)'''
 
         taskd = _TaskPanel_SlopedPlanes(self.Object)
         self.task = taskd
