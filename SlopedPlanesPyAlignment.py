@@ -551,15 +551,17 @@ class _PyAlignment(_Py):
             pyPlList = pyWireList[pyTwo.numWire].planes
             for nn in rangoTwo:
                 pyPl = pyPlList[nn]
-                baseControl.append(nn)
-                pyPl.control.append(numGeom)
+                if not pyPl.aligned:
+                    baseControl.append(nn)
+                    pyPl.control.append(numGeom)
 
             contControl = pyCont.control
             pyPlList = pyWireList[pyOne.numWire].planes
             for nn in rangoOne:
                 pyPl = pyPlList[nn]
-                contControl.append(nn)
-                pyPl.control.append(nGeom)
+                if not pyPl.aligned:
+                    contControl.append(nn)
+                    pyPl.control.append(nGeom)
 
     def priorLater(self):
 
