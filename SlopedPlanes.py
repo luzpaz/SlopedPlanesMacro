@@ -404,6 +404,8 @@ class _SlopedPlanes(_Py):
                                     slopedPlanes.FactorWidth * size
                                 pyPlane.length =\
                                     slopedPlanes.FactorLength * size
+                                pyPlane.overhang =\
+                                    slopedPlanes.FactorOverhang * size
 
                                 angle = pyPlane.angle
                                 if isinstance(angle, list):
