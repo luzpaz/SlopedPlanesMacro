@@ -36,7 +36,8 @@ __url__ = "http://www.freecadweb.org"
 __version__ = ""
 
 
-origin = FreeCAD.Vector(0, 0, 0)
+V = FreeCAD.Vector
+origin = V(0, 0, 0)
 
 
 class _Py(object):
@@ -47,7 +48,7 @@ class _Py(object):
     precision = 1e7
     reverse = False
     size = 0
-    normal = FreeCAD.Vector(0, 0, 1)
+    normal = V(0, 0, 1)
     face = None
     pyFace = None
     slopedPlanes = None
@@ -436,9 +437,9 @@ class _Py(object):
 
         precision = _Py.precision
 
-        return FreeCAD.Vector(round(vector.x, precision),
-                              round(vector.y, precision),
-                              round(vector.z, precision))
+        return V(round(vector.x, precision),
+                 round(vector.y, precision),
+                 round(vector.z, precision))
 
     def rotateVector(self, vector, axis, angle):
 
@@ -755,9 +756,9 @@ class _PySketch(_Py):
         sketch.Proxy = self
         self.Type = "SweepSketch"
 
-        vectorA = FreeCAD.Vector(-707.107, -707.107, 0)
-        vectorB = FreeCAD.Vector(0, 0, 0)
-        vectorC = FreeCAD.Vector(1414.21, 1414.21, 0)
+        vectorA = V(-707.107, -707.107, 0)
+        vectorB = V(0, 0, 0)
+        vectorC = V(1414.21, 1414.21, 0)
 
         lineA = Part.LineSegment(vectorA, vectorB)
         lineA.Construction = True
@@ -784,7 +785,7 @@ class _PySketch(_Py):
 
     def __getstate__(self):
 
-        ''''''
+        '''__getstate__(self)'''
 
         state = dict()
         state['Type'] = self.Type
@@ -792,7 +793,7 @@ class _PySketch(_Py):
 
     def __setstate__(self, state):
 
-        ''''''
+        '''__setstate__(self, state)'''
 
         self.Type = state['Type']
 
@@ -821,7 +822,7 @@ class _PySketch(_Py):
 
         # print 'direction ', direction
 
-        angle = direction.getAngle(FreeCAD.Vector(1, 0, 0)) + math.pi / 2
+        angle = direction.getAngle(V(1, 0, 0)) + math.pi / 2
         # print 'angle ', angle
 
         if ffPoint.y > llPoint.y:
@@ -829,14 +830,14 @@ class _PySketch(_Py):
             # print 'angle ', angle
 
         rotation = FreeCAD.Rotation()
-        rotation.Axis = FreeCAD.Vector(1, 0, 0)
+        rotation.Axis = V(1, 0, 0)
         rotation.Angle = math.pi / 2
         sketch.Placement.Rotation = rotation
 
         if ffPoint == llPoint:
             # print 'aa'
             rotation = FreeCAD.Rotation()
-            rotation.Axis = FreeCAD.Vector(0, 0, 1)
+            rotation.Axis = V(0, 0, 1)
             angleXU = geomShape.Curve.AngleXU
             # print angleXU
             if numWire == 0:
