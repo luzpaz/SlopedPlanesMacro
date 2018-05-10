@@ -1374,7 +1374,8 @@ class _PyFace(_Py):
                             cutList.extend(aList)
 
                         if cutList:
-                            # print 'cutList ', cutList
+                            # print 'cutList ', cutList, [c.Area for c in cutList]
+                            # print pyPlane.shape, pyPlane.shape.Area
 
                             if isinstance(plane, Part.Compound):
                                 # print '1'

@@ -144,6 +144,10 @@ class _Py(object):
             if section.Edges:
                 return face
 
+        # OCCT bug
+        if faceList:
+            return faceList[0]
+
         return None
 
     def selectFacePoint(self, shape, point):
@@ -796,6 +800,7 @@ class _PySketch(_Py):
 
         '''locate(self, sketch, plane, slopedPlanes)'''
 
+        numWire = plane.numWire
         geomShape = plane.geomShape
         ffPoint = geomShape.firstVertex(True).Point
         llPoint = geomShape.lastVertex(True).Point
@@ -834,7 +839,10 @@ class _PySketch(_Py):
             rotation.Axis = FreeCAD.Vector(0, 0, 1)
             angleXU = geomShape.Curve.AngleXU
             # print angleXU
-            rotation.Angle = math.pi + angleXU
+            if numWire == 0:
+                rotation.Angle = math.pi + angleXU
+            else:
+                rotation.Angle = angleXU
             sketch.Placement.Rotation =\
                 rotation.multiply(sketch.Placement.Rotation)
 

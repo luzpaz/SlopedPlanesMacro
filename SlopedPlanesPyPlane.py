@@ -1020,12 +1020,16 @@ class _PyPlane(_Py):
                 rotation.multiply(wire.Placement.Rotation)
 
             if ffPoint == llPoint:
+                numWire = self.numWire
                 # print 'aa'
                 angleXU = geom.AngleXU
                 # print 'angleXU ', angleXU
                 rotation = FreeCAD.Rotation()
                 rotation.Axis = FreeCAD.Vector(0, 0, 1)
-                rotation.Angle = pi + angleXU
+                if numWire == 0:
+                    rotation.Angle = pi + angleXU
+                else:
+                    rotation.Angle = angleXU
                 wire.Placement.Rotation =\
                     rotation.multiply(wire.Placement.Rotation)
 
