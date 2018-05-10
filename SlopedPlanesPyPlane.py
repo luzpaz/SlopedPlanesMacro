@@ -982,7 +982,7 @@ class _PyPlane(_Py):
 
             sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
             wire = sweepSketch.Shape.copy()
-            # TODO handle exceptions
+            # TODO handle exceptionss
 
             wire.Placement = FreeCAD.Placement()
 
