@@ -548,8 +548,18 @@ class _PyAlignment(_Py):
             else:
                 pyCont.cuttingPyth([pyTwo.enormousShape])
 
-            # TODO falseAlignment base and continuation don't cut opp rango ???
-            # pero si con rear y entre rears
+            pyPlList = pyWireList[pyTwo.numWire].planes
+            for nn in rangoTwo:
+                pyPl = pyPlList[nn]
+                baseControl.append(nn)
+                pyPl.control.append(numGeom)
+
+            contControl = pyCont.control
+            pyPlList = pyWireList[pyOne.numWire].planes
+            for nn in rangoOne:
+                pyPl = pyPlList[nn]
+                contControl.append(nn)
+                pyPl.control.append(nGeom)
 
     def priorLater(self):
 
