@@ -58,168 +58,168 @@ class _PyAlignment(_Py):
     @property
     def base(self):
 
-        ''''''
+        '''base(self)'''
 
         return self._base
 
     @base.setter
     def base(self, base):
 
-        ''''''
+        '''base(self, base)'''
 
         self._base = base
 
     @property
     def aligns(self):
 
-        ''''''
+        '''aligns(self)'''
 
         return self._aligns
 
     @aligns.setter
     def aligns(self, aligns):
 
-        ''''''
+        '''aligns(self, aligns)'''
 
         self._aligns = aligns
 
     @property
     def chops(self):
 
-        ''''''
+        '''chops(self)'''
 
         return self._chops
 
     @chops.setter
     def chops(self, chops):
 
-        ''''''
+        '''chops(self, chops)'''
 
         self._chops = chops
 
     @property
     def geomAligned(self):
 
-        ''''''
+        '''geomAligned(self)'''
 
         return self._geomAligned
 
     @geomAligned.setter
     def geomAligned(self, geomAligned):
 
-        ''''''
+        '''geomAligned(self, geomAligned)'''
 
         self._geomAligned = geomAligned
 
     @property
     def rango(self):
 
-        ''''''
+        '''rango(self)'''
 
         return self._rango
 
     @rango.setter
     def rango(self, rango):
 
-        ''''''
+        '''rango(self, rango)'''
 
         self._rango = rango
 
     @property
     def rangoPy(self):
 
-        ''''''
+        '''rangoPy(self)'''
 
         return self._rangoPy
 
     @rangoPy.setter
     def rangoPy(self, rangoPy):
 
-        ''''''
+        '''rangoPy(self, rangoPy)'''
 
         self._rangoPy = rangoPy
 
     @property
     def rangoRear(self):
 
-        ''''''
+        '''rangoRear(self)'''
 
         return self._rangoRear
 
     @rangoRear.setter
     def rangoRear(self, rangoRear):
 
-        ''''''
+        '''rangoRear(self, rangoRear)'''
 
         self._rangoRear = rangoRear
 
     @property
     def falsify(self):
 
-        ''''''
+        '''falsify(self)'''
 
         return self._falsify
 
     @falsify.setter
     def falsify(self, falsify):
 
-        ''''''
+        '''falsify(self, falsify)'''
 
         self._falsify = falsify
 
     @property
     def simulatedAlignment(self):
 
-        ''''''
+        '''simulatedAlignment(self)'''
 
         return self._simulatedAlignment
 
     @simulatedAlignment.setter
     def simulatedAlignment(self, simulatedAlignment):
 
-        ''''''
+        '''simulatedAlignment(self, simulatedAlignment)'''
 
         self._simulatedAlignment = simulatedAlignment
 
     @property
     def simulatedChops(self):
 
-        ''''''
+        '''simulatedChops(self)'''
 
         return self._simulatedChops
 
     @simulatedChops.setter
     def simulatedChops(self, simulatedChops):
 
-        ''''''
+        '''simulatedChops(self, simulatedChops)'''
 
         self._simulatedChops = simulatedChops
 
     @property
     def prior(self):
 
-        ''''''
+        '''prior(self)'''
 
         return self._prior
 
     @prior.setter
     def prior(self, prior):
 
-        ''''''
+        '''prior(self, prior)'''
 
         self._prior = prior
 
     @property
     def later(self):
 
-        ''''''
+        '''later(self)'''
 
         return self._later
 
     @later.setter
     def later(self, later):
 
-        ''''''
+        '''later(self, later)'''
 
         self._later = later
 
@@ -297,7 +297,8 @@ class _PyAlignment(_Py):
         rangoRear = self.rangoRear
 
         numChop = -1
-        for rChop, rChopPy, [pyOne, pyTwo] in zip(rangoChop, rangoChopPy, chops):
+        for rChop, rChopPy, [pyOne, pyTwo] in\
+                zip(rangoChop, rangoChopPy, chops):
             numChop += 1
             # print '### numChop ', numChop
 
@@ -478,42 +479,45 @@ class _PyAlignment(_Py):
                         if not (pyPl.aligned or pyPl.choped):
 
                             if not pyPlane.cross:
-                                # print 'A'
+                                # print '1'
 
                                 if consecutive:
                                     # print 'a'
 
                                     if pyPl.fronted:
+                                        # priny 'a1'
 
                                         control.append(numGeom)
                                         pyPlane.control.append(nG)
 
                                     else:
+                                        # print 'a2'
 
                                         pyPl.trimming(enormousShape)
 
                                 else:
+                                    # print 'b'
 
                                     cList = [enormousShape]
 
                                     if nG not in totalRear:
-                                        # print 'aa'
+                                        # print 'b1'
                                         if nG not in [pr, lat]:
-                                            # print 'aaa'
+                                            # print 'b11'
 
                                             if falsify:
-                                                # print 'aaa1'
+                                                # print 'b111'
                                                 if num == 0:
-                                                    # print 'aaa11'
+                                                    # print 'b1111'
                                                     cList.append(enormousBase)
                                                     control.append(numGeom)
                                                 else:
-                                                    # print 'aaa12'
+                                                    # print 'b1112'
                                                     cList.append(enormousCont)
                                                     control.append(nGeom)
 
                                             else:
-                                                # print 'aa2'
+                                                # print 'b112'
                                                 cList.append(enormousBase)
                                                 control.append(numGeom)
 
@@ -522,7 +526,7 @@ class _PyAlignment(_Py):
                                 control.append(pyPlane.numGeom)
 
                             else:
-                                # print 'B'
+                                # print '2'
 
                                 pyPl.trimmingTwo(enormousShape)
                                 baseControl.append(nG)
