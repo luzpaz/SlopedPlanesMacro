@@ -258,9 +258,6 @@ class _SlopedPlanes(_Py):
             # print 'B'
 
             faceList = self.faceList
-            place = FreeCAD.Placement()
-            for face in faceList:
-                face.Placement = place
 
         # procedees face by face and stores them into the Proxy
 
@@ -555,12 +552,13 @@ class _SlopedPlanes(_Py):
 
                 planeFaceList.append(upFace)
 
-            if slopedPlanes.Down:
-                # print 'Down'
-                face = faceList[numFace]
-                planeFaceList.append(face)
+            if not slopedPlanes.Mirror:
+                if slopedPlanes.Down:
+                    # print 'Down'
+                    face = faceList[numFace].copy()
+                    planeFaceList.append(face)
 
-            if slopedPlanes.Mirror:
+            else:
                 # print 'mirror'
                 shell = Part.makeShell(planeFaceList)
                 mirror = shell.mirror(FreeCAD.Vector(0, 0, 0),
