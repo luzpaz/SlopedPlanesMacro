@@ -716,8 +716,6 @@ class _PyAlignment(_Py):
             numChop += 1
             # print '### chops ', (pyOne.numGeom, pyTwo.numGeom)
 
-            # REFACT !!! rangos and cuts
-
             rrOne = []
             if pyOne.rear:
                 pyReflexListOne = pyOne.reflexedList
@@ -726,6 +724,7 @@ class _PyAlignment(_Py):
                     pyOppOne = pyReflexOne.planes[1]
                     oppEnormousOne = pyOppOne.enormousShape
                     rrOne = pyOne.rango[0]
+            # print 'rrOne ', rrOne
 
             rrTwo = []
             if pyTwo.rear:
@@ -735,6 +734,7 @@ class _PyAlignment(_Py):
                     pyOppTwo = pyReflexTwo.planes[0]
                     oppEnormousTwo = pyOppTwo.enormousShape
                     rrTwo = pyTwo.rango[1]
+             # print 'rrTwo ', rrTwo
 
             if falsify:
 
@@ -764,11 +764,11 @@ class _PyAlignment(_Py):
             rChop = rangoChop[numChop]
             rChopPy = rangoChopPy[numChop]
 
-            # print 'rChop ', rChop
+            # print 'rChop ', rChop, rChopPy
 
             cutList = []
             for rr, pyPl in map(None, rChop, rChopPy):
-                if not pyPl.aligned and not pyPl.choped:
+                if not (pyPl.aligned or pyPl.choped):
 
                     if pyPl.reflexed:
                         # print 'pyPl.numGeom reflexed ', pyPl.numGeom
@@ -1656,10 +1656,7 @@ class _PyAlignment(_Py):
         rearList = []
 
         for pyPl in rangoRear[1]:
-            '''if pyPl.choped or pyPl.aligned:
-                break'''
-            # esto debería estar hecho desde el principio
-            # if not (pyPl.choped or pyPl.aligned or pyPl.fronted): # fronted me rompe la cruz
+
             if not (pyPl.choped or pyPl.fronted) and pyPl.shape:
 
                 pl = pyPl.shape
@@ -1684,7 +1681,6 @@ class _PyAlignment(_Py):
                     if chopList:
                         # print 'chopList ', chopList
                         for pyPl in rangoRear[1]:
-                            # if not pyPl.choped: # and not pyPl.aligned:
                             if not (pyPl.choped or pyPl.fronted):
                                 pl = pyPl.cuttingPyth(chopList)
 
