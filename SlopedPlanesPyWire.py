@@ -55,98 +55,98 @@ class _PyWire(_Py):
     @property
     def numWire(self):
 
-        ''''''
+        '''numWire(self)'''
 
         return self._numWire
 
     @numWire.setter
     def numWire(self, numWire):
 
-        ''''''
+        '''numWire(self, numWire)'''
 
         self._numWire = numWire
 
     @property
     def reflexs(self):
 
-        ''''''
+        '''reflexs(self)'''
 
         return self._reflexs
 
     @reflexs.setter
     def reflexs(self, reflexs):
 
-        ''''''
+        '''reflexs(self, reflexs)'''
 
         self._reflexs = reflexs
 
     @property
     def planes(self):
 
-        ''''''
+        '''planes(self)'''
 
         return self._planes
 
     @planes.setter
     def planes(self, planes):
 
-        ''''''
+        '''planes(self, planes)'''
 
         self._planes = planes
 
     @property
     def coordinates(self):
 
-        ''''''
+        '''coordinates(self)'''
 
         return self._coordinates
 
     @coordinates.setter
     def coordinates(self, coordinates):
 
-        ''''''
+        '''coordinates(self, coordinates)'''
 
         self._coordinates = coordinates
 
     @property
     def shapeGeom(self):
 
-        ''''''
+        '''shapeGeom(self)'''
 
         return self._shapeGeom
 
     @shapeGeom.setter
     def shapeGeom(self, shapeGeom):
 
-        ''''''
+        '''shapeGeom(self, shapeGeom)'''
 
         self._shapeGeom = shapeGeom
 
     @property
     def reset(self):
 
-        ''''''
+        '''reset(self)'''
 
         return self._reset
 
     @reset.setter
     def reset(self, reset):
 
-        ''''''
+        '''reset(self, reset)'''
 
         self._reset = reset
 
     @property
     def wire(self):
 
-        ''''''
+        '''wire(self)'''
 
         return self._wire
 
     @wire.setter
     def wire(self, wire):
 
-        ''''''
+        '''wire(self, wire)'''
 
         self._wire = wire
 
@@ -191,7 +191,7 @@ class _PyWire(_Py):
     def virtualizing(self):
 
         '''virtualizing(self)
-        Assigns the forward and backward or the reflexs.
+        Assigns the forward and backward to the reflexs.
         Transfers to PyReflex'''
 
         # print '###### virtualizing wire', (self.numWire)
