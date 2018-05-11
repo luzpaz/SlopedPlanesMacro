@@ -40,7 +40,7 @@ class _PyReflex(_Py):
 
     def __init__(self):
 
-        ''''''
+        '''__init__(self)'''
 
         self.planes = []
         self.rango = []
@@ -50,56 +50,56 @@ class _PyReflex(_Py):
     @property
     def planes(self):
 
-        ''''''
+        '''planes(self)'''
 
         return self._planes
 
     @planes.setter
     def planes(self, planes):
 
-        ''''''
+        '''planes(self, planes)'''
 
         self._planes = planes
 
     @property
     def rango(self):
 
-        ''''''
+        '''rango(self)'''
 
         return self._rango
 
     @rango.setter
     def rango(self, rango):
 
-        ''''''
+        '''rango(self, rango)'''
 
         self._rango = rango
 
     @property
     def rear(self):
 
-        ''''''
+        '''rear(self)'''
 
         return self._rear
 
     @rear.setter
     def rear(self, rear):
 
-        ''''''
+        '''rear(self, rear)'''
 
         self._rear = rear
 
     @property
     def lines(self):
 
-        ''''''
+        '''lines(self)'''
 
         return self._lines
 
     @lines.setter
     def lines(self, lines):
 
-        ''''''
+        '''lines(self, lines)'''
 
         self._lines = lines
 
@@ -605,11 +605,7 @@ class _PyReflex(_Py):
         else:
             # print '1'
             secondaries = []
-            # if not pyR.aligned or pyR.virtualized:
-            # print '11'
-            # print 'pyR.cutter ', pyR.cutter
             cutList.extend(pyR.cutter)
-            # print[p.Placement for p in pyR.cutter]
 
         # print 'cutList ', cutList
 
