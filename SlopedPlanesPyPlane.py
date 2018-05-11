@@ -41,7 +41,7 @@ class _PyPlane(_Py):
 
     def __init__(self, numWire, numGeom):
 
-        ''''''
+        '''__init__(self, numWire, numGeom)'''
 
         self.alignedList = []
         self.chopedList = []
@@ -341,7 +341,8 @@ class _PyPlane(_Py):
     @property
     def seed(self):
 
-        '''used in PyReflex, allowed location for a second face'''
+        '''seed(self)
+        Allowed location for a second face of a reflex plane'''
 
         return self._seed
 
@@ -614,8 +615,7 @@ class _PyPlane(_Py):
     @virtuals.setter
     def virtuals(self, virtuals):
 
-        '''virtuals(self, virtuals)
-        _Py.printAsociatedShapes'''
+        '''virtuals(self, virtuals)'''
 
         self._virtuals = virtuals
 
@@ -1661,7 +1661,7 @@ class _PyPlane(_Py):
 
     def rangging(self, pyWire, direction, pyReflex=None):
 
-        '''rangging(self, pyWire, direction)'''
+        '''rangging(self, pyWire, direction, pyReflex=None)'''
 
         # print 'rangging ', (self.numWire, self.numGeom), direction, self.rear
         numGeom = self.numGeom
