@@ -5,8 +5,6 @@ FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 
 ### Versions
 
-    alpha: February 2018 (FreeCAD 0.17)
-    beta: March 2018 (FreeCAD 0.17)
     1.0: May 2018 (FreeCAD 0.17)
     master: updated every month (FreeCAD 0.18)
 
@@ -20,7 +18,7 @@ The macro is tested with a set of examples. Please, see at https://github.com/ca
 
 [SlopedPlanesMacro-master-status]: https://travis-ci.org/caceres/SlopedPlanesMacro.svg?branch=master
 [SlopedPlanesMacro-develop-status]: https://travis-ci.org/caceres/SlopedPlanesMacro.svg?branch=develop
-[SlopedPlanesMacro-beta-status]: https://travis-ci.org/caceres/SlopedPlanesMacro.svg?branch=beta
+[SlopedPlanesMacro-1.0-status]: https://travis-ci.org/caceres/SlopedPlanesMacro.svg?branch=1.0
 [travis-branches]: https://travis-ci.org/caceres/SlopedPlanesMacro/branches
 [travis-builds]: https://travis-ci.org/caceres/SlopedPlanesMacro/builds
 
