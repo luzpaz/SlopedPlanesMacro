@@ -162,6 +162,9 @@ class _PyFace(_Py):
             for pyPlane in pyWire.planes:
                 dd = pyPlane.__dict__.copy()
 
+                # print '######### ', pyPlane.numGeom, pyPlane
+                # print 'dd ', dd
+
                 dd['_shape'] = None
                 dd['_bigShape'] = None
                 dd['_enormousShape'] = None
@@ -188,6 +191,9 @@ class _PyFace(_Py):
 
                 dd['_rangoPy'] = []
 
+                dd['_solved'] = False
+                dd['_reallySolved'] = False
+
                 if serialize:
 
                     edgeList.append(pyPlane.geomShape)
@@ -205,6 +211,8 @@ class _PyFace(_Py):
 
                 dd['_geomShape'] = None
                 dd['_geomAligned'] = None
+
+                # print 'dd ', dd
 
                 planeList.append(dd)
             dct['_planes'] = planeList

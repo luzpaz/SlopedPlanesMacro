@@ -713,6 +713,8 @@ class _SlopedPlanes(_Py):
             dct['_alignments'] = alignments
             if serialize:
                 face = faceList[numFace]
+                # print 'serials ', serials
+                # print 'face ', face
                 serials = Part.makeCompound([face] + serials)
                 dct['_serials'] = serials.exportBrepToString()
             else:
@@ -720,6 +722,8 @@ class _SlopedPlanes(_Py):
                     del dct['_serials']
             pyth.append(dct)
         state['Pyth'] = pyth
+
+        # print 'state ', state
 
         return state
 
