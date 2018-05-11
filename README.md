@@ -1,4 +1,4 @@
-## SlopedPlanes Macro for FreeCAD <img src="https://github.com/caceres/SlopedPlanesMacro/blob/develop/SlopedPlanes.png" height="30"/>
+## SlopedPlanes Macro for FreeCAD <img src="https://github.com/caceres/SlopedPlanesMacro/blob/master/SlopedPlanes.png" height="30"/>
 A geometric factory. Build figures controlling the slopes of their faces.
 
 FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
