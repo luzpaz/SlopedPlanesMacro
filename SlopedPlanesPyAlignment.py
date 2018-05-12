@@ -596,7 +596,7 @@ class _PyAlignment(_Py):
 
             [pyOne, pyTwo] = self.chops[0]
 
-            if not pyPrior.reflexed or pyPrior.choped:
+            if not pyPrior.reflexed:
                 # print 'AP1'
 
                 pyBase.cuttingPyth([bigPrior])
@@ -604,24 +604,48 @@ class _PyAlignment(_Py):
                 if numWire == pyLater.numWire:
                     control.append(lat)
 
-            else:
+            elif pyPrior.choped:
                 # print 'AP2'
 
-                if pyBase.virtualized:
-                    # print 'AP21'
+                # print pyBase.alignedList
+
+                if len(pyBase.alignedList) == 1:
 
                     pyBase.cuttingPyth([bigPrior])
                     control.append(pr)
                     if numWire == pyLater.numWire:
                         control.append(lat)
 
-            if not pyLater.reflexed or pyLater.choped:
-                # print 'AL'
+            else:
+                # print 'AP3'
+
+                if pyBase.virtualized:
+                    # print 'AP31'
+
+                    pyBase.cuttingPyth([bigPrior])
+                    control.append(pr)
+                    if numWire == pyLater.numWire:
+                        control.append(lat)
+
+            if not pyLater.reflexed:
+                # print 'AL1'
 
                 pyCont.cuttingPyth([bigLater])
                 pyCont.control.append(lat)
                 if nWire == pyPrior.numWire:
                     pyCont.control.append(pr)
+
+            elif pyLater.choped:
+                # print 'AL2'
+
+                # print pyCont.alignedList
+
+                if len(pyCont.alignedList) == 1:
+
+                    pyCont.cuttingPyth([bigLater])
+                    pyCont.control.append(lat)
+                    if nWire == pyPrior.numWire:
+                        pyCont.control.append(pr)
 
         else:
             # print 'B'
