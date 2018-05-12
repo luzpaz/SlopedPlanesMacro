@@ -30,7 +30,7 @@ To use this macro, please:
 * Copy the file "SlopedPlanes.FCMacro" at "~/.FreeCAD"
 
 ### Help
-Please, visit our Wiki page [SlopedPlanes Wiki](https://github.com/caceres/SlopedPlanesMacro/wiki)
+Please, visit our page [SlopedPlanes Wiki](https://github.com/caceres/SlopedPlanesMacro/wiki)
 
 ### Feedback
 Please, send feedback via the dedicated SlopedPlanes [FreeCAD forum thread](https://forum.freecadweb.org/viewtopic.php?f=24&t=25337).
