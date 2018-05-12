@@ -1577,7 +1577,7 @@ class _PyAlignment(_Py):
 
         # print '# self.Base ', self.base.numGeom
 
-        # recolects   esto esta repetido en el final de aligning
+        # recolects   esto esta repetido en el final de aligning y luego en PyFace postProcess
 
         pyWireList = _Py.pyFace.wires
         pyBase = self.base

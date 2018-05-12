@@ -1459,11 +1459,11 @@ class _PyFace(_Py):
             aList.append(aL)
             cList.append(cL)
 
-        # the planes not fronted not aligned not choped are cutted by alignments not included in their rearedList
-
         for pyWire in self.wires:
 
             for pyPlane in pyWire.planes:
+
+                # the planes not fronted not aligned not choped are cutted by alignments not included in their rearedList
 
                 if not (pyPlane.fronted or pyPlane.choped or pyPlane.aligned):
                     # print pyPlane.numGeom
@@ -1477,6 +1477,12 @@ class _PyFace(_Py):
                     if cutList:
                         # print aList
                         pyPlane.cuttingPyth(cutList)
+
+                # the aligned planes with shape are cutted by other alignments
+
+                if pyPlane.aligned and pyPlane.shape:
+
+                    pass
 
         # everyone no reflexed with fronted
 
