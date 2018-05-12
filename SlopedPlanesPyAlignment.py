@@ -604,28 +604,21 @@ class _PyAlignment(_Py):
                 if numWire == pyLater.numWire:
                     control.append(lat)
 
-            elif pyPrior.choped:
+            elif pyBase.virtualized:
                 # print 'AP2'
 
-                # print pyBase.alignedList
+                pyBase.cuttingPyth([bigPrior])
+                control.append(pr)
+                if numWire == pyLater.numWire:
+                    control.append(lat)
 
-                if len(pyBase.alignedList) == 1 or pyBase.virtualized:
-
-                    pyBase.cuttingPyth([bigPrior])
-                    control.append(pr)
-                    if numWire == pyLater.numWire:
-                        control.append(lat)
-
-            else:
+            elif pyPrior.choped and len(pyBase.alignedList) == 1:
                 # print 'AP3'
 
-                if pyBase.virtualized:
-                    # print 'AP31'
-
-                    pyBase.cuttingPyth([bigPrior])
-                    control.append(pr)
-                    if numWire == pyLater.numWire:
-                        control.append(lat)
+                pyBase.cuttingPyth([bigPrior])
+                control.append(pr)
+                if numWire == pyLater.numWire:
+                    control.append(lat)
 
             if not pyLater.reflexed:
                 # print 'AL1'
@@ -635,17 +628,13 @@ class _PyAlignment(_Py):
                 if nWire == pyPrior.numWire:
                     pyCont.control.append(pr)
 
-            elif pyLater.choped:
+            elif pyLater.choped and len(pyCont.alignedList) == 1:
                 # print 'AL2'
 
-                # print pyCont.alignedList
-
-                if len(pyCont.alignedList) == 1:
-
-                    pyCont.cuttingPyth([bigLater])
-                    pyCont.control.append(lat)
-                    if nWire == pyPrior.numWire:
-                        pyCont.control.append(pr)
+                pyCont.cuttingPyth([bigLater])
+                pyCont.control.append(lat)
+                if nWire == pyPrior.numWire:
+                    pyCont.control.append(pr)
 
         else:
             # print 'B'
