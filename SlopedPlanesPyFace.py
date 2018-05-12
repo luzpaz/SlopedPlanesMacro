@@ -1463,7 +1463,7 @@ class _PyFace(_Py):
 
             for pyPlane in pyWire.planes:
 
-                # the planes not fronted not aligned not choped are cutted by alignments not included in their rearedList
+                # the planes not fronted not aligned not choped are cutted by alignments not included in its rearedList
 
                 if not (pyPlane.fronted or pyPlane.choped or pyPlane.aligned):
                     # print pyPlane.numGeom
@@ -1478,11 +1478,20 @@ class _PyFace(_Py):
                         # print aList
                         pyPlane.cuttingPyth(cutList)
 
-                # the aligned planes with shape are cutted by other alignments
+                # the aligned planes with shape are cutted by other alignments not included in its alignedList and chopedList
 
                 if pyPlane.aligned and pyPlane.shape:
 
-                    pass
+                    alignedList = pyPlane.alignedList
+                    chopedList = pyPlane.chopedList
+
+                    cutList = []
+                    for ali, aa in zip(self.alignments, aList):
+                        if ali not in alignedList and ali not in chopedList:
+                            cutList.extend(aa)
+                    if cutList:
+                        # print aList
+                        pyPlane.cuttingPyth(cutList)
 
         # everyone no reflexed with fronted
 
