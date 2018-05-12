@@ -1260,6 +1260,8 @@ class _PyAlignment(_Py):
                 if twoList:
                     pyT.cuttingPyth(twoList)'''
 
+        # hay que comprobar los numWire
+
         if len(pyWireList) > 1:
 
             cList = chopList[:]
@@ -1540,7 +1542,6 @@ class _PyAlignment(_Py):
                     rC.append(pl)
 
         # print 'rC ', rC
-        ###if rC:
         rC = Part.makeCompound(rC)
 
         # print 'cutList ', cutList

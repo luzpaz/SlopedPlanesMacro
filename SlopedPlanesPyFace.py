@@ -1459,38 +1459,40 @@ class _PyFace(_Py):
             aList.append(aL)
             cList.append(cL)
 
-        for pyWire in self.wires:
-            for pyPlane in pyWire.planes:
+        if len(self.wires) > 1:
 
-                # the planes not fronted not aligned not choped are cutted by alignments not included in its rearedList
+            for pyWire in self.wires:
+                for pyPlane in pyWire.planes:
 
-                if not (pyPlane.fronted or pyPlane.choped or pyPlane.aligned):
-                    # print pyPlane.numGeom
-                    rearedList = pyPlane.rearedList
-                    # print rearedList
+                    # the planes not fronted not aligned not choped are cutted by alignments not included in its rearedList
 
-                    cutList = []
-                    for ali, aa in zip(self.alignments, aList):
-                        if ali not in rearedList:
-                            cutList.extend(aa)
-                    if cutList:
-                        # print aList
-                        pyPlane.cuttingPyth(cutList)
+                    if not (pyPlane.fronted or pyPlane.choped or pyPlane.aligned):
+                        # print pyPlane.numGeom
+                        rearedList = pyPlane.rearedList
+                        # print rearedList
 
-                '''# the aligned planes with shape are cutted by other alignments not included in its alignedList and chopedList
+                        cutList = []
+                        for ali, aa in zip(self.alignments, aList):
+                            if ali not in rearedList:
+                                cutList.extend(aa)
+                        if cutList:
+                            # print aList
+                            pyPlane.cuttingPyth(cutList)
 
-                elif pyPlane.aligned and pyPlane.shape:
+                    '''# the aligned planes with shape are cutted by other alignments not included in its alignedList and chopedList
 
-                    alignedList = pyPlane.alignedList
-                    chopedList = pyPlane.chopedList
+                    elif pyPlane.aligned and pyPlane.shape:
 
-                    cutList = []
-                    for ali, aa in zip(self.alignments, aList):
-                        if ali not in alignedList and ali not in chopedList:
-                            cutList.extend(aa)
-                    if cutList:
-                        # print aList
-                        pyPlane.cuttingPyth(cutList)'''
+                        alignedList = pyPlane.alignedList
+                        chopedList = pyPlane.chopedList
+
+                        cutList = []
+                        for ali, aa in zip(self.alignments, aList):
+                            if ali not in alignedList and ali not in chopedList:
+                                cutList.extend(aa)
+                        if cutList:
+                            # print aList
+                            pyPlane.cuttingPyth(cutList)'''
 
         # everyone no reflexed with fronted
 
