@@ -1237,13 +1237,39 @@ class _PyAlignment(_Py):
 
         # between chops
 
-        if len(pyWireList) > 1:
+        '''if len(pyWireList) > 1:
 
-            cList = chopList[:]
             num = -1
             for [pyO, pyT] in chopList:
                 num += 1
+
+                oneList = []
+                for [oo, tt] in chopList[0:num]:
+                    oneList.extend([oo.shape, tt.shape])
+
+                twoList = []
+                try:
+                    for [oo, tt] in chopList[num + 1 :]:
+                        twoList.extend([oo.shape, tt.shape])
+                except IndexError:
+                    pass
+
+                if oneList:
+                    pyO.cuttingPyth(oneList)
+
+                if twoList:
+                    pyT.cuttingPyth(twoList)'''
+
+        if len(pyWireList) > 1:
+
+            cList = chopList[:]
+
+            num = -1
+            for [pyO, pyT] in chopList:
+                num += 1
+
                 pop = cList.pop(num)
+
                 cutList = []
                 for cc in cList:
                     for c in cc:
@@ -1514,8 +1540,8 @@ class _PyAlignment(_Py):
                     rC.append(pl)
 
         # print 'rC ', rC
-        if rC:
-            rC = Part.makeCompound(rC)
+        ###if rC:
+        rC = Part.makeCompound(rC)
 
         # print 'cutList ', cutList
         # print 'oppCutList ', oppCutList
