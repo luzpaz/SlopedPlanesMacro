@@ -1239,26 +1239,52 @@ class _PyAlignment(_Py):
 
         '''if len(pyWireList) > 1:
 
+            lenChop = len(chopList) - 2
+
             num = -1
             for [pyO, pyT] in chopList:
                 num += 1
 
-                oneList = []
-                for [oo, tt] in chopList[0:num]:
-                    oneList.extend([oo.shape, tt.shape])
+                if num > 0 and num < lenChop:
 
-                twoList = []
-                try:
-                    for [oo, tt] in chopList[num + 1 :]:
-                        twoList.extend([oo.shape, tt.shape])
-                except IndexError:
-                    pass
+                    cList = []
 
-                if oneList:
-                    pyO.cuttingPyth(oneList)
+                    pr = chopList[num - 1][1]
+                    if pr.numWire != pyO.numWire:
+                        cList.append(pr.shape)
 
-                if twoList:
-                    pyT.cuttingPyth(twoList)'''
+                    lat = chopList[num + 1][0]
+                    if lat.numWire != pyT.numWire:
+                        cList.append(lat.shape)
+
+                    if cList:
+                        pyO.cuttingPyth(cList)
+                        pyT.cuttingPyth(cList)
+
+                elif num == 0:
+
+                    cList = []
+
+                    lat = chopList[num + 1][0]
+                    if lat.numWire != pyT.numWire:
+                        cList.append(lat.shape)
+
+                    if cList:
+                        pyO.cuttingPyth(cList)
+                        pyT.cuttingPyth(cList)
+
+                else:
+
+                    cList = []
+
+                    pr = chopList[num - 1][1]
+                    if pr.numWire != pyO.numWire:
+                        cList.append(pr.shape)
+
+                    if cList:
+                        pyO.cuttingPyth(cList)
+                        pyT.cuttingPyth(cList)
+                '''
 
         # hay que comprobar los numWire
 
