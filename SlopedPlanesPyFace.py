@@ -1430,31 +1430,46 @@ class _PyFace(_Py):
 
         ''''''
 
-        # the planes not fronted not aligned not choped are cutted by alignments not included in their rearedList
-
         if not self.alignments:
             return
 
+        # recolects
+
         aList = []
+        cList = []
         for ali in self.alignments:
+
             aL = []
             aL.append(ali.base.shape)
             for aa in ali.aligns:
                 if aa.shape:
                     aL.append(aa.shape)
+
             for cc in ali.chops:
                 for c in cc:
                     if c.shape:
                         aL.append(c.shape)
+
+            cL = []
+            for rC in ali.rangoPy:
+                for r in rC:
+                    if r.shape:
+                        cL.append(r.shape)
+
             aList.append(aL)
+            cList.append(cL)
+
+        # the planes not fronted not aligned not choped are cutted by alignments not included in their rearedList
 
         for pyWire in self.wires:
+
             for pyPlane in pyWire.planes:
-                #if not (pyPlane.fronted or pyPlane.reflexed):  # cambiado para corregir alignments_holes. podría ser lenWire > 1
+
                 if not (pyPlane.fronted or pyPlane.choped or pyPlane.aligned):
                     # print pyPlane.numGeom
                     rearedList = pyPlane.rearedList
                     # print rearedList
+
                     cutList = []
                     for ali, aa in zip(self.alignments, aList):
                         if ali not in rearedList:
@@ -1463,15 +1478,13 @@ class _PyFace(_Py):
                         # print aList
                         pyPlane.cuttingPyth(cutList)
 
-        # everyone no reflexed with fronted. REFACT!!!
+        # everyone no reflexed with fronted
 
+        num = -1
         for pyAlignment in self.alignments:
+            num += 1
 
-            cc = []
-            for rC in pyAlignment.rangoPy:
-                for r in rC:
-                    if r.shape:
-                        cc.append(r.shape)
+            cc = cList[num]
 
             if cc:
                 for wire in self.wires:
