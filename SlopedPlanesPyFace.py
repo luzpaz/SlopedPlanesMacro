@@ -1322,8 +1322,7 @@ class _PyFace(_Py):
 
                             for pyA in pyAlignList:
                                 aList.remove(pyA)
-                                ## baseList.append(pyA.base.enormousShape)
-                                baseList.extend(pyA.simulatedAlignment)
+                                baseList.append(pyA.base.enormousShape)
 
                             aL = []
                             # print 'aList ', aList

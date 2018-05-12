@@ -594,11 +594,12 @@ class _PyAlignment(_Py):
 
             [pyOne, pyTwo] = self.chops[0]
 
-            if not pyPrior.reflexed:
+            if not pyPrior.reflexed:  # or pyPrior.choped:
                 # print 'AP1'
 
                 pyBase.cuttingPyth([bigPrior])
                 control.append(lat)
+                ## control.append(pr) ???
 
             else:
                 # print 'AP2'
@@ -609,7 +610,17 @@ class _PyAlignment(_Py):
                     pyBase.cuttingPyth([bigPrior])
                     control.append(lat)
 
-            if not pyLater.reflexed:
+                '''else:
+                    # print 'AP22'
+
+                    if pyPrior.choped:
+                        # print 'AP221'
+
+                        pyBase.cuttingPyth([bigPrior])
+                        control.append(pr)
+                        control.append(lat)'''
+
+            if not pyLater.reflexed:  # or pyLater.choped:
                 # print 'AL'
 
                 pyCont.cuttingPyth([bigLater])
