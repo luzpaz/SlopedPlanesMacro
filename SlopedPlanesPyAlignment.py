@@ -572,11 +572,13 @@ class _PyAlignment(_Py):
         falsify = self.falsify
 
         pyBase = self.base
+        numWire = pyBase.numWire
         numGeom = pyBase.numGeom
         enormousBase = pyBase.enormousShape
         control = pyBase.control
 
         pyCont = self.aligns[-1]
+        nWire = pyCont.numWire
         nGeom = pyCont.numGeom
         enormousCont = pyCont.enormousShape
 
@@ -598,8 +600,9 @@ class _PyAlignment(_Py):
                 # print 'AP1'
 
                 pyBase.cuttingPyth([bigPrior])
-                control.append(lat)
-                ## control.append(pr) ???
+                control.append(pr)
+                if numWire == pyLater.numWire:
+                    control.append(lat)
 
             else:
                 # print 'AP2'
@@ -608,24 +611,17 @@ class _PyAlignment(_Py):
                     # print 'AP21'
 
                     pyBase.cuttingPyth([bigPrior])
-                    control.append(lat)
-
-                '''else:
-                    # print 'AP22'
-
-                    if pyPrior.choped:
-                        # print 'AP221'
-
-                        pyBase.cuttingPyth([bigPrior])
-                        control.append(pr)
-                        control.append(lat)'''
+                    control.append(pr)
+                    if numWire == pyLater.numWire:
+                        control.append(lat)
 
             if not pyLater.reflexed or pyLater.choped:
                 # print 'AL'
 
                 pyCont.cuttingPyth([bigLater])
                 pyCont.control.append(lat)
-                pyCont.control.append(pr)
+                if nWire == pyPrior.numWire:
+                    pyCont.control.append(pr)
 
         else:
             # print 'B'
@@ -641,7 +637,7 @@ class _PyAlignment(_Py):
                 # print '1'
                 cutterList.append(bigPrior)
                 if not pyBase.choped:
-                    if pyBase.numWire == pyLater.numWire:
+                    if numWire == pyLater.numWire:
                         # print '11'
                         control.append(pr)
 
@@ -655,7 +651,7 @@ class _PyAlignment(_Py):
                 cutterList.append(bigLater)
                 if not self.falsify:
                     if not pyBase.choped:
-                        if pyBase.numWire == pyLater.numWire:
+                        if numWire == pyLater.numWire:
                             # print '21'
                             control.append(lat)
 
