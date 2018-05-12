@@ -1460,7 +1460,6 @@ class _PyFace(_Py):
             cList.append(cL)
 
         for pyWire in self.wires:
-
             for pyPlane in pyWire.planes:
 
                 # the planes not fronted not aligned not choped are cutted by alignments not included in its rearedList
@@ -1478,6 +1477,23 @@ class _PyFace(_Py):
                         # print aList
                         pyPlane.cuttingPyth(cutList)
 
+        # everyone no reflexed with fronted
+
+        num = -1
+        for pyAlignment in self.alignments:
+            num += 1
+
+            cc = cList[num]
+            if cc:
+                for wire in self.wires:
+                    for plane in wire.planes:
+                        if not plane.reflexed:
+                            if pyAlignment not in plane.frontedList:
+                                plane.cuttingPyth(cc)
+
+        for pyWire in self.wires:
+            for pyPlane in pyWire.planes:
+
                 # the aligned planes with shape are cutted by other alignments not included in its alignedList and chopedList
 
                 if pyPlane.aligned and pyPlane.shape:
@@ -1492,18 +1508,3 @@ class _PyFace(_Py):
                     if cutList:
                         # print aList
                         pyPlane.cuttingPyth(cutList)
-
-        # everyone no reflexed with fronted
-
-        num = -1
-        for pyAlignment in self.alignments:
-            num += 1
-
-            cc = cList[num]
-
-            if cc:
-                for wire in self.wires:
-                    for plane in wire.planes:
-                        if not plane.reflexed:
-                            if pyAlignment not in plane.frontedList:
-                                plane.cuttingPyth(cc)

@@ -1095,9 +1095,11 @@ class _PyAlignment(_Py):
                 planeCopy = plane.copy()
 
                 if ccList:
+                    # print 'ccList ', ccList
                     planeCopy = planeCopy.cut(ccList, tolerance)
                     # print 'planeCopy.Faces ', planeCopy.Faces
 
+                # print 'cList ', cList
                 pCopy = planeCopy.copy()
                 pCopy = pCopy.cut(cList, tolerance)
 
@@ -1512,7 +1514,8 @@ class _PyAlignment(_Py):
                     rC.append(pl)
 
         # print 'rC ', rC
-        rC = Part.makeCompound(rC)
+        if rC:
+            rC = Part.makeCompound(rC)
 
         # print 'cutList ', cutList
         # print 'oppCutList ', oppCutList
