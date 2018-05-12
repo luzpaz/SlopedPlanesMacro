@@ -1322,7 +1322,8 @@ class _PyFace(_Py):
 
                             for pyA in pyAlignList:
                                 aList.remove(pyA)
-                                baseList.append(pyA.base.enormousShape)
+                                ## baseList.append(pyA.base.enormousShape)
+                                baseList.extend(pyA.simulatedAlignment)
 
                             aL = []
                             # print 'aList ', aList
@@ -1385,7 +1386,7 @@ class _PyFace(_Py):
                             cutList.extend(aList)
 
                         if cutList:
-                            # print 'cutList ', cutList, [c.Area for c in cutList]
+                            # print 'cutList ', cutList
                             # print pyPlane.shape, pyPlane.shape.Area
 
                             if isinstance(plane, Part.Compound):
