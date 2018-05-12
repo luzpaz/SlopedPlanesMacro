@@ -1477,7 +1477,7 @@ class _PyFace(_Py):
                         # print aList
                         pyPlane.cuttingPyth(cutList)
 
-                # the aligned planes with shape are cutted by other alignments not included in its alignedList and chopedList
+                '''# the aligned planes with shape are cutted by other alignments not included in its alignedList and chopedList
 
                 elif pyPlane.aligned and pyPlane.shape:
 
@@ -1490,7 +1490,7 @@ class _PyFace(_Py):
                             cutList.extend(aa)
                     if cutList:
                         # print aList
-                        pyPlane.cuttingPyth(cutList)
+                        pyPlane.cuttingPyth(cutList)'''
 
         # everyone no reflexed with fronted
 
