@@ -687,41 +687,34 @@ class _PyAlignment(_Py):
 
         # cuts pyPrior and pyLater
 
-        # if not (pyPrior.reflexed or pyPrior.arrow):
-        if not pyPrior.reflexed:
+        if not (pyPrior.reflexed or pyPrior.arrow):
             # print 'a'
 
-            if not pyPrior.arrow:
+            pyPrior.trimming(enormousBase)
+            pyPrior.control.append(numGeom)
+            # print 'pyPrior.shape ', pyPrior.shape
+
+            if falsify:
                 # print 'a1'
+                pyPrior.control.append(nGeom)
 
-                pyPrior.trimming(enormousBase)
-                pyPrior.control.append(numGeom)
-                # print 'pyPrior.shape ', pyPrior.shape
-
-                if falsify:
-                    # print 'a11'
-                    pyPrior.control.append(nGeom)
-
-        # if not (pyLater.reflexed or pyLater.arrow):
-        if not pyLater.reflexed:
+        if not (pyLater.reflexed or pyLater.arrow):
             # print 'b'
 
-            if not pyLater.arrow:
+            if not falsify:
+                # print 'b1'
 
-                if not falsify:
-                    # print 'b1'
+                pyLater.trimming(enormousBase)
+                pyLater.control.append(numGeom)
+                # print 'pyLater.shape ', pyLater.shape
 
-                    pyLater.trimming(enormousBase)
-                    pyLater.control.append(numGeom)
-                    # print 'pyLater.shape ', pyLater.shape
+            else:
+                # print 'b2'
 
-                else:
-                    # print 'b2'
-
-                    pyLater.trimming(enormousCont)
-                    pyLater.control.append(nGeom)
-                    pyLater.control.append(numGeom)
-                    # print 'pyLater.shape ', pyLater.shape
+                pyLater.trimming(enormousCont)
+                pyLater.control.append(nGeom)
+                pyLater.control.append(numGeom)
+                # print 'pyLater.shape ', pyLater.shape
 
     def simulatingChops(self):
 
