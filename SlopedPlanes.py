@@ -59,6 +59,7 @@ def makeSlopedPlanes(sketch):
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
 
     slopedPlanes.Base = sketch
+    sketch.ViewObject.Visibility = False
 
     return slopedPlanes
 
@@ -824,7 +825,12 @@ class _ViewProvider_SlopedPlanes():
         '''claimChildren(self)'''
 
         obj = self.Object
-        return [obj.Base] + obj.Group
+        group = obj.Group
+        for oo in group:
+            if hasattr(oo, 'Proxy'):
+                if oo.Proxy.Type == 'SlopedPlanes':
+                    oo.ViewObject.Visibility = False
+        return [obj.Base] + group
 
     def unsetEdit(self, vobj, mode):
 
