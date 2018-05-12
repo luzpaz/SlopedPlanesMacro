@@ -609,7 +609,7 @@ class _PyAlignment(_Py):
 
                 # print pyBase.alignedList
 
-                if len(pyBase.alignedList) == 1:
+                if len(pyBase.alignedList) == 1 or pyBase.virtualized:
 
                     pyBase.cuttingPyth([bigPrior])
                     control.append(pr)
@@ -687,6 +687,7 @@ class _PyAlignment(_Py):
 
         # cuts pyPrior and pyLater
 
+        # if not (pyPrior.reflexed or pyPrior.arrow):
         if not pyPrior.reflexed:
             # print 'a'
 
@@ -701,6 +702,7 @@ class _PyAlignment(_Py):
                     # print 'a11'
                     pyPrior.control.append(nGeom)
 
+        # if not (pyLater.reflexed or pyLater.arrow):
         if not pyLater.reflexed:
             # print 'b'
 
