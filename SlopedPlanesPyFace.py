@@ -1510,8 +1510,6 @@ class _PyFace(_Py):
 
         if len(self.wires) > 1:
 
-            # tal vez pueda quitar por aqui (mejora en betweenWires)
-
             for pyWire in self.wires:
                 for pyPlane in pyWire.planes:
 
