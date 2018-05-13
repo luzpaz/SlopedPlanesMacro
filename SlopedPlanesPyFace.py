@@ -1307,33 +1307,69 @@ class _PyFace(_Py):
                         # print '# numGeom ', pyPlane.numGeom
                         gS = pyPlane.geomShape
 
+                        aL = []
+
                         if pyPlane.fronted:
                             # print '0'
                             pass
 
                         elif pyPlane.choped:
                             # print 'A'
-                            aList = alignments[:]
-                            # print 'aList ', aList
 
                             pyAlignList = pyPlane.chopedList
                             # print 'pyAlignList ', pyAlignList
 
-                            aL = []
-                            for pyA in aList:
+                            for pyA in alignments:
 
                                 if pyA in pyAlignList:
                                     # print 'A1'
+
                                     common = plane.common(pyA.simulatedAlignment, tolerance)
 
                                     if common.Area:
                                         # print 'A11'
-                                        if len(pyAlignList) > 1:  # debe ser otro criterio
+
+                                        if len(pyAlignList) > 1:
+                                            # print 'A111'
+
                                             for ch in pyA.chops:
                                                 for pyC in ch:
                                                     common = pyC.shape.common([plane], tolerance)  # hay que revisar este common
                                                     if not common.Area:
                                                         aL.append(pyC.shape)
+
+                                        else:
+                                            # print 'A112'
+
+                                            # if len(pyA.chops) > 1:
+                                            # hay repeticion de cortes
+
+                                            # el que va a ser cortado
+                                            procc = False
+                                            for ch in pyA.chops:
+                                                if pyPlane in ch:
+                                                    [pyOne, pyTwo] = ch
+                                                    if pyOne.numWire != pyTwo.numWire:
+                                                        procc = True
+                                                        aa = [pyOne.numWire, pyTwo.numWire]
+                                                    break
+
+                                            # los cortadores
+                                            if procc:
+                                                # print 'A1121'
+
+                                                if len(pyA.chops) > 1:
+
+                                                    for ch in pyA.chops:
+                                                        if pyPlane not in ch:
+                                                            [pyO, pyT] = ch
+                                                            if pyO.numWire != pyT.numWire:
+                                                                if pyO.numWire in aa or pyT.numWire in aa:
+                                                                    nn = pyO.simulatedShape.copy().cut([pyT.shape], tolerance)
+                                                                    nn = self.selectFace(nn.Faces, pyO.geomShape)
+                                                                    mm = pyT.simulatedShape.copy().cut([pyO.shape], tolerance)
+                                                                    mm = self.selectFace(mm.Faces, pyT.shape)
+                                                                    aL.extend([nn, mm])
 
                                     else:
                                         # print 'A12'
@@ -1343,7 +1379,6 @@ class _PyFace(_Py):
                                     # print 'A2'
                                     aL.extend(pyA.simulatedAlignment)
 
-                            # print 'aL ', aL
                             cutList.extend(aL)
 
                         elif pyPlane.aligned:
@@ -1354,8 +1389,6 @@ class _PyFace(_Py):
 
                             pyAlign = pyPlane.selectAlignmentBase()
                             if pyAlign:
-
-                                aL = []
 
                                 simulAlign =\
                                     Part.makeShell(pyAlign.simulatedAlignment)
@@ -1389,20 +1422,20 @@ class _PyFace(_Py):
                                                 if not common.Area:
                                                     aL.append(pyC.shape)
 
-                                # print 'aL ', aL
                                 cutList.extend(aL)
 
                         else:
                             # print 'C'
-                            aList = []
+
                             for ali in alignments:
                                 if ali in pyPlane.rearedList:
-                                    aList.append(ali.simulatedAlignment)
-                            cutList.extend(aList)
+                                    aL.append(ali.simulatedAlignment)
+                            cutList.extend(aL)
+
+                        # print 'aL ', aL
 
                         if cutList:
-                            # print 'cutList ', cutList
-                            # print pyPlane.shape, pyPlane.shape.Area
+                            # print 'cutList ', cutList, pyPlane.shape
 
                             if isinstance(plane, Part.Compound):
                                 # print '1'
@@ -1476,6 +1509,8 @@ class _PyFace(_Py):
             cList.append(cL)
 
         if len(self.wires) > 1:
+
+            # tal vez pueda quitar por aqui (mejora en betweenWires)
 
             for pyWire in self.wires:
                 for pyPlane in pyWire.planes:
