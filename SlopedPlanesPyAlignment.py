@@ -1233,62 +1233,67 @@ class _PyAlignment(_Py):
             pyTwo.shape = compound
 
             chopList.append([pyOne, pyTwo])
-        # print 'chopList ', chopList
+        # print 'chopList ', chopList'''
 
         # between chops
 
         '''if len(pyWireList) > 1:
 
-            lenChop = len(chopList) - 2
+            lenChop = len(chopList) - 1
 
             num = -1
             for [pyO, pyT] in chopList:
                 num += 1
 
-                if num > 0 and num < lenChop:
+                # print '### [pyO, pyT]', [(pyO.numWire, pyO.numGeom), (pyT.numWire, pyT.numGeom)]
 
-                    cList = []
+                if num > 0 and num < lenChop:
+                    # print 'a'
 
                     pr = chopList[num - 1][1]
                     if pr.numWire != pyO.numWire:
-                        cList.append(pr.shape)
+                        pprr = chopList[num - 1][0]
+                        pyO.cuttingPyth([pprr.shape, pr.shape])
 
                     lat = chopList[num + 1][0]
                     if lat.numWire != pyT.numWire:
-                        cList.append(lat.shape)
-
-                    if cList:
-                        pyO.cuttingPyth(cList)
-                        pyT.cuttingPyth(cList)
+                        llaatt = chopList[num + 1][1]
+                        pyT.cuttingPyth([llaatt.shape, lat.shape])
 
                 elif num == 0:
+                    # print 'b'
 
                     cList = []
 
-                    lat = chopList[num + 1][0]
-                    if lat.numWire != pyT.numWire:
-                        cList.append(lat.shape)
+                    try:
+                        lat = chopList[num + 1][0]
+                    except IndexError:
+                        pass
+                    else:
 
-                    if cList:
-                        pyO.cuttingPyth(cList)
-                        pyT.cuttingPyth(cList)
+                        if lat.numWire != pyT.numWire:
+                            cList.append(lat.enormousShape)
 
-                else:
+                        if cList:
+                            pyO.cuttingPyth(cList)
+                            pyT.cuttingPyth(cList)
+
+                elif num == lenChop:
+                    # print 'c'
 
                     cList = []
 
                     pr = chopList[num - 1][1]
                     if pr.numWire != pyO.numWire:
-                        cList.append(pr.shape)
+                        cList.append(pr.enormousShape)
 
                     if cList:
                         pyO.cuttingPyth(cList)
-                        pyT.cuttingPyth(cList)
-                '''
+                        pyT.cuttingPyth(cList)'''
 
         # hay que comprobar los numWire
 
-        if len(pyWireList) > 1:
+        '''if len(pyWireList) > 1:
 
             cList = chopList[:]
 
@@ -1308,7 +1313,7 @@ class _PyAlignment(_Py):
                     pyO.cuttingPyth(cutList)
                     pyT.cuttingPyth(cutList)
 
-                cList.insert(num, pop)
+                cList.insert(num, pop)'''
 
         # the alignments
 

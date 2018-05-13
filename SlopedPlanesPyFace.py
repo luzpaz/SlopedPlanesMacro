@@ -1294,7 +1294,7 @@ class _PyFace(_Py):
                 cutterFace.insert(num, pop)
                 # print 'cutterList ', cutterList
 
-                checkList = cutterList[:]   # TODO
+                checkList = cutterList[:]
                 cutterList = [pyPl.shape for pyPl in cutterList]
 
                 # print '### numWire ', pyWire.numWire
@@ -1318,11 +1318,42 @@ class _PyFace(_Py):
 
                             pyAlignList = pyPlane.chopedList
                             # print 'pyAlignList ', pyAlignList
-                            baseList = []
+
+                            aL = []
+                            for pyA in aList:
+
+                                if pyA in pyAlignList:
+                                    # print 'A1'
+                                    common = plane.common(pyA.simulatedAlignment, tolerance)
+
+                                    if common.Area:
+                                        # print 'A11'
+                                        if len(pyAlignList) > 1:  # debe ser otro criterio
+                                            for ch in pyA.chops:
+                                                for pyC in ch:
+                                                    common = pyC.shape.common([plane], tolerance)  # hay que revisar este common
+                                                    if not common.Area:
+                                                        aL.append(pyC.shape)
+
+                                    else:
+                                        # print 'A12'
+                                        aL.extend(pyA.simulatedAlignment)
+
+                                else:
+                                    # print 'A2'
+                                    aL.extend(pyA.simulatedAlignment)
+
+                            # print 'aL ', aL
+                            cutList.extend(aL)
+
+
+                            '''baseList = []
 
                             for pyA in pyAlignList:
                                 aList.remove(pyA)
                                 baseList.append(pyA.base.enormousShape)
+
+                            # print 'baseList ', baseList
 
                             aL = []
                             # print 'aList ', aList
@@ -1337,7 +1368,8 @@ class _PyFace(_Py):
                                 if sim:
                                     aL.append(sim)
                             # print 'aL ', aL
-                            cutList.extend(aL)
+                            cutList.extend(aL)'''
+
 
                         elif pyPlane.aligned:
                             # print 'B'
@@ -1348,16 +1380,41 @@ class _PyFace(_Py):
                             pyAlign = pyPlane.selectAlignmentBase()
                             if pyAlign:
 
+                                aL = []
+
+                                simulAlign =\
+                                    Part.makeShell(pyAlign.simulatedAlignment)
+
                                 prL = [pyAlign.prior, pyAlign.later]
 
                                 nn = -1
                                 for pyP in chList:
                                     nn += 1
                                     if pyP in prL:
-                                        chList.remove(pyP)
+                                        # chList.remove(pyP)
                                         cutList.pop(nn)
 
-                                line = pyAlign.geomAligned
+                                aList = alignments[:]
+                                aList.remove(pyAlign)
+                                for pyA in aList:
+
+                                    simulA =\
+                                        Part.makeShell(pyA.simulatedAlignment)
+
+                                    common =\
+                                        simulAlign.common([simulA], tolerance)
+
+                                    if not common.Area:
+                                        aL.extend(pyA.simulatedAlignment)
+
+                                    else:
+                                        for ch in pyA.chops:
+                                            for pyC in ch:
+                                                common = pyC.shape.common([simulAlign], tolerance)
+                                                if not common.Area:
+                                                    aL.append(pyC.shape)
+
+                                '''line = pyAlign.geomAligned
                                 simulAlign =\
                                     Part.makeShell(pyAlign.simulatedAlignment)
                                 aList = alignments[:]
@@ -1372,7 +1429,12 @@ class _PyFace(_Py):
                                         common =\
                                             simulAlign.common([simulA], tolerance)
                                         if not common.Area:
-                                            aL.extend(pyA.simulatedAlignment)
+                                            aL.extend(pyA.simulatedAlignment)'''
+
+
+
+
+
                                 # print 'aL ', aL
                                 cutList.extend(aL)
 
