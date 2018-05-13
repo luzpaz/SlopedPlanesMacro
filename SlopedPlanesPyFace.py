@@ -1346,31 +1346,6 @@ class _PyFace(_Py):
                             # print 'aL ', aL
                             cutList.extend(aL)
 
-
-                            '''baseList = []
-
-                            for pyA in pyAlignList:
-                                aList.remove(pyA)
-                                baseList.append(pyA.base.enormousShape)
-
-                            # print 'baseList ', baseList
-
-                            aL = []
-                            # print 'aList ', aList
-                            for aa in aList:
-                                # print '1'
-                                sim = aa.base.shape.copy()
-                                geomShape = aa.geomAligned
-                                if baseList:
-                                    # print '11'
-                                    sim = self.cutting(sim, baseList,
-                                                       geomShape)
-                                if sim:
-                                    aL.append(sim)
-                            # print 'aL ', aL
-                            cutList.extend(aL)'''
-
-
                         elif pyPlane.aligned:
                             # print 'B'
 
@@ -1413,27 +1388,6 @@ class _PyFace(_Py):
                                                 common = pyC.shape.common([simulAlign], tolerance)
                                                 if not common.Area:
                                                     aL.append(pyC.shape)
-
-                                '''line = pyAlign.geomAligned
-                                simulAlign =\
-                                    Part.makeShell(pyAlign.simulatedAlignment)
-                                aList = alignments[:]
-                                aList.remove(pyAlign)
-                                aL = []
-                                for pyA in aList:
-                                    ll = pyA.geomAligned
-                                    section = line.section([ll], tolerance)
-                                    if not section.Vertexes:
-                                        simulA =\
-                                            Part.makeShell(pyA.simulatedAlignment)
-                                        common =\
-                                            simulAlign.common([simulA], tolerance)
-                                        if not common.Area:
-                                            aL.extend(pyA.simulatedAlignment)'''
-
-
-
-
 
                                 # print 'aL ', aL
                                 cutList.extend(aL)
