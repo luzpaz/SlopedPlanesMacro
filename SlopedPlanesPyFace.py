@@ -1301,14 +1301,14 @@ class _PyFace(_Py):
                 checkList = cutterList[:]
                 cutterList = [pyPl.shape for pyPl in cutterList]
 
-                print '### numWire ', pyWire.numWire
+                # print '### numWire ', pyWire.numWire
 
                 for pyPlane in pyWire.planes:
                     cutList = cutterList[:]
                     chList = checkList[:]
                     plane = pyPlane.shape
                     if plane:
-                        print '# numGeom ', pyPlane.numGeom
+                        # print '# numGeom ', pyPlane.numGeom
                         gS = pyPlane.geomShape
 
                         aL = []
@@ -1318,7 +1318,7 @@ class _PyFace(_Py):
                             pass
 
                         elif pyPlane.choped:
-                            print 'A'
+                            # print 'A'
 
                             chopedList = pyPlane.chopedList
                             # print 'chopedList ', chopedList
@@ -1326,15 +1326,15 @@ class _PyFace(_Py):
                             for pyA in alignments:
 
                                 if pyA in chopedList:
-                                    print 'A1'
+                                    # print 'A1'
 
                                     common = plane.common(pyA.simulatedAlignment, tolerance)
 
                                     if common.Area:
-                                        print 'A11'
+                                        # print 'A11'
 
                                         if len(chopedList) > 1:
-                                            print 'A111'
+                                            # print 'A111'
 
                                             for ch in pyA.chops:
                                                 for pyC in ch:
@@ -1344,7 +1344,7 @@ class _PyFace(_Py):
                                                         aL.append(pyC.simulatedShape)
 
                                         else:
-                                            print 'A112'
+                                            # print 'A112'
 
                                             # if len(pyA.chops) > 1:
                                             # hay repeticion de cortes
@@ -1361,7 +1361,7 @@ class _PyFace(_Py):
 
                                             # los cortadores
                                             if procc:
-                                                print 'A1121'
+                                                # print 'A1121'
 
                                                 if len(pyA.chops) > 1:
 
@@ -1377,11 +1377,11 @@ class _PyFace(_Py):
                                                                     aL.extend([nn, mm])
 
                                     else:
-                                        print 'A12'
+                                        # print 'A12'
                                         aL.extend(pyA.simulatedAlignment)
 
                                 else:
-                                    print 'A2'
+                                    # print 'A2'
                                     aL.extend(pyA.simulatedAlignment)
 
                             cutList.extend(aL)
@@ -1436,10 +1436,10 @@ class _PyFace(_Py):
                                     aL.extend(ali.simulatedAlignment)
                             cutList.extend(aL)
 
-                        print 'aL ', aL
+                        # print 'aL ', aL
 
                         if cutList:
-                            print 'cutList ', cutList, pyPlane.shape
+                            # print 'cutList ', cutList, pyPlane.shape
 
                             if isinstance(plane, Part.Compound):
                                 # print '1'
