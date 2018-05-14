@@ -1233,7 +1233,7 @@ class _PyAlignment(_Py):
             pyTwo.shape = compound
 
             chopList.append([pyOne, pyTwo])
-        # print 'chopList ', chopList'''
+        # print 'chopList ', chopList
 
         # the alignments
 
@@ -1453,11 +1453,11 @@ class _PyAlignment(_Py):
                 for nn, pyPl in map(None, rChop, rChopPy):
                     if not (pyPl.choped or pyPl.aligned):
                         pyPl.cuttingPyth(cutList)
-                        # print 'rangoChop ', nn
+                        # print 'rangoChop ', nn'''
 
     def processRango(self, rango, rangoPy, pyPlane, numWire, enormousBase):
 
-        '''processRango(self, rango, pyPlaneList, pyPlane, numWire, enormousBase)'''
+        '''processRango(self, rango, rangoPy, pyPlane, numWire, enormousBase)'''
 
         control = pyPlane.control
         rC, cutList, oppCutList = [], [], []
