@@ -251,7 +251,6 @@ class _SlopedPlanes(_Py):
                 geomOuterOrdered.append(pop)
 
             # print 'outer geom ', geomOuterOrdered
-            # print 'coordinatesOuterOrdered ', coordinatesOuterOrdered
 
             self.faceList = faceList
 
@@ -483,7 +482,6 @@ class _SlopedPlanes(_Py):
         # elaborates a list of planes for every face
 
         # print 'pyFaceListNew ', pyFaceListNew
-        # print 'faceList ', faceList, [f.Area for f in faceList]
 
         figList = []
         for pyFace in pyFaceListNew:
