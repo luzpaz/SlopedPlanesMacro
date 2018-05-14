@@ -493,7 +493,9 @@ class _PyFace(_Py):
                         # print '0'
 
                         if [numWire, numGeom] in refList:
-                            # print 'refList'
+                            # print 'refList ', refList
+                            if not pyPrePlane:
+                                pyPrePlane = pyPlaneList[-1]
                             self.forBack(pyPrePlane, 'forward')
                             ref = True
 
@@ -742,7 +744,7 @@ class _PyFace(_Py):
                 # print 'alignments ', self.alignments
 
             if resetFace:
-                if numWire > 0 and len(coord) > 2:
+                if numWire > 0 and pyPlane.geomAligned and len(coord) > 2:
                     # print 'firstPlane'
 
                     firstPlane = pyPlaneList[0]
@@ -1097,6 +1099,8 @@ class _PyFace(_Py):
     def forBack(self, pyPlane, direction):
 
         '''forBack(self, pyPlane, direction)'''
+
+        # print (pyPlane.numWire, pyPlane.numGeom)
 
         geom = pyPlane.geom
         firstParam = geom.FirstParameter
