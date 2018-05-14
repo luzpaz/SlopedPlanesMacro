@@ -1399,7 +1399,6 @@ class _PyFace(_Py):
                                 for pyP in chList:
                                     nn += 1
                                     if pyP in prL:
-                                        # chList.remove(pyP)   # provar a activar
                                         cutList.pop(nn)
 
                                 aList = alignments[:]
