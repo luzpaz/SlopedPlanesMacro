@@ -1399,7 +1399,7 @@ class _PyFace(_Py):
                                 for pyP in chList:
                                     nn += 1
                                     if pyP in prL:
-                                        # chList.remove(pyP)
+                                        # chList.remove(pyP)   # provar a activar
                                         cutList.pop(nn)
 
                                 aList = alignments[:]
@@ -1429,7 +1429,8 @@ class _PyFace(_Py):
 
                             for ali in alignments:
                                 if ali in pyPlane.rearedList:
-                                    aL.append(ali.simulatedAlignment)
+                                    # aL.append(ali.simulatedAlignment)
+                                    aL.extend(ali.simulatedAlignment)
                             cutList.extend(aL)
 
                         # print 'aL ', aL
