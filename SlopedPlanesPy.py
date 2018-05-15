@@ -161,7 +161,7 @@ class _Py(object):
             if section.Vertexes:
                 return ff
 
-    def selectShape(self):
+    def selectShape(self, big=False):
 
         '''selectShape(self)'''
 
@@ -179,7 +179,10 @@ class _Py(object):
 
         else:
             # print 'c'
-            shape = self.shape
+            if big:
+                shape = self.bigShape
+            else:
+                shape = self.shape
 
         return shape
 

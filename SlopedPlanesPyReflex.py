@@ -311,6 +311,8 @@ class _PyReflex(_Py):
         rangoNext, rangoNextPy = [], []
 
         rear = pyR.rear
+        oppRear = pyOppR.rear
+
         if pyR.rear:
 
             if direction == 'forward':
@@ -325,13 +327,27 @@ class _PyReflex(_Py):
             if nGeom not in control or pyR.choped:
 
                 rearPyPl = pyPlaneList[nGeom]
-                rearPl = rearPyPl.selectShape()
+                if pyWire.numWire == 0:
+                    rearPl = rearPyPl.selectShape()
+                else:
+                    rearPl = rearPyPl.selectShape(True)
                 pyR.cutter.append(rearPl)
                 if not rearPyPl.reflexed:
                     control.append(nGeom)
                 # print 'included rear ', (pyWire.numWire, nGeom)
 
-        oppRear = pyOppR.rear
+        else:
+            # print oppRear
+            if oppRear:
+                if direction == 'forward':
+                    numOppRear = oppRear[-1]
+                else:
+                    numOppRear = oppRear[0]
+                # print numOppRear
+                # print self.rear[1]
+                if numOppRear == self.rear[1]:
+                    # print 'simulatedShape'
+                    pyR.cutter.append(pyOppR.simulatedShape)
 
         if oppRear:
 
