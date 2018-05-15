@@ -329,12 +329,12 @@ class _PyReflex(_Py):
                 rearPyPl = pyPlaneList[nGeom]
                 if pyWire.numWire == 0:
                     rearPl = rearPyPl.selectShape()
+                    if not rearPyPl.reflexed:
+                        control.append(nGeom)
+                        # print 'included rear ', (pyWire.numWire, nGeom)
                 else:
                     rearPl = rearPyPl.selectShape(True)
                 pyR.cutter.append(rearPl)
-                if not rearPyPl.reflexed:
-                    control.append(nGeom)
-                # print 'included rear ', (pyWire.numWire, nGeom)
 
         else:
             # print oppRear

@@ -175,7 +175,10 @@ class _Py(object):
 
         elif self.reflexed:
             # print 'b'
-            shape = self.simulatedShape
+            if big:
+                shape = self.bigShape
+            else:
+                shape = self.simulatedShape
 
         else:
             # print 'c'
