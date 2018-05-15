@@ -1240,30 +1240,6 @@ class _PyAlignment(_Py):
                     if section.Edges:
                         fList.append(f)
 
-            '''if len(pyTwo.chopedList) == 1:
-                # print 'a'
-                sList = [shapeOne]
-            else:
-                # print 'b'
-                if pyTwo.rear:
-                    # print 'b1'
-                    simulOne = pyOne.simulatedShape
-
-                    for pyA in pyOne.chopedList:
-                        if pyA is not self:
-                            bb = pyA.base.shape
-                            gS = pyA.base.geomShape
-                            tt = pyOne.enormousShape
-                            bb = self.cutting(bb, [tt], gS)
-                            sList = [simulOne, bb]
-                            break
-
-                else:
-                    # print 'b2'
-                    sList = [shapeOne]
-
-            # print 'sList ', sList'''
-
             # print 'fList ', fList
             compound = Part.makeCompound(fList)
             pyOne.shape = compound
