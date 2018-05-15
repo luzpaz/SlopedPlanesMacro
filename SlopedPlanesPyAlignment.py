@@ -1200,9 +1200,33 @@ class _PyAlignment(_Py):
             shapeOne = pyOne.shape.copy()
             shapeTwo = pyTwo.shape.copy()
 
+            if len(pyOne.chopedList) == 1:
+                # print 'a'
+                sList = [shapeTwo]
+            else:
+                # print 'b'
+                if pyOne.rear:
+                    # print 'b1'
+                    simulTwo = pyTwo.simulatedShape
+
+                    for pyA in pyOne.chopedList:
+                        if pyA is not self:
+                            bb = pyA.base.shape
+                            gS = pyA.base.geomShape
+                            tt = pyTwo.enormousShape
+                            bb = self.cutting(bb, [tt], gS)
+                            sList = [simulTwo, bb]
+                            print sList
+                            break
+
+                else:
+                    # print 'b2'
+                    sList = [shapeTwo]
+
             fList = []
             gS = pyOne.geomShape
-            ff = self.cutting(shapeOne.Faces[0], [shapeTwo], gS)
+            # ff = self.cutting(shapeOne.Faces[0], [shapeTwo], gS)
+            ff = self.cutting(shapeOne.Faces[0], sList, gS)
             fList.append(ff)
 
             for ff in shapeOne.Faces[1:]:
@@ -1212,13 +1236,37 @@ class _PyAlignment(_Py):
                     if section.Edges:
                         fList.append(f)
 
+            if len(pyTwo.chopedList) == 1:
+                # print 'a'
+                simulOne = shapeOne
+            else:
+                # print 'b'
+                if pyTwo.rear:
+                    # print 'b1'
+                    simulOne = pyOne.simulatedShape
+
+                    for pyA in pyOne.chopedList:
+                        if pyA is not self:
+                            bb = pyA.base.shape
+                            gS = pyA.base.geomShape
+                            tt = pyOne.enormousShape
+                            bb = self.cutting(bb, [tt], gS)
+                            sList = [simulOne, bb]
+                            # print sList
+                            break
+
+                else:
+                    # print 'b2'
+                    simulOne = shapeOne
+
             # print 'fList ', fList
             compound = Part.makeCompound(fList)
             pyOne.shape = compound
 
             fList = []
             gS = pyTwo.geomShape
-            ff = self.cutting(shapeTwo.Faces[0], [shapeOne], gS)
+            # ff = self.cutting(shapeTwo.Faces[0], [shapeOne], gS)
+            ff = self.cutting(shapeTwo.Faces[0], [simulOne], gS)
             fList.append(ff)
 
             for ff in shapeTwo.Faces[1:]:
