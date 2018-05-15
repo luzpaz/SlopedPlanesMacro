@@ -1211,7 +1211,6 @@ class _PyAlignment(_Py):
                 if pyOne.rear:
                     # print 'b1'
                     simulTwo = pyTwo.simulatedShape
-
                     for pyA in pyOne.chopedList:
                         if pyA is not self:
                             bb = pyA.base.shape
@@ -1220,11 +1219,9 @@ class _PyAlignment(_Py):
                             bb = self.cutting(bb, [tt], gS)
                             sList = [simulTwo, bb]
                             break
-
                 else:
                     # print 'b2'
                     sList = [shapeTwo]
-
             # print 'sList ', sList
 
             fList = []
@@ -1256,18 +1253,14 @@ class _PyAlignment(_Py):
                     for pyA in pyOne.chopedList:
                         if pyA is not self:
                             bb = pyA.base.shape
-
                             gS = pyA.aligns[-1].geomShape
-
                             tt = pyOne.enormousShape
                             bb = self.cutting(bb, [tt], gS)
                             sList = [simulOne, bb]
                             break
-
                 else:
                     # print 'b2'
                     sList = [shapeOne]
-
             # print 'sList ', sList
 
             fList = []
