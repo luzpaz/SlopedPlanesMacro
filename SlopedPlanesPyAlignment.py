@@ -1203,7 +1203,7 @@ class _PyAlignment(_Py):
             # print 'pyOne.chopedList ', pyOne.chopedList
             # print 'pyTwo.chopedList ', pyTwo.chopedList
 
-            if len(pyOne.chopedList) <= 1:
+            if len(pyOne.chopedList) == 1:
                 # print 'a'
                 sList = [shapeTwo]
             else:
@@ -1240,7 +1240,7 @@ class _PyAlignment(_Py):
                     if section.Edges:
                         fList.append(f)
 
-            if len(pyTwo.chopedList) <= 1:
+            if len(pyTwo.chopedList) == 1:
                 # print 'a'
                 sList = [shapeOne]
             else:

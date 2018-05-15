@@ -878,6 +878,7 @@ class _PyFace(_Py):
                     for pyP in chop:
                         # print 'b'
                         pyP.chopedList.remove(pyAli)
+                        pyP.chopedList.append(pyAlign)
 
         pyAlign.chops = chopList
 
