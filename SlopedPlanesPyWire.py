@@ -418,7 +418,14 @@ class _PyWire(_Py):
                                len(section.Vertexes) == 2):
                                 # print 'c1'
 
-                                procc = True
+                                    pyPl.trimming(enormousShape)
+                                    control.append(numGeom)
+
+                            else:
+                                # print 'c2'
+                                pyPl.trimmingTwo(enormousShape)
+
+                                '''procc = True
                                 pyRList = pyPl.reflexedList
                                 # print pyRList
 
@@ -454,7 +461,7 @@ class _PyWire(_Py):
 
                             else:
                                 # print 'c2'
-                                pyPl.trimmingTwo(enormousShape)
+                                pyPl.trimmingTwo(enormousShape)'''
 
                     # rango doesn't cut with oppRango
                     if not pyPl.reflexed:
