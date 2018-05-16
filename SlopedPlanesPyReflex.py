@@ -656,6 +656,7 @@ class _PyReflex(_Py):
         # print 'cutList ', cutList
 
         enorm = []    # auxiliar to clean the figure's bottom
+
         rangoCorner = None
         rangoCornerPy = None
 
@@ -664,28 +665,30 @@ class _PyReflex(_Py):
 
         if rearList:
 
+            lines = self.lines
+
             if direction == 'forward':
-                rr = pyPlaneList[rearList[0]]
+
+                rr = pyPlaneList[self.rear[0]]
                 if oppRearList:
-                    oppRr = pyPlaneList[oppRearList[-1]]
+                    oppRr = pyPlaneList[self.rear[-1]]
+
                 rangoCorner = pyR.rango[0]
                 rangoCornerPy = pyR.rangoPy[0]
-                forward = pyR.forward
-                backward = pyR.backward
+
+                forward = lines[0]
+                backward = lines[-1]
 
             else:
-                rr = pyPlaneList[rearList[-1]]
+                rr = pyPlaneList[self.rear[-1]]
                 if oppRearList:
-                    oppRr = pyPlaneList[oppRearList[0]]
+                    oppRr = pyPlaneList[self.rear[0]]
+
                 rangoCorner = pyR.rango[-1]
                 rangoCornerPy = pyR.rangoPy[-1]
 
-                if len(rearList) == 1:
-                    forward = pyR.forward
-                    backward = pyR.backward
-                else:
-                    forward = pyR.backward
-                    backward = pyR.forward
+                forward = lines[-1]
+                backward = lines[0]
 
             # print 'rear ', rr.numGeom
             # print 'rangoCorner ', rangoCorner
