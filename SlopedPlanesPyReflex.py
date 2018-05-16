@@ -655,31 +655,31 @@ class _PyReflex(_Py):
 
         # print 'cutList ', cutList
 
-        enorm = []    # auxiliar to clean the figure bottom
+        enorm = []    # auxiliar to clean the figure's bottom
         rangoCorner = None
         rangoCornerPy = None
-        rear = pyR.rear
-        oppRear = pyOppR.rear
+        rearList = pyR.rear
+        oppRearList = pyOppR.rear
 
-        if rear:
+        if rearList:
 
             if direction == 'forward':
-                rr = pyPlaneList[rear[0]]
-                if oppRear:
-                    oppRr = pyPlaneList[oppRear[-1]]
+                rr = pyPlaneList[rearList[0]]
+                if oppRearList:
+                    oppRr = pyPlaneList[oppRearList[-1]]
                 rangoCorner = pyR.rango[0]
                 rangoCornerPy = pyR.rangoPy[0]
                 forward = pyR.forward
                 backward = pyR.backward
 
             else:
-                rr = pyPlaneList[rear[-1]]
-                if oppRear:
-                    oppRr = pyPlaneList[oppRear[0]]
+                rr = pyPlaneList[rearList[-1]]
+                if oppRearList:
+                    oppRr = pyPlaneList[oppRearList[0]]
                 rangoCorner = pyR.rango[-1]
                 rangoCornerPy = pyR.rangoPy[-1]
 
-                if len(rear) == 1:
+                if len(rearList) == 1:
                     forward = pyR.forward
                     backward = pyR.backward
                 else:
@@ -709,7 +709,7 @@ class _PyReflex(_Py):
             if rrS:
                 enormous.extend(rrS)
 
-            if oppRear:
+            if oppRearList:
                 oppRS = None
                 if oppRr.aligned:
                     pyA = pyOppR.selectAlignmentBase()
@@ -783,7 +783,7 @@ class _PyReflex(_Py):
 
         cList = []    # clean cutterList
 
-        if rear:
+        if rearList:
 
             for f in cutterList:
                 section = f.section([backward], tolerance)
