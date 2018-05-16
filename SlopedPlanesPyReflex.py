@@ -803,7 +803,7 @@ class _PyReflex(_Py):
         if pyWire.numWire > 0:
             # print 'interior wire'
 
-            if not pyOppR.rear:
+            if not if not oppRearList:
 
                 rList = pyOppR.reflexedList
                 if len(rList) == 2:
