@@ -658,6 +658,7 @@ class _PyReflex(_Py):
         enorm = []    # auxiliar to clean the figure's bottom
         rangoCorner = None
         rangoCornerPy = None
+
         rearList = pyR.rear
         oppRearList = pyOppR.rear
 
@@ -803,7 +804,7 @@ class _PyReflex(_Py):
         if pyWire.numWire > 0:
             # print 'interior wire'
 
-            if not if not oppRearList:
+            if not oppRearList:
 
                 rList = pyOppR.reflexedList
                 if len(rList) == 2:
