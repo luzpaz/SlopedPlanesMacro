@@ -655,86 +655,71 @@ class _PyReflex(_Py):
 
         # print 'cutList ', cutList
 
-        enorm = []    # auxiliar to clean the figure's bottom
-
+        enorm = []    # auxiliar to clean the figure bottom
         rangoCorner = None
         rangoCornerPy = None
+        rear = pyR.rear
+        oppRear = pyOppR.rear
 
-        ###rearList = pyR.rear
-        ###oppRearList = pyOppR.rear
-
-        rear = None
-        oppRear = None
-
-        if pyR.rear:
-
-            rearList = self.rear
+        if rear:
 
             if direction == 'forward':
-
-                rear = rearList[0]
-                oppRear = rearList[-1]
-
+                rr = pyPlaneList[rear[0]]
+                if oppRear:
+                    oppRr = pyPlaneList[oppRear[-1]]
                 rangoCorner = pyR.rango[0]
                 rangoCornerPy = pyR.rangoPy[0]
-
                 forward = pyR.forward
                 backward = pyR.backward
 
             else:
-
-                rear = rearList[-1]
-                oppRear = rearList[0]
-
+                rr = pyPlaneList[rear[-1]]
+                if oppRear:
+                    oppRr = pyPlaneList[oppRear[0]]
                 rangoCorner = pyR.rango[-1]
                 rangoCornerPy = pyR.rangoPy[-1]
 
-                if len(rearList) == 1:
+                if len(rear) == 1:
                     forward = pyR.forward
                     backward = pyR.backward
                 else:
                     forward = pyR.backward
                     backward = pyR.forward
 
-            pyRear = pyPlaneList[rear]
-
-            if oppRear:
-                pyOppRear = pyPlaneList[oppRear]
-
-            # print 'rear ', pyRear.numGeom
+            # print 'rear ', rr.numGeom
             # print 'rangoCorner ', rangoCorner
-            rearGeom = pyRear.geomShape
+            rrG = rr.geomShape
 
             forw = forward.copy()
-            forw = forw.cut([rearGeom], tolerance)
+            forw = forw.cut([rrG], tolerance)
             wire = Part.Wire(forw.Edges)
             orderedEdges = wire.OrderedEdges
             forw = orderedEdges[0]
 
+            rrS = None
+            if rr.aligned:
+                pyA = rr.selectAlignmentBase()
+                if pyA:
+                    rrS = pyA.simulatedAlignment
+            else:
+                rrS = [rr.shape]
+
             enormous = []  # auxiliar to build the allowed location to extra faces
 
-            rearSimul = None
-            if pyRear.aligned:
-                pyA = pyRear.selectAlignmentBase()
-                if pyA:
-                    rearSimul = pyA.simulatedAlignment
-            else:
-                rearSimul = [pyRear.shape]
-
-            if rearSimul:
-                enormous.extend(rearSimul)
+            if rrS:
+                enormous.extend(rrS)
 
             if oppRear:
-                oppRearSimul = None
-                if pyOppRear.aligned:
+                oppRS = None
+                if oppRr.aligned:
                     pyA = pyOppR.selectAlignmentBase()
                     if pyA:
-                        oppRearSimul = pyA.simulatedAlignment
+                        oppRS = pyA.simulatedAlignment
                 else:
-                    oppRearSimul = [pyOppRear.shape]
+                    oppRS = [oppRr.shape]
 
-                if oppRearSimul:
-                    enormous.extend(oppRearSimul)
+                if oppRS:
+                    enormous.extend(oppRS)
 
             corn = []    # auxiliar to look for extra faces
             for nn, pyPl in zip(rangoCorner, rangoCornerPy):
@@ -791,7 +776,7 @@ class _PyReflex(_Py):
                 if section.Edges:
                     cutterList.append(ff)
                 elif section.Vertexes:
-                    section = ff.section([rearGeom], tolerance)
+                    section = ff.section([rrG], tolerance)
                     if not section.Vertexes:
                         cutterList.append(ff)
         # print 'cutterList ', cutterList, len(cutterList)
@@ -818,7 +803,7 @@ class _PyReflex(_Py):
         if pyWire.numWire > 0:
             # print 'interior wire'
 
-            if not oppRear:
+            if not pyOppR.rear:
 
                 rList = pyOppR.reflexedList
                 if len(rList) == 2:
@@ -841,7 +826,7 @@ class _PyReflex(_Py):
         # second face
         if rangoCorner:
 
-            if not pyRear.aligned:
+            if not rr.aligned:
 
                 if reflex.Faces:
                     reflex = reflex.cut([pyOppR.enormousShape], tolerance)
