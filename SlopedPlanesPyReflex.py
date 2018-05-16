@@ -544,11 +544,15 @@ class _PyReflex(_Py):
                 else:
                     forward = self.lines[1]
 
-                fo = pyPl.forward
-                # ba = pyPl.backward ???
+                forw = pyPl.forward
+                lList = [forw]
+                if len(pyPl.rear) > 1:
+                    back = pyPl.backward
+                    lList.append(back)
 
-                # if forward.section([fo, ba], tolerance).Vertexes: ???
-                if forward.section([fo], tolerance).Vertexes:
+                section = forward.section(lList, tolerance)
+
+                if section.Vertexes:
                     # print '32'
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
 
