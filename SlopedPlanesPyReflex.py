@@ -677,7 +677,7 @@ class _PyReflex(_Py):
                 pyRear = pyPlaneList[rear]
 
                 if oppRear:
-                    oppRr = pyPlaneList[oppRear]
+                    pyOppRear = pyPlaneList[oppRear]
 
                 rangoCorner = pyR.rango[0]
                 rangoCornerPy = pyR.rangoPy[0]
@@ -693,7 +693,7 @@ class _PyReflex(_Py):
                 pyRear = pyPlaneList[rear]
 
                 if oppRear:
-                    oppRr = pyPlaneList[oppRear]
+                    pyOppRear = pyPlaneList[oppRear]
 
                 rangoCorner = pyR.rango[-1]
                 rangoCornerPy = pyR.rangoPy[-1]
@@ -711,6 +711,8 @@ class _PyReflex(_Py):
             orderedEdges = wire.OrderedEdges
             forw = orderedEdges[0]
 
+            enormous = []  # auxiliar to build the allowed location to extra faces
+
             rearSimul = None
             if pyRear.aligned:
                 pyA = pyRear.selectAlignmentBase()
@@ -719,22 +721,20 @@ class _PyReflex(_Py):
             else:
                 rearSimul = [pyRear.shape]
 
-            enormous = []  # auxiliar to build the allowed location to extra faces
-
             if rearSimul:
                 enormous.extend(rearSimul)
 
             if oppRear:
-                oppRS = None
-                if oppRr.aligned:
+                oppRearSimul = None
+                if pyOppRear.aligned:
                     pyA = pyOppR.selectAlignmentBase()
                     if pyA:
-                        oppRS = pyA.simulatedAlignment
+                        oppRearSimul = pyA.simulatedAlignment
                 else:
-                    oppRS = [oppRr.shape]
+                    oppRearSimul = [pyOppRear.shape]
 
-                if oppRS:
-                    enormous.extend(oppRS)
+                if oppRearSimul:
+                    enormous.extend(oppRearSimul)
 
             corn = []    # auxiliar to look for extra faces
             for nn, pyPl in zip(rangoCorner, rangoCornerPy):
