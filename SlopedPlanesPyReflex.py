@@ -561,15 +561,23 @@ class _PyReflex(_Py):
                     pl = pyPl.shape.copy()
                     rang = self.rang(pyWire, numGeom, nn, direction)
                     # print 'rang ', rang
+
                     cList = []
                     for mm in rang:
                         pyP = pyPlaneList[mm]
                         if pyP.reflexed:
-                            section =\
-                                forward.section([pyP.forward, pyP.backward],
-                                                tolerance)
+
+                            fo = pyP.forward
+                            lList = [fo]
+                            if len(pyP.rear) > 1:
+                                ba = pyP.backward
+                                lList.append(ba)
+
+                            section = forward.section(lList, tolerance)
+
                             if section.Vertexes:
                                 cList.append(pyP.enormousShape)
+
                     if cList:
                         # print 'cList ', cList
                         pl = self.cutting(pl, cList, gS)
