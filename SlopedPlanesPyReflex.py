@@ -703,26 +703,26 @@ class _PyReflex(_Py):
 
             # print 'rear ', pyRear.numGeom
             # print 'rangoCorner ', rangoCorner
-            rrG = pyRear.geomShape
+            rearGeom = pyRear.geomShape
 
             forw = forward.copy()
-            forw = forw.cut([rrG], tolerance)
+            forw = forw.cut([rearGeom], tolerance)
             wire = Part.Wire(forw.Edges)
             orderedEdges = wire.OrderedEdges
             forw = orderedEdges[0]
 
-            rrS = None
+            rearSimul = None
             if pyRear.aligned:
                 pyA = pyRear.selectAlignmentBase()
                 if pyA:
-                    rrS = pyA.simulatedAlignment
+                    rearSimul = pyA.simulatedAlignment
             else:
-                rrS = [pyRear.shape]
+                rearSimul = [pyRear.shape]
 
             enormous = []  # auxiliar to build the allowed location to extra faces
 
-            if rrS:
-                enormous.extend(rrS)
+            if rearSimul:
+                enormous.extend(rearSimul)
 
             if oppRear:
                 oppRS = None
@@ -791,7 +791,7 @@ class _PyReflex(_Py):
                 if section.Edges:
                     cutterList.append(ff)
                 elif section.Vertexes:
-                    section = ff.section([rrG], tolerance)
+                    section = ff.section([rearGeom], tolerance)
                     if not section.Vertexes:
                         cutterList.append(ff)
         # print 'cutterList ', cutterList, len(cutterList)
