@@ -222,7 +222,7 @@ class _PyWire(_Py):
     def trimming(self):
 
         '''trimming(self)
-        The reflex corners act like a dam, blocking the path to others planes,
+        The reflex corners acts like a dam, blocking the path to others planes,
         except another reflex plane or an alignment.'''
 
         # print '###### trimming reflexs numWire ', self.numWire
@@ -401,11 +401,6 @@ class _PyWire(_Py):
                             pyRList = pyPl.reflexedList
                             # print pyRList
 
-                            gS = pyPl.geomShape
-                            section = forward.section([gS], tolerance)
-                            if section.Vertexes:
-                                procc = False
-
                             for pyR in pyRList:
                                 # print '1'
                                 if not procc:
@@ -417,8 +412,7 @@ class _PyWire(_Py):
 
                                     forw = pyR.lines[nn]
                                     section =\
-                                        forward.section([forw],
-                                                     tolerance)
+                                        forward.section([forw], tolerance)
 
                                     if section.Vertexes:
                                         # print '3'
