@@ -222,8 +222,9 @@ class _PyWire(_Py):
     def trimming(self):
 
         '''trimming(self)
-        The reflex corners act like a dam, blocking the path
-        to others planes.'''
+        The reflex corners act like a dam, blocking the path to others planes,
+        except another reflex plane in its edge direction,
+        or an alignment in its all directions.'''
 
         # print '###### trimming reflexs numWire ', self.numWire
 
