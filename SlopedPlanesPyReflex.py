@@ -660,8 +660,10 @@ class _PyReflex(_Py):
         rangoCorner = None
         rangoCornerPy = None
 
-        rearList = pyR.rear
-        oppRearList = pyOppR.rear
+        ###rearList = pyR.rear
+        ###oppRearList = pyOppR.rear
+
+        rearList = self.rear
 
         if rearList:
 
@@ -669,9 +671,13 @@ class _PyReflex(_Py):
 
             if direction == 'forward':
 
-                rr = pyPlaneList[self.rear[0]]
-                if oppRearList:
-                    oppRr = pyPlaneList[self.rear[-1]]
+                rear = rearList[0]
+                oppRear = rearList[-1]
+
+                rr = pyPlaneList[rear]
+
+                if oppRear:
+                    oppRr = pyPlaneList[oppRear]
 
                 rangoCorner = pyR.rango[0]
                 rangoCornerPy = pyR.rangoPy[0]
@@ -680,9 +686,14 @@ class _PyReflex(_Py):
                 backward = lines[-1]
 
             else:
-                rr = pyPlaneList[self.rear[-1]]
-                if oppRearList:
-                    oppRr = pyPlaneList[self.rear[0]]
+
+                rear = rearList[-1]
+                oppRear = rearList[0]
+
+                rr = pyPlaneList[rear]
+
+                if oppRear:
+                    oppRr = pyPlaneList[oppRear]
 
                 rangoCorner = pyR.rango[-1]
                 rangoCornerPy = pyR.rangoPy[-1]
@@ -713,7 +724,7 @@ class _PyReflex(_Py):
             if rrS:
                 enormous.extend(rrS)
 
-            if oppRearList:
+            if oppRear:
                 oppRS = None
                 if oppRr.aligned:
                     pyA = pyOppR.selectAlignmentBase()
@@ -787,7 +798,7 @@ class _PyReflex(_Py):
 
         cList = []    # clean cutterList
 
-        if rearList:
+        if rear:
 
             for f in cutterList:
                 section = f.section([backward], tolerance)
@@ -807,7 +818,7 @@ class _PyReflex(_Py):
         if pyWire.numWire > 0:
             # print 'interior wire'
 
-            if not oppRearList:
+            if not oppRear:
 
                 rList = pyOppR.reflexedList
                 if len(rList) == 2:
