@@ -634,28 +634,28 @@ class _PyReflex(_Py):
         enorm = []    # auxiliar to clean the figure bottom
         rangoCorner = None
         rangoCornerPy = None
-        rear = pyR.rear
-        oppRear = pyOppR.rear
+        rearList = pyR.rear
+        oppRearList = pyOppR.rear
 
-        if rear:
+        if rearList:
 
             if direction == 'forward':
-                pyRear = pyPlaneList[rear[0]]
-                if oppRear:
-                    pyOppRear = pyPlaneList[oppRear[-1]]
+                pyRear = pyPlaneList[rearList[0]]
+                if oppRearList:
+                    pyOppRear = pyPlaneList[oppRearList[-1]]
                 rangoCorner = pyR.rango[0]
                 rangoCornerPy = pyR.rangoPy[0]
                 forward = pyR.forward
                 backward = pyR.backward
 
             else:
-                pyRear = pyPlaneList[rear[-1]]
-                if oppRear:
-                    pyOppRear = pyPlaneList[oppRear[0]]
+                pyRear = pyPlaneList[rearList[-1]]
+                if oppRearList:
+                    pyOppRear = pyPlaneList[oppRearList[0]]
                 rangoCorner = pyR.rango[-1]
                 rangoCornerPy = pyR.rangoPy[-1]
 
-                if len(rear) == 1:
+                if len(rearList) == 1:
                     forward = pyR.forward
                     backward = pyR.backward
                 else:
@@ -685,7 +685,7 @@ class _PyReflex(_Py):
             if rearSimul:
                 enormous.extend(rearSimul)
 
-            if oppRear:
+            if oppRearList:
                 oppRearSimul = None
                 if pyOppRear.aligned:
                     pyA = pyOppR.selectAlignmentBase()
@@ -759,7 +759,7 @@ class _PyReflex(_Py):
 
         cList = []    # clean cutterList
 
-        if rear:
+        if rearList:
 
             for f in cutterList:
                 section = f.section([backward], tolerance)
@@ -779,7 +779,7 @@ class _PyReflex(_Py):
         if pyWire.numWire > 0:
             # print 'interior wire'
 
-            if not oppRear:
+            if not oppRearList:
 
                 rList = pyOppR.reflexedList
                 if len(rList) == 2:
