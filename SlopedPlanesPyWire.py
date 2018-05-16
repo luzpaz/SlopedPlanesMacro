@@ -370,7 +370,7 @@ class _PyWire(_Py):
                 for nG, pyPl in zip(rango, rangoPy):
                     control = pyPl.control
 
-                    if numGeom not in control:      # creo que este control sobra
+                    if numGeom not in control:
                         # print '# cutted ', nG
 
                         # TODO backRear
@@ -378,6 +378,7 @@ class _PyWire(_Py):
                         if not pyPl.aligned and nG in nextRango:
                             # print '0'
                             # rango doesn't cut with nextRango G
+
                             control.append(numGeom)
                             pyPlane.control.append(nG)
 
@@ -394,7 +395,6 @@ class _PyWire(_Py):
 
                         else:
                             # print 'c'
-
                             # interference between reflexs
 
                             procc = True
