@@ -663,43 +663,43 @@ class _PyReflex(_Py):
         ###rearList = pyR.rear
         ###oppRearList = pyOppR.rear
 
-        rearList = self.rear
+        rear = None
+        oppRear = None
 
-        if rearList:
+        if pyR.rear:
 
-            lines = self.lines
+            rearList = self.rear
 
             if direction == 'forward':
 
                 rear = rearList[0]
                 oppRear = rearList[-1]
 
-                pyRear = pyPlaneList[rear]
-
-                if oppRear:
-                    pyOppRear = pyPlaneList[oppRear]
-
                 rangoCorner = pyR.rango[0]
                 rangoCornerPy = pyR.rangoPy[0]
 
-                forward = lines[0]
-                backward = lines[-1]
+                forward = pyR.forward
+                backward = pyR.backward
 
             else:
 
                 rear = rearList[-1]
                 oppRear = rearList[0]
 
-                pyRear = pyPlaneList[rear]
-
-                if oppRear:
-                    pyOppRear = pyPlaneList[oppRear]
-
                 rangoCorner = pyR.rango[-1]
                 rangoCornerPy = pyR.rangoPy[-1]
 
-                forward = lines[-1]
-                backward = lines[0]
+                if len(rearList) == 1:
+                    forward = pyR.forward
+                    backward = pyR.backward
+                else:
+                    forward = pyR.backward
+                    backward = pyR.forward
+
+            pyRear = pyPlaneList[rear]
+
+            if oppRear:
+                pyOppRear = pyPlaneList[oppRear]
 
             # print 'rear ', pyRear.numGeom
             # print 'rangoCorner ', rangoCorner
