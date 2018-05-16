@@ -399,11 +399,23 @@ class _PyWire(_Py):
                             gS = pyPl.geomShape
                             forw = pyPl.forward
 
-                            section =\
+                            lList = [forw, gS]
+                            if len(pyPl.rear) > 1:
+                                back = pyPl.backward
+                                lList.append(back)
+
+                            '''section =\
                                 forward.section([forw, gS], tolerance)
 
                             if (not section.Edges and
                                len(section.Vertexes) == 1):
+                                # print 'c1'
+                            '''
+
+                            section = forward.section(lList, tolerance)
+
+                            if (not section.Edges and
+                               len(section.Vertexes) == 2):
                                 # print 'c1'
 
                                 procc = True
