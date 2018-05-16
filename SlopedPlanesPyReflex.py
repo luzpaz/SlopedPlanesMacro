@@ -359,14 +359,14 @@ class _PyReflex(_Py):
                 pyR.cutter.append(rearPl)
 
         else:
-            # print oppRear
+
             if oppRear:
+
                 if direction == 'forward':
                     numOppRear = oppRear[-1]
                 else:
                     numOppRear = oppRear[0]
-                # print numOppRear
-                # print self.rear[1]
+
                 if numOppRear == self.rear[1]:
                     # print 'simulatedShape'
                     pyR.cutter.append(pyOppR.simulatedShape)
@@ -455,7 +455,7 @@ class _PyReflex(_Py):
             nGeom = oppRear[1]
 
         pyOppRear = pyPlaneList[nGeom]
-        # podría quitar el condicional
+
         if nGeom not in control or pyOppR.choped:
 
             oppRearPl = pyOppRear.selectShape()
@@ -539,17 +539,13 @@ class _PyReflex(_Py):
             elif kind == 'rangoCorner':
                 # print '3'
 
-                forward = pyR.forward
+                if direction == 'forward':
+                    forward = self.lines[0]
+                else:
+                    forward = self.lines[1]
+
                 fo = pyPl.forward
                 # ba = pyPl.backward ???
-
-                if direction == 'forward':
-                    forward = pyR.forward
-                else:
-                    if len(pyR.rear) == 1:
-                        forward = pyR.forward
-                    else:
-                        forward = pyR.backward
 
                 # if forward.section([fo, ba], tolerance).Vertexes: ???
                 if forward.section([fo], tolerance).Vertexes:
