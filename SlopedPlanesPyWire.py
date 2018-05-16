@@ -223,8 +223,7 @@ class _PyWire(_Py):
 
         '''trimming(self)
         The reflex corners act like a dam, blocking the path to others planes,
-        except another reflex plane in its edge direction,
-        or an alignment in all theirs directions.'''
+        except another reflex plane or an alignment.'''
 
         # print '###### trimming reflexs numWire ', self.numWire
 
@@ -396,75 +395,44 @@ class _PyWire(_Py):
                         else:
                             # print 'c'
 
+                            # interference between reflexs
+
+                            procc = True
+                            pyRList = pyPl.reflexedList
+                            # print pyRList
+
                             gS = pyPl.geomShape
-                            forw = pyPl.forward
+                            section = forward.section([gS], tolerance)
+                            if section.Vertexes:
+                                procc = False
 
-                            mm = 1
+                            for pyR in pyRList:
+                                # print '1'
+                                if not procc:
+                                    break
+                                nn = -1
+                                for pyP in pyR.planes:
+                                    nn += 1
+                                    # print '2'
 
-                            lList = [forw, gS]
-                            if len(pyPl.rear) > 1:
-                                mm = 2
-                                back = pyPl.backward
-                                lList.append(back)
+                                    forw = pyR.lines[nn]
+                                    section =\
+                                        forward.section([forw],
+                                                     tolerance)
 
-                            '''section =\
-                                forward.section([forw, gS], tolerance)
+                                    if section.Vertexes:
+                                        # print '3'
+                                        procc = False
+                                        break
 
-                            if (not section.Edges and
-                               len(section.Vertexes) == 1):
-                                # print 'c1'
-                            '''
-
-                            section = forward.section(lList, tolerance)
-
-                            if (not section.Edges and
-                               len(section.Vertexes) == mm):
-                                # print 'c1'
-
+                            if procc:
+                                # print 'procc'
                                 pyPl.trimming(enormousShape)
                                 control.append(numGeom)
 
                             else:
-                                # print 'c2'
+                                # print 'no procc'
                                 pyPl.trimmingTwo(enormousShape)
-
-                                '''procc = True
-                                pyRList = pyPl.reflexedList
-                                # print pyRList
-
-                                # interference between reflexs
-                                for pyR in pyRList:
-                                    # print '1'
-                                    if not procc:
-                                        break
-                                    nn = -1
-                                    for pyP in pyR.planes:
-                                        nn += 1
-                                        # print '2'
-                                        if pyP != pyPl:
-                                            # print '3'
-
-                                            fo = pyR.lines[nn]
-                                            section =\
-                                                fo.section([forward],
-                                                           tolerance)
-                                            if section.Vertexes:
-                                                # print '4'
-                                                procc = False
-                                                break
-
-                                if procc:
-                                    # print 'procc'
-                                    pyPl.trimming(enormousShape)
-                                    control.append(numGeom)
-
-                                else:
-                                    # print 'no procc'
-                                    pyPl.trimmingTwo(enormousShape)
-
-                            else:
-                                # print 'c2'
-                                pyPl.trimmingTwo(enormousShape)'''
 
                     # rango doesn't cut with oppRango
                     if not pyPl.reflexed:
