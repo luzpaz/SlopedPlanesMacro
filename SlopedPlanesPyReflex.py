@@ -172,9 +172,22 @@ class _PyReflex(_Py):
         pyR = refPlanes[0]
         rango = pyR.rango[0]
         rangoPy = pyR.rangoPy[0]
-        pyOppR = refPlanes[-1]
+        ### pyOppR = refPlanes[-1]
 
-        if pyOppR.rear and pyR.rear:
+        rearList = self.rear
+
+        rear = rearList[0]
+        oppRear = rearList[1]
+
+        if oppRear and rear:
+
+            pyRearPlane = pyPlaneList[rear]
+            rearPlane = pyRearPlane.selectShape()
+
+            pyOppRearPlane = pyPlaneList[oppRear]
+            oppRearPlane = pyOppRearPlane.selectShape()
+
+        '''if pyOppR.rear and pyR.rear:
             rear = pyR.rear[0]
             oppRear = pyOppR.rear[-1]
 
@@ -182,7 +195,7 @@ class _PyReflex(_Py):
             rearPlane = pyRearPlane.selectShape()
 
             pyOppRearPlane = pyPlaneList[oppRear]
-            oppRearPlane = pyOppRearPlane.selectShape()
+            oppRearPlane = pyOppRearPlane.selectShape()'''
 
         for pyR in refPlanes:
             # print '# pyR ', pyR.numGeom
@@ -247,7 +260,7 @@ class _PyReflex(_Py):
 
                 if not (pyPlane.reflexed or pyPlane.fronted):
                     # print 'B'
-                    if pyOppR.rear and pyR.rear:
+                    if oppRear and rear:
                         cutList = []
                         if oppRear not in control:
                             # print 'a'
@@ -269,9 +282,18 @@ class _PyReflex(_Py):
                     # print 'plane ', pyPlane.shape
                     # print 'control ', pyPlane.control
 
-            if pyOppR.rear and pyR.rear:
+            if oppRear and rear:
 
-                rr = oppRearPlane.copy()
+                rear = rearList[1]
+                oppRear = rearList[0]
+
+                pyRearPlane = pyPlaneList[rear]
+                rearPlane = pyRearPlane.selectShape()
+
+                pyOppRearPlane = pyPlaneList[oppRear]
+                oppRearPlane = pyOppRearPlane.selectShape()
+
+                '''rr = oppRearPlane.copy()
                 oppRearPlane = rearPlane.copy()
                 rearPlane = rr
 
@@ -281,12 +303,12 @@ class _PyReflex(_Py):
                 rear = mm
 
                 pyRearPlane = pyPlaneList[rear]
-                pyOppRearPlane = pyPlaneList[oppRear]
+                pyOppRearPlane = pyPlaneList[oppRear]'''
 
             pyR = refPlanes[-1]
             rango = pyR.rango[-1]
             rangoPy = pyR.rangoPy[-1]
-            pyOppR = refPlanes[0]
+            ### pyOppR = refPlanes[0]
 
     def reflexing(self, pyWire):
 
