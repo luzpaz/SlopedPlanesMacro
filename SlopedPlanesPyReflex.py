@@ -674,7 +674,7 @@ class _PyReflex(_Py):
                 rear = rearList[0]
                 oppRear = rearList[-1]
 
-                rr = pyPlaneList[rear]
+                pyRear = pyPlaneList[rear]
 
                 if oppRear:
                     oppRr = pyPlaneList[oppRear]
@@ -690,7 +690,7 @@ class _PyReflex(_Py):
                 rear = rearList[-1]
                 oppRear = rearList[0]
 
-                rr = pyPlaneList[rear]
+                pyRear = pyPlaneList[rear]
 
                 if oppRear:
                     oppRr = pyPlaneList[oppRear]
@@ -701,9 +701,9 @@ class _PyReflex(_Py):
                 forward = lines[-1]
                 backward = lines[0]
 
-            # print 'rear ', rr.numGeom
+            # print 'rear ', pyRear.numGeom
             # print 'rangoCorner ', rangoCorner
-            rrG = rr.geomShape
+            rrG = pyRear.geomShape
 
             forw = forward.copy()
             forw = forw.cut([rrG], tolerance)
@@ -712,12 +712,12 @@ class _PyReflex(_Py):
             forw = orderedEdges[0]
 
             rrS = None
-            if rr.aligned:
-                pyA = rr.selectAlignmentBase()
+            if pyRear.aligned:
+                pyA = pyRear.selectAlignmentBase()
                 if pyA:
                     rrS = pyA.simulatedAlignment
             else:
-                rrS = [rr.shape]
+                rrS = [pyRear.shape]
 
             enormous = []  # auxiliar to build the allowed location to extra faces
 
@@ -841,7 +841,7 @@ class _PyReflex(_Py):
         # second face
         if rangoCorner:
 
-            if not rr.aligned:
+            if not pyRear.aligned:
 
                 if reflex.Faces:
                     reflex = reflex.cut([pyOppR.enormousShape], tolerance)
