@@ -47,7 +47,7 @@ for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
                             executionList.append((doc.Name, obj.Name))
                             # print '????????????????????????? execution ERROR'
 
-                        elif not (cut.isValid() and cc.isValid()):
+                        elif cut.isNull() or cc.isNull():
 
                             numError += 1
                             geometricList.append((doc.Name, obj.Name))
