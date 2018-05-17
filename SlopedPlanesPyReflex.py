@@ -1175,9 +1175,9 @@ class _PyReflex(_Py):
         '''rearing(self, pyWire)'''
 
         direction = "forward"
-        for pyPlane in self.planes:
+        for pyPlane, rear in zip(self.planes, self.rear):
             # if not pyPlane.aligned or pyPlane.virtualized:
-            if pyPlane.rear:
+            if rear:
                 pyPlane.rearing(pyWire, self, direction)
             direction = "backward"
 

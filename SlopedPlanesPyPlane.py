@@ -1385,7 +1385,6 @@ class _PyPlane(_Py):
         rearList = pyReflex.rear
         refList = pyReflex.planes
 
-
         if direction == 'forward':
             forward = lineList[0]
             rear = rearList[0]
@@ -1394,7 +1393,6 @@ class _PyPlane(_Py):
             forward = lineList[-1]
             rear = rearList[-1]
             pyOppPlane = refList[0]
-
 
         '''forward = self.forward
 
