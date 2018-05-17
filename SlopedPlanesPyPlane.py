@@ -978,11 +978,12 @@ class _PyPlane(_Py):
 
             # TODO reverse
 
+            point = geom.Location
+
             angle = self.angle
 
             sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
             wire = sweepSketch.Shape.copy()
-            # TODO handle exceptionss
 
             wire.Placement = FreeCAD.Placement()
 
@@ -1020,8 +1021,8 @@ class _PyPlane(_Py):
                 rotation.multiply(wire.Placement.Rotation)
 
             if ffPoint == llPoint:
-                numWire = self.numWire
                 # print 'aa'
+                numWire = self.numWire
                 angleXU = geom.AngleXU
                 # print 'angleXU ', angleXU
                 rotation = FreeCAD.Rotation()
@@ -1039,7 +1040,7 @@ class _PyPlane(_Py):
                 # print edge.firstVertex(True).Point
                 # print edge.lastVertex(True).Point
 
-                plane = edge.revolve(FreeCAD.Vector(0, 0, 0), FreeCAD.Vector(0, 0, 1))
+                plane = edge.revolve(point, FreeCAD.Vector(0, 0, 1))
                 # print plane
                 # print plane.Area
 
@@ -1098,7 +1099,8 @@ class _PyPlane(_Py):
                 else:
                     # print 'circle'
                     radius = geom.Radius
-                    # print 'radius ', radius
+
+                # print 'radius ', radius
 
                 angle = abs(angle) % 360
                 # print 'angle ', angle
@@ -1156,9 +1158,11 @@ class _PyPlane(_Py):
                     # print 'ang ', ang
 
                     if pyWire.numWire == 0:
+                        # print 'B141'
                         radiusTop = radiusBottom + length * sin(radians(ang))
 
                     else:
+                        # print 'B142'
                         ll = radius / cos(radians(ang))
                         # print 'll ', ll
                         if ll <= length:
@@ -1186,22 +1190,22 @@ class _PyPlane(_Py):
                     if ll <= length:
                         # print 'B151'
                         if pyWire.numWire == 0:
-                            # print 'D11'
+                            # print 'B1511'
                             height = radius * tan(radians(angle))
                             radiusTop = 0
                         else:
-                            # print 'D12'
+                            # print 'B1512'
                             height = length * sin(radians(angle))
                             radiusTop = radiusBottom + length * cos(radians(angle))
 
                     else:
                         # print 'B152'
                         if pyWire.numWire == 0:
-                            # print 'D21'
+                            # print 'B1521'
                             height = length * sin(radians(angle))
                             radiusTop = radiusBottom - length * cos(radians(angle))
                         else:
-                            # print 'D22'
+                            # print 'B1522'
                             height = radius * tan(radians(angle))
                             radiusTop = radiusBottom + length * cos(radians(angle))
 
@@ -1235,8 +1239,7 @@ class _PyPlane(_Py):
                 # print plane.Placement
                 angleXU = geom.AngleXU
                 # print 'angleXU ', angleXU
-                plane.Placement.Rotation =\
-                    FreeCAD.Rotation(FreeCAD.Vector(0, 0, 1), degrees(angleXU))
+                plane.rotate(point, FreeCAD.Vector(0, 0, 1), degrees(angleXU))
                 # print plane.Placement
 
             else:

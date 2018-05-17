@@ -183,7 +183,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
                                   "Part::FaceMakerCheese"]
-        slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
+        slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)   # no tiene persistencia
 
         slopedPlanes.Proxy = self
 
