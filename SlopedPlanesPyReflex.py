@@ -902,9 +902,6 @@ class _PyReflex(_Py):
         tolerance = _Py.tolerance
         gS = pyR.geomShape
 
-        '''forward = pyR.forward
-        backward = pyR.backward'''
-
         if direction == 'forward':
             forward = pyR.forward
             backward = pyR.backward
@@ -1015,9 +1012,6 @@ class _PyReflex(_Py):
             if len(plane.Faces) == 1:
                 # print '# cutted ', pyPlane.numGeom
 
-                '''forward = pyPlane.forward
-                forwardOpp = pyOppPlane.forward'''
-
                 forward = lines[0]
                 forwardOpp = lines[-1]
 
@@ -1032,7 +1026,6 @@ class _PyReflex(_Py):
                             if pyPl.isSolved():
                                 # print 'solved'
 
-                                #fo = pyPl.forward
                                 section = fo.section([lList], tolerance)
 
                                 if section.Vertexes:
