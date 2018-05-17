@@ -978,8 +978,6 @@ class _PyPlane(_Py):
 
             # TODO reverse
 
-            point = geom.Location
-
             angle = self.angle
 
             sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
@@ -1022,6 +1020,7 @@ class _PyPlane(_Py):
 
             if ffPoint == llPoint:
                 # print 'aa'
+                point = geom.Location
                 numWire = self.numWire
                 angleXU = geom.AngleXU
                 # print 'angleXU ', angleXU
@@ -1047,7 +1046,6 @@ class _PyPlane(_Py):
                 if isinstance(geom, Part.ArcOfEllipse):
                     # print 'ellipse'
 
-                    point = geom.Location
                     major = geom.MajorRadius
                     minor = geom.MinorRadius
 
