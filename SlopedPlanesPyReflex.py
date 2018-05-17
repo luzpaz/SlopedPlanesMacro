@@ -688,7 +688,7 @@ class _PyReflex(_Py):
             if oppRearList:
                 oppRearSimul = None
                 if pyOppRear.aligned:
-                    pyA = pyOppR.selectAlignmentBase()
+                    pyA = pyOppRear.selectAlignmentBase()
                     if pyA:
                         oppRearSimul = pyA.simulatedAlignment
                 else:
