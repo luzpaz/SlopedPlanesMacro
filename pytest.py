@@ -47,6 +47,12 @@ for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
                             executionList.append((doc.Name, obj.Name))
                             # print '????????????????????????? execution ERROR'
 
+                        elif not (cut.isValid() and cc.isValid()):
+
+                            numError += 1
+                            geometricList.append((doc.Name, obj.Name))
+                            # print '????????????????????????? geometric ERROR'
+
                         elif cut.Area != 0 or cc.Area != 0:
 
                             numError += 1
