@@ -1394,36 +1394,6 @@ class _PyPlane(_Py):
             rear = rearList[-1]
             pyOppPlane = refList[0]
 
-        '''forward = self.forward
-
-        if direction == "forward":
-            pyOppPlane = pyReflex.planes[1]
-            rear = self.rear[0]
-
-            if len(self.rear) > 1:
-
-                rr = pyReflex.rear[0]
-                # print(rr, rear)
-                if rr != rear:
-                    # print 'backw'
-                    forward = self.backward
-
-        else:
-            pyOppPlane = pyReflex.planes[0]
-            rear = self.rear[-1]
-
-            # alignments with reflexs
-            if self.virtualized:
-                forward = self.backward
-
-            elif len(self.rear) > 1:
-
-                rr = pyReflex.rear[-1]
-                # print(rr, rear)
-                if rr == rear:
-                    # print 'backw'
-                    forward = self.backward'''
-
         pyPlaneList = pyWire.planes
 
         oppPlane = pyOppPlane.shape
@@ -1440,7 +1410,6 @@ class _PyPlane(_Py):
                 # print 'fofo'
                 return
 
-        # if not (pyRearPl.aligned or pyRearPl.choped):
         if not pyRearPl.aligned:
 
             gS = pyRearPl.geomShape
@@ -1509,7 +1478,7 @@ class _PyPlane(_Py):
                             self.shape = compound
                             self.control.append(rear)
 
-                    if len(oppPlane.Faces) == 1:    # cuidado
+                    if len(oppPlane.Faces) == 1:
                         # print 'BB'
 
                         if rear not in pyOppPlane.control:

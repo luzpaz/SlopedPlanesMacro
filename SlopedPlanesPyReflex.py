@@ -934,7 +934,6 @@ class _PyReflex(_Py):
                 section = ff.section([forward], tolerance)
                 if section.Edges:
                     section = ff.section(aList, tolerance)
-                    #if section.Vertexes:
                     if section.Vertexes and not section.Edges:
                         bList = [ff]
                 else:
@@ -1064,7 +1063,6 @@ class _PyReflex(_Py):
             # print '# pyPlane ', pyPlane.numGeom
             plane = pyPlane.shape
             control = pyPlane.control
-            ###forward = pyPlane.forward
 
             cutterList = []
             for pyReflex in pyWire.reflexs:
@@ -1149,8 +1147,6 @@ class _PyReflex(_Py):
                 else:
                     # print '1'
 
-                    ###forward = pyPlane.forward
-
                     ff = plane.Faces[0]
                     ff = self.cutting(ff, cutterList, gS)
                     aList = [ff]
@@ -1176,7 +1172,6 @@ class _PyReflex(_Py):
 
         direction = "forward"
         for pyPlane, rear in zip(self.planes, self.rear):
-            # if not pyPlane.aligned or pyPlane.virtualized:
             if rear:
                 pyPlane.rearing(pyWire, self, direction)
             direction = "backward"

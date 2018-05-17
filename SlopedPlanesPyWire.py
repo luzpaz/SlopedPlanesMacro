@@ -373,7 +373,6 @@ class _PyWire(_Py):
                         enormousShape = enormousShape.copy()
                         enormousShape =\
                             self.cutting(enormousShape, [giantPlane], gS)
-                        # TODO no esta completo: preProcessTwo
 
                 for nG, pyPl in zip(rango, rangoPy):
                     control = pyPl.control
