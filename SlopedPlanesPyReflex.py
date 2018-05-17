@@ -1003,8 +1003,6 @@ class _PyReflex(_Py):
         refList = self.planes
         lines = self.lines
 
-        ##pyOppPlane = refList[1]
-
         for pyPlane in refList:
             plane = pyPlane.shape
             control = pyPlane.control
@@ -1045,8 +1043,6 @@ class _PyReflex(_Py):
                                         pyPlane.cuttingPyth([pl])
                                         control.append(pyPl.numGeom)
 
-            ##pyOppPlane = refList[0]
-
     def postProcessTwo(self, pyWire):
 
         '''postProcessTwo(self, pyWire)'''
@@ -1059,15 +1055,16 @@ class _PyReflex(_Py):
         pyPlaneList = pyWire.planes
 
         refList = self.planes
+        lineList = self.lines
         rangoInter = self.rango
 
         pyOppPlane = refList[1]
 
-        for pyPlane in refList:
+        for pyPlane, forward in zip(refList, lineList):
             # print '# pyPlane ', pyPlane.numGeom
             plane = pyPlane.shape
             control = pyPlane.control
-            forward = pyPlane.forward
+            ###forward = pyPlane.forward
 
             cutterList = []
             for pyReflex in pyWire.reflexs:
@@ -1152,7 +1149,7 @@ class _PyReflex(_Py):
                 else:
                     # print '1'
 
-                    forward = pyPlane.forward
+                    ###forward = pyPlane.forward
 
                     ff = plane.Faces[0]
                     ff = self.cutting(ff, cutterList, gS)
