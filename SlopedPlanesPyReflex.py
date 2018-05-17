@@ -773,7 +773,6 @@ class _PyReflex(_Py):
             reflex = reflex.cut(cList, tolerance)
             # print 'reflex.Faces ', reflex.Faces, len(reflex.Faces)
 
-        # if not pyR.aligned or pyR.virtualized:
         cList = pyR.cutter[:]
 
         if pyWire.numWire > 0:
@@ -902,8 +901,20 @@ class _PyReflex(_Py):
 
         tolerance = _Py.tolerance
         gS = pyR.geomShape
-        forward = pyR.forward
-        backward = pyR.backward
+
+        '''forward = pyR.forward
+        backward = pyR.backward'''
+
+        if direction == 'forward':
+            forward = pyR.forward
+            backward = pyR.backward
+        else:
+            if len(pyR.rear) == 1:
+                forward = pyR.forward
+                backward = pyR.backward
+            else:
+                forward = pyR.backward
+                backward = pyR.forward
 
         # podría incluir en isSolved la detención de sobrantes en planos de una cara
         # que tienen un vertice en la planta (tres vertices en total)
