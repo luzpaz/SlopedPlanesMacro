@@ -976,8 +976,6 @@ class _PyPlane(_Py):
            FreeCAD.ActiveDocument.getObject(self.sweepCurve).Shape.isNull():
             # print 'A'
 
-            # TODO reverse
-
             angle = self.angle
 
             sweepSketch = FreeCAD.ActiveDocument.getObject(self.sweepCurve)
@@ -1040,8 +1038,14 @@ class _PyPlane(_Py):
                 # print edge.lastVertex(True).Point
 
                 plane = edge.revolve(point, FreeCAD.Vector(0, 0, 1))
+
                 # print plane
                 # print plane.Area
+
+                if _Py.reverse:
+                    # print 'negative'
+                    plane = plane.mirror(FreeCAD.Vector(0, 0, 0),
+                                         FreeCAD.Vector(0, 0, -1))
 
                 if isinstance(geom, Part.ArcOfEllipse):
                     # print 'ellipse'
@@ -1058,7 +1062,7 @@ class _PyPlane(_Py):
                     plane.rotate(FreeCAD.Vector(0, 0, 0), FreeCAD.Vector(0, 0, 1), degrees(angleXU))
                     plane.translate(point)
 
-                    plane = plane.Faces[0]
+                plane = plane.Faces[0]
 
             else:
                 # print 'bb'
