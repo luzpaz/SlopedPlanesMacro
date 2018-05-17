@@ -1004,8 +1004,9 @@ class _PyReflex(_Py):
 
         tolerance = _Py.tolerance
         refList = self.planes
+        lines = self.lines
 
-        pyOppPlane = refList[1]
+        ##pyOppPlane = refList[1]
 
         for pyPlane in refList:
             plane = pyPlane.shape
@@ -1014,21 +1015,26 @@ class _PyReflex(_Py):
             if len(plane.Faces) == 1:
                 # print '# cutted ', pyPlane.numGeom
 
-                forward = pyPlane.forward
-                forwardOpp = pyOppPlane.forward
+                '''forward = pyPlane.forward
+                forwardOpp = pyOppPlane.forward'''
+
+                forward = lines[0]
+                forwardOpp = lines[-1]
+
                 gS = pyPlane.geomShape
-                lines = Part.makeCompound([gS, forward, forwardOpp])
+                lList = Part.makeCompound([gS, forward, forwardOpp])
 
                 for pyReflex in pyWire.reflexs:
-                    for pyPl in pyReflex.planes:
+                    for pyPl, fo in zip(pyReflex.planes, pyReflex.lines):
                         if pyPl.numGeom not in control:
                             # print 'pyPl.numGeom ', pyPl.numGeom
                             pl = pyPl.shape
                             if pyPl.isSolved():
                                 # print 'solved'
 
-                                fo = pyPl.forward
-                                section = fo.section([lines], tolerance)
+                                #fo = pyPl.forward
+                                section = fo.section([lList], tolerance)
+
                                 if section.Vertexes:
                                     # print 'cutter ', pyPl.numGeom
                                     conflictList =\
@@ -1046,7 +1052,7 @@ class _PyReflex(_Py):
                                         pyPlane.cuttingPyth([pl])
                                         control.append(pyPl.numGeom)
 
-            pyOppPlane = refList[0]
+            ##pyOppPlane = refList[0]
 
     def postProcessTwo(self, pyWire):
 
