@@ -197,6 +197,7 @@ class _PyWire(_Py):
         # print '###### virtualizing wire', (self.numWire)
 
         reflexList = self.reflexs[:]
+
         reflexList.reverse()
 
         controlList = []
@@ -212,8 +213,15 @@ class _PyWire(_Py):
 
             else:
 
-                pyReflex.addValue('lines', pyR.forward, 'forward')
-                pyReflex.addValue('lines', pyOppR.forward, 'backward')
+                if pyR.aligned:
+
+                    pyReflex.addValue('lines', pyR.forward, 'forward')
+                    pyReflex.addValue('lines', pyOppR.backward, 'backward')
+
+                else:
+
+                    pyReflex.addValue('lines', pyR.forward, 'forward')
+                    pyReflex.addValue('lines', pyOppR.forward, 'backward')
 
             controlList.append(pyR)
 
