@@ -1381,9 +1381,22 @@ class _PyPlane(_Py):
         tolerance = _Py.tolerance
         plane = self.shape
 
-        # TODO pasar forward backward para PyReflex
+        lineList = pyReflex.lines
+        rearList = pyReflex.rear
+        refList = pyReflex.planes
 
-        forward = self.forward
+
+        if direction == 'forward':
+            forward = lineList[0]
+            rear = rearList[0]
+            pyOppPlane = refList[-1]
+        else:
+            forward = lineList[-1]
+            rear = rearList[-1]
+            pyOppPlane = refList[0]
+
+
+        '''forward = self.forward
 
         if direction == "forward":
             pyOppPlane = pyReflex.planes[1]
@@ -1411,7 +1424,7 @@ class _PyPlane(_Py):
                 # print(rr, rear)
                 if rr == rear:
                     # print 'backw'
-                    forward = self.backward
+                    forward = self.backward'''
 
         pyPlaneList = pyWire.planes
 
