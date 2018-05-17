@@ -213,7 +213,7 @@ class _PyWire(_Py):
 
             else:
 
-                if pyR.aligned:
+                if pyOppR.aligned:
 
                     pyReflex.addValue('lines', pyR.forward, 'forward')
                     pyReflex.addValue('lines', pyOppR.backward, 'backward')
