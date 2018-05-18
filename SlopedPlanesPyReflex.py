@@ -588,10 +588,10 @@ class _PyReflex(_Py):
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        # print '# ', (pyR.numGeom, pyOppR.numGeom, pyR.virtualized, pyOppR.virtualized)
+        # print '# processReflex forward ', (pyR.numGeom, pyOppR.numGeom, pyR.virtualized, pyOppR.virtualized)
         self.processReflex(reflex, oppReflex, pyR, pyOppR, 'forward', pyWire)
 
-        # print '# ', (pyOppR.numGeom, pyR.numGeom, pyOppR.virtualized, pyR.virtualized)
+        # print '# processReflex backward', (pyOppR.numGeom, pyR.numGeom, pyOppR.virtualized, pyR.virtualized)
         self.processReflex(oppReflex, reflex, pyOppR, pyR, 'backward', pyWire)
 
         [pyR, pyOppR] = self.planes
@@ -599,10 +599,10 @@ class _PyReflex(_Py):
         reflex = pyR.shape.copy()
         oppReflex = pyOppR.shape.copy()
 
-        # print '### ', (pyR.numGeom, pyOppR.numGeom)
+        # print '# processReflexTwo forward ', (pyR.numGeom, pyOppR.numGeom)
         self.processReflexTwo(reflex, oppReflex, pyR, pyOppR, 'forward')
 
-        # print '### ', (pyOppR.numGeom, pyR.numGeom)
+        # print '# processReflexTwo backward ', (pyOppR.numGeom, pyR.numGeom)
         self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, 'backward')
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
@@ -1079,6 +1079,8 @@ class _PyReflex(_Py):
                                 conflictList = pyPl.isReallySolved(pyWire,
                                                                    pyReflex)
 
+                                # print 'conflictList ', conflictList
+
                                 cList = []
                                 for pyP in conflictList:
                                     if pyP.isSolved():
@@ -1131,6 +1133,13 @@ class _PyReflex(_Py):
 
                                         cutterList.append(pl)
                                         control.append(pyPl.numGeom)
+
+                            elif not pyPlane.rear:
+                                # print 'aa'
+
+                                pl = pyPl.shape
+                                cutterList.append(pl)
+                                control.append(pyPl.numGeom)
 
             # print 'cutterList', cutterList
 

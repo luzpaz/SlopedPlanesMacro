@@ -36,4 +36,4 @@ Please, visit our page [SlopedPlanes Wiki](https://github.com/caceres/SlopedPlan
 Please, send feedback via the dedicated SlopedPlanes [FreeCAD forum thread](https://forum.freecadweb.org/viewtopic.php?f=24&t=25337).
 
 ## Developer
-Damian Caceres Moreno AKA @caceres 
+Damian Caceres Moreno
