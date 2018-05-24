@@ -200,6 +200,7 @@ class _Py(object):
 
             print '****** numWire ', pyWire.numWire
             print '*** coordinates ', pyWire.coordinates
+            print '*** geoms ', [e.Curve for e in pyWire.shapeGeom]
             print '*** reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
 
@@ -211,14 +212,16 @@ class _Py(object):
                     print 'rear plane ', pyPlane.rear
                     print 'secondRear ', pyPlane.secondRear
                     print 'rango ', pyPlane.rango
-                    '''forward = pyPlane.forward
+                    forward = pyPlane.forward
                     print 'forward ',\
                         (self.roundVector(forward.firstVertex(True).Point),
-                         self.roundVector(forward.lastVertex(True).Point))
+                         self.roundVector(forward.lastVertex(True).Point),
+                         forward.Curve)
                     backward = pyPlane.backward
                     print 'backward ',\
                         (self.roundVector(backward.firstVertex(True).Point),
-                         self.roundVector(backward.lastVertex(True).Point))'''
+                         self.roundVector(backward.lastVertex(True).Point),
+                         backward.Curve)
 
         print '********* alignments ', _Py.pyFace.alignments
         for pyAlignment in _Py.pyFace.alignments:
@@ -673,7 +676,7 @@ class _Py(object):
 
         '''rang(self, pyWire, numGeom, nGeom, direction, reflex=False)'''
 
-        # print 'rang ', (numGeom, nGeom, reflex)
+        print 'rang ', (numGeom, nGeom, reflex)
 
         if numGeom == nGeom:
             return []
@@ -681,7 +684,7 @@ class _Py(object):
         lenWire = len(pyWire.planes)
 
         if direction == 'forward':
-            # print 'A'
+            print 'A'
             if reflex:
                 # print 'reflex'
                 num = numGeom + 2
@@ -689,13 +692,13 @@ class _Py(object):
                 # print 'no reflex'
                 num = numGeom + 1
             num = self.sliceIndex(num, lenWire)
-            # print 'num ', num
+            print 'num ', num
 
             if nGeom >= num:
-                # print 'A1'
+                print 'A1'
                 ran = range(num, nGeom)
             else:
-                # print 'A2'
+                print 'A2'
                 ran = range(num, lenWire) + range(0, nGeom)
 
         else:
