@@ -570,16 +570,26 @@ class _Py(object):
         edgeList = edgeList[number:] + edgeList[:number]
 
         geometries = []
-        number = -1
-        for edge in edgeList:
-            number += 1
+        #number = -1
+        for edge, second in zip(edgeList, coordinates[1:]):
+            #number += 1
+
             curve = edge.Curve
-            startParam = curve.parameter(coordinates[number])
-            endParam = curve.parameter(coordinates[number+1])
+
+            if not isinstance(curve, (Part.Line, Part.LineSegment)):
+
+                if edge.firstVertex(True).Point != edge.firstVertex(False).Point:
+
+                    curve.Axis = V(0, 0, -1)
+
+            startParam = curve.parameter(first)
+            endParam = curve.parameter(second)
 
             geom = self.makeGeom(curve, startParam, endParam)
 
             geometries.append(geom)
+
+            first = second
 
         coordinates.pop()
 
@@ -676,7 +686,7 @@ class _Py(object):
 
         '''rang(self, pyWire, numGeom, nGeom, direction, reflex=False)'''
 
-        print 'rang ', (numGeom, nGeom, reflex)
+        # print 'rang ', (numGeom, nGeom, reflex)
 
         if numGeom == nGeom:
             return []
@@ -684,7 +694,7 @@ class _Py(object):
         lenWire = len(pyWire.planes)
 
         if direction == 'forward':
-            print 'A'
+            # print 'A'
             if reflex:
                 # print 'reflex'
                 num = numGeom + 2
@@ -692,13 +702,13 @@ class _Py(object):
                 # print 'no reflex'
                 num = numGeom + 1
             num = self.sliceIndex(num, lenWire)
-            print 'num ', num
+            # print 'num ', num
 
             if nGeom >= num:
-                print 'A1'
+                # print 'A1'
                 ran = range(num, nGeom)
             else:
-                print 'A2'
+                # print 'A2'
                 ran = range(num, lenWire) + range(0, nGeom)
 
         else:

@@ -345,11 +345,11 @@ class _PyFace(_Py):
 
         self.reset = False
 
-        self.printSummary()
+        # self.printSummary()
 
         self.upping()
 
-        '''for pyWire in pyWireList:
+        for pyWire in pyWireList:
             pyWire.virtualizing()
 
         for pyAlign in pyAlignList:
@@ -912,7 +912,7 @@ class _PyFace(_Py):
         Finds the rear plane of a reflexed plane.
         Determines if an arrow situacion happens.'''
 
-        print '### findRear ', (pyPlane.numWire, pyPlane.numGeom)
+        # print '### findRear ', (pyPlane.numWire, pyPlane.numGeom)
 
         tolerance = _Py.tolerance
         numWire = pyWire.numWire
@@ -923,11 +923,11 @@ class _PyFace(_Py):
 
         forward = pyPlane.forward
         section = forward.section([sGW], tolerance)
-        print 'section.Edges ', section.Edges, [(e.firstVertex(True).Point, e.lastVertex(True).Point) for e in section.Edges]
-        print 'section.Vertexes ', [x.Point for x in section.Vertexes]
+        # print 'section.Edges ', section.Edges, [(e.firstVertex(True).Point, e.lastVertex(True).Point) for e in section.Edges]
+        # print 'section.Vertexes ', [x.Point for x in section.Vertexes]
 
         if len(section.Vertexes) == 1:
-            print 'return'
+            # print 'return'
             return
 
         edge = False
@@ -937,12 +937,12 @@ class _PyFace(_Py):
         lineInto = pyPlane.lineInto
 
         if lineInto:
-            print 'a'
+            # print 'a'
             sect = lineInto.section([sGW], tolerance)
             vertex = sect.Vertexes[1]
 
         elif section.Edges:
-            print 'b'
+            # print 'b'
 
             if pyPlane.choped:
                 # print 'b1'
@@ -953,7 +953,7 @@ class _PyFace(_Py):
                 vertex = section.Edges[0].Vertexes[1]
 
         else:
-            print 'c'
+            # print 'c'
 
             vertex = section.Vertexes[1]
 
@@ -964,17 +964,17 @@ class _PyFace(_Py):
                     # print 'cc'
                     edge = True
 
-        print 'point ', vertex.Point
-        print 'edge ', edge
+        # print 'point ', vertex.Point
+        # print 'edge ', edge
 
-        nGeom = self.findGeomRear(pyWire, pyPlane, direction, vertex, forward, edge)
+        nGeom = self.findGeomRear(pyWire, pyPlane, direction, vertex, edge)
         pyPlane.addValue('rear', nGeom, direction)
-        print 'nGeom ', nGeom
+        # print 'nGeom ', nGeom
 
         # second rear
 
         if len(section.Vertexes) > 2:
-            print 'secondRear'
+            # print 'secondRear'
 
             oo = forward.firstVertex(True)
             pp = oo.Point
@@ -1013,7 +1013,7 @@ class _PyFace(_Py):
                         if point in coord:
                             edge = True
 
-                sGeom = self.findGeomRear(pyWire, pyPlane, direction, vert, forward, edge)
+                sGeom = self.findGeomRear(pyWire, pyPlane, direction, vert, edge)
                 pyPlane.addValue('secondRear', sGeom, direction)
                 # print 'sGeom ', sGeom
 
@@ -1033,11 +1033,11 @@ class _PyFace(_Py):
 
         return nGeom
 
-    def findGeomRear(self, pyWire, pyPlane, direction, vertex, forward, edge=False):
+    def findGeomRear(self, pyWire, pyPlane, direction, vertex, edge=False):
 
         '''findGeomRear(self, pyWire, pyPlane, direction, vertex, edge=False)'''
 
-        print '#findGeomRear ', (direction, edge)
+        # print '#findGeomRear ', (direction, edge)
 
         coord = pyWire.coordinates
         lenWire = len(pyWire.planes)
@@ -1046,7 +1046,7 @@ class _PyFace(_Py):
         try:
 
             nGeom = coord.index(self.roundVector(vertex.Point))
-            print 'on vertex'
+            # print 'on vertex'
 
             if edge:
                 if direction == 'forward':
@@ -1059,42 +1059,21 @@ class _PyFace(_Py):
                     nGeom = self.sliceIndex(nGeom - 1, lenWire)
 
         except ValueError:
-            print 'not in vertex'
+            # print 'not in vertex'
 
-            print vertex.Point
+            # print vertex.Point
 
             tolerance = _Py.tolerance
 
             nGeom = -1
             for geomShape in shapeGeomWire:
                 nGeom += 1
-                print nGeom, geomShape, geomShape.Curve
+                # print nGeom, geomShape, geomShape.Curve
                 sect = vertex.section([geomShape], tolerance)
-                print sect.Vertexes
+                # print sect.Vertexes
                 if sect.Vertexes:
-                    print 'break'
+                    # print 'break'
                     break
-
-            else:
-                # debido a las lineas no curvas. Esto podría producir problemas con segundas traseras
-                numGeom = pyPlane.numGeom
-                mm = self.sliceIndex(numGeom + 2, lenWire)
-                nn = self.sliceIndex(numGeom - 2, lenWire)
-                print(mm, nn)
-
-                if direction == 'forward':
-                    print 'a'
-                    ran = self.rang(pyWire, numGeom, nn, direction, True)
-                else:
-                    print 'b'
-                    ran = self.rang(pyWire, numGeom, mm, direction, True)
-                print 'ran ', ran
-
-                for nGeom in ran:
-                    gS = shapeGeomWire[nGeom]
-                    se = forward.section([gS], tolerance)
-                    if se.Vertexes:
-                        break
 
         return nGeom
 
