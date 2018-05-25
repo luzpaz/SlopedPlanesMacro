@@ -20,6 +20,7 @@ for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
             # print 'open'
             doc = FreeCAD.openDocument(directory[0] + '/' + filename)
             # print '######### ', doc.Name
+            numDoc += 1
 
             for obj in doc.Objects:
                 if hasattr(obj, 'Proxy'):
