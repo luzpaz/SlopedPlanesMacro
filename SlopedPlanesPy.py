@@ -570,13 +570,12 @@ class _Py(object):
         edgeList = edgeList[number:] + edgeList[:number]
 
         geometries = []
-        #number = -1
+
         for edge, second in zip(edgeList, coordinates[1:]):
-            #number += 1
 
             curve = edge.Curve
 
-            if not isinstance(curve, (Part.Line, Part.LineSegment)):
+            if not isinstance(curve, Part.Line):
 
                 if edge.firstVertex(True).Point != edge.firstVertex(False).Point:
 
