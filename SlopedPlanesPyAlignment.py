@@ -396,8 +396,8 @@ class _PyAlignment(_Py):
                         gS = pyPl.geomShape
                         bPl = self.cutting(bPl, cutList, gS)
                         pyPl.bigShape = bPl
-                        # pyPl.fronted = True  # ???
-                        pyPl.frontedList.append(self)
+                        # pyPl.fronted = True  # resuelto en rangging
+                        # pyPl.frontedList.append(self)
 
                         rC.append(bPl)
 
@@ -469,7 +469,6 @@ class _PyAlignment(_Py):
                     # print 'virtualized'
                     aliList = pyPlane.alignedList
                     pyA = aliList[0]
-                    # for pyA in aliList:   no borrar de momento
                     gA = pyA.geomAligned.copy()
                     gA = gA.cut([geomAligned], tolerance)
                     if len(gA.Edges) == 2:
@@ -1833,6 +1832,7 @@ class _PyAlignment(_Py):
                 for nn in rangoChop:
                     pyP = planeList[nn]
                     pyP.fronted = True
+                    pyP.frontedList.append(self)
                     ran.append(pyP)
 
             else:
