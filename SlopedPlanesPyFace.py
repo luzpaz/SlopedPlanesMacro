@@ -749,12 +749,11 @@ class _PyFace(_Py):
                                 if pyPrePlane and pyPrePlane.aligned:
                                     # print 'pyPrePlane aligned'
 
+
                                     if possible:
                                         # print 'possible'
 
                                         pyA = pyPrePlane.alignedList[0]
-                                        #pyA.addValue('rear', rearF, 'forward')
-                                        #pyAlign.addValue('rear', rearB, 'backward')
 
                                         pyA.rear[0] = rearF
                                         pyAlign.rear[1] = rearB
@@ -762,16 +761,15 @@ class _PyFace(_Py):
                                     else:
                                         # print 'no possible'
 
-                                        pyA = pyPrePlane.alignedList[0]
+                                        pyB = self.selectBasePlane(pyPrePlane.numWire, pyPrePlane.numGeom)
+
                                         try:
-                                            rearF = pyA.base.rear[0]
-                                            # pyA.addValue('rear', rearF, 'forward')
+                                            rearF = pyB.rear[0]
                                             pyA.rear[0] = rearF
                                         except IndexError:
                                             pass
                                         try:
                                             rearB = pyAlign.base.rear[-1]
-                                            # pyAlign.addValue('rear', rearB, 'backward')
                                             pyAlign.rear[1] = rearB
                                         except IndexError:
                                             pass
