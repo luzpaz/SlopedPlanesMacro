@@ -1502,6 +1502,8 @@ class _PyPlane(_Py):
         pyPlaneList = pyWire.planes
         control = self.control
 
+        numGeom = self.numGeom
+
         if self.aligned:
 
             pyAlignList = self.alignedList
@@ -1528,31 +1530,33 @@ class _PyPlane(_Py):
                             pyAliList = pyPl.alignedList
                             pyAli = pyAliList[0]
 
-                        # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
-                        ll = pyAli.geomAligned
-                        simulAlign = pyAli.simulatedAlignment
+                        if not numGeom in pyAli.rear:
 
-                        if self.aligned:
-                            # print 'a1'
+                            # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                            ll = pyAli.geomAligned
+                            simulAlign = pyAli.simulatedAlignment
 
-                            line = pyAlign.geomAligned
-                            base = pyAlign.base.shape
+                            if self.aligned:
+                                # print 'a1'
 
-                            section = line.section([ll], tolerance)
-                            if not section.Vertexes:
-                                section = base.section([pl], tolerance)
-                                if section.Edges:
-                                    common = base.common(simulAlign,
-                                                         tolerance)
-                                    # print 'area ', common.Area
-                                    if not common.Area:
-                                        # print 'a11'
-                                        cutterList.extend(pyAli.simulatedAlignment)
+                                line = pyAlign.geomAligned
+                                base = pyAlign.base.shape
 
-                        else:
-                            # print 'a2'
-                            if pyAli in self.rearedList:
-                                cutterList.extend(pyAli.simulatedAlignment)
+                                section = line.section([ll], tolerance)
+                                if not section.Vertexes:
+                                    section = base.section([pl], tolerance)
+                                    if section.Edges:
+                                        common = base.common(simulAlign,
+                                                             tolerance)
+                                        # print 'area ', common.Area
+                                        if not common.Area:
+                                            # print 'a11'
+                                            cutterList.extend(pyAli.simulatedAlignment)
+
+                            else:
+                                # print 'a2'
+                                if pyAli in self.rearedList:
+                                    cutterList.extend(pyAli.simulatedAlignment)
 
                     elif pyPl.choped:
                         # print 'b'

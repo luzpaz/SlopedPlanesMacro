@@ -54,6 +54,7 @@ class _PyAlignment(_Py):
         self.simulatedChops = []
         self.prior = None
         self.later = None
+        self.rear = []
 
     @property
     def base(self):
@@ -222,6 +223,16 @@ class _PyAlignment(_Py):
         '''later(self, later)'''
 
         self._later = later
+
+    @property
+    def rear(self):
+
+        return self._rear
+
+    @rear.setter
+    def rear(self, rear):
+
+        self._rear = rear
 
     def virtualizing(self):
 

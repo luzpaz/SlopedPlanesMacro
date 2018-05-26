@@ -229,7 +229,8 @@ class _Py(object):
             print '****** base'
             print(pyAlignment.base.numWire, pyAlignment.base.numGeom), pyAlignment.base.alignedList
             print 'angle ', pyAlignment.base.angle
-            print 'rear ', pyAlignment.base.rear
+            print 'rear ', pyAlignment.rear
+            print 'rear base', pyAlignment.base.rear
             print 'rango ', pyAlignment.base.rango
             print 'geom ', pyAlignment.base.geom
             print 'geomAligned ', pyAlignment.base.geomAligned
