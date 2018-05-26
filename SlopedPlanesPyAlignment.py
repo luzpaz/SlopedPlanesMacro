@@ -1780,8 +1780,7 @@ class _PyAlignment(_Py):
 
     def rangging(self, reset):
 
-        '''rangging(self)
-        '''
+        '''rangging(self)'''
 
         pyWireList = _Py.pyFace.wires
 
@@ -1841,8 +1840,6 @@ class _PyAlignment(_Py):
             pyPrior = ali.aligns[-1]
         pyLater = self.later
 
-        # pr = pyPrior.numGeom  # bajar a w1 == w2
-        # lat = pyLater.numGeom
         w1 = pyPrior.numWire
         w2 = pyLater.numWire
 
@@ -1850,6 +1847,15 @@ class _PyAlignment(_Py):
 
             pr = pyPrior.numGeom
             lat = pyLater.numGeom
+
+            pyW = pyWireList[w1]
+            lenW = len(pyW.planes)
+
+            if self.rear[1]:
+                pr = self.sliceIndex(self.rear[1] - 1, lenW)
+
+            if self.rear[0]:
+                lat = self.sliceIndex(self.rear[0] + 1, lenW)
 
             pyWire = pyWireList[w1]
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
