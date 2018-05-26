@@ -1841,12 +1841,16 @@ class _PyAlignment(_Py):
             pyPrior = ali.aligns[-1]
         pyLater = self.later
 
-        pr = pyPrior.numGeom
-        lat = pyLater.numGeom
+        # pr = pyPrior.numGeom  # bajar a w1 == w2
+        # lat = pyLater.numGeom
         w1 = pyPrior.numWire
         w2 = pyLater.numWire
 
         if w1 == w2:
+
+            pr = pyPrior.numGeom
+            lat = pyLater.numGeom
+
             pyWire = pyWireList[w1]
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
             rangoRear.insert(0, lat)
