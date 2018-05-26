@@ -752,6 +752,7 @@ class _PyFace(_Py):
                                     if possible:
                                         # print 'possible'
 
+                                        # podria estar alignedList vacia ???
                                         pyA = pyPrePlane.alignedList[0]
 
                                         pyA.rear[0] = rearF
@@ -760,7 +761,12 @@ class _PyFace(_Py):
                                     else:
                                         # print 'no possible'
 
-                                        pyB = self.selectBasePlane(pyPrePlane.numWire, pyPrePlane.numGeom)
+                                        # por que alignedList esta vacia ???
+                                        pyB =\
+                                            self.selectBasePlane(numWire,
+                                                                 pyPrePlane.numGeom)
+
+                                        # alignment not serialized
 
                                         try:
                                             rearF = pyB.rear[0]
