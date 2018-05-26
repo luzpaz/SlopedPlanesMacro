@@ -164,13 +164,13 @@ class _PyReflex(_Py):
         The planes included in a range are cutted between them,
         and by rear and oppRear'''
 
-        print '### preProcess'
+        # print '### preProcess'
 
         pyPlaneList = pyWire.planes
         refPlanes = self.planes
 
         pyR = refPlanes[0]
-        print (pyR.numWire, pyR.numGeom, pyR.rango)
+        # print (pyR.numWire, pyR.numGeom, pyR.rango)
         rango = pyR.rango[0]
         rangoPy = pyR.rangoPy[0]
 

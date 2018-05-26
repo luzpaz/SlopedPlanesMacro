@@ -355,7 +355,7 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             pyAlign.virtualizing()
 
-        self.printSummary()
+        # self.printSummary()
 
         for pyWire in pyWireList:
             pyWire.trimming()
@@ -789,12 +789,16 @@ class _PyFace(_Py):
                                 pyReflex =\
                                     self.doReflex(pyWire, pyPrePlane,
                                                   pyPlane)
+                                # print (rearF, rearB)
                                 pyReflex.addValue('rear', rearF,
                                                   'forward')
                                 pyReflex.addValue('rear', rearB,
                                                   'backward')
-                                pyPrePlane.addValue('rear', rearF, 'forward')
-                                pyPlane.addValue('rear', rearB, 'backward')
+                                # print pyReflex.rear
+                                if rearF:
+                                    pyPrePlane.addValue('rear', rearF, 'forward')
+                                if rearB:
+                                    pyPlane.addValue('rear', rearB, 'backward')
 
                     else:
                         # print '2 Convex: does not look for alignments'
@@ -807,8 +811,10 @@ class _PyFace(_Py):
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
                             pyReflex.addValue('rear', rearF, 'forward')
                             pyReflex.addValue('rear', rearB, 'backward')
-                            pyPrePlane.addValue('rear', rearF, 'forward')
-                            pyPlane.addValue('rear', rearB, 'backward')
+                            if rearF:
+                                pyPrePlane.addValue('rear', rearF, 'forward')
+                            if rearB:
+                                pyPlane.addValue('rear', rearB, 'backward')
 
                 pyPrePlane = pyPlane
 
