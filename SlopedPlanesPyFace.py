@@ -547,13 +547,13 @@ class _PyFace(_Py):
 
                                     possible = True
 
-                                    '''rearF =\
+                                    rearF =\
                                         self.findRear(pyWire, pyPrePlane,
                                                       'forward')
                                     rearB =\
                                         self.findRear(pyWire, pyPlane,
                                                       'backward')
-                                    pyReflex =\
+                                    '''pyReflex =\
                                         self.doReflex(pyWire, pyPrePlane,
                                                       pyPlane)
                                     pyReflex.addValue('rear', rearF,
@@ -566,13 +566,13 @@ class _PyFace(_Py):
 
                                 possible = True
 
-                                '''rearF =\
+                                rearF =\
                                     self.findRear(pyWire, pyPrePlane,
                                                   'forward')
                                 rearB =\
                                     self.findRear(pyWire, pyPlane,
                                                   'backward')
-                                pyReflex =\
+                                '''pyReflex =\
                                     self.doReflex(pyWire, pyPrePlane, pyPlane)
                                 pyReflex.addValue('rear', rearF, 'forward')
                                 pyReflex.addValue('rear', rearB, 'backward')'''
@@ -744,12 +744,12 @@ class _PyFace(_Py):
                             if possible:
                                 # print 'pssible'
 
-                                rearF =\
+                                '''rearF =\
                                     self.findRear(pyWire, pyPrePlane,
                                                   'forward')
                                 rearB =\
                                     self.findRear(pyWire, pyPlane,
-                                                  'backward')
+                                                  'backward')'''
                                 pyReflex =\
                                     self.doReflex(pyWire, pyPrePlane,
                                                   pyPlane)
@@ -765,12 +765,12 @@ class _PyFace(_Py):
                         if possible:
                             # print 'possible'
 
-                            rearF =\
+                            '''rearF =\
                                 self.findRear(pyWire, pyPrePlane,
                                               'forward')
                             rearB =\
                                 self.findRear(pyWire, pyPlane,
-                                              'backward')
+                                              'backward')'''
                             pyReflex =\
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
                             pyReflex.addValue('rear', rearF, 'forward')
