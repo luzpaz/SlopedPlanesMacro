@@ -1852,7 +1852,7 @@ class _PyAlignment(_Py):
         w1 = pyPrior.numWire
         w2 = pyLater.numWire
 
-        if w1 == w2:
+        if w1 == 0 and w1 == w2:
 
             pr = pyPrior.numGeom
             lat = pyLater.numGeom
