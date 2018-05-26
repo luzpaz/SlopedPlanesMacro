@@ -54,7 +54,7 @@ class _PyAlignment(_Py):
         self.simulatedChops = []
         self.prior = None
         self.later = None
-        self.rear = []
+        self.rear = [None, None]
 
     @property
     def base(self):
