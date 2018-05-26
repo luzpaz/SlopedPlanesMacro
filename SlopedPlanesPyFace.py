@@ -759,10 +759,16 @@ class _PyFace(_Py):
                                         # print 'no possible'
 
                                         pyA = pyPrePlane.alignedList[0]
-                                        rearF = pyA.base.rear[0]
-                                        pyA.addValue('rear', rearF, 'forward')
-                                        rearB = pyAlign.base.rear[-1]
-                                        pyAlign.addValue('rear', rearB, 'backward')
+                                        try:
+                                            rearF = pyA.base.rear[0]
+                                            pyA.addValue('rear', rearF, 'forward')
+                                        except IndexError:
+                                            pass
+                                        try:
+                                            rearB = pyAlign.base.rear[-1]
+                                            pyAlign.addValue('rear', rearB, 'backward')
+                                        except IndexError:
+                                            pass
 
                         else:
                             # print '12 no alignment'
