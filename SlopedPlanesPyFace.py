@@ -749,7 +749,6 @@ class _PyFace(_Py):
                                 if pyPrePlane and pyPrePlane.aligned:
                                     # print 'pyPrePlane aligned'
 
-
                                     if possible:
                                         # print 'possible'
 
@@ -765,9 +764,11 @@ class _PyFace(_Py):
 
                                         try:
                                             rearF = pyB.rear[0]
+                                            pyA = pyB.selectAlignmentBase()
                                             pyA.rear[0] = rearF
                                         except IndexError:
                                             pass
+
                                         try:
                                             rearB = pyAlign.base.rear[-1]
                                             pyAlign.rear[1] = rearB

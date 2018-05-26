@@ -345,6 +345,7 @@ class _PyAlignment(_Py):
             rC = []
 
             if nW == pyTwo.numWire:
+                # print 'nW'
 
                 # the two rangos don't cut between them, if not aligned
 
@@ -389,12 +390,13 @@ class _PyAlignment(_Py):
 
                 for nG, pyPl in zip(rChop, rChopPy):
                     if not pyPl.aligned:
+                        # print(nG, pyPl)
 
                         bPl = pyPl.bigShape
                         gS = pyPl.geomShape
                         bPl = self.cutting(bPl, cutList, gS)
                         pyPl.bigShape = bPl
-                        pyPl.fronted = True
+                        # pyPl.fronted = True  # ???
                         pyPl.frontedList.append(self)
 
                         rC.append(bPl)
@@ -496,7 +498,7 @@ class _PyAlignment(_Py):
                                     # print 'a'
 
                                     if pyPl.fronted:
-                                        # priny 'a1'
+                                        # print 'a1'
 
                                         control.append(numGeom)
                                         pyPlane.control.append(nG)
@@ -1824,7 +1826,15 @@ class _PyAlignment(_Py):
                 nGeom = pyPl.numGeom
                 rangoChop = self.rang(pyWire, numGeom, nGeom, 'forward')
                 planeList = pyWire.planes
-                ran = [planeList[nn] for nn in rangoChop]
+
+                # ran = [planeList[nn] for nn in rangoChop]
+
+                ran = []
+                for nn in rangoChop:
+                    pyP = planeList[nn]
+                    pyP.fronted = True
+                    ran.append(pyP)
+
             else:
                 rangoChop = []
                 ran = []
