@@ -553,13 +553,16 @@ class _PyFace(_Py):
                                     rearB =\
                                         self.findRear(pyWire, pyPlane,
                                                       'backward')
-                                    '''pyReflex =\
-                                        self.doReflex(pyWire, pyPrePlane,
-                                                      pyPlane)
-                                    pyReflex.addValue('rear', rearF,
-                                                      'forward')
-                                    pyReflex.addValue('rear', rearB,
-                                                      'backward')'''
+
+                                    if not pyPrePlane.aligned:
+
+                                        pyReflex =\
+                                            self.doReflex(pyWire, pyPrePlane,
+                                                          pyPlane)
+                                        pyReflex.addValue('rear', rearF,
+                                                          'forward')
+                                        pyReflex.addValue('rear', rearB,
+                                                          'backward')
 
                             else:
                                 # print 'no alignament'
@@ -572,10 +575,13 @@ class _PyFace(_Py):
                                 rearB =\
                                     self.findRear(pyWire, pyPlane,
                                                   'backward')
-                                '''pyReflex =\
-                                    self.doReflex(pyWire, pyPrePlane, pyPlane)
-                                pyReflex.addValue('rear', rearF, 'forward')
-                                pyReflex.addValue('rear', rearB, 'backward')'''
+
+                                if not pyPrePlane.aligned:
+
+                                    pyReflex =\
+                                        self.doReflex(pyWire, pyPrePlane, pyPlane)
+                                    pyReflex.addValue('rear', rearF, 'forward')
+                                    pyReflex.addValue('rear', rearB, 'backward')
 
                             ref = False
 
@@ -741,15 +747,9 @@ class _PyFace(_Py):
                                     # print '1211 reflexed'
                                     ref = True
 
-                            if possible:
-                                # print 'pssible'
+                            if possible and pyPrePlane.aligned:
+                                # print 'possible'
 
-                                '''rearF =\
-                                    self.findRear(pyWire, pyPrePlane,
-                                                  'forward')
-                                rearB =\
-                                    self.findRear(pyWire, pyPlane,
-                                                  'backward')'''
                                 pyReflex =\
                                     self.doReflex(pyWire, pyPrePlane,
                                                   pyPlane)
@@ -762,15 +762,9 @@ class _PyFace(_Py):
                         # print '2 Convex: does not look for alignments'
                         pass
 
-                        if possible:
+                        if possible and pyPrePlane.aligned:
                             # print 'possible'
 
-                            '''rearF =\
-                                self.findRear(pyWire, pyPrePlane,
-                                              'forward')
-                            rearB =\
-                                self.findRear(pyWire, pyPlane,
-                                              'backward')'''
                             pyReflex =\
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
                             pyReflex.addValue('rear', rearF, 'forward')
