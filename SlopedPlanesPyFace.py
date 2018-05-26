@@ -745,7 +745,7 @@ class _PyFace(_Py):
 
                                     ref = False
 
-                                if pyPrePlane.aligned:
+                                if pyPrePlane and pyPrePlane.aligned:
                                     # print 'pyPrePlane aligned'
 
                                     if possible:
