@@ -1826,13 +1826,12 @@ class _PyAlignment(_Py):
                 rangoChop = self.rang(pyWire, numGeom, nGeom, 'forward')
                 planeList = pyWire.planes
 
-                # ran = [planeList[nn] for nn in rangoChop]
-
                 ran = []
                 for nn in rangoChop:
                     pyP = planeList[nn]
-                    pyP.fronted = True
-                    pyP.frontedList.append(self)
+                    if not pyP.aligned:
+                        pyP.fronted = True
+                        pyP.frontedList.append(self)
                     ran.append(pyP)
 
             else:
