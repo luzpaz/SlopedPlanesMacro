@@ -355,7 +355,7 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             pyAlign.virtualizing()
 
-        # self.printSummary()
+        self.printSummary()
 
         for pyWire in pyWireList:
             pyWire.trimming()
