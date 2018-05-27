@@ -487,7 +487,6 @@ class _PyAlignment(_Py):
                     rearedList = pyPl.rearedList
 
                     if not rearedList or self in rearedList:
-
                         control = pyPl.control
                         if pyPlane.numGeom not in control:
                             # print '# nG ', nG
@@ -1322,6 +1321,9 @@ class _PyAlignment(_Py):
             prior = self.prior
             later = self.later
 
+            # print 'prior ', (prior.numWire, prior.numGeom)
+            # print 'later ', (later.numWire, later.numGeom)
+
             if prior.numWire == pyBase.numWire:
                 if prior.numGeom not in control:
                     if prior.choped or prior.fronted:
@@ -1334,10 +1336,13 @@ class _PyAlignment(_Py):
             if later.numWire == pyCont.numWire:
                 if later.numGeom not in pyCont.control:
                     if later.choped or later.fronted:
+                        # print 'lat a'
                         pass
                     elif not later.aligned:
+                        # print 'lat b'
                         cutterList.append(later.shape)
                     elif later.aligned and not pyCont.choped:
+                        # print 'lat c'
                         cutterList.append(later.selectShape())
 
             if cutterList:

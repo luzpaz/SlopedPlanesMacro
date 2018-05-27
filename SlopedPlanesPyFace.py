@@ -588,7 +588,7 @@ class _PyFace(_Py):
 
                                 else:
 
-                                    if rearF:
+                                    if rearF:  # y si es 0 ???
                                         pyA = pyPrePlane.alignedList[0]
                                         pyA.base.addValue('rear', rearF, 'forward')
 
