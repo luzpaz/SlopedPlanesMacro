@@ -887,6 +887,11 @@ class _PyAlignment(_Py):
         pyPrior = self.prior
         pyLater = self.later
 
+        pr = pyPrior.numGeom
+        lat = pyLater.numGeom
+
+        rangoRear = self.rangoRear
+
         shapeList = []
         cutterList = []
 
@@ -942,10 +947,10 @@ class _PyAlignment(_Py):
 
             # prior and later
 
-            if pyPrior.numGeom not in pyBase.control:  # and not pyPrior.aligned:
+            if pyPrior.numGeom not in pyBase.control and not (pyPrior.aligned and pr in rangoRear):
                 cutterList.append(pyPrior.bigShape)
 
-            if pyLater.numGeom not in pyBase.control:  # and not pyLater.aligned:
+            if pyLater.numGeom not in pyBase.control and not (pyLater.aligned and lat in rangoRear):
                 cutterList.append(pyLater.bigShape)
 
             # print 'cutterList ', cutterList
