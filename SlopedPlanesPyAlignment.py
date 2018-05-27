@@ -942,10 +942,10 @@ class _PyAlignment(_Py):
 
             # prior and later
 
-            if pyPrior.numGeom not in pyBase.control and not pyPrior.aligned:
+            if pyPrior.numGeom not in pyBase.control:  # and not pyPrior.aligned:
                 cutterList.append(pyPrior.bigShape)
 
-            if pyLater.numGeom not in pyBase.control and not pyLater.aligned:
+            if pyLater.numGeom not in pyBase.control:  # and not pyLater.aligned:
                 cutterList.append(pyLater.bigShape)
 
             # print 'cutterList ', cutterList
