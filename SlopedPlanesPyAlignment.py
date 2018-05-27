@@ -1783,6 +1783,8 @@ class _PyAlignment(_Py):
 
         '''rangging(self)'''
 
+        # print '### rangging ', (self.base.numWire, self.base.numGeom)
+
         pyWireList = _Py.pyFace.wires
 
         for [pyPlane, pyPl] in self.chops:
@@ -1845,7 +1847,8 @@ class _PyAlignment(_Py):
 
         pyPrior = self.prior
         if pyPrior.aligned:
-            ali = pyPrior.selectAlignmentBase()
+            # ali = pyPrior.selectAlignmentBase()
+            ali = pyPrior.alignedList[0]
             pyPrior = ali.aligns[-1]
         pyLater = self.later
 

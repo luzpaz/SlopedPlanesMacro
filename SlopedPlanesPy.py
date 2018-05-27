@@ -199,8 +199,8 @@ class _Py(object):
         for pyWire in _Py.pyFace.wires:
 
             print '****** numWire ', pyWire.numWire
-            print '*** coordinates ', pyWire.coordinates
-            print '*** geoms ', [e.Curve for e in pyWire.shapeGeom]
+            # print '*** coordinates ', pyWire.coordinates
+            # print '*** geoms ', [e.Curve for e in pyWire.shapeGeom]
             print '*** reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
 
@@ -213,7 +213,7 @@ class _Py(object):
                     print 'secondRear ', pyPlane.secondRear
                     print 'rango ', pyPlane.rango
                     forward = pyPlane.forward
-                    print 'forward ',\
+                    '''print 'forward ',\
                         (self.roundVector(forward.firstVertex(True).Point),
                          self.roundVector(forward.lastVertex(True).Point),
                          forward.Curve)
@@ -221,7 +221,10 @@ class _Py(object):
                     print 'backward ',\
                         (self.roundVector(backward.firstVertex(True).Point),
                          self.roundVector(backward.lastVertex(True).Point),
-                         backward.Curve)
+                         backward.Curve)'''
+                    print '#########'
+
+                print '#######################'
 
         print '********* alignments ', _Py.pyFace.alignments
         for pyAlignment in _Py.pyFace.alignments:
@@ -232,14 +235,14 @@ class _Py(object):
             print 'rear ', pyAlignment.rear
             print 'rear base', pyAlignment.base.rear
             print 'rango ', pyAlignment.base.rango
-            print 'geom ', pyAlignment.base.geom
-            print 'geomAligned ', pyAlignment.base.geomAligned
-            print 'shape ', pyAlignment.base.shape
+            # print 'geom ', pyAlignment.base.geom
+            # print 'geomAligned ', pyAlignment.base.geomAligned
+            # print 'shape ', pyAlignment.base.shape
             print 'falsify ', pyAlignment.falsify
             print 'virtualized ', pyAlignment.base.virtualized
             print 'cross ', pyAlignment.base.cross
             print 'rangoChop ', pyAlignment.rango
-            print 'rangoRear ', pyAlignment.rangoRear[0]
+            print 'rangoRear ', pyAlignment.rangoRear
             print 'prior ', (pyAlignment.prior.numWire, pyAlignment.prior.numGeom)
             print 'later ', (pyAlignment.later.numWire, pyAlignment.later.numGeom)
 
@@ -264,9 +267,9 @@ class _Py(object):
                 print 'angle ', align.angle
                 print 'virtualized ', align.virtualized
                 print 'cross ', align.cross
-                print 'geom ', align.geom
-                print 'geomAligned ', align.geomAligned
-                print 'shape ', align.shape
+                # print 'geom ', align.geom
+                # print 'geomAligned ', align.geomAligned
+                # print 'shape ', align.shape
 
         print '###############################################################'
 
