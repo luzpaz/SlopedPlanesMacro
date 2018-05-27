@@ -658,26 +658,28 @@ class _PyAlignment(_Py):
 
             cutterList = []
 
-            if pyPrior.aligned:
+            '''if pyPrior.aligned:
+                print '0'
 
-                pass
+                pass'''
 
-            elif not pyPrior.reflexed or pyPrior.choped:
-
+            if not pyPrior.reflexed or pyPrior.choped or pyPrior.aligned:
                 # print '1'
+
                 cutterList.append(bigPrior)
                 if not pyBase.choped:
                     if numWire == pyLater.numWire:
                         # print '11'
                         control.append(pr)
 
-            if pyLater.aligned:
+            '''if pyLater.aligned:
+                print '2'
 
-                pass
+                pass'''
 
-            elif not pyLater.reflexed or pyLater.choped:
+            if not pyLater.reflexed or pyLater.choped or pyLater.aligned:
+                # print '3'
 
-                # print '2'
                 cutterList.append(bigLater)
                 if not self.falsify:
                     if not pyBase.choped:
