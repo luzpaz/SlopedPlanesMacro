@@ -277,6 +277,8 @@ class _PyAlignment(_Py):
         falsify = self.falsify
         geomAligned = self.geomAligned
 
+        rear = self.rear
+
         pyBase = self.base
         base = pyBase.shape
         numWire = pyBase.numWire
@@ -293,7 +295,7 @@ class _PyAlignment(_Py):
         enormousCont = pyCont.enormousShape
         contRear = pyCont.rear
 
-        totalRear = baseRear + contRear
+        totalRear = baseRear + contRear + rear
 
         pyPrior = self.prior
         pyLater = self.later
@@ -486,7 +488,8 @@ class _PyAlignment(_Py):
 
                     rearedList = pyPl.rearedList
 
-                    if not rearedList or self in rearedList:
+                    if not rearedList or self in rearedList or nG in rear:
+
                         control = pyPl.control
                         if pyPlane.numGeom not in control:
                             # print '# nG ', nG
