@@ -890,8 +890,9 @@ class _PyAlignment(_Py):
         pr = pyPrior.numGeom
         lat = pyLater.numGeom
 
-        rangoRear = self.rangoRear
+        # rangoRear = self.rangoRear[0]
         baseControl = pyBase.control
+        rear = self.rear
 
         shapeList = []
         cutterList = []
@@ -931,13 +932,13 @@ class _PyAlignment(_Py):
             # prior and later
 
             cList = cutterList[:]
-            if pr not in baseControl and not (pyPrior.aligned and pr in rangoRear):
+            if pr not in baseControl and not (pyPrior.aligned and not rear[1]):
                 cList.append(pyPrior.bigShape)
             gS = pyBase.geomShape
             base = self.cutting(base, cList, gS)
 
             cList = cutterList[:]
-            if lat not in pyCont.control and not (pyLater.aligned and lat in rangoRear):
+            if lat not in pyCont.control and not (pyLater.aligned and not rear[0]):
                 cList.append(pyLater.bigShape)
             gS = pyCont.geomShape
             cont = self.cutting(cont, cList, gS)
@@ -948,10 +949,10 @@ class _PyAlignment(_Py):
 
             # prior and later
 
-            if pr not in baseControl and not (pyPrior.aligned and pr in rangoRear):
+            if pr not in baseControl and not (pyPrior.aligned and not rear[1]):
                 cutterList.append(pyPrior.bigShape)
 
-            if lat not in baseControl and not (pyLater.aligned and lat in rangoRear):
+            if lat not in baseControl and not (pyLater.aligned and not rear[0]):
                 cutterList.append(pyLater.bigShape)
 
             # print 'cutterList ', cutterList
