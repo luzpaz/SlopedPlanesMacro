@@ -306,7 +306,6 @@ class _PyAlignment(_Py):
         rangoChopPy = self.rangoPy
         chops = self.chops
         rangoRear = self.rangoRear
-        rangoRearNum = rangoRear[0]
 
         numChop = -1
         for rChop, rChopPy, [pyOne, pyTwo] in\
@@ -397,8 +396,6 @@ class _PyAlignment(_Py):
                         gS = pyPl.geomShape
                         bPl = self.cutting(bPl, cutList, gS)
                         pyPl.bigShape = bPl
-                        # pyPl.fronted = True  # resuelto en rangging
-                        # pyPl.frontedList.append(self)
 
                         rC.append(bPl)
 
@@ -411,7 +408,7 @@ class _PyAlignment(_Py):
                                     control.append(r)
 
                                 if not pyPlR.aligned:
-                                    pyPlR.rearedList.append(self)
+                                    # pyPlR.rearedList.append(self)  # llevar a rangging
                                     if nG not in pyPlR.control:
                                         pyPlR.control.append(nG)
 
@@ -482,12 +479,14 @@ class _PyAlignment(_Py):
                     if nG in secondRear:
                         break
 
-                    if nG in rangoRearNum:
+                    pyPl = pyPlList[nG]
+                    if pyPl.aligned or pyPl.choped:
+                        consecutive = True
+                    # print 'consecutive ', consecutive
 
-                        pyPl = pyPlList[nG]
-                        if pyPl.aligned or pyPl.choped:
-                            consecutive = True
-                        # print 'consecutive ', consecutive
+                    rearedList = pyPl.rearedList
+
+                    if not rearedList or self in rearedList:
 
                         control = pyPl.control
                         if pyPlane.numGeom not in control:
@@ -1851,7 +1850,6 @@ class _PyAlignment(_Py):
 
         pyPrior = self.prior
         if pyPrior.aligned:
-            # ali = pyPrior.selectAlignmentBase()
             ali = pyPrior.alignedList[0]
             pyPrior = ali.aligns[-1]
         pyLater = self.later
@@ -1879,7 +1877,13 @@ class _PyAlignment(_Py):
             rangoRear.append(pr)
 
             pyPlaneList = pyWire.planes
-            ran = [pyPlaneList[nn] for nn in rangoRear]
+
+            # ran = [pyPlaneList[nn] for nn in rangoRear]
+            ran = []
+            for nn in rangoRear:
+                pyP = pyPlaneList[nn]
+                pyP.rearedList.append(self)
+                ran.append(pyP)
 
             rangoRear = (rangoRear, ran)
 
