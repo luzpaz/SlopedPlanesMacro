@@ -410,7 +410,6 @@ class _PyAlignment(_Py):
                                     control.append(r)
 
                                 if not pyPlR.aligned:
-                                    # pyPlR.rearedList.append(self)  # llevar a rangging
                                     if nG not in pyPlR.control:
                                         pyPlR.control.append(nG)
 
@@ -456,10 +455,20 @@ class _PyAlignment(_Py):
 
                 if num == 0:
                     rango = rangoOne
+
+                    if rear[1] is not None:
+                        index = rango.index(rear[1])
+                        rango = rango[index:]
+
                     secondRear = pyOne.secondRear
                     pyPlList = pyWireList[pyOne.numWire].planes
                 else:
                     rango = rangoTwo
+
+                    if rear[0] is not None:
+                        index = rango.index(rear[0])
+                        rango = rango[index:]
+
                     secondRear = pyTwo.secondRear
                     pyPlList = pyWireList[pyTwo.numWire].planes
                 # print 'rango ', rango
@@ -481,72 +490,72 @@ class _PyAlignment(_Py):
                     if nG in secondRear:
                         break
 
-                    pyPl = pyPlList[nG]
+                    pyPl = pyPlList[nG]  # cambiar a zip?
                     if pyPl.aligned or pyPl.choped:
                         consecutive = True
                     # print 'consecutive ', consecutive
 
-                    rearedList = pyPl.rearedList
+                    #rearedList = pyPl.rearedList
+                    # el rango se debe limpiar desde un principio. Luego lo utilizaré en aligning de nuevo ???
+                    #if not rearedList or self in rearedList or nG in rear:
 
-                    if not rearedList or self in rearedList or nG in rear:
+                    control = pyPl.control
+                    if pyPlane.numGeom not in control:
+                        # print '# nG ', nG
+                        if not (pyPl.aligned or pyPl.choped):
 
-                        control = pyPl.control
-                        if pyPlane.numGeom not in control:
-                            # print '# nG ', nG
-                            if not (pyPl.aligned or pyPl.choped):
+                            if not pyPlane.cross:
+                                # print '1'
 
-                                if not pyPlane.cross:
-                                    # print '1'
+                                if consecutive:
+                                    # print 'a'
 
-                                    if consecutive:
-                                        # print 'a'
+                                    if pyPl.fronted:
+                                        # print 'a1'
 
-                                        if pyPl.fronted:
-                                            # print 'a1'
-
-                                            control.append(numGeom)
-                                            pyPlane.control.append(nG)
-
-                                        else:
-                                            # print 'a2'
-
-                                            pyPl.trimming(enormousShape)
+                                        control.append(numGeom)
+                                        pyPlane.control.append(nG)
 
                                     else:
-                                        # print 'b'
+                                        # print 'a2'
 
-                                        cList = [enormousShape]
-
-                                        if nG not in totalRear:
-                                            # print 'b1'
-                                            if nG not in [pr, lat]:
-                                                # print 'b11'
-
-                                                if falsify:
-                                                    # print 'b111'
-                                                    if num == 0:
-                                                        # print 'b1111'
-                                                        cList.append(enormousBase)
-                                                        control.append(numGeom)
-                                                    else:
-                                                        # print 'b1112'
-                                                        cList.append(enormousCont)
-                                                        control.append(nGeom)
-
-                                                else:
-                                                    # print 'b112'
-                                                    cList.append(enormousBase)
-                                                    control.append(numGeom)
-
-                                        pyPl.trimming(enormousShape, cList)
-
-                                    control.append(pyPlane.numGeom)
+                                        pyPl.trimming(enormousShape)
 
                                 else:
-                                    # print '2'
+                                    # print 'b'
 
-                                    pyPl.trimmingTwo(enormousShape)
-                                    baseControl.append(nG)
+                                    cList = [enormousShape]
+
+                                    if nG not in totalRear:
+                                        # print 'b1'
+                                        if nG not in [pr, lat]:
+                                            # print 'b11'
+
+                                            if falsify:
+                                                # print 'b111'
+                                                if num == 0:
+                                                    # print 'b1111'
+                                                    cList.append(enormousBase)
+                                                    control.append(numGeom)
+                                                else:
+                                                    # print 'b1112'
+                                                    cList.append(enormousCont)
+                                                    control.append(nGeom)
+
+                                            else:
+                                                # print 'b112'
+                                                cList.append(enormousBase)
+                                                control.append(numGeom)
+
+                                    pyPl.trimming(enormousShape, cList)
+
+                                control.append(pyPlane.numGeom)
+
+                            else:
+                                # print '2'
+
+                                pyPl.trimmingTwo(enormousShape)
+                                baseControl.append(nG)
 
         if falsify:
             # the base and cont are cutted by a chop

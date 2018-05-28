@@ -401,7 +401,7 @@ class _PyFace(_Py):
             if pyAlign.falsify:
                 pyAlign.aligning()
 
-        for pyAlign in pyAlignList:
+        for pyAlign in pyAlignList[:1]:
             if not pyAlign.falsify:
                 pyAlign.aligning()
 
