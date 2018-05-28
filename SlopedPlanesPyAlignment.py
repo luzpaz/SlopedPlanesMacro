@@ -1025,45 +1025,51 @@ class _PyAlignment(_Py):
 
             rangoOne = pyOne.rango[-1]
             rangoOnePy = pyOne.rangoPy[-1]
-            # print 'rangoOne ', rangoOne
             numOne = pyOne.numWire
             pyWireOne = pyWireList[numOne]
             pyPlaneListOne = pyWireOne.planes
+            rearAlignOne = None
             if pyOne.rear:
                 rearOne = pyOne.rear[-1]
-                pyPlOne = pyPlaneListOne[rearOne]
-
                 # print 'rearOne ', rearOne
+                pyPlOne = pyPlaneListOne[rearOne]
                 plOne = self.processRear(rearOne, pyPlOne, numOne)
                 if plOne:
                     cutList.extend(plOne)
                     # print plOne
-
             if rear[1] is not None:
                 index = rangoOne.index(rear[1])
                 rangoOne = rangoOne[index:]
                 rangoOnePy = rangoOnePy[index:]
+                rearAlignOne = pyPlaneListOne[rear[1]]
+                rearAlignOne = self.processAlignRear(rearAlignOne, pyWireOne, 1, enormousBase)
+            # print 'rangoOne ', rangoOne
 
             rangoTwo = pyTwo.rango[0]
             rangoTwoPy = pyTwo.rangoPy[0]
-            # print 'rangoTwo ', rangoTwo
             numTwo = pyTwo.numWire
             pyWireTwo = pyWireList[numTwo]
             pyPlaneListTwo = pyWireTwo.planes
+            rearAlignTwo = None
             if pyTwo.rear:
                 rearTwo = pyTwo.rear[0]
-                pyPlTwo = pyPlaneListTwo[rearTwo]
-
                 # print 'rearTwo ', rearTwo
+                pyPlTwo = pyPlaneListTwo[rearTwo]
                 plTwo = self.processRear(rearTwo, pyPlTwo, numTwo)
                 if plTwo:
                     cutList.extend(plTwo)
                     # print plTwo
-
             if rear[0] is not None:
                 index = rangoTwo.index(rear[0])
                 rangoTwo = rangoTwo[index:]
                 rangoTwoPy = rangoTwo[index:]
+                rearAlignTwo = pyPlaneListTwo[rear[0]]
+                if falsify:
+                    enormous = enormousCont
+                else:
+                    enormous = enormousBase
+                rearAlignTwo = self.processAlignRear(rearAlignTwo, pyWireTwo, 2, enormous)
+            # print 'rangoTwo ', rangoTwo
 
             rCOne, cListOne, oppCListOne =\
                 self.processRango(rangoOne, rangoOnePy, pyOne,
@@ -1126,6 +1132,9 @@ class _PyAlignment(_Py):
                     ccList.extend(cListOne)
                     ccList.extend(oppCListTwo)
 
+                    if rearAlignOne:
+                        ccList.append(rearAlignOne)
+
                 else:
                     rC = rCTwo
                     if falsify:
@@ -1135,6 +1144,9 @@ class _PyAlignment(_Py):
 
                     ccList.extend(cListTwo)
                     ccList.extend(oppCListOne)
+
+                    if rearAlignTwo:
+                        ccList.append(rearAlignTwo)
 
                 plane = pyPlane.shape
                 planeCopy = plane.copy()
@@ -1628,12 +1640,22 @@ class _PyAlignment(_Py):
 
         return pl
 
-    def processAlignRear(self):
+    def processAlignRear(self, rearAlign, pyWire, num, enormous):
 
         ''''''
 
-        pass
+        numGeom = rearAlign.numGeom
 
+        if num == 1:
+            point = pyWire.coordinates[numGeom]
+        else:
+            point = pyWire.coordinates[numGeom + 1]
+
+        rA = rearAlign.shape.copy()
+        rA = rA.cut([enormous], _Py.tolerance)
+        rA = self.selectFacePoint(rA, point)
+
+        return rA
 
     def processBetween(self, rango, pyPlaneList):
 
