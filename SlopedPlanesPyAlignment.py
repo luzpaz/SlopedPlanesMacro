@@ -941,13 +941,13 @@ class _PyAlignment(_Py):
             # prior and later
 
             cList = cutterList[:]
-            if pr not in baseControl and not (pyPrior.aligned and not rear[1]):
+            if pr not in baseControl and not (pyPrior.aligned and rear[1] is None):
                 cList.append(pyPrior.bigShape)
             gS = pyBase.geomShape
             base = self.cutting(base, cList, gS)
 
             cList = cutterList[:]
-            if lat not in pyCont.control and not (pyLater.aligned and not rear[0]):
+            if lat not in pyCont.control and not (pyLater.aligned and rear[0] is None):
                 cList.append(pyLater.bigShape)
             gS = pyCont.geomShape
             cont = self.cutting(cont, cList, gS)
@@ -958,10 +958,10 @@ class _PyAlignment(_Py):
 
             # prior and later
 
-            if pr not in baseControl and not (pyPrior.aligned and not rear[1]):
+            if pr not in baseControl and not (pyPrior.aligned and rear[1] is None):
                 cutterList.append(pyPrior.bigShape)
 
-            if lat not in baseControl and not (pyLater.aligned and not rear[0]):
+            if lat not in baseControl and not (pyLater.aligned and rear[0] is None):
                 cutterList.append(pyLater.bigShape)
 
             # print 'cutterList ', cutterList
@@ -1942,16 +1942,24 @@ class _PyAlignment(_Py):
             pyW = pyWireList[w1]
             lenW = len(pyW.planes)
 
-            if self.rear[1]:
+            if self.rear[1] is not None:
                 pr = self.sliceIndex(self.rear[1] - 1, lenW)
 
-            if self.rear[0]:
+            if self.rear[0] is not None:
                 lat = self.sliceIndex(self.rear[0] + 1, lenW)
+
+            # print 'pr ', pr
+            # print 'lat ', lat
 
             pyWire = pyWireList[w1]
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
+
+            # print 'rangoRear ', rangoRear
+
             rangoRear.insert(0, lat)
             rangoRear.append(pr)
+
+            # print 'rangoRear ', rangoRear
 
             pyPlaneList = pyWire.planes
 
