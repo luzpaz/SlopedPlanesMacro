@@ -1008,6 +1008,8 @@ class _PyAlignment(_Py):
         cont = pyCont.shape
         enormousCont = pyCont.enormousShape
 
+        rear = self.rear
+
         # the chops
 
         chopList = []
@@ -1019,6 +1021,8 @@ class _PyAlignment(_Py):
             simulatedC = simulatedChops[numChop]
             # print 'simulatedC ', simulatedC
 
+            cutList = []
+
             rangoOne = pyOne.rango[-1]
             rangoOnePy = pyOne.rangoPy[-1]
             # print 'rangoOne ', rangoOne
@@ -1028,6 +1032,17 @@ class _PyAlignment(_Py):
             if pyOne.rear:
                 rearOne = pyOne.rear[-1]
                 pyPlOne = pyPlaneListOne[rearOne]
+
+                # print 'rearOne ', rearOne
+                plOne = self.processRear(rearOne, pyPlOne, numOne)
+                if plOne:
+                    cutList.extend(plOne)
+                    # print plOne
+
+            if rear[1] is not None:
+                index = rangoOne.index(rear[1])
+                rangoOne = rangoOne[index:]
+                rangoOnePy = rangoOnePy[index:]
 
             rangoTwo = pyTwo.rango[0]
             rangoTwoPy = pyTwo.rangoPy[0]
@@ -1039,6 +1054,17 @@ class _PyAlignment(_Py):
                 rearTwo = pyTwo.rear[0]
                 pyPlTwo = pyPlaneListTwo[rearTwo]
 
+                # print 'rearTwo ', rearTwo
+                plTwo = self.processRear(rearTwo, pyPlTwo, numTwo)
+                if plTwo:
+                    cutList.extend(plTwo)
+                    # print plTwo
+
+            if rear[0] is not None:
+                index = rangoTwo.index(rear[0])
+                rangoTwo = rangoTwo[index:]
+                rangoTwoPy = rangoTwo[index:]
+
             rCOne, cListOne, oppCListOne =\
                 self.processRango(rangoOne, rangoOnePy, pyOne,
                                   numOne, enormousBase)
@@ -1048,22 +1074,6 @@ class _PyAlignment(_Py):
                 self.processRango(rangoTwo, rangoTwoPy, pyTwo,
                                   numTwo, enormousBase)
             # print rCTwo, cListTwo, oppCListTwo
-
-            cutList = []
-
-            if pyOne.rear:
-                # print 'rearOne ', rearOne
-                plOne = self.processRear(rearOne, pyPlOne, numOne)
-                if plOne:
-                    cutList.extend(plOne)
-                    # print plOne
-
-            if pyTwo.rear:
-                # print 'rearTwo ', rearTwo
-                plTwo = self.processRear(rearTwo, pyPlTwo, numTwo)
-                if plTwo:
-                    cutList.extend(plTwo)
-                    # print plTwo
 
             if numTwo == numOne:
                 if pyOne.rear and pyTwo.rear:
@@ -1617,6 +1627,13 @@ class _PyAlignment(_Py):
             pl = [pyPl.shape]
 
         return pl
+
+    def processAlignRear(self):
+
+        ''''''
+
+        pass
+
 
     def processBetween(self, rango, pyPlaneList):
 
