@@ -1038,11 +1038,13 @@ class _PyAlignment(_Py):
                     cutList.extend(plOne)
                     # print plOne
             if rear[1] is not None:
+                # print 'rearAlignOne ', rear[1]
                 index = rangoOne.index(rear[1])
-                rangoOne = rangoOne[index:]
+                rangoOne = rangoOne[index + 1:]
                 rangoOnePy = rangoOnePy[index:]
                 rearAlignOne = pyPlaneListOne[rear[1]]
                 rearAlignOne = self.processAlignRear(rearAlignOne, pyWireOne, 1, enormousBase)
+                # print 'rearAlignOne ', rearAlignOne.Faces
             # print 'rangoOne ', rangoOne
 
             rangoTwo = pyTwo.rango[0]
@@ -1060,6 +1062,7 @@ class _PyAlignment(_Py):
                     cutList.extend(plTwo)
                     # print plTwo
             if rear[0] is not None:
+                # print 'rearAlignTwo ', rear[0]
                 index = rangoTwo.index(rear[0])
                 rangoTwo = rangoTwo[index:]
                 rangoTwoPy = rangoTwo[index:]
@@ -1069,6 +1072,7 @@ class _PyAlignment(_Py):
                 else:
                     enormous = enormousBase
                 rearAlignTwo = self.processAlignRear(rearAlignTwo, pyWireTwo, 2, enormous)
+                # print ',rearAlingTwo ', rearAlignTwo.Faces
             # print 'rangoTwo ', rangoTwo
 
             rCOne, cListOne, oppCListOne =\
@@ -1134,6 +1138,7 @@ class _PyAlignment(_Py):
 
                     if rearAlignOne:
                         ccList.append(rearAlignOne)
+                        pass
 
                 else:
                     rC = rCTwo
@@ -1153,11 +1158,13 @@ class _PyAlignment(_Py):
 
                 if ccList:
                     # print 'ccList ', ccList
+                    # print planeCopy.Faces
                     planeCopy = planeCopy.cut(ccList, tolerance)
                     # print 'planeCopy.Faces ', planeCopy.Faces
 
                 # print 'cList ', cList
                 pCopy = planeCopy.copy()
+                # print pCopy.Faces
                 pCopy = pCopy.cut(cList, tolerance)
 
                 fList = []    # surplus under the figure
@@ -1171,10 +1178,11 @@ class _PyAlignment(_Py):
                             section = ff.section(geomShapeFace, tolerance)
                             if not section.Edges:
                                 hList.append(ff)
-                # print 'fList ', fList
 
                 if fList:
+                    # print 'fList ', fList
                     pyPlane.under = fList
+                    # print planeCopy.Faces
                     planeCopy = planeCopy.cut(fList, tolerance)
                     # print 'planeCopy.Faces ', planeCopy.Faces
 
@@ -1647,12 +1655,16 @@ class _PyAlignment(_Py):
         numGeom = rearAlign.numGeom
 
         if num == 1:
+            # print '1'
             point = pyWire.coordinates[numGeom]
         else:
+            # print '2'
             point = pyWire.coordinates[numGeom + 1]
 
+        # print 'point ', point
         rA = rearAlign.shape.copy()
         rA = rA.cut([enormous], _Py.tolerance)
+        # print rA.Faces
         rA = self.selectFacePoint(rA, point)
 
         return rA
