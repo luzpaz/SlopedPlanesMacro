@@ -755,8 +755,6 @@ class _PyFace(_Py):
                                             refList.append([pyW.numWire, num])
                                             # print 'refList ', refList
 
-                                        # ref = False
-
                                     else:
                                         # print 'no resetFace'
                                         if [pyW.numWire, nn] in refAlignList and nextPlane.aligned:
@@ -782,14 +780,14 @@ class _PyFace(_Py):
                                     if pyA:
                                         # print 'pyA'
 
-                                        if resetFace:
-                                            # print 'resetFace'
+                                        if possible:
+                                            # print 'possible'
 
                                             pyA.rear[0] = rearF
                                             pyAlign.rear[1] = rearB
 
                                         else:
-                                            # print 'no resetFace'
+                                            # print 'no possible'
 
                                             try:
                                                 pyA.rear[0] = pyB.rear[0]
