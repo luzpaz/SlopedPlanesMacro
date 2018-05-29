@@ -472,7 +472,7 @@ class _PyFace(_Py):
                 numGeom = pyPlane.numGeom
                 # print '### numGeom ', numGeom, ' angle ', pyPlane.angle
 
-                rearF, rearB = None, None
+                rearF = None
 
                 if len(coord) == 2:
                     # print 'circle or ellipse'
@@ -810,21 +810,12 @@ class _PyFace(_Py):
                                     # print '1211 reflexed'
                                     ref = True
 
-                                if pyPrePlane.aligned:
-                                    # print 'pyPrePlane aligned'
+                                if rearF is not None and pyPrePlane.aligned:
+                                    # print 'rearF'
 
                                     pyReflex =\
                                         self.doReflex(pyWire, pyPrePlane,
                                                       pyPlane)
-
-                                    if not rearF:
-
-                                        rearF =\
-                                            self.findRear(pyWire, pyPrePlane,
-                                                          'forward')
-                                        rearB =\
-                                            self.findRear(pyWire, pyPlane,
-                                                          'backward')
 
                                     pyReflex.addValue('rear', rearF,
                                                       'forward')
@@ -834,22 +825,12 @@ class _PyFace(_Py):
 
                     else:
                         # print '2 Convex: does not look for alignments'
-                        pass
 
-                        if resetFace and pyPrePlane.aligned:
-                            # print 'resetFace'
+                        if rearF is not None and pyPrePlane.aligned:
+                            # print 'rearF'
 
                             pyReflex =\
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
-
-                            if not rearF:
-
-                                rearF =\
-                                    self.findRear(pyWire, pyPrePlane,
-                                                  'forward')
-                                rearB =\
-                                    self.findRear(pyWire, pyPlane,
-                                                  'backward')
 
                             pyReflex.addValue('rear', rearF, 'forward')
                             pyReflex.addValue('rear', rearB, 'backward')
