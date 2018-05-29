@@ -807,7 +807,7 @@ class _PyFace(_Py):
                                     # print '1211 reflexed'
                                     ref = True
 
-                                if pyPrePlane.aligned:
+                                if pyPrePlane and pyPrePlane.aligned:
                                     # print 'pyPrePlane aligned'
 
                                     pyReflex =\
