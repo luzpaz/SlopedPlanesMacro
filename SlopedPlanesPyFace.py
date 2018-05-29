@@ -460,10 +460,11 @@ class _PyFace(_Py):
             # print '###### numWire ', numWire
 
             ref = False
-            pyPrePlane = None
 
             pyPlaneList = pyWire.planes
             coord = pyWire.coordinates
+
+            pyPrePlane = pyPlaneList[-1]
 
             eje = coord[1].sub(coord[0])
 
@@ -497,8 +498,8 @@ class _PyFace(_Py):
 
                         if [numWire, numGeom] in refList:
                             # print 'refList ', refList
-                            if not pyPrePlane:
-                                pyPrePlane = pyPlaneList[-1]
+                            '''if not pyPrePlane:
+                                pyPrePlane = pyPlaneList[-1]'''
                             self.forBack(pyPrePlane, 'forward')
                             ref = True
 
@@ -760,7 +761,7 @@ class _PyFace(_Py):
                                             nextAlign = nextPlane.selectAlignmentBase()
                                             nextAlign.rear[1] = nextPlane.rear[-1]
 
-                                if pyPrePlane and pyPrePlane.aligned:
+                                if pyPrePlane.aligned:
                                     # print 'pyPrePlane aligned'
 
                                     try:
@@ -807,7 +808,7 @@ class _PyFace(_Py):
                                     # print '1211 reflexed'
                                     ref = True
 
-                                if pyPrePlane and pyPrePlane.aligned:
+                                if pyPrePlane.aligned:
                                     # print 'pyPrePlane aligned'
 
                                     pyReflex =\
@@ -824,7 +825,7 @@ class _PyFace(_Py):
                         # print '2 Convex: does not look for alignments'
                         pass
 
-                        if resetFace and pyPrePlane and pyPrePlane.aligned:
+                        if resetFace and pyPrePlane.aligned:
                             # print 'resetFace'
 
                             pyReflex =\
