@@ -817,7 +817,7 @@ class _PyFace(_Py):
                                         self.doReflex(pyWire, pyPrePlane,
                                                       pyPlane)
 
-                                if not rearF:
+                                    if not rearF:
 
                                         rearF =\
                                             self.findRear(pyWire, pyPrePlane,
