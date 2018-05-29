@@ -824,7 +824,7 @@ class _PyFace(_Py):
                         # print '2 Convex: does not look for alignments'
                         pass
 
-                        if resetFace and pyPrePlane.aligned:
+                        if resetFace and pyPrePlane and pyPrePlane.aligned:
                             # print 'resetFace'
 
                             pyReflex =\
