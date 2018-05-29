@@ -588,7 +588,8 @@ class _PyFace(_Py):
 
                                 else:
 
-                                    if rearF is not None:
+                                    # if rearF is not None:
+                                    if rearF is None:
                                         pyB = self.selectBasePlane(pyPrePlane.numWire, pyPrePlane.numGeom)
                                         pyB.addValue('rear', rearF, 'forward')
 
@@ -745,7 +746,9 @@ class _PyFace(_Py):
                                     if corner == 'reflex':
                                         # print 'reflex'
 
-                                        if [pyW.numWire, nn] in refAlignList:
+                                        nextPlane = pyW.planes[num]
+
+                                        if [pyW.numWire, nn] in refAlignList and nextPlane.aligned:
                                             # print 'refAlignList ', refAlignList
 
                                             endPlane = pyW.planes[nn]
@@ -753,9 +756,9 @@ class _PyFace(_Py):
                                             rearF =\
                                                 self.findRear(pyW, endPlane,
                                                               'forward')
-
                                             pyAlign.rear[0] = rearF
-                                            nextPlane = pyW.planes[num]
+
+                                            pyAlign.rear[0] = endPlane.rear[0]
 
                                             nextAlign = nextPlane.selectAlignmentBase()
                                             nextAlign.rear[1] = nextPlane.rear[-1]
@@ -772,6 +775,7 @@ class _PyFace(_Py):
 
                                     try:
                                         pyA = pyPrePlane.alignedList[0]
+                                        pyB = pyA.base
                                     except IndexError:
                                         pyB =\
                                             self.selectBasePlane(numWire,
@@ -826,10 +830,10 @@ class _PyFace(_Py):
                                 pyReflex.addValue('rear', rearB,
                                                   'backward')
                                 # print pyReflex.rear
-                                if rearF is not None:
+                                '''if rearF is not None:
                                     pyPrePlane.addValue('rear', rearF, 'forward')
                                 if rearB is not None:
-                                    pyPlane.addValue('rear', rearB, 'backward')
+                                    pyPlane.addValue('rear', rearB, 'backward')'''
 
                     else:
                         # print '2 Convex: does not look for alignments'
@@ -842,15 +846,17 @@ class _PyFace(_Py):
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
                             pyReflex.addValue('rear', rearF, 'forward')
                             pyReflex.addValue('rear', rearB, 'backward')
-                            if rearF is not None:
+                            '''if rearF is not None:
                                 pyPrePlane.addValue('rear', rearF, 'forward')
                             if rearB is not None:
-                                pyPlane.addValue('rear', rearB, 'backward')
+                                pyPlane.addValue('rear', rearB, 'backward')'''
 
                 pyPrePlane = pyPlane
 
                 # print 'reflex ', pyWire.reflexs
                 # print 'alignments ', self.alignments
+
+                # print[(p.numGeom, p.rear) for p in pyWire.planes]
 
             if resetFace:
                 if numWire > 0 and pyPlane.geomAligned and len(coord) > 2:
