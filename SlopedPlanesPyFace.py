@@ -755,7 +755,7 @@ class _PyFace(_Py):
                                             refList.append([pyW.numWire, num])
                                             # print 'refList ', refList
 
-                                        ref = False
+                                        # ref = False
 
                                     else:
                                         # print 'no resetFace'
