@@ -586,12 +586,12 @@ class _PyFace(_Py):
                                     pyReflex.addValue('rear', rearF, 'forward')
                                     pyReflex.addValue('rear', rearB, 'backward')
 
-                                else:
+                                '''else:
 
                                     # if rearF is not None:
                                     if rearF is None:
                                         pyB = self.selectBasePlane(pyPrePlane.numWire, pyPrePlane.numGeom)
-                                        pyB.addValue('rear', rearF, 'forward')
+                                        pyB.addValue('rear', rearF, 'forward')'''
 
                             ref = False
 
