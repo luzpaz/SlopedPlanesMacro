@@ -464,7 +464,7 @@ class _PyFace(_Py):
             pyPlaneList = pyWire.planes
             coord = pyWire.coordinates
 
-            pyPrePlane = pyPlaneList[-1]
+            pyPrePlane = None
 
             eje = coord[1].sub(coord[0])
 
@@ -500,8 +500,8 @@ class _PyFace(_Py):
 
                         if [numWire, numGeom] in refList:
                             # print 'refList ', refList
-                            '''if not pyPrePlane:
-                                pyPrePlane = pyPlaneList[-1]'''
+                            if not pyPrePlane:
+                                pyPrePlane = pyPlaneList[-1]
                             self.forBack(pyPrePlane, 'forward')
                             ref = True
 
@@ -763,7 +763,7 @@ class _PyFace(_Py):
                                             nextAlign = nextPlane.selectAlignmentBase()
                                             nextAlign.rear[1] = nextPlane.rear[-1]
 
-                                if pyPrePlane.aligned:
+                                if pyPrePlane and pyPrePlane.aligned:
                                     # print 'pyPrePlane aligned'
 
                                     try:
