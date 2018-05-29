@@ -472,6 +472,8 @@ class _PyFace(_Py):
                 numGeom = pyPlane.numGeom
                 # print '### numGeom ', numGeom, ' angle ', pyPlane.angle
 
+                rearF, rearB = None, None
+
                 if len(coord) == 2:
                     # print 'circle or ellipse'
                     break
@@ -814,7 +816,16 @@ class _PyFace(_Py):
                                     pyReflex =\
                                         self.doReflex(pyWire, pyPrePlane,
                                                       pyPlane)
-                                    # print (rearF, rearB)
+
+                                if not rearF:
+
+                                        rearF =\
+                                            self.findRear(pyWire, pyPrePlane,
+                                                          'forward')
+                                        rearB =\
+                                            self.findRear(pyWire, pyPlane,
+                                                          'backward')
+
                                     pyReflex.addValue('rear', rearF,
                                                       'forward')
                                     pyReflex.addValue('rear', rearB,
@@ -830,6 +841,16 @@ class _PyFace(_Py):
 
                             pyReflex =\
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
+
+                            if not rearF:
+
+                                rearF =\
+                                    self.findRear(pyWire, pyPrePlane,
+                                                  'forward')
+                                rearB =\
+                                    self.findRear(pyWire, pyPlane,
+                                                  'backward')
+
                             pyReflex.addValue('rear', rearF, 'forward')
                             pyReflex.addValue('rear', rearB, 'backward')
 
