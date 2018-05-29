@@ -472,7 +472,7 @@ class _PyFace(_Py):
                 numGeom = pyPlane.numGeom
                 # print '### numGeom ', numGeom, ' angle ', pyPlane.angle
 
-                rearF = None
+                possible = False
 
                 if len(coord) == 2:
                     # print 'circle or ellipse'
@@ -548,6 +548,8 @@ class _PyFace(_Py):
 
                                         pyPlane.lineInto = lineInto
 
+                                    possible = True
+
                                     rearF =\
                                         self.findRear(pyWire, pyPrePlane,
                                                       'forward')
@@ -567,6 +569,8 @@ class _PyFace(_Py):
 
                             else:
                                 # print 'no alignament'
+
+                                possible = True
 
                                 rearF =\
                                     self.findRear(pyWire, pyPrePlane,
@@ -810,8 +814,8 @@ class _PyFace(_Py):
                                     # print '1211 reflexed'
                                     ref = True
 
-                                if rearF is not None and pyPrePlane.aligned:
-                                    # print 'rearF'
+                                if possible and pyPrePlane.aligned:
+                                    # print 'possible'
 
                                     pyReflex =\
                                         self.doReflex(pyWire, pyPrePlane,
@@ -826,8 +830,8 @@ class _PyFace(_Py):
                     else:
                         # print '2 Convex: does not look for alignments'
 
-                        if rearF is not None and pyPrePlane.aligned:
-                            # print 'rearF'
+                        if possible and pyPrePlane.aligned:
+                            # print 'possible'
 
                             pyReflex =\
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
