@@ -586,13 +586,6 @@ class _PyFace(_Py):
                                     pyReflex.addValue('rear', rearF, 'forward')
                                     pyReflex.addValue('rear', rearB, 'backward')
 
-                                '''else:
-
-                                    # if rearF is not None:
-                                    if rearF is None:
-                                        pyB = self.selectBasePlane(pyPrePlane.numWire, pyPrePlane.numGeom)
-                                        pyB.addValue('rear', rearF, 'forward')'''
-
                             ref = False
 
                         if corner == 'reflex':
@@ -732,7 +725,50 @@ class _PyFace(_Py):
 
                             else:
                                 # print 'end alignment'
-                                if resetFace:
+
+                                nn = pyPl.numGeom
+                                lenW = len(pyW.planes)
+                                num = self.sliceIndex(nn + 1, lenW)
+                                coo = pyW.coordinates
+                                jj = coo[num].sub(coo[nn])
+                                nnjj = coo[num + 1].sub(coo[num])
+                                corner = self.convexReflex(jj, nnjj)
+                                endPlane = pyW.planes[nn]
+                                nextPlane = pyW.planes[num]
+
+                                if corner == 'reflex':
+                                    # print 'reflex'
+
+                                    if resetFace:
+                                        # print 'resetFace'
+
+                                        if [pyW.numWire, nn] in refAlignList and nextPlane.aligned:
+                                            # print 'refAlignList ', refAlignList
+
+                                            pyAlign.rear[0] = endPlane.rear[0]
+
+                                            nextAlign = nextPlane.selectAlignmentBase()
+                                            nextAlign.rear[1] = nextPlane.rear[-1]
+
+                                        else:
+                                            # print 'refList'
+                                            refList.append([pyW.numWire, num])
+                                            # print 'refList ', refList
+
+                                        ref = False
+
+                                    else:
+                                        # print 'no resetFace'
+                                        if [pyW.numWire, nn] in refAlignList and nextPlane.aligned:
+                                            # print 'refAlignList ', refAlignList
+
+                                            pyAlign.rear[0] = endPlane.rear[0]
+
+                                            nextAlign = nextPlane.selectAlignmentBase()
+                                            nextAlign.rear[1] = nextPlane.rear[-1]
+
+
+                                ''''if resetFace:
                                     # print 'resetFace'
 
                                     nn = pyPl.numGeom
@@ -753,11 +789,6 @@ class _PyFace(_Py):
 
                                             endPlane = pyW.planes[nn]
 
-                                            rearF =\
-                                                self.findRear(pyW, endPlane,
-                                                              'forward')
-                                            pyAlign.rear[0] = rearF
-
                                             pyAlign.rear[0] = endPlane.rear[0]
 
                                             nextAlign = nextPlane.selectAlignmentBase()
@@ -769,6 +800,12 @@ class _PyFace(_Py):
                                             # print 'refList ', refList
 
                                     ref = False
+
+                                else:
+                                    # print 'no resetFace'
+                                '''
+
+                                # bajar nivel
 
                                 if pyPrePlane and pyPrePlane.aligned:
                                     # print 'pyPrePlane aligned'
@@ -783,6 +820,7 @@ class _PyFace(_Py):
                                         pyA = pyB.selectAlignmentBase()
 
                                     if pyA:
+                                        # print 'pyA'
 
                                         if possible:
                                             # print 'possible'
@@ -830,10 +868,6 @@ class _PyFace(_Py):
                                 pyReflex.addValue('rear', rearB,
                                                   'backward')
                                 # print pyReflex.rear
-                                '''if rearF is not None:
-                                    pyPrePlane.addValue('rear', rearF, 'forward')
-                                if rearB is not None:
-                                    pyPlane.addValue('rear', rearB, 'backward')'''
 
                     else:
                         # print '2 Convex: does not look for alignments'
@@ -846,10 +880,6 @@ class _PyFace(_Py):
                                 self.doReflex(pyWire, pyPrePlane, pyPlane)
                             pyReflex.addValue('rear', rearF, 'forward')
                             pyReflex.addValue('rear', rearB, 'backward')
-                            '''if rearF is not None:
-                                pyPrePlane.addValue('rear', rearF, 'forward')
-                            if rearB is not None:
-                                pyPlane.addValue('rear', rearB, 'backward')'''
 
                 pyPrePlane = pyPlane
 
