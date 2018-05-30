@@ -557,7 +557,7 @@ class _PyFace(_Py):
                                         self.findRear(pyWire, pyPlane,
                                                       'backward')
 
-                                    if not pyPrePlane.aligned:
+                                    if not pyPrePlane.aligned and (rearF is not None or rearB is not None):
 
                                         pyReflex =\
                                             self.doReflex(pyWire, pyPrePlane,
@@ -579,7 +579,7 @@ class _PyFace(_Py):
                                     self.findRear(pyWire, pyPlane,
                                                   'backward')
 
-                                if not pyPrePlane.aligned:
+                                if not pyPrePlane.aligned and (rearF is not None or rearB is not None):
 
                                     pyReflex =\
                                         self.doReflex(pyWire, pyPrePlane, pyPlane)
@@ -812,7 +812,7 @@ class _PyFace(_Py):
                                     # print '1211 reflexed'
                                     ref = True
 
-                                if possible and pyPrePlane.aligned:
+                                if possible and pyPrePlane.aligned and (rearF is not None or rearB is not None):
                                     # print 'possible'
 
                                     pyReflex =\
@@ -828,7 +828,7 @@ class _PyFace(_Py):
                     else:
                         # print '2 Convex: does not look for alignments'
 
-                        if possible and pyPrePlane.aligned:
+                        if possible and pyPrePlane.aligned and (rearF is not None or rearB is not None):
                             # print 'possible'
 
                             pyReflex =\
@@ -844,7 +844,7 @@ class _PyFace(_Py):
 
                 # print[(p.numGeom, p.rear) for p in pyWire.planes]
 
-            if resetFace:
+            '''if resetFace:
                 if numWire > 0 and pyPlane.geomAligned and len(coord) > 2:
                     # print 'firstPlane'
 
@@ -874,7 +874,7 @@ class _PyFace(_Py):
 
                     # this reflex hasn't rear
                     if pyReflex:
-                        pyReflex.rear = [None, None]
+                        pyReflex.rear = [None, None]'''
 
             pyWire.reset = False
 
