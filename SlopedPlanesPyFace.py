@@ -698,12 +698,12 @@ class _PyFace(_Py):
 
                                         if pyAli:
                                             # print 'break other alignament'
-                                            ref = False
+                                            # ref = False
                                             break
 
                                         if pyAlign.falsify:
                                             # print 'break false alignament'
-                                            ref = False
+                                            # ref = False
                                             break
 
                                 elif ss is not 2:
