@@ -1061,7 +1061,7 @@ class _PyReflex(_Py):
         pyOppPlane = refList[1]
 
         for pyPlane, forward in zip(refList, lineList):
-            # print '# pyPlane ', pyPlane.numGeom
+            # print '# pyPlane ', (pyPlane.numWire, pyPlane.numGeom)
             plane = pyPlane.shape
             control = pyPlane.control
 
@@ -1090,6 +1090,7 @@ class _PyReflex(_Py):
                                     else:
                                         break
                                 else:
+                                    # print 'cList ', cList
                                     for pyP in cList:
                                         # print 'pyP ', pyP.numGeom
                                         pyPl.cuttingPyth([pyP.shape])
@@ -1135,7 +1136,7 @@ class _PyReflex(_Py):
                                         cutterList.append(pl)
                                         control.append(pyPl.numGeom)
 
-                            elif not pyPlane.rear:
+                            elif not (pyPlane.rear or pyPl.aligned):
                                 # print 'aa'
 
                                 pl = pyPl.shape
