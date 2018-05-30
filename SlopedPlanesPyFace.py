@@ -944,9 +944,9 @@ class _PyFace(_Py):
                     for b in bL:
                         b.angle = [numWire, numGeom]
 
-        pyAlign.aligns = alignList
+                pyAlign.rear[0] = pyAli.rear[0]
 
-        # FALTA ARRASTRAR LAS TRASERAS DEL ALINEAMIENTO
+        pyAlign.aligns = alignList
 
         # chop two
 
