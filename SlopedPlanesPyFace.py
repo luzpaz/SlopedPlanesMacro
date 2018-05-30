@@ -944,7 +944,8 @@ class _PyFace(_Py):
                     for b in bL:
                         b.angle = [numWire, numGeom]
 
-                pyAlign.rear[0] = pyAli.rear[0]
+                rr = pyAli.rear[0]
+                pyAlign.addValue('rear', rr, 'forward')
 
         pyAlign.aligns = alignList
 
