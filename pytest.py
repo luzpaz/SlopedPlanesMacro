@@ -29,9 +29,9 @@ for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
 
                         oldShape = obj.Shape.copy()
 
-                        '''obj.Proxy.faceList = []
+                        obj.Proxy.faceList = []
                         for pyFace in obj.Proxy.Pyth:
-                            pyFace.reset = True'''
+                            pyFace.reset = True
 
                         obj.touch()
                         # print '####### ', obj.Name
