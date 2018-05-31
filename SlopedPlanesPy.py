@@ -499,6 +499,7 @@ class _Py(object):
         wire = face.OuterWire
 
         orderVert = wire.OrderedVertexes
+        orderPoint = [vert.Point for vert in orderVert]
 
         if len(orderVert) == 1:
             # print 'closed'
@@ -512,7 +513,6 @@ class _Py(object):
         else:
             # print 'no closed'
 
-            orderPoint = [vert.Point for vert in orderVert]
             geometryList = self.geometries(face, orderPoint)
             edges = [line.toShape() for line in geometryList]
             wire = Part.Wire(edges)
