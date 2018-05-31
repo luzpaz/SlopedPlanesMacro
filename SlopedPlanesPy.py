@@ -122,6 +122,9 @@ class _Py(object):
         cutted = cutted.cut(cutter, _Py.tolerance)
         cutted = self.selectFace(cutted.Faces, geomShape)
 
+        # except FreeCAD.Base.FreeCADError:
+        # except Part.OCCError:
+
         return cutted
 
     def cuttingPyth(self, cutter):
@@ -358,6 +361,23 @@ class _Py(object):
                 compound.Placement = placement
                 Part.show(compound, slopedPlanes.Name+' simulatedAlignment '+str(numWire)+' '+str(numGeom))
 
+        try:
+            forward = pyPlane.forward
+            forward.Placement = placement
+            backward = pyPlane.backward
+            backward.Placement = placement
+            Part.show(forward, slopedPlanes.Name+' forward '+str(numWire)+' '+str(numGeom))
+            Part.show(backward, slopedPlanes.Name+' backward '+str(numWire)+' '+str(numGeom))
+        except AttributeError:
+            pass
+
+        try:
+            gS = pyPlane.geomShape
+            gS.Placement = placement
+            Part.show(gS, slopedPlanes.Name+' gS '+str(numWire)+' '+str(numGeom))
+        except AttributeError:
+            pass
+
         virtuals = pyPlane.virtuals
         if virtuals:
             for pyP in virtuals:
@@ -493,19 +513,16 @@ class _Py(object):
             # print 'no closed'
 
             orderPoint = [vert.Point for vert in orderVert]
-
             geometryList = self.geometries(face, orderPoint)
             edges = [line.toShape() for line in geometryList]
             wire = Part.Wire(edges)
             face = Part.makeFace(wire, "Part::FaceMakerSimple")
             norm = self.faceNormal(face)
             if normal == norm.negative():
-                orderVert.reverse()
+                orderPoint.reverse()
                 geometryList.reverse()
 
-        orientPoint = [vert.Point for vert in orderVert]
-        coordinates = [self.roundVector(vector)
-                            for vector in orientPoint]
+        coordinates = [self.roundVector(point) for point in orderPoint]
 
         if normal == _Py.normal:
             index = self.lowerLeftPoint(coordinates)
@@ -581,7 +598,8 @@ class _Py(object):
 
             if not isinstance(curve, Part.Line):
 
-                if edge.firstVertex(True).Point != edge.firstVertex(False).Point:
+                if edge.firstVertex(True).Point !=\
+                   edge.firstVertex(False).Point:
 
                     curve.Axis = V(0, 0, -1)
 

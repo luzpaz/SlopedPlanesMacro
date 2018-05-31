@@ -32,6 +32,9 @@ from SlopedPlanesPyAlignment import _PyAlignment
 from SlopedPlanesPyPlane import _PyPlane
 
 
+V = FreeCAD.Vector
+
+
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
 __url__ = "http://www.freecadweb.org"
@@ -511,9 +514,14 @@ class _PyFace(_Py):
 
                             forward = pyPlane.forward
                             section = forward.section(shapeGeomFace, tolerance)
+                            # print section.Edges, section.Vertexes
 
                             if section.Edges:
                                 # print 'edges'
+
+                                ee=section.Edges[0]
+                                # print ee.Length
+                                # print (ee.firstVertex(True).Point, ee.lastVertex(True).Point)
 
                                 lineStart = coord[numGeom]
                                 # print 'lineStart ', lineStart
@@ -542,7 +550,7 @@ class _PyFace(_Py):
                                     pyPlane.aligned = True
 
                                 else:
-                                    # print 'no alignment '
+                                    # print 'edges no alignment '
 
                                     if ss is not 2:
 
@@ -1215,6 +1223,10 @@ class _PyFace(_Py):
         firstParam = geom.FirstParameter
         lastParam = geom.LastParameter
 
+        # print 'geom ', geom
+        # print 'firstParam ', firstParam
+        # print 'lastParam ', lastParam
+
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola,
                              Part.ArcOfHyperbola)):
@@ -1229,14 +1241,46 @@ class _PyFace(_Py):
         elif isinstance(geom, (Part.ArcOfCircle,
                                Part.ArcOfEllipse)):
 
-            half = (2 * pi - (lastParam - firstParam)) / 2
-            startParam = lastParam
-            endParam = lastParam + half
+            if geom.Axis == V(0, 0, 1):
+                # print 'A'
 
-            gg = geom.copy()
-            gg.Axis = _Py.normal * -1
-            sParam = 2 * pi - firstParam
-            eParam = sParam + half
+                half = (2 * pi - (lastParam - firstParam)) / 2
+                startParam = lastParam
+                endParam = lastParam + half
+
+                # print 'half ', half
+                # print 'startParam ', startParam
+                # print 'endParam ', endParam
+
+                gg = geom.copy()
+                gg.Axis = _Py.normal * -1
+                sParam = 2 * pi - firstParam
+                eParam = sParam + half
+
+                # print 'gg ', gg
+
+                # print 'sParam ', sParam
+                # print 'eParam ', eParam
+
+            else:
+                # print 'B'
+
+                half = (2 * pi - (lastParam - firstParam)) / 2
+                startParam = lastParam
+                endParam = lastParam + half
+
+                # print 'half ', half
+                # print 'startParam ', startParam
+                # print 'endParam ', endParam
+
+                gg = geom.copy()
+                gg.Axis = _Py.normal
+                sParam = 2 * pi - firstParam
+                eParam = sParam + half
+
+                # print 'gg ', gg
+                # print 'sParam ', sParam
+                # print 'eParam ', eParam
 
         elif isinstance(geom, Part.BSplineCurve):
 
@@ -1244,9 +1288,11 @@ class _PyFace(_Py):
 
         forwardLine = self.makeGeom(geom, startParam, endParam)
         # print'forwardLine ', forwardLine
+        # print(forwardLine.value(startParam), forwardLine.value(endParam))
         forwardLineShape = forwardLine.toShape()
         backwardLine = self.makeGeom(gg, sParam, eParam)
         # print'backwardLine ', backwardLine
+        # print(backwardLine.value(sParam), backwardLine.value(eParam))
         backwardLineShape = backwardLine.toShape()
 
         # Always forward into and backward outside

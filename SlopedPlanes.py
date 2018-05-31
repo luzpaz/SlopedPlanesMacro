@@ -206,7 +206,7 @@ class _SlopedPlanes(_Py):
         _Py.slopedPlanes = slopedPlanes
         tolerance = slopedPlanes.Tolerance
         _Py.tolerance = tolerance
-        precision = 1 / tolerance
+        precision = 1 / tolerance - 1
         precision = str(precision)
         precision = precision[:].find('.')
         _Py.precision = precision
