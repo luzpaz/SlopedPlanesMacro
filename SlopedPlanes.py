@@ -600,7 +600,7 @@ class _SlopedPlanes(_Py):
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
 
-        # endShape.removeInternalWires(True)
+        endShape.removeInternalWires(True)
 
         slopedPlanes.Shape = endShape
 
