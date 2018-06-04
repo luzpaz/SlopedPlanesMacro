@@ -777,7 +777,7 @@ class _PyAlignment(_Py):
                     pyOppTwo = pyReflexTwo.planes[0]
                     oppEnormousTwo = pyOppTwo.enormousShape
                     rrTwo = pyTwo.rango[1]
-             # print 'rrTwo ', rrTwo
+            # print 'rrTwo ', rrTwo
 
             if falsify:
 
