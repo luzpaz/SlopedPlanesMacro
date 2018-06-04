@@ -712,11 +712,13 @@ class _PyReflex(_Py):
                 elif pyPl.reflexed:
                     # print 'b'
                     pl = pyPl.simulatedShape
-                    line = pyPl.forward
+                    line = pyPl.forward  # ??? with pyReflex
+                    # podria ser
+                    # if len(pyReflexedList) > 1:
+                    # añadir backward
                     section = forw.section([line], tolerance)
                     if section.Vertexes:
                         # print 'b1'
-                        # corn.append(pyPl.enormousShape)
                         pass
                     else:
                         # print 'b2'
