@@ -716,7 +716,8 @@ class _PyReflex(_Py):
                     section = forw.section([line], tolerance)
                     if section.Vertexes:
                         # print 'b1'
-                        corn.append(pyPl.enormousShape)
+                        # corn.append(pyPl.enormousShape)
+                        pass
                     else:
                         # print 'b2'
                         corn.append(pl)
