@@ -600,6 +600,14 @@ class _PyFace(_Py):
 
                             self.forBack(pyPlane, 'forward')
 
+                    else:
+
+                        if pyPlane.aligned and pyPrePlane.aligned:
+
+                            possible = True
+                            rearF = pyPrePlane.rear[0]
+                            rearB = pyPlane.rear[-1]
+
                     if corner == 'reflex':
                         # print '1 Reflex: does look for alignments'
 

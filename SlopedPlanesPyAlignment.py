@@ -1925,6 +1925,8 @@ class _PyAlignment(_Py):
 
         # rangoRear
 
+        # print 'rangoRear'
+
         pyPrior = self.prior
         if pyPrior.aligned:
             ali = pyPrior.alignedList[0]
@@ -1939,8 +1941,14 @@ class _PyAlignment(_Py):
             pr = pyPrior.numGeom
             lat = pyLater.numGeom
 
+            # print 'pr ', pr
+            # print 'lat ', lat
+
             pyW = pyWireList[w1]
             lenW = len(pyW.planes)
+
+            # print 'rear[1] ', self.rear[1]
+            # print 'rear[0] ', self.rear[0]
 
             if self.rear[1] is not None:
                 pr = self.sliceIndex(self.rear[1] - 1, lenW)
@@ -1951,7 +1959,7 @@ class _PyAlignment(_Py):
             # print 'pr ', pr
             # print 'lat ', lat
 
-            pyWire = pyWireList[w1]
+            pyWire = pyWireList[w1]  # esta repetido
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
 
             # print 'rangoRear ', rangoRear
