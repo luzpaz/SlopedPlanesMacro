@@ -519,10 +519,6 @@ class _PyFace(_Py):
                             if section.Edges:
                                 # print 'edges'
 
-                                ee=section.Edges[0]
-                                # print ee.Length
-                                # print (ee.firstVertex(True).Point, ee.lastVertex(True).Point)
-
                                 lineStart = coord[numGeom]
                                 # print 'lineStart ', lineStart
 
@@ -599,14 +595,6 @@ class _PyFace(_Py):
                         if corner == 'reflex':
 
                             self.forBack(pyPlane, 'forward')
-
-                    else:
-
-                        if pyPlane.aligned and not pyPlane.choped and pyPrePlane.aligned:
-
-                            possible = True
-                            rearF = pyPrePlane.rear[0]
-                            rearB = pyPlane.rear[-1]
 
                     if corner == 'reflex':
                         # print '1 Reflex: does look for alignments'
@@ -804,7 +792,8 @@ class _PyFace(_Py):
                                             # print 'no possible'
 
                                             try:
-                                                pyA.rear[0] = pyB.rear[0]
+                                                # pyA.rear[0] = pyB.rear[0]
+                                                pyA.rear[0] = pyPrePlane.rear[0]
                                             except IndexError:
                                                 pass
 
@@ -855,8 +844,6 @@ class _PyFace(_Py):
 
                 # print 'reflex ', pyWire.reflexs
                 # print 'alignments ', self.alignments
-
-                # print[(p.numGeom, p.rear) for p in pyWire.planes]
 
             if resetFace:
                 if numWire > 0 and pyPlane.geomAligned and len(coord) > 2:
