@@ -792,7 +792,6 @@ class _PyFace(_Py):
                                             # print 'no possible'
 
                                             try:
-                                                # pyA.rear[0] = pyB.rear[0]
                                                 pyA.rear[0] = pyPrePlane.rear[0]
                                             except IndexError:
                                                 pass
