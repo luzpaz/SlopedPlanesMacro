@@ -210,6 +210,7 @@ class _Py(object):
                 print 'planes ', pyReflex.planes
                 print 'rangoInter ', pyReflex.rango
                 print 'rear reflex', pyReflex.rear
+
                 for pyPlane in pyReflex.planes:
                     print 'numGeom ', pyPlane.numGeom  # , pyPlane.reflexedList
                     print 'rear plane ', pyPlane.rear
