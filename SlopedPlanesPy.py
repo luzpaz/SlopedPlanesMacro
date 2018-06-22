@@ -57,7 +57,7 @@ class _Py(object):
     def addValue(self, prop, value, direction='forward'):
 
         '''addValue(self, prop, value, direction='forward')'''
-
+        # podría necesitar una protección para cuando ya esta rellena la propiedad
         valueList = getattr(self, prop)
         if direction == 'forward':
             valueList.insert(0, value)
@@ -210,6 +210,7 @@ class _Py(object):
                 print 'planes ', pyReflex.planes
                 print 'rangoInter ', pyReflex.rango
                 print 'rear reflex', pyReflex.rear
+
                 for pyPlane in pyReflex.planes:
                     print 'numGeom ', pyPlane.numGeom  # , pyPlane.reflexedList
                     print 'rear plane ', pyPlane.rear

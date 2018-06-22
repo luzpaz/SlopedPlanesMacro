@@ -673,6 +673,8 @@ class _PyReflex(_Py):
             orderedEdges = wire.OrderedEdges
             forw = orderedEdges[0]
 
+            enormous = []  # auxiliar to build the allowed location to extra faces
+
             rearSimul = None
             if pyRear.aligned:
                 pyA = pyRear.selectAlignmentBase()
@@ -680,8 +682,6 @@ class _PyReflex(_Py):
                     rearSimul = pyA.simulatedAlignment
             else:
                 rearSimul = [pyRear.shape]
-
-            enormous = []  # auxiliar to build the allowed location to extra faces
 
             if rearSimul:
                 enormous.extend(rearSimul)
@@ -698,6 +698,8 @@ class _PyReflex(_Py):
                 if oppRearSimul:
                     enormous.extend(oppRearSimul)
 
+            # print 'enormous ', enormous
+
             corn = []    # auxiliar to look for extra faces
             for nn, pyPl in zip(rangoCorner, rangoCornerPy):
                 # print 'rangoCorner nn ', nn
@@ -710,11 +712,14 @@ class _PyReflex(_Py):
                 elif pyPl.reflexed:
                     # print 'b'
                     pl = pyPl.simulatedShape
-                    line = pyPl.forward
+                    line = pyPl.forward  # ??? with pyReflex
+                    # podria ser
+                    # if len(pyReflexedList) > 1:
+                    # añadir backward
                     section = forw.section([line], tolerance)
                     if section.Vertexes:
                         # print 'b1'
-                        enormous.append(pyPl.enormousShape)
+                        pass
                     else:
                         # print 'b2'
                         corn.append(pl)
@@ -722,8 +727,8 @@ class _PyReflex(_Py):
                     # print 'c'
                     pl = pyPl.shape
                     corn.append(pl)
+
             # print 'corn ', corn
-            # print 'enormous ', enormous
             corn = Part.makeCompound(corn)
 
             for pyReflex in reflexList:

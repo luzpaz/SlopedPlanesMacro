@@ -194,7 +194,7 @@ class _PyWire(_Py):
         Assigns the forward and backward to the reflexs.
         Transfers to PyReflex'''
 
-        # print '###### virtualizing wire', (self.numWire)
+        # print '###### virtualizing wire ', self.numWire
 
         reflexList = self.reflexs[:]
 
@@ -204,26 +204,44 @@ class _PyWire(_Py):
 
         for pyReflex in reflexList:
 
-            [pyR, pyOppR] = pyReflex.planes
+            if not pyReflex.lines:
 
-            if pyOppR in controlList:
+                [pyR, pyOppR] = pyReflex.planes
+                # print '### ', (pyR.numGeom, pyOppR.numGeom)
 
-                pyReflex.addValue('lines', pyR.forward, 'forward')
-                pyReflex.addValue('lines', pyOppR.backward, 'backward')
-
-            else:
-
-                if pyOppR.aligned:
+                if pyOppR in controlList:
+                    # print 'A'
 
                     pyReflex.addValue('lines', pyR.forward, 'forward')
                     pyReflex.addValue('lines', pyOppR.backward, 'backward')
 
                 else:
+                    # print 'B'
 
-                    pyReflex.addValue('lines', pyR.forward, 'forward')
-                    pyReflex.addValue('lines', pyOppR.forward, 'backward')
+                    if pyOppR.aligned:
+                        # print 'B1'
 
-            controlList.append(pyR)
+                        pyReflex.addValue('lines', pyR.forward, 'forward')
+                        pyReflex.addValue('lines', pyOppR.backward, 'backward')
+
+                    else:
+                        # print 'B2'
+
+                        pyReflex.addValue('lines', pyR.forward, 'forward')
+                        pyReflex.addValue('lines', pyOppR.forward, 'backward')
+
+                forw = pyReflex.lines[0]
+                # print '1 ', (self.roundVector(forw.firstVertex(True).Point), self.roundVector(forw.lastVertex(True).Point))
+                forw = pyReflex.lines[1]
+                # print '2 ', (self.roundVector(forw.firstVertex(True).Point), self.roundVector(forw.lastVertex(True).Point))
+
+                controlList.append(pyR)
+
+            else:
+
+                break
+
+        for pyReflex in reflexList:
 
             pyReflex.virtualizing()
 
@@ -401,8 +419,7 @@ class _PyWire(_Py):
                             pass
 
                         else:
-                            # print 'c'
-                            # interference between reflexs
+                            # print 'c, interference between reflexs'
 
                             procc = True
                             pyRList = pyPl.reflexedList
@@ -412,12 +429,16 @@ class _PyWire(_Py):
                                 # print '1'
                                 if not procc:
                                     break
+
                                 nn = -1
                                 for pyP in pyR.planes:
                                     nn += 1
                                     # print '2'
 
+                                    # cambiar a una sola section, con las dos lineas del reflex corner pyR
+
                                     forw = pyR.lines[nn]
+                                    # print 'forw ', (self.roundVector(forw.firstVertex(True).Point), self.roundVector(forw.lastVertex(True).Point))
                                     section =\
                                         forward.section([forw], tolerance)
 
