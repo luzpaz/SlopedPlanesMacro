@@ -515,13 +515,14 @@ class _Py(object):
             # print 'no closed'
 
             geometryList = self.geometries(face, orderPoint)
-            edges = [line.toShape() for line in geometryList]
+
+            '''edges = [line.toShape() for line in geometryList]
             wire = Part.Wire(edges)
             face = Part.makeFace(wire, "Part::FaceMakerSimple")
             norm = self.faceNormal(face)
             if normal == norm.negative():
                 orderPoint.reverse()
-                geometryList.reverse()
+                geometryList.reverse()'''
 
         coordinates = [self.roundVector(point) for point in orderPoint]
 
@@ -529,6 +530,7 @@ class _Py(object):
             index = self.lowerLeftPoint(coordinates)
         else:
             index = self.upperLeftPoint(coordinates)
+
         coordinates = coordinates[index:] + coordinates[:index]
         geometryList = geometryList[index:] + geometryList[:index]
 
