@@ -427,7 +427,7 @@ class _PyWire(_Py):
 
                             for pyR in pyRList:
                                 # print '1'
-                                if not procc:
+                                '''if not procc:
                                     break
 
                                 nn = -1
@@ -437,6 +437,8 @@ class _PyWire(_Py):
 
                                     # cambiar a una sola section, con las dos lineas del reflex corner pyR
 
+                                    
+
                                     forw = pyR.lines[nn]
                                     # print 'forw ', (self.roundVector(forw.firstVertex(True).Point), self.roundVector(forw.lastVertex(True).Point))
                                     section =\
@@ -445,7 +447,14 @@ class _PyWire(_Py):
                                     if section.Vertexes:
                                         # print '3'
                                         procc = False
-                                        break
+                                        break'''
+
+                                section = forward.section(pyR.lines, tolerance)
+
+                                if section.Vertexes:
+
+                                    procc = False
+                                    break
 
                             if procc:
                                 # print 'procc'
