@@ -847,8 +847,8 @@ class _PyPlane(_Py):
     def doPlane(self, direction, pyWire, geom, firstParam, lastParam,
                 scale, closed):
 
-        '''doPlane(self, direction, pyWire, geom, firstParam, lastParam, scale)
-        '''
+        '''doPlane(self, direction, pyWire, geom, firstParam, lastParam,
+                   scale, closed)'''
 
         # print '# doPlane'
 
@@ -903,14 +903,14 @@ class _PyPlane(_Py):
             endParam = lastParam + rightScale
 
         elif isinstance(geom, (Part.ArcOfHyperbola)):
-            # print 'aa'
+            # print 'b'
 
             startParam = firstParam
             endParam = lastParam
 
         elif isinstance(geom, (Part.ArcOfCircle,
                                Part.ArcOfEllipse)):
-            # print 'b'
+            # print 'c'
 
             rear = self.rear
 
@@ -918,24 +918,24 @@ class _PyPlane(_Py):
                 # print 'reflex'
 
                 if len(rear) == 1:
-                    # print 'b1'
+                    # print 'c1'
 
                     pyReflex = self.reflexedList[0]
 
                     if rear[0] == pyReflex.rear[0]:
-                        # print 'b11'
+                        # print 'c11'
 
                         startParam = firstParam
                         endParam = startParam + 2 * pi
 
                     else:
-                        # print 'b12'
+                        # print 'c12'
 
                         startParam = lastParam
                         endParam = startParam - 2 * pi
 
                 else:
-                    # print 'b2'
+                    # print 'c2'
 
                     startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
                     endParam = startParam + 2 * pi
@@ -961,7 +961,7 @@ class _PyPlane(_Py):
                     endParam = center + pi / 2
 
         elif isinstance(geom, Part.BSplineCurve):
-            # print 'c'
+            # print 'd'
 
             pass
 

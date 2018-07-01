@@ -185,8 +185,6 @@ class _PyWire(_Py):
                             c.append(pyPl)
                         cc.append(c)
                     pyPlane.rangoPy = cc
-                    # print 'rango ', pyPlane.rango
-                    # print 'rangoPy ', pyPlane.rangoPy
 
     def virtualizing(self):
 
@@ -229,11 +227,6 @@ class _PyWire(_Py):
 
                         pyReflex.addValue('lines', pyR.forward, 'forward')
                         pyReflex.addValue('lines', pyOppR.forward, 'backward')
-
-                forw = pyReflex.lines[0]
-                # print '1 ', (self.roundVector(forw.firstVertex(True).Point), self.roundVector(forw.lastVertex(True).Point))
-                forw = pyReflex.lines[1]
-                # print '2 ', (self.roundVector(forw.firstVertex(True).Point), self.roundVector(forw.lastVertex(True).Point))
 
                 controlList.append(pyR)
 
