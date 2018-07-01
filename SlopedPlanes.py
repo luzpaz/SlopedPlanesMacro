@@ -40,7 +40,7 @@ __url__ = "http://www.freecadweb.org"
 __version__ = ""
 
 
-def makeSlopedPlanes(sketch):
+def makeSlopedPlanes(sketch, slope=30.0):
 
     '''makeSlopedPlanes(sketch)
     makes the SlopedPlanes object from a sketch or a DWire.'''
@@ -55,7 +55,7 @@ def makeSlopedPlanes(sketch):
     slopedPlanes =\
         FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "SlopedPlanes")
 
-    _SlopedPlanes(slopedPlanes)
+    _SlopedPlanes(slopedPlanes, slope)
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
 
     slopedPlanes.Base = sketch
@@ -70,7 +70,7 @@ class _SlopedPlanes(_Py):
     Requieres a sketch or DWire as base. The base must support the FaceMaker.
     The angles numeration corresponds to the SlopedPlanes shape faces.'''
 
-    def __init__(self, slopedPlanes):
+    def __init__(self, slopedPlanes, slope=45.0):
 
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
@@ -175,7 +175,7 @@ class _SlopedPlanes(_Py):
 
         self.State = True
 
-        slopedPlanes.Slope = 45.0
+        slopedPlanes.Slope = slope
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
         slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)
@@ -214,6 +214,8 @@ class _SlopedPlanes(_Py):
         _Py.upList = []
 
         faceMaker = slopedPlanes.FaceMaker
+
+        slope = slopedPlanes.Slope.Value
 
         onChanged = self.OnChanged
         if not self.faceList:
@@ -375,7 +377,7 @@ class _SlopedPlanes(_Py):
                             if pyWire.reset:
                                 # print '11'
 
-                                pyPlane.angle = 45.0
+                                pyPlane.angle = slope
                                 pyPlane.rightWidth = size
                                 pyPlane.leftWidth = size
                                 pyPlane.length = 2 * size
@@ -420,7 +422,7 @@ class _SlopedPlanes(_Py):
 
                         except IndexError:
                             # print '2'
-                            pyPlane = _PyPlane(numWire, numGeom)
+                            pyPlane = _PyPlane(numWire, numGeom, slope)
                             pyPlaneListNew.append(pyPlane)
 
                         pyPlane.geom = geom

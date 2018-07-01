@@ -39,7 +39,7 @@ class _PyPlane(_Py):
     '''The complementary python object class for planes.A plane correspond
     to one or more edges of the base. A plane could have several faces.'''
 
-    def __init__(self, numWire, numGeom):
+    def __init__(self, numWire, numGeom, slope=45.0):
 
         '''__init__(self, numWire, numGeom)'''
 
@@ -51,7 +51,7 @@ class _PyPlane(_Py):
 
         self.numWire = numWire
         self.numGeom = numGeom
-        self.angle = 45.0
+        self.angle = slope
         size = _Py.size
         self.rightWidth = size
         self.leftWidth = size
