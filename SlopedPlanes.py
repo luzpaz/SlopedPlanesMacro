@@ -178,12 +178,12 @@ class _SlopedPlanes(_Py):
         slopedPlanes.Slope = 45.0
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
-        slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)   # no tiene persistencia
+        slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)
         slopedPlanes.Up = 0
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
                                   "Part::FaceMakerCheese"]
-        slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)   # no tiene persistencia
+        slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
 
         slopedPlanes.Proxy = self
 
@@ -685,6 +685,16 @@ class _SlopedPlanes(_Py):
                         setattr(pyPlane, prop, newValue)
 
         self.OnChanged = False
+
+    def onDocumentRestored(self, slopedPlanes):
+
+        ''''''
+
+        tolerance = slopedPlanes.Tolerance
+        slopedPlanes.Tolerance = (tolerance, 1e-7, 1, 1e-7)
+
+        factorOverhang = slopedPlanes.FactorOverhang
+        slopedPlanes.FactorOverhang = (factorOverhang, 0, 1, 0.01)
 
     def __getstate__(self):
 

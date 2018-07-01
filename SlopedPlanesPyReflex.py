@@ -124,6 +124,8 @@ class _PyReflex(_Py):
 
                 pyAli = pyAliList[0]
 
+                # esto esta muy raro
+
                 pyBase = pyAli.base
                 aligns = pyAli.aligns[:]
                 aligns.insert(0, pyBase)
