@@ -218,7 +218,10 @@ class _SlopedPlanes(_Py):
         faceMaker = slopedPlanes.FaceMaker
 
         slope = slopedPlanes.Slope.Value
-        slopeList = self.slopeList
+        try:
+            slopeList = self.slopeList
+        except AttributeError:
+            slopeList = []
 
         onChanged = self.OnChanged
         if not self.faceList:
