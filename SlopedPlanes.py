@@ -40,7 +40,7 @@ __url__ = "http://www.freecadweb.org"
 __version__ = ""
 
 
-def makeSlopedPlanes(sketch, slope=30.0):
+def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
 
     '''makeSlopedPlanes(sketch)
     makes the SlopedPlanes object from a sketch or a DWire.'''
@@ -57,6 +57,8 @@ def makeSlopedPlanes(sketch, slope=30.0):
 
     _SlopedPlanes(slopedPlanes, slope)
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
+
+    slopedPlanes.Proxy.slopeList = slopeList
 
     slopedPlanes.Base = sketch
     sketch.ViewObject.Visibility = False
@@ -216,6 +218,7 @@ class _SlopedPlanes(_Py):
         faceMaker = slopedPlanes.FaceMaker
 
         slope = slopedPlanes.Slope.Value
+        slopeList = self.slopeList
 
         onChanged = self.OnChanged
         if not self.faceList:
