@@ -426,28 +426,6 @@ class _PyWire(_Py):
                             # print pyRList
 
                             for pyR in pyRList:
-                                # print '1'
-                                '''if not procc:
-                                    break
-
-                                nn = -1
-                                for pyP in pyR.planes:
-                                    nn += 1
-                                    # print '2'
-
-                                    # cambiar a una sola section, con las dos lineas del reflex corner pyR
-
-                                    
-
-                                    forw = pyR.lines[nn]
-                                    # print 'forw ', (self.roundVector(forw.firstVertex(True).Point), self.roundVector(forw.lastVertex(True).Point))
-                                    section =\
-                                        forward.section([forw], tolerance)
-
-                                    if section.Vertexes:
-                                        # print '3'
-                                        procc = False
-                                        break'''
 
                                 section = forward.section(pyR.lines, tolerance)
 
