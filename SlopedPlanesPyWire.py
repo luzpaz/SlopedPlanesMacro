@@ -40,7 +40,7 @@ class _PyWire(_Py):
     The exterior wires round counterclockwise, from the lowerleft point.
     The interior wires round clockwise, from the upperleft point.'''
 
-    def __init__(self, numWire):
+    def __init__(self, numWire, mono=True):
 
         ''''''
 
@@ -51,6 +51,7 @@ class _PyWire(_Py):
         self.shapeGeom = []
         self.reset = True
         self.wire = None
+        self.mono = mono
 
     @property
     def numWire(self):
@@ -149,6 +150,20 @@ class _PyWire(_Py):
         '''wire(self, wire)'''
 
         self._wire = wire
+
+    @property
+    def mono(self):
+
+        '''mono(self)'''
+
+        return self._mono
+
+    @mono.setter
+    def mono(self, mono):
+
+        '''mono(self, mono)'''
+
+        self._mono = mono
 
     def planning(self, reset):
 

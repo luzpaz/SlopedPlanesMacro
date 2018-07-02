@@ -47,7 +47,7 @@ class _PyFace(_Py):
     to apply the FaceMaker to the SlopedPlanes base.
     The faces could have several wires, and as a consequense holes.'''
 
-    def __init__(self, numFace):
+    def __init__(self, numFace, mono=True):
 
         '''__init__(self, numFace)'''
 
@@ -57,6 +57,7 @@ class _PyFace(_Py):
         self.reset = True
         self.shapeGeom = []
         self.size = 0
+        self.mono = mono
 
     @property
     def numFace(self):
@@ -141,6 +142,20 @@ class _PyFace(_Py):
         '''size(self, size)'''
 
         self._size = size
+
+    @property
+    def mono(self):
+
+        '''mono(self)'''
+
+        return self._mono
+
+    @mono.setter
+    def mono(self, mono):
+
+        '''mono(self, mono)'''
+
+        self._mono = mono
 
     def __getstate__(self, serialize):
 

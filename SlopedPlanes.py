@@ -58,7 +58,8 @@ def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
     _SlopedPlanes(slopedPlanes, slope)
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
 
-    slopedPlanes.Proxy.slopeList = slopeList
+    if slopeList:
+        slopedPlanes.Proxy.slopeList = slopeList
 
     slopedPlanes.Base = sketch
     sketch.ViewObject.Visibility = False
@@ -220,8 +221,9 @@ class _SlopedPlanes(_Py):
         slope = slopedPlanes.Slope.Value
         try:
             slopeList = self.slopeList
+            mono = False
         except AttributeError:
-            slopeList = []
+            mono = True
 
         onChanged = self.OnChanged
         if not self.faceList:
@@ -293,7 +295,7 @@ class _SlopedPlanes(_Py):
                         pyFace.numFace = numFace
                         break
                 else:
-                    pyFace = _PyFace(numFace)
+                    pyFace = _PyFace(numFace, mono)
                     pyFaceListNew.append(pyFace)
 
                 _Py.pyFace = pyFace
@@ -361,7 +363,7 @@ class _SlopedPlanes(_Py):
                             break
                     else:
                         # print 'd'
-                        pyWire = _PyWire(numWire)
+                        pyWire = _PyWire(numWire, mono)
                         pyWireListNew.append(pyWire)
                         pyWire.reset = True
                         pyFace.reset = True
@@ -678,6 +680,8 @@ class _SlopedPlanes(_Py):
                 newValue = value * size
             else:
                 newValue = value
+                if prop == "angle":
+                    pyFace.mono = True
 
             if prop == "width":
 
@@ -689,6 +693,8 @@ class _SlopedPlanes(_Py):
             else:
 
                 for pyWire in pyFace.wires:
+                    if prop == "angle":
+                        pyWire.mono = True
                     for pyPlane in pyWire.planes:
                         setattr(pyPlane, prop, newValue)
 

@@ -489,12 +489,14 @@ class _TaskPanel_SlopedPlanes():
         for pyFace in pyFaceList:
             originList = []
             # print '### numFace', pyFace.numFace
+            pyFace.mono = False
 
             pyWireList = pyFace.wires
             lenWires = len(pyWireList)
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
                 # print '## numWire', numWire
+                pyWire.mono = False
 
                 numAngle = -1
                 pyPlaneList = pyWire.planes
