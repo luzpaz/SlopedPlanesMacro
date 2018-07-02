@@ -489,14 +489,14 @@ class _TaskPanel_SlopedPlanes():
         for pyFace in pyFaceList:
             originList = []
             # print '### numFace', pyFace.numFace
-            pyFace.mono = False
+            pyFace.mono = True
 
             pyWireList = pyFace.wires
             lenWires = len(pyWireList)
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
                 # print '## numWire', numWire
-                pyWire.mono = False
+                pyWire.mono = True
 
                 numAngle = -1
                 pyPlaneList = pyWire.planes
@@ -504,6 +504,8 @@ class _TaskPanel_SlopedPlanes():
                 if up:
                     if numWire == 1:
                         numSlope += 1
+
+                ang = pyPlaneList[0].angle
 
                 for pyPlane in pyPlaneList:
                     numAngle += 1
@@ -528,6 +530,10 @@ class _TaskPanel_SlopedPlanes():
                         if isinstance(angle, float):
                             # print 'a'
                             originList.append([numWire, numAngle])
+
+                            if angle != ang:
+                                pyWire.mono = False
+                                pyFace.mono = False
 
                         else:
                             # print 'b'
