@@ -468,6 +468,8 @@ class _PyWire(_Py):
         lenWire = len(pyPlaneList)
         numWire = self.numWire
 
+        mono = self.mono
+
         for pyPlane in pyPlaneList:
             if not pyPlane.aligned:
 
@@ -491,12 +493,14 @@ class _PyWire(_Py):
                 cutterList = []     # shape
                 cutList = []        # simulatedShape
 
+                arrow = pyPlane.arrow
+
                 if pyPlane.reflexed:
                     # print 'B reflexed'
 
                     if prior not in control:
 
-                        if not pyPrior.reflexed:
+                        if not pyPrior.reflexed or (mono and not arrow):
                             # print '1'
                             cutterList.append(bigPrior)
                             control.append(prior)
@@ -528,7 +532,7 @@ class _PyWire(_Py):
 
                     if later not in control:
 
-                        if not pyLater.reflexed:
+                        if not pyLater.reflexed or (mono and not arrow):
                             # print '2'
                             cutterList.append(bigLater)
                             control.append(later)

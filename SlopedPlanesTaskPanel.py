@@ -506,11 +506,12 @@ class _TaskPanel_SlopedPlanes():
                         numSlope += 1
 
                 ang = pyPlaneList[0].angle
+                # print(ang)
 
                 for pyPlane in pyPlaneList:
                     numAngle += 1
                     angle = pyPlane.angle
-                    # print '# numAngle ', numAngle, ' angle ', angle
+                    # print('# numAngle ', numAngle, ' angle ', angle)
 
                     if [numWire, numAngle] not in originList and\
                        angle not in originList:
@@ -528,15 +529,15 @@ class _TaskPanel_SlopedPlanes():
                         pyPlane.angle = value
 
                         if isinstance(angle, float):
-                            # print 'a'
+                            # print('a')
                             originList.append([numWire, numAngle])
 
-                            if angle != ang:
+                            if value != ang:
                                 pyWire.mono = False
                                 pyFace.mono = False
 
                         else:
-                            # print 'b'
+                            # print('b')
                             originList.append(angle)
 
                             pyPl = pyFace.wires[angle[0]].planes[angle[1]]
@@ -571,6 +572,8 @@ class _TaskPanel_SlopedPlanes():
                             comboBox = tree.itemWidget(it, 12)
                             sweepCurve = comboBox.currentText()
                             pyPlane.sweepCurve = sweepCurve
+
+                # print(pyWire.mono)
 
             if up:
                 if lenWires == 1:

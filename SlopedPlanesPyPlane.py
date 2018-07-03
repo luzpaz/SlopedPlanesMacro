@@ -1501,6 +1501,7 @@ class _PyPlane(_Py):
         tolerance = _Py.tolerance
         pyPlaneList = pyWire.planes
         control = self.control
+        mono = pyWire.mono
 
         numGeom = self.numGeom
 
@@ -1615,12 +1616,15 @@ class _PyPlane(_Py):
                     plane = plane.cut(cutterList, tolerance)
                     ff = self.selectFace(plane.Faces, gS)
                     fList = [ff]
-                    plane = plane.removeShape([ff])
-                    for ff in plane.Faces:
-                        section = ff.section(fList, tolerance)
-                        if not section.Edges:
-                            fList.append(ff)
-                            break
+
+                    if not mono:
+                        plane = plane.removeShape([ff])
+                        for ff in plane.Faces:
+                            section = ff.section(fList, tolerance)
+                            if not section.Edges:
+                                fList.append(ff)
+                                break
+
                     compound = Part.makeCompound(fList)
                     self.shape = compound
                     # print 'fList ', fList
@@ -1632,6 +1636,7 @@ class _PyPlane(_Py):
                     ff = self.cutting(ff, cutterList, gS)
                     fList = [ff]
 
+                    #if not mono:
                     ff = plane.Faces[1]
                     ff = ff.cut(cutterList, tolerance)
                     fList.append(ff.Faces[0])   # esto hay que cambiarlo?

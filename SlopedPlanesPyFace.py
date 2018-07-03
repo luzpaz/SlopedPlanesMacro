@@ -378,7 +378,8 @@ class _PyFace(_Py):
         # self.printSummary()
 
         for pyWire in pyWireList:
-            pyWire.trimming()
+            if not pyWire.mono:
+                pyWire.trimming()
         # self.printControl('trimming reflexs')
 
         for pyAlign in pyAlignList:
@@ -405,7 +406,7 @@ class _PyFace(_Py):
         # self.printControl('simulating')
 
         for pyWire in pyWireList:
-            if pyWire.reflexs:
+            if pyWire.reflexs and not pyWire.mono:
                 pyWire.reflexing()
         # self.printControl('reflexing')
 
