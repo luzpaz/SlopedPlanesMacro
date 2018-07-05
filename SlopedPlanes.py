@@ -462,9 +462,9 @@ class _SlopedPlanes(_Py):
 
                 pyFace = self.Pyth[numFace]
                 _Py.pyFace = pyFace
-
+                # print(pyFace.mono)
                 for pyWire in pyFace.wires:
-
+                    # print(pyWire.mono)
                     pyWire.wire = Part.Wire(pyWire.shapeGeom)
 
                     for pyPlane in pyWire.planes:

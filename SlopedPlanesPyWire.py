@@ -500,7 +500,7 @@ class _PyWire(_Py):
 
                     if prior not in control:
 
-                        if not pyPrior.reflexed or (mono and not arrow):
+                        if not pyPrior.reflexed or (mono and not arrow and not pyPrior.aligned):
                             # print '1'
                             cutterList.append(bigPrior)
                             control.append(prior)
@@ -532,7 +532,7 @@ class _PyWire(_Py):
 
                     if later not in control:
 
-                        if not pyLater.reflexed or (mono and not arrow):
+                        if not pyLater.reflexed or (mono and not arrow and not pyLater.aligned):
                             # print '2'
                             cutterList.append(bigLater)
                             control.append(later)
