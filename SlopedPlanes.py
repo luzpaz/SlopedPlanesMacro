@@ -58,6 +58,13 @@ def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
     _SlopedPlanes(slopedPlanes, slope)
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
 
+    if slope:
+        try:
+            ang = float(slope)
+            slopedPlanes.Slope = ang
+        except ValueError:
+            pass
+
     if slopeList:
         slopedPlanes.Proxy.slopeList = slopeList
 
@@ -380,6 +387,10 @@ class _SlopedPlanes(_Py):
 
                         try:
                             ang = slopeList.pop(0)
+                            try:
+                                ang = float(ang)
+                            except ValueError:
+                                ang = slope
                         except IndexError:
                             ang = slope
 
