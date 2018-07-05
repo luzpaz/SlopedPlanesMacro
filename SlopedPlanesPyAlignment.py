@@ -274,6 +274,9 @@ class _PyAlignment(_Py):
         pyWireList = _Py.pyFace.wires
         tolerance = _Py.tolerance
 
+        pyFace = _Py.pyFace
+        mono = pyFace.mono
+
         falsify = self.falsify
         geomAligned = self.geomAligned
 
@@ -346,7 +349,7 @@ class _PyAlignment(_Py):
             pyPlList = pyWireList[nW].planes
             rC = []
 
-            if nW == pyTwo.numWire:
+            if not mono and nW == pyTwo.numWire:
                 # print 'nW'
 
                 # the two rangos don't cut between them, if not aligned

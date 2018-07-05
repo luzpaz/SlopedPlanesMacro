@@ -379,15 +379,14 @@ class _PyFace(_Py):
         # self.printSummary()
 
         if not mono:
-
             for pyWire in pyWireList:
                 if not pyWire.mono:
                     pyWire.trimming()
             # self.printControl('trimming reflexs')
 
-            for pyAlign in pyAlignList:
-                pyAlign.trimming()
-            # self.printControl('trimming alignments')
+        for pyAlign in pyAlignList:
+            pyAlign.trimming()
+        # self.printControl('trimming alignments')
 
         for pyWire in pyWireList:
             pyWire.priorLater()
