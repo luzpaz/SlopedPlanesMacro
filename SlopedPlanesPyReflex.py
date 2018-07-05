@@ -1188,10 +1188,16 @@ class _PyReflex(_Py):
 
         '''rearing(self, pyWire)'''
 
+        mono = pyWire.mono
+
         direction = "forward"
         for pyPlane, rear in zip(self.planes, self.rear):
-            if rear:
-                pyPlane.rearing(pyWire, self, direction)
+            if mono:
+                if pyPlane.secondRear:
+                    pyPlane.rearing(pyWire, self, direction)
+            else:
+                if rear:
+                    pyPlane.rearing(pyWire, self, direction)
             direction = "backward"
 
     def rangging(self, pyWire):
