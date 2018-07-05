@@ -597,6 +597,9 @@ class _PyAlignment(_Py):
 
         falsify = self.falsify
 
+        pyFace = _Py.pyFace
+        mono = pyFace.mono
+
         pyBase = self.base
         numWire = pyBase.numWire
         numGeom = pyBase.numGeom
@@ -622,7 +625,7 @@ class _PyAlignment(_Py):
 
             [pyOne, pyTwo] = self.chops[0]
 
-            if not pyPrior.reflexed:
+            if not pyPrior.reflexed or mono:
                 # print 'AP1'
 
                 pyBase.cuttingPyth([bigPrior])
@@ -646,7 +649,7 @@ class _PyAlignment(_Py):
                 if numWire == pyLater.numWire:
                     control.append(lat)
 
-            if not pyLater.reflexed:
+            if not pyLater.reflexed or mono:
                 # print 'AL1'
 
                 pyCont.cuttingPyth([bigLater])
@@ -672,7 +675,7 @@ class _PyAlignment(_Py):
 
                 pass
 
-            elif not pyPrior.reflexed or pyPrior.choped:
+            elif not pyPrior.reflexed or pyPrior.choped or mono:
                 # print '1'
 
                 cutterList.append(bigPrior)
@@ -686,7 +689,7 @@ class _PyAlignment(_Py):
 
                 pass
 
-            elif not pyLater.reflexed or pyLater.choped:
+            elif not pyLater.reflexed or pyLater.choped or mono:
                 # print '3'
 
                 cutterList.append(bigLater)
