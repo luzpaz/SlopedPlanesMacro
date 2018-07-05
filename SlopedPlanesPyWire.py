@@ -635,25 +635,27 @@ class _PyWire(_Py):
 
         # print '###### reflexing wire ', self.numWire
 
-        for pyReflex in self.reflexs:
-            pyReflex.preProcess(self)
-        # self.printControl('preProcess')
+        if not self.mono:
 
-        for pyReflex in self.reflexs:
-            pyReflex.reflexing(self)
+            for pyReflex in self.reflexs:
+                pyReflex.preProcess(self)
+            # self.printControl('preProcess')
 
-        for pyReflex in self.reflexs:
-            pyReflex.solveReflex(self)
+            for pyReflex in self.reflexs:
+                pyReflex.reflexing(self)
+
+            for pyReflex in self.reflexs:
+                pyReflex.solveReflex(self)
+                # self.printControl('solveReflex')
             # self.printControl('solveReflex')
-        # self.printControl('solveReflex')
 
-        for pyReflex in self.reflexs:
-            pyReflex.postProcess(self)
-        # self.printControl('postProcess')
+            for pyReflex in self.reflexs:
+                pyReflex.postProcess(self)
+            # self.printControl('postProcess')
 
-        for pyReflex in self.reflexs:
-            pyReflex.postProcessTwo(self)
-        # self.printControl('postProcessTwo')
+            for pyReflex in self.reflexs:
+                pyReflex.postProcessTwo(self)
+            # self.printControl('postProcessTwo')
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self)

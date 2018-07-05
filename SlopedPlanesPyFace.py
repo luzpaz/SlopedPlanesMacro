@@ -406,7 +406,7 @@ class _PyFace(_Py):
         # self.printControl('simulating')
 
         for pyWire in pyWireList:
-            if pyWire.reflexs and not pyWire.mono:
+            if pyWire.reflexs:  # and not pyWire.mono:
                 pyWire.reflexing()
         # self.printControl('reflexing')
 
