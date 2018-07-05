@@ -42,7 +42,7 @@ __version__ = ""
 
 def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
 
-    '''makeSlopedPlanes(sketch)
+    '''makeSlopedPlanes(sketch, slope=45.0, slopeList=[])
     makes the SlopedPlanes object from a sketch or a DWire.'''
 
     if hasattr(sketch, 'Proxy'):
@@ -218,13 +218,6 @@ class _SlopedPlanes(_Py):
 
         faceMaker = slopedPlanes.FaceMaker
 
-        slope = slopedPlanes.Slope.Value
-        try:
-            slopeList = self.slopeList
-            mono = False
-        except AttributeError:
-            mono = True
-
         onChanged = self.OnChanged
         if not self.faceList:
             # print 'faceList'
@@ -284,6 +277,14 @@ class _SlopedPlanes(_Py):
 
             if onChanged:
                 # print 'AA'
+
+                slope = slopedPlanes.Slope.Value
+                try:
+                    slopeList = self.slopeList
+                    mono = False
+                except AttributeError:
+                    mono = True
+                    slopeList = []
 
                 # elaborates complementary python objects of a face
 
@@ -376,6 +377,12 @@ class _SlopedPlanes(_Py):
                     for geom in geomWire:
                         numGeom += 1
                         # print '### numGeom ', numGeom
+
+                        try:
+                            ang = slopeList.pop(0)
+                        except IndexError:
+                            ang = slope
+
                         try:
                             pyPlane = pyPlaneListOld[numGeom]
                             pyPlaneListNew.append(pyPlane)
@@ -385,7 +392,7 @@ class _SlopedPlanes(_Py):
                             if pyWire.reset:
                                 # print '11'
 
-                                pyPlane.angle = slope
+                                pyPlane.angle = ang
                                 pyPlane.rightWidth = size
                                 pyPlane.leftWidth = size
                                 pyPlane.length = 2 * size
@@ -430,7 +437,7 @@ class _SlopedPlanes(_Py):
 
                         except IndexError:
                             # print '2'
-                            pyPlane = _PyPlane(numWire, numGeom, slope)
+                            pyPlane = _PyPlane(numWire, numGeom, ang)
                             pyPlaneListNew.append(pyPlane)
 
                         pyPlane.geom = geom
