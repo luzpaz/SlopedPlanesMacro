@@ -1192,11 +1192,11 @@ class _PyReflex(_Py):
 
         direction = "forward"
         for pyPlane, rear in zip(self.planes, self.rear):
-            if mono:
-                if pyPlane.secondRear:
-                    pyPlane.rearing(pyWire, self, direction)
-            else:
-                if rear:
+            if rear:
+                if mono:
+                    if pyPlane.secondRear:
+                        pyPlane.rearing(pyWire, self, direction)
+                else:
                     pyPlane.rearing(pyWire, self, direction)
             direction = "backward"
 
