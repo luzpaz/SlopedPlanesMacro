@@ -68,8 +68,16 @@ class _TaskPanel_SlopedPlanes():
         advancedOptions = QtGui.QCheckBox(form)
         self.advancedOptions = advancedOptions
         advancedOptions.setObjectName("AdvancedOptions")
-        grid.addWidget(advancedOptions, 3, 0, 1, 1)
+        grid.addWidget(advancedOptions, 2, 0, 1, 1)
         advancedOptions.clicked.connect(self.advanced)
+
+        foot = QtGui.QLabel(form)
+        self.foot = foot
+        foot.setObjectName("foot")
+        doc = ("Hint: Select a face over the figure and \n"
+               "the related item in this task panel will be selected")
+        foot.setText(doc)
+        grid.addWidget(foot, 3, 0, 1, 2)
 
         FreeCADGui.Selection.addObserver(self)
 
