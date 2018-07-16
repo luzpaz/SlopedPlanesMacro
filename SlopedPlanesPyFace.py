@@ -1071,22 +1071,6 @@ class _PyFace(_Py):
             else:
                 vertex = section.Edges[0].lastVertex(True)
 
-            '''if pyPlane.choped:
-                # print 'b1'
-                ### vertex = section.Edges[0].Vertexes[0]
-                if direction == "forward":
-                    vertex = section.Edges[0].firstVertex(True)
-                else:
-                    vertex = section.Edges[0].lastVertex(True)
-
-            else:
-                # print 'b2'
-                ### vertex = section.Edges[0].Vertexes[1]
-                if direction == "forward":
-                    vertex = section.Edges[0].firstVertex(True)
-                else:
-                    vertex = section.Edges[0].lastVertex(True)'''
-
         else:
             # print 'c'
 
