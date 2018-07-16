@@ -1298,7 +1298,7 @@ class _PyAlignment(_Py):
             fList = []
             gS = pyOne.geomShape
             # ff = self.cutting(shapeOne.Faces[0], [shapeTwo], gS)
-            ff = self.cutting(shapeOne.Faces[0], sList, gS)
+            ff = self.cutting(shapeOne.Faces[0], sList, gS)         ######################################33
             fList.append(ff)
 
             for ff in shapeOne.Faces[1:]:

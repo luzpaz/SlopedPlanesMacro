@@ -671,7 +671,7 @@ class _PyReflex(_Py):
 
             forw = forward.copy()
             forw = forw.cut([rearGeom], tolerance)
-            wire = Part.Wire(forw.Edges)
+            wire = Part.Wire(forw.Edges)        ########################################
             orderedEdges = wire.OrderedEdges
             forw = orderedEdges[0]
 
