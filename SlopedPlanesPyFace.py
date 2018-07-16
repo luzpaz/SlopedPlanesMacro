@@ -1066,10 +1066,18 @@ class _PyFace(_Py):
         elif section.Edges:
             # print 'b'
 
-            if pyPlane.choped:
+            if direction == "forward":
+                vertex = section.Edges[0].firstVertex(True)
+            else:
+                vertex = section.Edges[0].lastVertex(True)
+
+            '''if pyPlane.choped:
                 # print 'b1'
-                vertex = section.Edges[0].Vertexes[0]
-                ###vertex = section.Edges[0].lastVertex(True)
+                ### vertex = section.Edges[0].Vertexes[0]
+                if direction == "forward":
+                    vertex = section.Edges[0].firstVertex(True)
+                else:
+                    vertex = section.Edges[0].lastVertex(True)
 
             else:
                 # print 'b2'
@@ -1077,7 +1085,7 @@ class _PyFace(_Py):
                 if direction == "forward":
                     vertex = section.Edges[0].firstVertex(True)
                 else:
-                    vertex = section.Edges[0].lastVertex(True)
+                    vertex = section.Edges[0].lastVertex(True)'''
 
         else:
             # print 'c'
@@ -1175,7 +1183,7 @@ class _PyFace(_Py):
 
             nGeom = coord.index(self.roundVector(vertex.Point))
             # print 'on vertex'
-            # revisar
+
             if edge:
                 if direction == 'forward':
                     # print 'aa'
