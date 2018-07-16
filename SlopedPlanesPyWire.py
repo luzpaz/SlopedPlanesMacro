@@ -40,7 +40,7 @@ class _PyWire(_Py):
     The exterior wires round counterclockwise, from the lowerleft point.
     The interior wires round clockwise, from the upperleft point.'''
 
-    def __init__(self, numWire):
+    def __init__(self, numWire, mono=True):
 
         ''''''
 
@@ -51,6 +51,7 @@ class _PyWire(_Py):
         self.shapeGeom = []
         self.reset = True
         self.wire = None
+        self.mono = mono
 
     @property
     def numWire(self):
@@ -150,6 +151,20 @@ class _PyWire(_Py):
 
         self._wire = wire
 
+    @property
+    def mono(self):
+
+        '''mono(self)'''
+
+        return self._mono
+
+    @mono.setter
+    def mono(self, mono):
+
+        '''mono(self, mono)'''
+
+        self._mono = mono
+
     def planning(self, reset):
 
         '''planning(self, reset):
@@ -185,8 +200,6 @@ class _PyWire(_Py):
                             c.append(pyPl)
                         cc.append(c)
                     pyPlane.rangoPy = cc
-                    # print 'rango ', pyPlane.rango
-                    # print 'rangoPy ', pyPlane.rangoPy
 
     def virtualizing(self):
 
@@ -229,11 +242,6 @@ class _PyWire(_Py):
 
                         pyReflex.addValue('lines', pyR.forward, 'forward')
                         pyReflex.addValue('lines', pyOppR.forward, 'backward')
-
-                forw = pyReflex.lines[0]
-                # print '1 ', (self.roundVector(forw.firstVertex(True).Point), self.roundVector(forw.lastVertex(True).Point))
-                forw = pyReflex.lines[1]
-                # print '2 ', (self.roundVector(forw.firstVertex(True).Point), self.roundVector(forw.lastVertex(True).Point))
 
                 controlList.append(pyR)
 
@@ -426,26 +434,13 @@ class _PyWire(_Py):
                             # print pyRList
 
                             for pyR in pyRList:
-                                # print '1'
-                                if not procc:
+
+                                section = forward.section(pyR.lines, tolerance)
+
+                                if section.Vertexes:
+
+                                    procc = False
                                     break
-
-                                nn = -1
-                                for pyP in pyR.planes:
-                                    nn += 1
-                                    # print '2'
-
-                                    # cambiar a una sola section, con las dos lineas del reflex corner pyR
-
-                                    forw = pyR.lines[nn]
-                                    # print 'forw ', (self.roundVector(forw.firstVertex(True).Point), self.roundVector(forw.lastVertex(True).Point))
-                                    section =\
-                                        forward.section([forw], tolerance)
-
-                                    if section.Vertexes:
-                                        # print '3'
-                                        procc = False
-                                        break
 
                             if procc:
                                 # print 'procc'
@@ -473,6 +468,8 @@ class _PyWire(_Py):
         lenWire = len(pyPlaneList)
         numWire = self.numWire
 
+        mono = self.mono
+
         for pyPlane in pyPlaneList:
             if not pyPlane.aligned:
 
@@ -496,12 +493,14 @@ class _PyWire(_Py):
                 cutterList = []     # shape
                 cutList = []        # simulatedShape
 
+                arrow = pyPlane.arrow
+
                 if pyPlane.reflexed:
                     # print 'B reflexed'
 
                     if prior not in control:
 
-                        if not pyPrior.reflexed:
+                        if not pyPrior.reflexed or (mono and not arrow and not (pyPlane.choped and pyPrior.aligned)):
                             # print '1'
                             cutterList.append(bigPrior)
                             control.append(prior)
@@ -533,7 +532,7 @@ class _PyWire(_Py):
 
                     if later not in control:
 
-                        if not pyLater.reflexed:
+                        if not pyLater.reflexed or (mono and not arrow and not (pyPlane.choped and pyLater.aligned)):
                             # print '2'
                             cutterList.append(bigLater)
                             control.append(later)
@@ -636,25 +635,27 @@ class _PyWire(_Py):
 
         # print '###### reflexing wire ', self.numWire
 
-        for pyReflex in self.reflexs:
-            pyReflex.preProcess(self)
-        # self.printControl('preProcess')
+        if not self.mono:
 
-        for pyReflex in self.reflexs:
-            pyReflex.reflexing(self)
+            for pyReflex in self.reflexs:
+                pyReflex.preProcess(self)
+            # self.printControl('preProcess')
 
-        for pyReflex in self.reflexs:
-            pyReflex.solveReflex(self)
+            for pyReflex in self.reflexs:
+                pyReflex.reflexing(self)
+
+            for pyReflex in self.reflexs:
+                pyReflex.solveReflex(self)
+                # self.printControl('solveReflex')
             # self.printControl('solveReflex')
-        # self.printControl('solveReflex')
 
-        for pyReflex in self.reflexs:
-            pyReflex.postProcess(self)
-        # self.printControl('postProcess')
+            for pyReflex in self.reflexs:
+                pyReflex.postProcess(self)
+            # self.printControl('postProcess')
 
-        for pyReflex in self.reflexs:
-            pyReflex.postProcessTwo(self)
-        # self.printControl('postProcessTwo')
+            for pyReflex in self.reflexs:
+                pyReflex.postProcessTwo(self)
+            # self.printControl('postProcessTwo')
 
         for pyReflex in self.reflexs:
             pyReflex.rearing(self)

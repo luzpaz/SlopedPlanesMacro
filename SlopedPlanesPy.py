@@ -203,7 +203,7 @@ class _Py(object):
 
             print '****** numWire ', pyWire.numWire
             # print '*** coordinates ', pyWire.coordinates
-            # print '*** geoms ', [e.Curve for e in pyWire.shapeGeom]
+            # print '*** wire ', [e.Point for e in pyWire.wire.OrderedVertexes]
             print '*** reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
 
@@ -216,8 +216,8 @@ class _Py(object):
                     print 'rear plane ', pyPlane.rear
                     print 'secondRear ', pyPlane.secondRear
                     print 'rango ', pyPlane.rango
-                    forward = pyPlane.forward
-                    '''print 'forward ',\
+                    '''forward = pyPlane.forward
+                    print 'forward ',\
                         (self.roundVector(forward.firstVertex(True).Point),
                          self.roundVector(forward.lastVertex(True).Point),
                          forward.Curve)
@@ -515,13 +515,6 @@ class _Py(object):
             # print 'no closed'
 
             geometryList = self.geometries(face, orderPoint)
-            edges = [line.toShape() for line in geometryList]
-            wire = Part.Wire(edges)
-            face = Part.makeFace(wire, "Part::FaceMakerSimple")
-            norm = self.faceNormal(face)
-            if normal == norm.negative():
-                orderPoint.reverse()
-                geometryList.reverse()
 
         coordinates = [self.roundVector(point) for point in orderPoint]
 
@@ -529,6 +522,7 @@ class _Py(object):
             index = self.lowerLeftPoint(coordinates)
         else:
             index = self.upperLeftPoint(coordinates)
+
         coordinates = coordinates[index:] + coordinates[:index]
         geometryList = geometryList[index:] + geometryList[:index]
 

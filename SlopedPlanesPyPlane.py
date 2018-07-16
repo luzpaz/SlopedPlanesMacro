@@ -39,7 +39,7 @@ class _PyPlane(_Py):
     '''The complementary python object class for planes.A plane correspond
     to one or more edges of the base. A plane could have several faces.'''
 
-    def __init__(self, numWire, numGeom):
+    def __init__(self, numWire, numGeom, slope=45.0):
 
         '''__init__(self, numWire, numGeom)'''
 
@@ -51,7 +51,7 @@ class _PyPlane(_Py):
 
         self.numWire = numWire
         self.numGeom = numGeom
-        self.angle = 45.0
+        self.angle = slope
         size = _Py.size
         self.rightWidth = size
         self.leftWidth = size
@@ -847,8 +847,8 @@ class _PyPlane(_Py):
     def doPlane(self, direction, pyWire, geom, firstParam, lastParam,
                 scale, closed):
 
-        '''doPlane(self, direction, pyWire, geom, firstParam, lastParam, scale)
-        '''
+        '''doPlane(self, direction, pyWire, geom, firstParam, lastParam,
+                   scale, closed)'''
 
         # print '# doPlane'
 
@@ -903,14 +903,14 @@ class _PyPlane(_Py):
             endParam = lastParam + rightScale
 
         elif isinstance(geom, (Part.ArcOfHyperbola)):
-            # print 'aa'
+            # print 'b'
 
             startParam = firstParam
             endParam = lastParam
 
         elif isinstance(geom, (Part.ArcOfCircle,
                                Part.ArcOfEllipse)):
-            # print 'b'
+            # print 'c'
 
             rear = self.rear
 
@@ -918,24 +918,24 @@ class _PyPlane(_Py):
                 # print 'reflex'
 
                 if len(rear) == 1:
-                    # print 'b1'
+                    # print 'c1'
 
                     pyReflex = self.reflexedList[0]
 
                     if rear[0] == pyReflex.rear[0]:
-                        # print 'b11'
+                        # print 'c11'
 
                         startParam = firstParam
                         endParam = startParam + 2 * pi
 
                     else:
-                        # print 'b12'
+                        # print 'c12'
 
                         startParam = lastParam
                         endParam = startParam - 2 * pi
 
                 else:
-                    # print 'b2'
+                    # print 'c2'
 
                     startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
                     endParam = startParam + 2 * pi
@@ -961,7 +961,7 @@ class _PyPlane(_Py):
                     endParam = center + pi / 2
 
         elif isinstance(geom, Part.BSplineCurve):
-            # print 'c'
+            # print 'd'
 
             pass
 
@@ -1501,6 +1501,7 @@ class _PyPlane(_Py):
         tolerance = _Py.tolerance
         pyPlaneList = pyWire.planes
         control = self.control
+        mono = pyWire.mono
 
         numGeom = self.numGeom
 
@@ -1615,12 +1616,15 @@ class _PyPlane(_Py):
                     plane = plane.cut(cutterList, tolerance)
                     ff = self.selectFace(plane.Faces, gS)
                     fList = [ff]
-                    plane = plane.removeShape([ff])
-                    for ff in plane.Faces:
-                        section = ff.section(fList, tolerance)
-                        if not section.Edges:
-                            fList.append(ff)
-                            break
+
+                    if not mono:
+                        plane = plane.removeShape([ff])
+                        for ff in plane.Faces:
+                            section = ff.section(fList, tolerance)
+                            if not section.Edges:
+                                fList.append(ff)
+                                break
+
                     compound = Part.makeCompound(fList)
                     self.shape = compound
                     # print 'fList ', fList
@@ -1632,6 +1636,7 @@ class _PyPlane(_Py):
                     ff = self.cutting(ff, cutterList, gS)
                     fList = [ff]
 
+                    #if not mono:
                     ff = plane.Faces[1]
                     ff = ff.cut(cutterList, tolerance)
                     fList.append(ff.Faces[0])   # esto hay que cambiarlo?

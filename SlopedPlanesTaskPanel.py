@@ -68,8 +68,16 @@ class _TaskPanel_SlopedPlanes():
         advancedOptions = QtGui.QCheckBox(form)
         self.advancedOptions = advancedOptions
         advancedOptions.setObjectName("AdvancedOptions")
-        grid.addWidget(advancedOptions, 3, 0, 1, 1)
+        grid.addWidget(advancedOptions, 2, 0, 1, 1)
         advancedOptions.clicked.connect(self.advanced)
+
+        foot = QtGui.QLabel(form)
+        self.foot = foot
+        foot.setObjectName("foot")
+        doc = ("Hint: Select a face over the figure and \n"
+               "the related item in this task panel will be selected")
+        foot.setText(doc)
+        grid.addWidget(foot, 3, 0, 1, 2)
 
         FreeCADGui.Selection.addObserver(self)
 
@@ -489,12 +497,14 @@ class _TaskPanel_SlopedPlanes():
         for pyFace in pyFaceList:
             originList = []
             # print '### numFace', pyFace.numFace
+            pyFace.mono = True
 
             pyWireList = pyFace.wires
             lenWires = len(pyWireList)
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
                 # print '## numWire', numWire
+                pyWire.mono = True
 
                 numAngle = -1
                 pyPlaneList = pyWire.planes
@@ -503,10 +513,13 @@ class _TaskPanel_SlopedPlanes():
                     if numWire == 1:
                         numSlope += 1
 
+                ang = pyPlaneList[0].angle
+                # print(ang)
+
                 for pyPlane in pyPlaneList:
                     numAngle += 1
                     angle = pyPlane.angle
-                    # print '# numAngle ', numAngle, ' angle ', angle
+                    # print('# numAngle ', numAngle, ' angle ', angle)
 
                     if [numWire, numAngle] not in originList and\
                        angle not in originList:
@@ -524,11 +537,15 @@ class _TaskPanel_SlopedPlanes():
                         pyPlane.angle = value
 
                         if isinstance(angle, float):
-                            # print 'a'
+                            # print('a')
                             originList.append([numWire, numAngle])
 
+                            if value != ang:
+                                pyWire.mono = False
+                                pyFace.mono = False
+
                         else:
-                            # print 'b'
+                            # print('b')
                             originList.append(angle)
 
                             pyPl = pyFace.wires[angle[0]].planes[angle[1]]
@@ -563,6 +580,8 @@ class _TaskPanel_SlopedPlanes():
                             comboBox = tree.itemWidget(it, 12)
                             sweepCurve = comboBox.currentText()
                             pyPlane.sweepCurve = sweepCurve
+
+                # print(pyWire.mono)
 
             if up:
                 if lenWires == 1:

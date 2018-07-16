@@ -40,9 +40,9 @@ __url__ = "http://www.freecadweb.org"
 __version__ = ""
 
 
-def makeSlopedPlanes(sketch):
+def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
 
-    '''makeSlopedPlanes(sketch)
+    '''makeSlopedPlanes(sketch, slope=45.0, slopeList=[])
     makes the SlopedPlanes object from a sketch or a DWire.'''
 
     if hasattr(sketch, 'Proxy'):
@@ -55,8 +55,18 @@ def makeSlopedPlanes(sketch):
     slopedPlanes =\
         FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "SlopedPlanes")
 
-    _SlopedPlanes(slopedPlanes)
+    _SlopedPlanes(slopedPlanes, slope)
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
+
+    if slope:
+        try:
+            ang = float(slope)
+            slopedPlanes.Slope = ang
+        except ValueError:
+            pass
+
+    if slopeList:
+        slopedPlanes.Proxy.slopeList = slopeList
 
     slopedPlanes.Base = sketch
     sketch.ViewObject.Visibility = False
@@ -70,7 +80,7 @@ class _SlopedPlanes(_Py):
     Requieres a sketch or DWire as base. The base must support the FaceMaker.
     The angles numeration corresponds to the SlopedPlanes shape faces.'''
 
-    def __init__(self, slopedPlanes):
+    def __init__(self, slopedPlanes, slope=45.0):
 
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
@@ -175,15 +185,15 @@ class _SlopedPlanes(_Py):
 
         self.State = True
 
-        slopedPlanes.Slope = 45.0
+        slopedPlanes.Slope = slope
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
-        slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)   # no tiene persistencia
+        slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)
         slopedPlanes.Up = 0
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
                                   "Part::FaceMakerCheese"]
-        slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)   # no tiene persistencia
+        slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
 
         slopedPlanes.Proxy = self
 
@@ -275,6 +285,14 @@ class _SlopedPlanes(_Py):
             if onChanged:
                 # print 'AA'
 
+                slope = slopedPlanes.Slope.Value
+                try:
+                    slopeList = self.slopeList
+                    mono = False
+                except AttributeError:
+                    mono = True
+                    slopeList = []
+
                 # elaborates complementary python objects of a face
 
                 coordinates = coordinatesOuterOrdered[numFace]
@@ -285,7 +303,7 @@ class _SlopedPlanes(_Py):
                         pyFace.numFace = numFace
                         break
                 else:
-                    pyFace = _PyFace(numFace)
+                    pyFace = _PyFace(numFace, mono)
                     pyFaceListNew.append(pyFace)
 
                 _Py.pyFace = pyFace
@@ -353,7 +371,7 @@ class _SlopedPlanes(_Py):
                             break
                     else:
                         # print 'd'
-                        pyWire = _PyWire(numWire)
+                        pyWire = _PyWire(numWire, mono)
                         pyWireListNew.append(pyWire)
                         pyWire.reset = True
                         pyFace.reset = True
@@ -366,6 +384,16 @@ class _SlopedPlanes(_Py):
                     for geom in geomWire:
                         numGeom += 1
                         # print '### numGeom ', numGeom
+
+                        try:
+                            ang = slopeList.pop(0)
+                            try:
+                                ang = float(ang)
+                            except ValueError:
+                                ang = slope
+                        except IndexError:
+                            ang = slope
+
                         try:
                             pyPlane = pyPlaneListOld[numGeom]
                             pyPlaneListNew.append(pyPlane)
@@ -375,7 +403,7 @@ class _SlopedPlanes(_Py):
                             if pyWire.reset:
                                 # print '11'
 
-                                pyPlane.angle = 45.0
+                                pyPlane.angle = ang
                                 pyPlane.rightWidth = size
                                 pyPlane.leftWidth = size
                                 pyPlane.length = 2 * size
@@ -420,7 +448,7 @@ class _SlopedPlanes(_Py):
 
                         except IndexError:
                             # print '2'
-                            pyPlane = _PyPlane(numWire, numGeom)
+                            pyPlane = _PyPlane(numWire, numGeom, ang)
                             pyPlaneListNew.append(pyPlane)
 
                         pyPlane.geom = geom
@@ -452,9 +480,9 @@ class _SlopedPlanes(_Py):
 
                 pyFace = self.Pyth[numFace]
                 _Py.pyFace = pyFace
-
+                # print(pyFace.mono)
                 for pyWire in pyFace.wires:
-
+                    # print(pyWire.mono)
                     pyWire.wire = Part.Wire(pyWire.shapeGeom)
 
                     for pyPlane in pyWire.planes:
@@ -670,6 +698,8 @@ class _SlopedPlanes(_Py):
                 newValue = value * size
             else:
                 newValue = value
+                if prop == "angle":
+                    pyFace.mono = True
 
             if prop == "width":
 
@@ -681,10 +711,22 @@ class _SlopedPlanes(_Py):
             else:
 
                 for pyWire in pyFace.wires:
+                    if prop == "angle":
+                        pyWire.mono = True
                     for pyPlane in pyWire.planes:
                         setattr(pyPlane, prop, newValue)
 
         self.OnChanged = False
+
+    def onDocumentRestored(self, slopedPlanes):
+
+        ''''''
+
+        tolerance = slopedPlanes.Tolerance
+        slopedPlanes.Tolerance = (tolerance, 1e-7, 1, 1e-7)
+
+        factorOverhang = slopedPlanes.FactorOverhang
+        slopedPlanes.FactorOverhang = (factorOverhang, 0, 1, 0.01)
 
     def __getstate__(self):
 

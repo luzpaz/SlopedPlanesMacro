@@ -124,6 +124,8 @@ class _PyReflex(_Py):
 
                 pyAli = pyAliList[0]
 
+                # esto esta muy raro
+
                 pyBase = pyAli.base
                 aligns = pyAli.aligns[:]
                 aligns.insert(0, pyBase)
@@ -669,7 +671,7 @@ class _PyReflex(_Py):
 
             forw = forward.copy()
             forw = forw.cut([rearGeom], tolerance)
-            wire = Part.Wire(forw.Edges)
+            wire = Part.Wire(forw.Edges)        ########################################
             orderedEdges = wire.OrderedEdges
             forw = orderedEdges[0]
 
@@ -1186,10 +1188,16 @@ class _PyReflex(_Py):
 
         '''rearing(self, pyWire)'''
 
+        mono = pyWire.mono
+
         direction = "forward"
         for pyPlane, rear in zip(self.planes, self.rear):
             if rear:
-                pyPlane.rearing(pyWire, self, direction)
+                if mono:
+                    if pyPlane.secondRear:
+                        pyPlane.rearing(pyWire, self, direction)
+                else:
+                    pyPlane.rearing(pyWire, self, direction)
             direction = "backward"
 
     def rangging(self, pyWire):

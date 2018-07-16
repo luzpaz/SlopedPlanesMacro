@@ -47,7 +47,7 @@ class _PyFace(_Py):
     to apply the FaceMaker to the SlopedPlanes base.
     The faces could have several wires, and as a consequense holes.'''
 
-    def __init__(self, numFace):
+    def __init__(self, numFace, mono=True):
 
         '''__init__(self, numFace)'''
 
@@ -57,6 +57,7 @@ class _PyFace(_Py):
         self.reset = True
         self.shapeGeom = []
         self.size = 0
+        self.mono = mono
 
     @property
     def numFace(self):
@@ -141,6 +142,20 @@ class _PyFace(_Py):
         '''size(self, size)'''
 
         self._size = size
+
+    @property
+    def mono(self):
+
+        '''mono(self)'''
+
+        return self._mono
+
+    @mono.setter
+    def mono(self, mono):
+
+        '''mono(self, mono)'''
+
+        self._mono = mono
 
     def __getstate__(self, serialize):
 
@@ -339,6 +354,7 @@ class _PyFace(_Py):
 
         pyAlignList = self.alignments
         pyWireList = self.wires
+        mono = self.mono
 
         reset = self.reset
 
@@ -362,9 +378,11 @@ class _PyFace(_Py):
 
         # self.printSummary()
 
-        for pyWire in pyWireList:
-            pyWire.trimming()
-        # self.printControl('trimming reflexs')
+        if not mono:
+            for pyWire in pyWireList:
+                if not pyWire.mono:
+                    pyWire.trimming()
+            # self.printControl('trimming reflexs')
 
         for pyAlign in pyAlignList:
             pyAlign.trimming()
@@ -1048,13 +1066,10 @@ class _PyFace(_Py):
         elif section.Edges:
             # print 'b'
 
-            if pyPlane.choped:
-                # print 'b1'
-                vertex = section.Edges[0].Vertexes[0]
-
+            if direction == "forward":
+                vertex = section.Edges[0].firstVertex(True)
             else:
-                # print 'b2'
-                vertex = section.Edges[0].Vertexes[1]
+                vertex = section.Edges[0].lastVertex(True)
 
         else:
             # print 'c'
@@ -1118,7 +1133,8 @@ class _PyFace(_Py):
                             edge = True
 
                 sGeom = self.findGeomRear(pyWire, pyPlane, direction, vert, edge)
-                pyPlane.addValue('secondRear', sGeom, direction)
+                if sGeom not in pyPlane.rear:   # mejor hacerlo arriba al principio de la seccion
+                    pyPlane.addValue('secondRear', sGeom, direction)
                 # print 'sGeom ', sGeom
 
         # TODO backRear

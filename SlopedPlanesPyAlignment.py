@@ -274,6 +274,9 @@ class _PyAlignment(_Py):
         pyWireList = _Py.pyFace.wires
         tolerance = _Py.tolerance
 
+        pyFace = _Py.pyFace
+        mono = pyFace.mono
+
         falsify = self.falsify
         geomAligned = self.geomAligned
 
@@ -346,7 +349,7 @@ class _PyAlignment(_Py):
             pyPlList = pyWireList[nW].planes
             rC = []
 
-            if nW == pyTwo.numWire:
+            if not mono and nW == pyTwo.numWire:
                 # print 'nW'
 
                 # the two rangos don't cut between them, if not aligned
@@ -597,6 +600,9 @@ class _PyAlignment(_Py):
 
         falsify = self.falsify
 
+        pyFace = _Py.pyFace
+        mono = pyFace.mono
+
         pyBase = self.base
         numWire = pyBase.numWire
         numGeom = pyBase.numGeom
@@ -622,7 +628,7 @@ class _PyAlignment(_Py):
 
             [pyOne, pyTwo] = self.chops[0]
 
-            if not pyPrior.reflexed:
+            if not pyPrior.reflexed or mono:
                 # print 'AP1'
 
                 pyBase.cuttingPyth([bigPrior])
@@ -646,7 +652,7 @@ class _PyAlignment(_Py):
                 if numWire == pyLater.numWire:
                     control.append(lat)
 
-            if not pyLater.reflexed:
+            if not pyLater.reflexed or mono:
                 # print 'AL1'
 
                 pyCont.cuttingPyth([bigLater])
@@ -672,7 +678,7 @@ class _PyAlignment(_Py):
 
                 pass
 
-            elif not pyPrior.reflexed or pyPrior.choped:
+            elif not pyPrior.reflexed or pyPrior.choped or mono:
                 # print '1'
 
                 cutterList.append(bigPrior)
@@ -686,7 +692,7 @@ class _PyAlignment(_Py):
 
                 pass
 
-            elif not pyLater.reflexed or pyLater.choped:
+            elif not pyLater.reflexed or pyLater.choped or mono:
                 # print '3'
 
                 cutterList.append(bigLater)
@@ -1292,7 +1298,7 @@ class _PyAlignment(_Py):
             fList = []
             gS = pyOne.geomShape
             # ff = self.cutting(shapeOne.Faces[0], [shapeTwo], gS)
-            ff = self.cutting(shapeOne.Faces[0], sList, gS)
+            ff = self.cutting(shapeOne.Faces[0], sList, gS)         ######################################33
             fList.append(ff)
 
             for ff in shapeOne.Faces[1:]:
