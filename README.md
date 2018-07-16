@@ -5,20 +5,20 @@ FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 
 ### Versions
 
-    1.0: May 2018 (FreeCAD 0.17)
+    1.1: July 2018 (FreeCAD 0.17)
     master: updated every month (FreeCAD 0.18)
 
 ### Build Status <img src="https://blog.travis-ci.com/images/travis-mascot-200px.png" height="30"/>
 
 The macro is tested with a set of examples. Please, see at https://github.com/caceres/SlopedPlanesTest.git
 
-| master | develop | 1.0 |
+| master | develop | 1.1 |
 |:------:|:-------:|:----:|
-|[![master][SlopedPlanesMacro-master-status]][travis-branches]|[![develop][SlopedPlanesMacro-develop-status]][travis-branches]|[![1.0][SlopedPlanesMacro-1.0-status]][travis-branches]|
+|[![master][SlopedPlanesMacro-master-status]][travis-branches]|[![develop][SlopedPlanesMacro-develop-status]][travis-branches]|[![1.1][SlopedPlanesMacro-1.1-status]][travis-branches]|
 
 [SlopedPlanesMacro-master-status]: https://travis-ci.org/caceres/SlopedPlanesMacro.svg?branch=master
 [SlopedPlanesMacro-develop-status]: https://travis-ci.org/caceres/SlopedPlanesMacro.svg?branch=develop
-[SlopedPlanesMacro-1.0-status]: https://travis-ci.org/caceres/SlopedPlanesMacro.svg?branch=1.0
+[SlopedPlanesMacro-1.1-status]: https://travis-ci.org/caceres/SlopedPlanesMacro.svg?branch=1.1
 [travis-branches]: https://travis-ci.org/caceres/SlopedPlanesMacro/branches
 [travis-builds]: https://travis-ci.org/caceres/SlopedPlanesMacro/builds
 
