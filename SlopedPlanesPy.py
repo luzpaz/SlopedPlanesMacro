@@ -202,8 +202,8 @@ class _Py(object):
         for pyWire in _Py.pyFace.wires:
 
             print '****** numWire ', pyWire.numWire
-            # print '*** coordinates ', pyWire.coordinates
-            # print '*** geoms ', [e.Curve for e in pyWire.shapeGeom]
+            print '*** coordinates ', pyWire.coordinates
+            print '*** wire ', [e.Point for e in pyWire.wire.OrderedVertexes]
             print '*** reflexs ', pyWire.reflexs
             for pyReflex in pyWire.reflexs:
 
@@ -217,7 +217,7 @@ class _Py(object):
                     print 'secondRear ', pyPlane.secondRear
                     print 'rango ', pyPlane.rango
                     forward = pyPlane.forward
-                    '''print 'forward ',\
+                    print 'forward ',\
                         (self.roundVector(forward.firstVertex(True).Point),
                          self.roundVector(forward.lastVertex(True).Point),
                          forward.Curve)
@@ -225,7 +225,7 @@ class _Py(object):
                     print 'backward ',\
                         (self.roundVector(backward.firstVertex(True).Point),
                          self.roundVector(backward.lastVertex(True).Point),
-                         backward.Curve)'''
+                         backward.Curve)
                     print '#########'
 
                 print '#######################'

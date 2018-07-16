@@ -1069,10 +1069,12 @@ class _PyFace(_Py):
             if pyPlane.choped:
                 # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
+                ###vertex = section.Edges[0].lastVertex(True)
 
             else:
                 # print 'b2'
-                vertex = section.Edges[0].Vertexes[1]
+                ###vertex = section.Edges[0].Vertexes[1]
+                vertex = section.Edges[0].firstVertex(True)
 
         else:
             # print 'c'
