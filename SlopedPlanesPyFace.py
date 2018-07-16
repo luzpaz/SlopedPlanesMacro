@@ -1141,8 +1141,8 @@ class _PyFace(_Py):
                             edge = True
 
                 sGeom = self.findGeomRear(pyWire, pyPlane, direction, vert, edge)
-                # if sGeom not in pyPlane.rear:   # mejor hacerlo arriba al principio de la seccion
-                pyPlane.addValue('secondRear', sGeom, direction)
+                if sGeom not in pyPlane.rear:   # mejor hacerlo arriba al principio de la seccion
+                    pyPlane.addValue('secondRear', sGeom, direction)
                 # print 'sGeom ', sGeom
 
         # TODO backRear
