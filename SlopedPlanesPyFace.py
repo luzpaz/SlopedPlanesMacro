@@ -1062,7 +1062,6 @@ class _PyFace(_Py):
             # print 'a'
             sect = lineInto.section([sGW], tolerance)
             vertex = sect.Vertexes[1]
-            ###vertex = sect.lastVertex(True)
 
         elif section.Edges:
             # print 'b'
@@ -1070,12 +1069,15 @@ class _PyFace(_Py):
             if pyPlane.choped:
                 # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
-                ###vertex = section.Edges[-1].lastVertex(True)
+                ###vertex = section.Edges[0].lastVertex(True)
 
             else:
                 # print 'b2'
-                ###vertex = section.Edges[0].Vertexes[1]
-                vertex = section.Edges[0].firstVertex(True)
+                ### vertex = section.Edges[0].Vertexes[1]
+                if direction == "forward":
+                    vertex = section.Edges[0].firstVertex(True)
+                else:
+                    vertex = section.Edges[0].lastVertex(True)
 
         else:
             # print 'c'
@@ -1139,9 +1141,9 @@ class _PyFace(_Py):
                             edge = True
 
                 sGeom = self.findGeomRear(pyWire, pyPlane, direction, vert, edge)
-                if sGeom not in pyPlane.rear:   # mejor hacerlo arriba al principio de la seccion
-                    pyPlane.addValue('secondRear', sGeom, direction)
-                    # print 'sGeom ', sGeom
+                # if sGeom not in pyPlane.rear:   # mejor hacerlo arriba al principio de la seccion
+                pyPlane.addValue('secondRear', sGeom, direction)
+                # print 'sGeom ', sGeom
 
         # TODO backRear
 
@@ -1173,7 +1175,7 @@ class _PyFace(_Py):
 
             nGeom = coord.index(self.roundVector(vertex.Point))
             # print 'on vertex'
-
+            # revisar
             if edge:
                 if direction == 'forward':
                     # print 'aa'
