@@ -1062,6 +1062,7 @@ class _PyFace(_Py):
             # print 'a'
             sect = lineInto.section([sGW], tolerance)
             vertex = sect.Vertexes[1]
+            ###vertex = sect.lastVertex(True)
 
         elif section.Edges:
             # print 'b'
@@ -1069,7 +1070,7 @@ class _PyFace(_Py):
             if pyPlane.choped:
                 # print 'b1'
                 vertex = section.Edges[0].Vertexes[0]
-                ###vertex = section.Edges[0].lastVertex(True)
+                ###vertex = section.Edges[-1].lastVertex(True)
 
             else:
                 # print 'b2'
@@ -1138,8 +1139,9 @@ class _PyFace(_Py):
                             edge = True
 
                 sGeom = self.findGeomRear(pyWire, pyPlane, direction, vert, edge)
-                pyPlane.addValue('secondRear', sGeom, direction)
-                # print 'sGeom ', sGeom
+                if sGeom not in pyPlane.rear:   # mejor hacerlo arriba al principio de la seccion
+                    pyPlane.addValue('secondRear', sGeom, direction)
+                    # print 'sGeom ', sGeom
 
         # TODO backRear
 
