@@ -54,16 +54,16 @@ class _TaskPanel_SlopedPlanes():
         self.grid = grid
         grid.setObjectName("grid")
 
-        title = QtGui.QLabel(form)
+        title = QtGui.QLabel(form)  # revisar NO HAY TITULO
         self.title = title
         grid.addWidget(title, 0, 0, 1, 2)
 
-        tree = _TreeWidget()
+        tree = _TreeWidget()  # TODO change to tableWidget
         self.tree = tree
         tree.setParent(form)
         grid.addWidget(tree, 1, 0, 1, 2)
         tree.itemChanged.connect(self.edit)
-        # tree.currentItemChanged.connect(tree.changeCurrentItem)
+        # tree.currentItemChanged.connect(tree.changeCurrentItem)  QUITAR
 
         advancedOptions = QtGui.QCheckBox(form)
         self.advancedOptions = advancedOptions
@@ -75,7 +75,7 @@ class _TaskPanel_SlopedPlanes():
         self.foot = foot
         foot.setObjectName("foot")
         doc = ("Hint: Select a face over the figure and \n"
-               "the related item in this task panel will be selected")
+               "the related item in this task panel will be selected")  # BAJAR A TRANSLATE
         foot.setText(doc)
         grid.addWidget(foot, 3, 0, 1, 2)
 
@@ -85,7 +85,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        taskPanel.setWindowTitle(self.obj.Label)
+        taskPanel.setWindowTitle(self.obj.Label)  # subir a init
 
         self.advancedOptions.setText("Advanced Options")
         advancedOptionsToolTip = '''More parameters to control the faces.'''

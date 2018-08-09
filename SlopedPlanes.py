@@ -233,7 +233,7 @@ class _SlopedPlanes(_Py):
         if onChanged:
             # print 'A'
 
-            face = Part.makeFace(shape, faceMaker)
+            face = Part.makeFace(shape.Wires, faceMaker)
             fList = face.Faces
 
             # gathers the exterior wires. Lower Left criteria
