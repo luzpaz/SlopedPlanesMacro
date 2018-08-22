@@ -49,6 +49,7 @@ class _TaskPanel_SlopedPlanes():
         form = QtGui.QWidget()
         self.form = form
         form.setObjectName("TaskPanel")
+        form.setWindowTitle(self.obj.Label)
 
         grid = QtGui.QGridLayout(form)
         self.grid = grid
@@ -63,7 +64,6 @@ class _TaskPanel_SlopedPlanes():
         tree.setParent(form)
         grid.addWidget(tree, 1, 0, 1, 2)
         tree.itemChanged.connect(self.edit)
-        # tree.currentItemChanged.connect(tree.changeCurrentItem)
 
         advancedOptions = QtGui.QCheckBox(form)
         self.advancedOptions = advancedOptions
@@ -74,24 +74,23 @@ class _TaskPanel_SlopedPlanes():
         foot = QtGui.QLabel(form)
         self.foot = foot
         foot.setObjectName("foot")
-        doc = ("Hint: Select a face over the figure and \n"
-               "the related item in this task panel will be selected")
-        foot.setText(doc)
         grid.addWidget(foot, 3, 0, 1, 2)
 
         FreeCADGui.Selection.addObserver(self)
 
-    def retranslateUi(self, taskPanel):
+    def retranslateUi(self):
 
         ''''''
 
-        taskPanel.setWindowTitle(self.obj.Label)
+        advancedOptions = self.advancedOptions
+        advancedOptions.setText("Advanced Options")
+        advancedOptions.setToolTip("More parameters to control the faces.")
+        self.title.setText("SlopedPlanes parameters by faces")
+        doc = ("Hint: Select a face over the figure and \n"
+               "the related item in this task panel will be selected")
+        self.foot.setText(doc)
 
-        self.advancedOptions.setText("Advanced Options")
-        advancedOptionsToolTip = '''More parameters to control the faces.'''
-        self.advancedOptions.setToolTip(advancedOptionsToolTip)
-
-        if self.advancedOptions.isChecked():
+        if advancedOptions.isChecked():
             self.tree.setHeaderLabels([("Face"),
                                        ("Angle"),
                                        ("Length"),
@@ -479,7 +478,7 @@ class _TaskPanel_SlopedPlanes():
                 if down:
                     numSlope += 1
 
-        self.retranslateUi(self.form)
+        self.retranslateUi()
         self.updating = False
 
     def resetObject(self):
@@ -723,23 +722,6 @@ class _TreeWidget(QtGui.QTreeWidget):
         self.setColumnCount(2)
         self.header().resizeSection(0, 60)
         self.header().resizeSection(1, 60)
-
-    '''def changeCurrentItem(self, current, previous):
-
-        ''''''
-
-        # print 'currentItemChanged'
-
-        if current:
-            number = self.indexFromItem(previous).data()
-            # print 'number ', number
-            num = self.indexFromItem(current).data()
-            # print 'num ', num
-            if num != number:
-                FreeCADGui.Selection.clearSelection()
-                obj = self.obj
-                sub = 'Face' + str(num)
-                FreeCADGui.Selection.addSelection(obj, [sub])'''
 
 
 class _NewCurve(QtGui.QPushButton):
@@ -1022,7 +1004,6 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         else:
             # print 'bR'
 
-
             suffix = 'mm'
             # print 'suffix ', suffix
             # print 'run ', run
@@ -1059,7 +1040,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             suffix = self.suffix()
             # print 'suffix ', suffix
             # print 'overhangLength ', overhangLength
-            overhangLength = FreeCAD.Units.Quantity(str(overhangLength) + suffix)
+            overhangLength =\
+                FreeCAD.Units.Quantity(str(overhangLength) + suffix)
 
             item = self.item
             tree = self.parent
@@ -1083,7 +1065,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             suffix = 'mm'
             # print 'suffix ', suffix
             # print 'overhangLength ', overhangLength
-            overhangLength = FreeCAD.Units.Quantity(str(overhangLength) + suffix)
+            overhangLength =\
+                FreeCAD.Units.Quantity(str(overhangLength) + suffix)
 
             nn = overhangLength.getUserPreferred()
             # print nn
@@ -1115,7 +1098,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             suffix = self.suffix()
             # print 'suffix ', suffix
             # print 'overhangHeight ', overhangHeight
-            overhangHeight = FreeCAD.Units.Quantity(str(overhangHeight) + suffix)
+            overhangHeight =\
+                FreeCAD.Units.Quantity(str(overhangHeight) + suffix)
 
             item = self.item
             tree = self.parent
@@ -1139,7 +1123,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             suffix = 'mm'
             # print 'suffix ', suffix
             # print 'overhangHeight ', overhangHeight
-            overhangHeight = FreeCAD.Units.Quantity(str(overhangHeight) + suffix)
+            overhangHeight =\
+                FreeCAD.Units.Quantity(str(overhangHeight) + suffix)
 
             nn = overhangHeight.getUserPreferred()
             # print nn
