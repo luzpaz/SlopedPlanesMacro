@@ -361,6 +361,8 @@ class _PyFace(_Py):
         for pyWire in pyWireList:
             pyWire.planning(reset)
 
+        # self.printSummary()
+
         for pyAlign in pyAlignList:
             pyAlign.rangging(reset)
 

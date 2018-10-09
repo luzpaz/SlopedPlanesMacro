@@ -349,6 +349,8 @@ class _PyAlignment(_Py):
             pyPlList = pyWireList[nW].planes
             rC = []
 
+            # if mono utilizar control para hacer descartes. IMPORTANTE!!!
+
             if not mono and nW == pyTwo.numWire:
                 # print 'nW'
 

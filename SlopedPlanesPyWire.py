@@ -201,6 +201,23 @@ class _PyWire(_Py):
                         cc.append(c)
                     pyPlane.rangoPy = cc
 
+            if self.mono:
+                # esto da fallo en la C
+                for pyReflex in reflexList:
+                    [pyR, pyOppR] = pyReflex.planes
+                    for ppList in pyR.rangoPy:
+                        for pp in ppList:
+                            control = pp.control
+                            for nnList in pyOppR.rango:
+                                for nn in nnList:
+                                    control.append(nn)
+                    for ppList in pyOppR.rangoPy:
+                        for pp in ppList:
+                            control = pp.control
+                            for nnList in pyR.rango:
+                                for nn in nnList:
+                                    control.append(nn)
+
     def virtualizing(self):
 
         '''virtualizing(self)
