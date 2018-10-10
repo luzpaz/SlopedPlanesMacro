@@ -201,7 +201,7 @@ class _PyWire(_Py):
                         cc.append(c)
                     pyPlane.rangoPy = cc
 
-            if self.mono:
+            # if self.mono:
 
                 # hay que completar pyReflex para que incluya los rango corner y rango next, en número, y luego usar para los descartes aquí con mono y en trimming reflex con los que resulten
 
