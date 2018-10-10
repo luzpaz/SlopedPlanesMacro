@@ -203,7 +203,7 @@ class _PyWire(_Py):
 
             if self.mono:
 
-                # hay que completar pyReflex para que incluya los rango corner y rango next, en número y plano, y luego usar para los descartes aquí con mono y en trimming reflex con los que resulten
+                # hay que completar pyReflex para que incluya los rango corner y rango next, en número, y luego usar para los descartes aquí con mono y en trimming reflex con los que resulten
 
                 '''for pyReflex in reflexList:
                     [pyR, pyOppR] = pyReflex.planes
