@@ -37,7 +37,6 @@ __version__ = ""
 
 
 V = FreeCAD.Vector
-origin = V(0, 0, 0)
 
 
 class _Py(object):
@@ -169,7 +168,7 @@ class _Py(object):
         '''selectShape(self)'''
 
         if self.aligned:
-            # print 'a'
+            # print('a')
             aliList = self.alignedList
             shape = []
             for pyA in aliList:
@@ -177,14 +176,14 @@ class _Py(object):
             shape = Part.makeCompound(shape)
 
         elif self.reflexed:
-            # print 'b'
+            # print('b')
             if big:
                 shape = self.bigShape
             else:
                 shape = self.simulatedShape
 
         else:
-            # print 'c'
+            # print('c')
             if big:
                 shape = self.bigShape
             else:
@@ -196,86 +195,86 @@ class _Py(object):
 
         '''printSummary(self)'''
 
-        print '###############################################################'
+        print('##############################################################')
 
-        print '********* wires ', _Py.pyFace.wires
+        print('********* wires ', _Py.pyFace.wires)
         for pyWire in _Py.pyFace.wires:
 
-            print '****** numWire ', pyWire.numWire
-            # print '*** coordinates ', pyWire.coordinates
-            # print '*** wire ', [e.Point for e in pyWire.wire.OrderedVertexes]
-            print '*** reflexs ', pyWire.reflexs
+            print('****** numWire ', pyWire.numWire)
+            # print('*** coordinates ', pyWire.coordinates)
+            # print('*** wire ', [e.Point for e in pyWire.wire.OrderedVertexes])
+            print('*** reflexs ', pyWire.reflexs)
             for pyReflex in pyWire.reflexs:
 
-                print 'planes ', pyReflex.planes
-                print 'rangoInter ', pyReflex.rango
-                print 'rear reflex', pyReflex.rear
+                print('planes ', pyReflex.planes)
+                print('rangoInter ', pyReflex.rango)
+                print('rear reflex', pyReflex.rear)
 
                 for pyPlane in pyReflex.planes:
-                    print 'numGeom ', pyPlane.numGeom  # , pyPlane.reflexedList
-                    print 'rear plane ', pyPlane.rear
-                    print 'secondRear ', pyPlane.secondRear
-                    print 'rango ', pyPlane.rango
+                    print('numGeom ', pyPlane.numGeom, pyPlane.reflexedList)
+                    print('rear plane ', pyPlane.rear)
+                    print('secondRear ', pyPlane.secondRear)
+                    print('rango ', pyPlane.rango)
                     '''forward = pyPlane.forward
-                    print 'forward ',\
+                    print('forward ',
                         (self.roundVector(forward.firstVertex(True).Point),
                          self.roundVector(forward.lastVertex(True).Point),
-                         forward.Curve)
+                         forward.Curve))
                     backward = pyPlane.backward
-                    print 'backward ',\
+                    print('backward ',
                         (self.roundVector(backward.firstVertex(True).Point),
                          self.roundVector(backward.lastVertex(True).Point),
-                         backward.Curve)'''
-                    print '#########'
+                         backward.Curve))'''
+                    print('#########')
 
-                print '#######################'
+                print('#######################')
 
-        print '********* alignments ', _Py.pyFace.alignments
+        print('********* alignments ', _Py.pyFace.alignments)
         for pyAlignment in _Py.pyFace.alignments:
 
-            print '****** base'
-            print(pyAlignment.base.numWire, pyAlignment.base.numGeom), pyAlignment.base.alignedList
-            print 'angle ', pyAlignment.base.angle
-            print 'rear ', pyAlignment.rear
-            print 'rear base', pyAlignment.base.rear
-            print 'rango ', pyAlignment.base.rango
-            # print 'geom ', pyAlignment.base.geom
-            # print 'geomAligned ', pyAlignment.base.geomAligned
-            # print 'shape ', pyAlignment.base.shape
-            print 'falsify ', pyAlignment.falsify
-            print 'virtualized ', pyAlignment.base.virtualized
-            print 'cross ', pyAlignment.base.cross
-            print 'rangoChop ', pyAlignment.rango
-            print 'rangoRear ', pyAlignment.rangoRear
-            print 'prior ', (pyAlignment.prior.numWire, pyAlignment.prior.numGeom)
-            print 'later ', (pyAlignment.later.numWire, pyAlignment.later.numGeom)
+            print('****** base')
+            print((pyAlignment.base.numWire, pyAlignment.base.numGeom), pyAlignment.base.alignedList)
+            print('angle ', pyAlignment.base.angle)
+            print('rear ', pyAlignment.rear)
+            print('rear base', pyAlignment.base.rear)
+            print('rango ', pyAlignment.base.rango)
+            # print('geom ', pyAlignment.base.geom)
+            # print('geomAligned ', pyAlignment.base.geomAligned)
+            # print('shape ', pyAlignment.base.shape)
+            print('falsify ', pyAlignment.falsify)
+            print('virtualized ', pyAlignment.base.virtualized)
+            print('cross ', pyAlignment.base.cross)
+            print('rangoChop ', pyAlignment.rango)
+            print('rangoRear ', pyAlignment.rangoRear)
+            print('prior ', (pyAlignment.prior.numWire, pyAlignment.prior.numGeom))
+            print('later ', (pyAlignment.later.numWire, pyAlignment.later.numGeom))
 
-            print '*** chops ', [[(x.numWire, x.numGeom),
+            print('*** chops ', [[(x.numWire, x.numGeom),
                                   (y.numWire, y.numGeom)]
-                                 for [x, y] in pyAlignment.chops]
+                                 for [x, y] in pyAlignment.chops])
             for chop in pyAlignment.chops:
                 for pyPlane in chop:
-                    print(pyPlane.numWire, pyPlane.numGeom), pyPlane.chopedList
-                    print 'rear ', pyPlane.rear
-                    print 'secondRear ', pyPlane.secondRear
-                    print 'rango ', pyPlane.rango
-                    print 'virtualized ', pyPlane.virtualized
-                    print 'cross ', pyPlane.cross
+                    print((pyPlane.numWire, pyPlane.numGeom), pyPlane.chopedList)
+                    print('rear ', pyPlane.rear)
+                    print('secondRear ', pyPlane.secondRear)
+                    print('rango ', pyPlane.rango)
+                    print('virtualized ', pyPlane.virtualized)
+                    print('cross ', pyPlane.cross)
 
-            print '*** aligns ', [(x.numWire, x.numGeom) for x in pyAlignment.aligns]
+            print('*** aligns ', [(x.numWire, x.numGeom) for x in pyAlignment.aligns])
             for align in pyAlignment.aligns:
-                print(align.numWire, align.numGeom), align.alignedList
-                print 'rear ', align.rear
-                print 'secondRear ', align.secondRear
-                print 'rango ', align.rango
-                print 'angle ', align.angle
-                print 'virtualized ', align.virtualized
-                print 'cross ', align.cross
-                # print 'geom ', align.geom
-                # print 'geomAligned ', align.geomAligned
-                # print 'shape ', align.shape
+                print((align.numWire, align.numGeom), align.alignedList)
+                print('rear ', align.rear)
+                print('secondRear ', align.secondRear)
+                print('rango ', align.rango)
+                print('angle ', align.angle)
+                print('virtualized ', align.virtualized)
+                print('cross ', align.cross)
+                # print('geom ', align.geom)
+                # print('geomAligned ', align.geomAligned)
+                # print('shape ', align.shape)
 
-        print '###############################################################'
+        print('##############################################################')
 
     def printSerialSummary(self):
 
@@ -290,23 +289,23 @@ class _Py(object):
 
         '''printPlaneSummary(self)'''
 
-        print '###### ', (self.numWire, self.numGeom), self.shape
+        print('###### ', (self.numWire, self.numGeom), self.shape)
         if self.shape:
-            print 'Area ', self.shape.Area
+            print('Area ', self.shape.Area)
         geom = self.geomShape
-        print (self.roundVector(geom.firstVertex(True).Point), self.roundVector(geom.lastVertex(True).Point))
+        print((self.roundVector(geom.firstVertex(True).Point), self.roundVector(geom.lastVertex(True).Point)))
         forward = self.forward
         try:
-            print (self.roundVector(forward.firstVertex(True).Point), self.roundVector(forward.lastVertex(True).Point))
+            print((self.roundVector(forward.firstVertex(True).Point), self.roundVector(forward.lastVertex(True).Point)))
         except:
             pass
         backward = self.backward
         try:
-            print (self.roundVector(backward.firstVertex(True).Point), self.roundVector(backward.lastVertex(True).Point))
+            print((self.roundVector(backward.firstVertex(True).Point), self.roundVector(backward.lastVertex(True).Point)))
         except:
             pass
 
-        print '######'
+        print('######')
 
     def printAssociatedShapes(self, numWire, numGeom):
 
@@ -426,16 +425,16 @@ class _Py(object):
 
         '''printControl(self, text)'''
 
-        print '###############################################################'
+        print('##############################################################')
 
-        print text
+        print(text)
 
         for pyWire in _Py.pyFace.wires:
-            print 'wire ', pyWire.numWire
+            print('wire ', pyWire.numWire)
             for pyPlane in pyWire.planes:
-                print pyPlane.numGeom, pyPlane.control
+                print(pyPlane.numGeom, pyPlane.control)
 
-        print '###############################################################'
+        print('##############################################################')
 
     def convexReflex(self, eje, nextEje):
 
@@ -443,7 +442,7 @@ class _Py(object):
 
         cross = eje.cross(nextEje)
         corner = None
-        if cross != origin:
+        if cross != V(0, 0, 0):
             cross.normalize()
 
             if cross == _Py.normal:
@@ -480,7 +479,7 @@ class _Py(object):
         '''rotateVector(self, vector, axis, angle)'''
 
         rotation = FreeCAD.Rotation(axis, angle)
-        placement = FreeCAD.Placement(origin, rotation)
+        placement = FreeCAD.Placement(V(0, 0, 0), rotation)
         return placement.multVec(vector)
 
     def faceNormal(self, face):
@@ -493,7 +492,7 @@ class _Py(object):
 
         '''faceDatas(self, face)'''
 
-        # print '###### faceDatas'
+        # print('###### faceDatas')
 
         normal = self.faceNormal(face)
 
@@ -503,7 +502,7 @@ class _Py(object):
         orderPoint = [vert.Point for vert in orderVert]
 
         if len(orderVert) == 1:
-            # print 'closed'
+            # print('closed')
 
             curve = wire.Edges[0].Curve
             startParam = 0
@@ -512,7 +511,7 @@ class _Py(object):
             geometryList = [geom]
 
         else:
-            # print 'no closed'
+            # print('no closed')
 
             geometryList = self.geometries(face, orderPoint)
 
@@ -526,7 +525,7 @@ class _Py(object):
         coordinates = coordinates[index:] + coordinates[:index]
         geometryList = geometryList[index:] + geometryList[:index]
 
-        # print coordinates, geometryList
+        # print(coordinates, geometryList)
 
         return coordinates, geometryList
 
@@ -564,7 +563,7 @@ class _Py(object):
 
         '''geometries(self, face, coordinates)'''
 
-        # print '###### geometries'
+        # print('###### geometries')
 
         if len(coordinates) == 0:
             edge = face.OuterWire.Edges[0]
@@ -615,65 +614,65 @@ class _Py(object):
 
         '''makeGeom(self, curve, startParam, endParam)'''
 
-        # print '###### makeGeom'
+        # print('###### makeGeom')
 
         if isinstance(curve, (Part.Line, Part.LineSegment)):
-            # print '1'
+            # print('1')
             geom = Part.LineSegment(curve, startParam, endParam)
 
         elif isinstance(curve, Part.Circle):
-            # print '2'
+            # print('2')
             angleXU = curve.AngleXU
             geom = Part.ArcOfCircle(curve, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfCircle):
-            # print '3'
+            # print('3')
             angleXU = curve.AngleXU
             geom = Part.ArcOfCircle(curve.Circle, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.Ellipse):
-            # print '4'
+            # print('4')
             angleXU = curve.AngleXU
             geom = Part.ArcOfEllipse(curve, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfEllipse):
-            # print '5'
+            # print('5')
             angleXU = curve.AngleXU
             geom = Part.ArcOfEllipse(curve.Ellipse, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.Parabola):
-            # print '6'
+            # print('6')
             angleXU = curve.AngleXU
             geom = Part.ArcOfParabola(curve, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfParabola):
-            # print '7'
+            # print('7')
             angleXU = curve.AngleXU
             geom = Part.ArcOfParabola(curve.Parabola, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.Hyperbola):
-            # print '8'
+            # print('8')
             angleXU = curve.AngleXU
             geom = Part.ArcOfHyperbola(curve, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfHyperbola):
-            # print '9'
+            # print('9')
             angleXU = curve.AngleXU
             geom = Part.ArcOfHyperbola(curve.Hyperbola, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.BSplineCurve):
-            # print '10'
+            # print('10')
             pass
 
-        # print 'geom ', geom
+        # print('geom ', geom)
 
         return geom
 
@@ -681,7 +680,7 @@ class _Py(object):
 
         '''doGeom(self)'''
 
-        # print '###### doGeom'
+        # print('###### doGeom')
 
         if not self.aligned:
             if self.geom:
@@ -702,7 +701,7 @@ class _Py(object):
 
         '''rang(self, pyWire, numGeom, nGeom, direction, reflex=False)'''
 
-        # print 'rang ', (numGeom, nGeom, reflex)
+        # print('rang ', (numGeom, nGeom, reflex))
 
         if numGeom == nGeom:
             return []
@@ -710,47 +709,47 @@ class _Py(object):
         lenWire = len(pyWire.planes)
 
         if direction == 'forward':
-            # print 'A'
+            # print('A')
             if reflex:
-                # print 'reflex'
+                # print('reflex')
                 num = numGeom + 2
             else:
-                # print 'no reflex'
+                # print('no reflex')
                 num = numGeom + 1
             num = self.sliceIndex(num, lenWire)
-            # print 'num ', num
+            # print('num ', num)
 
             if nGeom >= num:
-                # print 'A1'
+                # print('A1')
                 ran = range(num, nGeom)
             else:
-                # print 'A2'
+                # print('A2')
                 ran = range(num, lenWire) + range(0, nGeom)
 
         else:
-            # print 'B'
+            # print('B')
             if reflex:
-                # print 'reflex'
+                # print('reflex')
                 num = numGeom - 1
                 num = self.sliceIndex(num, lenWire)
             else:
-                # print 'no reflex'
+                # print('no reflex')
                 num = numGeom
-            # print 'num ', num
+            # print('num ', num)
 
             if numGeom >= nGeom:
-                # print 'B1'
+                # print('B1')
                 ran = range(nGeom + 1, num)
                 ran.reverse()
             else:
-                # print 'B2'
+                # print('B2')
                 ranA = range(nGeom + 1, lenWire)
                 ranA.reverse()
                 ranB = range(0, num)
                 ranB.reverse()
                 ran = ranB + ranA
 
-        # print 'ran ', ran
+        # print('ran ', ran)
         return ran
 
     def makeSweepSketch(self, slopedPlanes):
@@ -841,28 +840,28 @@ class _PySketch(_Py):
         ffPoint = geomShape.firstVertex(True).Point
         llPoint = geomShape.lastVertex(True).Point
 
-        # print 'ffPoint ', ffPoint
-        # print 'llPoint ', llPoint
+        # print('ffPoint ', ffPoint)
+        # print('llPoint ', llPoint)
 
         if ffPoint == llPoint:
-            # print 'a'
+            # print('a')
             edge = slopedPlanes.Shape.Edges[1]
             aa = ffPoint
             bb = edge.firstVertex(True).Point
             direction = bb.sub(aa)
 
         else:
-            # print 'b'
+            # print('b')
             direction = llPoint.sub(ffPoint)
 
-        # print 'direction ', direction
+        # print('direction ', direction)
 
         angle = direction.getAngle(V(1, 0, 0)) + math.pi / 2
-        # print 'angle ', angle
+        # print('angle ', angle)
 
         if ffPoint.y > llPoint.y:
             angle = angle + math.pi
-            # print 'angle ', angle
+            # print('angle ', angle)
 
         rotation = FreeCAD.Rotation()
         rotation.Axis = V(1, 0, 0)
@@ -870,11 +869,11 @@ class _PySketch(_Py):
         sketch.Placement.Rotation = rotation
 
         if ffPoint == llPoint:
-            # print 'aa'
+            # print('aa')
             rotation = FreeCAD.Rotation()
             rotation.Axis = V(0, 0, 1)
             angleXU = geomShape.Curve.AngleXU
-            # print angleXU
+            # print(angleXU)
             if numWire == 0:
                 rotation.Angle = math.pi + angleXU
             else:
@@ -883,7 +882,7 @@ class _PySketch(_Py):
                 rotation.multiply(sketch.Placement.Rotation)
 
         else:
-            # print 'bb'
+            # print('bb')
             rotation = FreeCAD.Rotation()
             rotation.Axis = _Py.normal
             rotation.Angle = angle
