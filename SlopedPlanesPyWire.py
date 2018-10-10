@@ -202,8 +202,10 @@ class _PyWire(_Py):
                     pyPlane.rangoPy = cc
 
             if self.mono:
-                # esto da fallo en la C
-                for pyReflex in reflexList:
+
+                # hay que completar pyReflex para que incluya los rango corner y rango next, en número y plano, y luego usar para los descartes aquí con mono y en trimming reflex con los que resulten
+
+                '''for pyReflex in reflexList:
                     [pyR, pyOppR] = pyReflex.planes
                     for ppList in pyR.rangoPy:
                         for pp in ppList:
@@ -211,12 +213,13 @@ class _PyWire(_Py):
                             for nnList in pyOppR.rango:
                                 for nn in nnList:
                                     control.append(nn)
+
                     for ppList in pyOppR.rangoPy:
                         for pp in ppList:
                             control = pp.control
                             for nnList in pyR.rango:
                                 for nn in nnList:
-                                    control.append(nn)
+                                    control.append(nn)'''
 
     def virtualizing(self):
 
