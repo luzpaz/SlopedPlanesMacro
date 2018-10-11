@@ -31,9 +31,3 @@ __url__ = "http://www.freecadweb.org"
 __version__ = ""
 
 
-class _PyEdge(_Py):
-
-    '''A funtional class for operations with edges.
-    The results are stored in the _PyPlane instance attributes.'''
-
-    pass
