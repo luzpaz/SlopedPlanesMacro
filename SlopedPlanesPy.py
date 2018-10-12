@@ -721,10 +721,10 @@ class _Py(object):
 
             if nGeom >= num:
                 # print('A1')
-                ran = range(num, nGeom)
+                ran = list(range(num, nGeom))
             else:
                 # print('A2')
-                ran = range(num, lenWire) + range(0, nGeom)
+                ran = list(range(num, lenWire)) + list(range(0, nGeom))
 
         else:
             # print('B')
@@ -740,14 +740,18 @@ class _Py(object):
             if numGeom >= nGeom:
                 # print('B1')
                 ran = range(nGeom + 1, num)
-                ran.reverse()
+                #ran.reverse()
+                ran = reversed(ran)
+                ran = list(ran)
             else:
                 # print('B2')
                 ranA = range(nGeom + 1, lenWire)
-                ranA.reverse()
+                #ranA.reverse()
+                ranA = reversed(ranA)
                 ranB = range(0, num)
-                ranB.reverse()
-                ran = ranB + ranA
+                #ranB.reverse()
+                ranB = reversed(ranB)
+                ran = list(ranB) + list(ranA)
 
         # print('ran ', ran)
         return ran

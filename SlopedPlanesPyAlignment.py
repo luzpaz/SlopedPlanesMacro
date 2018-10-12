@@ -1972,8 +1972,9 @@ class _PyAlignment(_Py):
 
             # print('rangoRear ', rangoRear)
 
-            rangoRear.insert(0, lat)
-            rangoRear.append(pr)
+            #rangoRear.insert(0, lat)
+            #rangoRear.append(pr)
+            rangoRear = [lat] + list(rangoRear) + [pr]
 
             # print('rangoRear ', rangoRear)
 
