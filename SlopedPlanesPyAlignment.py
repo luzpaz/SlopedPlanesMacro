@@ -818,7 +818,9 @@ class _PyAlignment(_Py):
             # print('rChop ', rChop, rChopPy)
 
             cutList = []
-            for rr, pyPl in map(None, rChop, rChopPy):
+            #for rr, pyPl in map(None, rChop, rChopPy):
+            for pyPl in rChopPy:
+
                 if not (pyPl.aligned or pyPl.choped):
 
                     if pyPl.reflexed:
@@ -830,6 +832,8 @@ class _PyAlignment(_Py):
                         # print('pyPl.numGeom ', pyPl.numGeom)
                         pl = pyPl.bigShape.copy()
                         gS = pyPl.geomShape
+
+                        rr = pyPl.numGeom
 
                         if rr in rrOne:
                             # print('rrOne')
@@ -1577,7 +1581,8 @@ class _PyAlignment(_Py):
                     pyBase = aligns[numChop]
 
                 # rChop with base and cont
-                for nn, pyPl in map(None, rChop, rChopPy):
+                #for nn, pyPl in map(None, rChop, rChopPy):
+                for pyPl in rChopPy:
                     if not (pyPl.choped or pyPl.aligned):
                         pyPl.cuttingPyth(cutList)
                         # print('rangoChop ', nn)'''
