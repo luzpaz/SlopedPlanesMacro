@@ -13,13 +13,13 @@ executionList = []
 
 
 for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
-    # print 'directory ', directory
+    # print('directory ', directory)
     for filename in directory[2]:
-        # print 'filename ', filename
+        # print('filename ', filename)
         if filename.endswith('.fcstd'):
-            # print 'open'
+            # print('open')
             doc = FreeCAD.openDocument(directory[0] + '/' + filename)
-            # print '######### ', doc.Name
+            # print('######### ', doc.Name)
             numDoc += 1
 
             for obj in doc.Objects:
@@ -34,7 +34,7 @@ for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
                             pyFace.reset = True
 
                         obj.touch()
-                        # print '####### ', obj.Name
+                        # print('####### ', obj.Name)
                         doc.recompute()
 
                         newShape = obj.Shape
@@ -46,42 +46,42 @@ for directory in os.walk('/home/travis/SlopedPlanesTest/Test'):
 
                             numError += 1
                             executionList.append((doc.Name, obj.Name))
-                            # print '????????????????????????? execution ERROR'
+                            # print('????????????????????????? execution ERROR')
 
                         elif cut.isNull() or cc.isNull():
 
                             numError += 1
                             geometricList.append((doc.Name, obj.Name))
-                            # print '????????????????????????? geometric ERROR'
+                            # print('????????????????????????? geometric ERROR')
 
                         elif cut.Area != 0 or cc.Area != 0:
 
                             numError += 1
                             geometricList.append((doc.Name, obj.Name))
-                            # print '????????????????????????? geometric ERROR'
+                            # print('????????????????????????? geometric ERROR')
 
                         elif len(newShape.Edges) != len(oldShape.Edges):
 
                             numError += 1
                             edgeList.append((doc.Name, obj.Name))
-                            # print '????????????????????????? edge ERROR'
+                            # print('????????????????????????? edge ERROR')
 
                         elif len(newShape.Vertexes) != len(oldShape.Vertexes):
 
                             numError += 1
                             vertexList.append((doc.Name, obj.Name))
-                            # print '????????????????????????? vertex ERROR'
+                            # print('????????????????????????? vertex ERROR')
 
                         else:
 
                             pass
-                            # print '### okey'
+                            # print('### okey')
 
-print 'files ', numDoc
-print 'objects ', numObj
-print 'erros ', numError
-print 'geometry errors ', geometricList
-print 'edge errors ', edgeList
-print 'vertex errors ', vertexList
-print 'execution errors ', executionList
-print 'time.clock() ', time.clock()
+print('files ', numDoc)
+print('objects ', numObj)
+print('erros ', numError)
+print('geometry errors ', geometricList)
+print('edge errors ', edgeList)
+print('vertex errors ', vertexList)
+print('execution errors ', executionList)
+print('time.clock() ', time.clock())
