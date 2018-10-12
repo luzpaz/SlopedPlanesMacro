@@ -34,6 +34,10 @@ __version__ = ""
 class _PyEdge(_Py):
 
     '''A funtional class for operations with edges.
-    The results are stored in the _PyPlane instance attributes.'''
+    This is a posteriori implementation.
+    At this moment, the results are stored in the _PyPlane instance attributes.
+    In this way, the objects created here are discarded.
+    To change this temporary situation, we need to modify the code and
+    serialization!!!'''
 
     pass
