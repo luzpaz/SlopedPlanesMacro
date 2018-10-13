@@ -33,11 +33,77 @@ __version__ = ""
 
 class _PyEdge(_Py):
 
-    '''A funtional class for operations with edges.
-    This is a posteriori implementation.
-    At this moment, the results are stored in the _PyPlane instance attributes.
-    In this way, the objects created here are discarded.
-    To change this temporary situation, we need to modify the code and
-    serialization!!!'''
+    '''The complementary python object class for edges.The edges of the base
+    sketch are extruded to create the planes. This is a delagated class'''
+
+    pass
+
+
+class _PyEdgeLineSegment(_PyEdge):
+
+    ''''''
+
+    pass
+
+
+class _PyEdgeCircle(_PyEdge):
+
+    ''''''
+
+    pass
+
+
+class _PyEdgeArcOfCircle(_PyEdge):
+
+    ''''''
+
+    pass
+
+
+class _PyEdgeEllipse(_PyEdge):
+
+    ''''''
+
+    pass
+
+
+class _PyEdgeArcOfEllipse(_PyEdge):
+
+    ''''''
+
+    pass
+
+
+class _PyEdgeParabola(_PyEdge):
+
+    ''''''
+
+    pass
+
+
+class _PyEdgeArcOfParabola(_PyEdge):
+
+    ''''''
+
+    pass
+
+
+class _PyEdgeHyperbola(_PyEdge):
+
+    ''''''
+
+    pass
+
+
+class _PyEdgeArcOfHyperbola(_PyEdge):
+
+    ''''''
+
+    pass
+
+
+class _PyEdgeBSplineCurve(_PyEdge):
+
+    ''''''
 
     pass
