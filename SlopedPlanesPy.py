@@ -25,7 +25,7 @@
 import math
 import FreeCAD
 import Part
-import Sketcher
+# import Sketcher
 if FreeCAD.GuiUp:
     import FreeCADGui
 
@@ -764,10 +764,10 @@ class _Py(object):
             FreeCAD.ActiveDocument.addObject('Sketcher::SketchObjectPython',
                                              'SweepSketch')
 
-        from SlopedPlanesPySketch import _PySketch, _ViewProviderPySketch
+        import SlopedPlanesPySketch as SPPS
 
-        _PySketch(pySketch)
-        _ViewProviderPySketch(pySketch.ViewObject)
+        SPPS._PySketch(pySketch)
+        SPPS._ViewProviderPySketch(pySketch.ViewObject)
 
         pySketch.Proxy.locate(pySketch, self, slopedPlanes)
         pySketch.Proxy.slope(pySketch, self)

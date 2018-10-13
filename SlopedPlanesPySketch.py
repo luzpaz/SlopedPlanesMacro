@@ -26,7 +26,6 @@ import math
 import FreeCAD
 import Part
 import Sketcher
-from SlopedPlanesPy import _Py
 
 
 V = FreeCAD.Vector
@@ -38,7 +37,7 @@ __url__ = "http://www.freecadweb.org"
 __version__ = ""
 
 
-class _PySketch(_Py):
+class _PySketch():
 
     ''''''
 
@@ -143,7 +142,7 @@ class _PySketch(_Py):
         else:
             # print('bb')
             rotation = FreeCAD.Rotation()
-            rotation.Axis = _Py.normal
+            rotation.Axis = V(0, 0, 1)
             rotation.Angle = angle
             sketch.Placement.Rotation =\
                 rotation.multiply(sketch.Placement.Rotation)
