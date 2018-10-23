@@ -693,7 +693,7 @@ class _Py(object):
         geom = self.makeGeom(curve, startParam, endParam)
 
         if not self.aligned:
-            self.geom = geom
+            self.geom = geom  # en este caso, que no se cual es, hay que modificar pyEdge
 
         return geom
 

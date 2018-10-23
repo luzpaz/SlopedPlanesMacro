@@ -833,7 +833,7 @@ class _PyPlane(_Py):
 
         coordinates = pyWire.coordinates
 
-        geom = self.doGeom()  # debido a alineamiento y planos sin geom?
+        geom = self.doGeom()  # debido a alineamiento y planos sin geom? Los planos sin geom debn ser otra utilización de doGeom(). Dividir
 
         eje = coordinates[numGeom + 1].sub(coordinates[numGeom])
         direction = self.rotateVector(eje, _Py.normal, 90)
