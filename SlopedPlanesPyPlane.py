@@ -828,11 +828,12 @@ class _PyPlane(_Py):
 
     def direction(self, pyWire, numGeom):
 
-        '''direction(self, pyWire, numGeom)'''
+        '''direction(self, pyWire, numGeom)
+        The extrusion direction'''
 
         coordinates = pyWire.coordinates
 
-        geom = self.doGeom()
+        geom = self.doGeom()  # debido a alineamiento y planos sin geom?
 
         eje = coordinates[numGeom + 1].sub(coordinates[numGeom])
         direction = self.rotateVector(eje, _Py.normal, 90)

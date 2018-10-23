@@ -683,7 +683,7 @@ class _Py(object):
         # print('###### doGeom')
 
         if not self.aligned:
-            if self.geom:
+            if self.geom:  # ver comentario en pyPlane direction
                 return self.geom
 
         geomAligned = self.geomAligned
