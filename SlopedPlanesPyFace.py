@@ -30,6 +30,7 @@ from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyReflex import _PyReflex
 from SlopedPlanesPyAlignment import _PyAlignment
 from SlopedPlanesPyPlane import _PyPlane
+import SlopedPlanesPyEdge
 
 
 V = FreeCAD.Vector
@@ -1243,6 +1244,8 @@ class _PyFace(_Py):
         # print('geom ', geom)
         # print('firstParam ', firstParam)
         # print('lastParam ', lastParam)
+
+        # SlopedPlanesPyEdge.makePyEdge(pyPlane)
 
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola,
