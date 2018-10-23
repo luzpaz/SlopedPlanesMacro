@@ -171,7 +171,7 @@ class _PyEdgeArcOfParabola(_PyEdgeOpen):
 
         '''__init__(self, pyPlane)'''
 
-        _PyEdgeOpen.__init__(pyPlane)
+        _PyEdgeOpen.__init__(self, pyPlane)
 
 
 class _PyEdgeArcOfHyperbola(_PyEdgeOpen):
@@ -182,7 +182,7 @@ class _PyEdgeArcOfHyperbola(_PyEdgeOpen):
 
         '''__init__(self, pyPlane)'''
 
-        _PyEdgeOpen.__init__(pyPlane)
+        _PyEdgeOpen.__init__(self, pyPlane)
 
 
 class _PyEdgeClosed(_PyEdge):
@@ -193,7 +193,7 @@ class _PyEdgeClosed(_PyEdge):
 
         '''__init__(self, pyPlane)'''
 
-        _PyEdge.__init__(pyPlane)
+        _PyEdge.__init__(self, pyPlane)
 
         geom = self.geom
         firstParam = self.firstParam
@@ -251,7 +251,7 @@ class _PyEdgeArcOfCircle(_PyEdgeClosed):
 
         '''__init__(self, pyPlane)'''
 
-        _PyEdgeClosed.__init__(pyPlane)
+        _PyEdgeClosed.__init__(self, pyPlane)
 
 
 class _PyEdgeArcOfEllipse(_PyEdgeClosed):
@@ -262,7 +262,7 @@ class _PyEdgeArcOfEllipse(_PyEdgeClosed):
 
         '''__init__(self, pyPlane)'''
 
-        _PyEdgeClosed.__init__(pyPlane)
+        _PyEdgeClosed.__init__(self, pyPlane)
 
 
 class _PyEdgeBSplineCurve(_PyEdge):
@@ -273,4 +273,4 @@ class _PyEdgeBSplineCurve(_PyEdge):
 
         '''__init__(self, pyPlane)'''
 
-        _PyEdge.__init__(pyPlane)
+        _PyEdge.__init__(self, pyPlane)
