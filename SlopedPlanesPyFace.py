@@ -1237,15 +1237,15 @@ class _PyFace(_Py):
 
         # print(pyPlane.numWire, pyPlane.numGeom)
 
-        geom = pyPlane.geom
+        pyEdge = SlopedPlanesPyEdge.makePyEdge(pyPlane)
+
+        '''geom = pyPlane.geom
         firstParam = geom.FirstParameter
         lastParam = geom.LastParameter
 
         # print('geom ', geom)
         # print('firstParam ', firstParam)
         # print('lastParam ', lastParam)
-
-        # SlopedPlanesPyEdge.makePyEdge(pyPlane)
 
         if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola,
@@ -1313,9 +1313,12 @@ class _PyFace(_Py):
         backwardLine = self.makeGeom(gg, sParam, eParam)
         # print('backwardLine ', backwardLine)
         # print(backwardLine.value(sParam), backwardLine.value(eParam))
-        backwardLineShape = backwardLine.toShape()
+        backwardLineShape = backwardLine.toShape()'''
 
         # Always forward into and backward outside
+
+        forwardLineShape = pyEdge.forward
+        backwardLineShape = pyEdge.backward
 
         if direction == "forward":
             # print('a')

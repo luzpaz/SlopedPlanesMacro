@@ -120,6 +120,7 @@ class _PyEdge(_Py):
         # print(forwardLine.value(startParam), forwardLine.value(endParam))
         forwardLineShape = forwardLine.toShape()
         self.forward = forwardLineShape
+
         backwardLine = self.makeGeom(gg, sParam, eParam)
         # print('backwardLine ', backwardLine)
         # print(backwardLine.value(sParam), backwardLine.value(eParam))
@@ -135,12 +136,11 @@ class _PyEdgeOpen(_PyEdge):
 
         '''__init__(self, pyPlane)'''
 
-        _PyEdge.__init__(pyPlane)
+        _PyEdge.__init__(self, pyPlane)
 
         geom = self.geom
-
-        firstParam = geom.FirstParameter
-        lastParam = geom.LastParameter
+        firstParam = self.firstParam
+        lastParam = self.lastParam
 
         startParam = lastParam
         endParam = lastParam + _Py.size
@@ -160,9 +160,7 @@ class _PyEdgeLineSegment(_PyEdgeOpen):
 
         '''__init__(self, pyPlane)'''
 
-        _PyEdgeOpen.__init__(pyPlane)
-
-        return self
+        _PyEdgeOpen.__init__(self, pyPlane)
 
 
 class _PyEdgeArcOfParabola(_PyEdgeOpen):
@@ -175,8 +173,6 @@ class _PyEdgeArcOfParabola(_PyEdgeOpen):
 
         _PyEdgeOpen.__init__(pyPlane)
 
-        return self
-
 
 class _PyEdgeArcOfHyperbola(_PyEdgeOpen):
 
@@ -188,8 +184,6 @@ class _PyEdgeArcOfHyperbola(_PyEdgeOpen):
 
         _PyEdgeOpen.__init__(pyPlane)
 
-        return self
-
 
 class _PyEdgeClosed(_PyEdge):
 
@@ -200,6 +194,53 @@ class _PyEdgeClosed(_PyEdge):
         '''__init__(self, pyPlane)'''
 
         _PyEdge.__init__(pyPlane)
+
+        geom = self.geom
+        firstParam = self.firstParam
+        lastParam = self.lastParam
+
+        if geom.Axis == V(0, 0, 1):
+            # print('A')
+
+            half = (2 * pi - (lastParam - firstParam)) / 2
+            startParam = lastParam
+            endParam = lastParam + half
+
+            # print('half ', half)
+            # print('startParam ', startParam)
+            # print('endParam ', endParam)
+
+            gg = geom.copy()
+            gg.Axis = _Py.normal * -1
+            sParam = 2 * pi - firstParam
+            eParam = sParam + half
+
+            # print('gg ', gg)
+
+            # print('sParam ', sParam)
+            # print('eParam ', eParam)
+
+        else:
+            # print('B')
+
+            half = (2 * pi - (lastParam - firstParam)) / 2
+            startParam = lastParam
+            endParam = lastParam + half
+
+            # print('half ', half)
+            # print('startParam ', startParam)
+            # print('endParam ', endParam)
+
+            gg = geom.copy()
+            gg.Axis = _Py.normal
+            sParam = 2 * pi - firstParam
+            eParam = sParam + half
+
+            # print('gg ', gg)
+            # print('sParam ', sParam)
+            # print('eParam ', eParam)
+
+        self.params(geom, gg, startParam, endParam, sParam, eParam)
 
 
 class _PyEdgeArcOfCircle(_PyEdgeClosed):
