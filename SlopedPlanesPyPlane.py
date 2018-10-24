@@ -831,9 +831,11 @@ class _PyPlane(_Py):
         '''direction(self, pyWire, numGeom)
         The extrusion direction'''
 
+        # solo se debería utilizar si no hay sweepCurve !!! Corregir
+
         coordinates = pyWire.coordinates
 
-        geom = self.doGeom()  # debido a alineamiento y planos sin geom? Los planos sin geom debn ser otra utilización de doGeom(). Dividir
+        geom = self.doGeom()  # debido a alineamiento y planos sin geom? Los planos sin geom debn ser otra utilización de doGeom(). Dividir y poner aqui el condicional de alineamiento
 
         eje = coordinates[numGeom + 1].sub(coordinates[numGeom])
         direction = self.rotateVector(eje, _Py.normal, 90)
