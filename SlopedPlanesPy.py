@@ -676,11 +676,11 @@ class _Py(object):
 
         return geom
 
-    def doGeom(self):
+    def doGeomAligned(self):
 
-        '''doGeom(self)'''
+        '''doGeomAligned(self)'''
 
-        # print('###### doGeom')
+        # print('###### doGeomAligned')
 
         geomAligned = self.geomAligned
         curve = geomAligned.Curve

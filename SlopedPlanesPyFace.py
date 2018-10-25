@@ -682,8 +682,8 @@ class _PyFace(_Py):
                                         fAng = self.findAngle(numWire, numGeom)
                                         sAng = self.findAngle(nWire, nGeom)
 
-                                        fGeom = pyPlane.doGeom()
-                                        sGeom = pyPl.doGeom()
+                                        fGeom = pyPlane.doGeomAligned()
+                                        sGeom = pyPl.doGeomAligned()
 
                                         forwardLine = forward.Curve
 

@@ -838,15 +838,16 @@ class _PyPlane(_Py):
 
         '''extrusionDirection(self, pyWire, numGeom)
         The extrusion direction.
-        If self is aligned a new geom is calculated.
-        If sweepCurve exists, later on is overwrited.'''
+        If self is aligned a new geom is calculated.'''
+
+        # debe incluir sweepCurve y closed
 
         coordinates = pyWire.coordinates
         geom = self.geom
 
         if self.aligned:
 
-            geom = self.doGeom()
+            geom = self.doGeomAligned()
 
             self.edge.geom = geom
             self.edge.firstParam = geom.FirstParameter
