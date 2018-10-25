@@ -794,35 +794,35 @@ class _PyPlane(_Py):
                 height = radius * tan(radians(angle))
                 pointA = self.geomShape.Vertexes[0].Point
                 pointB = geom.Location + FreeCAD.Vector(0, 0, height)
-                direction = pointB.sub(pointA)
-                direction.normalize()
+                extrusionDirection = pointB.sub(pointA)
+                extrusionDirection.normalize()
 
             else:
                 # print('no closed')
-                direction, geom = self.direction(pyWire, numGeom)
+                extrusionDirection, geom = self.extrusionDirection(pyWire, numGeom)
 
             # print('geom ', geom)
-            # print('direction ', direction)
+            # print('extrusionDirection ', extrusionDirection)
 
             geomCopy = geom.copy()
             if not (self.sweepCurve or closed):
-                geomCopy.translate(-1 * self.overhang * direction)
+                geomCopy.translate(-1 * self.overhang * extrusionDirection)
 
             # print('# normal')
             scale = 1
             plane =\
-                self.doPlane(direction, pyWire, geomCopy, scale, closed)
+                self.doPlane(extrusionDirection, pyWire, geomCopy, scale, closed)
             self.shape = plane
             self.seedShape = plane.copy()
 
             geomCopy = geom.copy()
             if not (self.sweepCurve or closed):
-                geomCopy.translate(-1 * _Py.size * direction)
+                geomCopy.translate(-1 * _Py.size * extrusionDirection)
 
             # print('# big')
             scale = 5
             bigPlane =\
-                self.doPlane(direction, pyWire, geomCopy, scale, closed)
+                self.doPlane(extrusionDirection, pyWire, geomCopy, scale, closed)
             self.bigShape = bigPlane
             self.seedBigShape = bigPlane.copy()
 
@@ -831,12 +831,12 @@ class _PyPlane(_Py):
                 # print('# enormous')
                 scale = 50
                 enormousPlane =\
-                    self.doPlane(direction, pyWire, geomCopy, scale, closed)
+                    self.doPlane(extrusionDirection, pyWire, geomCopy, scale, closed)
                 self.enormousShape = enormousPlane
 
-    def direction(self, pyWire, numGeom):
+    def extrusionDirection(self, pyWire, numGeom):
 
-        '''direction(self, pyWire, numGeom)
+        '''extrusionDirection(self, pyWire, numGeom)
         The extrusion direction.
         If sweepCurve exists, later on is overwrited.
         If self is aligned a new geom is calculated.'''
@@ -852,18 +852,18 @@ class _PyPlane(_Py):
         self.edge.lastParam = geom.LastParameter
 
         eje = coordinates[numGeom + 1].sub(coordinates[numGeom])
-        direction = self.rotateVector(eje, _Py.normal, 90)
+        extrusionDirection = self.rotateVector(eje, _Py.normal, 90)
         angle = self.angle
         if _Py.reverse:
             angle = angle * -1
-        direction = self.rotateVector(direction, eje, angle)
-        direction.normalize()
+        extrusionDirection = self.rotateVector(extrusionDirection, eje, angle)
+        extrusionDirection.normalize()
 
-        return direction, geom
+        return extrusionDirection, geom
 
-    def doPlane(self, direction, pyWire, geom, scale, closed):
+    def doPlane(self, extrusionDirection, pyWire, geom, scale, closed):
 
-        '''doPlane(self, direction, pyWire, geom, scale, closed)'''
+        '''doPlane(self, extrusionDirection, pyWire, geom, scale, closed)'''
 
         # print('# doPlane')
 
@@ -944,12 +944,12 @@ class _PyPlane(_Py):
                 edge = _Py.slopedPlanes.Shape.Edges[1]
                 aa = ffPoint
                 bb = edge.firstVertex(True).Point
-                direction = bb.sub(aa)
+                extrusionDirection = bb.sub(aa)
             else:
                 # print('b')
-                direction = llPoint.sub(ffPoint)
+                extrusionDirection = llPoint.sub(ffPoint)
 
-            aa = direction.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
+            aa = extrusionDirection.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
             if ffPoint.y > llPoint.y:
                 aa = aa + pi
 
@@ -1190,7 +1190,7 @@ class _PyPlane(_Py):
             else:
                 # print('B2')
 
-                plane = extendShape.extrude(direction * upScale)
+                plane = extendShape.extrude(extrusionDirection * upScale)
 
         return plane
 
