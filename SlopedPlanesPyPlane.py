@@ -844,12 +844,15 @@ class _PyPlane(_Py):
         # solo se debería utilizar si no hay sweepCurve !!! Corregir
 
         coordinates = pyWire.coordinates
+        geom = self.geom
 
-        geom = self.doGeom()  # debido a alineamiento y planos sin geom? Los planos sin geom debn ser otra utilización de doGeom(). Dividir y poner aqui el condicional de alineamiento
+        if self.aligned:
 
-        self.edge.geom = geom
-        self.edge.firstParam = geom.FirstParameter
-        self.edge.lastParam = geom.LastParameter
+            geom = self.doGeom()  # debido a alineamiento y planos sin geom? Los planos sin geom debn ser otra utilización de doGeom(). Dividir y poner aqui el condicional de alineamiento
+
+            self.edge.geom = geom
+            self.edge.firstParam = geom.FirstParameter
+            self.edge.lastParam = geom.LastParameter
 
         eje = coordinates[numGeom + 1].sub(coordinates[numGeom])
         extrusionDirection = self.rotateVector(eje, _Py.normal, 90)

@@ -682,9 +682,9 @@ class _Py(object):
 
         # print('###### doGeom')
 
-        if not self.aligned:
+        '''if not self.aligned:
             if self.geom:  # ver comentario en pyPlane direction
-                return self.geom
+                return self.geom'''
 
         geomAligned = self.geomAligned
         curve = geomAligned.Curve
@@ -692,8 +692,8 @@ class _Py(object):
         endParam = geomAligned.parameterAt(geomAligned.lastVertex(True))
         geom = self.makeGeom(curve, startParam, endParam)
 
-        if not self.aligned:
-            self.geom = geom  # en este caso, que no se cual es, hay que modificar pyEdge
+        #if not self.aligned:
+            #self.geom = geom  # en este caso, que no se cual es, hay que modificar pyEdge
 
         return geom
 
