@@ -838,17 +838,15 @@ class _PyPlane(_Py):
 
         '''extrusionDirection(self, pyWire, numGeom)
         The extrusion direction.
-        If sweepCurve exists, later on is overwrited.
-        If self is aligned a new geom is calculated.'''
-
-        # solo se debería utilizar si no hay sweepCurve !!! Corregir
+        If self is aligned a new geom is calculated.
+        If sweepCurve exists, later on is overwrited.'''
 
         coordinates = pyWire.coordinates
         geom = self.geom
 
         if self.aligned:
 
-            geom = self.doGeom()  # debido a alineamiento y planos sin geom? Los planos sin geom debn ser otra utilización de doGeom(). Dividir y poner aqui el condicional de alineamiento
+            geom = self.doGeom()
 
             self.edge.geom = geom
             self.edge.firstParam = geom.FirstParameter
