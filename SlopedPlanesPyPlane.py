@@ -912,7 +912,7 @@ class _PyPlane(_Py):
         # print('firstParam ', firstParam)
         # print('lastParam ', lastParam)
 
-        '''if isinstance(geom, (Part.LineSegment,
+        if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola)):
             # print('a')
 
@@ -980,12 +980,12 @@ class _PyPlane(_Py):
         elif isinstance(geom, Part.BSplineCurve):
             # print('d')
 
-            pass'''
+            pass
 
         # print('startParam ', startParam)
         # print('endParam ', endParam)
 
-        startParam, endParam = self.edge.baseEdge(leftScale, rightScale)
+        # startParam, endParam = self.edge.baseEdge(leftScale, rightScale)
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
         # print('extendGeom ', extendGeom)
