@@ -406,8 +406,7 @@ class _PyWire(_Py):
                         # print('secondRear')
                         pyRearPl = pyPlaneList[rear]
                         extrusionDirection, geom = pyRearPl.extrusionDirection(self, rear)
-                        # firstParam = geom.FirstParameter
-                        # lastParam = geom.LastParameter
+
                         geomCopy = geom.copy()
                         geomCopy.translate(-1 * _Py.size * extrusionDirection)
                         scale = 500
