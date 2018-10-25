@@ -869,6 +869,8 @@ class _PyPlane(_Py):
 
         # print('scale ', scale)
 
+        # utilizado por pyWire trimming linea 415
+
         size = _Py.size
         width = size
         length = 2 * size
