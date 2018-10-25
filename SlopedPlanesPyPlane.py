@@ -851,6 +851,8 @@ class _PyPlane(_Py):
 
         geom = self.doGeom()  # debido a alineamiento y planos sin geom? Los planos sin geom debn ser otra utilización de doGeom(). Dividir y poner aqui el condicional de alineamiento
 
+        self.edge.geom = geom
+
         eje = coordinates[numGeom + 1].sub(coordinates[numGeom])
         direction = self.rotateVector(eje, _Py.normal, 90)
         angle = self.angle
@@ -912,7 +914,7 @@ class _PyPlane(_Py):
         # print('firstParam ', firstParam)
         # print('lastParam ', lastParam)
 
-        if isinstance(geom, (Part.LineSegment,
+        '''if isinstance(geom, (Part.LineSegment,
                              Part.ArcOfParabola)):
             # print('a')
 
@@ -983,9 +985,9 @@ class _PyPlane(_Py):
             pass
 
         # print('startParam ', startParam)
-        # print('endParam ', endParam)
+        # print('endParam ', endParam)'''
 
-        # startParam, endParam = self.edge.baseEdge(leftScale, rightScale)
+        startParam, endParam = self.edge.baseEdge(leftScale, rightScale)
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
         # print('extendGeom ', extendGeom)
