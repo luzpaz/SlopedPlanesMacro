@@ -197,7 +197,7 @@ class _PyEdgeArcOfHyperbola(_PyEdgeOpen):
 
         _PyEdgeOpen.__init__(self, pyPlane)
 
-    def baseEdges(self, leftScale, rightScale):
+    def baseEdge(self, leftScale, rightScale):
 
         ''''''
 
