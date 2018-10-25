@@ -676,21 +676,19 @@ class _Py(object):
 
         return geom
 
-    def doGeomAligned(self):
+    def doGeom(self):
 
-        '''doGeomAligned(self)'''
+        '''doGeom(self)'''
 
-        # print('###### doGeomAligned')
+        # print('###### doGeom')
 
-        '''geomAligned = self.geomAligned
+        geomAligned = self.geomAligned
         curve = geomAligned.Curve
         startParam = geomAligned.parameterAt(geomAligned.firstVertex(True))
         endParam = geomAligned.parameterAt(geomAligned.lastVertex(True))
         geom = self.makeGeom(curve, startParam, endParam)
 
-        return geom'''
-
-        return self.geomAligned
+        return geom
 
     def rang(self, pyWire, numGeom, nGeom, direction, reflex=False):
 

@@ -847,7 +847,7 @@ class _PyPlane(_Py):
 
         if self.aligned:
 
-            geom = self.doGeomAligned()
+            geom = self.doGeom()
 
             self.edge.geom = geom
             self.edge.firstParam = geom.FirstParameter
