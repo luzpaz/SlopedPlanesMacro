@@ -284,7 +284,7 @@ class _PyEdgeClosed(_PyEdge):
             if len(rear) == 1:
                 # print('c1')
 
-                pyReflex = self.reflexedList[0]
+                pyReflex = pyPlane.reflexedList[0]
 
                 if rear[0] == pyReflex.rear[0]:
                     # print('c11')
