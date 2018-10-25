@@ -1241,6 +1241,7 @@ class _PyFace(_Py):
 
         # pyEdge = SlopedPlanesPyEdge.makePyEdge(pyPlane)
         pyEdge = pyPlane.edge
+        pyEdge.forBack()
 
         # Always forward into and backward outside
 

@@ -138,11 +138,13 @@ class _PyEdgeOpen(_PyEdge):
 
         _PyEdge.__init__(self, pyPlane)
 
+    def forBack(self):
+
+        ''''''
+
         geom = self.geom
         firstParam = self.firstParam
         lastParam = self.lastParam
-
-        # solo abría que hacerlo con los reflexed
 
         startParam = lastParam
         endParam = lastParam + _Py.size
@@ -196,6 +198,10 @@ class _PyEdgeClosed(_PyEdge):
         '''__init__(self, pyPlane)'''
 
         _PyEdge.__init__(self, pyPlane)
+
+    def forBack(self):
+
+        ''''''
 
         geom = self.geom
         firstParam = self.firstParam
