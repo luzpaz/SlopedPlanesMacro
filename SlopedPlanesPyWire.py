@@ -406,15 +406,16 @@ class _PyWire(_Py):
                         # print('secondRear')
                         pyRearPl = pyPlaneList[rear]
                         direction, geom = pyRearPl.direction(self, rear)
-                        firstParam = geom.FirstParameter
-                        lastParam = geom.LastParameter
+                        # firstParam = geom.FirstParameter
+                        # lastParam = geom.LastParameter
                         geomCopy = geom.copy()
                         geomCopy.translate(-1 * _Py.size * direction)
                         scale = 500
+
                         giantPlane =\
                             pyRearPl.doPlane(direction, self, geomCopy,
-                                             firstParam, lastParam,
                                              scale, False)
+
                         gS = pyPlane.geomShape
                         enormousShape = enormousShape.copy()
                         enormousShape =\

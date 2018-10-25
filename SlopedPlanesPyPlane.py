@@ -837,7 +837,9 @@ class _PyPlane(_Py):
     def direction(self, pyWire, numGeom):
 
         '''direction(self, pyWire, numGeom)
-        The extrusion direction'''
+        The extrusion direction.
+        If sweepCurve exists, later on is overwrited.
+        If self is aligned a new geom is calculated.'''
 
         # solo se debería utilizar si no hay sweepCurve !!! Corregir
 
