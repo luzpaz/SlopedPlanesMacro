@@ -804,9 +804,6 @@ class _PyPlane(_Py):
             # print('geom ', geom)
             # print('direction ', direction)
 
-            firstParam = geom.FirstParameter
-            lastParam = geom.LastParameter
-
             geomCopy = geom.copy()
             if not (self.sweepCurve or closed):
                 geomCopy.translate(-1 * self.overhang * direction)
@@ -814,8 +811,7 @@ class _PyPlane(_Py):
             # print('# normal')
             scale = 1
             plane =\
-                self.doPlane(direction, pyWire, geomCopy, firstParam,
-                             lastParam, scale, closed)
+                self.doPlane(direction, pyWire, geomCopy, scale, closed)
             self.shape = plane
             self.seedShape = plane.copy()
 
@@ -826,8 +822,7 @@ class _PyPlane(_Py):
             # print('# big')
             scale = 5
             bigPlane =\
-                self.doPlane(direction, pyWire, geomCopy, firstParam,
-                             lastParam, scale, closed)
+                self.doPlane(direction, pyWire, geomCopy, scale, closed)
             self.bigShape = bigPlane
             self.seedBigShape = bigPlane.copy()
 
@@ -836,8 +831,7 @@ class _PyPlane(_Py):
                 # print('# enormous')
                 scale = 50
                 enormousPlane =\
-                    self.doPlane(direction, pyWire, geomCopy, firstParam,
-                                 lastParam, scale, closed)
+                    self.doPlane(direction, pyWire, geomCopy, scale, closed)
                 self.enormousShape = enormousPlane
 
     def direction(self, pyWire, numGeom):
@@ -865,11 +859,9 @@ class _PyPlane(_Py):
 
         return direction, geom
 
-    def doPlane(self, direction, pyWire, geom, firstParam, lastParam,
-                scale, closed):
+    def doPlane(self, direction, pyWire, geom, scale, closed):
 
-        '''doPlane(self, direction, pyWire, geom, firstParam, lastParam,
-                   scale, closed)'''
+        '''doPlane(self, direction, pyWire, geom, scale, closed)'''
 
         # print('# doPlane')
 
@@ -912,9 +904,6 @@ class _PyPlane(_Py):
         # print('leftScale ', leftScale)
         # print('rightScale ', rightScale)
         # print('upScale ', upScale)
-
-        # print('firstParam ', firstParam)
-        # print('lastParam ', lastParam)
 
         startParam, endParam = self.edge.baseEdge(leftScale, rightScale)
 
