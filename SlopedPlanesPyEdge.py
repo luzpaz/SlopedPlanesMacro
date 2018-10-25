@@ -155,6 +155,15 @@ class _PyEdgeOpen(_PyEdge):
 
         self.params(geom, gg, startParam, endParam, sParam, eParam)
 
+    def baseEdge(self, leftScale, rightScale):
+
+        ''''''
+
+        startParam = self.firstParam - leftScale
+        endParam = self.lastParam + rightScale
+
+        return startParam, endParam
+
 
 class _PyEdgeLineSegment(_PyEdgeOpen):
 
@@ -187,6 +196,15 @@ class _PyEdgeArcOfHyperbola(_PyEdgeOpen):
         '''__init__(self, pyPlane)'''
 
         _PyEdgeOpen.__init__(self, pyPlane)
+
+    def baseEdges(self, leftScale, rightScale):
+
+        ''''''
+
+        startParam = self.firstParam
+        endParam = self.lastParam
+
+        return startParam, endParam
 
 
 class _PyEdgeClosed(_PyEdge):
@@ -249,6 +267,65 @@ class _PyEdgeClosed(_PyEdge):
             # print('eParam ', eParam)
 
         self.params(geom, gg, startParam, endParam, sParam, eParam)
+
+    def baseEdge(self, leftScale, rightScale):
+
+        ''''''
+
+        pyPlane = self.plane
+        firstParam = self.firstParam
+        lastParam = self.lastParam
+
+        rear = pyPlane.rear
+
+        if rear:
+            # print('reflex')
+
+            if len(rear) == 1:
+                # print('c1')
+
+                pyReflex = self.reflexedList[0]
+
+                if rear[0] == pyReflex.rear[0]:
+                    # print('c11')
+
+                    startParam = firstParam
+                    endParam = startParam + 2 * pi
+
+                else:
+                    # print('c12')
+
+                    startParam = lastParam
+                    endParam = startParam - 2 * pi
+
+            else:
+                # print('c2')
+
+                startParam =\
+                    (2 * pi - (lastParam - firstParam)) / 2 + lastParam
+                endParam = startParam + 2 * pi
+
+        else:
+            # print('no reflex')
+
+            dist = abs(lastParam - firstParam)
+            # print('dist ', dist)
+
+            if dist >= pi:
+                # print('2pi o more')
+
+                startParam = firstParam
+                endParam = lastParam
+
+            else:
+                # print('less 2pi')
+
+                center = (lastParam - firstParam) / 2 + firstParam
+                # print('center ', center)
+                startParam = center - pi / 2
+                endParam = center + pi / 2
+
+        return startParam, endParam
 
 
 class _PyEdgeArcOfCircle(_PyEdgeClosed):

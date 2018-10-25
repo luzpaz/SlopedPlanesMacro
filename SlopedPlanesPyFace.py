@@ -22,7 +22,6 @@
 # *****************************************************************************
 
 
-from math import pi
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
@@ -30,7 +29,6 @@ from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyReflex import _PyReflex
 from SlopedPlanesPyAlignment import _PyAlignment
 from SlopedPlanesPyPlane import _PyPlane
-import SlopedPlanesPyEdge
 
 
 V = FreeCAD.Vector
