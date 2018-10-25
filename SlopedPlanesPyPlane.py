@@ -738,6 +738,20 @@ class _PyPlane(_Py):
 
         self._sweepCurve = sweepCurve
 
+    @property
+    def edge(self):
+
+        ''''''
+
+        return self._edge
+
+    @edge.setter
+    def edge(self, edge):
+
+        ''''''
+
+        self._edge = edge
+
     def planning(self, pyWire, closed=False):
 
         '''planning(self, pyWire, closed=False)

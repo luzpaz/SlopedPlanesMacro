@@ -28,6 +28,7 @@ from SlopedPlanesPy import _Py
 from SlopedPlanesPyFace import _PyFace
 from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyPlane import _PyPlane
+import SlopedPlanesPyEdge
 if FreeCAD.GuiUp:
     from os import path
     import FreeCADGui
@@ -455,6 +456,10 @@ class _SlopedPlanes(_Py):
                             pyPlaneListNew.append(pyPlane)
 
                         pyPlane.geom = geom
+
+                        pyEdge = SlopedPlanesPyEdge.makePyEdge(pyPlane)
+                        pyPlane.edge = pyEdge
+
                         gS = geom.toShape()
                         pyPlane.geomShape = gS
                         pyPlane.geomAligned = gS

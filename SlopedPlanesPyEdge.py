@@ -142,6 +142,8 @@ class _PyEdgeOpen(_PyEdge):
         firstParam = self.firstParam
         lastParam = self.lastParam
 
+        # solo abría que hacerlo con los reflexed
+
         startParam = lastParam
         endParam = lastParam + _Py.size
 

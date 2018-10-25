@@ -213,6 +213,8 @@ class _PyFace(_Py):
                 dd['_solved'] = False
                 dd['_reallySolved'] = False
 
+                dd['_edge'] = None
+
                 if serialize:
 
                     edgeList.append(pyPlane.geomShape)
@@ -1237,7 +1239,8 @@ class _PyFace(_Py):
 
         # print(pyPlane.numWire, pyPlane.numGeom)
 
-        pyEdge = SlopedPlanesPyEdge.makePyEdge(pyPlane)
+        # pyEdge = SlopedPlanesPyEdge.makePyEdge(pyPlane)
+        pyEdge = pyPlane.edge
 
         # Always forward into and backward outside
 
