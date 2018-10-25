@@ -405,15 +405,15 @@ class _PyWire(_Py):
                     if sR in rango:
                         # print('secondRear')
                         pyRearPl = pyPlaneList[rear]
-                        direction, geom = pyRearPl.direction(self, rear)
+                        extrusionDirection, geom = pyRearPl.extrusionDirection(self, rear)
                         # firstParam = geom.FirstParameter
                         # lastParam = geom.LastParameter
                         geomCopy = geom.copy()
-                        geomCopy.translate(-1 * _Py.size * direction)
+                        geomCopy.translate(-1 * _Py.size * extrusionDirection)
                         scale = 500
 
                         giantPlane =\
-                            pyRearPl.doPlane(direction, self, geomCopy,
+                            pyRearPl.doPlane(extrusionDirection, self, geomCopy,
                                              scale, False)
 
                         gS = pyPlane.geomShape
