@@ -105,7 +105,8 @@ class _PyReflex(_Py):
 
     def virtualizing(self):
 
-        '''virtualizing(self)'''
+        '''virtualizing(self)
+        Virtualizes the reflex planes which are aligned too.'''
 
         # print '###### virtualizing reflex'
 
