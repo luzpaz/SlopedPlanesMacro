@@ -1237,7 +1237,6 @@ class _PyFace(_Py):
 
         # print(pyPlane.numWire, pyPlane.numGeom)
 
-        # pyEdge = SlopedPlanesPyEdge.makePyEdge(pyPlane)
         pyEdge = pyPlane.edge
         pyEdge.forBack()
 
