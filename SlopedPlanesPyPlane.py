@@ -1707,15 +1707,21 @@ class _PyPlane(_Py):
                     # print(pyPlane.numGeom)
                     plane = pyPlane.shape
                     shape = self.shape.copy()
+                    nF = len(shape.Faces)
                     shape = shape.cut([plane], tolerance)
-                    if len(shape.Faces) == 2:
+                    nnFF = len(shape.Faces)
+
+                    if nnFF == 2 and nF == 1:
+
                         conf = []
+
                         for ff in shape.Faces:
                             # print('a')
                             common = ff.common([simul], tolerance)
                             if common.Area:
                                 # print('b')
                                 conf.append(pyPlane)
+
                         if len(conf) == 1:
                             conflictList.extend(conf)
 
