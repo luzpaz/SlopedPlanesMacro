@@ -1711,31 +1711,31 @@ class _PyPlane(_Py):
                     plane = pyPlane.shape
                     shape = self.shape.copy()
 
-                    section = shape.section([plane], tolerance)
+                    # section = shape.section([plane], tolerance)
                     # este section no esta claro si ahorra o retrasa
 
-                    if section.Edges:
+                    # if section.Edges:
 
-                        shape = shape.cut([plane], tolerance)
+                    shape = shape.cut([plane], tolerance)
 
-                        if len(shape.Faces) == 2:
+                    if len(shape.Faces) == 2:
 
-                            conf = []
+                        conf = []
 
-                            for ff in shape.Faces:
-                                # print('a')
-                                common = ff.common([simul], tolerance)
-                                if common.Area:
-                                    # print('b')
-                                    conf.append(pyPlane)
+                        for ff in shape.Faces:
+                            # print('a')
+                            common = ff.common([simul], tolerance)
+                            if common.Area:
+                                # print('b')
+                                conf.append(pyPlane)
 
-                            if len(conf) == 1:
-                                conflictList.extend(conf)
+                        if len(conf) == 1:
+                            conflictList.extend(conf)
 
-                    else:
+                    # else:
 
-                        control.append(nG)
-                        pyPlane.control.append(numGeom)
+                        # control.append(nG)
+                        # pyPlane.control.append(numGeom)
 
         self.reallySolved = conflictList
 
