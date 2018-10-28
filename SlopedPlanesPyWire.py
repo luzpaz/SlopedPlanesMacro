@@ -451,13 +451,6 @@ class _PyWire(_Py):
                                 pyPl.trimming(enormousShape)
                                 control.append(numGeom)
 
-                                # esto no esta probado que suponga un ahorro
-                                '''if not pyPlane.intercepting(pyPl):
-                                    for nn, pyP in zip(oppRango, oppRangoPy):
-                                        if nn not in control:
-                                            if not pyP.reflexed:
-                                                control.append(nn)'''
-
                             else:
                                 # print('no procc')
                                 pyPl.trimmingTwo(enormousShape)
@@ -469,7 +462,7 @@ class _PyWire(_Py):
                                 if not pyP.reflexed:
                                     control.append(nn)
 
-                    else:
+                    elif not pyPl.aligned:
                         shape = pyPl.shape
                         for nn, pyP in zip(oppRango, oppRangoPy):
                             if nn not in control:
