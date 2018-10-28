@@ -165,7 +165,7 @@ class _PyWire(_Py):
 
         self._mono = mono
 
-    def planning(self, reset):
+    def planning(self):
 
         '''planning(self, reset):
         Transfers to PyPlane.
@@ -178,28 +178,32 @@ class _PyWire(_Py):
 
         else:
 
-            reflexList = self.reflexs
-
             for pyPlane in self.planes:
                 pyPlane.planning(self)
 
-            if reset:
-                for pyReflex in reflexList:
-                    pyReflex.rangging(self)
+    def rangging(self, reset):
 
-            pyPlaneList = self.planes
+        ''''''
 
+        reflexList = self.reflexs
+
+        if reset:
             for pyReflex in reflexList:
-                for pyPlane in pyReflex.planes:
+                pyReflex.rangging(self)
 
-                    cc = []
-                    for ran in pyPlane.rango:
-                        c = []
-                        for nn in ran:
-                            pyPl = pyPlaneList[nn]
-                            c.append(pyPl)
-                        cc.append(c)
-                    pyPlane.rangoPy = cc
+        pyPlaneList = self.planes
+
+        for pyReflex in reflexList:
+            for pyPlane in pyReflex.planes:
+
+                cc = []
+                for ran in pyPlane.rango:
+                    c = []
+                    for nn in ran:
+                        pyPl = pyPlaneList[nn]
+                        c.append(pyPl)
+                    cc.append(c)
+                pyPlane.rangoPy = cc
 
     def virtualizing(self):
 
