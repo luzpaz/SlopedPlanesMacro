@@ -636,6 +636,7 @@ class _PyReflex(_Py):
         enorm = []    # auxiliar to clean the figure bottom
         rangoCorner = None
         rangoCornerPy = None
+
         rearList = pyR.rear
         oppRearList = pyOppR.rear
 
@@ -647,6 +648,7 @@ class _PyReflex(_Py):
                     pyOppRear = pyPlaneList[oppRearList[-1]]
                 rangoCorner = pyR.rango[0]
                 rangoCornerPy = pyR.rangoPy[0]
+
                 forward = pyR.forward
                 backward = pyR.backward
 
@@ -656,6 +658,7 @@ class _PyReflex(_Py):
                     pyOppRear = pyPlaneList[oppRearList[0]]
                 rangoCorner = pyR.rango[-1]
                 rangoCornerPy = pyR.rangoPy[-1]
+
 
                 if len(rearList) == 1:
                     forward = pyR.forward
@@ -704,12 +707,16 @@ class _PyReflex(_Py):
             corn = []    # auxiliar to look for extra faces
             for nn, pyPl in zip(rangoCorner, rangoCornerPy):
                 # print('rangoCorner nn ', nn)
+
+
                 if pyPl.aligned:
                     # print('a')
                     pyAlign = pyPl.selectAlignmentBase()
                     if pyAlign:
                         pl = pyAlign.simulatedAlignment
                         corn.append(pl)
+
+
                 elif pyPl.reflexed:
                     # print('b')
                     pl = pyPl.simulatedShape
@@ -724,6 +731,8 @@ class _PyReflex(_Py):
                     else:
                         # print('b2')
                         corn.append(pl)
+
+
                 else:
                     # print('c')
                     pl = pyPl.shape
@@ -909,7 +918,7 @@ class _PyReflex(_Py):
         tolerance = _Py.tolerance
         gS = pyR.geomShape
 
-        if direction == 'forward':
+        '''if direction == 'forward':
             forward = pyR.forward
             backward = pyR.backward
         else:
@@ -918,7 +927,9 @@ class _PyReflex(_Py):
                 backward = pyR.backward
             else:
                 forward = pyR.backward
-                backward = pyR.forward
+                backward = pyR.forward'''
+
+        [forward, backward] = self.lines
 
         # podría incluir en isSolved la detención de sobrantes en planos de una cara
         # que tienen un vertice en la planta (tres vertices en total)
