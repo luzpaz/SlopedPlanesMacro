@@ -462,7 +462,7 @@ class _PyWire(_Py):
                                 if not pyP.reflexed:
                                     control.append(nn)
 
-                    elif not pyPl.aligned:
+                    else:
                         shape = pyPl.shape
                         for nn, pyP in zip(oppRango, oppRangoPy):
                             if nn not in control:
