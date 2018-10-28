@@ -468,7 +468,7 @@ class _PyWire(_Py):
                             if nn not in control:
                                 if pyP.reflexed:
                                     sh = pyP.shape
-                                    section = shape.section(sh)
+                                    section = shape.section([sh], tolerance)
                                     if not section.Edges:
                                         control.append(nn)
                                         pyP.control.append(nG)

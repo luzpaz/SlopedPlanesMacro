@@ -1711,7 +1711,8 @@ class _PyPlane(_Py):
                     plane = pyPlane.shape
                     shape = self.shape.copy()
 
-                    section = shape.section(plane)
+                    section = shape.section([plane], tolerance)
+                    # este section no esta claro si ahorra o retrasa
 
                     if section.Edges:
 
