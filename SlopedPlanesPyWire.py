@@ -455,18 +455,21 @@ class _PyWire(_Py):
                                 # print('no procc')
                                 pyPl.trimmingTwo(enormousShape)
 
-                            if not pyPlane.intercepting(pyPl):
-                                for nn, pyP in zip(oppRango, oppRangoPy):
-                                    if nn not in control:
-                                        if not pyP.reflexed:
-                                            control.append(nn)
-
                     # rango doesn't cut with oppRango
                     if not pyPl.reflexed:
                         for nn, pyP in zip(oppRango, oppRangoPy):
                             if nn not in control:
                                 if not pyP.reflexed:
                                     control.append(nn)
+
+                    else:
+                        # esto no esta probado que suponga un ahorro
+                        if not pyPlane.intercepting(pyPl):
+                            for nn, pyP in zip(oppRango, oppRangoPy):
+                                if nn not in control:
+                                    if not pyP.reflexed:
+                                        control.append(nn)
+
 
     def priorLater(self):
 
