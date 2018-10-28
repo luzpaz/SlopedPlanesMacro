@@ -280,7 +280,7 @@ class _PyWire(_Py):
 
                 pyOppPlane = pyReflex.planes[num - 1]
 
-                rango, rangoPy, oppRango, oppRangoPy, nextRango =\
+                rango, rangoPy, oppRango, oppRangoPy, secondRango =\
                     [], [], [], [], []
 
                 if num == 0:
@@ -301,7 +301,7 @@ class _PyWire(_Py):
                         oppRangoPy = pyOppPlane.rangoPy[-1]
 
                         if len(pyOppPlane.rango) > 1:
-                            nextRango = pyOppPlane.rango[0]
+                            secondRango = pyOppPlane.rango[0]
 
                     if self.numWire > 0:
 
@@ -345,7 +345,7 @@ class _PyWire(_Py):
                         oppRangoPy = pyOppPlane.rangoPy[0]
 
                         if len(pyOppPlane.rango) > 1:
-                            nextRango = pyOppPlane.rango[-1]
+                            secondRango = pyOppPlane.rango[-1]
 
                     if self.numWire > 0:
 
@@ -378,7 +378,7 @@ class _PyWire(_Py):
                 # print('oppRear ', oppRear)
                 # print('oppRango ', oppRango)
                 # print('oppRangoPy ', oppRangoPy)
-                # print('nextRango ', nextRango)
+                # print('secondRango ', secondRango)
 
                 if pyPlane.secondRear:
 
@@ -412,26 +412,26 @@ class _PyWire(_Py):
 
                         # TODO backRear
 
-                        if not pyPl.aligned and nG in nextRango:
-                            # print('0')
-                            # rango doesn't cut with nextRango G
+                        if not pyPl.aligned and nG in secondRango:
+                            # print('a, secondRango')
+                            # rango doesn't cut with secondRango G
 
                             control.append(numGeom)
                             pyPlane.control.append(nG)
 
                         elif not pyPl.reflexed:
-                            # print('a')
+                            # print('b, no reflexed')
 
                             pyPl.trimming(enormousShape)
                             control.append(numGeom)
 
                         elif pyPl.aligned or pyPl.choped:
-                            # print('b')
+                            # print('c, alignment')
 
                             pass
 
                         else:
-                            # print('c, interference between reflexs')
+                            # print('d, check interference between reflexs')
 
                             procc = True
                             pyRList = pyPl.reflexedList
