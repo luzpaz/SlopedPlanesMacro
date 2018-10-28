@@ -1710,11 +1710,11 @@ class _PyPlane(_Py):
                     # print(pyPlane.numGeom)
                     plane = pyPlane.shape
                     shape = self.shape.copy()
-                    nF = len(shape.Faces)
+                    # nF = len(shape.Faces)
                     shape = shape.cut([plane], tolerance)
                     nnFF = len(shape.Faces)
 
-                    if nnFF == 2 and nF == 1:
+                    if nnFF == 2:  # and nF == 1:
 
                         conf = []
 
