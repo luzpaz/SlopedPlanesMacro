@@ -1700,7 +1700,7 @@ class _PyPlane(_Py):
         conflictList = []
         simul = self.simulatedShape
         control = self.control
-        numGeom = self.numGeom
+        # numGeom = self.numGeom
 
         pyReflexList = pyWire.reflexs
         for pyRef in pyReflexList:
@@ -1728,7 +1728,7 @@ class _PyPlane(_Py):
                         if len(conf) == 1:
                             conflictList.extend(conf)
 
-                    else:
+                    elif nnFF == 1:
 
                         control.append(nG)
                         # pyPlane.control.append(numGeom)
