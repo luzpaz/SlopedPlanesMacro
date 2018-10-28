@@ -1700,11 +1700,13 @@ class _PyPlane(_Py):
         conflictList = []
         simul = self.simulatedShape
         control = self.control
+        numGeom = self.numGeom
 
         pyReflexList = pyWire.reflexs
         for pyRef in pyReflexList:
             for pyPlane in pyRef.planes:
-                if pyPlane.numGeom not in control:
+                nG = pyPlane.numGeom
+                if nG not in control:
                     # print(pyPlane.numGeom)
                     plane = pyPlane.shape
                     shape = self.shape.copy()
@@ -1725,6 +1727,11 @@ class _PyPlane(_Py):
 
                         if len(conf) == 1:
                             conflictList.extend(conf)
+
+                    else:
+
+                        control.append(nG)
+                        pyPlane.control.append(numGeom)
 
         self.reallySolved = conflictList
 
