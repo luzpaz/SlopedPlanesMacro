@@ -1318,7 +1318,7 @@ class _PyPlane(_Py):
         ''''''
 
         plane = self.shape
-        pl = pyPl.shape
+        pl = pyPl.shape.copy()
         cut = pl.cut(plane)
         if len(cut.Faces) > 1:
             return True
