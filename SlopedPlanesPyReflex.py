@@ -918,7 +918,7 @@ class _PyReflex(_Py):
         tolerance = _Py.tolerance
         gS = pyR.geomShape
 
-        '''if direction == 'forward':
+        if direction == 'forward':
             forward = pyR.forward
             backward = pyR.backward
         else:
@@ -927,9 +927,9 @@ class _PyReflex(_Py):
                 backward = pyR.backward
             else:
                 forward = pyR.backward
-                backward = pyR.forward'''
+                backward = pyR.forward
 
-        [forward, backward] = self.lines
+        # [forward, backward] = self.lines rompe Y072 Y074
 
         # podría incluir en isSolved la detención de sobrantes en planos de una cara
         # que tienen un vertice en la planta (tres vertices en total)

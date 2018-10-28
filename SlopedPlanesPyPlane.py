@@ -1699,11 +1699,12 @@ class _PyPlane(_Py):
         tolerance = _Py.tolerance
         conflictList = []
         simul = self.simulatedShape
+        control = self.control
 
         pyReflexList = pyWire.reflexs
         for pyRef in pyReflexList:
             for pyPlane in pyRef.planes:
-                if pyPlane != self:
+                if pyPlane.numGeom not in control:
                     # print(pyPlane.numGeom)
                     plane = pyPlane.shape
                     shape = self.shape.copy()
