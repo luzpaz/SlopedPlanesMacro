@@ -1700,6 +1700,7 @@ class _PyPlane(_Py):
         conflictList = []
         simul = self.simulatedShape
         control = self.control
+        numGeom = self.numGeom
 
         pyReflexList = pyWire.reflexs
         for pyRef in pyReflexList:
@@ -1709,21 +1710,31 @@ class _PyPlane(_Py):
                     # print(pyPlane.numGeom)
                     plane = pyPlane.shape
                     shape = self.shape.copy()
-                    shape = shape.cut([plane], tolerance)
 
-                    if len(shape.Faces) == 2:
+                    section = shape.section(plane)
 
-                        conf = []
+                    if section.Edges:
 
-                        for ff in shape.Faces:
-                            # print('a')
-                            common = ff.common([simul], tolerance)
-                            if common.Area:
-                                # print('b')
-                                conf.append(pyPlane)
+                        shape = shape.cut([plane], tolerance)
 
-                        if len(conf) == 1:
-                            conflictList.extend(conf)
+                        if len(shape.Faces) == 2:
+
+                            conf = []
+
+                            for ff in shape.Faces:
+                                # print('a')
+                                common = ff.common([simul], tolerance)
+                                if common.Area:
+                                    # print('b')
+                                    conf.append(pyPlane)
+
+                            if len(conf) == 1:
+                                conflictList.extend(conf)
+
+                    else:
+
+                        control.append(nG)
+                        pyPlane.control.append(numGeom)
 
         self.reallySolved = conflictList
 
