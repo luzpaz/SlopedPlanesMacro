@@ -26,6 +26,7 @@ from math import pi, degrees, radians, tan, cos, sin
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
+import SlopedPlanesPyEdge
 
 
 __title__ = "SlopedPlanes Macro"
@@ -845,13 +846,19 @@ class _PyPlane(_Py):
         coordinates = pyWire.coordinates
         geom = self.geom
 
-        if self.aligned:
+        if self.aligned or not geom:
 
             geom = self.doGeom()
+            self.geom = geom
 
-            self.edge.geom = geom
-            self.edge.firstParam = geom.FirstParameter
-            self.edge.lastParam = geom.LastParameter
+            pyEdge = self.edge
+            if not pyEdge:
+                pyEdge = SlopedPlanesPyEdge.makePyEdge(self)
+                self.edge = pyEdge
+
+            pyEdge.geom = geom
+            pyEdge.firstParam = geom.FirstParameter
+            pyEdge.lastParam = geom.LastParameter
 
         eje = coordinates[numGeom + 1].sub(coordinates[numGeom])
         extrusionDirection = self.rotateVector(eje, _Py.normal, 90)
@@ -911,7 +918,8 @@ class _PyPlane(_Py):
         # print('rightScale ', rightScale)
         # print('upScale ', upScale)
 
-        startParam, endParam = self.edge.baseEdge(leftScale, rightScale)
+        pyEdge = self.edge
+        startParam, endParam = pyEdge.baseEdge(leftScale, rightScale)
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
         # print('extendGeom ', extendGeom)
