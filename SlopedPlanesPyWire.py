@@ -452,11 +452,11 @@ class _PyWire(_Py):
                                 control.append(numGeom)
 
                                 # esto no esta probado que suponga un ahorro
-                                if not pyPlane.intercepting(pyPl):
+                                '''if not pyPlane.intercepting(pyPl):
                                     for nn, pyP in zip(oppRango, oppRangoPy):
                                         if nn not in control:
                                             if not pyP.reflexed:
-                                                control.append(nn)
+                                                control.append(nn)'''
 
                             else:
                                 # print('no procc')
