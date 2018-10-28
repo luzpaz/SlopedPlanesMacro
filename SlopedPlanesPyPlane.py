@@ -1731,7 +1731,7 @@ class _PyPlane(_Py):
                     else:
 
                         control.append(nG)
-                        pyPlane.control.append(numGeom)
+                        # pyPlane.control.append(numGeom)
 
         self.reallySolved = conflictList
 
