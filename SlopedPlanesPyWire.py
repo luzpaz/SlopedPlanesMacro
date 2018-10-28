@@ -469,6 +469,17 @@ class _PyWire(_Py):
                                 if not pyP.reflexed:
                                     control.append(nn)
 
+                    else:
+                        shape = pyPl.shape
+                        for nn, pyP in zip(oppRango, oppRangoPy):
+                            if nn not in control:
+                                if pyP.reflexed:
+                                    sh = pyP.shape
+                                    section = shape.section(sh)
+                                    if not section.Edges:
+                                        control.append(nn)
+                                        pyP.control.append(nG)
+
     def priorLater(self):
 
         '''priorLater(self)'''
