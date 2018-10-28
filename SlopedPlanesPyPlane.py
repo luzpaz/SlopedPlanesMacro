@@ -1313,6 +1313,18 @@ class _PyPlane(_Py):
         bigShape = self.cutting(bigShape, [enormousShape], gS)
         self.bigShape = bigShape
 
+    def intercepting(self, pyPl):
+
+        ''''''
+
+        plane = self.shape
+        pl = pyPl.shape
+        cut = pl.cut(plane)
+        if len(cut.Faces) > 1:
+            return True
+        else:
+            return False
+
     def simulating(self, cList):
 
         '''simulating(self, cList)'''
