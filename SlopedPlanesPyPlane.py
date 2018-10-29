@@ -1700,7 +1700,6 @@ class _PyPlane(_Py):
         conflictList = []
         simul = self.simulatedShape
         control = self.control
-        # numGeom = self.numGeom
 
         pyReflexList = pyWire.reflexs
         for pyRef in pyReflexList:
