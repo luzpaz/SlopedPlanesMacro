@@ -1713,7 +1713,6 @@ class _PyPlane(_Py):
 
                     # section = shape.section([plane], tolerance)
                     # este section no esta claro si ahorra o retrasa
-
                     # if section.Edges:
 
                     shape = shape.cut([plane], tolerance)
