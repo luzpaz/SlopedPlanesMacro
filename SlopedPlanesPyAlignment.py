@@ -1956,18 +1956,12 @@ class _PyAlignment(_Py):
             # print('pr ', pr)
             # print('lat ', lat)
 
-            # pyWire = pyWireList[w1]  # esta repetido
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
-
             # print('rangoRear ', rangoRear)
-
             rangoRear = [lat] + list(rangoRear) + [pr]
-
             # print('rangoRear ', rangoRear)
 
             pyPlaneList = pyWire.planes
-
-            # ran = [pyPlaneList[nn] for nn in rangoRear]
             ran = []
             for nn in rangoRear:
                 pyP = pyPlaneList[nn]
