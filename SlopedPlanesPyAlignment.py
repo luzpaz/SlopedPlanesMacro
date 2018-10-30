@@ -1920,8 +1920,6 @@ class _PyAlignment(_Py):
             self.addValue('rango', rangoChop, 'backward')
             self.addValue('rangoPy', ran, 'backward')
 
-        # rangoRear
-
         # print 'rangoRear'
 
         pyPrior = self.prior
@@ -1956,6 +1954,7 @@ class _PyAlignment(_Py):
             # print('pr ', pr)
             # print('lat ', lat)
 
+            pyWire = pyWireList[w1]
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
             # print('rangoRear ', rangoRear)
             rangoRear = [lat] + list(rangoRear) + [pr]
@@ -1971,6 +1970,7 @@ class _PyAlignment(_Py):
             rangoRear = (rangoRear, ran)
 
         else:
+
             rangoRear = ([], [])
 
         self.rangoRear = rangoRear
