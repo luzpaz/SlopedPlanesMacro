@@ -749,6 +749,22 @@ class _Py(object):
         # print('ran ', ran)
         return ran
 
+    def num2py(self, rango):
+
+        ''''''
+
+        pyPlaneList = self.planes
+
+        cc = []
+        for ran in rango:
+            c = []
+            for nn in ran:
+                pyP = pyPlaneList[nn]
+                c.append(pyP)
+            cc.append(c)
+
+        return cc
+
     def makeSweepSketch(self, slopedPlanes):
 
         '''makeSweepSketch(self, slopedPlanes)'''

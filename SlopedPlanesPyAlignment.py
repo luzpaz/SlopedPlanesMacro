@@ -1886,9 +1886,9 @@ class _PyAlignment(_Py):
             nWire = pyPl.numWire
 
             pyWire = pyWireList[numWire]
-            pyPlaneList = pyWire.planes
+            # pyPlaneList = pyWire.planes
             pyW = pyWireList[nWire]
-            pyPlList = pyW.planes
+            # pyPlList = pyW.planes
 
             if reset:
 
@@ -1897,22 +1897,10 @@ class _PyAlignment(_Py):
                 if not pyPl.rango:
                     pyPl.rangging(pyW, 'forward')
 
-            cc = []
-            for ran in pyPlane.rango:
-                c = []
-                for nn in ran:
-                    pyP = pyPlaneList[nn]
-                    c.append(pyP)
-                cc.append(c)
+            cc = pyWire.num2py(pyPlane.rango)
             pyPlane.rangoPy = cc
 
-            cc = []
-            for ran in pyPl.rango:
-                c = []
-                for nn in ran:
-                    pyP = pyPlList[nn]
-                    c.append(pyP)
-                cc.append(c)
+            cc = pyW.num2py(pyPl.rango)
             pyPl.rangoPy = cc
 
             if numWire == nWire:
