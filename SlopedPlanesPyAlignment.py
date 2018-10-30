@@ -1884,11 +1884,8 @@ class _PyAlignment(_Py):
 
             numWire = pyPlane.numWire
             nWire = pyPl.numWire
-
             pyWire = pyWireList[numWire]
-            # pyPlaneList = pyWire.planes
             pyW = pyWireList[nWire]
-            # pyPlList = pyW.planes
 
             if reset:
 
@@ -1899,7 +1896,6 @@ class _PyAlignment(_Py):
 
             cc = pyWire.num2py(pyPlane.rango)
             pyPlane.rangoPy = cc
-
             cc = pyW.num2py(pyPl.rango)
             pyPl.rangoPy = cc
 
@@ -1960,13 +1956,11 @@ class _PyAlignment(_Py):
             # print('pr ', pr)
             # print('lat ', lat)
 
-            pyWire = pyWireList[w1]  # esta repetido
+            # pyWire = pyWireList[w1]  # esta repetido
             rangoRear = self.rang(pyWire, lat, pr, 'forward')
 
             # print('rangoRear ', rangoRear)
 
-            #rangoRear.insert(0, lat)
-            #rangoRear.append(pr)
             rangoRear = [lat] + list(rangoRear) + [pr]
 
             # print('rangoRear ', rangoRear)
