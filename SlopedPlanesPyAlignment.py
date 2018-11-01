@@ -44,6 +44,7 @@ class _PyAlignment(_Py):
 
         self.base = None
         self.aligns = []
+        self.aliShape = []
         self.chops = []
         self.geomAligned = None
         self.geomList = []
@@ -84,6 +85,20 @@ class _PyAlignment(_Py):
         '''aligns(self, aligns)'''
 
         self._aligns = aligns
+
+    @property
+    def aliShape(self):
+
+        '''aliShape(self)'''
+
+        return self._aliShape
+
+    @aliShape.setter
+    def aliShape(self, aliShape):
+
+        '''aliShape(self, aliShape)'''
+
+        self._aliShape = aliShape
 
     @property
     def chops(self):
@@ -1837,11 +1852,13 @@ class _PyAlignment(_Py):
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         base = pyBase.shape
+
         bList = [base]
         for pyPl in self.aligns:
             if pyPl.shape:
                 bList.append(pyPl.shape)
         # print('bList ', bList)
+        self.aliShape = bList
 
         # chops
 

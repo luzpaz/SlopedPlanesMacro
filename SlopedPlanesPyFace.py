@@ -1598,11 +1598,13 @@ class _PyFace(_Py):
         cList = []
         for ali in self.alignments:
 
-            aL = []
+            '''aL = []
             aL.append(ali.base.shape)
             for aa in ali.aligns:
                 if aa.shape:
-                    aL.append(aa.shape)
+                    aL.append(aa.shape)'''
+
+            aL = self.aliShape
 
             for cc in ali.chops:
                 for c in cc:
