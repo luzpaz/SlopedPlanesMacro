@@ -1847,6 +1847,10 @@ class _PyAlignment(_Py):
 
         # print('# self.Base ', self.base.numGeom)
 
+        pyFace = self.pyFace
+        if pyFace.mono:
+            return
+
         # recollects
 
         pyWireList = _Py.pyFace.wires
