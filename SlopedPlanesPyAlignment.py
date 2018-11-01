@@ -743,7 +743,8 @@ class _PyAlignment(_Py):
 
     def simulatingChops(self):
 
-        '''simulatingChops(self)'''
+        '''simulatingChops(self)
+        simulating the rango'''
 
         # print('###### simulatingChops ', self.base.numWire, self.base.numGeom, self.falsify)
 
@@ -752,7 +753,6 @@ class _PyAlignment(_Py):
         face = pyFace.face
         falsify = self.falsify
 
-        rangoChop = self.rango
         rangoChopPy = self.rangoPy
         simulatedChops = []
 
@@ -766,6 +766,8 @@ class _PyAlignment(_Py):
         for [pyOne, pyTwo] in self.chops:
             numChop += 1
             # print('### chops ', pyOne.numGeom, pyTwo.numGeom)
+
+            # choped with reflex corner
 
             rrOne = []
             if pyOne.rear:
@@ -786,6 +788,8 @@ class _PyAlignment(_Py):
                     oppEnormousTwo = pyOppTwo.enormousShape
                     rrTwo = pyTwo.rango[1]
             # print('rrTwo ', rrTwo)
+
+            # simulating
 
             if falsify:
 
@@ -812,13 +816,9 @@ class _PyAlignment(_Py):
                     # print('22')
                     pyT.simulating([enormousBase])
 
-            rChop = rangoChop[numChop]
             rChopPy = rangoChopPy[numChop]
-
-            # print('rChop ', rChop, rChopPy)
-
+            # print('rChop ', self.rango, rChopPy)
             cutList = []
-            #for rr, pyPl in map(None, rChop, rChopPy):
             for pyPl in rChopPy:
 
                 if not (pyPl.aligned or pyPl.choped):
