@@ -46,6 +46,7 @@ class _PyAlignment(_Py):
         self.aligns = []
         self.chops = []
         self.geomAligned = None
+        self.geomList = []
         self.rango = []
         self.rangoPy = []   # TODO podría unir rango y rangoPy en un sola propiedad como en rangoRear
         self.rangoRear = ()
@@ -111,6 +112,20 @@ class _PyAlignment(_Py):
         '''geomAligned(self, geomAligned)'''
 
         self._geomAligned = geomAligned
+
+    @property
+    def geomList(self):
+
+        '''geomList(self)'''
+
+        return self._geomList
+
+    @geomList.setter
+    def geomList(self, geomList):
+
+        '''geomList(self, geomList)'''
+
+        self._geomList = geomList
 
     @property
     def rango(self):
@@ -756,9 +771,9 @@ class _PyAlignment(_Py):
         rangoChopPy = self.rangoPy
         simulatedChops = []
 
-        #geomList = [pyP.geomShape for pyP in self.aligns]
-        #geomList.insert(0, self.base.geomShape)
-        geomList = self.geomAligned
+        geomList = [pyP.geomShape for pyP in self.aligns]
+        geomList.insert(0, self.base.geomShape)
+        self.geomList = geomList
 
         enormousBase = self.base.enormousShape
         enormousCont = self.aligns[-1].enormousShape
@@ -978,9 +993,7 @@ class _PyAlignment(_Py):
 
             # print('cutterList ', cutterList)
 
-            geomList = [pyP.geomShape for pyP in self.aligns]
-            geomList.insert(0, pyBase.geomShape)
-            # print(geomList)
+            geomList = self.geomList
 
             base = base.cut(cutterList, _Py.tolerance)
             # print('base.Faces ', base.Faces, [f.Area for f in base.Faces])
@@ -1055,7 +1068,9 @@ class _PyAlignment(_Py):
                 rangoOne = rangoOne[index + 1:]
                 rangoOnePy = rangoOnePy[index:]
                 rearAlignOne = pyPlaneListOne[rear[1]]
-                rearAlignOne = self.processAlignRear(rearAlignOne, pyWireOne, 1, enormousBase)
+                rearAlignOne =\
+                    self.processAlignRear(rearAlignOne, pyWireOne,
+                                          1, enormousBase)
                 # print('rearAlignOne ', rearAlignOne.Faces)
             # print('rangoOne ', rangoOne)
 
@@ -1083,7 +1098,8 @@ class _PyAlignment(_Py):
                     enormous = enormousCont
                 else:
                     enormous = enormousBase
-                rearAlignTwo = self.processAlignRear(rearAlignTwo, pyWireTwo, 2, enormous)
+                rearAlignTwo =\
+                    self.processAlignRear(rearAlignTwo, pyWireTwo, 2, enormous)
                 # print(',rearAlingTwo ', rearAlignTwo.Faces)
             # print('rangoTwo ', rangoTwo)
 
@@ -1150,7 +1166,6 @@ class _PyAlignment(_Py):
 
                     if rearAlignOne:
                         ccList.append(rearAlignOne)
-                        pass
 
                 else:
                     rC = rCTwo
