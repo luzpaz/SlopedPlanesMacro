@@ -756,8 +756,9 @@ class _PyAlignment(_Py):
         rangoChopPy = self.rangoPy
         simulatedChops = []
 
-        geomList = [pyP.geomShape for pyP in self.aligns]
-        geomList.insert(0, self.base.geomShape)
+        #geomList = [pyP.geomShape for pyP in self.aligns]
+        #geomList.insert(0, self.base.geomShape)
+        geomList = self.geomAligned
 
         enormousBase = self.base.enormousShape
         enormousCont = self.aligns[-1].enormousShape
@@ -911,7 +912,6 @@ class _PyAlignment(_Py):
         pr = pyPrior.numGeom
         lat = pyLater.numGeom
 
-        # rangoRear = self.rangoRear[0]
         baseControl = pyBase.control
         rear = self.rear
 
