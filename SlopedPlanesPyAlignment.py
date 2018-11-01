@@ -1319,7 +1319,7 @@ class _PyAlignment(_Py):
             fList = []
             gS = pyOne.geomShape
             # ff = self.cutting(shapeOne.Faces[0], [shapeTwo], gS)
-            ff = self.cutting(shapeOne.Faces[0], sList, gS)         ######################################33
+            ff = self.cutting(shapeOne.Faces[0], sList, gS)         ###
             fList.append(ff)
 
             for ff in shapeOne.Faces[1:]:
@@ -1443,12 +1443,13 @@ class _PyAlignment(_Py):
             pyW = pyWireList[nW]
             pyPlList = pyW.planes
 
-            # rChop with base and cont
-            for nn in rChop:
-                pyPl = pyPlList[nn]
-                if not pyPl.choped and not pyPl.aligned:
-                    pyPl.cuttingPyth(cutList)
-                    # print('rangoChop ', nn)
+            if simulatedC:
+                # rChop with base and cont
+                for nn in rChop:
+                    pyPl = pyPlList[nn]
+                    if not pyPl.choped and not pyPl.aligned:
+                        pyPl.cuttingPyth(cutList)
+                        # print('rangoChop ', nn)
 
         else:
             # print('BB')
@@ -1595,12 +1596,13 @@ class _PyAlignment(_Py):
 
                     pyBase = aligns[numChop]
 
-                # rChop with base and cont
-                #for nn, pyPl in map(None, rChop, rChopPy):
-                for pyPl in rChopPy:
-                    if not (pyPl.choped or pyPl.aligned):
-                        pyPl.cuttingPyth(cutList)
-                        # print('rangoChop ', nn)'''
+                if simulatedC:
+                    # rChop with base and cont
+                    # for nn, pyPl in map(None, rChop, rChopPy):
+                    for pyPl in rChopPy:
+                        if not (pyPl.choped or pyPl.aligned):
+                            pyPl.cuttingPyth(cutList)
+                            # print('rangoChop ', nn)'''
 
     def processRango(self, rango, rangoPy, pyPlane, numWire, enormousBase):
 
