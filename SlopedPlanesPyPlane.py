@@ -1204,6 +1204,54 @@ class _PyPlane(_Py):
 
         return plane
 
+    def rangging(self, pyWire, direction, pyReflex=None):
+
+        '''rangging(self, pyWire, direction, pyReflex=None)'''
+
+        # print('rangging ', (self.numWire, self.numGeom), direction, self.rear)
+        numGeom = self.numGeom
+
+        rear = self.rear
+        lenRear = len(rear)
+
+        if lenRear == 0:
+            # print('a')
+
+            self.rango = [[]]
+
+        elif lenRear == 1:
+            # print('b')
+
+            if pyReflex:
+                # print('b1')
+                rearReflex = pyReflex.rear
+                if direction == 'forward':
+                    nGeom = rearReflex[0]
+                else:
+                    nGeom = rearReflex[1]
+                if nGeom is None:
+                    return
+
+            else:
+                # print('b2')
+                nGeom = rear[0]
+
+            ran = self.rang(pyWire, numGeom, nGeom, direction, True)
+            self.addValue('rango', ran, direction)
+
+        else:
+            # print('c')
+
+            nGeom = rear[0]
+            ran = self.rang(pyWire, numGeom, nGeom, 'forward', True)
+            self.addValue('rango', ran, 'forward')
+
+            nGeom = rear[-1]
+            ran = self.rang(pyWire, numGeom, nGeom, 'backward', True)
+            self.addValue('rango', ran, 'backward')
+
+        # print('rango ', self.rango)
+
     def virtualizing(self):
 
         '''virtualizing(self)
@@ -1313,20 +1361,6 @@ class _PyPlane(_Py):
         bigShape = self.cutting(bigShape, [enormousShape], gS)
         self.bigShape = bigShape
 
-    def intercepting(self, pyPl):
-
-        ''''''
-
-        pass
-
-        '''plane = self.shape
-        pl = pyPl.shape.copy()
-        cut = pl.cut(plane)
-        if len(cut.Faces) > 1:
-            return True
-        else:
-            return False'''
-
     def simulating(self, cList):
 
         '''simulating(self, cList)'''
@@ -1343,6 +1377,69 @@ class _PyPlane(_Py):
         gS = self.geomShape
         plCopy = self.cutting(plCopy, cList, gS)
         self.simulatedShape = plCopy
+
+
+    def isSolved(self):
+
+        '''isSolved(self)'''
+
+        if self.solved:
+            # print('memory')
+            return True
+
+        tolerance = _Py.tolerance
+        forward = self.forward
+        backward = self.backward
+        plane = self.shape
+        section = plane.section([forward, backward], tolerance)
+        if section.Edges:
+            # print('edges')
+            return False
+        else:
+            # print('no edges')
+            self.solved = True
+            return True
+
+    def isReallySolved(self, pyWire, pyReflex):
+
+        '''isReallySolved(self, pyWire, pyReflex)'''
+
+        if self.reallySolved is not False:
+            return self.reallySolved
+
+        tolerance = _Py.tolerance
+        conflictList = []
+        simul = self.simulatedShape
+        control = self.control
+
+        pyReflexList = pyWire.reflexs
+        for pyRef in pyReflexList:
+            for pyPlane in pyRef.planes:
+                nG = pyPlane.numGeom
+                if nG not in control:
+                    # print(pyPlane.numGeom)
+                    plane = pyPlane.shape
+                    shape = self.shape.copy()
+
+                    shape = shape.cut([plane], tolerance)
+
+                    if len(shape.Faces) == 2:
+
+                        conf = []
+
+                        for ff in shape.Faces:
+                            # print('a')
+                            common = ff.common([simul], tolerance)
+                            if common.Area:
+                                # print('b')
+                                conf.append(pyPlane)
+
+                        if len(conf) == 1:
+                            conflictList.extend(conf)
+
+        self.reallySolved = conflictList
+
+        return conflictList
 
     def rearing(self, pyWire, pyReflex, direction):
 
@@ -1619,113 +1716,3 @@ class _PyPlane(_Py):
                 self.cuttingPyth(cutterList)
 
         # print('shape ', self.shape)
-
-    def rangging(self, pyWire, direction, pyReflex=None):
-
-        '''rangging(self, pyWire, direction, pyReflex=None)'''
-
-        # print('rangging ', (self.numWire, self.numGeom), direction, self.rear)
-        numGeom = self.numGeom
-
-        rear = self.rear
-        lenRear = len(rear)
-
-        if lenRear == 0:
-            # print('a')
-
-            self.rango = [[]]
-
-        elif lenRear == 1:
-            # print('b')
-
-            if pyReflex:
-                # print('b1')
-                rearReflex = pyReflex.rear
-                if direction == 'forward':
-                    nGeom = rearReflex[0]
-                else:
-                    nGeom = rearReflex[1]
-                if nGeom is None:
-                    return
-
-            else:
-                # print('b2')
-                nGeom = rear[0]
-
-            ran = self.rang(pyWire, numGeom, nGeom, direction, True)
-            self.addValue('rango', ran, direction)
-
-        else:
-            # print('c')
-
-            nGeom = rear[0]
-            ran = self.rang(pyWire, numGeom, nGeom, 'forward', True)
-            self.addValue('rango', ran, 'forward')
-
-            nGeom = rear[-1]
-            ran = self.rang(pyWire, numGeom, nGeom, 'backward', True)
-            self.addValue('rango', ran, 'backward')
-
-        # print('rango ', self.rango)
-
-    def isSolved(self):
-
-        '''isSolved(self)'''
-
-        if self.solved:
-            # print('memory')
-            return True
-
-        tolerance = _Py.tolerance
-        forward = self.forward
-        backward = self.backward
-        plane = self.shape
-        section = plane.section([forward, backward], tolerance)
-        if section.Edges:
-            # print('edges')
-            return False
-        else:
-            # print('no edges')
-            self.solved = True
-            return True
-
-    def isReallySolved(self, pyWire, pyReflex):
-
-        '''isReallySolved(self, pyWire, pyReflex)'''
-
-        if self.reallySolved is not False:
-            return self.reallySolved
-
-        tolerance = _Py.tolerance
-        conflictList = []
-        simul = self.simulatedShape
-        control = self.control
-
-        pyReflexList = pyWire.reflexs
-        for pyRef in pyReflexList:
-            for pyPlane in pyRef.planes:
-                nG = pyPlane.numGeom
-                if nG not in control:
-                    # print(pyPlane.numGeom)
-                    plane = pyPlane.shape
-                    shape = self.shape.copy()
-
-                    shape = shape.cut([plane], tolerance)
-
-                    if len(shape.Faces) == 2:
-
-                        conf = []
-
-                        for ff in shape.Faces:
-                            # print('a')
-                            common = ff.common([simul], tolerance)
-                            if common.Area:
-                                # print('b')
-                                conf.append(pyPlane)
-
-                        if len(conf) == 1:
-                            conflictList.extend(conf)
-
-        self.reallySolved = conflictList
-
-        return conflictList

@@ -249,6 +249,110 @@ class _PyAlignment(_Py):
 
         self._rear = rear
 
+    def rangging(self, reset):
+
+        '''rangging(self)'''
+
+        # print('### rangging ', self.base.numWire, self.base.numGeom)
+
+        pyWireList = _Py.pyFace.wires
+
+        for [pyPlane, pyPl] in self.chops:
+
+            numWire = pyPlane.numWire
+            nWire = pyPl.numWire
+            pyWire = pyWireList[numWire]
+            pyW = pyWireList[nWire]
+
+            if reset:
+
+                if not pyPlane.rango:
+                    pyPlane.rangging(pyWire, 'backward')
+                if not pyPl.rango:
+                    pyPl.rangging(pyW, 'forward')
+
+            cc = pyWire.num2py(pyPlane.rango)
+            pyPlane.rangoPy = cc
+            cc = pyW.num2py(pyPl.rango)
+            pyPl.rangoPy = cc
+
+            if numWire == nWire:
+                numGeom = pyPlane.numGeom
+                nGeom = pyPl.numGeom
+                rangoChop = self.rang(pyWire, numGeom, nGeom, 'forward')
+                planeList = pyWire.planes
+
+                ran = []
+                for nn in rangoChop:
+                    pyP = planeList[nn]
+                    if not pyP.aligned:
+                        pyP.fronted = True
+                        pyP.frontedList.append(self)
+                    ran.append(pyP)
+
+            else:
+                rangoChop = []
+                ran = []
+
+            self.addValue('rango', rangoChop, 'backward')
+            self.addValue('rangoPy', ran, 'backward')
+
+        # print 'rangoRear'
+
+        pyPrior = self.prior
+        if pyPrior.aligned:
+            ali = pyPrior.alignedList[0]
+            pyPrior = ali.aligns[-1]
+        pyLater = self.later
+
+        w1 = pyPrior.numWire
+        w2 = pyLater.numWire
+
+        if w1 == 0 and w1 == w2:
+
+            pr = pyPrior.numGeom
+            lat = pyLater.numGeom
+
+            # print('pr ', pr)
+            # print('lat ', lat)
+
+            pyW = pyWireList[w1]
+            lenW = len(pyW.planes)
+
+            # print('rear[1] ', self.rear[1])
+            # print('rear[0] ', self.rear[0])
+
+            if self.rear[1] is not None:
+                pr = self.sliceIndex(self.rear[1] - 1, lenW)
+
+            if self.rear[0] is not None:
+                lat = self.sliceIndex(self.rear[0] + 1, lenW)
+
+            # print('pr ', pr)
+            # print('lat ', lat)
+
+            pyWire = pyWireList[w1]
+            rangoRear = self.rang(pyWire, lat, pr, 'forward')
+            # print('rangoRear ', rangoRear)
+            rangoRear = [lat] + list(rangoRear) + [pr]
+            # print('rangoRear ', rangoRear)
+
+            pyPlaneList = pyWire.planes
+            ran = []
+            for nn in rangoRear:
+                pyP = pyPlaneList[nn]
+                pyP.rearedList.append(self)
+                ran.append(pyP)
+
+            rangoRear = (rangoRear, ran)
+
+        else:
+
+            rangoRear = ([], [])
+
+        self.rangoRear = rangoRear
+        # print('rangoRear ', rangoRear)
+
     def virtualizing(self):
 
         '''virtualizing(self)
@@ -1888,107 +1992,3 @@ class _PyAlignment(_Py):
             for pyPl in self.aligns:
                 if pyPl.shape:
                     pyPl.cuttingPyth(rearList)
-
-    def rangging(self, reset):
-
-        '''rangging(self)'''
-
-        # print('### rangging ', self.base.numWire, self.base.numGeom)
-
-        pyWireList = _Py.pyFace.wires
-
-        for [pyPlane, pyPl] in self.chops:
-
-            numWire = pyPlane.numWire
-            nWire = pyPl.numWire
-            pyWire = pyWireList[numWire]
-            pyW = pyWireList[nWire]
-
-            if reset:
-
-                if not pyPlane.rango:
-                    pyPlane.rangging(pyWire, 'backward')
-                if not pyPl.rango:
-                    pyPl.rangging(pyW, 'forward')
-
-            cc = pyWire.num2py(pyPlane.rango)
-            pyPlane.rangoPy = cc
-            cc = pyW.num2py(pyPl.rango)
-            pyPl.rangoPy = cc
-
-            if numWire == nWire:
-                numGeom = pyPlane.numGeom
-                nGeom = pyPl.numGeom
-                rangoChop = self.rang(pyWire, numGeom, nGeom, 'forward')
-                planeList = pyWire.planes
-
-                ran = []
-                for nn in rangoChop:
-                    pyP = planeList[nn]
-                    if not pyP.aligned:
-                        pyP.fronted = True
-                        pyP.frontedList.append(self)
-                    ran.append(pyP)
-
-            else:
-                rangoChop = []
-                ran = []
-
-            self.addValue('rango', rangoChop, 'backward')
-            self.addValue('rangoPy', ran, 'backward')
-
-        # print 'rangoRear'
-
-        pyPrior = self.prior
-        if pyPrior.aligned:
-            ali = pyPrior.alignedList[0]
-            pyPrior = ali.aligns[-1]
-        pyLater = self.later
-
-        w1 = pyPrior.numWire
-        w2 = pyLater.numWire
-
-        if w1 == 0 and w1 == w2:
-
-            pr = pyPrior.numGeom
-            lat = pyLater.numGeom
-
-            # print('pr ', pr)
-            # print('lat ', lat)
-
-            pyW = pyWireList[w1]
-            lenW = len(pyW.planes)
-
-            # print('rear[1] ', self.rear[1])
-            # print('rear[0] ', self.rear[0])
-
-            if self.rear[1] is not None:
-                pr = self.sliceIndex(self.rear[1] - 1, lenW)
-
-            if self.rear[0] is not None:
-                lat = self.sliceIndex(self.rear[0] + 1, lenW)
-
-            # print('pr ', pr)
-            # print('lat ', lat)
-
-            pyWire = pyWireList[w1]
-            rangoRear = self.rang(pyWire, lat, pr, 'forward')
-            # print('rangoRear ', rangoRear)
-            rangoRear = [lat] + list(rangoRear) + [pr]
-            # print('rangoRear ', rangoRear)
-
-            pyPlaneList = pyWire.planes
-            ran = []
-            for nn in rangoRear:
-                pyP = pyPlaneList[nn]
-                pyP.rearedList.append(self)
-                ran.append(pyP)
-
-            rangoRear = (rangoRear, ran)
-
-        else:
-
-            rangoRear = ([], [])
-
-        self.rangoRear = rangoRear
-        # print('rangoRear ', rangoRear)

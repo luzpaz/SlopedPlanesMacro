@@ -103,6 +103,28 @@ class _PyReflex(_Py):
 
         self._lines = lines
 
+    def rangging(self, pyWire):
+
+        '''rangging(self, pyWire)'''
+
+        pyR = self.planes[0]
+        pyOppR = self.planes[1]
+        rear = pyR.rear
+        oppRear = pyOppR.rear
+
+        if rear and oppRear:
+
+            rG = rear[0]
+            oG = oppRear[-1]
+            ran = self.rang(pyWire, rG, oG, 'forward')
+            self.rango = ran
+
+        direction = "forward"
+        for pyPlane in self.planes:
+            if not pyPlane.rango:
+                pyPlane.rangging(pyWire, direction, self)
+            direction = "backward"
+
     def virtualizing(self):
 
         '''virtualizing(self)
@@ -1208,26 +1230,4 @@ class _PyReflex(_Py):
                         pyPlane.rearing(pyWire, self, direction)
                 else:
                     pyPlane.rearing(pyWire, self, direction)
-            direction = "backward"
-
-    def rangging(self, pyWire):
-
-        '''rangging(self, pyWire)'''
-
-        pyR = self.planes[0]
-        pyOppR = self.planes[1]
-        rear = pyR.rear
-        oppRear = pyOppR.rear
-
-        if rear and oppRear:
-
-            rG = rear[0]
-            oG = oppRear[-1]
-            ran = self.rang(pyWire, rG, oG, 'forward')
-            self.rango = ran
-
-        direction = "forward"
-        for pyPlane in self.planes:
-            if not pyPlane.rango:
-                pyPlane.rangging(pyWire, direction, self)
             direction = "backward"
