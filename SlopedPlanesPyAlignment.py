@@ -1847,12 +1847,11 @@ class _PyAlignment(_Py):
 
         # print('# self.Base ', self.base.numGeom)
 
-        # recolects   esto esta repetido en el final de aligning y luego en PyFace postProcess
+        # recollects
 
         pyWireList = _Py.pyFace.wires
         pyBase = self.base
         base = pyBase.shape
-
         bList = [base]
         for pyPl in self.aligns:
             if pyPl.shape:
@@ -1862,11 +1861,13 @@ class _PyAlignment(_Py):
 
         # chops
 
-        rangoChop = self.rango
+        #rangoChop = self.rango
+        rangoChopPy = self.rangoPy
         numChop = -1
         for [pyOne, pyTwo] in self.chops:
             numChop += 1
-            rChop = rangoChop[numChop]
+            #rChop = rangoChop[numChop]
+            rChopPy = rangoChopPy[numChop]
             pyPlList = pyWireList[pyOne.numWire].planes
 
             cutList = []
@@ -1881,8 +1882,8 @@ class _PyAlignment(_Py):
             # rangoChop with real chops
 
             if cutList:
-                for nn in rChop:
-                    pyPl = pyPlList[nn]
+                for pyPl in rChopPy:
+                    # pyPl = pyPlList[nn]
                     if not pyPl.choped and not pyPl.aligned:
                         pyPl.cuttingPyth(cutList)
                         # print('rangoChop ', nn)
