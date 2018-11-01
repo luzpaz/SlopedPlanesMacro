@@ -46,6 +46,7 @@ class _PyAlignment(_Py):
         self.aligns = []
         self.chops = []
         self.geomAligned = None
+        self.geomList = []
         self.rango = []
         self.rangoPy = []   # TODO podría unir rango y rangoPy en un sola propiedad como en rangoRear
         self.rangoRear = ()
@@ -111,6 +112,20 @@ class _PyAlignment(_Py):
         '''geomAligned(self, geomAligned)'''
 
         self._geomAligned = geomAligned
+
+    @property
+    def geomList(self):
+
+        '''geomList(self)'''
+
+        return self._geomList
+
+    @geomList.setter
+    def geomList(self, geomList):
+
+        '''geomList(self, geomList)'''
+
+        self._geomList = geomList
 
     @property
     def rango(self):
@@ -234,6 +249,110 @@ class _PyAlignment(_Py):
 
         self._rear = rear
 
+    def rangging(self, reset):
+
+        '''rangging(self)'''
+
+        # print('### rangging ', self.base.numWire, self.base.numGeom)
+
+        pyWireList = _Py.pyFace.wires
+
+        for [pyPlane, pyPl] in self.chops:
+
+            numWire = pyPlane.numWire
+            nWire = pyPl.numWire
+            pyWire = pyWireList[numWire]
+            pyW = pyWireList[nWire]
+
+            if reset:
+
+                if not pyPlane.rango:
+                    pyPlane.rangging(pyWire, 'backward')
+                if not pyPl.rango:
+                    pyPl.rangging(pyW, 'forward')
+
+            cc = pyWire.num2py(pyPlane.rango)
+            pyPlane.rangoPy = cc
+            cc = pyW.num2py(pyPl.rango)
+            pyPl.rangoPy = cc
+
+            if numWire == nWire:
+                numGeom = pyPlane.numGeom
+                nGeom = pyPl.numGeom
+                rangoChop = self.rang(pyWire, numGeom, nGeom, 'forward')
+                planeList = pyWire.planes
+
+                ran = []
+                for nn in rangoChop:
+                    pyP = planeList[nn]
+                    if not pyP.aligned:
+                        pyP.fronted = True
+                        pyP.frontedList.append(self)
+                    ran.append(pyP)
+
+            else:
+                rangoChop = []
+                ran = []
+
+            self.addValue('rango', rangoChop, 'backward')
+            self.addValue('rangoPy', ran, 'backward')
+
+        # print 'rangoRear'
+
+        pyPrior = self.prior
+        if pyPrior.aligned:
+            ali = pyPrior.alignedList[0]
+            pyPrior = ali.aligns[-1]
+        pyLater = self.later
+
+        w1 = pyPrior.numWire
+        w2 = pyLater.numWire
+
+        if w1 == 0 and w1 == w2:
+
+            pr = pyPrior.numGeom
+            lat = pyLater.numGeom
+
+            # print('pr ', pr)
+            # print('lat ', lat)
+
+            pyW = pyWireList[w1]
+            lenW = len(pyW.planes)
+
+            # print('rear[1] ', self.rear[1])
+            # print('rear[0] ', self.rear[0])
+
+            if self.rear[1] is not None:
+                pr = self.sliceIndex(self.rear[1] - 1, lenW)
+
+            if self.rear[0] is not None:
+                lat = self.sliceIndex(self.rear[0] + 1, lenW)
+
+            # print('pr ', pr)
+            # print('lat ', lat)
+
+            pyWire = pyWireList[w1]
+            rangoRear = self.rang(pyWire, lat, pr, 'forward')
+            # print('rangoRear ', rangoRear)
+            rangoRear = [lat] + list(rangoRear) + [pr]
+            # print('rangoRear ', rangoRear)
+
+            pyPlaneList = pyWire.planes
+            ran = []
+            for nn in rangoRear:
+                pyP = pyPlaneList[nn]
+                pyP.rearedList.append(self)
+                ran.append(pyP)
+
+            rangoRear = (rangoRear, ran)
+
+        else:
+
+            rangoRear = ([], [])
+
+        self.rangoRear = rangoRear
+        # print('rangoRear ', rangoRear)
+
     def virtualizing(self):
 
         '''virtualizing(self)
@@ -242,7 +361,7 @@ class _PyAlignment(_Py):
         Virtualizes the base of falsify alignnments which belongs to
         other alignment.'''
 
-        # print '###### virtualizing alignment', (self.base.numWire, self.base.numGeom)
+        # print('###### virtualizing alignment', self.base.numWire, self.base.numGeom)
 
         virtualizedChops = []
         for [pyChopOne, pyChopTwo] in self.chops:
@@ -267,7 +386,7 @@ class _PyAlignment(_Py):
         The alignment blocks the path to the planes
         in its front and laterals.'''
 
-        # print '###### trimming base ', (self.base.numWire, self.base.numGeom)
+        # print('###### trimming base ', self.base.numWire, self.base.numGeom)
 
         # self.printControl(str(self.base.numGeom))
 
@@ -316,7 +435,7 @@ class _PyAlignment(_Py):
         for rChop, rChopPy, [pyOne, pyTwo] in\
                 zip(rangoChop, rangoChopPy, chops):
             numChop += 1
-            # print '### numChop ', numChop
+            # print('### numChop ', numChop)
 
             rangoOne = pyOne.rango[-1][:]
             rangoOnePy = pyOne.rangoPy[-1][:]
@@ -332,8 +451,8 @@ class _PyAlignment(_Py):
             else:
                 rearTwo = None
 
-            # print 'rangoOne ', rangoOne  # , rangoOnePy
-            # print 'rangoTwo ', rangoTwo  # , rangoTwoPy
+            # print('rangoOne ', rangoOne  # , rangoOnePy)
+            # print('rangoTwo ', rangoTwo  # , rangoTwoPy)
 
             for nn, pyP in zip(rangoOne, rangoOnePy):
                 if nn in rangoTwo:
@@ -342,15 +461,17 @@ class _PyAlignment(_Py):
                     rangoOnePy.remove(pyP)
                     rangoTwoPy.remove(pyP)
 
-            # print 'rangoOne ', rangoOne  # , rangoOnePy
-            # print 'rangoTwo ', rangoTwo  # , rangoTwoPy
+            # print('rangoOne ', rangoOne  # , rangoOnePy)
+            # print('rangoTwo ', rangoTwo  # , rangoTwoPy)
 
             nW = pyOne.numWire
             pyPlList = pyWireList[nW].planes
             rC = []
 
+            # if mono utilizar control para hacer descartes. IMPORTANTE!!!
+
             if not mono and nW == pyTwo.numWire:
-                # print 'nW'
+                # print('nW')
 
                 # the two rangos don't cut between them, if not aligned
 
@@ -453,7 +574,7 @@ class _PyAlignment(_Py):
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
-                # print '### chop ', (pyPlane.numWire, pyPlane.numGeom)
+                # print('### chop ', pyPlane.numWire, pyPlane.numGeom)
                 enormousShape = pyPlane.enormousShape
 
                 if num == 0:
@@ -474,18 +595,18 @@ class _PyAlignment(_Py):
 
                     secondRear = pyTwo.secondRear
                     pyPlList = pyWireList[pyTwo.numWire].planes
-                # print 'rango ', rango
+                # print('rango ', rango)
 
                 # the cross
                 if pyPlane.virtualized:
-                    # print 'virtualized'
+                    # print('virtualized')
                     aliList = pyPlane.alignedList
                     pyA = aliList[0]
                     gA = pyA.geomAligned.copy()
                     gA = gA.cut([geomAligned], tolerance)
                     if len(gA.Edges) == 2:
                         pyPlane.cross = True
-                # print 'cross ', pyPlane.cross
+                # print('cross ', pyPlane.cross)
 
                 # consecutives
                 consecutive = False
@@ -496,7 +617,7 @@ class _PyAlignment(_Py):
                     pyPl = pyPlList[nG]  # cambiar a zip?
                     if pyPl.aligned or pyPl.choped:
                         consecutive = True
-                    # print 'consecutive ', consecutive
+                    # print('consecutive ', consecutive)
 
                     #rearedList = pyPl.rearedList
                     # el rango se debe limpiar desde un principio. Luego lo utilizaré en aligning de nuevo ???
@@ -504,49 +625,49 @@ class _PyAlignment(_Py):
 
                     control = pyPl.control
                     if pyPlane.numGeom not in control:
-                        # print '# nG ', nG
+                        # print('# nG ', nG)
                         if not (pyPl.aligned or pyPl.choped):
 
                             if not pyPlane.cross:
-                                # print '1'
+                                # print('1')
 
                                 if consecutive:
-                                    # print 'a'
+                                    # print('a')
 
                                     if pyPl.fronted:
-                                        # print 'a1'
+                                        # print('a1')
 
                                         control.append(numGeom)
                                         pyPlane.control.append(nG)
 
                                     else:
-                                        # print 'a2'
+                                        # print('a2')
 
                                         pyPl.trimming(enormousShape)
 
                                 else:
-                                    # print 'b'
+                                    # print('b')
 
                                     cList = [enormousShape]
 
                                     if nG not in totalRear:
-                                        # print 'b1'
+                                        # print('b1')
                                         if nG not in [pr, lat]:
-                                            # print 'b11'
+                                            # print('b11')
 
                                             if falsify:
-                                                # print 'b111'
+                                                # print('b111')
                                                 if num == 0:
-                                                    # print 'b1111'
+                                                    # print('b1111')
                                                     cList.append(enormousBase)
                                                     control.append(numGeom)
                                                 else:
-                                                    # print 'b1112'
+                                                    # print('b1112')
                                                     cList.append(enormousCont)
                                                     control.append(nGeom)
 
                                             else:
-                                                # print 'b112'
+                                                # print('b112')
                                                 cList.append(enormousBase)
                                                 control.append(numGeom)
 
@@ -555,7 +676,7 @@ class _PyAlignment(_Py):
                                 control.append(pyPlane.numGeom)
 
                             else:
-                                # print '2'
+                                # print('2')
 
                                 pyPl.trimmingTwo(enormousShape)
                                 baseControl.append(nG)
@@ -596,7 +717,7 @@ class _PyAlignment(_Py):
 
         '''priorLater(self)'''
 
-        # print '###### priorLater base ', (self.base.numWire, self.base.numGeom)
+        # print('###### priorLater base ', self.base.numWire, self.base.numGeom)
 
         falsify = self.falsify
 
@@ -617,19 +738,19 @@ class _PyAlignment(_Py):
         pyPrior = self.prior
         pyLater = self.later
         pr = pyPrior.numGeom
-        # print 'prior ', (pyPrior.numWire, pr)
+        # print('prior ', pyPrior.numWire, pr)
         lat = pyLater.numGeom
-        # print 'later ', (pyLater.numWire, lat)
+        # print('later ', pyLater.numWire, lat)
         bigPrior = pyPrior.bigShape
         bigLater = pyLater.bigShape
 
         if falsify:
-            # print 'A'
+            # print('A')
 
             [pyOne, pyTwo] = self.chops[0]
 
             if not pyPrior.reflexed or mono:
-                # print 'AP1'
+                # print('AP1')
 
                 pyBase.cuttingPyth([bigPrior])
                 control.append(pr)
@@ -637,7 +758,7 @@ class _PyAlignment(_Py):
                     control.append(lat)
 
             elif pyBase.virtualized:
-                # print 'AP2'
+                # print('AP2')
 
                 pyBase.cuttingPyth([bigPrior])
                 control.append(pr)
@@ -645,7 +766,7 @@ class _PyAlignment(_Py):
                     control.append(lat)
 
             elif pyPrior.choped and len(pyBase.alignedList) == 1:
-                # print 'AP3'
+                # print('AP3')
 
                 pyBase.cuttingPyth([bigPrior])
                 control.append(pr)
@@ -653,7 +774,7 @@ class _PyAlignment(_Py):
                     control.append(lat)
 
             if not pyLater.reflexed or mono:
-                # print 'AL1'
+                # print('AL1')
 
                 pyCont.cuttingPyth([bigLater])
                 pyCont.control.append(lat)
@@ -661,7 +782,7 @@ class _PyAlignment(_Py):
                     pyCont.control.append(pr)
 
             elif pyLater.choped and len(pyCont.alignedList) == 1:
-                # print 'AL2'
+                # print('AL2')
 
                 pyCont.cuttingPyth([bigLater])
                 pyCont.control.append(lat)
@@ -669,93 +790,94 @@ class _PyAlignment(_Py):
                     pyCont.control.append(pr)
 
         else:
-            # print 'B'
+            # print('B')
 
             cutterList = []
 
             if pyPrior.aligned:
-                # print '0'
+                # print('0')
 
                 pass
 
             elif not pyPrior.reflexed or pyPrior.choped or mono:
-                # print '1'
+                # print('1')
 
                 cutterList.append(bigPrior)
                 if not pyBase.choped:
                     if numWire == pyLater.numWire:
-                        # print '11'
+                        # print('11')
                         control.append(pr)
 
             if pyLater.aligned:
-                # print '2'
+                # print('2')
 
                 pass
 
             elif not pyLater.reflexed or pyLater.choped or mono:
-                # print '3'
+                # print('3')
 
                 cutterList.append(bigLater)
                 if not self.falsify:
                     if not pyBase.choped:
                         if numWire == pyLater.numWire:
-                            # print '31'
+                            # print('31')
                             control.append(lat)
 
             if cutterList:
-                # print 'BB'
+                # print('BB')
 
                 pyBase.cuttingPyth(cutterList)
-                # print 'pyBase.shape ', pyBase.shape
+                # print('pyBase.shape ', pyBase.shape)
 
         # cuts pyPrior and pyLater
 
         if not (pyPrior.reflexed or pyPrior.arrow):
-            # print 'a'
+            # print('a')
 
             pyPrior.trimming(enormousBase)
             pyPrior.control.append(numGeom)
-            # print 'pyPrior.shape ', pyPrior.shape
+            # print('pyPrior.shape ', pyPrior.shape)
 
             if falsify:
-                # print 'a1'
+                # print('a1')
                 pyPrior.control.append(nGeom)
 
         if not (pyLater.reflexed or pyLater.arrow):
-            # print 'b'
+            # print('b')
 
             if not falsify:
-                # print 'b1'
+                # print('b1')
 
                 pyLater.trimming(enormousBase)
                 pyLater.control.append(numGeom)
-                # print 'pyLater.shape ', pyLater.shape
+                # print('pyLater.shape ', pyLater.shape)
 
             else:
-                # print 'b2'
+                # print('b2')
 
                 pyLater.trimming(enormousCont)
                 pyLater.control.append(nGeom)
                 pyLater.control.append(numGeom)
-                # print 'pyLater.shape ', pyLater.shape
+                # print('pyLater.shape ', pyLater.shape)
 
     def simulatingChops(self):
 
-        '''simulatingChops(self)'''
+        '''simulatingChops(self)
+        simulating the rango'''
 
-        # print '###### simulatingChops ', (self.base.numWire, self.base.numGeom, self.falsify)
+        # print('###### simulatingChops ', self.base.numWire, self.base.numGeom, self.falsify)
 
         tolerance = _Py.tolerance
         pyFace = _Py.pyFace
         face = pyFace.face
         falsify = self.falsify
 
-        rangoChop = self.rango
         rangoChopPy = self.rangoPy
         simulatedChops = []
 
         geomList = [pyP.geomShape for pyP in self.aligns]
         geomList.insert(0, self.base.geomShape)
+        self.geomList = geomList
 
         enormousBase = self.base.enormousShape
         enormousCont = self.aligns[-1].enormousShape
@@ -763,7 +885,9 @@ class _PyAlignment(_Py):
         numChop = -1
         for [pyOne, pyTwo] in self.chops:
             numChop += 1
-            # print '### chops ', (pyOne.numGeom, pyTwo.numGeom)
+            # print('### chops ', pyOne.numGeom, pyTwo.numGeom)
+
+            # choped with reflex corner
 
             rrOne = []
             if pyOne.rear:
@@ -773,7 +897,7 @@ class _PyAlignment(_Py):
                     pyOppOne = pyReflexOne.planes[1]
                     oppEnormousOne = pyOppOne.enormousShape
                     rrOne = pyOne.rango[0]
-            # print 'rrOne ', rrOne
+            # print('rrOne ', rrOne)
 
             rrTwo = []
             if pyTwo.rear:
@@ -783,7 +907,9 @@ class _PyAlignment(_Py):
                     pyOppTwo = pyReflexTwo.planes[0]
                     oppEnormousTwo = pyOppTwo.enormousShape
                     rrTwo = pyTwo.rango[1]
-            # print 'rrTwo ', rrTwo
+            # print('rrTwo ', rrTwo)
+
+            # simulating
 
             if falsify:
 
@@ -797,44 +923,44 @@ class _PyAlignment(_Py):
 
             if pyOne.virtualized:
                 pyO = self.selectBasePlane(pyOne.numWire, pyOne.numGeom)
-                # print '1'
+                # print('1')
                 pyO.simulating([enormousBase])
 
             if pyTwo.virtualized:
                 pyT = self.selectBasePlane(pyTwo.numWire, pyTwo.numGeom)
-                # print '2'
+                # print('2')
                 if falsify:
-                    # print '21'
+                    # print('21')
                     pyT.simulating([enormousCont])
                 else:
-                    # print '22'
+                    # print('22')
                     pyT.simulating([enormousBase])
 
-            rChop = rangoChop[numChop]
             rChopPy = rangoChopPy[numChop]
-
-            # print 'rChop ', rChop, rChopPy
-
+            # print('rChop ', self.rango, rChopPy)
             cutList = []
-            for rr, pyPl in map(None, rChop, rChopPy):
+            for pyPl in rChopPy:
+
                 if not (pyPl.aligned or pyPl.choped):
 
                     if pyPl.reflexed:
-                        # print 'pyPl.numGeom reflexed ', pyPl.numGeom
+                        # print('pyPl.numGeom reflexed ', pyPl.numGeom)
                         pl = pyPl.simulatedShape
                         cutList.append(pl)
 
                     else:
-                        # print 'pyPl.numGeom ', pyPl.numGeom
+                        # print('pyPl.numGeom ', pyPl.numGeom)
                         pl = pyPl.bigShape.copy()
                         gS = pyPl.geomShape
 
+                        rr = pyPl.numGeom
+
                         if rr in rrOne:
-                            # print 'rrOne'
+                            # print('rrOne')
                             pl = self.cutting(pl, [oppEnormousOne], gS)
 
                         if rr in rrTwo:
-                            # print 'rrTwo'
+                            # print('rrTwo')
                             pl = self.cutting(pl, [oppEnormousTwo], gS)
 
                         cutList.append(pl)
@@ -842,7 +968,7 @@ class _PyAlignment(_Py):
             cList = []
 
             if cutList:
-                # print 'cutList ', cutList
+                # print('cutList ', cutList)
 
                 bb = self.base.seedShape.copy()
 
@@ -873,17 +999,17 @@ class _PyAlignment(_Py):
                 pyTwo.cuttingPyth(cutList)
 
                 if pyOne.virtualized:
-                    # print 'pyO'
+                    # print('pyO')
                     pyO.cuttingPyth(cutList)
                     pyO.simulating(cutList)
 
                 if pyTwo.virtualized:
-                    # print 'pyT'
+                    # print('pyT')
                     pyT.cuttingPyth(cutList)
                     pyT.simulating(cutList)
 
             simulatedChops.append(cList)
-            # print 'cList ', cList
+            # print('cList ', cList)
 
         self.simulatedChops = simulatedChops
 
@@ -891,7 +1017,7 @@ class _PyAlignment(_Py):
 
         '''simulatingAlignment(self)'''
 
-        # print '###### simulatingAlignment ', (self.base.numWire, self.base.numGeom, self.falsify, self.base.virtualized)
+        # print('###### simulatingAlignment ', self.base.numWire, self.base.numGeom, self.falsify, self.base.virtualized)
 
         chops = self.chops
         simulatedChops = self.simulatedChops
@@ -905,7 +1031,6 @@ class _PyAlignment(_Py):
         pr = pyPrior.numGeom
         lat = pyLater.numGeom
 
-        # rangoRear = self.rangoRear[0]
         baseControl = pyBase.control
         rear = self.rear
 
@@ -936,8 +1061,8 @@ class _PyAlignment(_Py):
             cutterList.extend([one, two])
             shapeList.extend([one, two])
 
-        # print 'cutterList ', cutterList
-        # print 'shapeList ', shapeList
+        # print('cutterList ', cutterList)
+        # print('shapeList ', shapeList)
 
         if falsify:
 
@@ -970,21 +1095,19 @@ class _PyAlignment(_Py):
             if lat not in baseControl and not (pyLater.aligned and rear[0] is None):
                 cutterList.append(pyLater.bigShape)
 
-            # print 'cutterList ', cutterList
+            # print('cutterList ', cutterList)
 
-            geomList = [pyP.geomShape for pyP in self.aligns]
-            geomList.insert(0, pyBase.geomShape)
-            # print geomList
+            geomList = self.geomList
 
             base = base.cut(cutterList, _Py.tolerance)
-            # print 'base.Faces ', base.Faces, [f.Area for f in base.Faces]
+            # print('base.Faces ', base.Faces, [f.Area for f in base.Faces])
             for ff in base.Faces:
                 section = ff.section(geomList, _Py.tolerance)
                 if section.Edges:
-                    # print 'section'
+                    # print('section')
                     shapeList.append(ff)
 
-            # print 'shapeList ', shapeList
+            # print('shapeList ', shapeList)
 
         self.simulatedAlignment = shapeList
 
@@ -992,7 +1115,7 @@ class _PyAlignment(_Py):
 
         '''aligning(self)'''
 
-        # print '###### base ', (self.base.numWire, self.base.numGeom)
+        # print('###### base ', self.base.numWire, self.base.numGeom)
 
         pyFace = _Py.pyFace
         geomShapeFace = pyFace.shapeGeom
@@ -1022,10 +1145,10 @@ class _PyAlignment(_Py):
         numChop = -1
         for [pyOne, pyTwo] in self.chops:
             numChop += 1
-            # print '### [pyOne, pyTwo]', [(pyOne.numWire, pyOne.numGeom), (pyTwo.numWire, pyTwo.numGeom)]
+            # print('### [pyOne, pyTwo]', [(pyOne.numWire, pyOne.numGeom), (pyTwo.numWire, pyTwo.numGeom)])
 
             simulatedC = simulatedChops[numChop]
-            # print 'simulatedC ', simulatedC
+            # print('simulatedC ', simulatedC)
 
             cutList = []
 
@@ -1037,21 +1160,23 @@ class _PyAlignment(_Py):
             rearAlignOne = None
             if pyOne.rear:
                 rearOne = pyOne.rear[-1]
-                # print 'rearOne ', rearOne
+                # print('rearOne ', rearOne)
                 pyPlOne = pyPlaneListOne[rearOne]
                 plOne = self.processRear(rearOne, pyPlOne, numOne)
                 if plOne:
                     cutList.extend(plOne)
-                    # print plOne
+                    # print(plOne)
             if rear[1] is not None:
-                # print 'rearAlignOne ', rear[1]
+                # print('rearAlignOne ', rear[1])
                 index = rangoOne.index(rear[1])
                 rangoOne = rangoOne[index + 1:]
                 rangoOnePy = rangoOnePy[index:]
                 rearAlignOne = pyPlaneListOne[rear[1]]
-                rearAlignOne = self.processAlignRear(rearAlignOne, pyWireOne, 1, enormousBase)
-                # print 'rearAlignOne ', rearAlignOne.Faces
-            # print 'rangoOne ', rangoOne
+                rearAlignOne =\
+                    self.processAlignRear(rearAlignOne, pyWireOne,
+                                          1, enormousBase)
+                # print('rearAlignOne ', rearAlignOne.Faces)
+            # print('rangoOne ', rangoOne)
 
             rangoTwo = pyTwo.rango[0]
             rangoTwoPy = pyTwo.rangoPy[0]
@@ -1061,14 +1186,14 @@ class _PyAlignment(_Py):
             rearAlignTwo = None
             if pyTwo.rear:
                 rearTwo = pyTwo.rear[0]
-                # print 'rearTwo ', rearTwo
+                # print('rearTwo ', rearTwo)
                 pyPlTwo = pyPlaneListTwo[rearTwo]
                 plTwo = self.processRear(rearTwo, pyPlTwo, numTwo)
                 if plTwo:
                     cutList.extend(plTwo)
-                    # print plTwo
+                    # print(plTwo)
             if rear[0] is not None:
-                # print 'rearAlignTwo ', rear[0]
+                # print('rearAlignTwo ', rear[0])
                 index = rangoTwo.index(rear[0])
                 rangoTwo = rangoTwo[index:]
                 rangoTwoPy = rangoTwo[index:]
@@ -1077,27 +1202,28 @@ class _PyAlignment(_Py):
                     enormous = enormousCont
                 else:
                     enormous = enormousBase
-                rearAlignTwo = self.processAlignRear(rearAlignTwo, pyWireTwo, 2, enormous)
-                # print ',rearAlingTwo ', rearAlignTwo.Faces
-            # print 'rangoTwo ', rangoTwo
+                rearAlignTwo =\
+                    self.processAlignRear(rearAlignTwo, pyWireTwo, 2, enormous)
+                # print(',rearAlingTwo ', rearAlignTwo.Faces)
+            # print('rangoTwo ', rangoTwo)
 
             rCOne, cListOne, oppCListOne =\
                 self.processRango(rangoOne, rangoOnePy, pyOne,
                                   numOne, enormousBase)
-            # print rCOne, cListOne, oppCListOne
+            # print(rCOne, cListOne, oppCListOne)
 
             rCTwo, cListTwo, oppCListTwo =\
                 self.processRango(rangoTwo, rangoTwoPy, pyTwo,
                                   numTwo, enormousBase)
-            # print rCTwo, cListTwo, oppCListTwo
+            # print(rCTwo, cListTwo, oppCListTwo)
 
             if numTwo == numOne:
                 if pyOne.rear and pyTwo.rear:
                     between = self.rang(pyWireOne, rearTwo, rearOne, 'forward')
-                    # print 'between ', between
+                    # print('between ', between)
                     cList = self.processBetween(between, pyPlaneListOne)
                     cutList.extend(cList)
-                    # print cList
+                    # print(cList)
 
             else:
                 if pyTwo.rear:
@@ -1105,7 +1231,7 @@ class _PyAlignment(_Py):
                     mm = self.sliceIndex(pyTwo.numGeom - 1,
                                          len(pyPlaneListTwo))
                     rr = self.rang(pyWireTwo, mm, rearTwo, 'backward')
-                    # print 'rr ', rr
+                    # print('rr ', rr)
 
                     for r in rr:
                         pyPl = pyPlaneListTwo[r]
@@ -1117,19 +1243,19 @@ class _PyAlignment(_Py):
                     mm = self.sliceIndex(pyOne.numGeom + 1,
                                          len(pyPlaneListOne))
                     rr = self.rang(pyWireOne, mm, rearOne, 'forward')
-                    # print 'rr ', rr
+                    # print('rr ', rr)
 
                     for r in rr:
                         pyPl = pyPlaneListOne[r]
                         if not pyPl.reflexed:
                             cListOne.append(pyPl.shape)
 
-            # print 'cutList ', cutList
+            # print('cutList ', cutList)
 
             num = -1
             for pyPlane in [pyOne, pyTwo]:
                 num += 1
-                # print '# pyPlane ', (pyPlane.numWire, pyPlane.numGeom, pyPlane.virtualized, pyPlane.cross)
+                # print('# pyPlane ', pyPlane.numWire, pyPlane.numGeom, pyPlane.virtualized, pyPlane.cross)
                 gS = pyPlane.geomShape
                 plane = pyPlane.shape
 
@@ -1144,7 +1270,6 @@ class _PyAlignment(_Py):
 
                     if rearAlignOne:
                         ccList.append(rearAlignOne)
-                        pass
 
                 else:
                     rC = rCTwo
@@ -1163,14 +1288,14 @@ class _PyAlignment(_Py):
                 planeCopy = plane.copy()
 
                 if ccList:
-                    # print 'ccList ', ccList
-                    # print planeCopy.Faces
+                    # print('ccList ', ccList)
+                    # print(planeCopy.Faces)
                     planeCopy = planeCopy.cut(ccList, tolerance)
-                    # print 'planeCopy.Faces ', planeCopy.Faces
+                    # print('planeCopy.Faces ', planeCopy.Faces)
 
-                # print 'cList ', cList
+                # print('cList ', cList)
                 pCopy = planeCopy.copy()
-                # print pCopy.Faces
+                # print(pCopy.Faces)
                 pCopy = pCopy.cut(cList, tolerance)
 
                 fList = []    # surplus under the figure
@@ -1186,21 +1311,21 @@ class _PyAlignment(_Py):
                                 hList.append(ff)
 
                 if fList:
-                    # print 'fList ', fList
+                    # print('fList ', fList)
                     pyPlane.under = fList
-                    # print planeCopy.Faces
+                    # print(planeCopy.Faces)
                     planeCopy = planeCopy.cut(fList, tolerance)
-                    # print 'planeCopy.Faces ', planeCopy.Faces
+                    # print('planeCopy.Faces ', planeCopy.Faces)
 
                 if hList:
 
                     if pyPlane.virtualized and not pyPlane.cross:
-                        # print 'virtualized plane ', (pyPlane.numWire, pyPlane.numGeom)
+                        # print('virtualized plane ', pyPlane.numWire, pyPlane.numGeom)
                         pyP = self.selectPlane(pyPlane.numWire,
                                                pyPlane.numGeom)
 
                         if isinstance(pyP.angle, list):
-                            # print 'virt B'
+                            # print('virt B')
                             angle = pyP.angle
                             pyp = self.selectPlane(angle[0], angle[1])
                             shape = pyp.shape
@@ -1213,7 +1338,7 @@ class _PyAlignment(_Py):
                             pyp.shape = Part.makeCompound(gList)
 
                         else:
-                            # print 'virt A'
+                            # print('virt A')
                             shape = pyP.shape
                             shape = shape.cut(hList, tolerance)
                             gList = []
@@ -1226,15 +1351,15 @@ class _PyAlignment(_Py):
                 # main face
                 aList = []
                 for ff in planeCopy.Faces:
-                    # print '1'
+                    # print('1')
                     section = ff.section([gS], tolerance)
                     if section.Edges:
-                        # print '11'
+                        # print('11')
                         aList.append(ff)
                         planeCopy = planeCopy.removeShape([ff])
                         break
-                # print 'planeCopy.Faces ', planeCopy.Faces
-                # print 'aList ', aList
+                # print('planeCopy.Faces ', planeCopy.Faces)
+                # print('aList ', aList)
 
                 # second face
                 if pyPlane.rear:
@@ -1247,21 +1372,21 @@ class _PyAlignment(_Py):
 
                     ffList = []
                     for ff in planeCopy.Faces:
-                        # print '2'
+                        # print('2')
                         section = ff.section([forward, backward], tolerance)
                         if not section.Edges:
-                            # print '21'
+                            # print('21')
                             section = ff.section(aList, tolerance)
                             if not section.Vertexes:
-                                # print '211'
+                                # print('211')
                                 section = ff.section([rC], tolerance)
                                 if section.Edges:
-                                    # print '2111'
+                                    # print('2111')
                                     ffList.append(ff)
                                     break
 
                     aList.extend(ffList)
-                    # print 'aList ', aList
+                    # print('aList ', aList)
 
                 comp = Part.makeCompound(aList)
                 pyPlane.shape = comp
@@ -1271,16 +1396,16 @@ class _PyAlignment(_Py):
             shapeOne = pyOne.shape.copy()
             shapeTwo = pyTwo.shape.copy()
 
-            # print 'pyOne.chopedList ', pyOne.chopedList
-            # print 'pyTwo.chopedList ', pyTwo.chopedList
+            # print('pyOne.chopedList ', pyOne.chopedList)
+            # print('pyTwo.chopedList ', pyTwo.chopedList)
 
             if len(pyOne.chopedList) == 1:
-                # print 'a'
+                # print('a')
                 sList = [shapeTwo]
             else:
-                # print 'b'
+                # print('b')
                 if pyOne.rear:
-                    # print 'b1'
+                    # print('b1')
                     simulTwo = pyTwo.simulatedShape
                     for pyA in pyOne.chopedList:
                         if pyA is not self:
@@ -1291,14 +1416,14 @@ class _PyAlignment(_Py):
                             sList = [simulTwo, bb]
                             break
                 else:
-                    # print 'b2'
+                    # print('b2')
                     sList = [shapeTwo]
-            # print 'sList ', sList
+            # print('sList ', sList)
 
             fList = []
             gS = pyOne.geomShape
             # ff = self.cutting(shapeOne.Faces[0], [shapeTwo], gS)
-            ff = self.cutting(shapeOne.Faces[0], sList, gS)         ######################################33
+            ff = self.cutting(shapeOne.Faces[0], sList, gS)         ###
             fList.append(ff)
 
             for ff in shapeOne.Faces[1:]:
@@ -1308,17 +1433,17 @@ class _PyAlignment(_Py):
                     if section.Edges:
                         fList.append(f)
 
-            # print 'fList ', fList
+            # print('fList ', fList)
             compound = Part.makeCompound(fList)
             pyOne.shape = compound
 
             if len(pyTwo.chopedList) == 1:
-                # print 'a'
+                # print('a')
                 sList = [shapeOne]
             else:
-                # print 'b'
+                # print('b')
                 if pyTwo.rear:
-                    # print 'b1'
+                    # print('b1')
                     simulOne = pyOne.simulatedShape
 
                     for pyA in pyOne.chopedList:
@@ -1330,9 +1455,9 @@ class _PyAlignment(_Py):
                             sList = [simulOne, bb]
                             break
                 else:
-                    # print 'b2'
+                    # print('b2')
                     sList = [shapeOne]
-            # print 'sList ', sList
+            # print('sList ', sList)
 
             fList = []
             gS = pyTwo.geomShape
@@ -1347,17 +1472,17 @@ class _PyAlignment(_Py):
                     if section.Edges:
                         fList.append(f)
 
-            # print 'fList ', fList
+            # print('fList ', fList)
             compound = Part.makeCompound(fList)
             pyTwo.shape = compound
 
             chopList.append([pyOne, pyTwo])
-        # print 'chopList ', chopList
+        # print('chopList ', chopList)
 
         # the alignments
 
         if self.falsify:
-            # print 'AA'
+            # print('AA')
 
             base = pyBase.shape
 
@@ -1378,8 +1503,8 @@ class _PyAlignment(_Py):
             prior = self.prior
             later = self.later
 
-            # print 'prior ', (prior.numWire, prior.numGeom)
-            # print 'later ', (later.numWire, later.numGeom)
+            # print('prior ', prior.numWire, prior.numGeom)
+            # print('later ', later.numWire, later.numGeom)
 
             if prior.numWire == pyBase.numWire:
                 if prior.numGeom not in control:
@@ -1393,13 +1518,13 @@ class _PyAlignment(_Py):
             if later.numWire == pyCont.numWire:
                 if later.numGeom not in pyCont.control:
                     if later.choped or later.fronted:
-                        # print 'lat a'
+                        # print('lat a')
                         pass
                     elif not later.aligned:
-                        # print 'lat b'
+                        # print('lat b')
                         cutterList.append(later.shape)
                     elif later.aligned and not pyCont.choped:
-                        # print 'lat c'
+                        # print('lat c')
                         cutterList.append(later.selectShape())
 
             if cutterList:
@@ -1422,15 +1547,16 @@ class _PyAlignment(_Py):
             pyW = pyWireList[nW]
             pyPlList = pyW.planes
 
-            # rChop with base and cont
-            for nn in rChop:
-                pyPl = pyPlList[nn]
-                if not pyPl.choped and not pyPl.aligned:
-                    pyPl.cuttingPyth(cutList)
-                    # print 'rangoChop ', nn
+            if simulatedC:
+                # rChop with base and cont
+                for nn in rChop:
+                    pyPl = pyPlList[nn]
+                    if not pyPl.choped and not pyPl.aligned:
+                        pyPl.cuttingPyth(cutList)
+                        # print('rangoChop ', nn)
 
         else:
-            # print 'BB'
+            # print('BB')
 
             cutList = []
 
@@ -1439,7 +1565,7 @@ class _PyAlignment(_Py):
                 for ch in chopList:
                     for p in ch:
                         cL.append(p.shape)
-            # print cL
+            # print(cL)
 
             lastAling = aligns[-1]
 
@@ -1475,7 +1601,7 @@ class _PyAlignment(_Py):
                                 if cL:
                                     gS = prior.geomShape
                                     pp = self.cutting(pp, cL, gS)
-                                # print 'prior'
+                                # print('prior')
                                 cutterList.append(pp)
                             elif prior.aligned and not pyBase.choped:
                                 cutterList.append(prior.selectShape())
@@ -1490,7 +1616,7 @@ class _PyAlignment(_Py):
                             if cL:
                                 gS = later.geomShape
                                 ll = self.cutting(ll, cL, gS)
-                            # print 'later'
+                            # print('later')
                             cutterList.append(ll)
                         elif later.aligned and not pyBase.choped:
                             cutterList.append(later.selectShape())
@@ -1500,19 +1626,19 @@ class _PyAlignment(_Py):
                 cutterList.extend(simulatedC)
 
                 base = base.cut(cutterList, _Py.tolerance)
-                # print 'base.Faces ', base.Faces, len(base.Faces)
+                # print('base.Faces ', base.Faces, len(base.Faces))
 
                 gA = self.geomAligned
-                # print 'geomAligned ', gA, (gA.firstVertex(True).Point, gA.lastVertex(True).Point)
+                # print('geomAligned ', gA, gA.firstVertex(True).Point, gA.lastVertex(True).Point)
                 number = 0
                 for ff in base.Faces:
                     section = ff.section([gA], tolerance)
                     if section.Edges:
                         number += 1
-                # print 'number ', number
+                # print('number ', number)
 
                 if number <= 2:
-                    # print 'a no divide'
+                    # print('a no divide')
 
                     gS = pyBase.geomShape
                     base = self.selectFace(base.Faces, gS)
@@ -1538,7 +1664,7 @@ class _PyAlignment(_Py):
                             pyTwo.shape = shapeTwo
 
                 else:
-                    # print 'b divide'
+                    # print('b divide')
 
                     gS = pyBase.geomShape
                     ff = self.selectFace(base.Faces, gS)
@@ -1574,11 +1700,13 @@ class _PyAlignment(_Py):
 
                     pyBase = aligns[numChop]
 
-                # rChop with base and cont
-                for nn, pyPl in map(None, rChop, rChopPy):
-                    if not (pyPl.choped or pyPl.aligned):
-                        pyPl.cuttingPyth(cutList)
-                        # print 'rangoChop ', nn'''
+                if simulatedC:
+                    # rChop with base and cont
+                    # for nn, pyPl in map(None, rChop, rChopPy):
+                    for pyPl in rChopPy:
+                        if not (pyPl.choped or pyPl.aligned):
+                            pyPl.cuttingPyth(cutList)
+                            # print('rangoChop ', nn)'''
 
     def processRango(self, rango, rangoPy, pyPlane, numWire, enormousBase):
 
@@ -1587,11 +1715,11 @@ class _PyAlignment(_Py):
         control = pyPlane.control
         rC, cutList, oppCutList = [], [], []
         for nn, pyPl in zip(rango, rangoPy):
-            # print 'nn ',nn
+            # print('nn ',nn)
             if nn not in control:
 
                 if pyPl.aligned:
-                    # print 'a'
+                    # print('a')
 
                     if not pyPlane.virtualized:
                         pyAli = pyPl.selectAlignmentBase()
@@ -1601,27 +1729,27 @@ class _PyAlignment(_Py):
                             oppCutList.extend(pl)
 
                 elif not pyPl.choped:
-                    # print 'b'
+                    # print('b')
 
                     pl = pyPl.shape.copy()
 
                     if not pyPl.fronted:
-                        # print 'b1'
+                        # print('b1')
                         oppCutList.append(pl)
 
                     if pyPl.arrow:
-                        # print 'b2'
+                        # print('b2')
                         gShape = pyPl.geomShape
                         pl = self.cutting(pl, [enormousBase], gShape)
 
                     cutList.append(pl)
                     rC.append(pl)
 
-        # print 'rC ', rC
+        # print('rC ', rC)
         rC = Part.makeCompound(rC)
 
-        # print 'cutList ', cutList
-        # print 'oppCutList ', oppCutList
+        # print('cutList ', cutList)
+        # print('oppCutList ', oppCutList)
         return rC, cutList, oppCutList
 
     def processRear(self, rear, pyPl, numWire):
@@ -1631,7 +1759,7 @@ class _PyAlignment(_Py):
         pl = None
 
         if pyPl.aligned:
-            # print 'r1'
+            # print('r1')
 
             pyAli = pyPl.selectAlignmentBase()
             if not pyAli:
@@ -1641,15 +1769,15 @@ class _PyAlignment(_Py):
                 except IndexError:
                     pass
             if pyAli and pyAli != self:
-                # print 'pyAli ', pyAli.base.numGeom
+                # print('pyAli ', pyAli.base.numGeom)
                 pl = pyAli.simulatedAlignment
 
         elif pyPl.fronted:
-            # print 'r2'
+            # print('r2')
             pl = [pyPl.bigShape]
 
         elif not pyPl.choped:
-            # print 'r3'
+            # print('r3')
             pl = [pyPl.shape]
 
         return pl
@@ -1661,16 +1789,16 @@ class _PyAlignment(_Py):
         numGeom = rearAlign.numGeom
 
         if num == 1:
-            # print '1'
+            # print('1')
             point = pyWire.coordinates[numGeom]
         else:
-            # print '2'
+            # print('2')
             point = pyWire.coordinates[numGeom + 1]
 
-        # print 'point ', point
+        # print('point ', point)
         rA = rearAlign.shape.copy()
         rA = rA.cut([enormous], _Py.tolerance)
-        # print rA.Faces
+        # print(rA.Faces)
         rA = self.selectFacePoint(rA, point)
 
         return rA
@@ -1694,7 +1822,7 @@ class _PyAlignment(_Py):
 
             if pl:
                 cutList.extend(pl)
-                # print 'rangoBetween ', nn
+                # print('rangoBetween ', nn)
 
         return cutList
 
@@ -1702,7 +1830,7 @@ class _PyAlignment(_Py):
 
         '''postProcess(self)'''
 
-        # print '# self.Base ', self.base.numGeom
+        # print('# self.Base ', self.base.numGeom)
 
         # recolects   esto esta repetido en el final de aligning y luego en PyFace postProcess
 
@@ -1713,7 +1841,7 @@ class _PyAlignment(_Py):
         for pyPl in self.aligns:
             if pyPl.shape:
                 bList.append(pyPl.shape)
-        # print 'bList ', bList
+        # print('bList ', bList)
 
         # chops
 
@@ -1731,7 +1859,7 @@ class _PyAlignment(_Py):
             pyT = self.selectPlane(pyTwo.numWire, pyTwo.numGeom)
             if pyT.shape:
                 cutList.append(pyT.shape)
-            # print 'cutList ', cutList
+            # print('cutList ', cutList)
 
             # rangoChop with real chops
 
@@ -1740,7 +1868,7 @@ class _PyAlignment(_Py):
                     pyPl = pyPlList[nn]
                     if not pyPl.choped and not pyPl.aligned:
                         pyPl.cuttingPyth(cutList)
-                        # print 'rangoChop ', nn
+                        # print('rangoChop ', nn)
 
             # rearChop with chop and alignment. Rango and rear with opp chop
 
@@ -1789,9 +1917,9 @@ class _PyAlignment(_Py):
 
         chops = self.chops
         rangoChop = self.rango
-        # print 'rangoChop ', rangoChop
+        # print('rangoChop ', rangoChop)
         rangoRear = self.rangoRear
-        # print 'rangoRear ', rangoRear
+        # print('rangoRear ', rangoRear)
         w1 = self.prior.numWire
         pyPlaneList = _Py.pyFace.wires[w1].planes
 
@@ -1805,7 +1933,7 @@ class _PyAlignment(_Py):
                 rearList.append(pl)
 
         if rearList:
-            # print 'rearList ', rearList
+            # print('rearList ', rearList)
 
             numChop = -1
             for rC in rangoChop:
@@ -1821,7 +1949,7 @@ class _PyAlignment(_Py):
                             chopList.append(pl)
 
                     if chopList:
-                        # print 'chopList ', chopList
+                        # print('chopList ', chopList)
                         for pyPl in rangoRear[1]:
                             if not (pyPl.choped or pyPl.fronted):
                                 pl = pyPl.cuttingPyth(chopList)
@@ -1853,141 +1981,14 @@ class _PyAlignment(_Py):
         rearList = []
         for pyPl in rangoRear[1]:
             if pyPl.choped:
-                # print 'a'
+                # print('a')
                 pl = pyPl.shape
                 if pl:
                     rearList.append(pl)
 
         if rearList:
-            # print 'rearList ', rearList
+            # print('rearList ', rearList)
             pyBase.cuttingPyth(rearList)
             for pyPl in self.aligns:
                 if pyPl.shape:
                     pyPl.cuttingPyth(rearList)
-
-    def rangging(self, reset):
-
-        '''rangging(self)'''
-
-        # print '### rangging ', (self.base.numWire, self.base.numGeom)
-
-        pyWireList = _Py.pyFace.wires
-
-        for [pyPlane, pyPl] in self.chops:
-
-            numWire = pyPlane.numWire
-            nWire = pyPl.numWire
-
-            pyWire = pyWireList[numWire]
-            pyPlaneList = pyWire.planes
-            pyW = pyWireList[nWire]
-            pyPlList = pyW.planes
-
-            if reset:
-
-                if not pyPlane.rango:
-                    pyPlane.rangging(pyWire, 'backward')
-                if not pyPl.rango:
-                    pyPl.rangging(pyW, 'forward')
-
-            cc = []
-            for ran in pyPlane.rango:
-                c = []
-                for nn in ran:
-                    pyP = pyPlaneList[nn]
-                    c.append(pyP)
-                cc.append(c)
-            pyPlane.rangoPy = cc
-
-            cc = []
-            for ran in pyPl.rango:
-                c = []
-                for nn in ran:
-                    pyP = pyPlList[nn]
-                    c.append(pyP)
-                cc.append(c)
-            pyPl.rangoPy = cc
-
-            if numWire == nWire:
-                numGeom = pyPlane.numGeom
-                nGeom = pyPl.numGeom
-                rangoChop = self.rang(pyWire, numGeom, nGeom, 'forward')
-                planeList = pyWire.planes
-
-                ran = []
-                for nn in rangoChop:
-                    pyP = planeList[nn]
-                    if not pyP.aligned:
-                        pyP.fronted = True
-                        pyP.frontedList.append(self)
-                    ran.append(pyP)
-
-            else:
-                rangoChop = []
-                ran = []
-
-            self.addValue('rango', rangoChop, 'backward')
-            self.addValue('rangoPy', ran, 'backward')
-
-        # rangoRear
-
-        # print 'rangoRear'
-
-        pyPrior = self.prior
-        if pyPrior.aligned:
-            ali = pyPrior.alignedList[0]
-            pyPrior = ali.aligns[-1]
-        pyLater = self.later
-
-        w1 = pyPrior.numWire
-        w2 = pyLater.numWire
-
-        if w1 == 0 and w1 == w2:
-
-            pr = pyPrior.numGeom
-            lat = pyLater.numGeom
-
-            # print 'pr ', pr
-            # print 'lat ', lat
-
-            pyW = pyWireList[w1]
-            lenW = len(pyW.planes)
-
-            # print 'rear[1] ', self.rear[1]
-            # print 'rear[0] ', self.rear[0]
-
-            if self.rear[1] is not None:
-                pr = self.sliceIndex(self.rear[1] - 1, lenW)
-
-            if self.rear[0] is not None:
-                lat = self.sliceIndex(self.rear[0] + 1, lenW)
-
-            # print 'pr ', pr
-            # print 'lat ', lat
-
-            pyWire = pyWireList[w1]  # esta repetido
-            rangoRear = self.rang(pyWire, lat, pr, 'forward')
-
-            # print 'rangoRear ', rangoRear
-
-            rangoRear.insert(0, lat)
-            rangoRear.append(pr)
-
-            # print 'rangoRear ', rangoRear
-
-            pyPlaneList = pyWire.planes
-
-            # ran = [pyPlaneList[nn] for nn in rangoRear]
-            ran = []
-            for nn in rangoRear:
-                pyP = pyPlaneList[nn]
-                pyP.rearedList.append(self)
-                ran.append(pyP)
-
-            rangoRear = (rangoRear, ran)
-
-        else:
-            rangoRear = ([], [])
-
-        self.rangoRear = rangoRear
-        # print 'rangoRear ', rangoRear

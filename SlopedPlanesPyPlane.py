@@ -26,6 +26,7 @@ from math import pi, degrees, radians, tan, cos, sin
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
+import SlopedPlanesPyEdge
 
 
 __title__ = "SlopedPlanes Macro"
@@ -738,16 +739,30 @@ class _PyPlane(_Py):
 
         self._sweepCurve = sweepCurve
 
+    @property
+    def edge(self):
+
+        ''''''
+
+        return self._edge
+
+    @edge.setter
+    def edge(self, edge):
+
+        ''''''
+
+        self._edge = edge
+
     def planning(self, pyWire, closed=False):
 
         '''planning(self, pyWire, closed=False)
         '''
 
         numGeom = self.numGeom
-        # print '### planning ', numGeom
+        # print('### planning ', numGeom)
 
         if self.reflexed:
-            # print 'reflexed'
+            # print('reflexed')
             self.simulatedShape = None
             self.cutter = []
             self.under = []
@@ -759,16 +774,16 @@ class _PyPlane(_Py):
             return
 
         if self.seedShape:
-            # print '### seed'
+            # print('### seed')
 
             self.shape = self.seedShape.copy()
             self.bigShape = self.seedBigShape.copy()
 
         else:
-            # print '### no seed'
+            # print('### no seed')
 
             if closed:
-                # print 'closed'
+                # print('closed')
                 geom = self.geom
                 if not geom:
                     geom = self.makeGeom(self.geomShape.Curve, 0, 2 * pi)
@@ -780,201 +795,139 @@ class _PyPlane(_Py):
                 height = radius * tan(radians(angle))
                 pointA = self.geomShape.Vertexes[0].Point
                 pointB = geom.Location + FreeCAD.Vector(0, 0, height)
-                direction = pointB.sub(pointA)
-                direction.normalize()
+                extrusionDirection = pointB.sub(pointA)
+                extrusionDirection.normalize()
 
             else:
-                # print 'no closed'
-                direction, geom = self.direction(pyWire, numGeom)
+                # print('no closed')
+                extrusionDirection, geom = self.extrusionDirection(pyWire, numGeom)
 
-            # print 'geom ', geom
-            # print 'direction ', direction
-
-            firstParam = geom.FirstParameter
-            lastParam = geom.LastParameter
+            # print('geom ', geom)
+            # print('extrusionDirection ', extrusionDirection)
 
             geomCopy = geom.copy()
             if not (self.sweepCurve or closed):
-                geomCopy.translate(-1 * self.overhang * direction)
+                geomCopy.translate(-1 * self.overhang * extrusionDirection)
 
-            # print '# normal'
+            # print('# normal')
             scale = 1
             plane =\
-                self.doPlane(direction, pyWire, geomCopy, firstParam,
-                             lastParam, scale, closed)
+                self.doPlane(extrusionDirection, pyWire, geomCopy, scale, closed)
             self.shape = plane
             self.seedShape = plane.copy()
 
             geomCopy = geom.copy()
             if not (self.sweepCurve or closed):
-                geomCopy.translate(-1 * _Py.size * direction)
+                geomCopy.translate(-1 * _Py.size * extrusionDirection)
 
-            # print '# big'
+            # print('# big')
             scale = 5
             bigPlane =\
-                self.doPlane(direction, pyWire, geomCopy, firstParam,
-                             lastParam, scale, closed)
+                self.doPlane(extrusionDirection, pyWire, geomCopy, scale, closed)
             self.bigShape = bigPlane
             self.seedBigShape = bigPlane.copy()
 
             if self.reflexed:
 
-                # print '# enormous'
+                # print('# enormous')
                 scale = 50
                 enormousPlane =\
-                    self.doPlane(direction, pyWire, geomCopy, firstParam,
-                                 lastParam, scale, closed)
+                    self.doPlane(extrusionDirection, pyWire, geomCopy, scale, closed)
                 self.enormousShape = enormousPlane
 
-    def direction(self, pyWire, numGeom):
+    def extrusionDirection(self, pyWire, numGeom):
 
-        '''direction(self, pyWire, numGeom)'''
+        '''extrusionDirection(self, pyWire, numGeom)
+        The extrusion direction.
+        If self is aligned a new geom is calculated.'''
+
+        # debe incluir sweepCurve y closed
 
         coordinates = pyWire.coordinates
+        geom = self.geom
 
-        geom = self.doGeom()
+        if self.aligned or not geom:
+
+            geom = self.doGeom()
+            self.geom = geom
+
+            pyEdge = self.edge
+            if not pyEdge:
+                pyEdge = SlopedPlanesPyEdge.makePyEdge(self)
+                self.edge = pyEdge
+
+            pyEdge.geom = geom
+            pyEdge.firstParam = geom.FirstParameter
+            pyEdge.lastParam = geom.LastParameter
 
         eje = coordinates[numGeom + 1].sub(coordinates[numGeom])
-        direction = self.rotateVector(eje, _Py.normal, 90)
+        extrusionDirection = self.rotateVector(eje, _Py.normal, 90)
         angle = self.angle
         if _Py.reverse:
             angle = angle * -1
-        direction = self.rotateVector(direction, eje, angle)
-        direction.normalize()
+        extrusionDirection = self.rotateVector(extrusionDirection, eje, angle)
+        extrusionDirection.normalize()
 
-        return direction, geom
+        return extrusionDirection, geom
 
-    def doPlane(self, direction, pyWire, geom, firstParam, lastParam,
-                scale, closed):
+    def doPlane(self, extrusionDirection, pyWire, geom, scale, closed):
 
-        '''doPlane(self, direction, pyWire, geom, firstParam, lastParam,
-                   scale, closed)'''
+        '''doPlane(self, extrusionDirection, pyWire, geom, scale, closed)'''
 
-        # print '# doPlane'
+        # print('# doPlane')
 
-        # print 'scale ', scale
+        # print('scale ', scale)
+
+        # utilizado por pyWire trimming linea 415
 
         size = _Py.size
         width = size
         length = 2 * size
 
-        # print 'size ', size
-        # print 'width ', width
-        # print 'length ', length
+        # print('size ', size)
+        # print('width ', width)
+        # print('length ', length)
 
         leftScale = self.leftWidth * scale
         rightScale = self.rightWidth * scale
         upScale = self.length * scale
 
-        # print 'leftScale ', leftScale
-        # print 'rightScale ', rightScale
-        # print 'upScale ', upScale
+        # print('leftScale ', leftScale)
+        # print('rightScale ', rightScale)
+        # print('upScale ', upScale)
 
         if not upScale:
-            # print 'up'
+            # print('up')
             upScale = 2 * size * scale
 
         if scale > 1:
 
             if self.leftWidth < width:
-                # print 'left'
+                # print('left')
                 leftScale = width * scale
 
             if self.rightWidth < width:
-                # print 'right'
+                # print('right')
                 rightScale = width * scale
 
             if self.length < length:
-                # print 'length'
+                # print('length')
                 upScale = length * scale
 
-        # print 'leftScale ', leftScale
-        # print 'rightScale ', rightScale
-        # print 'upScale ', upScale
+        # print('leftScale ', leftScale)
+        # print('rightScale ', rightScale)
+        # print('upScale ', upScale)
 
-        # print 'firstParam ', firstParam
-        # print 'lastParam ', lastParam
-
-        if isinstance(geom, (Part.LineSegment,
-                             Part.ArcOfParabola)):
-            # print 'a'
-
-            startParam = firstParam - leftScale
-            endParam = lastParam + rightScale
-
-        elif isinstance(geom, (Part.ArcOfHyperbola)):
-            # print 'b'
-
-            startParam = firstParam
-            endParam = lastParam
-
-        elif isinstance(geom, (Part.ArcOfCircle,
-                               Part.ArcOfEllipse)):
-            # print 'c'
-
-            rear = self.rear
-
-            if rear:
-                # print 'reflex'
-
-                if len(rear) == 1:
-                    # print 'c1'
-
-                    pyReflex = self.reflexedList[0]
-
-                    if rear[0] == pyReflex.rear[0]:
-                        # print 'c11'
-
-                        startParam = firstParam
-                        endParam = startParam + 2 * pi
-
-                    else:
-                        # print 'c12'
-
-                        startParam = lastParam
-                        endParam = startParam - 2 * pi
-
-                else:
-                    # print 'c2'
-
-                    startParam = (2 * pi - (lastParam - firstParam)) / 2 + lastParam
-                    endParam = startParam + 2 * pi
-
-            else:
-                # print 'no reflex'
-
-                dist = abs(lastParam - firstParam)
-                # print 'dist ', dist
-
-                if dist >= pi:
-                    # print '2pi o more'
-
-                    startParam = firstParam
-                    endParam = lastParam
-
-                else:
-                    # print 'less 2pi'
-
-                    center = (lastParam - firstParam) / 2 + firstParam
-                    # print 'center ', center
-                    startParam = center - pi / 2
-                    endParam = center + pi / 2
-
-        elif isinstance(geom, Part.BSplineCurve):
-            # print 'd'
-
-            pass
-
-        # print 'startParam ', startParam
-        # print 'endParam ', endParam
+        pyEdge = self.edge
+        startParam, endParam = pyEdge.baseEdge(leftScale, rightScale)
 
         extendGeom = self.makeGeom(geom, startParam, endParam)
-        # print 'extendGeom ', extendGeom
+        # print('extendGeom ', extendGeom)
         extendShape = extendGeom.toShape()
 
         if self.sweepCurve and not\
            FreeCAD.ActiveDocument.getObject(self.sweepCurve).Shape.isNull():
-            # print 'A'
+            # print('A')
 
             angle = self.angle
 
@@ -997,16 +950,16 @@ class _PyPlane(_Py):
             llPoint = geomShape.lastVertex(True).Point
 
             if ffPoint == llPoint:
-                # print 'a'
+                # print('a')
                 edge = _Py.slopedPlanes.Shape.Edges[1]
                 aa = ffPoint
                 bb = edge.firstVertex(True).Point
-                direction = bb.sub(aa)
+                extrusionDirection = bb.sub(aa)
             else:
-                # print 'b'
-                direction = llPoint.sub(ffPoint)
+                # print('b')
+                extrusionDirection = llPoint.sub(ffPoint)
 
-            aa = direction.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
+            aa = extrusionDirection.getAngle(FreeCAD.Vector(1, 0, 0)) + pi / 2
             if ffPoint.y > llPoint.y:
                 aa = aa + pi
 
@@ -1017,11 +970,11 @@ class _PyPlane(_Py):
                 rotation.multiply(wire.Placement.Rotation)
 
             if ffPoint == llPoint:
-                # print 'aa'
+                # print('aa')
                 point = geom.Location
                 numWire = self.numWire
                 angleXU = geom.AngleXU
-                # print 'angleXU ', angleXU
+                # print('angleXU ', angleXU)
                 rotation = FreeCAD.Rotation()
                 rotation.Axis = FreeCAD.Vector(0, 0, 1)
                 if numWire == 0:
@@ -1033,22 +986,22 @@ class _PyPlane(_Py):
 
                 wire.Placement.Base = ffPoint
                 edge = wire.Edges[0]
-                # print 'edge ', edge.Curve
-                # print edge.firstVertex(True).Point
-                # print edge.lastVertex(True).Point
+                # print('edge ', edge.Curve)
+                # print(edge.firstVertex(True).Point)
+                # print(edge.lastVertex(True).Point)
 
                 plane = edge.revolve(point, FreeCAD.Vector(0, 0, 1))
 
-                # print plane
-                # print plane.Area
+                # print(plane)
+                # print(plane.Area)
 
                 if _Py.reverse:
-                    # print 'negative'
+                    # print('negative')
                     plane = plane.mirror(FreeCAD.Vector(0, 0, 0),
                                          FreeCAD.Vector(0, 0, -1))
 
                 if isinstance(geom, Part.ArcOfEllipse):
-                    # print 'ellipse'
+                    # print('ellipse')
 
                     major = geom.MajorRadius
                     minor = geom.MinorRadius
@@ -1065,7 +1018,7 @@ class _PyPlane(_Py):
                 plane = plane.Faces[0]
 
             else:
-                # print 'bb'
+                # print('bb')
                 rotation = FreeCAD.Rotation()
                 rotation.Axis = _Py.normal
                 rotation.Angle = aa
@@ -1078,37 +1031,37 @@ class _PyPlane(_Py):
                 plane = wire.makePipeShell([extendShape])
 
         else:
-            # print 'B'
+            # print('B')
 
             if closed:
-                # print 'B1'
+                # print('B1')
 
                 angle = self.angle
-                # print 'angle ', angle
+                # print('angle ', angle)
                 point = geom.Location
-                # print 'point ', point
+                # print('point ', point)
                 length = self.length
-                # print 'length ', length
+                # print('length ', length)
 
-                # print 'geom'
+                # print('geom')
 
                 if isinstance(geom, Part.ArcOfEllipse):
-                    # print 'ellipse'
+                    # print('ellipse')
                     major = geom.MajorRadius
                     minor = geom.MinorRadius
                     radius = major
 
                 else:
-                    # print 'circle'
+                    # print('circle')
                     radius = geom.Radius
 
-                # print 'radius ', radius
+                # print('radius ', radius)
 
                 angle = abs(angle) % 360
-                # print 'angle ', angle
+                # print('angle ', angle)
 
                 if angle == 0:
-                    # print 'B11'
+                    # print('B11')
 
                     slopedPlanes = _Py.slopedPlanes
                     faceMaker = slopedPlanes.FaceMaker
@@ -1125,25 +1078,25 @@ class _PyPlane(_Py):
                                               faceMaker)
 
                 elif angle == 90:
-                    # print 'B12'
+                    # print('B12')
 
                     plane = Part.makeCylinder(radius, length, point)
 
                 elif angle == 180:
-                    # print 'B13'
+                    # print('B13')
 
                     slopedPlanes = _Py.slopedPlanes
                     faceMaker = slopedPlanes.FaceMaker
 
                     if pyWire.numWire > 0:
-                        # print 'B131'
+                        # print('B131')
 
                         plane = Part.makeFace(extendShape,
                                               faceMaker)
                         plane.translate(point)
 
                     else:
-                        # print 'B132'
+                        # print('B132')
 
                         rr = radius + length
                         circle = Part.makeCircle(rr)
@@ -1153,20 +1106,20 @@ class _PyPlane(_Py):
                                               faceMaker)
 
                 elif angle > 90:
-                    # print 'B14'
+                    # print('B14')
 
                     radiusBottom = radius
                     ang = angle - 90
-                    # print 'ang ', ang
+                    # print('ang ', ang)
 
                     if pyWire.numWire == 0:
-                        # print 'B141'
+                        # print('B141')
                         radiusTop = radiusBottom + length * sin(radians(ang))
 
                     else:
-                        # print 'B142'
+                        # print('B142')
                         ll = radius / cos(radians(ang))
-                        # print 'll ', ll
+                        # print('ll ', ll)
                         if ll <= length:
                             radiusTop = 0
                         else:
@@ -1174,53 +1127,53 @@ class _PyPlane(_Py):
 
                     height = length * cos(radians(ang))
 
-                    # print 'radiusBottom ', radiusBottom
-                    # print 'radiusTop ', radiusTop
-                    # print 'height ', height
+                    # print('radiusBottom ', radiusBottom)
+                    # print('radiusTop ', radiusTop)
+                    # print('height ', height)
 
                     plane = Part.makeCone(radiusBottom, radiusTop, height,
                                           point)
-                    # print plane.Placement
+                    # print(plane.Placement)
 
                 else:
-                    # print 'B15'
+                    # print('B15')
 
                     radiusBottom = radius
                     ll = radius / cos(radians(angle))
-                    # print 'll ', ll
+                    # print('ll ', ll)
 
                     if ll <= length:
-                        # print 'B151'
+                        # print('B151')
                         if pyWire.numWire == 0:
-                            # print 'B1511'
+                            # print('B1511')
                             height = radius * tan(radians(angle))
                             radiusTop = 0
                         else:
-                            # print 'B1512'
+                            # print('B1512')
                             height = length * sin(radians(angle))
                             radiusTop = radiusBottom + length * cos(radians(angle))
 
                     else:
-                        # print 'B152'
+                        # print('B152')
                         if pyWire.numWire == 0:
-                            # print 'B1521'
+                            # print('B1521')
                             height = length * sin(radians(angle))
                             radiusTop = radiusBottom - length * cos(radians(angle))
                         else:
-                            # print 'B1522'
+                            # print('B1522')
                             height = radius * tan(radians(angle))
                             radiusTop = radiusBottom + length * cos(radians(angle))
 
-                    # print 'radiusBottom ', radiusBottom
-                    # print 'radiusTop ', radiusTop
-                    # print 'height ', height
+                    # print('radiusBottom ', radiusBottom)
+                    # print('radiusTop ', radiusTop)
+                    # print('height ', height)
 
                     plane = Part.makeCone(radiusBottom, radiusTop, height,
                                           point)
-                    # print plane.Placement
+                    # print(plane.Placement)
 
                 if isinstance(geom, Part.ArcOfEllipse):
-                    # print 'ellipse'
+                    # print('ellipse')
 
                     matrix = FreeCAD.Matrix()
                     coef = minor / major
@@ -1233,23 +1186,71 @@ class _PyPlane(_Py):
                     pass
 
                 elif self.angle < 0 or _Py.reverse:
-                    # print 'negative'
+                    # print('negative')
                     plane = plane.mirror(FreeCAD.Vector(0, 0, 0),
                                          FreeCAD.Vector(0, 0, -1))
 
                 plane = plane.Faces[0]
-                # print plane.Placement
+                # print(plane.Placement)
                 angleXU = geom.AngleXU
-                # print 'angleXU ', angleXU
+                # print('angleXU ', angleXU)
                 plane.rotate(point, FreeCAD.Vector(0, 0, 1), degrees(angleXU))
-                # print plane.Placement
+                # print(plane.Placement)
 
             else:
-                # print 'B2'
+                # print('B2')
 
-                plane = extendShape.extrude(direction * upScale)
+                plane = extendShape.extrude(extrusionDirection * upScale)
 
         return plane
+
+    def rangging(self, pyWire, direction, pyReflex=None):
+
+        '''rangging(self, pyWire, direction, pyReflex=None)'''
+
+        # print('rangging ', (self.numWire, self.numGeom), direction, self.rear)
+        numGeom = self.numGeom
+
+        rear = self.rear
+        lenRear = len(rear)
+
+        if lenRear == 0:
+            # print('a')
+
+            self.rango = [[]]
+
+        elif lenRear == 1:
+            # print('b')
+
+            if pyReflex:
+                # print('b1')
+                rearReflex = pyReflex.rear
+                if direction == 'forward':
+                    nGeom = rearReflex[0]
+                else:
+                    nGeom = rearReflex[1]
+                if nGeom is None:
+                    return
+
+            else:
+                # print('b2')
+                nGeom = rear[0]
+
+            ran = self.rang(pyWire, numGeom, nGeom, direction, True)
+            self.addValue('rango', ran, direction)
+
+        else:
+            # print('c')
+
+            nGeom = rear[0]
+            ran = self.rang(pyWire, numGeom, nGeom, 'forward', True)
+            self.addValue('rango', ran, 'forward')
+
+            nGeom = rear[-1]
+            ran = self.rang(pyWire, numGeom, nGeom, 'backward', True)
+            self.addValue('rango', ran, 'backward')
+
+        # print('rango ', self.rango)
 
     def virtualizing(self):
 
@@ -1260,7 +1261,7 @@ class _PyPlane(_Py):
 
             # TODO change to copy dictionary
 
-            # print '# virtualizing ', (self.numWire, self.numGeom)
+            # print('# virtualizing ', self.numWire, self.numGeom)
 
             [numWire, numGeom] = [self.numWire, self.numGeom]
             plane = self.shape
@@ -1364,24 +1365,87 @@ class _PyPlane(_Py):
 
         '''simulating(self, cList)'''
 
-        # print '# simulating ', self.numGeom
+        # print('# simulating ', self.numGeom)
 
         try:
             plCopy = self.simulatedShape.copy()
-            # print 'a'
+            # print('a')
         except AttributeError:
-            # print 'b'
+            # print('b')
             plCopy = self.shape.copy()
 
         gS = self.geomShape
         plCopy = self.cutting(plCopy, cList, gS)
         self.simulatedShape = plCopy
 
+
+    def isSolved(self):
+
+        '''isSolved(self)'''
+
+        if self.solved:
+            # print('memory')
+            return True
+
+        tolerance = _Py.tolerance
+        forward = self.forward
+        backward = self.backward
+        plane = self.shape
+        section = plane.section([forward, backward], tolerance)
+        if section.Edges:
+            # print('edges')
+            return False
+        else:
+            # print('no edges')
+            self.solved = True
+            return True
+
+    def isReallySolved(self, pyWire, pyReflex):
+
+        '''isReallySolved(self, pyWire, pyReflex)'''
+
+        if self.reallySolved is not False:
+            return self.reallySolved
+
+        tolerance = _Py.tolerance
+        conflictList = []
+        simul = self.simulatedShape
+        control = self.control
+
+        pyReflexList = pyWire.reflexs
+        for pyRef in pyReflexList:
+            for pyPlane in pyRef.planes:
+                nG = pyPlane.numGeom
+                if nG not in control:
+                    # print(pyPlane.numGeom)
+                    plane = pyPlane.shape
+                    shape = self.shape.copy()
+
+                    shape = shape.cut([plane], tolerance)
+
+                    if len(shape.Faces) == 2:
+
+                        conf = []
+
+                        for ff in shape.Faces:
+                            # print('a')
+                            common = ff.common([simul], tolerance)
+                            if common.Area:
+                                # print('b')
+                                conf.append(pyPlane)
+
+                        if len(conf) == 1:
+                            conflictList.extend(conf)
+
+        self.reallySolved = conflictList
+
+        return conflictList
+
     def rearing(self, pyWire, pyReflex, direction):
 
         '''rearing(self, pyWire, pyReflex, direction)'''
 
-        # print '### rearing ', (self.numWire, self.numGeom, direction, self.virtualized)
+        # print('### rearing ', self.numWire, self.numGeom, direction, self.virtualized)
 
         tolerance = _Py.tolerance
         plane = self.shape
@@ -1402,17 +1466,17 @@ class _PyPlane(_Py):
         pyPlaneList = pyWire.planes
 
         oppPlane = pyOppPlane.shape
-        # print 'pyOppPlane ', pyOppPlane.numGeom
+        # print('pyOppPlane ', pyOppPlane.numGeom)
 
         pyRearPl = pyPlaneList[rear]
-        # print 'pyRearPl ', rear
+        # print('pyRearPl ', rear)
 
         if not self.isSolved():
-            # print 'fo'
+            # print('fo')
 
             section = plane.section([forward], tolerance)
             if section.Edges:
-                # print 'fofo'
+                # print('fofo')
                 return
 
         if not pyRearPl.aligned:
@@ -1424,7 +1488,7 @@ class _PyPlane(_Py):
             cList = []
             if self.numGeom not in control:
                 cList.append(plane)
-                # print 'included ', self.numGeom
+                # print('included ', self.numGeom)
                 control.append(self.numGeom)
 
             if pyOppPlane.numGeom not in control:
@@ -1433,47 +1497,47 @@ class _PyPlane(_Py):
                 section = oppPlane.section([fo, ba], tolerance)
                 if not section.Edges:
                     cList.append(oppPlane)
-                    # print 'included ', pyOppPlane.numGeom
+                    # print('included ', pyOppPlane.numGeom)
                     control.append(pyOppPlane.numGeom)
 
             if cList:
-                # print 'cList ', cList
+                # print('cList ', cList)
 
                 if isinstance(rearPl, Part.Compound):
-                    # print 'aa'
+                    # print('aa')
 
                     if len(rearPl.Faces) > 1:
-                        # print 'aa1'
+                        # print('aa1')
 
                         aList = []
                         for ff in rearPl.Faces:
                             section = ff.section([gS], tolerance)
                             ff = ff.cut(cList, tolerance)
                             if section.Edges:
-                                # print 'aa11'
+                                # print('aa11')
                                 ff = self.selectFace(ff.Faces, gS)
                                 aList.append(ff)
                             else:
-                                # print 'aa12'
+                                # print('aa12')
                                 aList.append(ff.Faces[0])
 
                         compound = Part.Compound(aList)
                         pyRearPl.shape = compound
 
                     else:
-                        # print 'aa2'
+                        # print('aa2')
                         rearPl = self.cutting(rearPl, cList, gS)
                         compound = Part.Compound([rearPl])
                         pyRearPl.shape = compound
 
                 else:
-                    # print 'bb'
+                    # print('bb')
                     pyRearPl.cuttingPyth(cList)
 
                 if not pyRearPl.choped:
 
                     if len(plane.Faces) == 1:
-                        # print 'AA'
+                        # print('AA')
 
                         if rear not in self.control:
 
@@ -1484,7 +1548,7 @@ class _PyPlane(_Py):
                             self.control.append(rear)
 
                     if len(oppPlane.Faces) == 1:
-                        # print 'BB'
+                        # print('BB')
 
                         if rear not in pyOppPlane.control:
 
@@ -1508,11 +1572,11 @@ class _PyPlane(_Py):
         if self.aligned:
 
             pyAlignList = self.alignedList
-            # print 'pyAlignList ', pyAlignList
+            # print('pyAlignList ', pyAlignList)
 
             pyAlign = pyAlignList[0]
             rr = pyAlign.rangoRear[0]
-            # print 'rr ' , rr
+            # print('rr ' , rr)
 
         cutterList = []
         for pyPl in pyPlaneList:
@@ -1521,10 +1585,10 @@ class _PyPlane(_Py):
 
                 pl = pyPl.shape
                 if pl:
-                    # print '### numGeom ', pyPl.numGeom
+                    # print('### numGeom ', pyPl.numGeom)
 
                     if pyPl.aligned:
-                        # print 'a'
+                        # print('a')
 
                         pyAli = pyPl.selectAlignmentBase()
                         if not pyAli:
@@ -1533,12 +1597,12 @@ class _PyPlane(_Py):
 
                         # if not numGeom in pyAli.rear:
 
-                        # print 'pyAli ', (pyAli.base.numWire, pyAli.base.numGeom)
+                        # print('pyAli ', pyAli.base.numWire, pyAli.base.numGeom)
                         ll = pyAli.geomAligned
                         simulAlign = pyAli.simulatedAlignment
 
                         if self.aligned:
-                            # print 'a1'
+                            # print('a1')
 
                             line = pyAlign.geomAligned
                             base = pyAlign.base.shape
@@ -1549,70 +1613,70 @@ class _PyPlane(_Py):
                                 if section.Edges:
                                     common = base.common(simulAlign,
                                                          tolerance)
-                                    # print 'area ', common.Area
+                                    # print('area ', common.Area)
                                     if not common.Area:
-                                        # print 'a11'
+                                        # print('a11')
                                         cutterList.extend(pyAli.simulatedAlignment)
 
                         else:
-                            # print 'a2'
+                            # print('a2')
                             if pyAli in self.rearedList or numGeom in pyAli.rear:
                                 cutterList.extend(pyAli.simulatedAlignment)
 
                     elif pyPl.choped:
-                        # print 'b'
+                        # print('b')
                         pass
 
                     elif pyPl.fronted:
-                        # print 'c'
+                        # print('c')
                         if self.aligned:
-                            # print 'c1'
+                            # print('c1')
                             if nGeom in rr:
                                 pl = pyPl.bigShape
                                 cutterList.append(pl)
                         else:
-                            # print 'c2'
+                            # print('c2')
                             pass
 
                     elif pyPl.reflexed:
-                        # print 'd'
+                        # print('d')
 
                         if self.aligned:
                             if pyPl not in [pyAlign.prior, pyAlign.later]:
 
                                 if pyPl.isSolved():
-                                    # print 'd1'
+                                    # print('d1')
                                     cutterList.append(pl)
                                     control.append(pyPl.numGeom)
                                 else:
-                                    # print 'd2'
+                                    # print('d2')
                                     cutterList.append(pyPl.simulatedShape)
 
                         else:
 
                             if pyPl.isSolved():
-                                # print 'd11'
+                                # print('d11')
                                 cutterList.append(pl)
                                 control.append(pyPl.numGeom)
                             else:
-                                # print 'd22'
+                                # print('d22')
                                 cutterList.append(pyPl.simulatedShape)
 
                     else:
-                        # print 'e'
+                        # print('e')
                         cutterList.append(pl)
                         control.append(pyPl.numGeom)
 
         if cutterList:
-            # print 'cutterList ', cutterList
+            # print('cutterList ', cutterList)
             plane = self.shape.copy()
             gS = self.geomShape
 
             if self.reflexed and not self.aligned:
-                # print '1'
+                # print('1')
 
                 if len(plane.Faces) == 1:
-                    # print '11'
+                    # print('11')
                     plane = plane.cut(cutterList, tolerance)
                     ff = self.selectFace(plane.Faces, gS)
                     fList = [ff]
@@ -1627,11 +1691,11 @@ class _PyPlane(_Py):
 
                     compound = Part.makeCompound(fList)
                     self.shape = compound
-                    # print 'fList ', fList
-                    # print 'compound ', compound
+                    # print('fList ', fList)
+                    # print('compound ', compound)
 
                 else:
-                    # print '12'
+                    # print('12')
                     ff = plane.Faces[0]
                     ff = self.cutting(ff, cutterList, gS)
                     fList = [ff]
@@ -1643,115 +1707,12 @@ class _PyPlane(_Py):
 
                     compound = Part.makeCompound(fList)
                     self.shape = compound
-                    # print 'fList ', fList
-                    # print 'compound ', compound
+                    # print('fList ', fList)
+                    # print('compound ', compound)
 
             else:
-                # print '2'
+                # print('2')
 
                 self.cuttingPyth(cutterList)
 
-        # print 'shape ', self.shape
-
-    def rangging(self, pyWire, direction, pyReflex=None):
-
-        '''rangging(self, pyWire, direction, pyReflex=None)'''
-
-        # print 'rangging ', (self.numWire, self.numGeom), direction, self.rear
-        numGeom = self.numGeom
-
-        rear = self.rear
-        lenRear = len(rear)
-
-        if lenRear == 0:
-            # print 'a'
-
-            self.rango = [[]]
-
-        elif lenRear == 1:
-            # print 'b'
-
-            if pyReflex:
-                # print 'b1'
-                rearReflex = pyReflex.rear
-                if direction == 'forward':
-                    nGeom = rearReflex[0]
-                else:
-                    nGeom = rearReflex[1]
-                if nGeom is None:
-                    return
-
-            else:
-                # print 'b2'
-                nGeom = rear[0]
-
-            ran = self.rang(pyWire, numGeom, nGeom, direction, True)
-            self.addValue('rango', ran, direction)
-
-        else:
-            # print 'c'
-
-            nGeom = rear[0]
-            ran = self.rang(pyWire, numGeom, nGeom, 'forward', True)
-            self.addValue('rango', ran, 'forward')
-
-            nGeom = rear[-1]
-            ran = self.rang(pyWire, numGeom, nGeom, 'backward', True)
-            self.addValue('rango', ran, 'backward')
-
-        # print 'rango ', self.rango
-
-    def isSolved(self):
-
-        '''isSolved(self)'''
-
-        if self.solved:
-            # print 'memory'
-            return True
-
-        tolerance = _Py.tolerance
-        forward = self.forward
-        backward = self.backward
-        plane = self.shape
-        section = plane.section([forward, backward], tolerance)
-        if section.Edges:
-            # print 'edges'
-            return False
-        else:
-            # print 'no edges'
-            self.solved = True
-            return True
-
-    def isReallySolved(self, pyWire, pyReflex):
-
-        '''isReallySolved(self, pyWire, pyReflex)'''
-
-        if self.reallySolved is not False:
-            return self.reallySolved
-
-        tolerance = _Py.tolerance
-        conflictList = []
-        simul = self.simulatedShape
-
-        pyReflexList = pyWire.reflexs
-        for pyRef in pyReflexList:
-            for pyPlane in pyRef.planes:
-                if pyPlane != self:
-                    # print pyPlane.numGeom
-                    plane = pyPlane.shape
-                    shape = self.shape.copy()
-                    shape = shape.cut([plane], tolerance)
-                    if len(shape.Faces) == 2:
-                        conf = []
-                        for ff in shape.Faces:
-                            # print 'a'
-                            common = ff.common([simul], tolerance)
-                            if common.Area:
-                                # print 'b'
-                                conf.append(pyPlane)
-                        if len(conf) == 1:
-                            conflictList.extend(conf)
-
-        self.reallySolved = conflictList
-
-        return conflictList
+        # print('shape ', self.shape)

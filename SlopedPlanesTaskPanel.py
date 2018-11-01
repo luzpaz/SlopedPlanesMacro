@@ -217,7 +217,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        # print 'update'
+        # print('update')
 
         self.updating = True
         slopedPlanes = self.obj
@@ -238,13 +238,13 @@ class _TaskPanel_SlopedPlanes():
                 originList = []
                 pyWireList = pyFace.wires
                 size = pyFace.size
-                # print '### numFace ', pyFace.numFace
+                # print('### numFace ', pyFace.numFace)
 
                 lenWires = len(pyWireList)
 
                 for pyWire in pyWireList:
                     numWire = pyWire.numWire
-                    # print '## numWire ', numWire
+                    # print('## numWire ', numWire)
                     pyPlaneList = pyWire.planes
 
                     if up:
@@ -256,9 +256,9 @@ class _TaskPanel_SlopedPlanes():
                         numAngle = pyPlane.numGeom
                         angle = pyPlane.angle
                         sweepCurve = pyPlane.sweepCurve
-                        # print '# numAngle, angle ', (numAngle, angle)
+                        # print('# numAngle, angle ', numAngle, angle)
 
-                        # print 'originList ', originList
+                        # print('originList ', originList)
 
                         if [numWire, numAngle] not in originList and\
                            angle not in originList:
@@ -266,17 +266,17 @@ class _TaskPanel_SlopedPlanes():
                             numSlope += 1
 
                             if isinstance(angle, float):
-                                # print 'a'
+                                # print('a')
                                 originList.append([numWire, numAngle])
 
                             else:
-                                # print 'b'
+                                # print('b')
                                 originList.append(angle)
 
                                 pyW = pyWireList[angle[0]]
                                 angle = pyW.planes[angle[1]].angle
 
-                            # print 'NUMSLOPE ', numSlope
+                            # print('NUMSLOPE ', numSlope)
 
                             item = QtGui.QTreeWidgetItem(tree)
                             item.setText(0, str(numSlope))
@@ -485,7 +485,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        # print 'resetObject'
+        # print('resetObject')
 
         slopedPlanes = self.obj
         up = slopedPlanes.Up
@@ -495,14 +495,14 @@ class _TaskPanel_SlopedPlanes():
 
         for pyFace in pyFaceList:
             originList = []
-            # print '### numFace', pyFace.numFace
+            # print('### numFace', pyFace.numFace)
             pyFace.mono = True
 
             pyWireList = pyFace.wires
             lenWires = len(pyWireList)
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
-                # print '## numWire', numWire
+                # print('## numWire', numWire)
                 pyWire.mono = True
 
                 numAngle = -1
@@ -532,7 +532,7 @@ class _TaskPanel_SlopedPlanes():
 
                         doubleSpinBox = tree.itemWidget(it, 1)
                         value = doubleSpinBox.value()
-                        # print 'value ', value
+                        # print('value ', value)
                         pyPlane.angle = value
 
                         if isinstance(angle, float):
@@ -595,7 +595,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        # print 'addSelection'
+        # print('addSelection')
         # print(doc, obj, sub, pnt)
 
         reset = True
@@ -609,20 +609,20 @@ class _TaskPanel_SlopedPlanes():
                 if sub.startswith('Face'):
 
                     num = int(sub[4:]) - 1
-                    # print '###### num ', num
+                    # print('###### num ', num)
                     ff = shape.Faces[num]
-                    # print ff.Area, ff.BoundBox
+                    # print(ff.Area, ff.BoundBox)
 
                     bound = ff.BoundBox
                     if bound.ZMax == bound.ZMin:
-                        # print 'reset'
+                        # print('reset')
                         self.tree.setCurrentItem(None)
                         return
 
                     numSlope = 0
 
                     for pyFace in slopedPlanes.Proxy.Pyth:
-                        # print '###### numFace ', pyFace.numFace
+                        # print('###### numFace ', pyFace.numFace)
                         if not reset:
                             break
 
@@ -632,7 +632,7 @@ class _TaskPanel_SlopedPlanes():
                         lenWires = len(pyWireList)
 
                         for pyWire in pyWireList:
-                            # print '###### numWire ', pyWire.numWire
+                            # print('###### numWire ', pyWire.numWire)
                             if not reset:
                                 break
 
@@ -646,31 +646,31 @@ class _TaskPanel_SlopedPlanes():
 
                                 numGeom = pyPlane.numGeom
                                 angle = pyPlane.angle
-                                # print '### numGeom, angle ', (numGeom, angle)
-                                # print 'originList ', originList
+                                # print('### numGeom, angle ', numGeom, angle)
+                                # print('originList ', originList)
 
                                 if [numWire, numGeom] not in originList:
 
                                     if isinstance(angle, float):
-                                        # print 'a'
+                                        # print('a')
                                         originList.append([numWire, numGeom])
                                         numSlope += 1
 
                                     else:
                                         if angle not in originList:
-                                            # print 'b'
+                                            # print('b')
                                             originList.append(angle)
                                             numSlope += 1
 
-                                # print 'NUMSLOPE ', numSlope
+                                # print('NUMSLOPE ', numSlope)
 
                                 geomShape = pyPlane.geomShape
-                                # print geomShape, geomShape.Curve, geomShape.firstVertex(True).Point, geomShape.lastVertex(True).Point
+                                # print(geomShape, geomShape.Curve, geomShape.firstVertex(True).Point, geomShape.lastVertex(True).Point)
                                 section = ff.section(geomShape) # false positive, OCCT bug, see above bound
-                                # print section.Edges
+                                # print(section.Edges)
 
                                 if section.Edges:
-                                    # print '# numGeom, numSlope ', (numGeom, numSlope)
+                                    # print('# numGeom, numSlope ', numGeom, numSlope)
                                     match = QtCore.Qt.MatchExactly
                                     item =\
                                         self.tree.findItems(str(numSlope),
@@ -687,7 +687,7 @@ class _TaskPanel_SlopedPlanes():
                             numSlope += 1
 
         if reset:
-            # print 'reset'
+            # print('reset')
             self.tree.setCurrentItem(None)
 
     def shaping(self):
@@ -738,7 +738,7 @@ class _NewCurve(QtGui.QPushButton):
 
         ''''''
 
-        # print 'onClicked _NewCurve'
+        # print('onClicked _NewCurve')
 
         pyPlane = self.plane
         slopedPlanes = self.slopedPlanes
@@ -759,10 +759,10 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '### changeAngle ', angle, aa, A
+        # print('### changeAngle ', angle, aa, A)
 
         if A:
-            # print 'A'
+            # print('A')
             A.pop()
             return
 
@@ -774,15 +774,15 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         suffix = itemW.suffix()
         length = FreeCAD.Units.Quantity(str(length) + suffix)
         length = length.Value
-        # print 'length ', length
+        # print('length ', length)
 
         angle = math.radians(angle)
-        # print 'angle ', angle
+        # print('angle ', angle)
 
         height = self.height(angle, length)
-        # print 'height ', height
+        # print('height ', height)
         run = self.run(angle, length)
-        # print 'run ', run
+        # print('run ', run)
         tree.itemWidget(item, 3).changeHeight(height, False)
         tree.itemWidget(item, 4).changeRun(run, False)
 
@@ -791,30 +791,30 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         suffix = itemW.suffix()
         overhangLength = FreeCAD.Units.Quantity(str(overhangLength) + suffix)
         overhangLength = overhangLength.Value
-        # print 'overhangLength ', overhangLength
+        # print('overhangLength ', overhangLength)
 
         overhangHeight = self.height(angle, overhangLength)
-        # print 'overhangHeight ', overhangHeight
+        # print('overhangHeight ', overhangHeight)
         overhangRun = self.run(angle, overhangLength)
-        # print 'overhangRun ', overhangRun
+        # print('overhangRun ', overhangRun)
         tree.itemWidget(item, 7).changeOverhangHeight(overhangHeight, False)
         tree.itemWidget(item, 8).changeOverhangRun(overhangRun, False)
 
         if aa:
-            # print 'aA'
+            # print('aA')
 
             slope = 100 * math.tan(angle)
-            # print 'slope ', slope
+            # print('slope ', slope)
             suffix = ' %'
             tree.itemWidget(item, 5).changeSlope(slope, False)
 
         else:
-            # print 'bA'
+            # print('bA')
 
             deg = u"\u00b0"
             suffix = " " + deg
-            # print 'suffix ', suffix
-            # print 'slope ', slope
+            # print('suffix ', suffix)
+            # print('slope ', slope)
             angle = math.degrees(angle)
             A.append(angle)
 
@@ -825,30 +825,30 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '### changeSlope ',slope, ss, S
+        # print('### changeSlope ',slope, ss, S)
 
         if S:
-            # print 'S'
+            # print('S')
             S.pop()
             return
 
         if ss:
-            # print 'aS'
+            # print('aS')
 
             item = self.item
             tree = self.parent
 
             angle = math.atan(slope / 100)
             angle = math.degrees(angle)
-            # print 'angle ', angle
+            # print('angle ', angle)
             tree.itemWidget(item, 1).changeAngle(angle, False)
 
         else:
-            # print 'bS'
+            # print('bS')
 
             suffix = ' %'
-            # print 'suffix ', suffix
-            # print 'slope ', slope
+            # print('suffix ', suffix)
+            # print('slope ', slope)
             S.append(slope)
 
             self.setValue(slope)
@@ -858,19 +858,19 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '### changeLength ', length, ll, L
+        # print('### changeLength ', length, ll, L)
 
         if L:
-            # print 'L'
+            # print('L')
             L.pop()
             return
 
         if ll:
-            # print 'aL'
+            # print('aL')
 
             suffix = self.suffix()
-            # print 'suffix ', suffix
-            # print 'length ', length
+            # print('suffix ', suffix)
+            # print('length ', length)
             length = FreeCAD.Units.Quantity(str(length) + suffix)
 
             item = self.item
@@ -880,27 +880,27 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             angle = math.radians(angle)
 
             length = length.Value
-            # print 'length ', length
+            # print('length ', length)
 
             height = self.height(angle, length)
-            # print 'height ', height
+            # print('height ', height)
             run = self.run(angle, length)
-            # print 'run ', run
+            # print('run ', run)
             tree.itemWidget(item, 3).changeHeight(height, False)
             tree.itemWidget(item, 4).changeRun(run, False)
 
         else:
-            # print 'bL'
+            # print('bL')
 
             suffix = 'mm'
-            # print 'suffix ', suffix
-            # print 'length ', length
+            # print('suffix ', suffix)
+            # print('length ', length)
             length = FreeCAD.Units.Quantity(str(length) + suffix)
 
             nn = length.getUserPreferred()
-            # print nn
+            # print(nn)
             length = length.Value
-            # print 'length ', length
+            # print('length ', length)
             value = length / nn[1]
             suffix = ' ' + nn[2]
 
@@ -914,19 +914,19 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '### changeHeight ', height, hh, H
+        # print('### changeHeight ', height, hh, H)
 
         if H:
-            # print 'H'
+            # print('H')
             H.pop()
             return
 
         if hh:
-            # print 'aH'
+            # print('aH')
 
             suffix = self.suffix()
-            # print 'suffix ', suffix
-            # print 'height ', height
+            # print('suffix ', suffix)
+            # print('height ', height)
             height = FreeCAD.Units.Quantity(str(height) + suffix)
 
             item = self.item
@@ -936,27 +936,27 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             angle = math.radians(angle)
 
             height = height.Value
-            # print 'height ', height
+            # print('height ', height)
 
             length = self.lengthHeight(angle, height)
-            # print 'length ', length
+            # print('length ', length)
             run = self.run(angle, length)
-            # print 'run ', run
+            # print('run ', run)
             tree.itemWidget(item, 2).changeLength(length, False)
             tree.itemWidget(item, 4).changeRun(run, False)
 
         else:
-            # print 'bH'
+            # print('bH')
 
             suffix = 'mm'
-            # print 'suffix ', suffix
-            # print 'height ', height
+            # print('suffix ', suffix)
+            # print('height ', height)
             height = FreeCAD.Units.Quantity(str(height) + suffix)
 
             nn = height.getUserPreferred()
-            # print nn
+            # print(nn)
             height = height.Value
-            # print 'height ', height
+            # print('height ', height)
             value = height / nn[1]
             suffix = ' ' + nn[2]
 
@@ -970,19 +970,19 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '### changeRun ', run, rr, R
+        # print('### changeRun ', run, rr, R)
 
         if R:
-            # print 'R'
+            # print('R')
             R.pop()
             return
 
         if rr:
-            # print 'aR'
+            # print('aR')
 
             suffix = self.suffix()
-            # print 'suffix ', suffix
-            # print 'run ', run
+            # print('suffix ', suffix)
+            # print('run ', run)
             run = FreeCAD.Units.Quantity(str(run) + suffix)
 
             item = self.item
@@ -992,27 +992,27 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             angle = math.radians(angle)
 
             run = run.Value
-            # print 'run ', run
+            # print('run ', run)
 
             length = self.lengthRun(angle, run)
-            # print 'length ', length
+            # print('length ', length)
             height = self.height(angle, length)
-            # print 'height ', height
+            # print('height ', height)
             tree.itemWidget(item, 2).changeLength(length, False)
             tree.itemWidget(item, 3).changeHeight(height, False)
 
         else:
-            # print 'bR'
+            # print('bR')
 
             suffix = 'mm'
-            # print 'suffix ', suffix
-            # print 'run ', run
+            # print('suffix ', suffix)
+            # print('run ', run)
             run = FreeCAD.Units.Quantity(str(run) + suffix)
 
             nn = run.getUserPreferred()
-            # print nn
+            # print(nn)
             run = run.Value
-            # print 'run ', run
+            # print('run ', run)
 
             value = run / nn[1]
             suffix = ' ' + nn[2]
@@ -1027,19 +1027,19 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '### changeOverhangLength ', overhangLength, lo, LO
+        # print('### changeOverhangLength ', overhangLength, lo, LO)
 
         if LO:
-            # print 'LO'
+            # print('LO')
             LO.pop()
             return
 
         if lo:
-            # print 'aLO'
+            # print('aLO')
 
             suffix = self.suffix()
-            # print 'suffix ', suffix
-            # print 'overhangLength ', overhangLength
+            # print('suffix ', suffix)
+            # print('overhangLength ', overhangLength)
             overhangLength =\
                 FreeCAD.Units.Quantity(str(overhangLength) + suffix)
 
@@ -1050,28 +1050,28 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             angle = math.radians(angle)
 
             overhangLength = overhangLength.Value
-            # print 'overhangLength ', overhangLength
+            # print('overhangLength ', overhangLength)
 
             overhangHeight = self.height(angle, overhangLength)
-            # print 'overhangHeight ', overhangHeight
+            # print('overhangHeight ', overhangHeight)
             overhangRun = self.run(angle, overhangLength)
-            # print 'overhangRun ', overhangRun
+            # print('overhangRun ', overhangRun)
             tree.itemWidget(item, 7).changeOverhangHeight(overhangHeight, False)
             tree.itemWidget(item, 8).changeOverhangRun(overhangRun, False)
 
         else:
-            # print 'bLO'
+            # print('bLO')
 
             suffix = 'mm'
-            # print 'suffix ', suffix
-            # print 'overhangLength ', overhangLength
+            # print('suffix ', suffix)
+            # print('overhangLength ', overhangLength)
             overhangLength =\
                 FreeCAD.Units.Quantity(str(overhangLength) + suffix)
 
             nn = overhangLength.getUserPreferred()
-            # print nn
+            # print(nn)
             overhangLength = overhangLength.Value
-            # print 'overhangLength ', overhangLength
+            # print('overhangLength ', overhangLength)
             value = overhangLength / nn[1]
             suffix = ' ' + nn[2]
 
@@ -1085,19 +1085,19 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '### changeOverhangHeight ', overhangHeight, ho, HO
+        # print('### changeOverhangHeight ', overhangHeight, ho, HO)
 
         if HO:
-            # print 'HO'
+            # print('HO')
             HO.pop()
             return
 
         if ho:
-            # print 'aHO'
+            # print('aHO')
 
             suffix = self.suffix()
-            # print 'suffix ', suffix
-            # print 'overhangHeight ', overhangHeight
+            # print('suffix ', suffix)
+            # print('overhangHeight ', overhangHeight)
             overhangHeight =\
                 FreeCAD.Units.Quantity(str(overhangHeight) + suffix)
 
@@ -1108,28 +1108,28 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             angle = math.radians(angle)
 
             overhangHeight = overhangHeight.Value
-            # print 'overhangHeight ', overhangHeight
+            # print('overhangHeight ', overhangHeight)
 
             overhangLength = self.lengthHeight(angle, overhangHeight)
-            # print 'length ', length
+            # print('length ', length)
             overhangRun = self.run(angle, overhangHeight)
-            # print 'run ', run
+            # print('run ', run)
             tree.itemWidget(item, 6).changeOverhangLength(overhangLength, False)
             tree.itemWidget(item, 8).changeOverhangRun(overhangRun, False)
 
         else:
-            # print 'bHO'
+            # print('bHO')
 
             suffix = 'mm'
-            # print 'suffix ', suffix
-            # print 'overhangHeight ', overhangHeight
+            # print('suffix ', suffix)
+            # print('overhangHeight ', overhangHeight)
             overhangHeight =\
                 FreeCAD.Units.Quantity(str(overhangHeight) + suffix)
 
             nn = overhangHeight.getUserPreferred()
-            # print nn
+            # print(nn)
             overhangHeight = overhangHeight.Value
-            # print 'overhangHeight ', overhangHeight
+            # print('overhangHeight ', overhangHeight)
             value = overhangHeight / nn[1]
             suffix = ' ' + nn[2]
 
@@ -1143,19 +1143,19 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '### changeOverhangRun ', overhangRun, hr, HR
+        # print('### changeOverhangRun ', overhangRun, hr, HR)
 
         if HR:
-            # print 'HR'
+            # print('HR')
             HR.pop()
             return
 
         if hr:
-            # print 'aHR'
+            # print('aHR')
 
             suffix = self.suffix()
-            # print 'suffix ', suffix
-            # print 'run ', run
+            # print('suffix ', suffix)
+            # print('run ', run)
             overhangRun = FreeCAD.Units.Quantity(str(overhangRun) + suffix)
 
             item = self.item
@@ -1165,27 +1165,27 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             angle = math.radians(angle)
 
             overhangRun = overhangRun.Value
-            # print 'overhangRun ', overhangRun
+            # print('overhangRun ', overhangRun)
 
             overhangLength = self.lengthRun(angle, overhangRun)
-            # print 'overhangLength ', overhangLength
+            # print('overhangLength ', overhangLength)
             overhangHeight = self.height(angle, overhangRun)
-            # print 'overhangHeight ', overhangHeight
+            # print('overhangHeight ', overhangHeight)
             tree.itemWidget(item, 6).changeOverhangLength(overhangLength, False)
             tree.itemWidget(item, 7).changeOverhangHeight(overhangHeight, False)
 
         else:
-            # print 'bHR'
+            # print('bHR')
 
             suffix = 'mm'
-            # print 'suffix ', suffix
-            # print 'overhangRun ', overhangRun
+            # print('suffix ', suffix)
+            # print('overhangRun ', overhangRun)
             overhangRun = FreeCAD.Units.Quantity(str(overhangRun) + suffix)
 
             nn = overhangRun.getUserPreferred()
-            # print nn
+            # print(nn)
             overhangRun = overhangRun.Value
-            # print 'overhangRun ', overhangRun
+            # print('overhangRun ', overhangRun)
 
             value = overhangRun / nn[1]
             suffix = ' ' + nn[2]
@@ -1200,7 +1200,7 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '# height'
+        # print('# height')
 
         return length * math.sin(angle)
 
@@ -1208,7 +1208,7 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '# run'
+        # print('# run')
 
         return length * math.cos(angle)
 
@@ -1216,7 +1216,7 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '# lengthHeight'
+        # print('# lengthHeight')
 
         try:
             length = height / math.sin(angle)
@@ -1230,7 +1230,7 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
 
         ''''''
 
-        # print '# lengthRun'
+        # print('# lengthRun')
 
         try:
             length = run / math.cos(angle)
