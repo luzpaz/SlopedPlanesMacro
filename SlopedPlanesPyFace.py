@@ -1604,7 +1604,7 @@ class _PyFace(_Py):
                 if aa.shape:
                     aL.append(aa.shape)'''
 
-            aL = self.aliShape
+            aL = ali.aliShape
 
             for cc in ali.chops:
                 for c in cc:
