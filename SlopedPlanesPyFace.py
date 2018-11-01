@@ -1589,7 +1589,7 @@ class _PyFace(_Py):
 
         ''''''
 
-        if not self.alignments or self.mono:
+        if not self.alignments:  # or self.mono:
             return
 
         # recolects
