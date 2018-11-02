@@ -1868,7 +1868,8 @@ class _PyAlignment(_Py):
 
         # chops
 
-        #rangoChop = self.rango
+        rangoChop = self.rango
+        rangoRear = self.rangoRear
         rangoChopPy = self.rangoPy
         numChop = -1
         for [pyOne, pyTwo] in self.chops:
@@ -1945,9 +1946,9 @@ class _PyAlignment(_Py):
         if not mono:
 
             chops = self.chops
-            rangoChop = self.rango
+            #rangoChop = self.rango
             # print('rangoChop ', rangoChop)
-            rangoRear = self.rangoRear
+            #rangoRear = self.rangoRear
             # print('rangoRear ', rangoRear)
             w1 = self.prior.numWire
             pyPlaneList = _Py.pyFace.wires[w1].planes
