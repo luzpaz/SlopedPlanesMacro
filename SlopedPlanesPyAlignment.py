@@ -1851,6 +1851,9 @@ class _PyAlignment(_Py):
         if pyFace.mono:
             return'''
 
+        pyFace = self.pyFace
+        mono = pyFace.mono
+
         # recollects
 
         pyWireList = _Py.pyFace.wires
@@ -1926,14 +1929,16 @@ class _PyAlignment(_Py):
 
             # between rears with chops
 
-            if pyO.shape and pyO.rear and\
-               pyT.shape and pyT.rear:
-                pyWireOne = pyWireList[pyO.numWire]
-                between = self.rang(pyWireOne, rTwo, rOne, 'forward')
-                for nn in between:
-                    pyPl = pyPlList[nn]
-                    if not pyPl.choped and not pyPl.aligned:
-                        pyPl.cuttingPyth(cutList)
+            if not mono:
+
+                if pyO.shape and pyO.rear and\
+                   pyT.shape and pyT.rear:
+                    pyWireOne = pyWireList[pyO.numWire]
+                    between = self.rang(pyWireOne, rTwo, rOne, 'forward')
+                    for nn in between:
+                        pyPl = pyPlList[nn]
+                        if not pyPl.choped and not pyPl.aligned:
+                            pyPl.cuttingPyth(cutList)
 
         # rangoRear vs rangoChop
 
