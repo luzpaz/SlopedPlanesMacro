@@ -1942,44 +1942,46 @@ class _PyAlignment(_Py):
 
         # rangoRear vs rangoChop
 
-        chops = self.chops
-        rangoChop = self.rango
-        # print('rangoChop ', rangoChop)
-        rangoRear = self.rangoRear
-        # print('rangoRear ', rangoRear)
-        w1 = self.prior.numWire
-        pyPlaneList = _Py.pyFace.wires[w1].planes
+        if not mono:
 
-        rearList = []
+            chops = self.chops
+            rangoChop = self.rango
+            # print('rangoChop ', rangoChop)
+            rangoRear = self.rangoRear
+            # print('rangoRear ', rangoRear)
+            w1 = self.prior.numWire
+            pyPlaneList = _Py.pyFace.wires[w1].planes
 
-        for pyPl in rangoRear[1]:
+            rearList = []
 
-            if not (pyPl.choped or pyPl.fronted) and pyPl.shape:
+            for pyPl in rangoRear[1]:
 
-                pl = pyPl.shape
-                rearList.append(pl)
+                if not (pyPl.choped or pyPl.fronted) and pyPl.shape:
 
-        if rearList:
-            # print('rearList ', rearList)
+                    pl = pyPl.shape
+                    rearList.append(pl)
 
-            numChop = -1
-            for rC in rangoChop:
-                numChop += 1
-                [pyOne, pyTwo] = chops[numChop]
-                if pyOne.numWire == w1:
+            if rearList:
+                # print('rearList ', rearList)
 
-                    chopList = []
-                    for r in rC:
-                        pyPl = pyPlaneList[r]
-                        if not pyPl.choped and not pyPl.aligned:
-                            pl = pyPl.cuttingPyth(rearList)
-                            chopList.append(pl)
+                numChop = -1
+                for rC in rangoChop:
+                    numChop += 1
+                    [pyOne, pyTwo] = chops[numChop]
+                    if pyOne.numWire == w1:
 
-                    if chopList:
-                        # print('chopList ', chopList)
-                        for pyPl in rangoRear[1]:
-                            if not (pyPl.choped or pyPl.fronted):
-                                pl = pyPl.cuttingPyth(chopList)
+                        chopList = []
+                        for r in rC:
+                            pyPl = pyPlaneList[r]
+                            if not pyPl.choped and not pyPl.aligned:
+                                pl = pyPl.cuttingPyth(rearList)
+                                chopList.append(pl)
+
+                        if chopList:
+                            # print('chopList ', chopList)
+                            for pyPl in rangoRear[1]:
+                                if not (pyPl.choped or pyPl.fronted):
+                                    pl = pyPl.cuttingPyth(chopList)
 
         # into rangoChop
 
