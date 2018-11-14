@@ -732,7 +732,7 @@ class _PyAlignment(_Py):
 
         '''priorLater(self)'''
 
-        # print('###### priorLater base ', self.base.numWire, self.base.numGeom)
+        print('###### priorLater base ', self.base.numWire, self.base.numGeom)
 
         falsify = self.falsify
 
@@ -753,19 +753,21 @@ class _PyAlignment(_Py):
         pyPrior = self.prior
         pyLater = self.later
         pr = pyPrior.numGeom
-        # print('prior ', pyPrior.numWire, pr)
+        print('prior ', pyPrior.numWire, pr)
         lat = pyLater.numGeom
-        # print('later ', pyLater.numWire, lat)
+        print('later ', pyLater.numWire, lat)
         bigPrior = pyPrior.bigShape
+        prior = pyPrior.shape
         bigLater = pyLater.bigShape
+        later = pyLater.shape
 
         if falsify:
-            # print('A')
+            print('A')
 
             [pyOne, pyTwo] = self.chops[0]
 
             if not pyPrior.reflexed or mono:
-                # print('AP1')
+                print('AP1')
 
                 pyBase.cuttingPyth([bigPrior])
                 control.append(pr)
@@ -773,7 +775,7 @@ class _PyAlignment(_Py):
                     control.append(lat)
 
             elif pyBase.virtualized:
-                # print('AP2')
+                print('AP2')
 
                 pyBase.cuttingPyth([bigPrior])
                 control.append(pr)
@@ -781,7 +783,7 @@ class _PyAlignment(_Py):
                     control.append(lat)
 
             elif pyPrior.choped and len(pyBase.alignedList) == 1:
-                # print('AP3')
+                print('AP3')
 
                 pyBase.cuttingPyth([bigPrior])
                 control.append(pr)
@@ -789,7 +791,7 @@ class _PyAlignment(_Py):
                     control.append(lat)
 
             if not pyLater.reflexed or mono:
-                # print('AL1')
+                print('AL1')
 
                 pyCont.cuttingPyth([bigLater])
                 pyCont.control.append(lat)
@@ -797,7 +799,7 @@ class _PyAlignment(_Py):
                     pyCont.control.append(pr)
 
             elif pyLater.choped and len(pyCont.alignedList) == 1:
-                # print('AL2')
+                print('AL2')
 
                 pyCont.cuttingPyth([bigLater])
                 pyCont.control.append(lat)
@@ -805,75 +807,77 @@ class _PyAlignment(_Py):
                     pyCont.control.append(pr)
 
         else:
-            # print('B')
+            print('B')
 
             cutterList = []
 
             if pyPrior.aligned:
-                # print('0')
+                print('0')
 
                 pass
 
             elif not pyPrior.reflexed or pyPrior.choped or mono:
-                # print('1')
+                print('1')
 
-                cutterList.append(bigPrior)
+                #cutterList.append(bigPrior)
+                cutterList.append(prior)
                 if not pyBase.choped:
                     if numWire == pyLater.numWire:
-                        # print('11')
+                        print('11')
                         control.append(pr)
 
             if pyLater.aligned:
-                # print('2')
+                print('2')
 
                 pass
 
             elif not pyLater.reflexed or pyLater.choped or mono:
-                # print('3')
+                print('3')
 
-                cutterList.append(bigLater)
+                #cutterList.append(bigLater)
+                cutterList.append(later)
                 if not self.falsify:
                     if not pyBase.choped:
                         if numWire == pyLater.numWire:
-                            # print('31')
+                            print('31')
                             control.append(lat)
 
             if cutterList:
-                # print('BB')
+                print('BB')
 
                 pyBase.cuttingPyth(cutterList)
-                # print('pyBase.shape ', pyBase.shape)
+                print('pyBase.shape ', pyBase.shape)
 
         # cuts pyPrior and pyLater
 
         if not (pyPrior.reflexed or pyPrior.arrow):
-            # print('a')
+            print('a')
 
             pyPrior.trimming(enormousBase)
             pyPrior.control.append(numGeom)
-            # print('pyPrior.shape ', pyPrior.shape)
+            print('pyPrior.shape ', pyPrior.shape)
 
             if falsify:
-                # print('a1')
+                print('a1')
                 pyPrior.control.append(nGeom)
 
         if not (pyLater.reflexed or pyLater.arrow):
-            # print('b')
+            print('b')
 
             if not falsify:
-                # print('b1')
+                print('b1')
 
                 pyLater.trimming(enormousBase)
                 pyLater.control.append(numGeom)
-                # print('pyLater.shape ', pyLater.shape)
+                print('pyLater.shape ', pyLater.shape)
 
             else:
-                # print('b2')
+                print('b2')
 
                 pyLater.trimming(enormousCont)
                 pyLater.control.append(nGeom)
                 pyLater.control.append(numGeom)
-                # print('pyLater.shape ', pyLater.shape)
+                print('pyLater.shape ', pyLater.shape)
 
     def simulatingChops(self):
 
