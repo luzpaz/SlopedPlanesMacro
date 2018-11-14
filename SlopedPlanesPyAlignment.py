@@ -819,10 +819,10 @@ class _PyAlignment(_Py):
             elif not pyPrior.reflexed or pyPrior.choped or mono:
                 # print('1')
 
-                if pyPrior.fronted:
+                '''if pyPrior.fronted:
                     cutterList.append(prior)
-                else:
-                    cutterList.append(bigPrior)
+                else:'''
+                cutterList.append(bigPrior)
 
                 if not pyBase.choped:
                     if numWire == pyLater.numWire:
@@ -837,10 +837,10 @@ class _PyAlignment(_Py):
             elif not pyLater.reflexed or pyLater.choped or mono:
                 # print('3')
 
-                if pyLater.fronted:
+                '''if pyLater.fronted:
                     cutterList.append(later)
-                else:
-                    cutterList.append(bigLater)
+                else:'''
+                cutterList.append(bigLater)
 
                 if not self.falsify:
                     if not pyBase.choped:
