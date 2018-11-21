@@ -975,7 +975,8 @@ class _PyAlignment(_Py):
 
                     else:
                         # print('pyPl.numGeom ', pyPl.numGeom)
-                        pl = pyPl.bigShape.copy()
+                        #pl = pyPl.bigShape.copy()
+                        pl = pyPl.shape.copy()
                         gS = pyPl.geomShape
 
                         rr = pyPl.numGeom
