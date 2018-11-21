@@ -936,7 +936,7 @@ class _PyAlignment(_Py):
 
             # simulating
 
-            if falsify:
+            '''if falsify:
 
                 pyOne.simulating([enormousBase])
                 pyTwo.simulating([enormousCont])
@@ -959,7 +959,7 @@ class _PyAlignment(_Py):
                     pyT.simulating([enormousCont])
                 else:
                     # print('22')
-                    pyT.simulating([enormousBase])
+                    pyT.simulating([enormousBase])'''
 
             rChopPy = rangoChopPy[numChop]
             # print('rChop ', self.rango, rChopPy)
@@ -997,8 +997,10 @@ class _PyAlignment(_Py):
 
                 bb = self.base.seedShape.copy()
 
-                bb = bb.cut([pyOne.simulatedShape,
-                             pyTwo.simulatedShape], tolerance)
+                '''bb = bb.cut([pyOne.simulatedShape,
+                             pyTwo.simulatedShape], tolerance)'''
+                bb = bb.cut([pyOne.shape,
+                             pyTwo.shape], tolerance)
 
                 for ff in bb.Faces:
                     section = ff.section(geomList, tolerance)
@@ -1089,7 +1091,7 @@ class _PyAlignment(_Py):
 
             # simulating
 
-            '''if falsify:
+            if falsify:
 
                 pyOne.simulating([enormousBase])
                 pyTwo.simulating([enormousCont])
@@ -1097,22 +1099,22 @@ class _PyAlignment(_Py):
             else:
 
                 pyOne.simulating([enormousBase])
-                pyTwo.simulating([enormousBase])'''
+                pyTwo.simulating([enormousBase])
 
             if pyOne.virtualized:
                 pyO = self.selectBasePlane(pyOne.numWire, pyOne.numGeom)
                 # print('1')
-                #pyO.simulating([enormousBase])
+                pyO.simulating([enormousBase])
 
             if pyTwo.virtualized:
                 pyT = self.selectBasePlane(pyTwo.numWire, pyTwo.numGeom)
                 # print('2')
-                '''if falsify:
+                if falsify:
                     # print('21')
                     pyT.simulating([enormousCont])
                 else:
                     # print('22')
-                    pyT.simulating([enormousBase])'''
+                    pyT.simulating([enormousBase])
 
             rChopPy = rangoChopPy[numChop]
             # print('rChop ', self.rango, rChopPy)
