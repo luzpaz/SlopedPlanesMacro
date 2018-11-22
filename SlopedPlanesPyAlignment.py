@@ -895,7 +895,6 @@ class _PyAlignment(_Py):
         tolerance = _Py.tolerance
         pyFace = _Py.pyFace
         face = pyFace.face
-        falsify = self.falsify
 
         rangoChopPy = self.rangoPy
         simulatedChops = []
@@ -903,9 +902,6 @@ class _PyAlignment(_Py):
         geomList = [pyP.geomShape for pyP in self.aligns]
         geomList.insert(0, self.base.geomShape)
         self.geomList = geomList
-
-        enormousBase = self.base.enormousShape
-        enormousCont = self.aligns[-1].enormousShape
 
         numChop = -1
         for [pyOne, pyTwo] in self.chops:
@@ -934,33 +930,6 @@ class _PyAlignment(_Py):
                     rrTwo = pyTwo.rango[1]
             # print('rrTwo ', rrTwo)
 
-            # simulating
-
-            '''if falsify:
-
-                pyOne.simulating([enormousBase])
-                pyTwo.simulating([enormousCont])
-
-            else:
-
-                pyOne.simulating([enormousBase])
-                pyTwo.simulating([enormousBase])
-
-            if pyOne.virtualized:
-                pyO = self.selectBasePlane(pyOne.numWire, pyOne.numGeom)
-                # print('1')
-                pyO.simulating([enormousBase])
-
-            if pyTwo.virtualized:
-                pyT = self.selectBasePlane(pyTwo.numWire, pyTwo.numGeom)
-                # print('2')
-                if falsify:
-                    # print('21')
-                    pyT.simulating([enormousCont])
-                else:
-                    # print('22')
-                    pyT.simulating([enormousBase])'''
-
             rChopPy = rangoChopPy[numChop]
             # print('rChop ', self.rango, rChopPy)
             cutList = []
@@ -976,7 +945,6 @@ class _PyAlignment(_Py):
                     else:
                         # print('pyPl.numGeom ', pyPl.numGeom)
                         pl = pyPl.bigShape.copy()
-                        ###pl = pyPl.shape.copy()
                         gS = pyPl.geomShape
 
                         rr = pyPl.numGeom
@@ -998,8 +966,6 @@ class _PyAlignment(_Py):
 
                 bb = self.base.seedShape.copy()
 
-                '''bb = bb.cut([pyOne.simulatedShape,
-                             pyTwo.simulatedShape], tolerance)'''
                 bb = bb.cut([pyOne.shape,
                              pyTwo.shape], tolerance)
 
@@ -1020,22 +986,6 @@ class _PyAlignment(_Py):
                     if section.Edges:
                         cList.append(ff)
 
-                '''pyOne.simulating(cutList)
-                pyTwo.simulating(cutList)
-
-                pyOne.cuttingPyth(cutList)
-                pyTwo.cuttingPyth(cutList)
-
-                if pyOne.virtualized:
-                    # print('pyO')
-                    pyO.cuttingPyth(cutList)
-                    pyO.simulating(cutList)
-
-                if pyTwo.virtualized:
-                    # print('pyT')
-                    pyT.cuttingPyth(cutList)
-                    pyT.simulating(cutList)'''
-
             simulatedChops.append(cList)
             # print('cList ', cList)
 
@@ -1048,13 +998,8 @@ class _PyAlignment(_Py):
 
         # print('###### simulatingChops ', self.base.numWire, self.base.numGeom, self.falsify)
 
-        tolerance = _Py.tolerance
-        pyFace = _Py.pyFace
-        face = pyFace.face
         falsify = self.falsify
-
         rangoChopPy = self.rangoPy
-        simulatedChops = []
 
         geomList = [pyP.geomShape for pyP in self.aligns]
         geomList.insert(0, self.base.geomShape)
@@ -1146,32 +1091,8 @@ class _PyAlignment(_Py):
 
                         cutList.append(pl)
 
-            # cList = []
-
             if cutList:
                 # print('cutList ', cutList)
-
-                '''bb = self.base.seedShape.copy()
-
-                bb = bb.cut([pyOne.simulatedShape,
-                             pyTwo.simulatedShape], tolerance)
-
-                for ff in bb.Faces:
-                    section = ff.section(geomList, tolerance)
-                    if not section.Edges:
-                        section = ff.section([face], tolerance)
-                        if section.Edges:
-                            bb = ff
-                            break
-
-                cL = Part.makeCompound(cutList)
-                cL = cL.cut([pyOne.enormousShape,
-                             pyTwo.enormousShape], tolerance)
-
-                for ff in cL.Faces:
-                    section = ff.section([bb], tolerance)
-                    if section.Edges:
-                        cList.append(ff)'''
 
                 pyOne.simulating(cutList)
                 pyTwo.simulating(cutList)
@@ -1188,11 +1109,6 @@ class _PyAlignment(_Py):
                     # print('pyT')
                     pyT.cuttingPyth(cutList)
                     pyT.simulating(cutList)
-
-            #simulatedChops.append(cList)
-            # print('cList ', cList)
-
-        #self.simulatedChops = simulatedChops
 
     def simulatingAlignment(self):
 
