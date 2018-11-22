@@ -391,11 +391,11 @@ class _PyFace(_Py):
             # self.printControl('trimming reflexs')
 
         for pyAlign in pyAlignList:
-            pyAlign.simulatingChopsOne()
-
-        for pyAlign in pyAlignList:
             pyAlign.trimming()
         # self.printControl('trimming alignments')
+
+        for pyAlign in pyAlignList:
+            pyAlign.simulatingChopsOne()
 
         for pyWire in pyWireList:
             pyWire.priorLater()
