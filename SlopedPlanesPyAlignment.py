@@ -912,6 +912,7 @@ class _PyAlignment(_Py):
             # choped with reflex corner
 
             rrOne = []
+            oppEnormousOne = None
             if pyOne.rear:
                 pyReflexListOne = pyOne.reflexedList
                 if pyReflexListOne:
@@ -922,6 +923,7 @@ class _PyAlignment(_Py):
             # print('rrOne ', rrOne)
 
             rrTwo = []
+            oppEnormousTwo = None
             if pyTwo.rear:
                 pyReflexListTwo = pyTwo.reflexedList
                 if pyReflexListTwo:
@@ -989,7 +991,7 @@ class _PyAlignment(_Py):
 
             simulatedChops.append(cList)
             # print('cList ', cList)
-            reflexedChops.append(cutList)
+            reflexedChops.append([(rrOne, oppEnormousOne), (rrTwo, oppEnormousTwo)])
 
         self.simulatedChops = simulatedChops
         self.reflexedChops = reflexedChops  # no esta como propiedad
@@ -1005,6 +1007,8 @@ class _PyAlignment(_Py):
 
         enormousBase = self.base.enormousShape
         enormousCont = self.aligns[-1].enormousShape
+
+        rangoChopPy = self.rangoPy
 
         # choped with reflex corner
         reflexedChops = self.reflexedChops
@@ -1041,7 +1045,38 @@ class _PyAlignment(_Py):
                     # print('22')
                     pyT.simulating([enormousBase])
 
-            cutList = reflexedChops[numChop]
+            [(rrOne, oppEnormousOne), (rrTwo, oppEnormousTwo)] = reflexedChops[numChop]
+
+            # codigo repetido
+
+            rChopPy = rangoChopPy[numChop]
+            # print('rChop ', self.rango, rChopPy)
+            cutList = []
+            for pyPl in rChopPy:
+
+                if not (pyPl.aligned or pyPl.choped):
+
+                    if pyPl.reflexed:
+                        # print('pyPl.numGeom reflexed ', pyPl.numGeom)
+                        pl = pyPl.simulatedShape
+                        cutList.append(pl)
+
+                    else:
+                        # print('pyPl.numGeom ', pyPl.numGeom)
+                        pl = pyPl.bigShape.copy()
+                        gS = pyPl.geomShape
+
+                        rr = pyPl.numGeom
+
+                        if rr in rrOne:
+                            # print('rrOne')
+                            pl = self.cutting(pl, [oppEnormousOne], gS)
+
+                        if rr in rrTwo:
+                            # print('rrTwo')
+                            pl = self.cutting(pl, [oppEnormousTwo], gS)
+
+                        cutList.append(pl)
 
             if cutList:
                 # print('cutList ', cutList)
