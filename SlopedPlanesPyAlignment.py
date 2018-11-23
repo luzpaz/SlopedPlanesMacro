@@ -1003,11 +1003,6 @@ class _PyAlignment(_Py):
 
         falsify = self.falsify
 
-        # cambiar
-        geomList = [pyP.geomShape for pyP in self.aligns]
-        geomList.insert(0, self.base.geomShape)
-        self.geomList = geomList
-
         enormousBase = self.base.enormousShape
         enormousCont = self.aligns[-1].enormousShape
 
