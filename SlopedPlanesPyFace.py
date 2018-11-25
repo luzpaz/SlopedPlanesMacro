@@ -394,9 +394,6 @@ class _PyFace(_Py):
             pyAlign.trimming()
         # self.printControl('trimming alignments')
 
-        for pyAlign in pyAlignList:
-            pyAlign.simulatingChopsOne()
-
         for pyWire in pyWireList:
             pyWire.priorLater()
         # self.printControl('priorLater wires')
@@ -409,7 +406,7 @@ class _PyFace(_Py):
             pyWire.simulating()
 
         for pyAlign in pyAlignList:
-            pyAlign.simulatingChopsTwo()
+            pyAlign.simulatingChops()
 
         for pyAlign in pyAlignList:
             pyAlign.simulatingAlignment()
