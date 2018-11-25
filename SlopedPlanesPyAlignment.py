@@ -811,15 +811,10 @@ class _PyAlignment(_Py):
 
             cutterList = []
 
-            '''if pyPrior.aligned:
-                # print('0')
-
-                pass'''
-
             if not pyPrior.reflexed or pyPrior.choped or mono:
                 # print('1')
 
-                if pyBase.choped:  # or cross
+                '''if pyBase.choped:  # or cross
                     ali = pyBase.alignedList[0]
                     simulatedChop = ali.simulatedChops[-1]
                     if simulatedChop:
@@ -827,22 +822,19 @@ class _PyAlignment(_Py):
                     else:
                         cutterList.append(prior)
                 else:
-                    cutterList.append(bigPrior)
+                    cutterList.append(bigPrior)'''
+
+                cutterList.append(bigPrior)
 
                 if not pyBase.choped:
                     if numWire == pyLater.numWire:
                         # print('11')
                         control.append(pr)
 
-            '''if pyLater.aligned:
-                # print('2')
-
-                pass'''
-
             if not pyLater.reflexed or pyLater.choped or mono:
                 # print('3')
 
-                if pyCont.choped:  # or cross:
+                '''if pyCont.choped:  # or cross:
                     ali = pyCont.alignedList[0]
                     simulatedChop = ali.simulatedChops[0]
                     if simulatedChop:
@@ -850,9 +842,10 @@ class _PyAlignment(_Py):
                     else:
                         cutterList.append(later)
                 else:
-                    cutterList.append(bigLater)
+                    cutterList.append(bigLater)'''
 
-                # if not self.falsify:
+                cutterList.append(bigLater)
+
                 if not pyBase.choped:
                     if numWire == pyLater.numWire:
                         # print('31')
