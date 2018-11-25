@@ -814,16 +814,6 @@ class _PyAlignment(_Py):
             if not pyPrior.reflexed or pyPrior.choped or mono:
                 # print('1')
 
-                '''if pyBase.choped:  # or cross
-                    ali = pyBase.alignedList[0]
-                    simulatedChop = ali.simulatedChops[-1]
-                    if simulatedChop:
-                        cutterList.append(bigPrior)
-                    else:
-                        cutterList.append(prior)
-                else:
-                    cutterList.append(bigPrior)'''
-
                 cutterList.append(bigPrior)
 
                 if not pyBase.choped:
@@ -832,23 +822,13 @@ class _PyAlignment(_Py):
                         control.append(pr)
 
             if not pyLater.reflexed or pyLater.choped or mono:
-                # print('3')
-
-                '''if pyCont.choped:  # or cross:
-                    ali = pyCont.alignedList[0]
-                    simulatedChop = ali.simulatedChops[0]
-                    if simulatedChop:
-                        cutterList.append(bigLater)
-                    else:
-                        cutterList.append(later)
-                else:
-                    cutterList.append(bigLater)'''
+                # print('2')
 
                 cutterList.append(bigLater)
 
                 if not pyBase.choped:
                     if numWire == pyLater.numWire:
-                        # print('31')
+                        # print('21')
                         control.append(lat)
 
             if cutterList:
