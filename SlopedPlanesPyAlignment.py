@@ -842,11 +842,11 @@ class _PyAlignment(_Py):
 
                 cutterList.append(bigLater)
 
-                if not self.falsify:
-                    if not pyBase.choped:
-                        if numWire == pyLater.numWire:
-                            # print('31')
-                            control.append(lat)
+                # if not self.falsify:
+                if not pyBase.choped:
+                    if numWire == pyLater.numWire:
+                        # print('31')
+                        control.append(lat)
 
             if cutterList:
                 # print('BB')
