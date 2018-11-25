@@ -816,20 +816,20 @@ class _PyAlignment(_Py):
 
                 cutterList.append(bigPrior)
 
-                '''if not pyBase.choped:
+                if not pyBase.choped:
                     if numWire == pyLater.numWire:
                         # print('11')
-                        control.append(pr)'''
+                        control.append(pr)
 
             if not pyLater.reflexed or pyLater.choped or mono:
                 # print('2')
 
                 cutterList.append(bigLater)
 
-                '''if not pyBase.choped:
+                if not pyBase.choped:
                     if numWire == pyLater.numWire:
                         # print('21')
-                        control.append(lat)'''
+                        control.append(lat)
 
             if cutterList:
                 # print('BB')
@@ -867,6 +867,159 @@ class _PyAlignment(_Py):
                 pyLater.control.append(nGeom)
                 pyLater.control.append(numGeom)
                 # print('pyLater.shape ', pyLater.shape)
+
+    def simulatingChops(self):
+
+        '''simulatingChops(self)
+        simulating the rango'''
+
+        # print('###### simulatingChops ', self.base.numWire, self.base.numGeom, self.falsify)
+
+        tolerance = _Py.tolerance
+        pyFace = _Py.pyFace
+        face = pyFace.face
+        falsify = self.falsify
+
+        rangoChopPy = self.rangoPy
+        simulatedChops = []
+
+        geomList = [pyP.geomShape for pyP in self.aligns]
+        geomList.insert(0, self.base.geomShape)
+        self.geomList = geomList
+
+        enormousBase = self.base.enormousShape
+        enormousCont = self.aligns[-1].enormousShape
+
+        numChop = -1
+        for [pyOne, pyTwo] in self.chops:
+            numChop += 1
+            # print('### chops ', pyOne.numGeom, pyTwo.numGeom)
+
+            # choped with reflex corner
+
+            rrOne = []
+            if pyOne.rear:
+                pyReflexListOne = pyOne.reflexedList
+                if pyReflexListOne:
+                    pyReflexOne = pyReflexListOne[0]
+                    pyOppOne = pyReflexOne.planes[1]
+                    oppEnormousOne = pyOppOne.enormousShape
+                    rrOne = pyOne.rango[0]
+            # print('rrOne ', rrOne)
+
+            rrTwo = []
+            if pyTwo.rear:
+                pyReflexListTwo = pyTwo.reflexedList
+                if pyReflexListTwo:
+                    pyReflexTwo = pyReflexListTwo[0]
+                    pyOppTwo = pyReflexTwo.planes[0]
+                    oppEnormousTwo = pyOppTwo.enormousShape
+                    rrTwo = pyTwo.rango[1]
+            # print('rrTwo ', rrTwo)
+
+            # simulating
+
+            if falsify:
+
+                pyOne.simulating([enormousBase])
+                pyTwo.simulating([enormousCont])
+
+            else:
+
+                pyOne.simulating([enormousBase])
+                pyTwo.simulating([enormousBase])
+
+            if pyOne.virtualized:
+                pyO = self.selectBasePlane(pyOne.numWire, pyOne.numGeom)
+                # print('1')
+                pyO.simulating([enormousBase])
+
+            if pyTwo.virtualized:
+                pyT = self.selectBasePlane(pyTwo.numWire, pyTwo.numGeom)
+                # print('2')
+                if falsify:
+                    # print('21')
+                    pyT.simulating([enormousCont])
+                else:
+                    # print('22')
+                    pyT.simulating([enormousBase])
+
+            rChopPy = rangoChopPy[numChop]
+            # print('rChop ', self.rango, rChopPy)
+            cutList = []
+            for pyPl in rChopPy:
+
+                if not (pyPl.aligned or pyPl.choped):
+
+                    if pyPl.reflexed:
+                        # print('pyPl.numGeom reflexed ', pyPl.numGeom)
+                        pl = pyPl.simulatedShape
+                        cutList.append(pl)
+
+                    else:
+                        # print('pyPl.numGeom ', pyPl.numGeom)
+                        pl = pyPl.bigShape.copy()
+                        gS = pyPl.geomShape
+
+                        rr = pyPl.numGeom
+
+                        if rr in rrOne:
+                            # print('rrOne')
+                            pl = self.cutting(pl, [oppEnormousOne], gS)
+
+                        if rr in rrTwo:
+                            # print('rrTwo')
+                            pl = self.cutting(pl, [oppEnormousTwo], gS)
+
+                        cutList.append(pl)
+
+            cList = []
+
+            if cutList:
+                # print('cutList ', cutList)
+
+                bb = self.base.seedShape.copy()
+
+                bb = bb.cut([pyOne.simulatedShape,
+                             pyTwo.simulatedShape], tolerance)
+
+                for ff in bb.Faces:
+                    section = ff.section(geomList, tolerance)
+                    if not section.Edges:
+                        section = ff.section([face], tolerance)
+                        if section.Edges:
+                            bb = ff
+                            break
+
+                cL = Part.makeCompound(cutList)
+                cL = cL.cut([pyOne.enormousShape,
+                             pyTwo.enormousShape], tolerance)
+
+                for ff in cL.Faces:
+                    section = ff.section([bb], tolerance)
+                    if section.Edges:
+                        cList.append(ff)
+
+                pyOne.simulating(cutList)
+                pyTwo.simulating(cutList)
+
+                pyOne.cuttingPyth(cutList)
+                pyTwo.cuttingPyth(cutList)
+
+                if pyOne.virtualized:
+                    # print('pyO')
+                    pyO.cuttingPyth(cutList)
+                    pyO.simulating(cutList)
+
+                if pyTwo.virtualized:
+                    # print('pyT')
+                    pyT.cuttingPyth(cutList)
+                    pyT.simulating(cutList)
+
+            simulatedChops.append(cList)
+            # print('cList ', cList)
+
+        self.simulatedChops = simulatedChops
 
     def simulatingChopsOne(self):
 
