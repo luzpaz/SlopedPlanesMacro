@@ -816,20 +816,20 @@ class _PyAlignment(_Py):
 
                 cutterList.append(bigPrior)
 
-                if not pyBase.choped:
+                '''if not pyBase.choped:
                     if numWire == pyLater.numWire:
                         # print('11')
-                        control.append(pr)
+                        control.append(pr)'''
 
             if not pyLater.reflexed or pyLater.choped or mono:
                 # print('2')
 
                 cutterList.append(bigLater)
 
-                if not pyBase.choped:
+                '''if not pyBase.choped:
                     if numWire == pyLater.numWire:
                         # print('21')
-                        control.append(lat)
+                        control.append(lat)'''
 
             if cutterList:
                 # print('BB')
