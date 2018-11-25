@@ -819,6 +819,9 @@ class _PyAlignment(_Py):
             if not pyPrior.reflexed or pyPrior.choped or mono:
                 # print('1')
 
+                if pyBase.choped:  # or cross
+                    ali = pyBase.alignedList[0]
+
                 cutterList.append(bigPrior)
 
                 if not pyBase.choped:
@@ -833,6 +836,9 @@ class _PyAlignment(_Py):
 
             if not pyLater.reflexed or pyLater.choped or mono:
                 # print('3')
+
+                if pyCont.choped:  # or cross:
+                    ali = pyCont.alignedList[0]
 
                 cutterList.append(bigLater)
 
