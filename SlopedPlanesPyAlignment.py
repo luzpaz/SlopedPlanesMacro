@@ -757,9 +757,7 @@ class _PyAlignment(_Py):
         lat = pyLater.numGeom
         # print('later ', pyLater.numWire, lat)
         bigPrior = pyPrior.bigShape
-        prior = pyPrior.shape
         bigLater = pyLater.bigShape
-        later = pyLater.shape
 
         if falsify:
             # print('A')
