@@ -1889,6 +1889,9 @@ class _PyAlignment(_Py):
                         pyPl.cuttingPyth(cutList)
                         # print('rangoChop ', nn)
 
+            # TODO if cross chop with rangoChop
+
+
             # rearChop with chop and alignment. Rango and rear with opp chop
 
             if pyO.shape and pyO.rear:
