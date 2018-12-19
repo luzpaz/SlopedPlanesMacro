@@ -4,8 +4,6 @@ job1:
 
     before_script:
         - apt-get update
-        - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
-        - apt-get update
         - apt-get install -y freecad-daily --allow-unauthenticated
 
     script:
