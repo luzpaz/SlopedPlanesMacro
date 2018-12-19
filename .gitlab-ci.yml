@@ -5,6 +5,7 @@ job1:
     before_script:
 
         - apt-get update
+        - apt-get install -y software-properties-common
         - apt-get install -y freecad
 
     script:
