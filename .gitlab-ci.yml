@@ -3,10 +3,10 @@ job1:
     image: python:2.7
 
     before_script:
-        - sudo apt-get update
-        - sudo add-apt-repository -y ppa:freecad-maintainers/freecad-daily
-        - sudo apt-get update
-        - sudo apt-get install -y freecad-daily --allow-unauthenticated
+        - apt-get update
+        - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
+        - apt-get update
+        - apt-get install -y freecad-daily --allow-unauthenticated
 
     script:
 
