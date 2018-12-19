@@ -4,10 +4,10 @@ job1:
 
     before_script:
 
-        - apt-get update
+        - apt-get update -qy
         - apt-get install -y software-properties-common
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
-        - apt-get update
+        - apt-get update -qy
         - apt-get install -y freecad-daily
 
     script:
