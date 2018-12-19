@@ -8,8 +8,7 @@ job1:
         - apt-get install -y software-properties-common
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
         - apt-get update
-        - cat /etc/os-release
-        - apt-get install -y freecad-daily
+        - apt-get install -y freecad-daily/xenial-backports
 
     script:
 
