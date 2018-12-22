@@ -6,12 +6,13 @@ job1:
 
         - cat /etc/os-release
         - apt-get update
-        - apt-get install -y software-properties-common
+        - apt-get install -y software-properties-common gnupg
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
         - ls /etc/apt/sources.list.d
         - cat /etc/apt/sources.list.d/freecad-maintainers-ubuntu-freecad-daily-disco.list
         - sed -i 's/disco main/xenial InRelease/g' /etc/apt/sources.list.d/freecad-maintainers-ubuntu-freecad-daily-disco.list
         - cat /etc/apt/sources.list.d/freecad-maintainers-ubuntu-freecad-daily-disco.list
+        - apt-key list
         - apt-get update
         - apt-get install -y freecad-daily
 
