@@ -1,12 +1,12 @@
 job1:
 
-    image: python:2.7
+    image: ubuntu:latest
 
     before_script:
 
         - cat /etc/os-release
         - apt-get update
-        - apt-get install -y software-properties-common gnupg
+        - apt-get install -y software-properties-common
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
         - ls /etc/apt/sources.list.d
         - cat /etc/apt/sources.list.d/freecad-maintainers-ubuntu-freecad-daily-disco.list
