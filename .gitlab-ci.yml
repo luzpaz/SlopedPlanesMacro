@@ -4,19 +4,11 @@ job1:
 
     before_script:
 
-        - cat /etc/os-release
-        - cd /home
         - apt-get update
-        - apt-get install -y software-properties-common
-        - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
-        - apt-get update
+        - apt-get install -y software-properties-common git
         - DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
-        - apt-get update
-        - apt-get install -y freecad-daily
-        - apt-get install -y git
 
-    script:
-
+        - cd /home
         - git clone https://gitlab.com/damianCaceres/slopedplanestest
         - mkdir .FreeCAD
         - cd .FreeCAD
@@ -25,3 +17,11 @@ job1:
         - mkdir SlopedPlanesMacro
         - cd SlopedPlanesMacro
         - cp /builds/damianCaceres/slopedplanes /home/.FreeCAD/Mod/SlopedPlanesMacro
+
+        - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
+        - apt-get update
+        - apt-get install -y freecad-daily
+
+    script:
+
+
