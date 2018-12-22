@@ -6,9 +6,9 @@ job1:
 
         - apt-get update
         - apt-get install -y software-properties-common
-        - add-apt-repository -y ppa:freecad-maintainers/freecad-daily xenial universe
+        - add-apt-repository -y ppa:freecad-maintainers/freecad-stable
         - apt-get update
-        - apt-get install -y freecad-daily
+        - apt-get install -y freecad
 
     script:
 
