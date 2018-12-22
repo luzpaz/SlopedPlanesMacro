@@ -6,8 +6,8 @@ job1:
 
         - cat /etc/os-release
         - cd /home
-        - pwd
-        - ls -a
+        - ls
+        - ls -R
         - apt-get update
         - apt-get install -y software-properties-common
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
@@ -19,10 +19,10 @@ job1:
 
     script:
 
-        - cd /home
         - git clone https://gitlab.com/damianCaceres/slopedplanestest
         - mkdir .FreeCAD
         - cd .FreeCAD
         - mkdir Mod
         - cd Mod
         - mkdir SlopedPlanesMacro
+        - cd SlopedPlanesMacro
