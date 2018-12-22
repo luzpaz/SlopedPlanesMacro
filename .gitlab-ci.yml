@@ -18,9 +18,10 @@ job1:
         - cd SlopedPlanesMacro
         - cp /builds/damianCaceres/slopedplanes/* /home/.FreeCAD/Mod/SlopedPlanesMacro
 
-    script:
-
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
         - apt-get update
         - apt-get install -y freecad-daily
+
+    script:
+
         - freecad-daily --console --run pytest
