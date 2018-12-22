@@ -1,0 +1,27 @@
+job1:
+
+    image: ubuntu:latest
+
+    before_script:
+
+        - apt-get update
+        - apt-get install -y software-properties-common git
+        - DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
+
+        - cd /home
+        - git clone https://gitlab.com/damianCaceres/slopedplanestest
+        - mkdir .FreeCAD
+        - cd .FreeCAD
+        - mkdir Mod
+        - cd Mod
+        - mkdir SlopedPlanesMacro
+        - cd SlopedPlanesMacro
+        - cp /builds/damianCaceres/slopedplanes/* /home/.FreeCAD/Mod/SlopedPlanesMacro
+
+        - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
+        - apt-get update
+        - apt-get install -y freecad-daily
+
+    script:
+
+        - freecad-daily --console --run pytest
