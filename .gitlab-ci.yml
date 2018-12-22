@@ -6,9 +6,9 @@ job1:
 
         - apt-get update
         - apt-get install -y software-properties-common
-        - add-apt-repository -y ppa:freecad-maintainers/freecad-stable
+        - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
         - apt-get update
-        - apt-get install -y freecad
+        - apt-get install -y freecad-daily
 
     script:
 
