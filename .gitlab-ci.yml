@@ -8,6 +8,7 @@ job1:
         - apt-get update
         - apt-get install -y software-properties-common
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
+        - sed -i 's/stretch/xenial/g' etc/apt/sources.list.d/freecad-daily.list
         - apt-get update
         - apt-get install -y freecad-daily
 
