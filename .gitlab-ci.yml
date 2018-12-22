@@ -9,6 +9,7 @@ job1:
         - apt-get install -y software-properties-common
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
         - apt-get update
+        - echo 'Atlantic/Canary' >> /etc/timezone
         - apt-get install -y freecad-daily
 
     script:
