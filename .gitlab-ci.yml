@@ -5,6 +5,7 @@ job1:
     before_script:
 
         - cat /etc/os-release
+        - cd /home
         - pwd
         - ls -a
         - apt-get update
