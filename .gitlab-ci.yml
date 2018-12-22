@@ -12,6 +12,7 @@ job1:
         - DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
         - apt-get update
         - apt-get install -y freecad-daily
+        - apt-get install git
 
     script:
 
