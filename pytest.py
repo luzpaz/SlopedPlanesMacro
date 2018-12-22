@@ -12,7 +12,7 @@ edgeList = []
 executionList = []
 
 
-for directory in os.walk('/home/SlopedPlanesTest/Test'):
+for directory in os.walk('/home/slopedplanestest/Test'):
     # print('directory ', directory)
     for filename in directory[2]:
         # print('filename ', filename)
