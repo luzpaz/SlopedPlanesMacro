@@ -16,7 +16,7 @@ job1:
         - cd Mod
         - mkdir SlopedPlanesMacro
         - cd SlopedPlanesMacro
-        - cp /builds/damianCaceres/slopedplanes /home/.FreeCAD/Mod/SlopedPlanesMacro
+        - cp /builds/damianCaceres/slopedplanes/* /home/.FreeCAD/Mod/SlopedPlanesMacro
 
     script:
 
