@@ -23,3 +23,4 @@ job1:
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
         - apt-get update
         - apt-get install -y freecad-daily
+        - freecad-daily --console --run pytest
