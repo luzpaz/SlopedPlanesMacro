@@ -5,8 +5,8 @@ job1:
     before_script:
 
         - cat /etc/os-release
+        - pwd
         - ls -a
-        - ls -R
         - apt-get update
         - apt-get install -y software-properties-common
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
