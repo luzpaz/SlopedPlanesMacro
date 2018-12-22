@@ -5,6 +5,8 @@ job1:
     before_script:
 
         - cat /etc/os-release
+        - ls -a
+        - ls -R
         - apt-get update
         - apt-get install -y software-properties-common
         - add-apt-repository -y ppa:freecad-maintainers/freecad-daily
@@ -16,6 +18,7 @@ job1:
 
     script:
 
+        - cd /home
         - git clone https://gitlab.com/damianCaceres/slopedplanestest
         - mkdir .FreeCAD
         - cd .FreeCAD
