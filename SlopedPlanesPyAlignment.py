@@ -28,7 +28,7 @@ from SlopedPlanesPy import _Py
 
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
-__url__ = "http://www.freecadweb.org"
+__url__ = "https://gitlab.com/damianCaceres/slopedplanes"
 __version__ = ""
 
 

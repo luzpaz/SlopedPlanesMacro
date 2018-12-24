@@ -27,5 +27,5 @@ import SlopedPlanes
 
 __title__ = "SlopedPlanesMacro"
 __author__ = "Damian Caceres"
-__url__ = "http://www.freecadweb.org"
-
+__url__ = "https://gitlab.com/damianCaceres/slopedplanes"
+__version__ = ""
