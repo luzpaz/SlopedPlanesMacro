@@ -334,11 +334,6 @@ class _SlopedPlanes(_Py):
                 oldCoord = pyFace.wires[0].coordinates
                 if oldCoord[0] == coordinates[0]:
                     pyFaceListNew.append(pyFace)
-                    pyFace.numFace = numFace
-                    break
-            else:
-                pyFace = _PyFace(numFace)
-                pyFaceListNew.append(pyFace)
 
             _Py.pyFace = pyFace
             pyFace.mono = True
@@ -1188,6 +1183,11 @@ class _SlopedPlanes(_Py):
 
         state['Type'] = self.Type
 
+        serialize = self.Serialize
+        state['Serialize'] = serialize
+
+        faceList = self.faceList
+
         pyth = []
         numFace = -1
         # print('number of faces ', len(self.Pyth))
@@ -1220,6 +1220,9 @@ class _SlopedPlanes(_Py):
 
         self.Type = state['Type']
 
+        serialize = state['Serialize']
+
+        faceList = []
         pyth = []
         numFace = -1
         for dct in state['Pyth']:
@@ -1240,8 +1243,17 @@ class _SlopedPlanes(_Py):
             pyth.append(pyFace)
 
         self.Pyth = pyth
+        self.faceList = faceList
 
         self.slopeList = []
+
+        if serialize:
+            self.OnChanged = False
+            # if the geometry change after loading, recompute
+        else:
+            self.OnChanged = True
+
+        # self.printSerialSummary()
 
 
 class _ViewProvider_SlopedPlanes():

@@ -232,6 +232,8 @@ class _TaskPanel_SlopedPlanes():
 
         if slopedPlanes:
 
+            linkList = [o.Name for o in slopedPlanes.SweepCurves]
+            linkList.insert(0, None)
             up = slopedPlanes.Up
             down = slopedPlanes.Down
             pyFaceList = slopedPlanes.Proxy.Pyth
@@ -558,6 +560,9 @@ class _TaskPanel_SlopedPlanes():
                     if numWire == 1:
                         numSlope += 1
 
+                ang = pyPlaneList[0].angle
+                # print(ang)
+
                 for pyPlane in pyPlaneList:
                     numAngle += 1
                     angle = pyPlane.angle
@@ -581,6 +586,10 @@ class _TaskPanel_SlopedPlanes():
                         if isinstance(angle, float):
                             # print('a')
                             originList.append([numWire, numAngle])
+
+                            if value != ang:
+                                pyWire.mono = False
+                                pyFace.mono = False
 
                         else:
                             # print('b')

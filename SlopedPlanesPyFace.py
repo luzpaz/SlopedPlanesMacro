@@ -291,6 +291,11 @@ class _PyFace(_Py):
                 planeList.append(dd)
             dct['_planes'] = planeList
 
+            if serialize:
+                ww = Part.Wire(edgeList)
+                ss = Part.Compound([ww] + forBack)
+                serialList.append(ss)
+
             reflexList = []
             for pyReflex in pyWire.reflexs:
                 dd = pyReflex.__dict__.copy()
@@ -308,13 +313,14 @@ class _PyFace(_Py):
             dct = {}
             alignList.append(dct)
 
-        return wireList, alignList
+        return wireList, alignList, serialList
 
-    def __setstate__(self, wires, alignments):
+    def __setstate__(self, wires, alignments, serialize, compound):
 
         '''__setstate__(self, wires, alignments)
         Deserializes the complementary python objects.'''
 
+        geomShapeFace = []
         wireList = []
         numWire = -1
 
@@ -362,7 +368,7 @@ class _PyFace(_Py):
             pyAlignment = _PyAlignment()
             alignList.append(pyAlignment)
 
-        return wireList, alignList
+        return wireList, alignList, geomShapeFace
 
     def faceManager(self):
 

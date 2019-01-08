@@ -1,0 +1,18 @@
+language: python
+python:
+    - "2.7"
+before_install:
+    - sudo add-apt-repository -y ppa:freecad-maintainers/freecad-daily
+    - sudo apt-get update
+    - sudo apt-get install -y freecad-daily --allow-unauthenticated
+script:
+    - cd /home/travis
+    - git clone https://github.com/caceres/SlopedPlanesTest.git
+    - mkdir .FreeCAD
+    - cd .FreeCAD
+    - mkdir Mod
+    - cd Mod
+    - mkdir SlopedPlanesMacro
+    - cd /home/travis/build/caceres/SlopedPlanesMacro
+    - cp ./* /home/travis/.FreeCAD/Mod/SlopedPlanesMacro
+    - travis_wait 40 freecad-daily --console --run pytest

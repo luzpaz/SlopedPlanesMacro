@@ -596,13 +596,14 @@ class _Py(object):
 
             geom = self.makeGeom(curve, startParam, endParam)
 
-            geometries.append(geom)
+            curve = edge.Curve
 
             first = second
 
         coordinates.pop()
 
-        return geometries
+                if edge.firstVertex(True).Point !=\
+                   edge.firstVertex(False).Point:
 
     def makeGeom(self, curve, startParam, endParam):
 

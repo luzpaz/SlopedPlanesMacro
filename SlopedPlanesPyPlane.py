@@ -45,6 +45,12 @@ class _PyPlane(_Py):
 
         '''__init__(self, numWire, numGeom, angle):'''
 
+        self.alignedList = []
+        self.chopedList = []
+        self.frontedList = []
+        self.rearedList = []
+        self.reflexedList = []
+
         self.numWire = numWire
         self.numGeom = numGeom
         self.angle = angle
@@ -98,6 +104,76 @@ class _PyPlane(_Py):
         self.sweepCurve = None
 
     ###########################################################################
+
+    @property
+    def alignedList(self):
+
+        ''''''
+
+        return self._alignedList
+
+    @alignedList.setter
+    def alignedList(self, alignedList):
+
+        ''''''
+
+        self._alignedList = alignedList
+
+    @property
+    def chopedList(self):
+
+        ''''''
+
+        return self._chopedList
+
+    @chopedList.setter
+    def chopedList(self, chopedList):
+
+        ''''''
+
+        self._chopedList = chopedList
+
+    @property
+    def frontedList(self):
+
+        ''''''
+
+        return self._frontedList
+
+    @frontedList.setter
+    def frontedList(self, frontedList):
+
+        ''''''
+
+        self._frontedList = frontedList
+
+    @property
+    def rearedList(self):
+
+        ''''''
+
+        return self._rearedList
+
+    @rearedList.setter
+    def rearedList(self, rearedList):
+
+        ''''''
+
+        self._rearedList = rearedList
+
+    @property
+    def reflexedList(self):
+
+        ''''''
+
+        return self._reflexedList
+
+    @reflexedList.setter
+    def reflexedList(self, reflexedList):
+
+        ''''''
+
+        self._reflexedList = reflexedList
 
     @property
     def numWire(self):
@@ -534,6 +610,13 @@ class _PyPlane(_Py):
         ''''''
 
         self._chopedList = chopedList
+
+    @control.setter
+    def control(self, control):
+
+        ''''''
+
+        self._control = control
 
     @property
     def frontedList(self):
@@ -1283,6 +1366,7 @@ class _PyPlane(_Py):
             pyPlane.rear = rear
             pyPlane.rango = rango
             pyPlane.reflexed = True
+            pyPlane.fronted = fronted
             pyPlane.shape = plane.copy()
             pyPlane.seedShape = seedShape
             pyPlane.bigShape = big
