@@ -140,6 +140,11 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
+        doc = "Thickness direction."
+
+        slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
+                                 "SlopedPlanes", doc)
+
         doc = ('Applies over all planes overhang length,\n'
                'multiplied by the diagonal \n'
                'length of the SlopedPlanes base.\n'
@@ -197,6 +202,9 @@ class _SlopedPlanes(_Py):
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
                                   "Part::FaceMakerCheese"]
+        slopedPlanes.ThicknessDirection = ["Vertical",
+                                           "Horizontal",
+                                           "Normal"]
         slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
 
         slopedPlanes.Proxy = self
