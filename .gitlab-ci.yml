@@ -1,12 +1,12 @@
 job1:
 
     image: ubuntu:latest
-    image: python:3.6
 
     before_script:
 
         - apt-get update
         - apt-get install -y software-properties-common git
+        - apt-get install python3
         - DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
 
         - cd /home
