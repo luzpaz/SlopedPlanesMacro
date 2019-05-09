@@ -19,11 +19,11 @@ for directory in os.walk('/home/slopedplanestest/Test'):
         if filename.endswith('.fcstd'):
             # print('open')
             doc = FreeCAD.openDocument(directory[0] + '/' + filename)
-            print('######### ', doc.Name)
+            #print('######### ', doc.Name)
             numDoc += 1
 
             for obj in doc.Objects:
-                if hasattr(obj, 'Proxy'):
+                #if hasattr(obj, 'Proxy'):
                     if obj.Proxy.Type == 'SlopedPlanes':
                         numObj += 1
 
@@ -76,6 +76,8 @@ for directory in os.walk('/home/slopedplanestest/Test'):
 
                             pass
                             # print('### okey')
+
+FreeCAD.Console.PrintMessage('files ' + numDoc)
 
 print('files ', numDoc)
 print('objects ', numObj)
