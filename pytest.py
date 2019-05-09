@@ -77,7 +77,7 @@ for directory in os.walk('/home/slopedplanestest/Test'):
                             pass
                             # print('### okey')
 
-FreeCAD.Console.PrintMessage('files ' + numDoc)
+FreeCAD.Console.PrintMessage('files ' + str(numDoc))
 
 print('files ', numDoc)
 print('objects ', numObj)
