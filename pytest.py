@@ -15,11 +15,11 @@ executionList = []
 for directory in os.walk('/home/slopedplanestest/Test'):
     # print('directory ', directory)
     for filename in directory[2]:
-        # print('filename ', filename)
+        print('filename ', filename)
         if filename.endswith('.fcstd'):
             # print('open')
             doc = FreeCAD.openDocument(directory[0] + '/' + filename)
-            # print('######### ', doc.Name)
+            print('######### ', doc.Name)
             numDoc += 1
 
             for obj in doc.Objects:
