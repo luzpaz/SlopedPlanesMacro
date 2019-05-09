@@ -6,6 +6,7 @@ job1:
 
         - apt-get update
         - apt-get install -y software-properties-common git
+        - apt-get install python
         - DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata
 
         - cd /home
