@@ -848,7 +848,7 @@ class _PyPlane(_Py):
         coordinates = pyWire.coordinates
         geom = self.geom
 
-        if self.aligned or not geom:
+        if self.aligned:  # or not geom:
 
             geom = self.doGeom()
             self.geom = geom
