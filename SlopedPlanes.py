@@ -103,37 +103,37 @@ class _SlopedPlanes(_Py):
         doc = "The sketch or Dwire in which the SlopedPlanes is based"
 
         slopedPlanes.addProperty("App::PropertyLink", "Base",
-                                 "SlopedPlanes", doc)
+                                 "Base", doc)
 
         doc = "Computes de complement of the orientation of the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyBool", "Complement",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Reverses the angles of the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyBool", "Reverse",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Mirrors the SlopedPlanes with respect its base"
 
         slopedPlanes.addProperty("App::PropertyBool", "Mirror",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Creates a solid out of the SlopedPlanes shells"
 
         slopedPlanes.addProperty("App::PropertyBool", "Solid",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Gives a plane on SlopedPlanes base"
 
         slopedPlanes.addProperty("App::PropertyBool", "Down",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Gives a plane on top of the SlopedPlanes."
 
         slopedPlanes.addProperty("App::PropertyLength", "Up",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Gives a thickness to the SlopedPlanes."
 
@@ -178,12 +178,12 @@ class _SlopedPlanes(_Py):
         doc = "Tolerance"
 
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "FaceMaker"
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Available curves to sweep"
 
