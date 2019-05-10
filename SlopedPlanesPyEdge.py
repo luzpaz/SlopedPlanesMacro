@@ -147,11 +147,11 @@ class _PyEdgeOpen(_PyEdge):
         lastParam = self.lastParam
 
         startParam = lastParam
-        endParam = lastParam + _Py.size
+        endParam = lastParam + _Py.pyFace.size
 
         gg = geom
         sParam = firstParam
-        eParam = firstParam - _Py.size
+        eParam = firstParam - _Py.pyFace.size
 
         self.params(geom, gg, startParam, endParam, sParam, eParam)
 
