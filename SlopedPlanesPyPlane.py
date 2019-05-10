@@ -90,6 +90,8 @@ class _PyPlane(_Py):
         self.reallySolved = False
         self.sweepCurve = None
 
+        self.edge = None
+
     @property
     def alignedList(self):
 
