@@ -220,6 +220,8 @@ class _SlopedPlanes(_Py):
         '''execute(self, slopedPlanes)
         Builds the shape of the slopedPlanes object.'''
 
+        # print('execute')
+
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
         placement = sketch.Placement
@@ -290,8 +292,6 @@ class _SlopedPlanes(_Py):
             numFace += 1
             # print('######### numFace ', numFace)
 
-            size = face.BoundBox.DiagonalLength
-            _Py.size = size
             _Py.face = face
 
             if onChanged:
@@ -319,6 +319,8 @@ class _SlopedPlanes(_Py):
                     pyFaceListNew.append(pyFace)
 
                 _Py.pyFace = pyFace
+
+                size = face.BoundBox.DiagonalLength
                 pyFace.size = size
 
                 # gathers the interior wires. Upper Left criteria
@@ -460,7 +462,9 @@ class _SlopedPlanes(_Py):
 
                         except IndexError:
                             # print('2')
+
                             pyPlane = _PyPlane(numWire, numGeom, ang)
+
                             pyPlaneListNew.append(pyPlane)
 
                         pyPlane.geom = geom
@@ -652,6 +656,8 @@ class _SlopedPlanes(_Py):
 
         '''onChanged(self, slopedPlanes, prop)'''
 
+        # print('onChanged ', prop)
+
         if self.State:
 
             return
@@ -706,12 +712,14 @@ class _SlopedPlanes(_Py):
 
         '''overWritePyProp(self, prop, value)'''
 
+        # print('overWritePyProp', prop)
+
         for pyFace in self.Pyth:
 
-            size = pyFace.size
+            _Py.pyFace = pyFace
 
             if prop in ["length", "width", "overhang"]:
-                newValue = value * size
+                newValue = value * pyFace.size
             else:
                 newValue = value
                 if prop == "angle":
@@ -737,6 +745,8 @@ class _SlopedPlanes(_Py):
     def onDocumentRestored(self, slopedPlanes):
 
         ''''''
+
+        # print('onDocumentRestored')
 
         tolerance = slopedPlanes.Tolerance
         slopedPlanes.Tolerance = (tolerance, 1e-7, 1, 1e-7)
@@ -786,6 +796,8 @@ class _SlopedPlanes(_Py):
 
         '''__setstate__(self, state)'''
 
+        # print('__setstate__')
+
         self.Type = state['Type']
 
         serialize = state['Serialize']
@@ -796,6 +808,7 @@ class _SlopedPlanes(_Py):
         for dct in state['Pyth']:
             numFace += 1
             pyFace = _PyFace(numFace)
+            _Py.pyFace = pyFace
 
             wires = dct['_wires']
             alignments = dct['_alignments']
@@ -830,7 +843,7 @@ class _SlopedPlanes(_Py):
         else:
             self.OnChanged = True
 
-        # self.printSerialSummary()
+        # self.printSerialSummary()  ROTO
 
 
 class _ViewProvider_SlopedPlanes():
