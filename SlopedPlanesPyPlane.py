@@ -53,7 +53,7 @@ class _PyPlane(_Py):
         self.numWire = numWire
         self.numGeom = numGeom
         self.angle = slope
-        size = _Py.size
+        size = _Py.pyFace.size
         self.rightWidth = size
         self.leftWidth = size
         self.length = 2 * size
@@ -89,6 +89,8 @@ class _PyPlane(_Py):
         self.solved = False
         self.reallySolved = False
         self.sweepCurve = None
+
+        self.edge = None
 
     @property
     def alignedList(self):
@@ -291,7 +293,7 @@ class _PyPlane(_Py):
         except AttributeError:
             pass
 
-        size = _Py.size
+        size = _Py.pyFace.size
         if overhang > size:
             overhang = size
 
@@ -818,7 +820,7 @@ class _PyPlane(_Py):
 
             geomCopy = geom.copy()
             if not (self.sweepCurve or closed):
-                geomCopy.translate(-1 * _Py.size * extrusionDirection)
+                geomCopy.translate(-1 * _Py.pyFace.size * extrusionDirection)
 
             # print('# big')
             scale = 5
@@ -846,7 +848,7 @@ class _PyPlane(_Py):
         coordinates = pyWire.coordinates
         geom = self.geom
 
-        if self.aligned or not geom:
+        if self.aligned:  # or not geom:
 
             geom = self.doGeom()
             self.geom = geom
@@ -880,7 +882,7 @@ class _PyPlane(_Py):
 
         # utilizado por pyWire trimming linea 415
 
-        size = _Py.size
+        size = _Py.pyFace.size
         width = size
         length = 2 * size
 

@@ -46,19 +46,19 @@ def makePyEdge(pyPlane):
     if isinstance(geom, Part.LineSegment):
         pyEdge = _PyEdgeLineSegment(pyPlane)
 
-    if isinstance(geom, Part.ArcOfParabola):
+    elif isinstance(geom, Part.ArcOfParabola):
         pyEdge = _PyEdgeArcOfParabola(pyPlane)
 
-    if isinstance(geom, Part.ArcOfHyperbola):
+    elif isinstance(geom, Part.ArcOfHyperbola):
         pyEdge = _PyEdgeArcOfHyperbola(pyPlane)
 
-    if isinstance(geom, Part.ArcOfCircle):
+    elif isinstance(geom, Part.ArcOfCircle):
         pyEdge = _PyEdgeArcOfCircle(pyPlane)
 
-    if isinstance(geom, Part.ArcOfEllipse):
+    elif isinstance(geom, Part.ArcOfEllipse):
         pyEdge = _PyEdgeArcOfEllipse(pyPlane)
 
-    if isinstance(geom, Part.BSplineCurve):
+    elif isinstance(geom, Part.BSplineCurve):
         pyEdge = _PyEdgeBSplineCurve(pyPlane)
 
     return pyEdge
@@ -147,11 +147,11 @@ class _PyEdgeOpen(_PyEdge):
         lastParam = self.lastParam
 
         startParam = lastParam
-        endParam = lastParam + _Py.size
+        endParam = lastParam + _Py.pyFace.size
 
         gg = geom
         sParam = firstParam
-        eParam = firstParam - _Py.size
+        eParam = firstParam - _Py.pyFace.size
 
         self.params(geom, gg, startParam, endParam, sParam, eParam)
 

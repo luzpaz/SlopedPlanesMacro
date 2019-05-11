@@ -103,37 +103,37 @@ class _SlopedPlanes(_Py):
         doc = "The sketch or Dwire in which the SlopedPlanes is based"
 
         slopedPlanes.addProperty("App::PropertyLink", "Base",
-                                 "SlopedPlanes", doc)
+                                 "Base", doc)
 
         doc = "Computes de complement of the orientation of the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyBool", "Complement",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Reverses the angles of the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyBool", "Reverse",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Mirrors the SlopedPlanes with respect its base"
 
         slopedPlanes.addProperty("App::PropertyBool", "Mirror",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Creates a solid out of the SlopedPlanes shells"
 
         slopedPlanes.addProperty("App::PropertyBool", "Solid",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Gives a plane on SlopedPlanes base"
 
         slopedPlanes.addProperty("App::PropertyBool", "Down",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Gives a plane on top of the SlopedPlanes."
 
         slopedPlanes.addProperty("App::PropertyLength", "Up",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Gives a thickness to the SlopedPlanes."
 
@@ -178,12 +178,12 @@ class _SlopedPlanes(_Py):
         doc = "Tolerance"
 
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "FaceMaker"
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanesPart", doc)
 
         doc = "Available curves to sweep"
 
@@ -219,6 +219,8 @@ class _SlopedPlanes(_Py):
 
         '''execute(self, slopedPlanes)
         Builds the shape of the slopedPlanes object.'''
+
+        # print('execute')
 
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
@@ -290,8 +292,6 @@ class _SlopedPlanes(_Py):
             numFace += 1
             # print('######### numFace ', numFace)
 
-            size = face.BoundBox.DiagonalLength
-            _Py.size = size
             _Py.face = face
 
             if onChanged:
@@ -319,6 +319,8 @@ class _SlopedPlanes(_Py):
                     pyFaceListNew.append(pyFace)
 
                 _Py.pyFace = pyFace
+
+                size = face.BoundBox.DiagonalLength
                 pyFace.size = size
 
                 # gathers the interior wires. Upper Left criteria
@@ -460,7 +462,9 @@ class _SlopedPlanes(_Py):
 
                         except IndexError:
                             # print('2')
+
                             pyPlane = _PyPlane(numWire, numGeom, ang)
+
                             pyPlaneListNew.append(pyPlane)
 
                         pyPlane.geom = geom
@@ -502,7 +506,7 @@ class _SlopedPlanes(_Py):
                     pyWire.wire = Part.Wire(pyWire.shapeGeom)
 
                     for pyPlane in pyWire.planes:
-                        pyPlane.geomAligned = pyPlane.geomShape
+                        #pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
                         pyPlane.solved = False
                         pyPlane.reallySolved = False
@@ -652,6 +656,8 @@ class _SlopedPlanes(_Py):
 
         '''onChanged(self, slopedPlanes, prop)'''
 
+        # print('onChanged ', prop)
+
         if self.State:
 
             return
@@ -706,12 +712,14 @@ class _SlopedPlanes(_Py):
 
         '''overWritePyProp(self, prop, value)'''
 
+        # print('overWritePyProp', prop)
+
         for pyFace in self.Pyth:
 
-            size = pyFace.size
+            _Py.pyFace = pyFace
 
             if prop in ["length", "width", "overhang"]:
-                newValue = value * size
+                newValue = value * pyFace.size
             else:
                 newValue = value
                 if prop == "angle":
@@ -737,6 +745,8 @@ class _SlopedPlanes(_Py):
     def onDocumentRestored(self, slopedPlanes):
 
         ''''''
+
+        # print('onDocumentRestored')
 
         tolerance = slopedPlanes.Tolerance
         slopedPlanes.Tolerance = (tolerance, 1e-7, 1, 1e-7)
@@ -786,6 +796,8 @@ class _SlopedPlanes(_Py):
 
         '''__setstate__(self, state)'''
 
+        # print('__setstate__')
+
         self.Type = state['Type']
 
         serialize = state['Serialize']
@@ -796,6 +808,7 @@ class _SlopedPlanes(_Py):
         for dct in state['Pyth']:
             numFace += 1
             pyFace = _PyFace(numFace)
+            _Py.pyFace = pyFace
 
             wires = dct['_wires']
             alignments = dct['_alignments']
@@ -830,7 +843,7 @@ class _SlopedPlanes(_Py):
         else:
             self.OnChanged = True
 
-        # self.printSerialSummary()
+        # self.printSerialSummary()  ROTO
 
 
 class _ViewProvider_SlopedPlanes():

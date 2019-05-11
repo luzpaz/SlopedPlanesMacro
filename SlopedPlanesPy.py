@@ -46,7 +46,6 @@ class _Py(object):
     tolerance = 1e-7
     precision = 1e7
     reverse = False
-    size = 0
     normal = V(0, 0, 1)
     face = None
     pyFace = None

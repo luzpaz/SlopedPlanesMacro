@@ -392,7 +392,7 @@ class _PyWire(_Py):
                         extrusionDirection, geom = pyRearPl.extrusionDirection(self, rear)
 
                         geomCopy = geom.copy()
-                        geomCopy.translate(-1 * _Py.size * extrusionDirection)
+                        geomCopy.translate(-1 * _Py.pyFace.size * extrusionDirection)
                         scale = 500
 
                         giantPlane =\

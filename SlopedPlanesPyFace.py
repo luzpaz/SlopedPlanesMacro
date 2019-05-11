@@ -29,6 +29,7 @@ from SlopedPlanesPyWire import _PyWire
 from SlopedPlanesPyReflex import _PyReflex
 from SlopedPlanesPyAlignment import _PyAlignment
 from SlopedPlanesPyPlane import _PyPlane
+import SlopedPlanesPyEdge
 
 
 V = FreeCAD.Vector
@@ -305,6 +306,10 @@ class _PyFace(_Py):
 
                     geomShape = edgeList[numGeom]
                     pyPlane.geomShape = geomShape
+                    pyPlane.geomAligned = geomShape
+                    geom = pyPlane.doGeom()
+                    pyPlane.geom = geom
+                    pyPlane.edge = SlopedPlanesPyEdge.makePyEdge(pyPlane)
                     geomShapeWire.append(geomShape)
 
                 planeList.append(pyPlane)
