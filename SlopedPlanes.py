@@ -140,7 +140,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = "Thickness direction."
+        doc = "Thickness direction. Not available yet."
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
                                  "SlopedPlanes", doc)
@@ -643,7 +643,7 @@ class _SlopedPlanes(_Py):
 
             thicknessDirection = slopedPlanes.ThicknessDirection
             value = slopedPlanes.Thickness.Value
-            center = faceList[0].CenterOfMass
+            #center = faceList[0].CenterOfMass
 
             if thicknessDirection == 'Vertical':
 
@@ -654,14 +654,11 @@ class _SlopedPlanes(_Py):
 
             elif thicknessDirection == 'Horizontal':
 
-                secondShape = endShape.copy()
+                pass
 
-                factor = 1.5
+            elif thicknessDirection == 'Normal':
 
-                secondShape.scale(factor, center)
-
-                endShape = Part.Compound([secondShape, endShape])
-
+                pass
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
