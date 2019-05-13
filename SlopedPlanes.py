@@ -642,17 +642,26 @@ class _SlopedPlanes(_Py):
         if slopedPlanes.Thickness:
 
             thicknessDirection = slopedPlanes.ThicknessDirection
+            value = slopedPlanes.Thickness.Value
+            center = faceList[0].CenterOfMass
 
             if thicknessDirection == 'Vertical':
 
                 normal = self.faceNormal(faceList[0])
                 if slopedPlanes.Reverse:
                     normal = normal * -1
-                endShape = endShape.extrude(slopedPlanes.Thickness.Value * normal)
+                endShape = endShape.extrude(value * normal)
 
-            else:
+            elif thicknessDirection == 'Horizontal':
 
-                pass
+                secondShape = endShape.copy()
+
+                factor = 1.5
+
+                secondShape.scale(factor, center)
+
+                endShape = Part.Compound([secondShape, endShape])
+
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
