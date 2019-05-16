@@ -356,7 +356,7 @@ class _PyFace(_Py):
 
         self.parsing()
 
-        # self.printSummary()
+        self.printSummary()
 
         pyAlignList = self.alignments
         pyWireList = self.wires
