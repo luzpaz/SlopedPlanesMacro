@@ -140,7 +140,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = "Thickness direction."
+        doc = "Thickness direction. Not available yet."
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
                                  "SlopedPlanes", doc)
@@ -506,7 +506,7 @@ class _SlopedPlanes(_Py):
                     pyWire.wire = Part.Wire(pyWire.shapeGeom)
 
                     for pyPlane in pyWire.planes:
-                        #pyPlane.geomAligned = pyPlane.geomShape
+                        pyPlane.geomAligned = pyPlane.geomShape
                         pyPlane.control = [pyPlane.numGeom]
                         pyPlane.solved = False
                         pyPlane.reallySolved = False
@@ -640,10 +640,25 @@ class _SlopedPlanes(_Py):
             endShape.complement()
 
         if slopedPlanes.Thickness:
-            normal = self.faceNormal(faceList[0])
-            if slopedPlanes.Reverse:
-                normal = normal * -1
-            endShape = endShape.extrude(slopedPlanes.Thickness.Value * normal)
+
+            thicknessDirection = slopedPlanes.ThicknessDirection
+            value = slopedPlanes.Thickness.Value
+            #center = faceList[0].CenterOfMass
+
+            if thicknessDirection == 'Vertical':
+
+                normal = self.faceNormal(faceList[0])
+                if slopedPlanes.Reverse:
+                    normal = normal * -1
+                endShape = endShape.extrude(value * normal)
+
+            elif thicknessDirection == 'Horizontal':
+
+                pass
+
+            elif thicknessDirection == 'Normal':
+
+                pass
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
