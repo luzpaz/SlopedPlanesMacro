@@ -293,10 +293,6 @@ class _PyPlane(_Py):
         except AttributeError:
             pass
 
-        size = _Py.pyFace.size
-        if overhang > size:
-            overhang = size
-
         self._overhang = overhang
 
     @property
