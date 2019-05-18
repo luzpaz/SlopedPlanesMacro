@@ -146,10 +146,10 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
                                  "SlopedPlanes", doc)
 
-        doc = ('Applies over all planes overhang length,\n'
+        doc = ('Applies over all planes overhang height,\n'
                'multiplied by the diagonal \n'
                'length of the SlopedPlanes base.\n'
-               'It \'s limited to 1')
+               'It \'s limited')
 
         slopedPlanes.addProperty("App::PropertyFloatConstraint", "FactorOverhang",
                                  "SlopedPlanes", doc)
