@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+from math import radians, sin
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
@@ -145,10 +146,10 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
                                  "SlopedPlanes", doc)
 
-        doc = ('Applies over all planes overhang length,\n'
+        doc = ('Applies over all planes overhang height,\n'
                'multiplied by the diagonal \n'
                'length of the SlopedPlanes base.\n'
-               'It \'s limited to 1')
+               'It \'s limited to 1 or even less')
 
         slopedPlanes.addProperty("App::PropertyFloatConstraint", "FactorOverhang",
                                  "SlopedPlanes", doc)
@@ -734,11 +735,13 @@ class _SlopedPlanes(_Py):
             _Py.pyFace = pyFace
 
             if prop in ["length", "width", "overhang"]:
-                newValue = value * pyFace.size
+                size = pyFace.size
+                newValue = value * size
             else:
                 newValue = value
                 if prop == "angle":
                     pyFace.mono = True
+                    _Py.slopedPlanes.FactorOverhang = 0
 
             if prop == "width":
 
@@ -746,6 +749,23 @@ class _SlopedPlanes(_Py):
                     for pyPlane in pyWire.planes:
                         setattr(pyPlane, "leftWidth", newValue)
                         setattr(pyPlane, "rightWidth", newValue)
+
+            elif prop == "overhang":
+                for pyWire in pyFace.wires:
+                    for pyPlane in pyWire.planes:
+
+                        angle = pyPlane.angle
+                        factorOverhang = sin(radians(angle))
+                        length = newValue / factorOverhang
+                        # print(pyPlane.numGeom, angle, length, newValue)
+
+                        if length > size:
+                            # print('size ', (size, factorOverhang))
+                            setattr(pyPlane, "overhang", size)
+                            _Py.slopedPlanes.FactorOverhang = factorOverhang
+                            return
+
+                        setattr(pyPlane, "overhang", length)
 
             else:
 
@@ -816,6 +836,9 @@ class _SlopedPlanes(_Py):
         self.Type = state['Type']
 
         serialize = state['Serialize']
+
+        #slopedPlanes = FreeCAD.ActiveDocument.getObject('')
+        #_Py
 
         faceList = []
         pyth = []
