@@ -755,18 +755,22 @@ class _SlopedPlanes(_Py):
                     for pyPlane in pyWire.planes:
 
                         angle = pyPlane.angle
-                        if isinstance(angle, float):
-                            factorOverhang = sin(radians(angle))
-                            length = newValue / factorOverhang
-                            # print(pyPlane.numGeom, angle, length, newValue)
+                        if isinstance(angle, list):
+                            angle = pyFace.selectPlane(angle[0], angle[1],
+                                                       pyFace).angle
 
-                            if length > size:
-                                # print('size ', (size, factorOverhang))
-                                setattr(pyPlane, "overhang", size)
-                                _Py.slopedPlanes.FactorOverhang = factorOverhang
-                                return
 
-                            setattr(pyPlane, "overhang", length)
+                        factorOverhang = sin(radians(angle))
+                        length = newValue / factorOverhang
+                        # print(pyPlane.numGeom, angle, length, newValue)
+
+                        if length > size:
+                            # print('size ', (size, factorOverhang))
+                            setattr(pyPlane, "overhang", size)
+                            _Py.slopedPlanes.FactorOverhang = factorOverhang
+                            return
+
+                        setattr(pyPlane, "overhang", length)
 
             else:
 
