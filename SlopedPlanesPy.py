@@ -791,3 +791,59 @@ class _Py(object):
         self.sweepCurve = pySketch.Name
 
         return pySketch
+
+    def gatherExteriorWires(self, fList):
+
+        ''''''
+
+        coordinatesOuter, geomOuter = [], []
+        for face in fList:
+            outerWire = face.OuterWire
+            falseFace = Part.makeFace(outerWire, "Part::FaceMakerSimple")
+            coordinates, geometryList = self.faceDatas(falseFace)
+            coordinates.extend(coordinates[0:2])
+            coordinatesOuter.append(coordinates)
+            geomOuter.append(geometryList)
+
+        lowerLeft = [cc[0] for cc in coordinatesOuter]
+        faceList = []
+        coordinatesOuterOrdered, geomOuterOrdered = [], []
+        while lowerLeft:
+            index = self.lowerLeftPoint(lowerLeft)
+            lowerLeft.pop(index)
+            pop = coordinatesOuter.pop(index)
+            coordinatesOuterOrdered.append(pop)
+            pop = fList.pop(index)
+            faceList.append(pop)
+            pop = geomOuter.pop(index)
+            geomOuterOrdered.append(pop)
+
+        return coordinatesOuterOrdered, geomOuterOrdered, faceList
+
+    def gatherInteriorWires(self, wList):
+
+        ''''''
+
+        coordinatesInner, geomInner = [], []
+        for wire in wList:
+            falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
+            coord, geomList = self.faceDatas(falseFace)
+            coord.extend(coord[0:2])
+            coordinatesInner.append(coord)
+            geomInner.append(geomList)
+
+        upperLeft = [cc[0] for cc in coordinatesInner]
+        wireList = []
+        coordinatesInnerOrdered, geomInnerOrdered = [], []
+        while upperLeft:
+            index = self.upperLeftPoint(upperLeft)
+            upperLeft.pop(index)
+            pop = coordinatesInner.pop(index)
+            coordinatesInnerOrdered.append(pop)
+            pop = wList.pop(index)
+            wireList.append(pop)
+            pop = geomInner.pop(index)
+            geomInnerOrdered.append(pop)
+
+        return coordinatesInnerOrdered, geomInnerOrdered, wireList
+

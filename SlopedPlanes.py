@@ -229,13 +229,17 @@ class _SlopedPlanes(_Py):
         shape.Placement = FreeCAD.Placement()
 
         _Py.slopedPlanes = slopedPlanes
+
         tolerance = slopedPlanes.Tolerance
         _Py.tolerance = tolerance
+
         precision = 1 / tolerance - 1
         precision = str(precision)
         precision = precision[:].find('.')
         _Py.precision = precision
+
         _Py.reverse = slopedPlanes.Reverse
+
         _Py.upList = []
 
         faceMaker = slopedPlanes.FaceMaker
@@ -253,28 +257,8 @@ class _SlopedPlanes(_Py):
 
             # gathers the exterior wires. Lower Left criteria
 
-            coordinatesOuter, geomOuter = [], []
-            for face in fList:
-                outerWire = face.OuterWire
-                falseFace = Part.makeFace(outerWire, "Part::FaceMakerSimple")
-                coordinates, geometryList = self.faceDatas(falseFace)
-                coordinates.extend(coordinates[0:2])
-                coordinatesOuter.append(coordinates)
-                geomOuter.append(geometryList)
-
-            lowerLeft = [cc[0] for cc in coordinatesOuter]
-            faceList = []
-            coordinatesOuterOrdered, geomOuterOrdered = [], []
-            while lowerLeft:
-                index = self.lowerLeftPoint(lowerLeft)
-                lowerLeft.pop(index)
-                pop = coordinatesOuter.pop(index)
-                coordinatesOuterOrdered.append(pop)
-                pop = fList.pop(index)
-                faceList.append(pop)
-                pop = geomOuter.pop(index)
-                geomOuterOrdered.append(pop)
-
+            coordinatesOuterOrdered, geomOuterOrdered, faceList =\
+                self.gatherExteriorWires(fList)
             # print('outer geom ', geomOuterOrdered)
 
             self.faceList = faceList
@@ -328,26 +312,8 @@ class _SlopedPlanes(_Py):
 
                 wList = face.Wires[1:]
 
-                coordinatesInner, geomInner = [], []
-                for wire in wList:
-                    falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
-                    coord, geomList = self.faceDatas(falseFace)
-                    coord.extend(coord[0:2])
-                    coordinatesInner.append(coord)
-                    geomInner.append(geomList)
-
-                upperLeft = [cc[0] for cc in coordinatesInner]
-                wireList = []
-                coordinatesInnerOrdered, geomInnerOrdered = [], []
-                while upperLeft:
-                    index = self.upperLeftPoint(upperLeft)
-                    upperLeft.pop(index)
-                    pop = coordinatesInner.pop(index)
-                    coordinatesInnerOrdered.append(pop)
-                    pop = wList.pop(index)
-                    wireList.append(pop)
-                    pop = geomInner.pop(index)
-                    geomInnerOrdered.append(pop)
+                coordinatesInnerOrdered, geomInnerOrdered, wireList =\
+                    self.gatherInteriorWires(wList)
 
                 # print('inner geom ', geomInnerOrdered)
 
@@ -532,6 +498,63 @@ class _SlopedPlanes(_Py):
 
         # print('pyFaceListNew ', pyFaceListNew)
 
+        figList =\
+            self.listPlanes(slopedPlanes, pyFaceListNew, faceList, placement)
+
+        endShape = Part.makeShell(figList)
+
+        if slopedPlanes.Group:
+            for obj in slopedPlanes.Group:
+                if hasattr(obj, "Proxy"):
+                    if obj.Proxy.Type == "SlopedPlanes":
+                        childShape = obj.Shape.copy()
+
+                        common = endShape.common([childShape], tolerance)
+
+                        if common.Area:
+
+                            endShape = endShape.cut([common], tolerance)
+                            childShape = childShape.cut([common], tolerance)
+
+                        shell = Part.Shell(endShape.Faces + childShape.Faces)
+                        shell = shell.removeSplitter()
+                        endShape = shell
+
+        if not slopedPlanes.Complement:
+            endShape.complement()
+
+        if slopedPlanes.Thickness:
+
+            thicknessDirection = slopedPlanes.ThicknessDirection
+            value = slopedPlanes.Thickness.Value
+            #center = faceList[0].CenterOfMass
+
+            if thicknessDirection == 'Vertical':
+
+                normal = self.faceNormal(faceList[0])
+                if slopedPlanes.Reverse:
+                    normal = normal * -1
+                endShape = endShape.extrude(value * normal)
+
+            elif thicknessDirection == 'Horizontal':
+
+                pass
+
+            elif thicknessDirection == 'Normal':
+
+                pass
+
+        if slopedPlanes.Solid:
+            endShape = Part.makeSolid(endShape)
+
+        # endShape.removeInternalWires(True)
+
+        slopedPlanes.Shape = endShape
+
+    def listPlanes(self, slopedPlanes, pyFaceListNew, faceList, placement):
+
+        ''''''
+
         figList = []
         for pyFace in pyFaceListNew:
             # print(pyFace.numFace)
@@ -596,6 +619,7 @@ class _SlopedPlanes(_Py):
 
             if slopedPlanes.Up:
                 # print('Up')
+                faceMaker = slopedPlanes.FaceMaker
                 upFace = Part.makeFace(wireList, faceMaker)
 
                 planeFaceList.append(upFace)
@@ -618,55 +642,7 @@ class _SlopedPlanes(_Py):
 
             figList.extend(planeFaceList)
 
-        endShape = Part.makeShell(figList)
-
-        if slopedPlanes.Group:
-            for obj in slopedPlanes.Group:
-                if hasattr(obj, "Proxy"):
-                    if obj.Proxy.Type == "SlopedPlanes":
-                        childShape = obj.Shape.copy()
-
-                        common = endShape.common([childShape], tolerance)
-
-                        if common.Area:
-
-                            endShape = endShape.cut([common], tolerance)
-                            childShape = childShape.cut([common], tolerance)
-
-                        shell = Part.Shell(endShape.Faces + childShape.Faces)
-                        shell = shell.removeSplitter()
-                        endShape = shell
-
-        if not slopedPlanes.Complement:
-            endShape.complement()
-
-        if slopedPlanes.Thickness:
-
-            thicknessDirection = slopedPlanes.ThicknessDirection
-            value = slopedPlanes.Thickness.Value
-            #center = faceList[0].CenterOfMass
-
-            if thicknessDirection == 'Vertical':
-
-                normal = self.faceNormal(faceList[0])
-                if slopedPlanes.Reverse:
-                    normal = normal * -1
-                endShape = endShape.extrude(value * normal)
-
-            elif thicknessDirection == 'Horizontal':
-
-                pass
-
-            elif thicknessDirection == 'Normal':
-
-                pass
-
-        if slopedPlanes.Solid:
-            endShape = Part.makeSolid(endShape)
-
-        # endShape.removeInternalWires(True)
-
-        slopedPlanes.Shape = endShape
+        return figList
 
     def onChanged(self, slopedPlanes, prop):
 
