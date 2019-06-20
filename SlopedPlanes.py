@@ -228,7 +228,7 @@ class _SlopedPlanes(_Py):
         placement = sketch.Placement
         shape.Placement = FreeCAD.Placement()
 
-        _Py.slopedPlanes = slopedPlanes
+        self.declareSlopedPlanes(slopedPlanes)
 
         tolerance = slopedPlanes.Tolerance
         faceMaker = slopedPlanes.FaceMaker

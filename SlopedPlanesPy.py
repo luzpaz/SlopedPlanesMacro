@@ -47,16 +47,29 @@ class _Py(object):
     normal = V(0, 0, 1)
     face = None
     pyFace = None
-
-    tolerance = slopedPlanes.Tolerance
-
-    precision = 1 / tolerance - 1
-    precision = str(precision)
-    precision = precision[:].find('.')
-
-    reverse = slopedPlanes.Reverse
-
     upList = []
+    tolerance = 1e-7
+    precision = 7
+    reverse = False
+
+    def declareSlopedPlanes(self, slopedPlanes):
+
+        ''''''
+
+        _Py.slopedPlanes = slopedPlanes
+
+        tolerance = slopedPlanes.Tolerance
+        # print('tolerance ', tolerance)
+        _Py.tolerance = tolerance
+
+        precision = 1 / tolerance
+        precision = str(precision)
+        precision = precision[:].find('.') - 1
+        # print('precision ', precision)
+        _Py.precision = precision
+
+        reverse = slopedPlanes.Reverse
+        _Py.reverse = reverse
 
     def addValue(self, prop, value, direction='forward'):
 
