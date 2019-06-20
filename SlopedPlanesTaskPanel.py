@@ -93,10 +93,10 @@ class _TaskPanel_SlopedPlanes():
         if advancedOptions.isChecked():
             self.tree.setHeaderLabels([("Face"),
                                        ("Angle"),
+                                       ("Slope"),
                                        ("Length"),
                                        ("Height"),
                                        ("Run"),
-                                       ("Slope"),
                                        ("OverhangLength"),
                                        ("OverhangHeight"),
                                        ("OverhangRun"),
@@ -192,10 +192,10 @@ class _TaskPanel_SlopedPlanes():
             tree.setColumnCount(14)
             tree.header().resizeSection(0, 60)
             tree.header().resizeSection(1, 120)
-            tree.header().resizeSection(2, 120)
+            tree.header().resizeSection(2, 130)
             tree.header().resizeSection(3, 120)
             tree.header().resizeSection(4, 120)
-            tree.header().resizeSection(5, 130)
+            tree.header().resizeSection(5, 120)
             tree.header().resizeSection(6, 130)
             tree.header().resizeSection(7, 130)
             tree.header().resizeSection(8, 120)
@@ -301,6 +301,21 @@ class _TaskPanel_SlopedPlanes():
 
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
+                                doubleSpinBox.setToolTip("The slope of the related face")
+                                doubleSpinBox.setMaximum(2000*size)
+                                doubleSpinBox.setMinimum(-2000*size)
+                                slope = 100 * math.tan(angle)
+                                suffix = ' %'
+                                doubleSpinBox.setValue(slope)
+                                doubleSpinBox.setSuffix(suffix)
+                                tree.setItemWidget(item, 2, doubleSpinBox)
+
+                                doubleSpinBox.item = item
+                                doubleSpinBox.parent = tree
+                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeSlope)
+
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The length of the related face")
                                 doubleSpinBox.setMaximum(2000*size)
                                 doubleSpinBox.setMinimum(-2000*size)
@@ -311,7 +326,7 @@ class _TaskPanel_SlopedPlanes():
                                 suffix = ' ' + nn[2]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                tree.setItemWidget(item, 2, doubleSpinBox)
+                                tree.setItemWidget(item, 3, doubleSpinBox)
 
                                 doubleSpinBox.item = item
                                 doubleSpinBox.parent = tree
@@ -329,7 +344,7 @@ class _TaskPanel_SlopedPlanes():
                                 value = height / nn[1]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                tree.setItemWidget(item, 3, doubleSpinBox)
+                                tree.setItemWidget(item, 4, doubleSpinBox)
 
                                 doubleSpinBox.item = item
                                 doubleSpinBox.parent = tree
@@ -347,26 +362,11 @@ class _TaskPanel_SlopedPlanes():
                                 value = run / nn[1]
                                 doubleSpinBox.setValue(value)
                                 doubleSpinBox.setSuffix(suffix)
-                                tree.setItemWidget(item, 4, doubleSpinBox)
-
-                                doubleSpinBox.item = item
-                                doubleSpinBox.parent = tree
-                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeRun)
-
-                                doubleSpinBox = _DoubleSpinBox()
-                                doubleSpinBox.setParent(tree)
-                                doubleSpinBox.setToolTip("The slope of the related face")
-                                doubleSpinBox.setMaximum(2000*size)
-                                doubleSpinBox.setMinimum(-2000*size)
-                                slope = 100 * math.tan(angle)
-                                suffix = ' %'
-                                doubleSpinBox.setValue(slope)
-                                doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 5, doubleSpinBox)
 
                                 doubleSpinBox.item = item
                                 doubleSpinBox.parent = tree
-                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeSlope)
+                                doubleSpinBox.valueChanged.connect(doubleSpinBox.changeRun)
 
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
@@ -552,7 +552,7 @@ class _TaskPanel_SlopedPlanes():
 
                         if self.advancedOptions.isChecked():
 
-                            doubleSpinBox = tree.itemWidget(it, 2)
+                            doubleSpinBox = tree.itemWidget(it, 3)
                             length = doubleSpinBox.value()
                             suffix = doubleSpinBox.suffix()
                             length = FreeCAD.Units.Quantity(str(length) + suffix)
@@ -769,7 +769,7 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         item = self.item
         tree = self.parent
 
-        itemW = tree.itemWidget(item, 2)
+        itemW = tree.itemWidget(item, 3)
         length = itemW.value()
         suffix = itemW.suffix()
         length = FreeCAD.Units.Quantity(str(length) + suffix)
@@ -783,8 +783,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
         # print('height ', height)
         run = self.run(angle, length)
         # print('run ', run)
-        tree.itemWidget(item, 3).changeHeight(height, False)
-        tree.itemWidget(item, 4).changeRun(run, False)
+        tree.itemWidget(item, 4).changeHeight(height, False)
+        tree.itemWidget(item, 5).changeRun(run, False)
 
         itemW = tree.itemWidget(item, 6)
         overhangLength = itemW.value()
@@ -806,7 +806,7 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             slope = 100 * math.tan(angle)
             # print('slope ', slope)
             suffix = ' %'
-            tree.itemWidget(item, 5).changeSlope(slope, False)
+            tree.itemWidget(item, 2).changeSlope(slope, False)
 
         else:
             # print('bA')
@@ -886,8 +886,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             # print('height ', height)
             run = self.run(angle, length)
             # print('run ', run)
-            tree.itemWidget(item, 3).changeHeight(height, False)
-            tree.itemWidget(item, 4).changeRun(run, False)
+            tree.itemWidget(item, 4).changeHeight(height, False)
+            tree.itemWidget(item, 5).changeRun(run, False)
 
         else:
             # print('bL')
@@ -942,8 +942,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             # print('length ', length)
             run = self.run(angle, length)
             # print('run ', run)
-            tree.itemWidget(item, 2).changeLength(length, False)
-            tree.itemWidget(item, 4).changeRun(run, False)
+            tree.itemWidget(item, 3).changeLength(length, False)
+            tree.itemWidget(item, 5).changeRun(run, False)
 
         else:
             # print('bH')
@@ -998,8 +998,8 @@ class _DoubleSpinBox(QtGui.QDoubleSpinBox):
             # print('length ', length)
             height = self.height(angle, length)
             # print('height ', height)
-            tree.itemWidget(item, 2).changeLength(length, False)
-            tree.itemWidget(item, 3).changeHeight(height, False)
+            tree.itemWidget(item, 3).changeLength(length, False)
+            tree.itemWidget(item, 4).changeHeight(height, False)
 
         else:
             # print('bR')
