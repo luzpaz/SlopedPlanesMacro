@@ -233,11 +233,6 @@ class _SlopedPlanes(_Py):
         tolerance = slopedPlanes.Tolerance
         _Py.tolerance = tolerance
 
-        precision = 1 / tolerance - 1
-        precision = str(precision)
-        precision = precision[:].find('.')
-        _Py.precision = precision
-
         _Py.reverse = slopedPlanes.Reverse
 
         _Py.upList = []
