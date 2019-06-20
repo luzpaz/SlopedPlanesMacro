@@ -231,12 +231,6 @@ class _SlopedPlanes(_Py):
         _Py.slopedPlanes = slopedPlanes
 
         tolerance = slopedPlanes.Tolerance
-        _Py.tolerance = tolerance
-
-        _Py.reverse = slopedPlanes.Reverse
-
-        _Py.upList = []
-
         faceMaker = slopedPlanes.FaceMaker
 
         onChanged = self.OnChanged

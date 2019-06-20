@@ -43,17 +43,19 @@ class _Py(object):
 
     '''A functional Class bequeaths methods and class variables'''
 
-    tolerance = 1e-7
+    slopedPlanes = None
+    normal = V(0, 0, 1)
+    face = None
+    pyFace = None
+
+    tolerance = slopedPlanes.Tolerance
 
     precision = 1 / tolerance - 1
     precision = str(precision)
     precision = precision[:].find('.')
 
-    reverse = False
-    normal = V(0, 0, 1)
-    face = None
-    pyFace = None
-    slopedPlanes = None
+    reverse = slopedPlanes.Reverse
+
     upList = []
 
     def addValue(self, prop, value, direction='forward'):
