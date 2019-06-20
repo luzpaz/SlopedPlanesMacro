@@ -60,7 +60,7 @@ def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
     slopedPlanes =\
         FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "SlopedPlanes")
 
-    _SlopedPlanes(slopedPlanes, slope)
+    _SlopedPlanes(slopedPlanes)
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
 
     if slope:
@@ -734,7 +734,6 @@ class _SlopedPlanes(_Py):
                         if isinstance(angle, list):
                             angle = pyFace.selectPlane(angle[0], angle[1],
                                                        pyFace).angle
-
 
                         factorOverhang = sin(radians(angle))
                         length = newValue / factorOverhang
