@@ -85,7 +85,7 @@ class _SlopedPlanes(_Py):
     Requieres a sketch or DWire as base. The base must support the FaceMaker.
     The angles numeration corresponds to the SlopedPlanes shape faces.'''
 
-    def __init__(self, slopedPlanes, slope=45.0):
+    def __init__(self, slopedPlanes, slope=45.0, slopeList=[]):
 
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
@@ -97,9 +97,10 @@ class _SlopedPlanes(_Py):
             OnChanged: faster execute from property and task panels (~7%)
             Serialize: Slower loading file (~15%) and faster execute (~7%)
 
-        - two lists:
+        - three lists:
             Pyth: the complementary python objects
-            faceList: faces produced by the FaceMaker over the base'''
+            faceList: faces produced by the FaceMaker over the base
+            slopeList: list of angles'''
 
         doc = "The sketch or Dwire in which the SlopedPlanes is based"
 
@@ -212,6 +213,7 @@ class _SlopedPlanes(_Py):
 
         self.Pyth = []
         self.faceList = []
+        self.slopeList = slopeList
         self.Type = "SlopedPlanes"
         self.Serialize = True
         self.OnChanged = True
@@ -272,12 +274,19 @@ class _SlopedPlanes(_Py):
                 # print('AA')
 
                 slope = slopedPlanes.Slope.Value
-                try:
+
+                slopeList = self.slopeList
+                if slopeList:
+                    mono = False
+                else:
+                    mono = True
+
+                '''try:
                     slopeList = self.slopeList
                     mono = False
                 except AttributeError:
                     mono = True
-                    slopeList = []
+                    slopeList = []'''
 
                 # elaborates complementary python objects of a face
 
