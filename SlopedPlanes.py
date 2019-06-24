@@ -63,16 +63,6 @@ def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
     _SlopedPlanes(slopedPlanes, slope, slopeList)
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
 
-    '''if slope:
-        try:
-            ang = float(slope)
-            slopedPlanes.Slope = ang
-        except ValueError:
-            pass
-
-    if slopeList:
-        slopedPlanes.Proxy.slopeList = slopeList'''
-
     slopedPlanes.Base = sketch
     sketch.ViewObject.Visibility = False
 
@@ -269,6 +259,80 @@ class _SlopedPlanes(_Py):
 
         # procedees face by face and stores them into the Proxy
 
+        pyFaceListNew =\
+            self.processFaces(slopedPlanes, faceList, onChanged,
+                              coordinatesOuterOrdered, geomOuterOrdered)
+
+        if onChanged:
+            # print('AAA')
+            self.Pyth = pyFaceListNew
+        else:
+            # print('BBB')
+            pyFaceListNew = self.Pyth
+
+        self.OnChanged = True
+
+        # elaborates a list of planes for every face
+
+        # print('pyFaceListNew ', pyFaceListNew)
+
+        figList =\
+            self.listPlanes(slopedPlanes, pyFaceListNew, faceList, placement)
+
+        endShape = Part.makeShell(figList)
+
+        if slopedPlanes.Group:
+            for obj in slopedPlanes.Group:
+                if hasattr(obj, "Proxy"):
+                    if obj.Proxy.Type == "SlopedPlanes":
+                        childShape = obj.Shape.copy()
+
+                        common = endShape.common([childShape], tolerance)
+
+                        if common.Area:
+
+                            endShape = endShape.cut([common], tolerance)
+                            childShape = childShape.cut([common], tolerance)
+
+                        shell = Part.Shell(endShape.Faces + childShape.Faces)
+                        shell = shell.removeSplitter()
+                        endShape = shell
+
+        if not slopedPlanes.Complement:
+            endShape.complement()
+
+        if slopedPlanes.Thickness:
+
+            thicknessDirection = slopedPlanes.ThicknessDirection
+            value = slopedPlanes.Thickness.Value
+
+            if thicknessDirection == 'Vertical':
+
+                normal = self.faceNormal(faceList[0])
+                if slopedPlanes.Reverse:
+                    normal = normal * -1
+                endShape = endShape.extrude(value * normal)
+
+            elif thicknessDirection == 'Horizontal':
+
+                pass
+
+            elif thicknessDirection == 'Normal':
+
+                pass
+
+        if slopedPlanes.Solid:
+            endShape = Part.makeSolid(endShape)
+
+        # endShape.removeInternalWires(True)
+
+        slopedPlanes.Shape = endShape
+
+    def processFaces(self, slopedPlanes, faceList, onChanged,
+                     coordinatesOuterOrdered, geomOuterOrdered):
+
+        ''''''
+
         pyFaceListOld = self.Pyth
         pyFaceListNew = []
         numFace = -1
@@ -282,12 +346,6 @@ class _SlopedPlanes(_Py):
                 # print('AA')
 
                 slope = slopedPlanes.Slope.Value
-
-                '''slopeList = self.slopeList
-                if slopeList:
-                    mono = False
-                else:
-                    mono = True'''
 
                 try:
                     slopeList = self.slopeList
@@ -491,71 +549,7 @@ class _SlopedPlanes(_Py):
 
             pyFace.faceManager()
 
-        if onChanged:
-            # print('AAA')
-            self.Pyth = pyFaceListNew
-        else:
-            # print('BBB')
-            pyFaceListNew = self.Pyth
-
-        self.OnChanged = True
-
-        # elaborates a list of planes for every face
-
-        # print('pyFaceListNew ', pyFaceListNew)
-
-        figList =\
-            self.listPlanes(slopedPlanes, pyFaceListNew, faceList, placement)
-
-        endShape = Part.makeShell(figList)
-
-        if slopedPlanes.Group:
-            for obj in slopedPlanes.Group:
-                if hasattr(obj, "Proxy"):
-                    if obj.Proxy.Type == "SlopedPlanes":
-                        childShape = obj.Shape.copy()
-
-                        common = endShape.common([childShape], tolerance)
-
-                        if common.Area:
-
-                            endShape = endShape.cut([common], tolerance)
-                            childShape = childShape.cut([common], tolerance)
-
-                        shell = Part.Shell(endShape.Faces + childShape.Faces)
-                        shell = shell.removeSplitter()
-                        endShape = shell
-
-        if not slopedPlanes.Complement:
-            endShape.complement()
-
-        if slopedPlanes.Thickness:
-
-            thicknessDirection = slopedPlanes.ThicknessDirection
-            value = slopedPlanes.Thickness.Value
-            #center = faceList[0].CenterOfMass
-
-            if thicknessDirection == 'Vertical':
-
-                normal = self.faceNormal(faceList[0])
-                if slopedPlanes.Reverse:
-                    normal = normal * -1
-                endShape = endShape.extrude(value * normal)
-
-            elif thicknessDirection == 'Horizontal':
-
-                pass
-
-            elif thicknessDirection == 'Normal':
-
-                pass
-
-        if slopedPlanes.Solid:
-            endShape = Part.makeSolid(endShape)
-
-        # endShape.removeInternalWires(True)
-
-        slopedPlanes.Shape = endShape
+        return pyFaceListNew
 
     def listPlanes(self, slopedPlanes, pyFaceListNew, faceList, placement):
 
