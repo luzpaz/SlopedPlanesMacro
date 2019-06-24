@@ -60,10 +60,10 @@ def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
     slopedPlanes =\
         FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "SlopedPlanes")
 
-    _SlopedPlanes(slopedPlanes)
+    _SlopedPlanes(slopedPlanes, slope, slopeList)
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
 
-    if slope:
+    '''if slope:
         try:
             ang = float(slope)
             slopedPlanes.Slope = ang
@@ -71,7 +71,7 @@ def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
             pass
 
     if slopeList:
-        slopedPlanes.Proxy.slopeList = slopeList
+        slopedPlanes.Proxy.slopeList = slopeList'''
 
     slopedPlanes.Base = sketch
     sketch.ViewObject.Visibility = False
@@ -196,7 +196,13 @@ class _SlopedPlanes(_Py):
 
         self.State = True
 
-        slopedPlanes.Slope = slope
+        try:
+            ang = float(slope)
+        except ValueError:
+            ang = 45.0
+
+        slopedPlanes.Slope = ang
+
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
         slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)
@@ -214,7 +220,9 @@ class _SlopedPlanes(_Py):
         self.Pyth = []
         self.faceList = []
         self.slopeList = slopeList
+
         self.Type = "SlopedPlanes"
+
         self.Serialize = True
         self.OnChanged = True
 
