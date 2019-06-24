@@ -313,13 +313,15 @@ class _SlopedPlanes(_Py):
                     normal = normal * -1
                 endShape = endShape.extrude(value * normal)
 
-            elif thicknessDirection == 'Horizontal':
+            else:
 
-                pass
+                if thicknessDirection == 'Horizontal':
 
-            elif thicknessDirection == 'Normal':
+                    pass
 
-                pass
+                elif thicknessDirection == 'Normal':
+
+                    pass
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
