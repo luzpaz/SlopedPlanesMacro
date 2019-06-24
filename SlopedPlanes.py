@@ -256,6 +256,7 @@ class _SlopedPlanes(_Py):
             # print('B')
 
             faceList = self.faceList
+            coordinatesOuterOrdered, geomOuterOrdered = [], []
 
         # procedees face by face and stores them into the Proxy
 
@@ -314,6 +315,30 @@ class _SlopedPlanes(_Py):
                 endShape = endShape.extrude(value * normal)
 
             else:
+
+                face = Part.Compound(faceList)
+                print(face.Area)
+                bigFace = face.makeOffset2D(value, join=1)
+                print(bigFace.Area)
+
+                coordOutOrd, geomOutOrd, fList =\
+                    self.gatherExteriorWires(bigFace.Faces)
+
+                onChanged = True
+
+                pyFLNew =\
+                    self.processFaces(slopedPlanes, fList, onChanged,
+                                      coordOutOrd, geomOutOrd)
+
+                figList =\
+                    self.listPlanes(slopedPlanes, pyFLNew, fList, placement)
+
+                secondShape = Part.makeShell(figList)
+                secondShape = secondShape.removeSplitter()
+
+                print(secondShape.isNull())
+
+                endShape = Part.Compound([endShape, secondShape])
 
                 if thicknessDirection == 'Horizontal':
 
