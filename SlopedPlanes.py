@@ -283,18 +283,18 @@ class _SlopedPlanes(_Py):
 
                 slope = slopedPlanes.Slope.Value
 
-                slopeList = self.slopeList
+                '''slopeList = self.slopeList
                 if slopeList:
                     mono = False
                 else:
-                    mono = True
+                    mono = True'''
 
-                '''try:
+                try:
                     slopeList = self.slopeList
                     mono = False
                 except AttributeError:
                     mono = True
-                    slopeList = []'''
+                    slopeList = []
 
                 # elaborates complementary python objects of a face
 
