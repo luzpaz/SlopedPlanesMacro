@@ -331,7 +331,7 @@ class _SlopedPlanes(_Py):
                 coordOutOrd, geomOutOrd, fList =\
                     self.gatherExteriorWires(bigFace.Faces)
 
-                onChanged = False  #
+                onChanged = True
 
                 pyFLNew =\
                     self.processFaces(slopedPlanes, fList, onChanged,
