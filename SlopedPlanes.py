@@ -22,7 +22,7 @@
 # *****************************************************************************
 
 
-from math import radians, sin
+from math import radians, sin, cos
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
@@ -35,6 +35,7 @@ if FreeCAD.GuiUp:
     import FreeCADGui
     from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 
+V = FreeCAD.Vector
 
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
@@ -60,18 +61,8 @@ def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
     slopedPlanes =\
         FreeCAD.ActiveDocument.addObject("Part::FeaturePython", "SlopedPlanes")
 
-    _SlopedPlanes(slopedPlanes, slope)
+    _SlopedPlanes(slopedPlanes, slope, slopeList)
     _ViewProvider_SlopedPlanes(slopedPlanes.ViewObject)
-
-    if slope:
-        try:
-            ang = float(slope)
-            slopedPlanes.Slope = ang
-        except ValueError:
-            pass
-
-    if slopeList:
-        slopedPlanes.Proxy.slopeList = slopeList
 
     slopedPlanes.Base = sketch
     sketch.ViewObject.Visibility = False
@@ -85,7 +76,7 @@ class _SlopedPlanes(_Py):
     Requieres a sketch or DWire as base. The base must support the FaceMaker.
     The angles numeration corresponds to the SlopedPlanes shape faces.'''
 
-    def __init__(self, slopedPlanes, slope=45.0):
+    def __init__(self, slopedPlanes, slope=45.0, slopeList=[]):
 
         '''__init__(self, slopedPlanes)
         Initializes the properties of the SlopedPlanes object and its Proxy.
@@ -97,9 +88,10 @@ class _SlopedPlanes(_Py):
             OnChanged: faster execute from property and task panels (~7%)
             Serialize: Slower loading file (~15%) and faster execute (~7%)
 
-        - two lists:
+        - three lists:
             Pyth: the complementary python objects
-            faceList: faces produced by the FaceMaker over the base'''
+            faceList: faces produced by the FaceMaker over the base
+            slopeList: list of angles'''
 
         doc = "The sketch or Dwire in which the SlopedPlanes is based"
 
@@ -131,17 +123,17 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyBool", "Down",
                                  "SlopedPlanesPart", doc)
 
-        doc = "Gives a plane on top of the SlopedPlanes."
+        doc = "Gives a plane on top of the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanesPart", doc)
 
-        doc = "Gives a thickness to the SlopedPlanes."
+        doc = "Gives a thickness to the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = "Thickness direction. Not available yet."
+        doc = "Thickness direction"
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
                                  "SlopedPlanes", doc)
@@ -195,7 +187,13 @@ class _SlopedPlanes(_Py):
 
         self.State = True
 
-        slopedPlanes.Slope = slope
+        try:
+            ang = float(slope)
+        except ValueError:
+            ang = 45.0
+
+        slopedPlanes.Slope = ang
+
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
         slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)
@@ -212,7 +210,10 @@ class _SlopedPlanes(_Py):
 
         self.Pyth = []
         self.faceList = []
+        self.slopeList = slopeList
+
         self.Type = "SlopedPlanes"
+
         self.Serialize = True
         self.OnChanged = True
 
@@ -228,16 +229,9 @@ class _SlopedPlanes(_Py):
         placement = sketch.Placement
         shape.Placement = FreeCAD.Placement()
 
-        _Py.slopedPlanes = slopedPlanes
-        tolerance = slopedPlanes.Tolerance
-        _Py.tolerance = tolerance
-        precision = 1 / tolerance - 1
-        precision = str(precision)
-        precision = precision[:].find('.')
-        _Py.precision = precision
-        _Py.reverse = slopedPlanes.Reverse
-        _Py.upList = []
+        self.declareSlopedPlanes(slopedPlanes)
 
+        tolerance = slopedPlanes.Tolerance
         faceMaker = slopedPlanes.FaceMaker
 
         onChanged = self.OnChanged
@@ -253,28 +247,8 @@ class _SlopedPlanes(_Py):
 
             # gathers the exterior wires. Lower Left criteria
 
-            coordinatesOuter, geomOuter = [], []
-            for face in fList:
-                outerWire = face.OuterWire
-                falseFace = Part.makeFace(outerWire, "Part::FaceMakerSimple")
-                coordinates, geometryList = self.faceDatas(falseFace)
-                coordinates.extend(coordinates[0:2])
-                coordinatesOuter.append(coordinates)
-                geomOuter.append(geometryList)
-
-            lowerLeft = [cc[0] for cc in coordinatesOuter]
-            faceList = []
-            coordinatesOuterOrdered, geomOuterOrdered = [], []
-            while lowerLeft:
-                index = self.lowerLeftPoint(lowerLeft)
-                lowerLeft.pop(index)
-                pop = coordinatesOuter.pop(index)
-                coordinatesOuterOrdered.append(pop)
-                pop = fList.pop(index)
-                faceList.append(pop)
-                pop = geomOuter.pop(index)
-                geomOuterOrdered.append(pop)
-
+            coordinatesOuterOrdered, geomOuterOrdered, faceList =\
+                self.gatherExteriorWires(fList)
             # print('outer geom ', geomOuterOrdered)
 
             self.faceList = faceList
@@ -283,8 +257,118 @@ class _SlopedPlanes(_Py):
             # print('B')
 
             faceList = self.faceList
+            coordinatesOuterOrdered, geomOuterOrdered = [], []
 
         # procedees face by face and stores them into the Proxy
+
+        pyFaceListNew =\
+            self.processFaces(slopedPlanes, faceList, onChanged,
+                              coordinatesOuterOrdered, geomOuterOrdered)
+
+        if onChanged:
+            # print('AAA')
+            self.Pyth = pyFaceListNew
+        else:
+            # print('BBB')
+            pyFaceListNew = self.Pyth
+
+        self.OnChanged = True
+
+        # elaborates a list of planes for every face
+
+        # print('pyFaceListNew ', pyFaceListNew)
+
+        figList =\
+            self.listPlanes(slopedPlanes, pyFaceListNew, faceList, placement)
+
+        endShape = Part.makeShell(figList)
+
+        if slopedPlanes.Group:
+            for obj in slopedPlanes.Group:
+                if hasattr(obj, "Proxy"):
+                    if obj.Proxy.Type == "SlopedPlanes":
+                        childShape = obj.Shape.copy()
+
+                        common = endShape.common([childShape], tolerance)
+
+                        if common.Area:
+
+                            endShape = endShape.cut([common], tolerance)
+                            childShape = childShape.cut([common], tolerance)
+
+                        shell = Part.Shell(endShape.Faces + childShape.Faces)
+                        shell = shell.removeSplitter()
+                        endShape = shell
+
+        if not slopedPlanes.Complement:
+            endShape.complement()
+
+        if slopedPlanes.Thickness:
+
+            thicknessDirection = slopedPlanes.ThicknessDirection
+            value = slopedPlanes.Thickness.Value
+
+            if thicknessDirection == 'Vertical':
+
+                normal = self.faceNormal(faceList[0])
+                if slopedPlanes.Reverse:
+                    normal = normal * -1
+                endShape = endShape.extrude(value * normal)
+
+            else:
+
+                face = Part.Compound(faceList)
+
+                if thicknessDirection == 'Normal':
+
+                    ang = slopedPlanes.Slope.Value
+                    height = value * sin(radians(ang))
+                    value = value * cos(radians(ang))
+                    # print(ang, height, value)
+
+                bigFace = face.makeOffset2D(value, join=1)
+
+                coordOutOrd, geomOutOrd, fList =\
+                    self.gatherExteriorWires(bigFace.Faces)
+
+                onChanged = True
+
+                pyFLNew =\
+                    self.processFaces(slopedPlanes, fList, onChanged,
+                                      coordOutOrd, geomOutOrd)
+
+                figList =\
+                    self.listPlanes(slopedPlanes, pyFLNew, fList, placement)
+
+                secondShape = Part.makeShell(figList)
+                secondShape = secondShape.removeSplitter()
+
+                if thicknessDirection == 'Normal':
+
+                    secondShape.translate(V(0, 0, height))
+
+                    bigFace.translate(V(0, 0, height))
+
+                outer = face.Wires[0]
+                bigOuter = bigFace.Wires[0]
+                base =\
+                    Part.makeLoft([outer, bigOuter])
+
+                shell =\
+                    Part.Shell(endShape.Faces + secondShape.Faces + base.Faces)
+                endShape = shell
+
+        if slopedPlanes.Solid:
+            endShape = Part.makeSolid(endShape)
+
+        # endShape.removeInternalWires(True)
+
+        slopedPlanes.Shape = endShape
+
+    def processFaces(self, slopedPlanes, faceList, onChanged,
+                     coordinatesOuterOrdered, geomOuterOrdered):
+
+        ''''''
 
         pyFaceListOld = self.Pyth
         pyFaceListNew = []
@@ -299,12 +383,19 @@ class _SlopedPlanes(_Py):
                 # print('AA')
 
                 slope = slopedPlanes.Slope.Value
+
                 try:
                     slopeList = self.slopeList
                     mono = False
+                    # print('A')
                 except AttributeError:
+                    # print('B')
                     mono = True
                     slopeList = []
+
+                # print('slopeList ', slopeList)
+
+                slopeListCopy = slopeList[:]
 
                 # elaborates complementary python objects of a face
 
@@ -328,26 +419,8 @@ class _SlopedPlanes(_Py):
 
                 wList = face.Wires[1:]
 
-                coordinatesInner, geomInner = [], []
-                for wire in wList:
-                    falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
-                    coord, geomList = self.faceDatas(falseFace)
-                    coord.extend(coord[0:2])
-                    coordinatesInner.append(coord)
-                    geomInner.append(geomList)
-
-                upperLeft = [cc[0] for cc in coordinatesInner]
-                wireList = []
-                coordinatesInnerOrdered, geomInnerOrdered = [], []
-                while upperLeft:
-                    index = self.upperLeftPoint(upperLeft)
-                    upperLeft.pop(index)
-                    pop = coordinatesInner.pop(index)
-                    coordinatesInnerOrdered.append(pop)
-                    pop = wList.pop(index)
-                    wireList.append(pop)
-                    pop = geomInner.pop(index)
-                    geomInnerOrdered.append(pop)
+                coordinatesInnerOrdered, geomInnerOrdered, wireList =\
+                    self.gatherInteriorWires(wList)
 
                 # print('inner geom ', geomInnerOrdered)
 
@@ -401,7 +474,7 @@ class _SlopedPlanes(_Py):
                         # print('### numGeom ', numGeom)
 
                         try:
-                            ang = slopeList.pop(0)
+                            ang = slopeListCopy.pop(0)
                             try:
                                 ang = float(ang)
                             except ValueError:
@@ -519,18 +592,11 @@ class _SlopedPlanes(_Py):
 
             pyFace.faceManager()
 
-        if onChanged:
-            # print('AAA')
-            self.Pyth = pyFaceListNew
-        else:
-            # print('BBB')
-            pyFaceListNew = self.Pyth
+        return pyFaceListNew
 
-        self.OnChanged = True
+    def listPlanes(self, slopedPlanes, pyFaceListNew, faceList, placement):
 
-        # elaborates a list of planes for every face
-
-        # print('pyFaceListNew ', pyFaceListNew)
+        ''''''
 
         figList = []
         for pyFace in pyFaceListNew:
@@ -596,6 +662,7 @@ class _SlopedPlanes(_Py):
 
             if slopedPlanes.Up:
                 # print('Up')
+                faceMaker = slopedPlanes.FaceMaker
                 upFace = Part.makeFace(wireList, faceMaker)
 
                 planeFaceList.append(upFace)
@@ -618,55 +685,7 @@ class _SlopedPlanes(_Py):
 
             figList.extend(planeFaceList)
 
-        endShape = Part.makeShell(figList)
-
-        if slopedPlanes.Group:
-            for obj in slopedPlanes.Group:
-                if hasattr(obj, "Proxy"):
-                    if obj.Proxy.Type == "SlopedPlanes":
-                        childShape = obj.Shape.copy()
-
-                        common = endShape.common([childShape], tolerance)
-
-                        if common.Area:
-
-                            endShape = endShape.cut([common], tolerance)
-                            childShape = childShape.cut([common], tolerance)
-
-                        shell = Part.Shell(endShape.Faces + childShape.Faces)
-                        shell = shell.removeSplitter()
-                        endShape = shell
-
-        if not slopedPlanes.Complement:
-            endShape.complement()
-
-        if slopedPlanes.Thickness:
-
-            thicknessDirection = slopedPlanes.ThicknessDirection
-            value = slopedPlanes.Thickness.Value
-            #center = faceList[0].CenterOfMass
-
-            if thicknessDirection == 'Vertical':
-
-                normal = self.faceNormal(faceList[0])
-                if slopedPlanes.Reverse:
-                    normal = normal * -1
-                endShape = endShape.extrude(value * normal)
-
-            elif thicknessDirection == 'Horizontal':
-
-                pass
-
-            elif thicknessDirection == 'Normal':
-
-                pass
-
-        if slopedPlanes.Solid:
-            endShape = Part.makeSolid(endShape)
-
-        endShape.removeInternalWires(True)
-
-        slopedPlanes.Shape = endShape
+        return figList
 
     def onChanged(self, slopedPlanes, prop):
 
@@ -684,6 +703,7 @@ class _SlopedPlanes(_Py):
             value = slope.Value
             prop = "angle"
             self.overWritePyProp(prop, value)
+            self.slopeList = []
 
         elif prop == "FactorLength":
 
@@ -758,7 +778,6 @@ class _SlopedPlanes(_Py):
                         if isinstance(angle, list):
                             angle = pyFace.selectPlane(angle[0], angle[1],
                                                        pyFace).angle
-
 
                         factorOverhang = sin(radians(angle))
                         length = newValue / factorOverhang
