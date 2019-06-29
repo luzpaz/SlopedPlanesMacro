@@ -22,7 +22,7 @@
 # *****************************************************************************
 
 
-from math import radians, sin
+from math import radians, sin, cos
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
@@ -35,6 +35,7 @@ if FreeCAD.GuiUp:
     import FreeCADGui
     from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 
+V = FreeCAD.Vector
 
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
@@ -318,15 +319,19 @@ class _SlopedPlanes(_Py):
 
                 face = Part.Compound(faceList)
 
-                bigFace = face.makeOffset2D(value, join=1)
+                if thicknessDirection == 'Normal':
 
-                base = bigFace.copy().cut([face], tolerance)
-                # base = Part.makeShell(base.Faces)
+                    ang = slopedPlanes.Slope.Value
+                    height = value * sin(radians(ang))
+                    value = value * cos(radians(ang))
+                    # print(ang, height, value)
+
+                bigFace = face.makeOffset2D(value, join=1)
 
                 coordOutOrd, geomOutOrd, fList =\
                     self.gatherExteriorWires(bigFace.Faces)
 
-                onChanged = True
+                onChanged = True  #
 
                 pyFLNew =\
                     self.processFaces(slopedPlanes, fList, onChanged,
@@ -338,19 +343,20 @@ class _SlopedPlanes(_Py):
                 secondShape = Part.makeShell(figList)
                 secondShape = secondShape.removeSplitter()
 
-                shell = Part.Shell(endShape.Faces + secondShape.Faces + base.Faces)
+                if thicknessDirection == 'Normal':
 
+                    secondShape.translate(V(0, 0, height))
+
+                    bigFace.translate(V(0, 0, height))
+
+                outer = face.Wires[0]
+                bigOuter = bigFace.Wires[0]
+                base =\
+                    Part.makeLoft([outer, bigOuter])
+
+                shell =\
+                    Part.Shell(endShape.Faces + secondShape.Faces + base.Faces)
                 endShape = shell
-
-                # endShape = Part.Compound([endShape, secondShape, base])
-
-                if thicknessDirection == 'Horizontal':
-
-                    pass
-
-                elif thicknessDirection == 'Normal':
-
-                    pass
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
