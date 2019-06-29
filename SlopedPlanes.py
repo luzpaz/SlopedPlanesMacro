@@ -317,11 +317,11 @@ class _SlopedPlanes(_Py):
             else:
 
                 face = Part.Compound(faceList)
-                # print(face.Area)
+
                 bigFace = face.makeOffset2D(value, join=1)
-                # print(bigFace.Area)
 
                 base = bigFace.copy().cut([face], tolerance)
+                # base = Part.makeShell(base.Faces)
 
                 coordOutOrd, geomOutOrd, fList =\
                     self.gatherExteriorWires(bigFace.Faces)
@@ -338,10 +338,11 @@ class _SlopedPlanes(_Py):
                 secondShape = Part.makeShell(figList)
                 secondShape = secondShape.removeSplitter()
 
-                # print(secondShape.isNull())
+                shell = Part.Shell(endShape.Faces + secondShape.Faces + base.Faces)
 
-                endShape = Part.Compound([endShape, secondShape, base])
-                # endShape = Part.Shell([endShape, secondShape, base])
+                endShape = shell
+
+                # endShape = Part.Compound([endShape, secondShape, base])
 
                 if thicknessDirection == 'Horizontal':
 
