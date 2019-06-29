@@ -387,9 +387,15 @@ class _SlopedPlanes(_Py):
                 try:
                     slopeList = self.slopeList
                     mono = False
+                    # print('A')
                 except AttributeError:
+                    # print('B')
                     mono = True
                     slopeList = []
+
+                # print('slopeList ', slopeList)
+
+                slopeListCopy = slopeList[:]
 
                 # elaborates complementary python objects of a face
 
@@ -468,7 +474,7 @@ class _SlopedPlanes(_Py):
                         # print('### numGeom ', numGeom)
 
                         try:
-                            ang = slopeList.pop(0)
+                            ang = slopeListCopy.pop(0)
                             try:
                                 ang = float(ang)
                             except ValueError:
@@ -697,6 +703,7 @@ class _SlopedPlanes(_Py):
             value = slope.Value
             prop = "angle"
             self.overWritePyProp(prop, value)
+            self.slopeList = []
 
         elif prop == "FactorLength":
 

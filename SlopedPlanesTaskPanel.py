@@ -493,6 +493,8 @@ class _TaskPanel_SlopedPlanes():
         pyFaceList = slopedPlanes.Proxy.Pyth
         numSlope = 0
 
+        slopeList = []
+
         for pyFace in pyFaceList:
             originList = []
             # print('### numFace', pyFace.numFace)
@@ -555,30 +557,36 @@ class _TaskPanel_SlopedPlanes():
                             doubleSpinBox = tree.itemWidget(it, 3)
                             length = doubleSpinBox.value()
                             suffix = doubleSpinBox.suffix()
-                            length = FreeCAD.Units.Quantity(str(length) + suffix)
+                            length =\
+                                FreeCAD.Units.Quantity(str(length) + suffix)
                             pyPlane.length = length.Value
 
                             doubleSpinBox = tree.itemWidget(it, 6)
                             overhang = doubleSpinBox.value()
                             suffix = doubleSpinBox.suffix()
-                            overhang = FreeCAD.Units.Quantity(str(overhang) + suffix)
+                            overhang =\
+                                FreeCAD.Units.Quantity(str(overhang) + suffix)
                             pyPlane.overhang = overhang.Value
 
                             doubleSpinBox = tree.itemWidget(it, 9)
                             left = doubleSpinBox.value()
                             suffix = doubleSpinBox.suffix()
-                            left = FreeCAD.Units.Quantity(str(left) + suffix)
+                            left =\
+                                FreeCAD.Units.Quantity(str(left) + suffix)
                             pyPlane.leftWidth = left.Value
 
                             doubleSpinBox = tree.itemWidget(it, 10)
                             right = doubleSpinBox.value()
                             suffix = doubleSpinBox.suffix()
-                            right = FreeCAD.Units.Quantity(str(right) + suffix)
+                            right =\
+                                FreeCAD.Units.Quantity(str(right) + suffix)
                             pyPlane.rightWidth = right.Value
 
                             comboBox = tree.itemWidget(it, 12)
                             sweepCurve = comboBox.currentText()
                             pyPlane.sweepCurve = sweepCurve
+
+                    slopeList.append(pyPlane.angle)
 
                 # print(pyWire.mono)
 
@@ -588,6 +596,8 @@ class _TaskPanel_SlopedPlanes():
 
             if down:
                 numSlope += 1
+
+        slopedPlanes.Proxy.slopeList = slopeList
 
         slopedPlanes.Proxy.OnChanged = False
 
