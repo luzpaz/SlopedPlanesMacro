@@ -123,17 +123,17 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyBool", "Down",
                                  "SlopedPlanesPart", doc)
 
-        doc = "Gives a plane on top of the SlopedPlanes."
+        doc = "Gives a plane on top of the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanesPart", doc)
 
-        doc = "Gives a thickness to the SlopedPlanes."
+        doc = "Gives a thickness to the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = "Thickness direction. Not available yet."
+        doc = "Thickness direction"
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
                                  "SlopedPlanes", doc)
@@ -331,7 +331,7 @@ class _SlopedPlanes(_Py):
                 coordOutOrd, geomOutOrd, fList =\
                     self.gatherExteriorWires(bigFace.Faces)
 
-                onChanged = True  #
+                onChanged = False  #
 
                 pyFLNew =\
                     self.processFaces(slopedPlanes, fList, onChanged,
