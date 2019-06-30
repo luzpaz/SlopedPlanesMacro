@@ -326,9 +326,9 @@ class _SlopedPlanes(_Py):
                     value = value * cos(radians(ang))
                     # print(ang, height, value)
 
-                    bigFace =\
-                        face.makeOffset2D(offset=value, join=2, fill=False,
-                                          openResult=False, intersection=True)
+                bigFace =\
+                    face.makeOffset2D(offset=value, join=2, fill=False,
+                                      openResult=False, intersection=True)
 
                 coordOutOrd, geomOutOrd, fList =\
                     self.gatherExteriorWires(bigFace.Faces)
