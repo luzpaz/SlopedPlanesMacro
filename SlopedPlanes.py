@@ -98,35 +98,10 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "Base", doc)
 
-        doc = "Computes de complement of the orientation of the SlopedPlanes"
-
-        slopedPlanes.addProperty("App::PropertyBool", "Complement",
-                                 "SlopedPlanesPart", doc)
-
         doc = "Reverses the angles of the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyBool", "Reverse",
-                                 "SlopedPlanesPart", doc)
-
-        doc = "Mirrors the SlopedPlanes with respect its base"
-
-        slopedPlanes.addProperty("App::PropertyBool", "Mirror",
-                                 "SlopedPlanesPart", doc)
-
-        doc = "Creates a solid out of the SlopedPlanes shells"
-
-        slopedPlanes.addProperty("App::PropertyBool", "Solid",
-                                 "SlopedPlanesPart", doc)
-
-        doc = "Gives a plane on SlopedPlanes base"
-
-        slopedPlanes.addProperty("App::PropertyBool", "Down",
-                                 "SlopedPlanesPart", doc)
-
-        doc = "Gives a plane on top of the SlopedPlanes"
-
-        slopedPlanes.addProperty("App::PropertyLength", "Up",
-                                 "SlopedPlanesPart", doc)
+                                 "SlopedPlanes", doc)
 
         doc = "Gives a thickness to the SlopedPlanes"
 
@@ -168,6 +143,38 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyFloat", "FactorWidth",
                                  "SlopedPlanes", doc)
 
+        doc = "Available curves to sweep"
+
+        slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
+                                 "SlopedPlanes", doc)
+
+        slopedPlanes.addExtension("App::GroupExtensionPython", self)
+
+        doc = "Computes de complement of the orientation of the SlopedPlanes"
+
+        slopedPlanes.addProperty("App::PropertyBool", "Complement",
+                                 "SlopedPlanesPart", doc)
+
+        doc = "Mirrors the SlopedPlanes with respect its base"
+
+        slopedPlanes.addProperty("App::PropertyBool", "Mirror",
+                                 "SlopedPlanesPart", doc)
+
+        doc = "Creates a solid out of the SlopedPlanes shells"
+
+        slopedPlanes.addProperty("App::PropertyBool", "Solid",
+                                 "SlopedPlanesPart", doc)
+
+        doc = "Gives a plane on SlopedPlanes base"
+
+        slopedPlanes.addProperty("App::PropertyBool", "Down",
+                                 "SlopedPlanesPart", doc)
+
+        doc = "Gives a plane on top of the SlopedPlanes"
+
+        slopedPlanes.addProperty("App::PropertyLength", "Up",
+                                 "SlopedPlanesPart", doc)
+
         doc = "Tolerance"
 
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
@@ -177,13 +184,6 @@ class _SlopedPlanes(_Py):
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanesPart", doc)
-
-        doc = "Available curves to sweep"
-
-        slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
-                                 "SlopedPlanes", doc)
-
-        slopedPlanes.addExtension("App::GroupExtensionPython", self)
 
         self.State = True
 
