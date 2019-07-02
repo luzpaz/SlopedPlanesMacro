@@ -355,6 +355,7 @@ class _SlopedPlanes(_Py):
                 bigOuter = bigFace.Wires[0]
                 base =\
                     Part.makeLoft([outer, bigOuter])
+                # hay que hacerlo también para los alambres interiores
 
                 shell =\
                     Part.Shell(endShape.Faces + secondShape.Faces + base.Faces)
