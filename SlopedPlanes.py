@@ -204,7 +204,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.ThicknessDirection = ["Vertical",
                                            "Horizontal",
                                            "Normal"]
-        slopedPlanes.Tolerance = (1e-7, 1e-7, 1, 1e-7)
+        slopedPlanes.Tolerance = (1e-5, 1e-7, 1, 1e-7)
 
         slopedPlanes.Proxy = self
 

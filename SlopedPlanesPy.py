@@ -48,8 +48,8 @@ class _Py(object):
     face = None
     pyFace = None
     upList = []
-    tolerance = 1e-7
-    precision = 7
+    tolerance = 1e-5
+    precision = 6
     reverse = False
 
     def declareSlopedPlanes(self, slopedPlanes):
@@ -64,7 +64,7 @@ class _Py(object):
 
         precision = 1 / tolerance
         precision = str(precision)
-        precision = precision[:].find('.') - 1
+        precision = precision[:].find('.') + 1
         # print('precision ', precision)
         _Py.precision = precision
 
