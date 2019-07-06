@@ -175,7 +175,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanesPart", doc)
 
-        doc = "Tolerance"
+        doc = "Tolerance value applied in boolean operation (Fuzzy)"
 
         slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
                                  "SlopedPlanesPart", doc)
