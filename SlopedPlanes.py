@@ -22,6 +22,7 @@
 # *****************************************************************************
 
 
+from multiprocessing import Pool
 from math import radians, sin, cos
 import FreeCAD
 import Part
