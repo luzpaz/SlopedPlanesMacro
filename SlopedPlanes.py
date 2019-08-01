@@ -22,7 +22,7 @@
 # *****************************************************************************
 
 
-from multiprocessing import Pool
+import asyncio
 from math import radians, sin, cos
 import FreeCAD
 import Part
