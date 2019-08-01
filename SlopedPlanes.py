@@ -357,6 +357,7 @@ class _SlopedPlanes(_Py):
                 base =\
                     Part.makeLoft([outer, bigOuter])
                 # hay que hacerlo también para los alambres interiores
+                # si hay overhang hay que desplazarlo para cerrar malla
 
                 shell =\
                     Part.Shell(endShape.Faces + secondShape.Faces + base.Faces)
