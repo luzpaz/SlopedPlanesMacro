@@ -275,11 +275,11 @@ class _SlopedPlanes(_Py):
             self.reProcessFaces(slopedPlanes, faceList)
             pyFaceListNew = self.Pyth
 
+        # print('pyFaceListNew ', pyFaceListNew)
+
         self.OnChanged = True
 
         # elaborates a list of planes for every face
-
-        # print('pyFaceListNew ', pyFaceListNew)
 
         figList =\
             self.listPlanes(slopedPlanes, pyFaceListNew, faceList, placement)
@@ -287,83 +287,13 @@ class _SlopedPlanes(_Py):
         endShape = Part.makeShell(figList)
 
         if slopedPlanes.Group:
-            for obj in slopedPlanes.Group:
-                if hasattr(obj, "Proxy"):
-                    if obj.Proxy.Type == "SlopedPlanes":
-                        childShape = obj.Shape.copy()
-
-                        common = endShape.common([childShape], tolerance)
-
-                        if common.Area:
-
-                            endShape = endShape.cut([common], tolerance)
-                            childShape = childShape.cut([common], tolerance)
-
-                        shell = Part.Shell(endShape.Faces + childShape.Faces)
-                        shell = shell.removeSplitter()
-                        endShape = shell
+            endShape = self.groupping(slopedPlanes, endShape, tolerance)
 
         if not slopedPlanes.Complement:
             endShape.complement()
 
         if slopedPlanes.Thickness:
-
-            thicknessDirection = slopedPlanes.ThicknessDirection
-            value = slopedPlanes.Thickness.Value
-
-            if thicknessDirection == 'Vertical':
-
-                normal = self.faceNormal(faceList[0])
-                if slopedPlanes.Reverse:
-                    normal = normal * -1
-                endShape = endShape.extrude(value * normal)
-
-            else:
-
-                face = Part.Compound(faceList)
-
-                if thicknessDirection == 'Normal':
-
-                    ang = slopedPlanes.Slope.Value
-                    height = value * sin(radians(ang))
-                    value = value * cos(radians(ang))
-                    # print(ang, height, value)
-
-                bigFace =\
-                    face.makeOffset2D(offset=value, join=2, fill=False,
-                                      openResult=False, intersection=True)
-
-                coordOutOrd, geomOutOrd, fList =\
-                    self.gatherExteriorWires(bigFace.Faces)
-
-                onChanged = True
-
-                pyFLNew =\
-                    self.processFaces(slopedPlanes, fList, onChanged,
-                                      coordOutOrd, geomOutOrd)
-
-                figList =\
-                    self.listPlanes(slopedPlanes, pyFLNew, fList, placement)
-
-                secondShape = Part.makeShell(figList)
-                secondShape = secondShape.removeSplitter()
-
-                if thicknessDirection == 'Normal':
-
-                    secondShape.translate(V(0, 0, height))
-
-                    bigFace.translate(V(0, 0, height))
-
-                outer = face.Wires[0]
-                bigOuter = bigFace.Wires[0]
-                base =\
-                    Part.makeLoft([outer, bigOuter])
-                # hay que hacerlo también para los alambres interiores
-                # si hay overhang hay que desplazarlo para cerrar malla
-
-                shell =\
-                    Part.Shell(endShape.Faces + secondShape.Faces + base.Faces)
-                endShape = shell
+            endShape = self.fattening(slopedPlanes, faceList, endShape, placement)
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
@@ -700,6 +630,91 @@ class _SlopedPlanes(_Py):
             figList.extend(planeFaceList)
 
         return figList
+
+    def groupping(self, slopedPlanes, endShape, tolerance):
+
+        ''''''
+
+        for obj in slopedPlanes.Group:
+            if hasattr(obj, "Proxy"):
+                if obj.Proxy.Type == "SlopedPlanes":
+                    childShape = obj.Shape.copy()
+
+                    common = endShape.common([childShape], tolerance)
+
+                    if common.Area:
+
+                        endShape = endShape.cut([common], tolerance)
+                        childShape = childShape.cut([common], tolerance)
+
+                    shell = Part.Shell(endShape.Faces + childShape.Faces)
+                    shell = shell.removeSplitter()
+                    endShape = shell
+
+        return endShape
+
+    def fattening(self, slopedPlanes, faceList, endShape, placement):
+
+        ''''''
+
+        thicknessDirection = slopedPlanes.ThicknessDirection
+        value = slopedPlanes.Thickness.Value
+
+        if thicknessDirection == 'Vertical':
+
+            normal = self.faceNormal(faceList[0])
+            if slopedPlanes.Reverse:
+                normal = normal * -1
+            endShape = endShape.extrude(value * normal)
+
+        else:
+
+            face = Part.Compound(faceList)
+
+            if thicknessDirection == 'Normal':
+
+                ang = slopedPlanes.Slope.Value
+                height = value * sin(radians(ang))
+                value = value * cos(radians(ang))
+                # print(ang, height, value)
+
+            bigFace =\
+                face.makeOffset2D(offset=value, join=2, fill=False,
+                                  openResult=False, intersection=True)
+
+            coordOutOrd, geomOutOrd, fList =\
+                self.gatherExteriorWires(bigFace.Faces)
+
+            onChanged = True
+
+            pyFLNew =\
+                self.processFaces(slopedPlanes, fList, onChanged,
+                                  coordOutOrd, geomOutOrd)
+
+            figList =\
+                self.listPlanes(slopedPlanes, pyFLNew, fList, placement)
+
+            secondShape = Part.makeShell(figList)
+            secondShape = secondShape.removeSplitter()
+
+            if thicknessDirection == 'Normal':
+
+                secondShape.translate(V(0, 0, height))
+
+                bigFace.translate(V(0, 0, height))
+
+            outer = face.Wires[0]
+            bigOuter = bigFace.Wires[0]
+            base =\
+                Part.makeLoft([outer, bigOuter])
+            # hay que hacerlo también para los alambres interiores
+            # si hay overhang hay que desplazarlo para cerrar malla
+
+            shell =\
+                Part.Shell(endShape.Faces + secondShape.Faces + base.Faces)
+            endShape = shell
+
+        return endShape
 
     def onChanged(self, slopedPlanes, prop):
 
