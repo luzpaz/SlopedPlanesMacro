@@ -23,7 +23,7 @@
 
 
 import asyncio
-from math import radians, sin, cos
+from math import radians, sin, cos, tan
 import FreeCAD
 import Part
 from SlopedPlanesPy import _Py
@@ -703,10 +703,11 @@ class _SlopedPlanes(_Py):
             if factorOverhang:
 
                 size = _Py.pyFace.size
+                precision = _Py.precision
 
-                height = factorOverhang * size
-                run = height * cos(radians(ang))
-                # print(ang, height, run)
+                height = round(factorOverhang * size, precision)
+                run = round(height / tan(radians(ang)), precision)
+                print(ang, height, run)
 
                 face =\
                     face.makeOffset2D(offset=run, join=2, fill=False,
@@ -729,9 +730,13 @@ class _SlopedPlanes(_Py):
                 base = Part.makeLoft([ww, WW])
                 baseFaces.extend(base.Faces)
 
-            shell =\
+            print(endShape.Faces, secondShape.Faces, baseFaces)
+
+            '''shell =\
                 Part.Shell(endShape.Faces + secondShape.Faces + baseFaces)
-            endShape = shell
+            endShape = shell'''
+
+            endShape = Part.Compound(endShape.Faces + secondShape.Faces + baseFaces)
 
         return endShape
 
@@ -819,6 +824,7 @@ class _SlopedPlanes(_Py):
                         setattr(pyPlane, "rightWidth", newValue)
 
             elif prop == "overhang":
+                precision = _Py.precision
                 for pyWire in pyFace.wires:
                     for pyPlane in pyWire.planes:
 
@@ -827,7 +833,7 @@ class _SlopedPlanes(_Py):
                             angle = pyFace.selectPlane(angle[0], angle[1],
                                                        pyFace).angle
 
-                        factorOverhang = sin(radians(angle))
+                        factorOverhang = round(sin(radians(angle)), precision)
                         length = newValue / factorOverhang
                         # print(pyPlane.numGeom, angle, length, newValue)
 

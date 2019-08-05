@@ -141,7 +141,7 @@ class _PyFace(_Py):
 
         '''size(self, size)'''
 
-        self._size = size
+        self._size = round(size, _Py.precision)
 
     @property
     def mono(self):
