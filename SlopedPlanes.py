@@ -688,7 +688,7 @@ class _SlopedPlanes(_Py):
             onChanged = True
 
             pyFLNew =\
-                self.processFaces(slopedPlanes, fList, onChanged,
+                self.processFaces(slopedPlanes, fList,
                                   coordOutOrd, geomOutOrd)
 
             figList =\
