@@ -85,7 +85,7 @@ class _SlopedPlanes(_Py):
 
         - four flags
             Type: object recognition
-            State: jumps onChanged at the loading file
+            State: jumps onChanged function at the loading file
             OnChanged: faster execute from property and task panels (~7%)
             Serialize: Slower loading file (~15%) and faster execute (~7%)
 
@@ -216,7 +216,7 @@ class _SlopedPlanes(_Py):
         self.Type = "SlopedPlanes"
 
         self.Serialize = True
-        self.OnChanged = True
+        self.OnChanged = False
 
     def execute(self, slopedPlanes):
 
@@ -238,9 +238,9 @@ class _SlopedPlanes(_Py):
         onChanged = self.OnChanged
         if not self.faceList:
             # print('hasn't faceList')
-            onChanged = True
+            onChanged = False
 
-        if onChanged:
+        if not onChanged:
             # print('A')
 
             face = Part.makeFace(shape.Wires, faceMaker)
@@ -261,7 +261,7 @@ class _SlopedPlanes(_Py):
 
         # procedees face by face and stores them into the Proxy
 
-        if onChanged:
+        if not onChanged:
             # print('AA')
 
             pyFaceListNew =\
@@ -277,7 +277,7 @@ class _SlopedPlanes(_Py):
 
         # print('pyFaceListNew ', pyFaceListNew)
 
-        self.OnChanged = True
+        self.OnChanged = False
 
         # elaborates a list of planes for every face
 
@@ -293,7 +293,8 @@ class _SlopedPlanes(_Py):
             endShape.complement()
 
         if slopedPlanes.Thickness:
-            endShape = self.fattening(slopedPlanes, faceList, endShape, placement)
+            endShape = self.fattening(slopedPlanes, faceList,
+                                      endShape, placement)
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
@@ -685,8 +686,6 @@ class _SlopedPlanes(_Py):
             coordOutOrd, geomOutOrd, fList =\
                 self.gatherExteriorWires(bigFace.Faces)
 
-            onChanged = True
-
             pyFLNew =\
                 self.processFaces(slopedPlanes, fList,
                                   coordOutOrd, geomOutOrd)
@@ -828,7 +827,7 @@ class _SlopedPlanes(_Py):
                     for pyPlane in pyWire.planes:
                         setattr(pyPlane, prop, newValue)
 
-        self.OnChanged = False
+        self.OnChanged = True
 
     def onDocumentRestored(self, slopedPlanes):
 
@@ -929,10 +928,10 @@ class _SlopedPlanes(_Py):
         self.State = True
 
         if serialize:
-            self.OnChanged = False
+            self.OnChanged = True
             # if the geometry change after loading, recompute
         else:
-            self.OnChanged = True
+            self.OnChanged = False
 
         # self.printSerialSummary()  ROTO
 
