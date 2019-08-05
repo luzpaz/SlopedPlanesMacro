@@ -670,11 +670,11 @@ class _SlopedPlanes(_Py):
 
         else:
 
+            ang = slopedPlanes.Slope.Value
             face = Part.Compound(faceList)
 
             if thicknessDirection == 'Normal':
 
-                ang = slopedPlanes.Slope.Value
                 height = value * sin(radians(ang))
                 value = value * cos(radians(ang))
                 # print(ang, height, value)
@@ -694,20 +694,35 @@ class _SlopedPlanes(_Py):
                 self.listPlanes(slopedPlanes, pyFLNew, fList, placement)
 
             secondShape = Part.makeShell(figList)
-            # secondShape = secondShape.removeSplitter()
 
             if thicknessDirection == 'Normal':
 
                 secondShape.translate(V(0, 0, height))
 
-                bigFace.translate(V(0, 0, height))
+            factorOverhang = slopedPlanes.FactorOverhang
+            if factorOverhang:
 
-            # outer = face.Wires[0]
-            # bigOuter = bigFace.Wires[0]
-            # base =\
-                # Part.makeLoft([outer, bigOuter])
-            # hay que hacerlo también para los alambres interiores
-            # si hay overhang hay que desplazarlo para cerrar malla
+                size = _Py.pyFace.size
+
+                height = factorOverhang * size
+                run = height * cos(radians(ang))
+                # print(ang, height, run)
+
+                face =\
+                    face.makeOffset2D(offset=run, join=2, fill=False,
+                                      openResult=False, intersection=True)
+                face.translate(V(0, 0, -1 * height))
+
+                bigFace =\
+                    bigFace.makeOffset2D(offset=run, join=2, fill=False,
+                                         openResult=False, intersection=True)
+                bigFace.translate(V(0, 0, -1 * height))
+
+            else:
+
+                if thicknessDirection == 'Normal':
+
+                    bigFace.translate(V(0, 0, height))
 
             baseFaces = []
             for ww, WW in zip(face.Wires, bigFace.Wires):
