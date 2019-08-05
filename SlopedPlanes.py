@@ -289,12 +289,12 @@ class _SlopedPlanes(_Py):
         if slopedPlanes.Group:
             endShape = self.groupping(slopedPlanes, endShape, tolerance)
 
-        if not slopedPlanes.Complement:
-            endShape.complement()
-
         if slopedPlanes.Thickness:
             endShape = self.fattening(slopedPlanes, faceList,
                                       endShape, placement)
+
+        if not slopedPlanes.Complement:
+            endShape.complement()
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
