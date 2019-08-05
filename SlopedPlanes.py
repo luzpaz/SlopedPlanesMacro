@@ -694,7 +694,7 @@ class _SlopedPlanes(_Py):
                 self.listPlanes(slopedPlanes, pyFLNew, fList, placement)
 
             secondShape = Part.makeShell(figList)
-            secondShape = secondShape.removeSplitter()
+            # secondShape = secondShape.removeSplitter()
 
             if thicknessDirection == 'Normal':
 
@@ -702,18 +702,25 @@ class _SlopedPlanes(_Py):
 
                 bigFace.translate(V(0, 0, height))
 
-            outer = face.Wires[0]
-            bigOuter = bigFace.Wires[0]
-            base =\
-                Part.makeLoft([outer, bigOuter])
+            # outer = face.Wires[0]
+            # bigOuter = bigFace.Wires[0]
+            # base =\
+                # Part.makeLoft([outer, bigOuter])
             # hay que hacerlo también para los alambres interiores
             # si hay overhang hay que desplazarlo para cerrar malla
 
-            shell =\
-                Part.Shell(endShape.Faces + secondShape.Faces + base.Faces)
-            endShape = shell
+            baseFaces = []
+            for ww, WW in zip(face.Wires, bigFace.Wires):
+                base = Part.makeLoft([ww, WW])
+                baseFaces.extend(base.Faces)
 
-        return endShape
+            shell =\
+                Part.Shell(endShape.Faces + secondShape.Faces + baseFaces)
+            # endShape = shell
+
+        # return endShape
+
+        return shell
 
     def onChanged(self, slopedPlanes, prop):
 
