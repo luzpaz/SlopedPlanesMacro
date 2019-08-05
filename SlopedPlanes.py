@@ -296,10 +296,10 @@ class _SlopedPlanes(_Py):
         if not slopedPlanes.Complement:
             endShape.complement()
 
+        # endShape.removeInternalWires(True)
+
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
-
-        # endShape.removeInternalWires(True)
 
         slopedPlanes.Shape = endShape
 
@@ -716,11 +716,9 @@ class _SlopedPlanes(_Py):
 
             shell =\
                 Part.Shell(endShape.Faces + secondShape.Faces + baseFaces)
-            # endShape = shell
+            endShape = shell
 
-        # return endShape
-
-        return shell
+        return endShape
 
     def onChanged(self, slopedPlanes, prop):
 
