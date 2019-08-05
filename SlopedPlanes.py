@@ -789,7 +789,7 @@ class _SlopedPlanes(_Py):
                 newValue = value
                 if prop == "angle":
                     pyFace.mono = True
-                    _Py.slopedPlanes.FactorOverhang = 0
+                    # _Py.slopedPlanes.FactorOverhang = 0
 
             if prop == "width":
 
@@ -840,6 +840,8 @@ class _SlopedPlanes(_Py):
 
         factorOverhang = slopedPlanes.FactorOverhang
         slopedPlanes.FactorOverhang = (factorOverhang, 0, 1, 0.01)
+
+        _Py.slopedPlanes = slopedPlanes
 
     def __getstate__(self):
 
