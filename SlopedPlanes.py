@@ -700,6 +700,8 @@ class _SlopedPlanes(_Py):
             factorOverhang = slopedPlanes.FactorOverhang
             if factorOverhang:
 
+                # hay que prepararlo para varias caras
+
                 size = _Py.pyFace.size
 
                 hght = factorOverhang * size
@@ -721,6 +723,8 @@ class _SlopedPlanes(_Py):
             if thicknessDirection == 'Normal':
 
                 bigFace.translate(V(0, 0, height))
+
+            # esto no está preparado para varias faces. Hay que dividir el Loft
 
             baseFaces = []
             for ww, WW in zip(face.Wires, bigFace.Wires):
