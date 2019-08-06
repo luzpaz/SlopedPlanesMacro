@@ -94,6 +94,8 @@ class _SlopedPlanes(_Py):
             faceList: faces produced by the FaceMaker over the base
             slopeList: list of angles'''
 
+        slopedPlanes.addExtension("App::GroupExtensionPython", self)
+
         doc = "The sketch or Dwire in which the SlopedPlanes is based"
 
         slopedPlanes.addProperty("App::PropertyLink", "Base",
@@ -149,8 +151,6 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
                                  "SlopedPlanes", doc)
 
-        slopedPlanes.addExtension("App::GroupExtensionPython", self)
-
         doc = "Computes de complement of the orientation of the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyBool", "Complement",
@@ -192,20 +192,21 @@ class _SlopedPlanes(_Py):
             ang = float(slope)
         except ValueError:
             ang = 45.0
-
         slopedPlanes.Slope = ang
 
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
         slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)
         slopedPlanes.Up = 0
+        slopedPlanes.Tolerance = (1e-5, 1e-7, 1, 1e-7)
+
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
                                   "Part::FaceMakerCheese"]
+
         slopedPlanes.ThicknessDirection = ["Vertical",
                                            "Horizontal",
                                            "Normal"]
-        slopedPlanes.Tolerance = (1e-5, 1e-7, 1, 1e-7)
 
         slopedPlanes.Proxy = self
 
