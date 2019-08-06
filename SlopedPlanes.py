@@ -657,7 +657,18 @@ class _SlopedPlanes(_Py):
             normal = self.faceNormal(faceList[0])
             if slopedPlanes.Reverse:
                 normal = normal * -1
-            endShape = endShape.extrude(value * normal)
+
+            shellList = []
+            vv = value * normal
+            for ss in endShape.Shells:
+                ss = ss.extrude(vv)
+                shell = Part.Shell(ss.Faces)
+                shellList.append(shell)
+
+            if len(shellList) > 1:
+                endShape = Part.Compound(shellList)
+            else:
+                endShape = shellList[0]
 
         else:
 
