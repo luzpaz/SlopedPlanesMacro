@@ -692,8 +692,6 @@ class _SlopedPlanes(_Py):
             factorOverhang = slopedPlanes.FactorOverhang
             if factorOverhang:
 
-                # hay que prepararlo para varias caras
-
                 size = _Py.pyFace.size
 
                 hght = factorOverhang * size
@@ -709,8 +707,6 @@ class _SlopedPlanes(_Py):
                     bigFace.makeOffset2D(offset=run, join=2, fill=False,
                                          openResult=False, intersection=True)
                 bigFace.translate(V(0, 0, -1 * hght))
-
-            # else:
 
             if thicknessDirection == 'Normal':
 
