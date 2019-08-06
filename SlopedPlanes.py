@@ -236,11 +236,8 @@ class _SlopedPlanes(_Py):
         faceMaker = slopedPlanes.FaceMaker
 
         onChanged = self.OnChanged
-        if not self.faceList:
-            # print('hasn't faceList')
-            onChanged = False
 
-        if not onChanged:
+        if not onChanged or not self.faceList:
             # print('A')
 
             face = Part.makeFace(shape.Wires, faceMaker)
@@ -254,15 +251,7 @@ class _SlopedPlanes(_Py):
 
             self.faceList = faceList
 
-        else:
-            # print('B')
-
-            faceList = self.faceList
-
-        # procedees face by face and stores them into the Proxy
-
-        if not onChanged:
-            # print('AA')
+            # procedees face by face and stores them into the Proxy
 
             pyFaceListNew =\
                 self.processFaces(slopedPlanes, faceList,
@@ -270,7 +259,9 @@ class _SlopedPlanes(_Py):
             self.Pyth = pyFaceListNew
 
         else:
-            # print('BB')
+            # print('B')
+
+            faceList = self.faceList
 
             self.reProcessFaces(slopedPlanes, faceList)
             pyFaceListNew = self.Pyth
@@ -732,11 +723,11 @@ class _SlopedPlanes(_Py):
 
             print(endShape.Faces, secondShape.Faces, baseFaces)
 
-            '''shell =\
+            shell =\
                 Part.Shell(endShape.Faces + secondShape.Faces + baseFaces)
-            endShape = shell'''
+            endShape = shell
 
-            endShape = Part.Compound(endShape.Faces + secondShape.Faces + baseFaces)
+            # endShape = Part.Compound(endShape.Faces + secondShape.Faces + baseFaces)
 
         return endShape
 
