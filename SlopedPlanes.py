@@ -707,10 +707,9 @@ class _SlopedPlanes(_Py):
             if factorOverhang:
 
                 size = _Py.pyFace.size
-                precision = _Py.precision
 
-                hght = round(factorOverhang * size, precision)
-                run = round(hght / tan(radians(ang)), precision)
+                hght = factorOverhang * size
+                run = hght / tan(radians(ang))
                 print(ang, hght, run)
 
                 face =\
@@ -740,7 +739,8 @@ class _SlopedPlanes(_Py):
                 Part.Shell(endShape.Faces + secondShape.Faces + baseFaces)
             endShape = shell'''
 
-            endShape = Part.Compound(endShape.Faces + secondShape.Faces + baseFaces)
+            endShape =\
+                Part.Compound(endShape.Faces + secondShape.Faces + baseFaces)
 
         return endShape
 
@@ -837,7 +837,7 @@ class _SlopedPlanes(_Py):
                             angle = pyFace.selectPlane(angle[0], angle[1],
                                                        pyFace).angle
 
-                        factorOverhang = round(sin(radians(angle)), precision)
+                        factorOverhang = sin(radians(angle))
                         length = newValue / factorOverhang
                         # print(pyPlane.numGeom, angle, length, newValue)
 
