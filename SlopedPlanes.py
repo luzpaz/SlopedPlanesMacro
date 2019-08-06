@@ -623,6 +623,8 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
+        # limitar a figuras con una sola face: REMOVESPLITTER
+
         tolerance = slopedPlanes.Tolerance
 
         for obj in slopedPlanes.Group:
@@ -670,7 +672,7 @@ class _SlopedPlanes(_Py):
 
             bigFace =\
                 face.makeOffset2D(offset=value, join=2, fill=False,
-                                  openResult=False, intersection=True)
+                                  openResult=False, intersection=False)
 
             coordOutOrd, geomOutOrd, fList =\
                 self.gatherExteriorWires(bigFace.Faces)
@@ -686,11 +688,13 @@ class _SlopedPlanes(_Py):
             secondShape = Part.makeShell(figList)
 
             if thicknessDirection == 'Normal':
-
                 secondShape.translate(V(0, 0, height))
+                bigFace.translate(V(0, 0, height))
 
             factorOverhang = slopedPlanes.FactorOverhang
             if factorOverhang:
+
+                # for face, pyFace in zip(faceList, slopedPlanes.Proxy.Pyth):
 
                 size = _Py.pyFace.size
 
@@ -700,17 +704,16 @@ class _SlopedPlanes(_Py):
 
                 face =\
                     face.makeOffset2D(offset=run, join=2, fill=False,
-                                      openResult=False, intersection=True)
+                                      openResult=False, intersection=False)
                 face.translate(V(0, 0, -1 * hght))
 
                 bigFace =\
                     bigFace.makeOffset2D(offset=run, join=2, fill=False,
-                                         openResult=False, intersection=True)
+                                         openResult=False, intersection=False)
                 bigFace.translate(V(0, 0, -1 * hght))
 
-            if thicknessDirection == 'Normal':
-
-                bigFace.translate(V(0, 0, height))
+                if thicknessDirection == 'Normal':
+                    bigFace.translate(V(0, 0, height))
 
             baseFaces = []
             for ww, WW in zip(face.Wires, bigFace.Wires):
@@ -721,8 +724,8 @@ class _SlopedPlanes(_Py):
 
             totalFaces = endShape.Faces + secondShape.Faces + baseFaces
 
-            endShape = Part.Shell(totalFaces)
-            # endShape = Part.Compound(totalFaces)
+            # endShape = Part.Shell(totalFaces)
+            endShape = Part.Compound(totalFaces)
 
         return endShape
 
