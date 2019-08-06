@@ -731,7 +731,7 @@ class _SlopedPlanes(_Py):
                     base = Part.makeLoft([ww, WW])
                     baseFaces.extend(base.Faces)
 
-            print(endShape.Faces, secondShape.Faces, baseFaces)
+            # print(endShape.Faces, secondShape.Faces, baseFaces)
 
             totalFaces = endShape.Faces + secondShape.Faces + baseFaces
 
