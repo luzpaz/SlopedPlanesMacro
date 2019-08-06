@@ -232,15 +232,12 @@ class _SlopedPlanes(_Py):
 
         self.declareSlopedPlanes(slopedPlanes)
 
-        tolerance = slopedPlanes.Tolerance
-        faceMaker = slopedPlanes.FaceMaker
-
         onChanged = self.OnChanged
 
         if not onChanged or not self.faceList:
             # print('A')
 
-            face = Part.makeFace(shape.Wires, faceMaker)
+            face = Part.makeFace(shape.Wires, slopedPlanes.FaceMaker)
             fList = face.Faces
 
             # gathers the exterior wires. Lower Left criteria
@@ -278,7 +275,7 @@ class _SlopedPlanes(_Py):
         endShape = Part.makeShell(figList)
 
         if slopedPlanes.Group:
-            endShape = self.groupping(slopedPlanes, endShape, tolerance)
+            endShape = self.groupping(slopedPlanes, endShape)
 
         if slopedPlanes.Thickness:
             endShape = self.fattening(slopedPlanes, faceList,
@@ -635,9 +632,11 @@ class _SlopedPlanes(_Py):
 
         return figList
 
-    def groupping(self, slopedPlanes, endShape, tolerance):
+    def groupping(self, slopedPlanes, endShape):
 
         ''''''
+
+        tolerance = slopedPlanes.Tolerance
 
         for obj in slopedPlanes.Group:
             if hasattr(obj, "Proxy"):
