@@ -692,10 +692,16 @@ class _SlopedPlanes(_Py):
                 bigFace.translate(V(0, 0, height))
 
             factorOverhang = slopedPlanes.FactorOverhang
+            shellList = []
+
             if factorOverhang:
 
-                firstBase, secondBase = [], []
-                for face, pyFace in zip(faceList, slopedPlanes.Proxy.Pyth):
+                for ss, SS, face, pyFace in zip(endShape.Shells,
+                                                secondShape.Shells,
+                                                faceList,
+                                                slopedPlanes.Proxy.Pyth):
+
+                    baseFaces = ss.Faces + SS.Faces
 
                     size = pyFace.size
 
@@ -712,31 +718,33 @@ class _SlopedPlanes(_Py):
                                         openResult=False, intersection=False)
 
                     ff.translate(V(0, 0, -1 * hght))
-                    firstBase.extend(ff.Wires)
 
                     FF.translate(V(0, 0, -1 * hght))
                     if thicknessDirection == 'Normal':
                         FF.translate(V(0, 0, height))
-                    secondBase.extend(FF.Wires)
 
-                baseFaces = []
-                for ww, WW in zip(firstBase, secondBase):
-                    base = Part.makeLoft([ww, WW])
-                    baseFaces.extend(base.Faces)
+                    for ww, WW in zip(ff.Wires, FF.Wires):
+                        base = Part.makeLoft([ww, WW])
+                        baseFaces.extend(base.Faces)
+                    shell = Part.Shell(baseFaces)
+                    shellList.append(shell)
 
             else:
 
-                baseFaces = []
-                for ww, WW in zip(face.Wires, bigFace.Wires):
-                    base = Part.makeLoft([ww, WW])
-                    baseFaces.extend(base.Faces)
+                for ss, SS, ff, FF in zip(endShape.Shells, secondShape.Shells,
+                                          face.Faces, bigFace.Faces):
+                    baseFaces = ss.Faces + SS.Faces
+                    for ww, WW in zip(ff.Wires, FF.Wires):
+                        base = Part.makeLoft([ww, WW])
+                        baseFaces.extend(base.Faces)
+                    shell = Part.Shell(baseFaces)
+                    shellList.append(shell)
 
-            # print(endShape.Faces, secondShape.Faces, baseFaces)
-
-            totalFaces = endShape.Faces + secondShape.Faces + baseFaces
-
-            endShape = Part.Shell(totalFaces)
-            # endShape = Part.Compound(totalFaces)
+            # print(shellList)
+            if len(shellList) > 1:
+                endShape = Part.Compound(shellList)
+            else:
+                endShape = shellList[0]
 
         return endShape
 
