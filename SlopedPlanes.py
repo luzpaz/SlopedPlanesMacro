@@ -298,6 +298,18 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
+        slope = slopedPlanes.Slope.Value
+        try:
+            slopeList = self.slopeList
+            mono = False
+            # print('a')
+        except AttributeError:
+            # print('b')
+            slopeList = []
+            mono = True
+        # print('slopeList ', slopeList)
+        slopeListCopy = slopeList[:]
+
         pyFaceListOld = self.Pyth
         pyFaceListNew = []
         numFace = -1
@@ -306,21 +318,6 @@ class _SlopedPlanes(_Py):
             # print('######### numFace ', numFace)
 
             _Py.face = face
-
-            slope = slopedPlanes.Slope.Value
-
-            try:
-                slopeList = self.slopeList
-                mono = False
-                # print('a')
-            except AttributeError:
-                # print('b')
-                mono = True
-                slopeList = []
-
-            # print('slopeList ', slopeList)
-
-            slopeListCopy = slopeList[:]
 
             # elaborates complementary python objects of a face
 
