@@ -310,8 +310,6 @@ class _SlopedPlanes(_Py):
         # print('slopeList ', slopeList)
         slopeListCopy = slopeList[:]
 
-        fOverhang = slopedPlanes.FactorOverhang * size
-
         pyFaceListOld = self.Pyth
         pyFaceListNew = []
         numFace = -1
@@ -340,6 +338,8 @@ class _SlopedPlanes(_Py):
             else:
                 size = face.BoundBox.DiagonalLength
             pyFace.size = size
+
+            fOverhang = slopedPlanes.FactorOverhang * size
 
             # gathers the interior wires. Upper Left criteria
             coordinatesInnerOrdered, geomInnerOrdered, wireList =\
@@ -715,8 +715,6 @@ class _SlopedPlanes(_Py):
             if thicknessDirection == 'Normal':
 
                 bigFace.translate(V(0, 0, height))
-
-            # esto no está preparado para varias faces. Hay que dividir el Loft
 
             baseFaces = []
             for ww, WW in zip(face.Wires, bigFace.Wires):
