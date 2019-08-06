@@ -331,15 +331,12 @@ class _SlopedPlanes(_Py):
             else:
                 pyFace = _PyFace(numFace, mono)
                 pyFaceListNew.append(pyFace)
-
             _Py.pyFace = pyFace
 
             if thickness:
                 size = pyFaceListOld[numFace].size
-
             else:
                 size = face.BoundBox.DiagonalLength
-
             pyFace.size = size
 
             # gathers the interior wires. Upper Left criteria
