@@ -310,6 +310,8 @@ class _SlopedPlanes(_Py):
         # print('slopeList ', slopeList)
         slopeListCopy = slopeList[:]
 
+        fOverhang = slopedPlanes.FactorOverhang * size
+
         pyFaceListOld = self.Pyth
         pyFaceListNew = []
         numFace = -1
@@ -340,12 +342,8 @@ class _SlopedPlanes(_Py):
             pyFace.size = size
 
             # gathers the interior wires. Upper Left criteria
-
-            wList = face.Wires[1:]
-
             coordinatesInnerOrdered, geomInnerOrdered, wireList =\
-                self.gatherInteriorWires(wList)
-
+                self.gatherInteriorWires(face.Wires[1:])
             # print('inner geom ', geomInnerOrdered)
 
             wireList.insert(0, face.OuterWire)
@@ -444,8 +442,7 @@ class _SlopedPlanes(_Py):
                                 slopedPlanes.FactorWidth * size
                             pyPlane.length =\
                                 slopedPlanes.FactorLength * size
-                            pyPlane.overhang =\
-                                slopedPlanes.FactorOverhang * size
+                            pyPlane.overhang = fOverhang
 
                             angle = pyPlane.angle
                             if isinstance(angle, list):
@@ -462,14 +459,9 @@ class _SlopedPlanes(_Py):
                         # print('2')
 
                         pyPlane = _PyPlane(numWire, numGeom, ang)
-
                         pyPlaneListNew.append(pyPlane)
-
                         if thickness:
-                            pyPlane.overhang =\
-                                slopedPlanes.FactorOverhang / sin(radians(ang)) * size
-
-                        # print(pyPlane.overhang)
+                            pyPlane.overhang = fOverhang / sin(radians(ang))
 
                     pyPlane.geom = geom
 
