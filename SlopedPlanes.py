@@ -233,9 +233,7 @@ class _SlopedPlanes(_Py):
 
         self.declareSlopedPlanes(slopedPlanes)
 
-        onChanged = self.OnChanged
-
-        if not onChanged or not self.faceList:
+        if not self.OnChanged or not self.faceList:
             # print('A')
 
             face = Part.makeFace(shape.Wires, slopedPlanes.FaceMaker)
