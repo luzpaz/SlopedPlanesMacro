@@ -933,9 +933,6 @@ class _SlopedPlanes(_Py):
 
         serialize = state['Serialize']
 
-        #slopedPlanes = FreeCAD.ActiveDocument.getObject('')
-        #_Py
-
         faceList = []
         pyth = []
         numFace = -1
