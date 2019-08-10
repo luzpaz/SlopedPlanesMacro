@@ -830,7 +830,6 @@ class _SlopedPlanes(_Py):
                 newValue = value
                 if prop == "angle":
                     pyFace.mono = True
-                    # _Py.slopedPlanes.FactorOverhang = 0
 
             if prop == "width":
 
