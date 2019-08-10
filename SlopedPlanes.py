@@ -710,8 +710,6 @@ class _SlopedPlanes(_Py):
                                                 faceList,
                                                 slopedPlanes.Proxy.Pyth):
 
-                    baseFaces = ss.Faces + SS.Faces
-
                     size = pyFace.size
 
                     hght = factorOverhang * size
@@ -732,6 +730,7 @@ class _SlopedPlanes(_Py):
                     if thicknessDirection == 'Normal':
                         FF.translate(V(0, 0, height))
 
+                    baseFaces = ss.Faces + SS.Faces
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
                         baseFaces.extend(base.Faces)
