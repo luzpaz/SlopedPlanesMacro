@@ -840,6 +840,7 @@ class _SlopedPlanes(_Py):
                         setattr(pyPlane, "rightWidth", newValue)
 
             elif prop == "overhang":
+
                 for pyWire in pyFace.wires:
                     for pyPlane in pyWire.planes:
 
