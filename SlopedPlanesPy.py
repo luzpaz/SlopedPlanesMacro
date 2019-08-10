@@ -639,49 +639,49 @@ class _Py(object):
             geom = Part.LineSegment(curve, startParam, endParam)
 
         elif isinstance(curve, Part.ArcOfCircle):
-            # print('3')
+            # print('2')
             angleXU = curve.AngleXU
             geom = Part.ArcOfCircle(curve.Circle, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfEllipse):
-            # print('5')
+            # print('3')
             angleXU = curve.AngleXU
             geom = Part.ArcOfEllipse(curve.Ellipse, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfParabola):
-            # print('7')
+            # print('4')
             angleXU = curve.AngleXU
             geom = Part.ArcOfParabola(curve.Parabola, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.ArcOfHyperbola):
-            # print('9')
+            # print('5')
             angleXU = curve.AngleXU
             geom = Part.ArcOfHyperbola(curve.Hyperbola, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.Circle):
-            # print('2')
+            # print('6')
             angleXU = curve.AngleXU
             geom = Part.ArcOfCircle(curve, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.Ellipse):
-            # print('4')
+            # print('7')
             angleXU = curve.AngleXU
             geom = Part.ArcOfEllipse(curve, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.Parabola):
-            # print('6')
+            # print('8')
             angleXU = curve.AngleXU
             geom = Part.ArcOfParabola(curve, startParam, endParam)
             geom.AngleXU = angleXU
 
         elif isinstance(curve, Part.Hyperbola):
-            # print('8')
+            # print('9')
             angleXU = curve.AngleXU
             geom = Part.ArcOfHyperbola(curve, startParam, endParam)
             geom.AngleXU = angleXU
