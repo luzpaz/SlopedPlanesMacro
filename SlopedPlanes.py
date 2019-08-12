@@ -94,6 +94,8 @@ class _SlopedPlanes(_Py):
             faceList: faces produced by the FaceMaker over the base
             slopeList: list of angles'''
 
+        # _____________________________________________________________________
+
         slopedPlanes.addExtension("App::GroupExtensionPython", self)
 
         doc = "The sketch or Dwire in which the SlopedPlanes is based"
@@ -101,34 +103,20 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLink", "Base",
                                  "Base", doc)
 
-        doc = "Reverses the angles of the SlopedPlanes"
-
-        slopedPlanes.addProperty("App::PropertyBool", "Reverse",
-                                 "SlopedPlanes", doc)
-
-        doc = "Gives a thickness to the SlopedPlanes"
-
-        slopedPlanes.addProperty("App::PropertyLength", "Thickness",
-                                 "SlopedPlanes", doc)
-
-        doc = "Thickness direction"
-
-        slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
-                                 "SlopedPlanes", doc)
-
-        doc = ('Applies over all planes overhang height,\n'
-               'multiplied by the diagonal \n'
-               'length of the SlopedPlanes base.\n'
-               'It \'s limited to 1 or even less')
-
-        slopedPlanes.addProperty("App::PropertyFloatConstraint", "FactorOverhang",
-                                 "SlopedPlanes", doc)
+        # _____________________________________________________________________
 
         doc = ('Applies over all planes angles.\n'
                'To cero the SlopedPlanes hasn\'t shape')
 
         slopedPlanes.addProperty("App::PropertyAngle", "Slope",
                                  "SlopedPlanes", doc)
+
+        doc = "Reverses the angles of the SlopedPlanes"
+
+        slopedPlanes.addProperty("App::PropertyBool", "Reverse",
+                                 "SlopedPlanes", doc)
+
+        # _____________________________________________________________________
 
         doc = ('Applies over all planes length, or length of extrusion \n'
                'of the base\'s edges, multiplied by the diagonal \n'
@@ -146,10 +134,46 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyFloat", "FactorWidth",
                                  "SlopedPlanes", doc)
 
+        doc = ('Applies over all planes overhang height,\n'
+               'multiplied by the diagonal \n'
+               'length of the SlopedPlanes base.\n'
+               'It \'s limited to 1 or even less')
+
+        slopedPlanes.addProperty("App::PropertyFloatConstraint", "FactorOverhang",
+                                 "SlopedPlanes", doc)
+
+        # _____________________________________________________________________
+
         doc = "Available curves to sweep"
 
         slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
                                  "SlopedPlanes", doc)
+
+        # _____________________________________________________________________
+
+
+        doc = "Gives a thickness to the SlopedPlanes"
+
+        slopedPlanes.addProperty("App::PropertyLength", "Thickness",
+                                 "SlopedPlanesThickness", doc)
+
+        doc = "Thickness direction"
+
+        slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
+                                 "SlopedPlanesThickness", doc)
+
+        doc = ('Applies over all planes angles.\n'
+               'To cero the SlopedPlanes hasn\'t shape')
+
+        slopedPlanes.addProperty("App::PropertyAngle", "ThicknessSlope",
+                                 "SlopedPlanesThickness", doc)
+
+        doc = "FaceMaker"
+
+        slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessOption",
+                                 "SlopedPlanesThickness", doc)
+
+        # _____________________________________________________________________
 
         doc = "Computes de complement of the orientation of the SlopedPlanes"
 
@@ -186,6 +210,8 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
                                  "SlopedPlanesPart", doc)
 
+        # _____________________________________________________________________
+
         self.State = True
 
         try:
@@ -193,6 +219,7 @@ class _SlopedPlanes(_Py):
         except ValueError:
             ang = 45.0
         slopedPlanes.Slope = ang
+        slopedPlanes.ThicknessSlope = ang
 
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
@@ -207,6 +234,9 @@ class _SlopedPlanes(_Py):
         slopedPlanes.ThicknessDirection = ["Vertical",
                                            "Horizontal",
                                            "Normal"]
+
+        slopedPlanes.ThicknessOption = ["RegularThickness",
+                                        "RegularAngle"]
 
         slopedPlanes.Proxy = self
 
