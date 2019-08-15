@@ -736,7 +736,7 @@ class _PyReflex(_Py):
                     pyAlign = pyPl.selectAlignmentBase()
                     if pyAlign:
                         pl = pyAlign.simulatedAlignment
-                        corn.append(pl)
+                        corn.extend(pl)
 
 
                 elif pyPl.reflexed:
