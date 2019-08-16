@@ -158,7 +158,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = "ThicknessOption"
+        doc = "Thickness option"
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessOption",
                                  "SlopedPlanes", doc)
@@ -169,7 +169,7 @@ class _SlopedPlanes(_Py):
                                  "ThicknessDirection",
                                  "SlopedPlanes", doc)
 
-        doc = "ThicknessSlope"
+        doc = "Thickness slope"
 
         slopedPlanes.addProperty("App::PropertyAngle", "ThicknessSlope",
                                  "SlopedPlanes", doc)
