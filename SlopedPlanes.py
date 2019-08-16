@@ -219,19 +219,19 @@ class _SlopedPlanes(_Py):
             ang = 45.0
         slopedPlanes.Slope = ang
 
-        slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
+        slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)
 
-        slopedPlanes.ThicknessSlope = ang
+        slopedPlanes.ThicknessOption = ["RegularThickness",
+                                        "RegularAngle"]
 
         slopedPlanes.ThicknessDirection = ["Vertical",
                                            "Horizontal",
                                            "Normal",
-                                           "ThicknessSlope"]
+                                           "ThicknesSlope"]
 
-        slopedPlanes.ThicknessOption = ["RegularThickness",
-                                        "RegularAngle"]
+        slopedPlanes.ThicknessSlope = ang
 
         slopedPlanes.Up = 0
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
