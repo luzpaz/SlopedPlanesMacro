@@ -234,6 +234,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.ThicknessSlope = ang
 
         slopedPlanes.Up = 0
+
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
                                   "Part::FaceMakerCheese"]
