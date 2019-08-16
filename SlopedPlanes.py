@@ -218,24 +218,27 @@ class _SlopedPlanes(_Py):
         except ValueError:
             ang = 45.0
         slopedPlanes.Slope = ang
-        slopedPlanes.ThicknessSlope = ang
 
         slopedPlanes.FactorWidth = 1
         slopedPlanes.FactorLength = 2
         slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)
-        slopedPlanes.Up = 0
-        slopedPlanes.Tolerance = (1e-5, 1e-7, 1, 1e-7)
 
+        slopedPlanes.ThicknessSlope = ang
+
+        slopedPlanes.ThicknessDirection = ["Vertical",
+                                           "Horizontal",
+                                           "Normal",
+                                           "ThicknessSlope"]
+
+        slopedPlanes.ThicknessOption = ["RegularThickness",
+                                        "RegularAngle"]
+
+        slopedPlanes.Up = 0
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
                                   "Part::FaceMakerCheese"]
 
-        slopedPlanes.ThicknessDirection = ["Vertical",
-                                           "Horizontal",
-                                           "Normal"]
-
-        slopedPlanes.ThicknessOption = ["RegularThickness",
-                                        "RegularAngle"]
+        slopedPlanes.Tolerance = (1e-5, 1e-7, 1, 1e-7)
 
         slopedPlanes.Proxy = self
 
