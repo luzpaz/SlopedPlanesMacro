@@ -139,7 +139,8 @@ class _SlopedPlanes(_Py):
                'length of the SlopedPlanes base.\n'
                'It \'s limited to 1 or even less')
 
-        slopedPlanes.addProperty("App::PropertyFloatConstraint", "FactorOverhang",
+        slopedPlanes.addProperty("App::PropertyFloatConstraint",
+                                 "FactorOverhang",
                                  "SlopedPlanes", doc)
 
         # _____________________________________________________________________
@@ -164,7 +165,8 @@ class _SlopedPlanes(_Py):
 
         doc = "Thickness direction"
 
-        slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
+        slopedPlanes.addProperty("App::PropertyEnumeration",
+                                 "ThicknessDirection",
                                  "SlopedPlanes", doc)
 
         doc = "ThicknessSlope"
@@ -221,7 +223,6 @@ class _SlopedPlanes(_Py):
 
         slopedPlanes.FactorLength = 2
         slopedPlanes.FactorWidth = 1
-        slopedPlanes.FactorOverhang = (0, 0, 1, 0.01)
 
         slopedPlanes.ThicknessOption = ["RegularThickness",
                                         "RegularAngle"]
@@ -229,17 +230,15 @@ class _SlopedPlanes(_Py):
         slopedPlanes.ThicknessDirection = ["Vertical",
                                            "Horizontal",
                                            "Normal",
-                                           "ThicknesSlope"]
+                                           "ThicknessSlope"]
 
         slopedPlanes.ThicknessSlope = ang
-
-        slopedPlanes.Up = 0
 
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
                                   "Part::FaceMakerCheese"]
 
-        slopedPlanes.Tolerance = (1e-5, 1e-7, 1, 1e-7)
+        slopedPlanes.Tolerance = 1e-7
 
         slopedPlanes.Proxy = self
 
@@ -908,12 +907,6 @@ class _SlopedPlanes(_Py):
         ''''''
 
         # print('onDocumentRestored')
-
-        tolerance = slopedPlanes.Tolerance
-        slopedPlanes.Tolerance = (tolerance, 1e-7, 1, 1e-7)
-
-        factorOverhang = slopedPlanes.FactorOverhang
-        slopedPlanes.FactorOverhang = (factorOverhang, 0, 1, 0.01)
 
         _Py.slopedPlanes = slopedPlanes
 
