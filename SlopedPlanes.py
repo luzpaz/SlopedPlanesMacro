@@ -155,40 +155,24 @@ class _SlopedPlanes(_Py):
         doc = "Gives a thickness to the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
-                                 "SlopedPlanesThickness", doc)
+                                 "SlopedPlanes", doc)
+
+        doc = "ThicknessOption"
+
+        slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessOption",
+                                 "SlopedPlanes", doc)
 
         doc = "Thickness direction"
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessDirection",
-                                 "SlopedPlanesThickness", doc)
+                                 "SlopedPlanes", doc)
 
-        doc = ('Applies over all planes angles.\n'
-               'To cero the SlopedPlanes hasn\'t shape')
+        doc = "ThicknessSlope"
 
         slopedPlanes.addProperty("App::PropertyAngle", "ThicknessSlope",
-                                 "SlopedPlanesThickness", doc)
-
-        doc = "FaceMaker"
-
-        slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessOption",
-                                 "SlopedPlanesThickness", doc)
+                                 "SlopedPlanes", doc)
 
         # _____________________________________________________________________
-
-        doc = "Computes de complement of the orientation of the SlopedPlanes"
-
-        slopedPlanes.addProperty("App::PropertyBool", "Complement",
-                                 "SlopedPlanesPart", doc)
-
-        doc = "Mirrors the SlopedPlanes with respect its base"
-
-        slopedPlanes.addProperty("App::PropertyBool", "Mirror",
-                                 "SlopedPlanesPart", doc)
-
-        doc = "Creates a solid out of the SlopedPlanes shells"
-
-        slopedPlanes.addProperty("App::PropertyBool", "Solid",
-                                 "SlopedPlanesPart", doc)
 
         doc = "Gives a plane on SlopedPlanes base"
 
@@ -200,14 +184,29 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Up",
                                  "SlopedPlanesPart", doc)
 
-        doc = "Tolerance value applied in boolean operation (Fuzzy)"
+        doc = "Mirrors the SlopedPlanes with respect its base"
 
-        slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
+        slopedPlanes.addProperty("App::PropertyBool", "Mirror",
+                                 "SlopedPlanesPart", doc)
+
+        doc = "Computes de complement of the orientation of the SlopedPlanes"
+
+        slopedPlanes.addProperty("App::PropertyBool", "Complement",
+                                 "SlopedPlanesPart", doc)
+
+        doc = "Creates a solid out of the SlopedPlanes shells"
+
+        slopedPlanes.addProperty("App::PropertyBool", "Solid",
                                  "SlopedPlanesPart", doc)
 
         doc = "FaceMaker"
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "FaceMaker",
+                                 "SlopedPlanesPart", doc)
+
+        doc = "Tolerance value applied in boolean operation (Fuzzy)"
+
+        slopedPlanes.addProperty("App::PropertyPrecision", "Tolerance",
                                  "SlopedPlanesPart", doc)
 
         # _____________________________________________________________________
