@@ -315,7 +315,7 @@ class _SlopedPlanes(_Py):
         if not slopedPlanes.Complement:
             endShape.complement()
 
-        endShape.removeInternalWires(True)
+        # endShape.removeInternalWires(True)
 
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
