@@ -701,26 +701,42 @@ class _SlopedPlanes(_Py):
             else:
                 endShape = shellList[0]
 
+            # cuando convierto a sólido da un error de geometria
+
         else:
 
-            ang = slopedPlanes.Slope.Value
+            # hay que hacer ThicknessOption
+            # hay que dar una propiedad AngleThickness a cada plano
+
             face = Part.Compound(faceList)
+
+            angle = slopedPlanes.Slope.Value
+            height = value * sin(radians(angle))
+
+            # print(angle, height, value)
 
             if thicknessDirection == 'Normal':
 
-                ang = 90.0 - ang
-                height = value * sin(radians(ang))
-                value = value * cos(radians(ang))
-                # print(ang, height, value)
+                ang = 90.0 - angle
+                hei = value * sin(radians(ang))
+                val = value * cos(radians(ang))
 
             elif thicknessDirection == 'ThicknessSlope':
 
                 ang = slopedPlanes.ThicknessSlope.Value
-                height = value * sin(radians(ang))
-                value = value * cos(radians(ang))
+                hei = value * sin(radians(ang))
+                val = value * cos(radians(ang))
+
+            elif thicknessDirection == 'Horizontal':
+
+                ang = angle
+                hei = height
+                val = value
+
+            # print(ang, hei, val)
 
             bigFace =\
-                face.makeOffset2D(offset=value, join=2, fill=False,
+                face.makeOffset2D(offset=val, join=2, fill=False,
                                   openResult=False, intersection=False)
 
             coordOutOrd, geomOutOrd, fList =\
@@ -736,14 +752,17 @@ class _SlopedPlanes(_Py):
 
             secondShape = Part.makeShell(figList)
 
-            if thicknessDirection == 'Normal' or thicknessDirection == 'ThicknessSlope':
-                secondShape.translate(V(0, 0, height))
-                bigFace.translate(V(0, 0, height))
+            if thicknessDirection != 'Horizontal':
+
+                secondShape.translate(V(0, 0, hei))
+                bigFace.translate(V(0, 0, hei))
 
             factorOverhang = slopedPlanes.FactorOverhang
             shellList = []
 
             if factorOverhang:
+
+                # hay que corregir cuando el angulo de los planos no es unico
 
                 for ss, SS, face, pyFace in zip(endShape.Shells,
                                                 secondShape.Shells,
@@ -751,30 +770,31 @@ class _SlopedPlanes(_Py):
                                                 slopedPlanes.Proxy.Pyth):
 
                     size = pyFace.size
-
                     hght = factorOverhang * size
-                    run = hght / tan(radians(ang))
-                    # print(ang, hght, run)
+                    run = hght / tan(radians(angle))
+                    # print(hght, run)
 
                     ff =\
                         face.makeOffset2D(offset=run, join=2, fill=False,
                                           openResult=False, intersection=False)
 
                     FF =\
-                        ff.makeOffset2D(offset=value, join=2, fill=False,
+                        ff.makeOffset2D(offset=val, join=2, fill=False,
                                         openResult=False, intersection=False)
 
                     ff.translate(V(0, 0, -1 * hght))
 
                     FF.translate(V(0, 0, -1 * hght))
-                    if thicknessDirection == 'Normal':
-                        FF.translate(V(0, 0, height))
+
+                    if thicknessDirection != 'Horizontal':
+                        FF.translate(V(0, 0, hei))
 
                     baseFaces = ss.Faces + SS.Faces
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
                         baseFaces.extend(base.Faces)
                     shell = Part.Shell(baseFaces)
+                    # shell = Part.Compound(baseFaces)
                     shellList.append(shell)
 
             else:
@@ -813,6 +833,7 @@ class _SlopedPlanes(_Py):
             prop = "angle"
             self.overWritePyProp(prop, value)
             self.slopeList = []
+            slopedPlanes.FactorOverhang = 0
 
         elif prop == "FactorLength":
 
@@ -900,11 +921,16 @@ class _SlopedPlanes(_Py):
 
                         setattr(pyPlane, "overhang", length)
 
+            elif prop == "angle":
+
+                for pyWire in pyFace.wires:
+                    pyWire.mono = True
+                    for pyPlane in pyWire.planes:
+                        setattr(pyPlane, prop, newValue)
+
             else:
 
                 for pyWire in pyFace.wires:
-                    if prop == "angle":
-                        pyWire.mono = True
                     for pyPlane in pyWire.planes:
                         setattr(pyPlane, prop, newValue)
 
