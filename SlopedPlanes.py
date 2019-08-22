@@ -372,6 +372,7 @@ class _SlopedPlanes(_Py):
             fOverhang = slopedPlanes.FactorOverhang * size
 
             # gathers the interior wires. Upper Left criteria
+
             coordinatesInnerOrdered, geomInnerOrdered, wireList =\
                 self.gatherInteriorWires(face.Wires[1:])
             # print('inner geom ', geomInnerOrdered)
@@ -653,7 +654,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # limitar a figuras con una sola face: REMOVESPLITTER
+        # limitar a figuras con una sola face: REMOVESPLITTER ?
 
         tolerance = slopedPlanes.Tolerance
 
