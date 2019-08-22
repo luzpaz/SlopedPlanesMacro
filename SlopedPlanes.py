@@ -158,7 +158,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = "Thickness option"
+        doc = "Thickness option (Not available yet!)"
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessOption",
                                  "SlopedPlanes", doc)
@@ -708,9 +708,16 @@ class _SlopedPlanes(_Py):
 
             if thicknessDirection == 'Normal':
 
+                ang = 90.0 - ang
                 height = value * sin(radians(ang))
                 value = value * cos(radians(ang))
                 # print(ang, height, value)
+
+            elif thicknessDirection == 'ThicknessSlope':
+
+                ang = slopedPlanes.ThicknessSlope.Value
+                height = value * sin(radians(ang))
+                value = value * cos(radians(ang))
 
             bigFace =\
                 face.makeOffset2D(offset=value, join=2, fill=False,
@@ -729,7 +736,7 @@ class _SlopedPlanes(_Py):
 
             secondShape = Part.makeShell(figList)
 
-            if thicknessDirection == 'Normal':
+            if thicknessDirection == 'Normal' or thicknessDirection == 'ThicknessSlope':
                 secondShape.translate(V(0, 0, height))
                 bigFace.translate(V(0, 0, height))
 
