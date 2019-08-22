@@ -6,7 +6,7 @@ FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 ### Versions
 
     1.2: December 2018 (FreeCAD 0.18)
-    1.4: July 2019 (FreeCAD 0.19)
+    1.5: August 2019 (FreeCAD 0.19)
 
 ### Installation
 To use this macro, please:
