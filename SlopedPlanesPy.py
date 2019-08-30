@@ -846,6 +846,9 @@ class _Py(object):
         coordinatesInner, geomInner = [], []
         for wire in wList:
             falseFace = Part.makeFace(wire, "Part::FaceMakerSimple")
+            # se obtienen los wires de una copia y
+            # los sentidos de giro y la referencia salen correctamente
+            # sin necesidad de corregir
             coord, geomList = self.faceDatas(falseFace)
             coord.extend(coord[0:2])
             coordinatesInner.append(coord)
