@@ -266,7 +266,7 @@ class _SlopedPlanes(_Py):
         self.declareSlopedPlanes(slopedPlanes)
 
         if not self.OnChanged or not self.faceList:
-            print('A')
+            # print('A')
 
             face = Part.makeFace(shape.Wires, slopedPlanes.FaceMaker)
             fList = face.Faces
@@ -287,7 +287,7 @@ class _SlopedPlanes(_Py):
             self.Pyth = pyFaceListNew
 
         else:
-            print('B')
+            # print('B')
 
             faceList = self.faceList
 
@@ -305,14 +305,14 @@ class _SlopedPlanes(_Py):
 
         endShape = Part.makeShell(figList)
 
-        print(self.slopeList)
+        # print(self.slopeList)
 
         if slopedPlanes.Group:
-            print('Group')
+            # print('Group')
             endShape = self.groupping(slopedPlanes, endShape)
 
         if slopedPlanes.Thickness:
-            print('Thickness')
+            # print('Thickness')
             endShape = self.fattening(slopedPlanes, faceList,
                                       endShape, placement)
 
@@ -336,12 +336,12 @@ class _SlopedPlanes(_Py):
         try:
             slopeList = self.slopeList
             mono = False
-            print('a')
+            # print('a')
         except AttributeError:
-            print('b')
+            # print('b')
             slopeList = []
             mono = True
-        print('slopeList ', slopeList)
+        # print('slopeList ', slopeList)
         slopeListCopy = slopeList[:]
 
         pyFaceListOld = self.Pyth
@@ -688,7 +688,7 @@ class _SlopedPlanes(_Py):
         value = slopedPlanes.Thickness.Value
 
         if thicknessDirection == 'Vertical':
-            print('Vertical')
+            # print('Vertical')
 
             normal = self.faceNormal(faceList[0])
             if slopedPlanes.Reverse:
@@ -709,7 +709,7 @@ class _SlopedPlanes(_Py):
             # cuando convierto a sólido da un error de geometria
 
         else:
-            print('No Vertical')
+            # print('No Vertical')
 
             # hay que hacer ThicknessOption
             # hay que dar una propiedad AngleThickness a cada plano
