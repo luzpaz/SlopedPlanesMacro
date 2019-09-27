@@ -599,7 +599,7 @@ class _TaskPanel_SlopedPlanes():
 
         slopedPlanes.Proxy.slopeList = slopeList
 
-        slopedPlanes.Proxy.OnChanged = False
+        slopedPlanes.Proxy.OnChanged = True
 
     def addSelection(self, doc, obj, sub, pnt=None):
 
