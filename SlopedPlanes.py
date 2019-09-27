@@ -435,8 +435,6 @@ class _SlopedPlanes(_Py):
                     # print('### numGeom ', numGeom)
 
                     # unificar denominaciones con task panel ang angle slope ...
-                    # esto rompe los alineamientos con thickness not vertical
-                    # mirar task panel
 
                     try:
                         ang = slopeListCopy.pop(0)
@@ -836,9 +834,12 @@ class _SlopedPlanes(_Py):
                     baseFaces = ss.Faces + SS.Faces
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
-                        baseFaces.extend(base.Faces)
+                        for bf in base.Faces:
+                            bf.Placement = bf.Placement.multiply(placement)
+                            baseFaces.append(bf)
                     shell = Part.Shell(baseFaces)
                     # shell = Part.Compound(baseFaces)
+                    shell.Placement = placement
                     shellList.append(shell)
 
             else:
@@ -848,8 +849,11 @@ class _SlopedPlanes(_Py):
                     baseFaces = ss.Faces + SS.Faces
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
-                        baseFaces.extend(base.Faces)
+                        for bf in base.Faces:
+                            bf.Placement = bf.Placement.multiply(placement)
+                            baseFaces.append(bf)
                     shell = Part.Shell(baseFaces)
+                    # shell = Part.Compound(baseFaces)
                     shellList.append(shell)
 
             # print(shellList)
