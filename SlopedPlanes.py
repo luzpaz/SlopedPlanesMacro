@@ -305,7 +305,7 @@ class _SlopedPlanes(_Py):
 
         endShape = Part.makeShell(figList)
 
-        # print(self.slopeList)
+        ## print(self.slopeList)
 
         if slopedPlanes.Group:
             # print('Group')
@@ -984,7 +984,7 @@ class _SlopedPlanes(_Py):
             pyth.append(dct)
         state['Pyth'] = pyth
 
-        state['slopeList'] = self.slopeList
+        ## state['slopeList'] = self.slopeList
 
         # print('state ', state)
 
@@ -998,7 +998,7 @@ class _SlopedPlanes(_Py):
 
         self.Type = state['Type']
 
-        self.slopeList = state['slopeList']
+        ## self.slopeList = state['slopeList']
 
         serialize = state['Serialize']
 
