@@ -444,9 +444,10 @@ class _SlopedPlanes(_Py):
                     except IndexError:
                         ang = slope
 
-                    if slope != ang:
-                        pyWire.mono = False
-                        pyFace.mono = False
+                    if isinstance(ang, float):
+                        if ang != slope:
+                            pyWire.mono = False
+                            pyFace.mono = False
 
                     try:
                         pyPlane = pyPlaneListOld[numGeom]
