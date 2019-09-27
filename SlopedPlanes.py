@@ -92,7 +92,7 @@ class _SlopedPlanes(_Py):
         - three lists:
             Pyth: the complementary python objects
             faceList: faces produced by the FaceMaker over the base
-            slopeList: list of angles'''
+            slopeList: list of angles (not serialized)'''
 
         # _____________________________________________________________________
 
@@ -335,14 +335,16 @@ class _SlopedPlanes(_Py):
         slope = slopedPlanes.Slope.Value
         try:
             slopeList = self.slopeList
-            mono = False
+            ## mono = False
             # print('a')
         except AttributeError:
             # print('b')
             slopeList = []
-            mono = True
+            ## mono = True
         # print('slopeList ', slopeList)
         slopeListCopy = slopeList[:]
+
+        angleList = []
 
         pyFaceListOld = self.Pyth
         pyFaceListNew = []
@@ -363,7 +365,8 @@ class _SlopedPlanes(_Py):
                     pyFace.numFace = numFace
                     break
             else:
-                pyFace = _PyFace(numFace, mono)
+                # pyFace = _PyFace(numFace, mono)
+                pyFace = _PyFace(numFace)
                 pyFaceListNew.append(pyFace)
             _Py.pyFace = pyFace
 
@@ -416,7 +419,8 @@ class _SlopedPlanes(_Py):
                         break
                 else:
                     # print('d')
-                    pyWire = _PyWire(numWire, mono)
+                    ## pyWire = _PyWire(numWire, mono)
+                    pyWire = _PyWire(numWire)
                     pyWireListNew.append(pyWire)
                     pyWire.reset = True
                     pyFace.reset = True
@@ -430,6 +434,7 @@ class _SlopedPlanes(_Py):
                     numGeom += 1
                     # print('### numGeom ', numGeom)
 
+                    # unificar denominaciones con task panel ang angle slope ...
                     try:
                         ang = slopeListCopy.pop(0)
                         try:
@@ -438,6 +443,10 @@ class _SlopedPlanes(_Py):
                             ang = slope
                     except IndexError:
                         ang = slope
+
+                    if slope != ang:
+                        pyWire.mono = False
+                        pyFace.mono = False
 
                     try:
                         pyPlane = pyPlaneListOld[numGeom]
@@ -498,6 +507,8 @@ class _SlopedPlanes(_Py):
                         if thickness:
                             pyPlane.overhang = fOverhang / sin(radians(ang))
 
+                    angleList.append(pyPlane.angle)
+
                     pyPlane.geom = geom
 
                     pyEdge = SlopedPlanesPyEdge.makePyEdge(pyPlane)
@@ -528,12 +539,15 @@ class _SlopedPlanes(_Py):
 
             pyFace.faceManager()
 
+        self.slopeList = angleList
+
         return pyFaceListNew
 
     def reProcessFaces(self, slopedPlanes, faceList):
 
         ''''''
 
+        angleList = []
         numFace = -1
         for face in faceList:
             numFace += 1
@@ -559,7 +573,11 @@ class _SlopedPlanes(_Py):
                     pyPlane.frontedList = []
                     pyPlane.rearedList = []
 
+                    angleList.append(pyPlane.angle)
+
             pyFace.faceManager()
+
+        self.slopeList = angleList
 
     def listPlanes(self, slopedPlanes, pyFaceListNew, faceList, placement):
 
@@ -929,6 +947,7 @@ class _SlopedPlanes(_Py):
 
             elif prop == "angle":
 
+                pyFace.mono = True
                 for pyWire in pyFace.wires:
                     pyWire.mono = True
                     for pyPlane in pyWire.planes:
