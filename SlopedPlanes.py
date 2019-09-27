@@ -446,9 +446,9 @@ class _SlopedPlanes(_Py):
                                     pyFace.mono = False
                             except ValueError:
                                 ang = slope
-                        else:
+                        '''else:
                             pyPl = pyFace.wires[ang[0]].planes[ang[1]]
-                            ang = pyPl.angle
+                            ang = pyPl.angle'''
                     except IndexError:
                         ang = slope
 
@@ -522,7 +522,7 @@ class _SlopedPlanes(_Py):
 
                         pyPlane = _PyPlane(numWire, numGeom, ang)
                         pyPlaneListNew.append(pyPlane)
-                        if thickness:
+                        if thickness and isinstance(ang, float):
                             pyPlane.overhang = fOverhang / sin(radians(ang))
 
                     angleList.append(pyPlane.angle)
