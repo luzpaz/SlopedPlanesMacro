@@ -435,7 +435,26 @@ class _SlopedPlanes(_Py):
                     # print('### numGeom ', numGeom)
 
                     # unificar denominaciones con task panel ang angle slope ...
+                    # esto rompe los alineamientos con thickness not vertical
+                    # mirar task panel
+
                     try:
+                        ang = slopeListCopy.pop(0)
+                        if isinstance(ang, float):
+                            try:
+                                ang = float(ang)
+                                if ang != slope:
+                                    pyWire.mono = False
+                                    pyFace.mono = False
+                            except ValueError:
+                                ang = slope
+                        else:
+                            pyPl = pyFace.wires[ang[0]].planes[ang[1]]
+                            ang = pyPl.angle
+                    except IndexError:
+                        ang = slope
+
+                    '''try:
                         ang = slopeListCopy.pop(0)
                         try:
                             ang = float(ang)
@@ -447,7 +466,7 @@ class _SlopedPlanes(_Py):
                     if isinstance(ang, float):
                         if ang != slope:
                             pyWire.mono = False
-                            pyFace.mono = False
+                            pyFace.mono = False'''
 
                     try:
                         pyPlane = pyPlaneListOld[numGeom]
