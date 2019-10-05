@@ -493,7 +493,7 @@ class _TaskPanel_SlopedPlanes():
         pyFaceList = slopedPlanes.Proxy.Pyth
         numSlope = 0
 
-        slopeList = []
+        ##slopeList = []
 
         for pyFace in pyFaceList:
             originList = []
@@ -586,7 +586,7 @@ class _TaskPanel_SlopedPlanes():
                             sweepCurve = comboBox.currentText()
                             pyPlane.sweepCurve = sweepCurve
 
-                    slopeList.append(pyPlane.angle)
+                    ##slopeList.append(pyPlane.angle)
 
                 # print(pyWire.mono)
 
@@ -597,7 +597,7 @@ class _TaskPanel_SlopedPlanes():
             if down:
                 numSlope += 1
 
-        slopedPlanes.Proxy.slopeList = slopeList
+        ##slopedPlanes.Proxy.slopeList = slopeList
 
         slopedPlanes.Proxy.OnChanged = True
 
