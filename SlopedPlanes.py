@@ -87,7 +87,8 @@ class _SlopedPlanes(_Py):
             Type: object recognition
             State: jumps onChanged function at the loading file
             OnChanged: faster execute from property and task panels (~7%)
-            Serialize: Slower loading file (~15%) and faster execute (~7%)
+            Serialize: Slower loading file (~15%) and
+                       faster execute after starting (~7%)
 
         - three lists:
             Pyth: the complementary python objects
@@ -145,7 +146,7 @@ class _SlopedPlanes(_Py):
 
         # _____________________________________________________________________
 
-        doc = "Available curves to sweep"
+        doc = "Available curves to sweep (Not available yet!)"
 
         slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
                                  "SlopedPlanes", doc)
@@ -158,12 +159,20 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = "Thickness option (Not available yet!)"
+        doc = ('Thickness option (Not available yet!)\n'
+               'Applies on figures with more than one slope.\n'
+               'Regular Thickness: .\n'
+               'Regular Angle: ')
 
         slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessOption",
                                  "SlopedPlanes", doc)
 
-        doc = "Thickness direction"
+        doc = ('Thickness direction.\n'
+               'Vertical:.\n'
+               'Horizontal: .\n'
+               'Normal: .\n'
+               'ThicknessSlope: ')
+
 
         slopedPlanes.addProperty("App::PropertyEnumeration",
                                  "ThicknessDirection",
