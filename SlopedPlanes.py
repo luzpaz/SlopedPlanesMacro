@@ -153,7 +153,6 @@ class _SlopedPlanes(_Py):
 
         # _____________________________________________________________________
 
-
         doc = "Gives a thickness to the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
@@ -172,7 +171,6 @@ class _SlopedPlanes(_Py):
                'Horizontal: .\n'
                'Normal: .\n'
                'ThicknessSlope: ')
-
 
         slopedPlanes.addProperty("App::PropertyEnumeration",
                                  "ThicknessDirection",
@@ -1036,8 +1034,6 @@ class _SlopedPlanes(_Py):
             pyth.append(dct)
         state['Pyth'] = pyth
 
-        ## state['slopeList'] = self.slopeList
-
         # print('state ', state)
 
         return state
@@ -1049,8 +1045,6 @@ class _SlopedPlanes(_Py):
         # print('__setstate__')
 
         self.Type = state['Type']
-
-        ## self.slopeList = state['slopeList']
 
         serialize = state['Serialize']
 
@@ -1091,7 +1085,7 @@ class _SlopedPlanes(_Py):
 
         if serialize:
             self.OnChanged = True
-            # if the geometry change after loading, recompute
+            # if the geometry change after loading, recompute by hand
         else:
             self.OnChanged = False
 
