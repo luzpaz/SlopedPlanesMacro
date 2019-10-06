@@ -277,27 +277,14 @@ class _SlopedPlanes(_Py):
 
             face = Part.makeFace(shape.Wires, slopedPlanes.FaceMaker)
             fList = face.Faces
-
-            # gathers the exterior wires. Lower Left criteria
-
-            coordinatesOuterOrdered, geomOuterOrdered, faceList =\
-                self.gatherExteriorWires(fList)
-            # print('outer geom ', geomOuterOrdered)
-
+            faceList, pyFaceListNew = self.processFaces(slopedPlanes, fList)
             self.faceList = faceList
-
-            # procedees face by face and stores them into the Proxy
-
-            pyFaceListNew =\
-                self.processFaces(slopedPlanes, faceList,
-                                  coordinatesOuterOrdered, geomOuterOrdered)
             self.Pyth = pyFaceListNew
 
         else:
             # print('B')
 
             faceList = self.faceList
-
             self.reProcessFaces(slopedPlanes, faceList)
             pyFaceListNew = self.Pyth
 
@@ -311,8 +298,6 @@ class _SlopedPlanes(_Py):
             self.listPlanes(slopedPlanes, pyFaceListNew, faceList, placement)
 
         endShape = Part.makeShell(figList)
-
-        ## print(self.slopeList)
 
         if slopedPlanes.Group:
             # print('Group')
@@ -333,11 +318,15 @@ class _SlopedPlanes(_Py):
 
         slopedPlanes.Shape = endShape
 
-    def processFaces(self, slopedPlanes, faceList,
-                     coordinatesOuterOrdered, geomOuterOrdered,
-                     thickness=False):
+    def processFaces(self, slopedPlanes, fList, thickness=False):
 
         ''''''
+
+        # gathers the exterior wires. Lower Left criteria
+
+        coordinatesOuterOrdered, geomOuterOrdered, faceList =\
+            self.gatherExteriorWires(fList)
+        # print('outer geom ', geomOuterOrdered)
 
         slope = slopedPlanes.Slope.Value
         try:
@@ -566,7 +555,7 @@ class _SlopedPlanes(_Py):
 
         self.slopeList = angleList
 
-        return pyFaceListNew
+        return faceList, pyFaceListNew
 
     def reProcessFaces(self, slopedPlanes, faceList):
 
@@ -788,12 +777,8 @@ class _SlopedPlanes(_Py):
                 face.makeOffset2D(offset=val, join=2, fill=False,
                                   openResult=False, intersection=False)
 
-            coordOutOrd, geomOutOrd, fList =\
-                self.gatherExteriorWires(bigFace.Faces)
-
-            pyFLNew =\
-                self.processFaces(slopedPlanes, fList,
-                                  coordOutOrd, geomOutOrd,
+            fList, pyFLNew =\
+                self.processFaces(slopedPlanes, bigFace.Faces,
                                   thickness=True)
 
             figList =\
