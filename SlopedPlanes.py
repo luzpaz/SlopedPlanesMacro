@@ -83,12 +83,10 @@ class _SlopedPlanes(_Py):
         Initializes the properties of the SlopedPlanes object and its Proxy.
         The Proxy stores:
 
-        - four flags
+        - three flags
             Type: object recognition
             State: jumps onChanged function at the loading file
             OnChanged: faster execute from property and task panels (~7%)
-            Serialize: Slower loading file (~15%) and
-                       faster execute after starting (~7%)
 
         - three lists:
             Pyth: the complementary python objects
@@ -255,7 +253,6 @@ class _SlopedPlanes(_Py):
 
         self.Type = "SlopedPlanes"
 
-        self.Serialize = True
         self.OnChanged = False
 
     def execute(self, slopedPlanes):
@@ -389,8 +386,7 @@ class _SlopedPlanes(_Py):
             coordinates = [coordinates]
             coordinates.extend(coordinatesInnerOrdered)
 
-            if not self.Serialize:
-                pyFace.reset = True
+            pyFace.reset = True
 
             pyWireListOld = pyFace.wires
             pyWireListNew = []
@@ -993,9 +989,6 @@ class _SlopedPlanes(_Py):
 
         state['Type'] = self.Type
 
-        serialize = self.Serialize
-        state['Serialize'] = serialize
-
         faceList = self.faceList
 
         pyth = []
@@ -1003,19 +996,10 @@ class _SlopedPlanes(_Py):
         for pyFace in self.Pyth:
             numFace += 1
             dct = pyFace.__dict__.copy()
-            wires, alignments, serials = pyFace.__getstate__(serialize)
+            wires, alignments, serials = pyFace.__getstate__()
             dct['_shapeGeom'] = []
             dct['_wires'] = wires
             dct['_alignments'] = alignments
-            if serialize:
-                face = faceList[numFace]
-                # print('serials ', serials)
-                # print('face ', face)
-                serials = Part.makeCompound([face] + serials)
-                dct['_serials'] = serials.exportBrepToString()
-            else:
-                if '_serials' in dct:
-                    del dct['_serials']
             pyth.append(dct)
         state['Pyth'] = pyth
 
@@ -1031,8 +1015,6 @@ class _SlopedPlanes(_Py):
 
         self.Type = state['Type']
 
-        serialize = state['Serialize']
-
         faceList = []
         pyth = []
         numFace = -1
@@ -1044,18 +1026,8 @@ class _SlopedPlanes(_Py):
             wires = dct['_wires']
             alignments = dct['_alignments']
 
-            if serialize:
-                compound = Part.Compound([])
-                compound.importBrepFromString(dct['_serials'])
-                face = compound.Faces[0]
-                faceList.append(face)
-                compound = compound.removeShape([face])
-
-            else:
-                compound = None
-
             wires, alignments, geomShapeFace =\
-                pyFace.__setstate__(wires, alignments, serialize, compound)
+                pyFace.__setstate__(wires, alignments)
 
             dct['_wires'] = wires
             dct['_alignments'] = alignments
@@ -1065,14 +1037,9 @@ class _SlopedPlanes(_Py):
         self.Pyth = pyth
         self.faceList = faceList
 
-        self.Serialize = serialize
         self.State = True
 
-        if serialize:
-            self.OnChanged = True
-            # if the geometry change after loading, recompute by hand
-        else:
-            self.OnChanged = False
+        self.OnChanged = False
 
         # self.printSerialSummary()  ROTO
 

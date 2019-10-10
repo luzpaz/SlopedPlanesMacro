@@ -157,9 +157,9 @@ class _PyFace(_Py):
 
         self._mono = mono
 
-    def __getstate__(self, serialize):
+    def __getstate__(self):
 
-        '''__getstate__(self, serialize)
+        '''__getstate__(self)
         Serializes the complementary python objects.'''
 
         wireList, serialList = [], []
@@ -171,10 +171,6 @@ class _PyFace(_Py):
 
             for pyReflex in pyWire.reflexs:
                 pyReflex.lines = []
-
-            if serialize:
-                edgeList = []
-                forBack = []
 
             planeList = []
             for pyPlane in pyWire.planes:
@@ -214,20 +210,8 @@ class _PyFace(_Py):
 
                 dd['_edge'] = None
 
-                if serialize:
-
-                    edgeList.append(pyPlane.geomShape)
-
-                    if pyPlane.forward:
-
-                        forBack.extend([pyPlane.forward, pyPlane.backward])
-                        dd['_forward'] = 'forward'
-                        dd['_backward'] = 'backward'
-
-                else:
-
-                    dd['_forward'] = None
-                    dd['_backward'] = None
+                dd['_forward'] = None
+                dd['_backward'] = None
 
                 dd['_geomShape'] = None
                 dd['_geomAligned'] = None
@@ -236,11 +220,6 @@ class _PyFace(_Py):
 
                 planeList.append(dd)
             dct['_planes'] = planeList
-
-            if serialize:
-                ww = Part.Wire(edgeList)
-                ss = Part.Compound([ww] + forBack)
-                serialList.append(ss)
 
             reflexList = []
             for pyReflex in pyWire.reflexs:
@@ -261,21 +240,14 @@ class _PyFace(_Py):
 
         return wireList, alignList, serialList
 
-    def __setstate__(self, wires, alignments, serialize, compound):
+    def __setstate__(self, wires, alignments):
 
-        '''__setstate__(self, wires, alignments, serialize, compound)
+        '''__setstate__(self, wires, alignments)
         Deserializes the complementary python objects.'''
 
         geomShapeFace = []
         wireList = []
         numWire = -1
-
-        if serialize:
-
-            ww = compound.Wires[:]
-            compound = compound.removeShape(ww)
-            forBack = compound.Edges
-            nf = -1
 
         for dct in wires:
             numWire += 1
@@ -286,31 +258,10 @@ class _PyFace(_Py):
 
             geomShapeWire = []
 
-            if serialize:
-
-                wire = ww[numWire]
-                edgeList = wire.Edges
-
             for dd in dct['_planes']:
                 numGeom += 1
                 pyPlane = _PyPlane(numWire, numGeom)
                 pyPlane.__dict__ = dd
-
-                if serialize:
-
-                    if dd['_forward']:
-                        nf += 2
-
-                        pyPlane.forward = forBack[nf - 1]
-                        pyPlane.backward = forBack[nf]
-
-                    geomShape = edgeList[numGeom]
-                    pyPlane.geomShape = geomShape
-                    pyPlane.geomAligned = geomShape
-                    geom = pyPlane.doGeom()
-                    pyPlane.geom = geom
-                    pyPlane.edge = SlopedPlanesPyEdge.makePyEdge(pyPlane)
-                    geomShapeWire.append(geomShape)
 
                 planeList.append(pyPlane)
 
@@ -336,10 +287,6 @@ class _PyFace(_Py):
             dct['_coordinates'] = coordinates
 
             pyWire.__dict__ = dct
-
-            if serialize:
-                pyWire.shapeGeom = geomShapeWire
-                geomShapeFace.extend(geomShapeWire)
 
             wireList.append(pyWire)
 
