@@ -386,6 +386,7 @@ class _SlopedPlanes(_Py):
             coordinates = [coordinates]
             coordinates.extend(coordinatesInnerOrdered)
 
+            # TODO eliminado serializa hay que reconsiderar reset
             pyFace.reset = True
 
             pyWireListOld = pyFace.wires
