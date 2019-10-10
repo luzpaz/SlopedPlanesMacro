@@ -400,7 +400,6 @@ class _PyFace(_Py):
         Splits the pyFace object finding its reflex corners and alignments.'''
 
         # print('######### parsing')
-        # TODO no sería mas eficiente empezar por upperleft en exteriores?
 
         resetFace = self.reset
         # print('resetFace ', resetFace)
