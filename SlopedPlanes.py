@@ -724,7 +724,6 @@ class _SlopedPlanes(_Py):
             # print('No Vertical')
 
             # hay que hacer ThicknessOption
-            # hay que dar una propiedad AngleThickness a cada plano
 
             face = Part.Compound(faceList)
 
