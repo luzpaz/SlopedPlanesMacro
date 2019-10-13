@@ -718,17 +718,15 @@ class _SlopedPlanes(_Py):
             else:
                 endShape = shellList[0]
 
-            # cuando convierto a sólido da un error de geometria
+            # cuando convierto a sólido da un error de geometría
 
         else:
             # print('No Vertical')
 
             # hay que hacer ThicknessOption
 
-            face = Part.Compound(faceList)
-
             angle = slopedPlanes.Slope.Value
-            height = value * sin(radians(angle))
+            # height = value * sin(radians(angle))
 
             # print(angle, height, value)
 
@@ -747,11 +745,12 @@ class _SlopedPlanes(_Py):
             elif thicknessDirection == 'Horizontal':
 
                 ang = angle
-                # hei = height
                 hei = 0
                 val = value
 
             # print(ang, hei, val)
+
+            face = Part.Compound(faceList)
 
             bigFace =\
                 face.makeOffset2D(offset=val, join=2, fill=False,
@@ -766,13 +765,12 @@ class _SlopedPlanes(_Py):
 
             secondShape = Part.makeShell(figList)
 
-            #if thicknessDirection != 'Horizontal':
-
             secondShape.translate(V(0, 0, hei))
             bigFace.translate(V(0, 0, hei))
 
-            factorOverhang = slopedPlanes.FactorOverhang
             shellList = []
+
+            factorOverhang = slopedPlanes.FactorOverhang
 
             if factorOverhang:
 
@@ -786,7 +784,7 @@ class _SlopedPlanes(_Py):
                     size = pyFace.size
                     hght = factorOverhang * size
                     run = hght / tan(radians(angle))
-                    # print(hght, run)
+                    print(hght, run)
 
                     ff =\
                         face.makeOffset2D(offset=run, join=2, fill=False,
@@ -800,7 +798,6 @@ class _SlopedPlanes(_Py):
 
                     FF.translate(V(0, 0, -1 * hght))
 
-                    # if thicknessDirection != 'Horizontal':
                     FF.translate(V(0, 0, hei))
 
                     baseFaces = ss.Faces + SS.Faces
