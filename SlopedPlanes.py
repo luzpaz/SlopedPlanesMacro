@@ -89,8 +89,8 @@ class _SlopedPlanes(_Py):
             OnChanged: faster execute from property and task panels (~7%)
 
         - three lists:
-            Pyth: the complementary python objects
-            faceList: faces produced by the FaceMaker over the base
+            Pyth: the complementary python objects (serialized)
+            faceList: produced by the FaceMaker over the base (not serialized)
             slopeList: list of angles (not serialized)'''
 
         # _____________________________________________________________________
@@ -319,6 +319,8 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
+        # print('processFaces')
+
         # gathers the exterior wires. Lower Left criteria
 
         coordinatesOuterOrdered, geomOuterOrdered, faceList =\
@@ -386,9 +388,12 @@ class _SlopedPlanes(_Py):
             coordinates = [coordinates]
             coordinates.extend(coordinatesInnerOrdered)
 
+<<<<<<< HEAD
             # TODO eliminado serializa hay que reconsiderar reset
             pyFace.reset = True
 
+=======
+>>>>>>> serial
             pyWireListOld = pyFace.wires
             pyWireListNew = []
             geomShapeFace = []
@@ -397,8 +402,10 @@ class _SlopedPlanes(_Py):
                 numWire += 1
                 # print('###### numWire ', numWire)
                 coo = coordinates[numWire]
+                # print(coo)
                 for pyWire in pyWireListOld:
                     oldCoo = pyWire.coordinates
+                    # print(oldCoo)
                     if oldCoo[0] == coo[0]:
                         # print('a')
                         if oldCoo != coo:
@@ -415,7 +422,6 @@ class _SlopedPlanes(_Py):
                     ## pyWire = _PyWire(numWire, mono)
                     pyWire = _PyWire(numWire)
                     pyWireListNew.append(pyWire)
-                    pyWire.reset = True
                     pyFace.reset = True
                 pyWire.coordinates = coo
 
@@ -439,25 +445,8 @@ class _SlopedPlanes(_Py):
                                     pyFace.mono = False
                             except ValueError:
                                 ang = slope
-                        '''else:
-                            pyPl = pyFace.wires[ang[0]].planes[ang[1]]
-                            ang = pyPl.angle'''
                     except IndexError:
                         ang = slope
-
-                    '''try:
-                        ang = slopeListCopy.pop(0)
-                        try:
-                            ang = float(ang)
-                        except ValueError:
-                            ang = slope
-                    except IndexError:
-                        ang = slope
-
-                    if isinstance(ang, float):
-                        if ang != slope:
-                            pyWire.mono = False
-                            pyFace.mono = False'''
 
                     try:
                         pyPlane = pyPlaneListOld[numGeom]
@@ -558,6 +547,8 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
+        # print('reProcessFaces')
+
         angleList = []
         numFace = -1
         for face in faceList:
@@ -568,9 +559,11 @@ class _SlopedPlanes(_Py):
 
             pyFace = self.Pyth[numFace]
             _Py.pyFace = pyFace
+            pyFace.reset = False
             # print(pyFace.mono)
             for pyWire in pyFace.wires:
                 # print(pyWire.mono)
+                pyWire.reset = False
                 pyWire.wire = Part.Wire(pyWire.shapeGeom)
 
                 for pyPlane in pyWire.planes:
@@ -990,14 +983,12 @@ class _SlopedPlanes(_Py):
 
         state['Type'] = self.Type
 
-        faceList = self.faceList
-
         pyth = []
         numFace = -1
         for pyFace in self.Pyth:
             numFace += 1
             dct = pyFace.__dict__.copy()
-            wires, alignments, serials = pyFace.__getstate__()
+            wires, alignments = pyFace.__getstate__()
             dct['_shapeGeom'] = []
             dct['_wires'] = wires
             dct['_alignments'] = alignments
@@ -1016,7 +1007,6 @@ class _SlopedPlanes(_Py):
 
         self.Type = state['Type']
 
-        faceList = []
         pyth = []
         numFace = -1
         for dct in state['Pyth']:
@@ -1027,22 +1017,22 @@ class _SlopedPlanes(_Py):
             wires = dct['_wires']
             alignments = dct['_alignments']
 
-            wires, alignments, geomShapeFace =\
+            wires, alignments =\
                 pyFace.__setstate__(wires, alignments)
 
             dct['_wires'] = wires
             dct['_alignments'] = alignments
-            dct['_shapeGeom'] = geomShapeFace
+            dct['_shapeGeom'] = []
             pyFace.__dict__ = dct
+            pyFace.reset = True
             pyth.append(pyFace)
         self.Pyth = pyth
-        self.faceList = faceList
+
+        self.faceList = []
 
         self.State = True
 
         self.OnChanged = False
-
-        # self.printSerialSummary()  ROTO
 
 
 class _ViewProvider_SlopedPlanes():

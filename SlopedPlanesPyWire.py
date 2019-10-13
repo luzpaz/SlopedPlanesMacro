@@ -167,7 +167,7 @@ class _PyWire(_Py):
 
     def planning(self):
 
-        '''planning(self, reset):
+        '''planning(self):
         Transfers to PyPlane.
         Arranges the reflex range and its planes ranges.'''
 
