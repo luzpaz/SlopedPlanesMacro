@@ -567,9 +567,11 @@ class _SlopedPlanes(_Py):
 
             pyFace = self.Pyth[numFace]
             _Py.pyFace = pyFace
+            pyFace.reset = False
             # print(pyFace.mono)
             for pyWire in pyFace.wires:
                 # print(pyWire.mono)
+                pyWire.reset = False
                 pyWire.wire = Part.Wire(pyWire.shapeGeom)
 
                 for pyPlane in pyWire.planes:
@@ -989,7 +991,7 @@ class _SlopedPlanes(_Py):
 
         state['Type'] = self.Type
 
-        faceList = self.faceList
+        # faceList = self.faceList
 
         pyth = []
         numFace = -1
@@ -1015,7 +1017,7 @@ class _SlopedPlanes(_Py):
 
         self.Type = state['Type']
 
-        faceList = []
+        # faceList = []
         pyth = []
         numFace = -1
         for dct in state['Pyth']:
@@ -1035,7 +1037,8 @@ class _SlopedPlanes(_Py):
             pyFace.__dict__ = dct
             pyth.append(pyFace)
         self.Pyth = pyth
-        self.faceList = faceList
+        # self.faceList = faceList
+        self.faceList = []
 
         self.State = True
 
