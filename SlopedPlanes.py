@@ -844,7 +844,7 @@ class _SlopedPlanes(_Py):
                     pyPl = pyFace.selectPlane(ang[0], ang[1], pyFace)
                     ang = pyPl.angle
                 edge = pyPlane.geomShape.copy()
-                edge.translate()
+                # edge.translate()
                 eeList.append(edge)
         compound = Part.Compound(eeList)
         slopedPlanes.Proxy.ee = compound
