@@ -15,4 +15,4 @@ To use this macro, please:
 * Copy the file "SlopedPlanes.FCMacro" at "~/.FreeCAD"
 
 ### Dedicatory
-    Didicated to my mother, who makes this code possible.
+    Dedicated to my mother, who makes this code possible.
