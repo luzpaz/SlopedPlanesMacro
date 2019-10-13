@@ -90,8 +90,8 @@ class _SlopedPlanes(_Py):
 
         - three lists:
             Pyth: the complementary python objects (serialized)
-            faceList: produced by the FaceMaker over the base (not serialized)
-            slopeList: list of angles (not serialized)'''
+            faceList: produced by the FaceMaker over the base
+            slopeList: list of angles'''
 
         # _____________________________________________________________________
 
