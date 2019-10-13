@@ -162,7 +162,7 @@ class _PyFace(_Py):
         '''__getstate__(self)
         Serializes the complementary python objects.'''
 
-        wireList, serialList = [], []
+        wireList = []
         for pyWire in self.wires:
             dct = pyWire.__dict__.copy()
             dct['_coordinates'] = [[v.x, v.y, v.z] for v in pyWire.coordinates]
@@ -238,7 +238,7 @@ class _PyFace(_Py):
             dct = {}
             alignList.append(dct)
 
-        return wireList, alignList, serialList
+        return wireList, alignList
 
     def __setstate__(self, wires, alignments):
 
@@ -301,6 +301,9 @@ class _PyFace(_Py):
 
         '''faceManager(self)'''
 
+        # print('Face mono reset', self.mono, self.reset)
+        # print('Wire mono reset ', [(p.mono, p.reset) for p in self.wires])
+
         self.parsing()
 
         # self.printSummary()
@@ -311,7 +314,9 @@ class _PyFace(_Py):
 
         reset = self.reset
 
+        # print('Face mono reset', self.mono, self.reset)
         for pyWire in pyWireList:
+            # print('Wire mono reset ', pyWire.mono, pyWire.reset)
             pyWire.planning()
 
         # self.printSummary()
@@ -323,6 +328,7 @@ class _PyFace(_Py):
             pyAlign.rangging(reset)
 
         self.reset = False
+        # print('Face mono reset', self.mono, self.reset)
 
         # self.printSummary()
 

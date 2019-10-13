@@ -25,10 +25,6 @@ for directory in os.walk('/home/slopedplanestest/Test'):
 
                         oldShape = obj.Shape.copy()
 
-                        '''obj.Proxy.faceList = []
-                        for pyFace in obj.Proxy.Pyth:
-                            pyFace.reset = True'''
-
                         obj.touch()
                         doc.recompute()
 
