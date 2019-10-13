@@ -270,7 +270,7 @@ class _SlopedPlanes(_Py):
         self.declareSlopedPlanes(slopedPlanes)
 
         if not self.OnChanged or not self.faceList:
-            # print('A')
+            print('A')
 
             face = Part.makeFace(shape.Wires, slopedPlanes.FaceMaker)
             fList = face.Faces
@@ -279,7 +279,7 @@ class _SlopedPlanes(_Py):
             self.Pyth = pyFaceListNew
 
         else:
-            # print('B')
+            print('B')
 
             faceList = self.faceList
             self.reProcessFaces(slopedPlanes, faceList)
@@ -319,7 +319,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # print('processFaces')
+        print('processFaces')
 
         # gathers the exterior wires. Lower Left criteria
 
@@ -537,7 +537,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # print('reProcessFaces')
+        print('reProcessFaces')
 
         angleList = []
         numFace = -1
@@ -781,14 +781,8 @@ class _SlopedPlanes(_Py):
                                                 faceList,
                                                 slopedPlanes.Proxy.Pyth):
 
-                    size = pyFace.size
-                    hght = factorOverhang * size
-                    run = hght / tan(radians(angle))
-                    print(hght, run)
-
-                    ff =\
-                        face.makeOffset2D(offset=run, join=2, fill=False,
-                                          openResult=False, intersection=False)
+                    ff, hght = self.slopedOffset(slopedPlanes, pyFace, face,
+                                                 factorOverhang, angle)
 
                     FF =\
                         ff.makeOffset2D(offset=val, join=2, fill=False,
@@ -806,8 +800,8 @@ class _SlopedPlanes(_Py):
                         for bf in base.Faces:
                             bf.Placement = bf.Placement.multiply(placement)
                             baseFaces.append(bf)
-                    shell = Part.Shell(baseFaces)
-                    # shell = Part.Compound(baseFaces)
+                    #shell = Part.Shell(baseFaces)
+                    shell = Part.Compound(baseFaces)
                     shell.Placement = placement
                     shellList.append(shell)
 
@@ -832,6 +826,34 @@ class _SlopedPlanes(_Py):
                 endShape = shellList[0]
 
         return endShape
+
+    def slopedOffset(self, slopedPlanes, pyFace, face, factorOverhang, angle):
+
+        ''''''
+
+        size = pyFace.size
+        hght = factorOverhang * size
+        run = hght / tan(radians(angle))
+        # print(hght, run)
+
+        eeList = []
+        for pyWire in pyFace.wires:
+            for pyPlane in pyWire.planes:
+                ang = pyPlane.angle
+                if isinstance(ang, list):
+                    pyPl = pyFace.selectPlane(ang[0], ang[1], pyFace)
+                    ang = pyPl.angle
+                edge = pyPlane.geomShape.copy()
+                edge.translate()
+                eeList.append(edge)
+        compound = Part.Compound(eeList)
+        slopedPlanes.Proxy.ee = compound
+
+        ff =\
+            face.makeOffset2D(offset=run, join=2, fill=False,
+                              openResult=False, intersection=False)
+
+        return ff, hght
 
     def onChanged(self, slopedPlanes, prop):
 
@@ -890,6 +912,8 @@ class _SlopedPlanes(_Py):
                         if sw:
                             if sw not in curvesList:
                                 pyPlane.sweepCurve = None
+
+        self.OnChanged = True
 
     def overWritePyProp(self, prop, value):
 
@@ -951,8 +975,6 @@ class _SlopedPlanes(_Py):
                 for pyWire in pyFace.wires:
                     for pyPlane in pyWire.planes:
                         setattr(pyPlane, prop, newValue)
-
-        self.OnChanged = True
 
     def onDocumentRestored(self, slopedPlanes):
 
