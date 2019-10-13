@@ -245,7 +245,6 @@ class _PyFace(_Py):
         '''__setstate__(self, wires, alignments)
         Deserializes the complementary python objects.'''
 
-        geomShapeFace = []
         wireList = []
         numWire = -1
 
@@ -255,8 +254,6 @@ class _PyFace(_Py):
 
             planeList = []
             numGeom = -1
-
-            geomShapeWire = []
 
             for dd in dct['_planes']:
                 numGeom += 1
@@ -295,7 +292,7 @@ class _PyFace(_Py):
             pyAlignment = _PyAlignment()
             alignList.append(pyAlignment)
 
-        return wireList, alignList, geomShapeFace
+        return wireList, alignList
 
     def faceManager(self):
 
