@@ -330,12 +330,10 @@ class _SlopedPlanes(_Py):
         slope = slopedPlanes.Slope.Value
         try:
             slopeList = self.slopeList
-            ## mono = False
             # print('a')
         except AttributeError:
             # print('b')
             slopeList = []
-            ## mono = True
         # print('slopeList ', slopeList)
         slopeListCopy = slopeList[:]
 
@@ -360,7 +358,6 @@ class _SlopedPlanes(_Py):
                     pyFace.numFace = numFace
                     break
             else:
-                # pyFace = _PyFace(numFace, mono)
                 pyFace = _PyFace(numFace)
                 pyFaceListNew.append(pyFace)
             _Py.pyFace = pyFace
@@ -413,7 +410,6 @@ class _SlopedPlanes(_Py):
                         break
                 else:
                     # print('d')
-                    ## pyWire = _PyWire(numWire, mono)
                     pyWire = _PyWire(numWire)
                     pyWireListNew.append(pyWire)
                     pyFace.reset = True
