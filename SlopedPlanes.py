@@ -747,7 +747,8 @@ class _SlopedPlanes(_Py):
             elif thicknessDirection == 'Horizontal':
 
                 ang = angle
-                hei = height
+                # hei = height
+                hei = 0
                 val = value
 
             # print(ang, hei, val)
@@ -765,10 +766,10 @@ class _SlopedPlanes(_Py):
 
             secondShape = Part.makeShell(figList)
 
-            if thicknessDirection != 'Horizontal':
+            #if thicknessDirection != 'Horizontal':
 
-                secondShape.translate(V(0, 0, hei))
-                bigFace.translate(V(0, 0, hei))
+            secondShape.translate(V(0, 0, hei))
+            bigFace.translate(V(0, 0, hei))
 
             factorOverhang = slopedPlanes.FactorOverhang
             shellList = []
@@ -799,8 +800,8 @@ class _SlopedPlanes(_Py):
 
                     FF.translate(V(0, 0, -1 * hght))
 
-                    if thicknessDirection != 'Horizontal':
-                        FF.translate(V(0, 0, hei))
+                    # if thicknessDirection != 'Horizontal':
+                    FF.translate(V(0, 0, hei))
 
                     baseFaces = ss.Faces + SS.Faces
                     for ww, WW in zip(ff.Wires, FF.Wires):
