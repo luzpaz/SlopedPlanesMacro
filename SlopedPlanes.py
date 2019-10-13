@@ -388,8 +388,6 @@ class _SlopedPlanes(_Py):
             coordinates = [coordinates]
             coordinates.extend(coordinatesInnerOrdered)
 
-            # pyFace.reset = True
-
             pyWireListOld = pyFace.wires
             pyWireListNew = []
             geomShapeFace = []
@@ -1020,6 +1018,7 @@ class _SlopedPlanes(_Py):
             dct['_alignments'] = alignments
             dct['_shapeGeom'] = []
             pyFace.__dict__ = dct
+            pyFace.reset = True
             pyth.append(pyFace)
         self.Pyth = pyth
 
