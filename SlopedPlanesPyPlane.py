@@ -90,6 +90,8 @@ class _PyPlane(_Py):
         self.reallySolved = False
         self.sweepCurve = None
 
+        self.extrDirect = None
+
         self.edge = None
 
     @property
@@ -742,6 +744,20 @@ class _PyPlane(_Py):
         self._sweepCurve = sweepCurve
 
     @property
+    def extrDirect(self):
+
+        ''''''
+
+        return self._extrDirect
+
+    @extrDirect.setter
+    def extrDirect(self, extrDirect):
+
+        ''''''
+
+        self._extrDirect = extrDirect
+
+    @property
     def edge(self):
 
         ''''''
@@ -1203,6 +1219,8 @@ class _PyPlane(_Py):
                 # print('B2')
 
                 plane = extendShape.extrude(extrusionDirection * upScale)
+
+        self.extrDirect = extrusionDirection
 
         return plane
 

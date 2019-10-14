@@ -270,7 +270,7 @@ class _SlopedPlanes(_Py):
         self.declareSlopedPlanes(slopedPlanes)
 
         if not self.OnChanged or not self.faceList:
-            print('A')
+            # print('A')
 
             face = Part.makeFace(shape.Wires, slopedPlanes.FaceMaker)
             fList = face.Faces
@@ -279,7 +279,7 @@ class _SlopedPlanes(_Py):
             self.Pyth = pyFaceListNew
 
         else:
-            print('B')
+            # print('B')
 
             faceList = self.faceList
             self.reProcessFaces(slopedPlanes, faceList)
@@ -319,7 +319,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        print('processFaces')
+        # print('processFaces')
 
         # gathers the exterior wires. Lower Left criteria
 
@@ -537,7 +537,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        print('reProcessFaces')
+        # print('reProcessFaces')
 
         angleList = []
         numFace = -1
@@ -788,9 +788,11 @@ class _SlopedPlanes(_Py):
                         ff.makeOffset2D(offset=val, join=2, fill=False,
                                         openResult=False, intersection=False)
 
-                    ff.translate(V(0, 0, -1 * hght))
+                    if pyFace.mono:
 
-                    FF.translate(V(0, 0, -1 * hght))
+                        ff.translate(V(0, 0, -1 * hght))
+
+                        FF.translate(V(0, 0, -1 * hght))
 
                     FF.translate(V(0, 0, hei))
 
@@ -800,8 +802,8 @@ class _SlopedPlanes(_Py):
                         for bf in base.Faces:
                             bf.Placement = bf.Placement.multiply(placement)
                             baseFaces.append(bf)
-                    #shell = Part.Shell(baseFaces)
-                    shell = Part.Compound(baseFaces)
+                    shell = Part.Shell(baseFaces)
+                    # shell = Part.Compound(baseFaces)
                     shell.Placement = placement
                     shellList.append(shell)
 
@@ -832,26 +834,63 @@ class _SlopedPlanes(_Py):
         ''''''
 
         size = pyFace.size
-        hght = factorOverhang * size
-        run = hght / tan(radians(angle))
-        # print(hght, run)
 
-        eeList = []
-        for pyWire in pyFace.wires:
-            for pyPlane in pyWire.planes:
-                ang = pyPlane.angle
-                if isinstance(ang, list):
-                    pyPl = pyFace.selectPlane(ang[0], ang[1], pyFace)
-                    ang = pyPl.angle
-                edge = pyPlane.geomShape.copy()
-                # edge.translate()
-                eeList.append(edge)
-        compound = Part.Compound(eeList)
-        slopedPlanes.Proxy.ee = compound
+        if pyFace.mono:
 
-        ff =\
-            face.makeOffset2D(offset=run, join=2, fill=False,
-                              openResult=False, intersection=False)
+            hght = factorOverhang * size
+            run = hght / tan(radians(angle))
+            # print(hght, run)
+
+            ff =\
+                face.makeOffset2D(offset=run, join=2, fill=False,
+                                  openResult=False, intersection=False)
+
+        else:
+
+            hght = factorOverhang * size
+
+            eeList, ttList = [], []
+            for pyWire in pyFace.wires:
+                for pyPlane in pyWire.planes:
+                    ang = pyPlane.angle
+                    if isinstance(ang, list):
+                        pyPl = pyFace.selectPlane(ang[0], ang[1], pyFace)
+                        ang = pyPl.angle
+                    geom = pyPlane.geom.copy()
+                    length = hght / sin(radians(ang))
+                    extrDirect = pyPlane.extrDirect
+                    geom.translate(-1 * length * extrDirect)
+                    ttList.append(geom.copy().toShape())
+                    geom.setParameterRange(geom.FirstParameter - size,
+                                           geom.LastParameter + size)
+                    eeList.append(geom.toShape())
+
+            edgeList = []
+            nn = -1
+            for ee, tt in zip(eeList, ttList):
+
+                prior = eeList[nn]
+                try:
+                    later = eeList[nn + 2]
+                except IndexError:
+                    later = eeList[0]
+                ee = ee.cut([prior, later])
+                nn += 1
+
+                for ll in ee.Edges:
+                    section = ll.section(tt)
+                    if section.Edges:
+                        edgeList.append(ll)
+                        break
+
+            ff = Part.Wire(edgeList)
+
+            '''compound = Part.Compound(edgeList)
+            slopedPlanes.Proxy.ee = compound
+            run = hght / tan(radians(angle))
+            ff =\
+                face.makeOffset2D(offset=run, join=2, fill=False,
+                                  openResult=False, intersection=False)'''
 
         return ff, hght
 
