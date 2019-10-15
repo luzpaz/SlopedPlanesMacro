@@ -845,6 +845,12 @@ class _SlopedPlanes(_Py):
 
             # se puede hacer cortando un gran plano ubicado a la altura -1*hght
             # y reservar este procedimiento para Thickness Option
+            # Thickness option desaparece y se incluye en direction y queda:
+            # vertical,
+            # horizontal,
+            # slope,
+            # thickness slope,
+            # normal to planes (variable thickness (height calculated with 45º))
 
             eeList, ttList = [], []
             for pyWire in pyFace.wires:
