@@ -788,12 +788,6 @@ class _SlopedPlanes(_Py):
                         ff.makeOffset2D(offset=val, join=2, fill=False,
                                         openResult=False, intersection=False)
 
-                    if pyFace.mono:
-
-                        ff.translate(V(0, 0, -1 * hght))
-
-                        FF.translate(V(0, 0, -1 * hght))
-
                     FF.translate(V(0, 0, hei))
 
                     baseFaces = ss.Faces + SS.Faces
@@ -834,10 +828,10 @@ class _SlopedPlanes(_Py):
         ''''''
 
         size = pyFace.size
+        hght = factorOverhang * size
 
         if pyFace.mono:
 
-            hght = factorOverhang * size
             run = hght / tan(radians(angle))
             # print(hght, run)
 
@@ -845,9 +839,12 @@ class _SlopedPlanes(_Py):
                 face.makeOffset2D(offset=run, join=2, fill=False,
                                   openResult=False, intersection=False)
 
+            ff.translate(V(0, 0, -1 * hght))
+
         else:
 
-            hght = factorOverhang * size
+            # se puede hacer cortando un gran plano ubicado a la altura -1*hght
+            # y reservar este procedimiento para Thickness Option
 
             eeList, ttList = [], []
             for pyWire in pyFace.wires:
@@ -884,13 +881,6 @@ class _SlopedPlanes(_Py):
                         break
 
             ff = Part.Wire(edgeList)
-
-            '''compound = Part.Compound(edgeList)
-            slopedPlanes.Proxy.ee = compound
-            run = hght / tan(radians(angle))
-            ff =\
-                face.makeOffset2D(offset=run, join=2, fill=False,
-                                  openResult=False, intersection=False)'''
 
         return ff, hght
 
