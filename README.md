@@ -14,5 +14,5 @@ To use this macro, please:
 * Clone the repository at "~/.FreeCAD/Mod"
 * Copy the file "SlopedPlanes.FCMacro" at "~/.FreeCAD"
 
-### Dedicatory
+### Acknowledgement
     Dedicated to my mother, who makes this code possible.

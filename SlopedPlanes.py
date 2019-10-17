@@ -156,19 +156,13 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = ('Thickness option (Not available yet!)\n'
-               'Applies on figures with more than one slope.\n'
-               'Regular Thickness: .\n'
-               'Regular Angle: ')
-
-        slopedPlanes.addProperty("App::PropertyEnumeration", "ThicknessOption",
-                                 "SlopedPlanes", doc)
-
         doc = ('Thickness direction.\n'
-               'Vertical:.\n'
-               'Horizontal: .\n'
-               'Normal: .\n'
-               'ThicknessSlope: ')
+               '    Vertical: \n'
+               '    Horizontal: \n'
+               '    Slope: \n'
+               '    ThicknessSlope: \n'
+               '    Normal: normal to planes. Height calculated with 45º \n'
+               '            and the length of Thickness property. \n')
 
         slopedPlanes.addProperty("App::PropertyEnumeration",
                                  "ThicknessDirection",
@@ -229,13 +223,11 @@ class _SlopedPlanes(_Py):
         slopedPlanes.FactorLength = 2
         slopedPlanes.FactorWidth = 1
 
-        slopedPlanes.ThicknessOption = ["RegularThickness",
-                                        "RegularAngle"]
-
         slopedPlanes.ThicknessDirection = ["Vertical",
                                            "Horizontal",
-                                           "Normal",
-                                           "ThicknessSlope"]
+                                           "Slope",
+                                           "ThicknessSlope",
+                                           "Normal"]
 
         slopedPlanes.ThicknessSlope = ang
 
@@ -723,8 +715,6 @@ class _SlopedPlanes(_Py):
         else:
             # print('No Vertical')
 
-            # hay que hacer ThicknessOption
-
             angle = slopedPlanes.Slope.Value
             # height = value * sin(radians(angle))
 
@@ -844,13 +834,7 @@ class _SlopedPlanes(_Py):
         else:
 
             # se puede hacer cortando un gran plano ubicado a la altura -1*hght
-            # y reservar este procedimiento para Thickness Option
-            # Thickness option desaparece y se incluye en direction y queda:
-            # vertical,
-            # horizontal,
-            # slope,
-            # thickness slope,
-            # normal to planes (variable thickness (height calculated with 45º))
+            # y reservar este procedimiento para Thickness Direction normal
 
             eeList, ttList = [], []
             for pyWire in pyFace.wires:
