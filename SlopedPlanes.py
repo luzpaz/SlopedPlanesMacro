@@ -821,7 +821,17 @@ class _SlopedPlanes(_Py):
 
         return endShape
 
+    def overhangWires(self):
 
+        ''''''
+
+        return
+
+    def normalWires(self):
+
+        ''''''
+
+        return
 
     def slopedOffset(self, slopedPlanes, pyFace, face, factorOverhang, angle):
 
