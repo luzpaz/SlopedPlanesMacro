@@ -366,6 +366,7 @@ class _SlopedPlanes(_Py):
             pyFace.size = size
 
             fOverhang = slopedPlanes.FactorOverhang * size
+            # print(size, fOverhang)
 
             # gathers the interior wires. Upper Left criteria
 
@@ -474,13 +475,14 @@ class _SlopedPlanes(_Py):
                                 slopedPlanes.FactorWidth * size
                             pyPlane.length =\
                                 slopedPlanes.FactorLength * size
-                            pyPlane.overhang = fOverhang
 
                             angle = pyPlane.angle
                             if isinstance(angle, list):
                                 angle = self.selectPlane(angle[0],
                                                          angle[1]).angle
                                 pyPlane.angle = angle
+
+                            pyPlane.overhang = fOverhang / sin(radians(angle))
 
                             pyPlane.lineInto = None
                             pyPlane.cross = False
@@ -494,6 +496,8 @@ class _SlopedPlanes(_Py):
                         pyPlaneListNew.append(pyPlane)
                         if thickness and isinstance(ang, float):
                             pyPlane.overhang = fOverhang / sin(radians(ang))
+
+                    # print(pyPlane.overhang)
 
                     angleList.append(pyPlane.angle)
 
@@ -567,6 +571,8 @@ class _SlopedPlanes(_Py):
                     pyPlane.rearedList = []
 
                     angleList.append(pyPlane.angle)
+
+                    # print(pyPlane.overhang)
 
             pyFace.faceManager()
 
@@ -695,6 +701,8 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
+        # print('fattening ')
+
         thicknessDirection = slopedPlanes.ThicknessDirection
         value = slopedPlanes.Thickness.Value
 
@@ -723,7 +731,7 @@ class _SlopedPlanes(_Py):
             # print('No Vertical')
 
             angle = slopedPlanes.Slope.Value
-            # height = value * sin(radians(angle))
+            height = value * sin(radians(angle))
 
             # print(angle, height, value)
 
@@ -825,10 +833,12 @@ class _SlopedPlanes(_Py):
         ss = 10 * size
         cc = -1 * 5 * size # TODO habría que centrarlo en la primera coordenada
 
+        # print(endShape.BoundBox.ZMin)
         endPlane = Part.makePlane(ss, ss, V(cc, cc, endShape.BoundBox.ZMin))
         cut = endPlane.cut(endShape, _Py.tolerance)
         ff = Part.makeFace(cut.Wires[1:], 'Part::FaceMakerBullseye')
 
+        # print(secondShape.BoundBox.ZMin)
         secondPlane =\
             Part.makePlane(ss, ss, V(cc, cc, secondShape.BoundBox.ZMin))
         cut = secondPlane.cut(secondShape, _Py.tolerance)
