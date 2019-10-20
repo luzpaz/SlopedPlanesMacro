@@ -706,6 +706,8 @@ class _SlopedPlanes(_Py):
         thicknessDirection = slopedPlanes.ThicknessDirection
         value = slopedPlanes.Thickness.Value
 
+        pyth = slopedPlanes.Proxy.Pyth
+
         if thicknessDirection == 'Vertical':
             # print('Vertical')
 
@@ -755,17 +757,33 @@ class _SlopedPlanes(_Py):
 
             elif thicknessDirection == 'Normal':
 
-                ang = angle
-                hei = 0
-                val = value
+                ang = 45.0
+                hei = value * sin(radians(ang))
+                val = None
 
             # print(ang, hei, val)
 
             face = Part.Compound(faceList)
 
-            bigFace =\
-                face.makeOffset2D(offset=val, join=2, fill=False,
-                                  openResult=False, intersection=False)
+            if thicknessDirection == 'Normal':
+
+                bigFaceList = []
+                for pyFace, face in zip(pyth, faceList):
+
+                    bFace = self.normalWires(pyFace, face, hei)
+                    bigFaceList.append(bFace)
+
+                if len(bigFaceList) == 1:
+                    bigFace = bigFaceList[0]
+                else:
+                    bigFace = Part.Compound(bigFaceList)
+
+            else:
+
+                bigFace =\
+                    face.makeOffset2D(offset=val, join=2, fill=False,
+                                      openResult=False, intersection=False)
+                bigFace.translate(V(0, 0, hei))
 
             fList, pyFLNew =\
                 self.processFaces(slopedPlanes, bigFace.Faces,
@@ -776,8 +794,8 @@ class _SlopedPlanes(_Py):
 
             secondShape = Part.makeShell(figList)
 
-            secondShape.translate(V(0, 0, hei))
-            bigFace.translate(V(0, 0, hei))
+            #secondShape.translate(V(0, 0, hei))
+            #bigFace.translate(V(0, 0, hei))
 
             shellList = []
 
@@ -787,8 +805,7 @@ class _SlopedPlanes(_Py):
 
                 for ss, SS, face, pyFace in zip(endShape.Shells,
                                                 secondShape.Shells,
-                                                faceList,
-                                                slopedPlanes.Proxy.Pyth):
+                                                faceList, pyth):
 
                     ff, FF = self.overhangWires(endShape, secondShape, pyFace)
 
@@ -846,11 +863,62 @@ class _SlopedPlanes(_Py):
 
         return ff, FF
 
-    def normalWires(self):
+    def normalWires(self, pyFace, face, height):
 
         ''''''
 
-        return
+        if pyFace.mono:
+            pass
+
+        size = pyFace.size
+        tolerance = _Py.tolerance
+        wireList = []
+
+        for pyWire in pyFace.wires:
+
+            eeList, ttList = [], []
+
+            for pyPlane in pyWire.planes:
+                angle = pyPlane.angle
+                if isinstance(angle, list):
+                    pyPl = pyFace.selectPlane(angle[0], angle[1], pyFace)
+                    angle = pyPl.angle
+                geom = pyPlane.geom.copy()
+                length = height / cos(radians(angle))
+                extrDirect = pyPlane.shape.normalAt(0, 0)
+                # print(angle, extrDirect, length)
+
+                geom.translate(-1 * length * extrDirect)
+
+                ttList.append(geom.copy().toShape())
+                geom.setParameterRange(geom.FirstParameter - size,
+                                       geom.LastParameter + size)
+                eeList.append(geom.toShape())
+
+            edgeList = []
+            nn = -1
+            for ee, tt in zip(eeList, ttList):
+
+                prior = eeList[nn]
+                try:
+                    later = eeList[nn + 2]
+                except IndexError:
+                    later = eeList[0]
+                ee = ee.cut([prior, later], tolerance)
+                nn += 1
+
+                for ll in ee.Edges:
+                    section = ll.section(tt)
+                    if section.Edges:
+                        edgeList.append(ll)
+                        break
+
+            ww = Part.Wire(edgeList)
+            wireList.append(ww)
+
+        baseFace = Part.makeFace(wireList, 'Part::FaceMakerBullseye')
+
+        return baseFace
 
     def slopedOffset(self, slopedPlanes, pyFace, face, factorOverhang, angle):
 

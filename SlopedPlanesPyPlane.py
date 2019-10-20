@@ -90,7 +90,7 @@ class _PyPlane(_Py):
         self.reallySolved = False
         self.sweepCurve = None
 
-        self.extrDirect = None
+        self.extrDirect = None  # not used
 
         self.edge = None
 

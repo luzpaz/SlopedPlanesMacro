@@ -504,7 +504,7 @@ class _Py(object):
 
         '''faceNormal(self, face)'''
 
-        return self.roundVector(face.normalAt(0, 0))
+        return self.roundVector(face.normalAt(0, 0))  # en operaciones delicadas roundVector sobra
 
     def faceDatas(self, face):
 
