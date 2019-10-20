@@ -37,6 +37,7 @@ if FreeCAD.GuiUp:
     from SlopedPlanesTaskPanel import _TaskPanel_SlopedPlanes
 
 V = FreeCAD.Vector
+P = FreeCAD.Placement
 
 __title__ = "SlopedPlanes Macro"
 __author__ = "Damian Caceres Moreno"
@@ -67,6 +68,8 @@ def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
 
     slopedPlanes.Base = sketch
     sketch.ViewObject.Visibility = False
+
+    # TODO el objecto debe quedar seleccionado tras su creación
 
     return slopedPlanes
 
@@ -257,7 +260,7 @@ class _SlopedPlanes(_Py):
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
         placement = sketch.Placement
-        shape.Placement = FreeCAD.Placement()
+        shape.Placement = P()
 
         self.declareSlopedPlanes(slopedPlanes)
 
@@ -779,14 +782,7 @@ class _SlopedPlanes(_Py):
                                                 faceList,
                                                 slopedPlanes.Proxy.Pyth):
 
-                    ff, hght = self.slopedOffset(slopedPlanes, pyFace, face,
-                                                 factorOverhang, angle)
-
-                    FF =\
-                        ff.makeOffset2D(offset=val, join=2, fill=False,
-                                        openResult=False, intersection=False)
-
-                    FF.translate(V(0, 0, hei))
+                    ff, FF = self.overhangWires(endShape, secondShape, pyFace)
 
                     baseFaces = ss.Faces + SS.Faces
                     for ww, WW in zip(ff.Wires, FF.Wires):
@@ -821,11 +817,24 @@ class _SlopedPlanes(_Py):
 
         return endShape
 
-    def overhangWires(self):
+    def overhangWires(self, endShape, secondShape, pyFace):
 
         ''''''
 
-        return
+        size = pyFace.size
+        ss = 10 * size
+        cc = -1 * 5 * size # TODO habría que centrarlo en la primera coordenada
+
+        endPlane = Part.makePlane(ss, ss, V(cc, cc, endShape.BoundBox.ZMin))
+        cut = endPlane.cut(endShape, _Py.tolerance)
+        ff = Part.makeFace(cut.Wires[1:], 'Part::FaceMakerBullseye')
+
+        secondPlane =\
+            Part.makePlane(ss, ss, V(cc, cc, secondShape.BoundBox.ZMin))
+        cut = secondPlane.cut(secondShape, _Py.tolerance)
+        FF = Part.makeFace(cut.Wires[1:], 'Part::FaceMakerBullseye')
+
+        return ff, FF
 
     def normalWires(self):
 
