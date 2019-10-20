@@ -770,7 +770,7 @@ class _SlopedPlanes(_Py):
                 bigFaceList = []
                 for pyFace, face in zip(pyth, faceList):
 
-                    bFace = self.normalWires(pyFace, face, hei)
+                    bFace = self.normalWires(pyFace, face, hei, angle)
                     bigFaceList.append(bFace)
 
                 if len(bigFaceList) == 1:
@@ -794,11 +794,7 @@ class _SlopedPlanes(_Py):
 
             secondShape = Part.makeShell(figList)
 
-            #secondShape.translate(V(0, 0, hei))
-            #bigFace.translate(V(0, 0, hei))
-
             shellList = []
-
             factorOverhang = slopedPlanes.FactorOverhang
 
             if factorOverhang:
@@ -863,18 +859,30 @@ class _SlopedPlanes(_Py):
 
         return ff, FF
 
-    def normalWires(self, pyFace, face, height):
+    def normalWires(self, pyFace, face, height, angle):
 
         ''''''
 
         if pyFace.mono:
-            pass
+
+            run = height / tan(radians(angle))
+            # print(height, run)
+
+            ff =\
+                face.makeOffset2D(offset=run, join=2, fill=False,
+                                  openResult=False, intersection=False)
+
+            ff.translate(V(0, 0, height))
+
+            return ff
 
         size = pyFace.size
         tolerance = _Py.tolerance
         wireList = []
 
         for pyWire in pyFace.wires:
+
+            # TODO pyWire.mono
 
             eeList, ttList = [], []
 
@@ -919,67 +927,6 @@ class _SlopedPlanes(_Py):
         baseFace = Part.makeFace(wireList, 'Part::FaceMakerBullseye')
 
         return baseFace
-
-    def slopedOffset(self, slopedPlanes, pyFace, face, factorOverhang, angle):
-
-        ''''''
-
-        size = pyFace.size
-        hght = factorOverhang * size
-
-        if pyFace.mono:
-
-            run = hght / tan(radians(angle))
-            # print(hght, run)
-
-            ff =\
-                face.makeOffset2D(offset=run, join=2, fill=False,
-                                  openResult=False, intersection=False)
-
-            ff.translate(V(0, 0, -1 * hght))
-
-        else:
-
-            # se puede hacer cortando un gran plano ubicado a la altura -1*hght
-            # y reservar este procedimiento para Thickness Direction normal
-
-            eeList, ttList = [], []
-            for pyWire in pyFace.wires:
-                for pyPlane in pyWire.planes:
-                    ang = pyPlane.angle
-                    if isinstance(ang, list):
-                        pyPl = pyFace.selectPlane(ang[0], ang[1], pyFace)
-                        ang = pyPl.angle
-                    geom = pyPlane.geom.copy()
-                    length = hght / sin(radians(ang))
-                    extrDirect = pyPlane.extrDirect
-                    geom.translate(-1 * length * extrDirect)
-                    ttList.append(geom.copy().toShape())
-                    geom.setParameterRange(geom.FirstParameter - size,
-                                           geom.LastParameter + size)
-                    eeList.append(geom.toShape())
-
-            edgeList = []
-            nn = -1
-            for ee, tt in zip(eeList, ttList):
-
-                prior = eeList[nn]
-                try:
-                    later = eeList[nn + 2]
-                except IndexError:
-                    later = eeList[0]
-                ee = ee.cut([prior, later])
-                nn += 1
-
-                for ll in ee.Edges:
-                    section = ll.section(tt)
-                    if section.Edges:
-                        edgeList.append(ll)
-                        break
-
-            ff = Part.Wire(edgeList)
-
-        return ff, hght
 
     def onChanged(self, slopedPlanes, prop):
 
