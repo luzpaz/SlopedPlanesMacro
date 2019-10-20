@@ -724,7 +724,13 @@ class _SlopedPlanes(_Py):
 
             # print(angle, height, value)
 
-            if thicknessDirection == 'Normal':
+            if thicknessDirection == 'Horizontal':
+
+                ang = angle
+                hei = 0
+                val = value
+
+            elif thicknessDirection == 'Slope':
 
                 ang = 90.0 - angle
                 hei = value * sin(radians(ang))
@@ -736,7 +742,7 @@ class _SlopedPlanes(_Py):
                 hei = value * sin(radians(ang))
                 val = value * cos(radians(ang))
 
-            elif thicknessDirection == 'Horizontal':
+            elif thicknessDirection == 'Normal':
 
                 ang = angle
                 hei = 0
@@ -767,8 +773,6 @@ class _SlopedPlanes(_Py):
             factorOverhang = slopedPlanes.FactorOverhang
 
             if factorOverhang:
-
-                # hay que corregir cuando el angulo de los planos no es unico
 
                 for ss, SS, face, pyFace in zip(endShape.Shells,
                                                 secondShape.Shells,
@@ -816,6 +820,8 @@ class _SlopedPlanes(_Py):
                 endShape = shellList[0]
 
         return endShape
+
+
 
     def slopedOffset(self, slopedPlanes, pyFace, face, factorOverhang, angle):
 
