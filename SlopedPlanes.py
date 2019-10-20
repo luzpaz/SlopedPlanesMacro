@@ -384,7 +384,7 @@ class _SlopedPlanes(_Py):
             for wire, geomWire in zip(wireList, gList):
                 numWire += 1
                 # print('###### numWire ', numWire)
-                # TODO change to new topolocic name
+                # TODO change to new topologic name
                 coo = coordinates[numWire]
                 # print(coo)
                 for pyWire in pyWireListOld:
@@ -533,6 +533,7 @@ class _SlopedPlanes(_Py):
         # print('reProcessFaces')
 
         angleList = []
+        # TODO mono
         numFace = -1
         for face in faceList:
             numFace += 1
