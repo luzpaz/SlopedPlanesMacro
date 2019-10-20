@@ -342,6 +342,8 @@ class _SlopedPlanes(_Py):
 
             # elaborates complementary python objects of a face
 
+            # TODO mono
+
             coordinates = coordinatesOuterOrdered[numFace]
             for pyFace in pyFaceListOld:
                 oldCoord = pyFace.wires[0].coordinates
