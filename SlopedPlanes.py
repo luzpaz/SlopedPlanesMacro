@@ -384,6 +384,7 @@ class _SlopedPlanes(_Py):
             for wire, geomWire in zip(wireList, gList):
                 numWire += 1
                 # print('###### numWire ', numWire)
+                # TODO change to new topolocic name
                 coo = coordinates[numWire]
                 # print(coo)
                 for pyWire in pyWireListOld:
