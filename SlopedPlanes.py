@@ -264,6 +264,8 @@ class _SlopedPlanes(_Py):
 
         self.declareSlopedPlanes(slopedPlanes)
 
+        # print(self.OnChanged)
+
         if not self.OnChanged or not self.faceList:
             # print('A')
 
@@ -283,6 +285,7 @@ class _SlopedPlanes(_Py):
         # print('pyFaceListNew ', pyFaceListNew)
 
         self.OnChanged = False
+        self.State = False
 
         # elaborates a list of planes for every face
 
@@ -932,13 +935,18 @@ class _SlopedPlanes(_Py):
 
         '''onChanged(self, slopedPlanes, prop)'''
 
-        # print('onChanged ', prop)
+        # print('onChanged ', prop, ' self.state ', self.State)
 
         if self.State:
 
             return
 
-        if prop == "Slope":
+        if prop in ['Shape', 'Visibility']:
+
+            self.Onchanged = False
+            return
+
+        elif prop == "Slope":
 
             slope = slopedPlanes.Slope
             value = slope.Value
@@ -1156,13 +1164,15 @@ class _ViewProvider_SlopedPlanes():
 
         '''attach(self, vobj)'''
 
+        # print('attach')
+
         self.Object = vobj.Object
-        obj = self.Object
-        obj.Proxy.State = False
 
     def claimChildren(self):
 
         '''claimChildren(self)'''
+
+        # print('claimChildren')
 
         obj = self.Object
         group = obj.Group
