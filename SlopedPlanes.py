@@ -266,21 +266,21 @@ class _SlopedPlanes(_Py):
 
         # print(self.OnChanged)
 
-        if not self.OnChanged or not self.faceList:
-            # print('A')
+        if self.OnChanged:
+            # print('A ', self.OnChanged)
+
+            faceList = self.faceList
+            self.reProcessFaces(slopedPlanes, faceList)
+            pyFaceListNew = self.Pyth
+
+        else:
+            # print('B ', self.OnChanged)
 
             face = Part.makeFace(shape.Wires, slopedPlanes.FaceMaker)
             fList = face.Faces
             faceList, pyFaceListNew = self.processFaces(slopedPlanes, fList)
             self.faceList = faceList
             self.Pyth = pyFaceListNew
-
-        else:
-            # print('B')
-
-            faceList = self.faceList
-            self.reProcessFaces(slopedPlanes, faceList)
-            pyFaceListNew = self.Pyth
 
         # print('pyFaceListNew ', pyFaceListNew)
 
@@ -943,7 +943,7 @@ class _SlopedPlanes(_Py):
 
         if prop in ['Shape', 'Visibility']:
 
-            self.Onchanged = False
+            self.OnChanged = False
             return
 
         elif prop == "Slope":
