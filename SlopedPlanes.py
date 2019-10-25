@@ -887,24 +887,43 @@ class _SlopedPlanes(_Py):
 
             # TODO pyWire.mono
 
+            geomShapeWire = pyWire.shapeGeom
             eeList, ttList = [], []
 
-            for pyPlane in pyWire.planes:
-                angle = pyPlane.angle
-                if isinstance(angle, list):
-                    pyPl = pyFace.selectPlane(angle[0], angle[1], pyFace)
-                    angle = pyPl.angle
-                geom = pyPlane.geom.copy()
-                length = height / cos(radians(angle))
-                extrDirect = pyPlane.shape.normalAt(0, 0)
+            for pyPlane, geomShape in zip(pyWire.planes, geomShapeWire):
+                ang = pyPlane.angle
+                if isinstance(ang, list):
+                    pyPl = pyFace.selectPlane(ang[0], ang[1], pyFace)
+                    ang = pyPl.angle
+                    sh = pyPl.shape.Faces[0]
+                else:
+                    sh = pyPlane.shape.Faces[0]
+
+                length = height / cos(radians(ang))
+                extrDirect = sh.normalAt(0, 0)
                 # print(angle, extrDirect, length)
 
-                geom.translate(-1 * length * extrDirect)
+                geomShape.translate(-1 * length * extrDirect)
 
-                ttList.append(geom.copy().toShape())
-                geom.setParameterRange(geom.FirstParameter - size,
-                                       geom.LastParameter + size)
-                eeList.append(geom.toShape())
+                ll = 0.49 * geomShape.Length
+
+                geomS = Part.LineSegment(geomShape.firstVertex(True).Point,
+                                         geomShape.lastVertex(True).Point)
+
+                geomS.setParameterRange(geomS.FirstParameter + ll,
+                                        geomS.LastParameter - ll)
+
+                ttList.append(geomS.toShape())
+
+                gS = Part.LineSegment(geomShape.firstVertex(True).Point,
+                                      geomShape.lastVertex(True).Point)
+
+                gS.setParameterRange(gS.FirstParameter - size,
+                                     gS.LastParameter + size)
+
+                eeList.append(gS.toShape())
+
+            # print(eeList, ttList)
 
             edgeList = []
             nn = -1
@@ -923,6 +942,11 @@ class _SlopedPlanes(_Py):
                     if section.Edges:
                         edgeList.append(ll)
                         break
+
+            # print(edgeList)
+            self.ed = Part.Compound(edgeList)
+            self.et = Part.Compound(ttList)
+            self.ee = Part.Compound(eeList)
 
             ww = Part.Wire(edgeList)
             wireList.append(ww)

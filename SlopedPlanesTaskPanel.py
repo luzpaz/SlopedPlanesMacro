@@ -608,6 +608,9 @@ class _TaskPanel_SlopedPlanes():
         # print('addSelection')
         # print(doc, obj, sub, pnt)
 
+        # al quitar el serializado, tras abrir el archivo y task panel no funciona el observer
+        #
+
         reset = True
         slopedPlanes = self.obj
         shape = self.shape
