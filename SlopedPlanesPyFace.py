@@ -208,8 +208,6 @@ class _PyFace(_Py):
                 dd['_solved'] = False
                 dd['_reallySolved'] = False
 
-                dd['_extrDirect'] = None
-
                 dd['_edge'] = None
 
                 dd['_forward'] = None
