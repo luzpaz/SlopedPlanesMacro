@@ -632,9 +632,6 @@ class _TaskPanel_SlopedPlanes():
         # print('addSelection')
         # print(doc, obj, sub, pnt)
 
-        # al quitar el serializado, tras abrir el archivo y task panel no funciona el observer
-        #
-
         reset = True
         slopedPlanes = self.obj
         shape = self.shape
@@ -701,20 +698,38 @@ class _TaskPanel_SlopedPlanes():
 
                                 # print('NUMSLOPE ', numSlope)
 
-                                geomShape = pyPlane.geomShape
-                                # print(geomShape, geomShape.Curve, geomShape.firstVertex(True).Point, geomShape.lastVertex(True).Point)
-                                section = ff.section(geomShape) # false positive, OCCT bug, see above bound
-                                # print(section.Edges)
+                                # al quitar el serializado, tras abrir el archivo y task panel no funciona el observer
+                                # por la carencia de geomShape
 
-                                if section.Edges:
-                                    # print('# numGeom, numSlope ', numGeom, numSlope)
-                                    match = QtCore.Qt.MatchExactly
-                                    item =\
-                                        self.tree.findItems(str(numSlope),
-                                                            match, 0)[0]
-                                    self.tree.setCurrentItem(item)
-                                    reset = False
-                                    break
+                                try:
+
+                                    geomShape = pyPlane.geomShape
+                                    # print(geomShape, geomShape.Curve, geomShape.firstVertex(True).Point, geomShape.lastVertex(True).Point)
+                                    section = ff.section(geomShape) # false positive, OCCT bug, see above bound
+                                    # print(section.Edges)
+
+                                    if section.Edges:
+                                        # print('# numGeom, numSlope ', numGeom, numSlope)
+                                        match = QtCore.Qt.MatchExactly
+                                        item =\
+                                            self.tree.findItems(str(numSlope),
+                                                                match, 0)[0]
+                                        self.tree.setCurrentItem(item)
+                                        reset = False
+                                        break
+
+                                except:
+
+                                    # this system could fail
+                                    if numSlope == num + 1:
+                                        # print('# numGeom, numSlope ', numGeom, numSlope)
+                                        match = QtCore.Qt.MatchExactly
+                                        item =\
+                                            self.tree.findItems(str(numSlope),
+                                                                match, 0)[0]
+                                        self.tree.setCurrentItem(item)
+                                        reset = False
+                                        break
 
                         if up:
                             if lenWires == 1:
