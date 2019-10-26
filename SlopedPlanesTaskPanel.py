@@ -731,6 +731,8 @@ class _TaskPanel_SlopedPlanes():
                                         reset = False
                                         break
 
+                                # TODO revisar con el nuevo topologic
+
                         if up:
                             if lenWires == 1:
                                 numSlope += 1
