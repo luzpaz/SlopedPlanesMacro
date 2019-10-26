@@ -102,7 +102,10 @@ class _TaskPanel_SlopedPlanes():
                                        ("OverhangRun"),
                                        ("Left Width"),
                                        ("Right Width"),
-                                       ("Curves"),
+                                       ("Thickness"),
+                                       ("ThicknessSlope"),
+                                       ("ThicknessHeight"),
+                                       ("ThicknessRun"),
                                        ("Sweep Curve"),
                                        ("Face")])
 
@@ -201,9 +204,12 @@ class _TaskPanel_SlopedPlanes():
             tree.header().resizeSection(8, 120)
             tree.header().resizeSection(9, 120)
             tree.header().resizeSection(10, 120)
-            tree.header().resizeSection(11, 60)
-            tree.header().resizeSection(12, 180)
-            tree.header().resizeSection(13, 60)
+            tree.header().resizeSection(11, 120)
+            tree.header().resizeSection(12, 120)
+            tree.header().resizeSection(13, 120)
+            tree.header().resizeSection(14, 120)
+            tree.header().resizeSection(15, 120)
+            tree.header().resizeSection(16, 60)
 
         else:
 
@@ -450,13 +456,31 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 10, doubleSpinBox)
 
-                                button = _NewCurve()
+                                '''button = _NewCurve()
                                 button.setParent(tree)
                                 button.plane = pyPlane
                                 button.slopedPlanes = slopedPlanes
                                 button.setText('New')
                                 tree.setItemWidget(item, 11, button)
-                                button.clicked.connect(button.onClicked)
+                                button.clicked.connect(button.onClicked)'''
+
+                                # reserves:
+                                # 11: Thickness
+                                # 12: ThicknessSlope
+                                # 13: ThicknessHeight
+                                # 14: ThicknessRun
+
+                                doubleSpinBox = QtGui.QDoubleSpinBox(tree)
+                                tree.setItemWidget(item, 11, doubleSpinBox)
+
+                                doubleSpinBox = QtGui.QDoubleSpinBox(tree)
+                                tree.setItemWidget(item, 12, doubleSpinBox)
+
+                                doubleSpinBox = QtGui.QDoubleSpinBox(tree)
+                                tree.setItemWidget(item, 13, doubleSpinBox)
+
+                                doubleSpinBox = QtGui.QDoubleSpinBox(tree)
+                                tree.setItemWidget(item, 14, doubleSpinBox)
 
                                 combo = QtGui.QComboBox(tree)
                                 combo.addItems(linkList)
@@ -465,11 +489,11 @@ class _TaskPanel_SlopedPlanes():
                                     combo.setCurrentIndex(index)
                                 except ValueError:
                                     combo.setCurrentIndex(0)
-                                tree.setItemWidget(item, 12, combo)
+                                tree.setItemWidget(item, 15, combo)
 
-                                button.combo = combo
+                                # button.combo = combo
 
-                                item.setText(13, str(numSlope))
+                                item.setText(16, str(numSlope))
 
                 if up:
                     if lenWires == 1:
@@ -582,7 +606,7 @@ class _TaskPanel_SlopedPlanes():
                                 FreeCAD.Units.Quantity(str(right) + suffix)
                             pyPlane.rightWidth = right.Value
 
-                            comboBox = tree.itemWidget(it, 12)
+                            comboBox = tree.itemWidget(it, 15)
                             sweepCurve = comboBox.currentText()
                             pyPlane.sweepCurve = sweepCurve
 
@@ -710,7 +734,9 @@ class _TaskPanel_SlopedPlanes():
         slopedPlanes = self.obj
 
         shape = slopedPlanes.Shape.copy()
-        shape.Placement = FreeCAD.Placement()
+        shape.Placement = FreeCAD.Placement()  # ?
+
+        # TODO hacer con Placement inverse
 
         sketch = slopedPlanes.Base
         sketchBase = sketch.Placement.Base
