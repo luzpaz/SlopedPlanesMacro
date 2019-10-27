@@ -257,6 +257,8 @@ class _SlopedPlanes(_Py):
 
         # print('execute')
 
+        # TODO: hace falta un mecanismo para solo ejecutar las partes necesarias
+
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
         placement = sketch.Placement
