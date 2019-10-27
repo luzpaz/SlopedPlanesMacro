@@ -705,7 +705,7 @@ class _TaskPanel_SlopedPlanes():
 
                                     geomShape = pyPlane.geomShape
                                     # print(geomShape, geomShape.Curve, geomShape.firstVertex(True).Point, geomShape.lastVertex(True).Point)
-                                    section = ff.section(geomShape) # false positive, OCCT bug, see above bound
+                                    section = ff.section(geomShape) # false positive, OCCT bug, see above bound # o que no he trasladado los planos y por eso la tapa da positivo
                                     # print(section.Edges)
 
                                     if section.Edges:
