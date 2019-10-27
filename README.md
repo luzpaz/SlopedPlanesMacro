@@ -6,8 +6,8 @@ FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 
 ### Versions
 
-    1.2: December 2018 (FreeCAD 0.18)
-    1.6: Octubre 2019 (FreeCAD 0.19)
+    - 1.2: December 2018 (FreeCAD 0.18)
+    - 1.6: Octubre 2019 (FreeCAD 0.19)
 
 ### Installation
 
@@ -18,9 +18,10 @@ To install this macro, please:
 
 ### Use instructions
 
-* Draw a sketch with a closed wire
+* Make a sketch and draw a closed wire
 * Select the sketch and execute the macro
-* Editing the SlopedPlanes document object (double click over the object in the document's tree)
+* Editing the SlopedPlanes document object
+  (double click over the object in the document's tree)
   opens the Taks Panel with the controls plane by plane.
 
 ### Agenda
