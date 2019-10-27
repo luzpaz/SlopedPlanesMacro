@@ -106,7 +106,7 @@ class _TaskPanel_SlopedPlanes():
                                        ("ThicknessSlope"),
                                        ("ThicknessHeight"),
                                        ("ThicknessRun"),
-                                       ("Sweep Curve"),
+                                       # ("Sweep Curve"),
                                        ("Face")])
 
         else:
@@ -233,8 +233,8 @@ class _TaskPanel_SlopedPlanes():
 
         if slopedPlanes:
 
-            linkList = [o.Name for o in slopedPlanes.SweepCurves]
-            linkList.insert(0, None)
+            # linkList = [o.Name for o in slopedPlanes.SweepCurves]
+            # linkList.insert(0, None)
             up = slopedPlanes.Up
             down = slopedPlanes.Down
             pyFaceList = slopedPlanes.Proxy.Pyth
@@ -261,7 +261,7 @@ class _TaskPanel_SlopedPlanes():
 
                         numAngle = pyPlane.numGeom
                         angle = pyPlane.angle
-                        sweepCurve = pyPlane.sweepCurve
+                        # sweepCurve = pyPlane.sweepCurve
                         # print('# numAngle, angle ', numAngle, angle)
 
                         # print('originList ', originList)
@@ -482,18 +482,18 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox = QtGui.QDoubleSpinBox(tree)
                                 tree.setItemWidget(item, 14, doubleSpinBox)
 
-                                combo = QtGui.QComboBox(tree)
+                                '''combo = QtGui.QComboBox(tree)
                                 combo.addItems(linkList)
                                 try:
                                     index = linkList.index(sweepCurve)
                                     combo.setCurrentIndex(index)
                                 except ValueError:
                                     combo.setCurrentIndex(0)
-                                tree.setItemWidget(item, 15, combo)
+                                tree.setItemWidget(item, 15, combo)'''
 
                                 # button.combo = combo
 
-                                item.setText(16, str(numSlope))
+                                item.setText(15, str(numSlope))
 
                 if up:
                     if lenWires == 1:
@@ -606,9 +606,9 @@ class _TaskPanel_SlopedPlanes():
                                 FreeCAD.Units.Quantity(str(right) + suffix)
                             pyPlane.rightWidth = right.Value
 
-                            comboBox = tree.itemWidget(it, 15)
-                            sweepCurve = comboBox.currentText()
-                            pyPlane.sweepCurve = sweepCurve
+                            # comboBox = tree.itemWidget(it, 15)
+                            # sweepCurve = comboBox.currentText()
+                            # pyPlane.sweepCurve = sweepCurve
 
                     ##slopeList.append(pyPlane.angle)
 

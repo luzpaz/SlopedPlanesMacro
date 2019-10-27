@@ -147,10 +147,10 @@ class _SlopedPlanes(_Py):
 
         # _____________________________________________________________________
 
-        doc = "Available curves to sweep (Not available yet!)"
+        '''doc = "Available curves to sweep (Not available yet!)"
 
         slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
-                                 "SlopedPlanes", doc)
+                                 "SlopedPlanes", doc)'''
 
         # _____________________________________________________________________
 
@@ -1008,7 +1008,7 @@ class _SlopedPlanes(_Py):
             prop = "seedShape"
             self.overWritePyProp(prop, value)
 
-        elif prop == "SweepCurves":
+        '''elif prop == "SweepCurves":
 
             curvesList = slopedPlanes.SweepCurves
 
@@ -1018,7 +1018,7 @@ class _SlopedPlanes(_Py):
                         sw = pyPlane.sweepCurve
                         if sw:
                             if sw not in curvesList:
-                                pyPlane.sweepCurve = None
+                                pyPlane.sweepCurve = None'''
 
         self.OnChanged = True
 
