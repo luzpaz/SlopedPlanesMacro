@@ -30,7 +30,7 @@ To install this macro, please:
     - 1.9 June 2020: refact
     - 2.0 December 2020: groups
     - 3.0 June 2021: sweep
-    - 4.0 December 20201: finished!!!
+    - 4.0 December 2021: finished!!!
 
 ### Acknowledgement
 
