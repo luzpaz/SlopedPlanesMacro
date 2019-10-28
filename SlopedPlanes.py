@@ -22,6 +22,9 @@
 # *****************************************************************************
 
 
+# TODO aplicada una herramienta, por ejemplo thickness, si se cambia algun angulo la figura queda rota
+
+
 import asyncio
 from math import radians, sin, cos, tan
 import FreeCAD
