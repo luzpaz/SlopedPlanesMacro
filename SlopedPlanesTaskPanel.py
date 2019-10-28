@@ -22,6 +22,9 @@
 # *****************************************************************************
 
 
+# TODO change order: before ThicknessSlope, after Thickness
+
+
 import math
 import FreeCAD
 import FreeCADGui
