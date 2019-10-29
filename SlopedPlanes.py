@@ -22,9 +22,6 @@
 # *****************************************************************************
 
 
-# TODO aplicada una herramienta, por ejemplo thickness, si se cambia algun angulo la figura queda rota
-
-
 import asyncio
 from math import radians, sin, cos, tan
 import FreeCAD
@@ -908,6 +905,7 @@ class _SlopedPlanes(_Py):
                 extrDirect = sh.normalAt(0, 0)
                 # print(angle, extrDirect, length)
 
+                geomShape = geomShape.copy()
                 geomShape.translate(-1 * length * extrDirect)
 
                 ll = 0.49 * geomShape.Length
@@ -949,9 +947,9 @@ class _SlopedPlanes(_Py):
                         break
 
             # print(edgeList)
-            self.ed = Part.Compound(edgeList)
-            self.et = Part.Compound(ttList)
-            self.ee = Part.Compound(eeList)
+            # self.ed = Part.Compound(edgeList)
+            # self.et = Part.Compound(ttList)
+            # self.ee = Part.Compound(eeList)
 
             ww = Part.Wire(edgeList)
             wireList.append(ww)
