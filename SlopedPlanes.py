@@ -905,6 +905,7 @@ class _SlopedPlanes(_Py):
                 extrDirect = sh.normalAt(0, 0)
                 # print(angle, extrDirect, length)
 
+                geomShape = geomShape.copy()
                 geomShape.translate(-1 * length * extrDirect)
 
                 ll = 0.49 * geomShape.Length
@@ -946,9 +947,9 @@ class _SlopedPlanes(_Py):
                         break
 
             # print(edgeList)
-            self.ed = Part.Compound(edgeList)
-            self.et = Part.Compound(ttList)
-            self.ee = Part.Compound(eeList)
+            # self.ed = Part.Compound(edgeList)
+            # self.et = Part.Compound(ttList)
+            # self.ee = Part.Compound(eeList)
 
             ww = Part.Wire(edgeList)
             wireList.append(ww)

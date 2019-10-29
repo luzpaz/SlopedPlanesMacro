@@ -102,8 +102,8 @@ class _TaskPanel_SlopedPlanes():
                                        ("OverhangRun"),
                                        ("Left Width"),
                                        ("Right Width"),
-                                       ("Thickness"),
                                        ("ThicknessSlope"),
+                                       ("Thickness"),
                                        ("ThicknessHeight"),
                                        ("ThicknessRun"),
                                        # ("Sweep Curve"),
@@ -465,8 +465,8 @@ class _TaskPanel_SlopedPlanes():
                                 button.clicked.connect(button.onClicked)'''
 
                                 # reserves:
-                                # 11: Thickness
-                                # 12: ThicknessSlope
+                                # 11: ThicknessSlope
+                                # 12: Thickness
                                 # 13: ThicknessHeight
                                 # 14: ThicknessRun
 
