@@ -136,13 +136,13 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyFloat", "FactorWidth",
                                  "SlopedPlanes", doc)
 
-        # _____________________________________________________________________
-
         doc = ('Applies over all planes overhang height,\n'
-               'It \'s limited')
+               'multiplied by the diagonal \n'
+               'length of the SlopedPlanes base.\n'
+               'It \'s limited to 1 or even less')
 
-        slopedPlanes.addProperty("App::PropertyFloat",
-                                 "OverhangHeight",
+        slopedPlanes.addProperty("App::PropertyFloatConstraint",
+                                 "FactorOverhang",
                                  "SlopedPlanes", doc)
 
         # _____________________________________________________________________
@@ -370,7 +370,7 @@ class _SlopedPlanes(_Py):
                 size = face.BoundBox.DiagonalLength
             pyFace.size = size
 
-            fOverhang = slopedPlanes.OverhangHeight * size
+            fOverhang = slopedPlanes.FactorOverhang * size
             # print(size, fOverhang)
 
             # gathers the interior wires. Upper Left criteria
@@ -800,7 +800,7 @@ class _SlopedPlanes(_Py):
             secondShape = Part.makeShell(figList)
 
             shellList = []
-            factorOverhang = slopedPlanes.OverhangHeight
+            factorOverhang = slopedPlanes.FactorOverhang
 
             if factorOverhang:
 
@@ -980,7 +980,7 @@ class _SlopedPlanes(_Py):
             prop = "angle"
             self.overWritePyProp(prop, value)
             self.slopeList = []
-            slopedPlanes.OverhangHeight = 0
+            slopedPlanes.FactorOverhang = 0
 
         elif prop == "FactorLength":
 
@@ -996,9 +996,9 @@ class _SlopedPlanes(_Py):
             prop = "width"
             self.overWritePyProp(prop, value)
 
-        elif prop == "OverhangHeight":
+        elif prop == "FactorOverhang":
 
-            overhang = slopedPlanes.OverhangHeight
+            overhang = slopedPlanes.FactorOverhang
             value = overhang
             prop = "overhang"
             self.overWritePyProp(prop, value)
@@ -1065,7 +1065,7 @@ class _SlopedPlanes(_Py):
                         if length > size:
                             # print('size ', (size, factorOverhang))
                             setattr(pyPlane, "overhang", size)
-                            _Py.slopedPlanes.OverhangHeight = factorOverhang
+                            _Py.slopedPlanes.FactorOverhang = factorOverhang
                             return
 
                         setattr(pyPlane, "overhang", length)
