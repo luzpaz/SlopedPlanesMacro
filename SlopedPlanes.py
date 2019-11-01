@@ -141,7 +141,7 @@ class _SlopedPlanes(_Py):
         doc = ('Applies over all planes overhang height,\n'
                'It \'s limited')
 
-        slopedPlanes.addProperty("App::PropertyLength",
+        slopedPlanes.addProperty("App::PropertyFloat",
                                  "OverhangHeight",
                                  "SlopedPlanes", doc)
 
