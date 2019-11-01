@@ -370,7 +370,7 @@ class _SlopedPlanes(_Py):
                 size = face.BoundBox.DiagonalLength
             pyFace.size = size
 
-            fOverhang = slopedPlanes.FactorOverhang * size
+            fOverhang = slopedPlanes.OverhangHeight * size
             # print(size, fOverhang)
 
             # gathers the interior wires. Upper Left criteria
@@ -800,7 +800,7 @@ class _SlopedPlanes(_Py):
             secondShape = Part.makeShell(figList)
 
             shellList = []
-            factorOverhang = slopedPlanes.FactorOverhang
+            factorOverhang = slopedPlanes.OverhangHeight
 
             if factorOverhang:
 
@@ -980,7 +980,7 @@ class _SlopedPlanes(_Py):
             prop = "angle"
             self.overWritePyProp(prop, value)
             self.slopeList = []
-            slopedPlanes.FactorOverhang = 0
+            slopedPlanes.OverhangHeight = 0
 
         elif prop == "FactorLength":
 
@@ -996,9 +996,9 @@ class _SlopedPlanes(_Py):
             prop = "width"
             self.overWritePyProp(prop, value)
 
-        elif prop == "FactorOverhang":
+        elif prop == "OverhangHeight":
 
-            overhang = slopedPlanes.FactorOverhang
+            overhang = slopedPlanes.OverhangHeight
             value = overhang
             prop = "overhang"
             self.overWritePyProp(prop, value)
@@ -1065,7 +1065,7 @@ class _SlopedPlanes(_Py):
                         if length > size:
                             # print('size ', (size, factorOverhang))
                             setattr(pyPlane, "overhang", size)
-                            _Py.slopedPlanes.FactorOverhang = factorOverhang
+                            _Py.slopedPlanes.OverhangHeight = factorOverhang
                             return
 
                         setattr(pyPlane, "overhang", length)
