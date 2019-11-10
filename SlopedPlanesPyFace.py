@@ -54,15 +54,17 @@ class _PyFace(_Py):
         self.numFace = numFace
         self.wires = []
         self.alignments = []
-        self.reset = True
-        self.shapeGeom = []
         self.size = 0
+        self.shapeGeom = []
         self.mono = mono
+        self.reset = True
+        self.execute = True
 
     @property
     def numFace(self):
 
-        '''numFace(self)'''
+        '''numFace(self):
+        integer numbering the face.'''
 
         return self._numFace
 
@@ -76,7 +78,8 @@ class _PyFace(_Py):
     @property
     def wires(self):
 
-        '''wires(self)'''
+        '''wires(self):
+        list of wires'''
 
         return self._wires
 
@@ -90,7 +93,8 @@ class _PyFace(_Py):
     @property
     def alignments(self):
 
-        '''alignments(self)'''
+        '''alignments(self):
+        list of alignments.'''
 
         return self._alignments
 
@@ -102,23 +106,25 @@ class _PyFace(_Py):
         self._alignments = alignments
 
     @property
-    def reset(self):
+    def size(self):
 
-        '''reset(self)'''
+        '''size(self):
+        the face diagonal length.'''
 
-        return self._reset
+        return self._size
 
-    @reset.setter
-    def reset(self, reset):
+    @size.setter
+    def size(self, size):
 
-        '''reset(self, reset)'''
+        '''size(self, size)'''
 
-        self._reset = reset
+        self._size = size
 
     @property
     def shapeGeom(self):
 
-        '''shapeGeom(self)'''
+        '''shapeGeom(self):
+        list of lists of edges, ordered by wire.'''
 
         return self._shapeGeom
 
@@ -130,23 +136,10 @@ class _PyFace(_Py):
         self._shapeGeom = shapeGeom
 
     @property
-    def size(self):
-
-        '''size(self)'''
-
-        return self._size
-
-    @size.setter
-    def size(self, size):
-
-        '''size(self, size)'''
-
-        self._size =size
-
-    @property
     def mono(self):
 
-        '''mono(self)'''
+        '''mono(self):
+        all planes of the face have the same slope.'''
 
         return self._mono
 
@@ -156,6 +149,36 @@ class _PyFace(_Py):
         '''mono(self, mono)'''
 
         self._mono = mono
+
+    @property
+    def reset(self):
+
+        '''reset(self):
+        affects the face parsing.'''
+
+        return self._reset
+
+    @reset.setter
+    def reset(self, reset):
+
+        '''reset(self, reset)'''
+
+        self._reset = reset
+
+    @property
+    def execute(self):
+
+        '''execute(self):
+        affects the face execute.'''
+
+        return self._execute
+
+    @execute.setter
+    def execute(self, execute):
+
+        '''execute(self, execute)'''
+
+        self._execute = execute
 
     def __getstate__(self):
 

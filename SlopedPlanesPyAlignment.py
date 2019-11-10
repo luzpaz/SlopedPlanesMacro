@@ -42,6 +42,8 @@ class _PyAlignment(_Py):
 
         ''''''
 
+
+
         self.base = None
         self.aligns = []
         self.aliShape = []
