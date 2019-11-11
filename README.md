@@ -15,6 +15,7 @@ To install this macro, please:
 
 * Clone the repository at the folder "~/.FreeCAD/Mod"
 * Copy the file "SlopedPlanes.FCMacro" at the folder "~/.FreeCAD", or whatever your FreeCAD macro path
+* The FreeCAD macro path is governed in Edit-Preferences-General-Macro
 
 ### Use instructions
 
