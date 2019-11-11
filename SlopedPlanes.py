@@ -651,7 +651,6 @@ class _SlopedPlanes(_Py):
                 # print('Up')
                 faceMaker = slopedPlanes.FaceMaker
                 upFace = Part.makeFace(wireList, faceMaker)
-
                 planeFaceList.append(upFace)
 
             if not slopedPlanes.Mirror:
@@ -1006,6 +1005,10 @@ class _SlopedPlanes(_Py):
             value = None
             prop = "seedShape"
             self.overWritePyProp(prop, value)
+
+        elif prop == "Up":
+
+            _Py.upList = []
 
         '''elif prop == "SweepCurves":
 
