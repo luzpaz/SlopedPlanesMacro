@@ -145,13 +145,6 @@ class _SlopedPlanes(_Py):
 
         # _____________________________________________________________________
 
-        '''doc = "Available curves to sweep (Not available yet!)"
-
-        slopedPlanes.addProperty("App::PropertyLinkList", "SweepCurves",
-                                 "SlopedPlanes", doc)'''
-
-        # _____________________________________________________________________
-
         doc = "Gives a thickness to the SlopedPlanes"
 
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
@@ -653,14 +646,13 @@ class _SlopedPlanes(_Py):
                 upFace = Part.makeFace(wireList, faceMaker)
                 planeFaceList.append(upFace)
 
-            if not slopedPlanes.Mirror:
-                if slopedPlanes.Down:
-                    # print('Down')
-                    face = faceList[numFace].copy()
-                    planeFaceList.append(face)
+            if slopedPlanes.Down:
+                # print('Down')
+                face = faceList[numFace].copy()
+                planeFaceList.append(face)
 
-            else:
-                # print('mirror')
+            if slopedPlanes.Mirror:
+                # print('Mirror')
                 shell = Part.makeShell(planeFaceList)
                 mirror = shell.mirror(FreeCAD.Vector(0, 0, 0),
                                       FreeCAD.Vector(0, 0, -1))
@@ -959,11 +951,10 @@ class _SlopedPlanes(_Py):
 
         '''onChanged(self, slopedPlanes, prop)'''
 
-        # print('onChanged ', prop, ' self.state ', self.State)
-
         if self.State:
-
             return
+
+        # print('onChanged ', prop)
 
         if prop in ['Shape', 'Visibility']:
 
@@ -1009,18 +1000,26 @@ class _SlopedPlanes(_Py):
         elif prop == "Up":
 
             _Py.upList = []
+            if slopedPlanes.Up:
+                slopedPlanes.Thickness = 0
 
-        '''elif prop == "SweepCurves":
+        elif prop == "Down":
 
-            curvesList = slopedPlanes.SweepCurves
+            if slopedPlanes.Down:
+                slopedPlanes.Thickness = 0
+                slopedPlanes.Mirror = False
 
-            for pyFace in self.Pyth:
-                for pyWire in pyFace.wires:
-                    for pyPlane in pyWire.planes:
-                        sw = pyPlane.sweepCurve
-                        if sw:
-                            if sw not in curvesList:
-                                pyPlane.sweepCurve = None'''
+        elif prop == "Mirror":
+
+            if slopedPlanes.Mirror:
+                slopedPlanes.Thickness = 0
+                slopedPlanes.Down = False
+
+        elif prop == "Thickness":
+            if slopedPlanes.Thickness:
+                slopedPlanes.Up = 0
+                slopedPlanes.Down = False
+                slopedPlanes.Mirror = False
 
         self.OnChanged = True
 
