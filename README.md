@@ -1,6 +1,7 @@
 ## SlopedPlanes Macro for FreeCAD
 
-The macro SlopedPlanes is a geometric factory, which allows you to build figures controlling the slopes of their faces.
+The macro SlopedPlanes is a geometric factory,
+which allows you to build figures controlling the slopes of their faces.
 
 FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 
@@ -14,7 +15,8 @@ FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 To install this macro, please:
 
 * Clone the repository at the folder "~/.FreeCAD/Mod"
-* Copy the file "SlopedPlanes.FCMacro" at the folder "~/.FreeCAD", or whatever your FreeCAD macro path
+* Copy the file "SlopedPlanes.FCMacro" at the folder "~/.FreeCAD",
+or whatever your FreeCAD macro path
 * The FreeCAD macro path is governed in Edit-Preferences-General-Macro
 
 ### Use instructions
