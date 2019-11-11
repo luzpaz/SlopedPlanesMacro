@@ -859,7 +859,8 @@ class _SlopedPlanes(_Py):
 
         if pyFace.mono:
 
-            run = height / tan(radians(angle))
+            ang = 90 - angle
+            run = height / tan(radians(ang))
             # print(height, run)
 
             ff =\
