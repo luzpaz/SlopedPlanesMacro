@@ -69,8 +69,6 @@ def makeSlopedPlanes(sketch, slope=45.0, slopeList=[]):
     slopedPlanes.Base = sketch
     sketch.ViewObject.Visibility = False
 
-    # TODO el objecto debe quedar seleccionado tras su creación
-
     return slopedPlanes
 
 

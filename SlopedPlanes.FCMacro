@@ -1,43 +1,99 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf8 -*-
+# *****************************************************************************
+# *                                                                           *
+# *    Copyright (c) 2017                                                     *
+# *                                                                           *
+# *    This program is free software; you can redistribute it and/or modify   *
+# *    it under the terms of the GNU Lesser General Public License (LGPL)     *
+# *    as published by the Free Software Foundation; either version 2 of      *
+# *    the License, or (at your option) any later version.                    *
+# *    For detail see the LICENSE text file.                                  *
+# *                                                                           *
+# *    This program is distributed in the hope that it will be useful,        *
+# *    but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+# *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                   *
+# *    See the  GNU Library General Public License for more details.          *
+# *                                                                           *
+# *    You should have received a copy of the GNU Library General Public      *
+# *    License along with this program; if not, write to the Free Software    *
+# *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307   *
+# *    USA                                                                    *
+# *                                                                           *
+# *****************************************************************************
+
+
 import sys
 import os.path
+
+
+__title__ = "SlopedPlanes Macro"
+__author__ = "Damian Caceres Moreno"
+__url__ = "https://gitlab.com/damianCaceres/slopedplanes"
+__version__ = ""
+
+
+# reference https://github.com/Rentlau/WorkFeature/blob/master/start_WF.FCMacro
+
 
 # Change this by your own FreeCAD lib path to import FreeCAD
 if not sys.path.__contains__("/usr/lib/freecad/lib"):
     sys.path.append("/usr/lib/freecad/lib")
 
 try:
+
     import SlopedPlanes
-except:
-    param = FreeCAD.ParamGet('User parameter:Plugins/SlopedPlanesMacro')
-    m_current_path = param.GetString('destination','')
+    print('A')
 
-    if not m_current_path:
-        m_current_path = os.path.realpath(__file__)
-        m_current_path = os.path.dirname(m_current_path)
+except Import Error:
 
-    if not sys.path.__contains__(str(m_current_path)):
-        sys.path.append(str(m_current_path))
+    print('B')
+    print(sys.path)
 
     try:
-        import SlopedPlanes
-    except:
-        from PySide import QtGui
-        folderDialog = QtGui.QFileDialog.getExistingDirectory(None,QtGui.QApplication.translate("SlopedPlanesMacro", "Location of your SlopedPlanesMacro folder", None, QtGui.QApplication.UnicodeUTF8))
-        param.SetString('destination',folderDialog)
-        m_current_path = param.GetString('destination')
-        sys.path.append(str(m_current_path))
 
-        import SlopedPlanes
+        print('C')
 
-selection = FreeCADGui.Selection.getSelectionEx()
+        import FreeCAD
+        param = FreeCAD.ParamGet('User parameter:Plugins/slopedplanes')
+        m_current_path = param.GetString('destination','')
 
-for select in selection:
+        if not m_current_path:
+
+            m_current_path = os.path.realpath(__file__)
+            m_current_path = os.path.dirname(m_current_path)
+
+        if not sys.path.__contains__(str(m_current_path)):
+
+            sys.path.append(str(m_current_path))
+
+        try:
+
+            import SlopedPlanes
+            print('E')
+
+        except ImportError:
+
+            print('F')
+            print('Error: cannot load SlopedPlanes macro!')
+            sys.exit(1)
+
+    except ImportError:
+
+        print('D')
+        print('Error: cannot load FreeCAD!')
+        sys.exit(1)
+
+import FreeCADGui
+
+for select in FreeCADGui.Selection.getSelectionEx():
 
     obj = select.Object
 
     if obj.TypeId == "Sketcher::SketchObject":
+
         SlopedPlanes.makeSlopedPlanes(obj)
+
     elif hasattr(obj, 'Proxy'):
         if obj.Proxy.Type == 'Wire':
+
             SlopedPlanes.makeSlopedPlanes(obj)
