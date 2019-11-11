@@ -14,7 +14,7 @@ FreeCAD is a parametric 3D modeler. Please, see at https://freecadweb.org/
 To install this macro, please:
 
 * Clone the repository at the folder "~/.FreeCAD/Mod"
-* Copy the file "SlopedPlanes.FCMacro" at the folder "~/.FreeCAD"
+* Copy the file "SlopedPlanes.FCMacro" at the folder "~/.FreeCAD", or whatever your FreeCAD macro path
 
 ### Use instructions
 
@@ -30,8 +30,8 @@ To install this macro, please:
     - 1.8 March 2020: refact
     - 1.9 June 2020: refact
     - 2.0 December 2020: groups
-    - 3.0 June 2021: sweep
-    - 4.0 December 2021: finished!!!
+    - 3.0 December 2021: sweep
+    - 4.0 December 2022: finished!!!
 
 ### Acknowledgement
 

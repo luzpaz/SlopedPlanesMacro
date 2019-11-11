@@ -32,26 +32,24 @@ __version__ = ""
 try:
 
     import SlopedPlanes
-    print('A')
 
 except ImportError:
 
-    print('B')
     print('Error: cannot load SlopedPlanes macro for FreeCAD!')
-    import sys
-    sys.exit(1)
 
-import FreeCADGui
+else:
 
-for select in FreeCADGui.Selection.getSelectionEx():
+    import FreeCADGui
 
-    obj = select.Object
+    for select in FreeCADGui.Selection.getSelectionEx():
 
-    if obj.TypeId == "Sketcher::SketchObject":
+        obj = select.Object
 
-        SlopedPlanes.makeSlopedPlanes(obj)
-
-    elif hasattr(obj, 'Proxy'):
-        if obj.Proxy.Type == 'Wire':
+        if obj.TypeId == "Sketcher::SketchObject":
 
             SlopedPlanes.makeSlopedPlanes(obj)
+
+        elif hasattr(obj, 'Proxy'):
+            if obj.Proxy.Type == 'Wire':
+
+                SlopedPlanes.makeSlopedPlanes(obj)
