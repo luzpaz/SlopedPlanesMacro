@@ -32,56 +32,16 @@ __url__ = "https://gitlab.com/damianCaceres/slopedplanes"
 __version__ = ""
 
 
-# reference https://github.com/Rentlau/WorkFeature/blob/master/start_WF.FCMacro
-
-
-# Change this by your own FreeCAD lib path to import FreeCAD
-if not sys.path.__contains__("/usr/lib/freecad/lib"):
-    sys.path.append("/usr/lib/freecad/lib")
-
 try:
 
     import SlopedPlanes
     print('A')
 
-except Import Error:
+except ImportError:
 
     print('B')
-    print(sys.path)
-
-    try:
-
-        print('C')
-
-        import FreeCAD
-        param = FreeCAD.ParamGet('User parameter:Plugins/slopedplanes')
-        m_current_path = param.GetString('destination','')
-
-        if not m_current_path:
-
-            m_current_path = os.path.realpath(__file__)
-            m_current_path = os.path.dirname(m_current_path)
-
-        if not sys.path.__contains__(str(m_current_path)):
-
-            sys.path.append(str(m_current_path))
-
-        try:
-
-            import SlopedPlanes
-            print('E')
-
-        except ImportError:
-
-            print('F')
-            print('Error: cannot load SlopedPlanes macro!')
-            sys.exit(1)
-
-    except ImportError:
-
-        print('D')
-        print('Error: cannot load FreeCAD!')
-        sys.exit(1)
+    print('Error: cannot load SlopedPlanes macro for FreeCAD!')
+    sys.exit(1)
 
 import FreeCADGui
 
