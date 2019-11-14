@@ -150,13 +150,12 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyLength", "Thickness",
                                  "SlopedPlanes", doc)
 
-        doc = ('Thickness direction.\n'
-               '    Vertical: \n'
-               '    Horizontal: \n'
-               '    Slope: \n'
-               '    ThicknessSlope: \n'
-               '    Normal: normal to planes. Height calculated with 45º \n'
-               '            and the length of Thickness property. \n')
+        doc = ('Vertical: \n'
+               'Horizontal: \n'
+               'Slope: follow the property Slope, above\n'
+               'ThicknessSlope: follow the property ThicknessSlope, below\n'
+               'Normal: normal to planes. Height calculated with 45º and\n'
+               'the length of Thickness property. \n')
 
         slopedPlanes.addProperty("App::PropertyEnumeration",
                                  "ThicknessDirection",
