@@ -40,9 +40,7 @@ class _PyAlignment(_Py):
 
     def __init__(self):
 
-        ''''''
-
-
+        '''__init__(self):'''
 
         self.base = None
         self.aligns = []
@@ -63,21 +61,23 @@ class _PyAlignment(_Py):
     @property
     def base(self):
 
-        '''base(self)'''
+        '''base(self):
+        The number of the first plane of the alignment.'''
 
         return self._base
 
     @base.setter
     def base(self, base):
 
-        '''base(self, base)'''
+        '''base(self, base):'''
 
         self._base = base
 
     @property
     def aligns(self):
 
-        '''aligns(self)'''
+        '''aligns(self):
+        The numbers of the secondaries planes of the alignment.'''
 
         return self._aligns
 
@@ -91,7 +91,8 @@ class _PyAlignment(_Py):
     @property
     def aliShape(self):
 
-        '''aliShape(self)'''
+        '''aliShape(self):
+        '''
 
         return self._aliShape
 
@@ -105,7 +106,8 @@ class _PyAlignment(_Py):
     @property
     def chops(self):
 
-        '''chops(self)'''
+        '''chops(self):
+        List of twin planes which chop the alignment'''
 
         return self._chops
 
@@ -119,7 +121,8 @@ class _PyAlignment(_Py):
     @property
     def geomAligned(self):
 
-        '''geomAligned(self)'''
+        '''geomAligned(self):
+        Joins in one edge the base edges of aligned planes.'''
 
         return self._geomAligned
 
@@ -133,7 +136,8 @@ class _PyAlignment(_Py):
     @property
     def geomList(self):
 
-        '''geomList(self)'''
+        '''geomList(self):
+        '''
 
         return self._geomList
 
@@ -147,7 +151,8 @@ class _PyAlignment(_Py):
     @property
     def rango(self):
 
-        '''rango(self)'''
+        '''rango(self):
+        List of list of planes, by number, between every chop.'''
 
         return self._rango
 
@@ -161,7 +166,8 @@ class _PyAlignment(_Py):
     @property
     def rangoPy(self):
 
-        '''rangoPy(self)'''
+        '''rangoPy(self):
+        By python planes'''
 
         return self._rangoPy
 

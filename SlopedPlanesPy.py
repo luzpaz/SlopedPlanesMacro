@@ -294,37 +294,6 @@ class _Py(object):
 
         print('##############################################################')
 
-    def printSerialSummary(self):
-
-        '''printSerialSummary(self)'''
-
-        for pyFace in self.Pyth:
-            for pyWire in pyFace.wires:
-                for pyPlane in pyWire.planes:
-                    pyPlane.printPlaneSummary()
-
-    def printPlaneSummary(self):
-
-        '''printPlaneSummary(self)'''
-
-        print('###### ', (self.numWire, self.numGeom), self.shape)
-        if self.shape:
-            print('Area ', self.shape.Area)
-        geom = self.geomShape
-        print((self.roundVector(geom.firstVertex(True).Point), self.roundVector(geom.lastVertex(True).Point)))
-        forward = self.forward
-        try:
-            print((self.roundVector(forward.firstVertex(True).Point), self.roundVector(forward.lastVertex(True).Point)))
-        except:
-            pass
-        backward = self.backward
-        try:
-            print((self.roundVector(backward.firstVertex(True).Point), self.roundVector(backward.lastVertex(True).Point)))
-        except:
-            pass
-
-        print('######')
-
     def printAssociatedShapes(self, numWire, numGeom):
 
         '''printAssociatedShapes(self, numWire, numGeom)'''

@@ -45,11 +45,11 @@ class _PyFace(_Py):
 
     '''The complementary python object class for the faces resulting
     to apply the FaceMaker to the SlopedPlanes base.
-    The faces could have several wires, and as a consequense holes.'''
+    One face could have several wires, and as a consequense, holes.'''
 
     def __init__(self, numFace, mono=True):
 
-        '''__init__(self, numFace)'''
+        '''__init__(self, numFace):'''
 
         self.numFace = numFace
         self.wires = []
@@ -124,7 +124,7 @@ class _PyFace(_Py):
     def shapeGeom(self):
 
         '''shapeGeom(self):
-        list of lists of edges, ordered by wire.'''
+        list of lists of edges (ordered by wires).'''
 
         return self._shapeGeom
 
@@ -321,12 +321,12 @@ class _PyFace(_Py):
 
         '''faceManager(self)'''
 
-        # print('Face mono reset', self.mono, self.reset)
-        # print('Wire mono reset ', [(p.mono, p.reset) for p in self.wires])
+        # print('Face mono/reset ', (self.mono, self.reset))
+        # print('Wire mono/reset ', [(p.mono, p.reset) for p in self.wires])
 
         self.parsing()
 
-        # self.printSummary()
+        self.printSummary()
 
         pyAlignList = self.alignments
         pyWireList = self.wires
