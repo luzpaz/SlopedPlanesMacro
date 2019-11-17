@@ -250,22 +250,26 @@ class _Py(object):
         print('********* alignments ', _Py.pyFace.alignments)
         for pyAlignment in _Py.pyFace.alignments:
 
-            print('****** base')
-            print((pyAlignment.base.numWire, pyAlignment.base.numGeom), pyAlignment.base.alignedList)
-            print('angle ', pyAlignment.base.angle)
+            print('geomAligned ', pyAlignment.geomAligned)
+            print('geomList ', pyAlignment.geomList)
             print('rear ', pyAlignment.rear)
-            print('rear base', pyAlignment.base.rear)
-            print('rango ', pyAlignment.base.rango)
-            # print('geom ', pyAlignment.base.geom)
-            # print('geomAligned ', pyAlignment.base.geomAligned)
-            # print('shape ', pyAlignment.base.shape)
             print('falsify ', pyAlignment.falsify)
-            print('virtualized ', pyAlignment.base.virtualized)
-            print('cross ', pyAlignment.base.cross)
             print('rangoChop ', pyAlignment.rango)
             print('rangoRear ', pyAlignment.rangoRear)
             print('prior ', (pyAlignment.prior.numWire, pyAlignment.prior.numGeom))
             print('later ', (pyAlignment.later.numWire, pyAlignment.later.numGeom))
+
+            print('****** base')
+            print((pyAlignment.base.numWire, pyAlignment.base.numGeom), pyAlignment.base.alignedList)
+            print('angle ', pyAlignment.base.angle)
+            print('rear ', pyAlignment.base.rear)
+            print('rango ', pyAlignment.base.rango)
+            print('geom ', pyAlignment.base.geom)
+            print('geomAligned ', pyAlignment.base.geomAligned)
+            print('shape ', pyAlignment.base.shape)
+
+            print('virtualized ', pyAlignment.base.virtualized)
+            print('cross ', pyAlignment.base.cross)
 
             print('*** chops ', [[(x.numWire, x.numGeom),
                                   (y.numWire, y.numGeom)]
@@ -288,9 +292,9 @@ class _Py(object):
                 print('angle ', align.angle)
                 print('virtualized ', align.virtualized)
                 print('cross ', align.cross)
-                # print('geom ', align.geom)
-                # print('geomAligned ', align.geomAligned)
-                # print('shape ', align.shape)
+                print('geom ', align.geom)
+                print('geomAligned ', align.geomAligned)
+                print('shape ', align.shape)
 
         print('##############################################################')
 

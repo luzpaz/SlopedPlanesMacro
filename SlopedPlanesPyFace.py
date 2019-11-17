@@ -326,7 +326,7 @@ class _PyFace(_Py):
 
         self.parsing()
 
-        self.printSummary()
+        # self.printSummary()
 
         pyAlignList = self.alignments
         pyWireList = self.wires
@@ -360,7 +360,7 @@ class _PyFace(_Py):
         for pyAlign in pyAlignList:
             pyAlign.virtualizing()
 
-        # self.printSummary()
+        self.printSummary()
 
         if not mono:
             for pyWire in pyWireList:
