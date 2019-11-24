@@ -259,6 +259,9 @@ class _PyAlignment(_Py):
     @property
     def rear(self):
 
+        '''def rear(self):
+        Redundant with chops planes or alignment base plane?'''
+
         return self._rear
 
     @rear.setter
