@@ -50,56 +50,60 @@ class _PyReflex(_Py):
     @property
     def planes(self):
 
-        '''planes(self)'''
+        '''planes(self):
+        List with the two planes.'''
 
         return self._planes
 
     @planes.setter
     def planes(self, planes):
 
-        '''planes(self, planes)'''
+        '''planes(self, planes):'''
 
         self._planes = planes
 
     @property
     def rango(self):
 
-        '''rango(self)'''
+        '''rango(self):
+        Redundant with plane.'''
 
         return self._rango
 
     @rango.setter
     def rango(self, rango):
 
-        '''rango(self, rango)'''
+        '''rango(self, rango):'''
 
         self._rango = rango
 
     @property
     def rear(self):
 
-        '''rear(self)'''
+        '''rear(self):
+        Redundant with plane'''
 
         return self._rear
 
     @rear.setter
     def rear(self, rear):
 
-        '''rear(self, rear)'''
+        '''rear(self, rear):'''
 
         self._rear = rear
 
     @property
     def lines(self):
 
-        '''lines(self)'''
+        '''lines(self):
+        Redundant with planes.'''
 
         return self._lines
 
     @lines.setter
     def lines(self, lines):
 
-        '''lines(self, lines)'''
+        '''lines(self, lines):'''
 
         self._lines = lines
 
