@@ -64,14 +64,14 @@ class _PyFace(_Py):
     def numFace(self):
 
         '''numFace(self):
-        integer numbering the face.'''
+        Integer numbering the face.'''
 
         return self._numFace
 
     @numFace.setter
     def numFace(self, numFace):
 
-        '''numFace(self, numFace)'''
+        '''numFace(self, numFace):'''
 
         self._numFace = numFace
 
@@ -79,14 +79,14 @@ class _PyFace(_Py):
     def wires(self):
 
         '''wires(self):
-        list of wires'''
+        List of wires.'''
 
         return self._wires
 
     @wires.setter
     def wires(self, wires):
 
-        '''wires(self, wires)'''
+        '''wires(self, wires):'''
 
         self._wires = wires
 
@@ -94,14 +94,14 @@ class _PyFace(_Py):
     def alignments(self):
 
         '''alignments(self):
-        list of alignments.'''
+        List of alignments.'''
 
         return self._alignments
 
     @alignments.setter
     def alignments(self, alignments):
 
-        '''alignments(self, alignments)'''
+        '''alignments(self, alignments):'''
 
         self._alignments = alignments
 
@@ -116,7 +116,7 @@ class _PyFace(_Py):
     @size.setter
     def size(self, size):
 
-        '''size(self, size)'''
+        '''size(self, size):'''
 
         self._size = size
 
@@ -139,14 +139,14 @@ class _PyFace(_Py):
     def mono(self):
 
         '''mono(self):
-        all planes of the face have the same slope.'''
+        All planes of the face have the same slope.'''
 
         return self._mono
 
     @mono.setter
     def mono(self, mono):
 
-        '''mono(self, mono)'''
+        '''mono(self, mono):'''
 
         self._mono = mono
 
@@ -154,14 +154,14 @@ class _PyFace(_Py):
     def reset(self):
 
         '''reset(self):
-        affects the face parsing.'''
+        Affects the face parsing.'''
 
         return self._reset
 
     @reset.setter
     def reset(self, reset):
 
-        '''reset(self, reset)'''
+        '''reset(self, reset):'''
 
         self._reset = reset
 
@@ -169,16 +169,33 @@ class _PyFace(_Py):
     def execute(self):
 
         '''execute(self):
-        affects the face execute.'''
-
+        Affects the face execute.'''
+        # TODO
         return self._execute
 
     @execute.setter
     def execute(self, execute):
 
-        '''execute(self, execute)'''
+        '''execute(self, execute):'''
 
         self._execute = execute
+
+    # TODO
+
+    '''@property
+    def face(self):
+
+        face(self):
+        The Face shape.
+        # TODO
+        return self._face
+
+    @face.setter
+    def face(self, face):
+
+        ace(self, face):
+
+        self._face = face'''
 
     def __getstate__(self):
 

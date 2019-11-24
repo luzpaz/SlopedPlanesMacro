@@ -56,63 +56,68 @@ class _PyWire(_Py):
     @property
     def numWire(self):
 
-        '''numWire(self)'''
+        '''numWire(self):
+        Integer numbering the wire into the face.'''
 
         return self._numWire
 
     @numWire.setter
     def numWire(self, numWire):
 
-        '''numWire(self, numWire)'''
+        '''numWire(self, numWire):'''
 
         self._numWire = numWire
 
     @property
     def reflexs(self):
 
-        '''reflexs(self)'''
+        '''reflexs(self):
+        List of reflex corners'''
 
         return self._reflexs
 
     @reflexs.setter
     def reflexs(self, reflexs):
 
-        '''reflexs(self, reflexs)'''
+        '''reflexs(self, reflexs):'''
 
         self._reflexs = reflexs
 
     @property
     def planes(self):
 
-        '''planes(self)'''
+        '''planes(self):
+        List of planes.'''
 
         return self._planes
 
     @planes.setter
     def planes(self, planes):
 
-        '''planes(self, planes)'''
+        '''planes(self, planes):'''
 
         self._planes = planes
 
     @property
     def coordinates(self):
 
-        '''coordinates(self)'''
+        '''coordinates(self):
+        Points of the wire.'''
 
         return self._coordinates
 
     @coordinates.setter
     def coordinates(self, coordinates):
 
-        '''coordinates(self, coordinates)'''
+        '''coordinates(self, coordinates):'''
 
         self._coordinates = coordinates
 
     @property
     def shapeGeom(self):
 
-        '''shapeGeom(self)'''
+        '''shapeGeom(self):
+        List of edges.'''
 
         return self._shapeGeom
 
@@ -126,35 +131,38 @@ class _PyWire(_Py):
     @property
     def reset(self):
 
-        '''reset(self)'''
+        '''reset(self):
+        Affects the face parsing.'''
 
         return self._reset
 
     @reset.setter
     def reset(self, reset):
 
-        '''reset(self, reset)'''
+        '''reset(self, reset):'''
 
         self._reset = reset
 
     @property
     def wire(self):
 
-        '''wire(self)'''
+        '''wire(self):
+        The Wire shape.'''
 
         return self._wire
 
     @wire.setter
     def wire(self, wire):
 
-        '''wire(self, wire)'''
+        '''wire(self, wire):'''
 
         self._wire = wire
 
     @property
     def mono(self):
 
-        '''mono(self)'''
+        '''mono(self):
+        All planes of the wire have the same slope.'''
 
         return self._mono
 
