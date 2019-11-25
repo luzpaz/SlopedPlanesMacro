@@ -37,12 +37,35 @@ __version__ = ""
 
 class _PyPlane(_Py):
 
-    '''The complementary python object class for planes.A plane correspond
+    '''The complementary python object class for planes. A plane correspond
     to one or more edges of the base. A plane could have several faces.'''
 
-    def __init__(self, numWire, numGeom, slope=45.0):
+    def __init__(self, numWire, numGeom, angle=45.0):
 
-        '''__init__(self, numWire, numGeom)'''
+        '''__init__(self, numWire, numGeom, angle):'''
+
+        self.numWire = numWire
+        self.numGeom = numGeom
+        self.angle = angle
+        size = _Py.pyFace.size
+        self.rightWidth = size
+        self.leftWidth = size
+        self.length = 2 * size
+        self.overhang = 0
+
+        self.control = [numGeom]
+
+        self.geom = None
+        self.geomShape = None
+        self.geomAligned = None
+        self.forward = None
+        self.backward = None
+
+        self.shape = None
+        self.bigShape = None
+        self.enormousShape = None
+        self.seedShape = None
+        self.seedBigShape = None
 
         self.alignedList = []
         self.chopedList = []
@@ -50,47 +73,340 @@ class _PyPlane(_Py):
         self.rearedList = []
         self.reflexedList = []
 
-        self.numWire = numWire
-        self.numGeom = numGeom
-        self.angle = slope
-        size = _Py.pyFace.size
-        self.rightWidth = size
-        self.leftWidth = size
-        self.length = 2 * size
-        self.overhang = 0
         self.rear = []
         self.secondRear = []
+
         self.under = []
         self.seed = []
+
         self.rango = []
-        self.rangoPy = []   # TODO unir rangos
+        self.rangoPy = []   # TODO unir rangos. NO UNIR
+
         self.reflexed = False
         self.aligned = False  # quitar
         self.choped = False  # quitar
         self.fronted = False  # quitar
+
         self.arrow = False
-        self.geom = None
-        self.geomShape = None
-        self.geomAligned = None
-        self.shape = None
-        self.bigShape = None
-        self.enormousShape = None
+
         self.simulatedShape = None
+
         self.cutter = []
-        self.forward = None
-        self.backward = None
+
         self.virtualized = False
         self.virtuals = []
-        self.control = [numGeom]
-        self.seedShape = None
-        self.seedBigShape = None
+
         self.lineInto = None
         self.cross = False
+
         self.solved = False
         self.reallySolved = False
+
         self.sweepCurve = None
 
         self.edge = None
+
+    @property
+    def numWire(self):
+
+        '''numWire(self):
+        Integer numbering the wire which the plane belongs.'''
+
+        return self._numWire
+
+    @numWire.setter
+    def numWire(self, numWire):
+
+        '''numWire(self, numWire):'''
+
+        self._numWire = numWire
+
+    @property
+    def numGeom(self):
+
+        '''numGeom(self):
+        Integer numbering the plane into the wire.'''
+
+        return self._numGeom
+
+    @numGeom.setter
+    def numGeom(self, numGeom):
+
+        '''numGeom(self, numGeom):'''
+
+        self._numGeom = numGeom
+
+    @property
+    def angle(self):
+
+        '''angle(self):'''
+
+        return self._angle
+
+    @angle.setter
+    def angle(self, angle):
+
+        '''angle(self, angle):'''
+
+        try:
+            oldAngle = self.angle
+            if oldAngle != angle:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
+        self._angle = angle
+
+    @property
+    def rightWidth(self):
+
+        '''rightWidth(self):'''
+
+        return self._rightWidth
+
+    @rightWidth.setter
+    def rightWidth(self, width):
+
+        '''rightWidth(self, width):'''
+
+        try:
+            oldWidth = self.rightWidth
+            if oldWidth != width:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
+        self._rightWidth = width
+
+    @property
+    def leftWidth(self):
+
+        '''leftWidth(self):'''
+
+        return self._leftWidth
+
+    @leftWidth.setter
+    def leftWidth(self, width):
+
+        '''leftWidth(self, width):'''
+
+        try:
+            oldWidth = self.leftWidth
+            if oldWidth != width:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
+        self._leftWidth = width
+
+    @property
+    def length(self):
+
+        '''length(self):'''
+
+        return self._length
+
+    @length.setter
+    def length(self, length):
+
+        '''length(self, length):'''
+
+        try:
+            oldLength = self.length
+            if oldLength != length:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
+        self._length = length
+
+    @property
+    def overhang(self):
+
+        '''overhang(self):
+        Overhang length'''
+
+        return self._overhang
+
+    @overhang.setter
+    def overhang(self, overhang):
+
+        '''overhang(self, overhang):'''
+
+        try:
+            oldOverhang = self.overhang
+            if oldOverhang != overhang:
+                self.seedShape = None
+        except AttributeError:
+            pass
+
+        size = _Py.pyFace.size
+        if overhang > size:
+            overhang = size
+
+        self._overhang = overhang
+
+    ###########################################################################
+
+    @property
+    def control(self):
+
+        ''''''
+
+        return self._control
+
+    @control.setter
+    def control(self, control):
+
+        ''''''
+
+        self._control = control
+
+    ###########################################################################
+
+    @property
+    def geom(self):
+
+        ''''''
+
+        return self._geom
+
+    @geom.setter
+    def geom(self, geom):
+
+        ''''''
+
+        self._geom = geom
+
+    @property
+    def geomShape(self):
+
+        ''''''
+
+        return self._geomShape
+
+    @geomShape.setter
+    def geomShape(self, geomShape):
+
+        ''''''
+
+        self._geomShape = geomShape
+
+    @property
+    def geomAligned(self):
+
+        ''''''
+
+        return self._geomAligned
+
+    @geomAligned.setter
+    def geomAligned(self, geomAligned):
+
+        ''''''
+
+        self._geomAligned = geomAligned
+
+    @property
+    def forward(self):
+
+        ''''''
+
+        return self._forward
+
+    @forward.setter
+    def forward(self, forward):
+
+        ''''''
+
+        self._forward = forward
+
+    @property
+    def backward(self):
+
+        ''''''
+
+        return self._backward
+
+    @backward.setter
+    def backward(self, backward):
+
+        ''''''
+
+        self._backward = backward
+
+    ###########################################################################
+
+    @property
+    def shape(self):
+
+        ''''''
+
+        return self._shape
+
+    @shape.setter
+    def shape(self, shape):
+
+        ''''''
+
+        self._shape = shape
+
+    @property
+    def bigShape(self):
+
+        ''''''
+
+        return self._bigShape
+
+    @bigShape.setter
+    def bigShape(self, bigShape):
+
+        ''''''
+
+        self._bigShape = bigShape
+
+    @property
+    def enormousShape(self):
+
+        ''''''
+
+        return self._enormousShape
+
+    @enormousShape.setter
+    def enormousShape(self, enormousShape):
+
+        ''''''
+
+        self._enormousShape = enormousShape
+
+    @property
+    def seedShape(self):
+
+        ''''''
+
+        return self._seedShape
+
+    @seedShape.setter
+    def seedShape(self, seedShape):
+
+        ''''''
+
+        self._seedShape = seedShape
+
+    @property
+    def seedBigShape(self):
+
+        ''''''
+
+        return self._seedBigShape
+
+    @seedBigShape.setter
+    def seedBigShape(self, seedBigShape):
+
+        ''''''
+
+        self._seedBigShape = seedBigShape
+
+    ###########################################################################
 
     @property
     def alignedList(self):
@@ -162,142 +478,8 @@ class _PyPlane(_Py):
 
         self._reflexedList = reflexedList
 
-    @property
-    def numWire(self):
 
-        ''''''
 
-        return self._numWire
-
-    @numWire.setter
-    def numWire(self, numWire):
-
-        ''''''
-
-        self._numWire = numWire
-
-    @property
-    def numGeom(self):
-
-        ''''''
-
-        return self._numGeom
-
-    @numGeom.setter
-    def numGeom(self, numGeom):
-
-        ''''''
-
-        self._numGeom = numGeom
-
-    @property
-    def angle(self):
-
-        ''''''
-
-        return self._angle
-
-    @angle.setter
-    def angle(self, angle):
-
-        ''''''
-
-        try:
-            oldAngle = self.angle
-            if oldAngle != angle:
-                self.seedShape = None
-        except AttributeError:
-            pass
-
-        self._angle = angle
-
-    @property
-    def rightWidth(self):
-
-        ''''''
-
-        return self._rightWidth
-
-    @rightWidth.setter
-    def rightWidth(self, width):
-
-        ''''''
-
-        try:
-            oldWidth = self.rightWidth
-            if oldWidth != width:
-                self.seedShape = None
-        except AttributeError:
-            pass
-
-        self._rightWidth = width
-
-    @property
-    def leftWidth(self):
-
-        ''''''
-
-        return self._leftWidth
-
-    @leftWidth.setter
-    def leftWidth(self, width):
-
-        ''''''
-
-        try:
-            oldWidth = self.leftWidth
-            if oldWidth != width:
-                self.seedShape = None
-        except AttributeError:
-            pass
-
-        self._leftWidth = width
-
-    @property
-    def length(self):
-
-        ''''''
-
-        return self._length
-
-    @length.setter
-    def length(self, length):
-
-        ''''''
-
-        try:
-            oldLength = self.length
-            if oldLength != length:
-                self.seedShape = None
-        except AttributeError:
-            pass
-
-        self._length = length
-
-    @property
-    def overhang(self):
-
-        ''''''
-
-        return self._overhang
-
-    @overhang.setter
-    def overhang(self, overhang):
-
-        ''''''
-
-        try:
-            oldOverhang = self.overhang
-            if oldOverhang != overhang:
-                self.seedShape = None
-        except AttributeError:
-            pass
-
-        size = _Py.pyFace.size
-        if overhang > size:
-            overhang = size
-
-        self._overhang = overhang
 
     @property
     def rear(self):
@@ -454,89 +636,9 @@ class _PyPlane(_Py):
 
         self._arrow = arrow
 
-    @property
-    def geom(self):
 
-        ''''''
 
-        return self._geom
 
-    @geom.setter
-    def geom(self, geom):
-
-        ''''''
-
-        self._geom = geom
-
-    @property
-    def geomShape(self):
-
-        ''''''
-
-        return self._geomShape
-
-    @geomShape.setter
-    def geomShape(self, geomShape):
-
-        ''''''
-
-        self._geomShape = geomShape
-
-    @property
-    def geomAligned(self):
-
-        ''''''
-
-        return self._geomAligned
-
-    @geomAligned.setter
-    def geomAligned(self, geomAligned):
-
-        ''''''
-
-        self._geomAligned = geomAligned
-
-    @property
-    def shape(self):
-
-        ''''''
-
-        return self._shape
-
-    @shape.setter
-    def shape(self, shape):
-
-        ''''''
-
-        self._shape = shape
-
-    @property
-    def bigShape(self):
-
-        ''''''
-
-        return self._bigShape
-
-    @bigShape.setter
-    def bigShape(self, bigShape):
-
-        ''''''
-
-        self._bigShape = bigShape
-
-    @property
-    def enormousShape(self):
-
-        ''''''
-
-        return self._enormousShape
-
-    @enormousShape.setter
-    def enormousShape(self, enormousShape):
-
-        ''''''
-
-        self._enormousShape = enormousShape
 
     @property
     def simulatedShape(self):
@@ -566,33 +668,7 @@ class _PyPlane(_Py):
 
         self._cutter = cutter
 
-    @property
-    def forward(self):
 
-        ''''''
-
-        return self._forward
-
-    @forward.setter
-    def forward(self, forward):
-
-        ''''''
-
-        self._forward = forward
-
-    @property
-    def backward(self):
-
-        ''''''
-
-        return self._backward
-
-    @backward.setter
-    def backward(self, backward):
-
-        ''''''
-
-        self._backward = backward
 
     @property
     def virtualized(self):
@@ -621,48 +697,6 @@ class _PyPlane(_Py):
         '''virtuals(self, virtuals)'''
 
         self._virtuals = virtuals
-
-    @property
-    def control(self):
-
-        ''''''
-
-        return self._control
-
-    @control.setter
-    def control(self, control):
-
-        ''''''
-
-        self._control = control
-
-    @property
-    def seedShape(self):
-
-        ''''''
-
-        return self._seedShape
-
-    @seedShape.setter
-    def seedShape(self, seedShape):
-
-        ''''''
-
-        self._seedShape = seedShape
-
-    @property
-    def seedBigShape(self):
-
-        ''''''
-
-        return self._seedBigShape
-
-    @seedBigShape.setter
-    def seedBigShape(self, seedBigShape):
-
-        ''''''
-
-        self._seedBigShape = seedBigShape
 
     @property
     def lineInto(self):
