@@ -38,7 +38,8 @@ __version__ = ""
 class _PyPlane(_Py):
 
     '''The complementary python object class for planes. A plane correspond
-    to one or more edges of the base. A plane could have several faces.'''
+    to one edge of the base, or more than one edge for alignments.
+    A plane could have several faces.'''
 
     def __init__(self, numWire, numGeom, angle=45.0):
 
@@ -58,30 +59,29 @@ class _PyPlane(_Py):
         self.geom = None
         self.geomShape = None
         self.geomAligned = None
+        self.edge = None
         self.forward = None
         self.backward = None
+        self.lineInto = None
 
         self.shape = None
         self.bigShape = None
         self.enormousShape = None
         self.seedShape = None
         self.seedBigShape = None
+        self.simulatedShape = None
+
+        self.rear = []
+        self.secondRear = []
+
+        self.rango = []
+        self.rangoPy = []
 
         self.alignedList = []
         self.chopedList = []
         self.frontedList = []
         self.rearedList = []
         self.reflexedList = []
-
-        self.rear = []
-        self.secondRear = []
-
-        self.under = []
-        self.seed = []
-
-        self.rango = []
-        self.rangoPy = []   # TODO unir rangos. NO UNIR
-
         self.reflexed = False
         self.aligned = False  # quitar
         self.choped = False  # quitar
@@ -89,22 +89,20 @@ class _PyPlane(_Py):
 
         self.arrow = False
 
-        self.simulatedShape = None
-
-        self.cutter = []
-
+        self.cross = False
         self.virtualized = False
         self.virtuals = []
-
-        self.lineInto = None
-        self.cross = False
 
         self.solved = False
         self.reallySolved = False
 
+        self.under = []
+        self.seed = []
+        self.cutter = []
+
         self.sweepCurve = None
 
-        self.edge = None
+    ###########################################################################
 
     @property
     def numWire(self):
@@ -307,6 +305,20 @@ class _PyPlane(_Py):
         self._geomAligned = geomAligned
 
     @property
+    def edge(self):
+
+        ''''''
+
+        return self._edge
+
+    @edge.setter
+    def edge(self, edge):
+
+        ''''''
+
+        self._edge = edge
+
+    @property
     def forward(self):
 
         ''''''
@@ -333,6 +345,20 @@ class _PyPlane(_Py):
         ''''''
 
         self._backward = backward
+
+    @property
+    def lineInto(self):
+
+        ''''''
+
+        return self._lineInto
+
+    @lineInto.setter
+    def lineInto(self, lineInto):
+
+        ''''''
+
+        self._lineInto = lineInto
 
     ###########################################################################
 
@@ -406,6 +432,80 @@ class _PyPlane(_Py):
 
         self._seedBigShape = seedBigShape
 
+    @property
+    def simulatedShape(self):
+
+        ''''''
+
+        return self._simulatedShape
+
+    @simulatedShape.setter
+    def simulatedShape(self, simulatedShape):
+
+        ''''''
+
+        self._simulatedShape = simulatedShape
+
+    ###########################################################################
+
+    @property
+    def rear(self):
+
+        ''''''
+
+        return self._rear
+
+    @rear.setter
+    def rear(self, rear):
+
+        ''''''
+
+        self._rear = rear
+
+    @property
+    def secondRear(self):
+
+        ''''''
+
+        return self._secondRear
+
+    @secondRear.setter
+    def secondRear(self, secondRear):
+
+        ''''''
+
+        self._secondRear = secondRear
+
+    ###########################################################################
+
+    @property
+    def rango(self):
+
+        ''''''
+
+        return self._rango
+
+    @rango.setter
+    def rango(self, rango):
+
+        ''''''
+
+        self._rango = rango
+
+    @property
+    def rangoPy(self):
+
+        ''''''
+
+        return self._rangoPy
+
+    @rangoPy.setter
+    def rangoPy(self, rangoPy):
+
+        ''''''
+
+        self._rangoPy = rangoPy
+
     ###########################################################################
 
     @property
@@ -478,94 +578,6 @@ class _PyPlane(_Py):
 
         self._reflexedList = reflexedList
 
-
-
-
-    @property
-    def rear(self):
-
-        ''''''
-
-        return self._rear
-
-    @rear.setter
-    def rear(self, rear):
-
-        ''''''
-
-        self._rear = rear
-
-    @property
-    def secondRear(self):
-
-        ''''''
-
-        return self._secondRear
-
-    @secondRear.setter
-    def secondRear(self, secondRear):
-
-        ''''''
-
-        self._secondRear = secondRear
-
-    @property
-    def under(self):
-
-        ''''''
-
-        return self._under
-
-    @under.setter
-    def under(self, under):
-
-        ''''''
-
-        self._under = under
-
-    @property
-    def seed(self):
-
-        '''seed(self)
-        Allowed location for a second face of a reflex plane'''
-
-        return self._seed
-
-    @seed.setter
-    def seed(self, seed):
-
-        ''''''
-
-        self._seed = seed
-
-    @property
-    def rango(self):
-
-        ''''''
-
-        return self._rango
-
-    @rango.setter
-    def rango(self, rango):
-
-        ''''''
-
-        self._rango = rango
-
-    @property
-    def rangoPy(self):
-
-        ''''''
-
-        return self._rangoPy
-
-    @rangoPy.setter
-    def rangoPy(self, rangoPy):
-
-        ''''''
-
-        self._rangoPy = rangoPy
-
     @property
     def reflexed(self):
 
@@ -622,6 +634,8 @@ class _PyPlane(_Py):
 
         self._fronted = fronted
 
+    ###########################################################################
+
     @property
     def arrow(self):
 
@@ -636,39 +650,7 @@ class _PyPlane(_Py):
 
         self._arrow = arrow
 
-
-
-
-
-    @property
-    def simulatedShape(self):
-
-        ''''''
-
-        return self._simulatedShape
-
-    @simulatedShape.setter
-    def simulatedShape(self, simulatedShape):
-
-        ''''''
-
-        self._simulatedShape = simulatedShape
-
-    @property
-    def cutter(self):
-
-        ''''''
-
-        return self._cutter
-
-    @cutter.setter
-    def cutter(self, cutter):
-
-        ''''''
-
-        self._cutter = cutter
-
-
+    ###########################################################################
 
     @property
     def virtualized(self):
@@ -699,20 +681,6 @@ class _PyPlane(_Py):
         self._virtuals = virtuals
 
     @property
-    def lineInto(self):
-
-        ''''''
-
-        return self._lineInto
-
-    @lineInto.setter
-    def lineInto(self, lineInto):
-
-        ''''''
-
-        self._lineInto = lineInto
-
-    @property
     def cross(self):
 
         ''''''
@@ -725,6 +693,8 @@ class _PyPlane(_Py):
         ''''''
 
         self._cross = cross
+
+    ###########################################################################
 
     @property
     def solved(self):
@@ -754,6 +724,53 @@ class _PyPlane(_Py):
 
         self._reallySolved = reallySolved
 
+    ###########################################################################
+
+    @property
+    def under(self):
+
+        ''''''
+
+        return self._under
+
+    @under.setter
+    def under(self, under):
+
+        ''''''
+
+        self._under = under
+
+    @property
+    def seed(self):
+
+        '''seed(self)
+        Allowed location for a second face of a reflex plane'''
+
+        return self._seed
+
+    @seed.setter
+    def seed(self, seed):
+
+        ''''''
+
+        self._seed = seed
+
+    @property
+    def cutter(self):
+
+        ''''''
+
+        return self._cutter
+
+    @cutter.setter
+    def cutter(self, cutter):
+
+        ''''''
+
+        self._cutter = cutter
+
+    ###########################################################################
+
     @property
     def sweepCurve(self):
 
@@ -775,19 +792,7 @@ class _PyPlane(_Py):
 
         self._sweepCurve = sweepCurve
 
-    @property
-    def edge(self):
-
-        ''''''
-
-        return self._edge
-
-    @edge.setter
-    def edge(self, edge):
-
-        ''''''
-
-        self._edge = edge
+    ###########################################################################
 
     def planning(self, pyWire, closed=False):
 
