@@ -232,7 +232,7 @@ class _PyFace(_Py):
                 dd['_lineInto'] = None
 
                 dd['_cutter'] = []
-                dd['_under'] = []
+                ## dd['_under'] = []
                 dd['_seed'] = []
 
                 dd['_virtuals'] = []

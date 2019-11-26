@@ -96,7 +96,7 @@ class _PyPlane(_Py):
         self.solved = False
         self.reallySolved = False
 
-        self.under = []
+        # self.under = []
         self.seed = []
         self.cutter = []
 
@@ -726,7 +726,7 @@ class _PyPlane(_Py):
 
     ###########################################################################
 
-    @property
+    '''@property
     def under(self):
 
         ''''''
@@ -738,7 +738,7 @@ class _PyPlane(_Py):
 
         ''''''
 
-        self._under = under
+        self._under = under'''
 
     @property
     def seed(self):
@@ -806,7 +806,7 @@ class _PyPlane(_Py):
             # print('reflexed')
             self.simulatedShape = None
             self.cutter = []
-            self.under = []
+            # self.under = []
             self.seed = []
             self.virtuals = []
             self.virtualized = False

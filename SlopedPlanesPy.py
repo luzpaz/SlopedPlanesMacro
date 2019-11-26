@@ -330,12 +330,12 @@ class _Py(object):
             compound.Placement = placement
             Part.show(compound, slopedPlanes.Name+' cutter '+str(numWire)+' '+str(numGeom))
 
-        under = pyPlane.under
+        '''under = pyPlane.under
         if under:
 
             compound = Part.makeCompound(under)
             compound.Placement = placement
-            Part.show(compound, slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))
+            Part.show(compound, slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))'''
 
         seed = pyPlane.seed
         if seed:
@@ -393,12 +393,12 @@ class _Py(object):
                         compound.Placement = placement
                         Part.show(compound, slopedPlanes.Name+'virtual simulatedAlignment '+str(numWire)+' '+str(numGeom))
 
-                under = pyP.under
+                '''under = pyP.under
                 if under:
 
                     compound = Part.makeCompound(pyP.under)
                     compound.Placement = placement
-                    Part.show(compound, slopedPlanes.Name+' virtual under '+str(numWire)+' '+str(numGeom))
+                    Part.show(compound, slopedPlanes.Name+' virtual under '+str(numWire)+' '+str(numGeom))'''
 
                 cutter = pyP.cutter
                 if cutter:

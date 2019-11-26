@@ -807,9 +807,9 @@ class _PyReflex(_Py):
                 section = f.section([backward], tolerance)
                 if not section.Edges:
                     cList.append(f)
-            pyR.under.extend(cList)    # surplus figure's bottom
+            # pyR.under.extend(cList)    # surplus figure's bottom
             # print('cList ', cList, len(cList))
-            cutterList = Part.makeCompound(pyR.under)
+            cutterList = Part.makeCompound(cList)
 
         if cList:
             reflex = reflex.cut(cList, tolerance)
