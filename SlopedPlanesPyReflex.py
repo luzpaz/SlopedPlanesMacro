@@ -904,7 +904,7 @@ class _PyReflex(_Py):
                                             if enormous:
                                                 # print('e111')
 
-                                                seed = self.seedExtraFaces(pyR)
+                                                seed = self.seedExtraFaces(pyR, enormous)
 
                                                 common =\
                                                     ff.common([seed],
@@ -921,7 +921,7 @@ class _PyReflex(_Py):
                                         if enormous:
                                             # print('e21')
 
-                                            seed = self.seedExtraFaces(pyR)
+                                            seed = self.seedExtraFaces(pyR, enormous)
 
                                             common =\
                                                 ff.common([seed], tolerance)
@@ -941,12 +941,13 @@ class _PyReflex(_Py):
         compound = Part.makeCompound(aList)
         pyR.shape = compound
 
-        def seedExtraFaces(self, pyR):
+        def seedExtraFaces(self, pyR, enormous):
 
             ''''''
 
             gS = pyR.geomShape
             face = _Py.face
+            tolerance = _Py.tolerance
 
             seedList = pyR.seed
             # print('seedList ', seedList)
