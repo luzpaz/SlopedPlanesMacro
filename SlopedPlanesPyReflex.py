@@ -941,41 +941,41 @@ class _PyReflex(_Py):
         compound = Part.makeCompound(aList)
         pyR.shape = compound
 
-        def seedExtraFaces(self, pyR, enormous):
+    def seedExtraFaces(self, pyR, enormous):
 
-            ''''''
+        ''''''
 
-            gS = pyR.geomShape
-            face = _Py.face
-            tolerance = _Py.tolerance
+        gS = pyR.geomShape
+        face = _Py.face
+        tolerance = _Py.tolerance
 
-            seedList = pyR.seed
-            # print('seedList ', seedList)
-            if not seedList:
-                # print('a')
-                seed = pyR.seedShape.copy()
-            else:
-                # print('b')
-                seed = Part.makeShell(seedList)
-                seedList = []
-            seed = seed.cut(enormous, tolerance)
-            ff = self.selectFace(seed.Faces, gS)
-            seed = seed.removeShape([ff])
-            seedList.append(ff)
-            for ff in seed.Faces:
-                # print('1')
-                section = ff.section([face], tolerance)
-                if section.Edges:
-                    # print('2')
-                    section = ff.section(seedList, tolerance)
-                    if not section.Edges:
-                        # print('3')
-                        seedList.append(ff)
-            # print('seedList ', seedList)
-            pyR.seed = seedList    # allowed location for extra faces
+        seedList = pyR.seed
+        # print('seedList ', seedList)
+        if not seedList:
+            # print('a')
+            seed = pyR.seedShape.copy()
+        else:
+            # print('b')
             seed = Part.makeShell(seedList)
+            seedList = []
+        seed = seed.cut(enormous, tolerance)
+        ff = self.selectFace(seed.Faces, gS)
+        seed = seed.removeShape([ff])
+        seedList.append(ff)
+        for ff in seed.Faces:
+            # print('1')
+            section = ff.section([face], tolerance)
+            if section.Edges:
+                # print('2')
+                section = ff.section(seedList, tolerance)
+                if not section.Edges:
+                    # print('3')
+                    seedList.append(ff)
+        # print('seedList ', seedList)
+        pyR.seed = seedList    # allowed location for extra faces
+        seed = Part.makeShell(seedList)
 
-            return seed
+        return seed
 
     def processReflexTwo(self, reflex, oppReflex, pyR, pyOppR, direction):
 
