@@ -699,7 +699,7 @@ class _PyReflex(_Py):
 
             forw = forward.copy()
             forw = forw.cut([rearGeom], tolerance)
-            wire = Part.Wire(forw.Edges)        ########################################
+            wire = Part.Wire(forw.Edges)
             orderedEdges = wire.OrderedEdges
             forw = orderedEdges[0]
 
@@ -996,6 +996,18 @@ class _PyReflex(_Py):
             else:
                 forward = pyR.backward
                 backward = pyR.forward
+
+        '''lines = self.lines
+        if direction == 'forward':
+            forward = lines[0]
+            backward = lines[1]
+        else:
+            forward = lines[1]
+            backward = lines[0]
+
+        print((forward.firstVertex(True).Point, forward.lastVertex(True).Point), (backward.firstVertex(True).Point, backward.lastVertex(True).Point))
+        print(self.lines)
+        print((self.lines[0].firstVertex(True).Point, self.lines[0].lastVertex(True).Point), (self.lines[1].firstVertex(True).Point, self.lines[1].lastVertex(True).Point))'''
 
         # [forward, backward] = self.lines rompe Y072 Y074
 
