@@ -453,8 +453,6 @@ class _SlopedPlanes(_Py):
 
                             pyPlane.rear = []
                             pyPlane.secondRear = []
-                            # pyPlane.under = []
-                            # pyPlane.seed = []
                             pyPlane.seedShape = None
                             pyPlane.rango = []
                             pyPlane.aligned = False

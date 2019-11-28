@@ -96,8 +96,6 @@ class _PyPlane(_Py):
         self.solved = False
         self.reallySolved = False
 
-        # self.under = []
-        # self.seed = []
         self.cutter = []
 
         self.sweepCurve = None
@@ -738,34 +736,6 @@ class _PyPlane(_Py):
         self._reallySolved = reallySolved
 
     ###########################################################################
-
-    '''@property
-    def under(self):
-
-        ''''''
-
-        return self._under
-
-    @under.setter
-    def under(self, under):
-
-        ''''''
-
-        self._under = under
-
-    @property
-    def seed(self):
-
-        ''''''
-
-        return self._seed
-
-    @seed.setter
-    def seed(self, seed):
-
-        ''''''
-
-        self._seed = seed'''
 
     @property
     def cutter(self):
