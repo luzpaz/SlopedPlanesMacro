@@ -83,8 +83,8 @@ class _PyPlane(_Py):
         self.rearedList = []
         self.reflexedList = []
         self.reflexed = False
-        self.aligned = False  # quitar
-        self.choped = False  # quitar
+        self.aligned = False
+        self.choped = False
         self.fronted = False  # quitar
 
         self.arrow = False
@@ -511,7 +511,9 @@ class _PyPlane(_Py):
     @property
     def alignedList(self):
 
-        ''''''
+        '''alignedList(self):
+        List of alignments which the plane belongs
+        like base or align (pyPlane.aligned = True)'''
 
         return self._alignedList
 
@@ -525,7 +527,9 @@ class _PyPlane(_Py):
     @property
     def chopedList(self):
 
-        ''''''
+        '''chopedList(self):
+        List of alignments which the plane belongs
+        like chop (pyPlane.choped = True)'''
 
         return self._chopedList
 
@@ -539,7 +543,9 @@ class _PyPlane(_Py):
     @property
     def frontedList(self):
 
-        ''''''
+        '''frontedList(self):
+        List of alignments which the plane belongs
+        like front (pyPlane.fronted = True TODO quitar)'''
 
         return self._frontedList
 
@@ -553,7 +559,9 @@ class _PyPlane(_Py):
     @property
     def rearedList(self):
 
-        ''''''
+        '''rearedList(self):
+        List of alignments which the plane belongs
+        like rear'''
 
         return self._rearedList
 
@@ -567,7 +575,8 @@ class _PyPlane(_Py):
     @property
     def reflexedList(self):
 
-        ''''''
+        '''reflexedList(self):
+        List of reflex corners which the plane belongs.'''
 
         return self._reflexedList
 
@@ -581,7 +590,9 @@ class _PyPlane(_Py):
     @property
     def reflexed(self):
 
-        ''''''
+        '''reflexed(self):
+        The plane takes part in at least one alignment
+        (like base, align or chop) or one reflex corner.'''
 
         return self._reflexed
 
@@ -595,7 +606,8 @@ class _PyPlane(_Py):
     @property
     def aligned(self):
 
-        ''''''
+        '''aligned(self):
+        The plane takes part in at least one alignment, like base or align.'''
 
         return self._aligned
 
@@ -609,7 +621,8 @@ class _PyPlane(_Py):
     @property
     def choped(self):
 
-        ''''''
+        '''choped(self):
+        The plane takes part in at least one alignment, like chop.'''
 
         return self._choped
 
@@ -623,7 +636,7 @@ class _PyPlane(_Py):
     @property
     def fronted(self):
 
-        ''''''
+        '''A quitar'''
 
         return self._fronted
 
