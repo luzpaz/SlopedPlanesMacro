@@ -97,7 +97,7 @@ class _PyPlane(_Py):
         self.reallySolved = False
 
         # self.under = []
-        self.seed = []
+        # self.seed = []
         self.cutter = []
 
         self.sweepCurve = None
@@ -751,13 +751,12 @@ class _PyPlane(_Py):
 
         ''''''
 
-        self._under = under'''
+        self._under = under
 
     @property
     def seed(self):
 
-        '''seed(self)
-        Allowed location for a second face of a reflex plane'''
+        ''''''
 
         return self._seed
 
@@ -766,7 +765,7 @@ class _PyPlane(_Py):
 
         ''''''
 
-        self._seed = seed
+        self._seed = seed'''
 
     @property
     def cutter(self):
@@ -820,7 +819,7 @@ class _PyPlane(_Py):
             self.simulatedShape = None
             self.cutter = []
             # self.under = []
-            self.seed = []
+            # self.seed = []
             self.virtuals = []
             self.virtualized = False
 
@@ -828,13 +827,13 @@ class _PyPlane(_Py):
             return
 
         if self.seedShape:
-            # print('### seed')
+            # print('### seedShape')
 
             self.shape = self.seedShape.copy()
             self.bigShape = self.seedBigShape.copy()
 
         else:
-            # print('### no seed')
+            # print('### no seedShape')
 
             if closed:
                 # print('closed')

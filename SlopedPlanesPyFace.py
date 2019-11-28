@@ -233,7 +233,7 @@ class _PyFace(_Py):
 
                 dd['_cutter'] = []
                 ## dd['_under'] = []
-                dd['_seed'] = []
+                ## dd['_seed'] = []
 
                 dd['_virtuals'] = []
 

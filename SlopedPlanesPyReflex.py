@@ -849,34 +849,6 @@ class _PyReflex(_Py):
                     reflex = reflex.cut([pyOppR.enormousShape], tolerance)
                     # print('reflex.Faces ', reflex.Faces, len(reflex.Faces))
 
-                '''if enormous:
-
-                    seedList = pyR.seed
-                    # print('seedList ', seedList)
-                    if not seedList:
-                        # print('a')
-                        seed = pyR.seedShape.copy()
-                    else:
-                        # print('b')
-                        seed = Part.makeShell(seedList)
-                        seedList = []
-                    seed = seed.cut(enormous, tolerance)
-                    ff = self.selectFace(seed.Faces, gS)
-                    seed = seed.removeShape([ff])
-                    seedList.append(ff)
-                    for ff in seed.Faces:
-                        # print('1')
-                        section = ff.section([face], tolerance)
-                        if section.Edges:
-                            # print('2')
-                            section = ff.section(seedList, tolerance)
-                            if not section.Edges:
-                                # print('3')
-                                seedList.append(ff)
-                    # print('seedList ', seedList)
-                    pyR.seed = seedList    # allowed location for extra faces
-                    seed = Part.makeShell(seedList)'''
-
                 bList = []
                 for ff in reflex.Faces:
                     # print('a')
@@ -943,13 +915,13 @@ class _PyReflex(_Py):
 
     def seedExtraFaces(self, pyR, enormous):
 
-        ''''''
+        '''allowed location for extra faces'''
 
         gS = pyR.geomShape
         face = _Py.face
         tolerance = _Py.tolerance
 
-        seedList = pyR.seed
+        '''seedList = pyR.seed
         # print('seedList ', seedList)
         if not seedList:
             # print('a')
@@ -957,7 +929,10 @@ class _PyReflex(_Py):
         else:
             # print('b')
             seed = Part.makeShell(seedList)
-            seedList = []
+            seedList = []'''
+        # necesita una memoria ??
+        seedList = []
+        seed = pyR.seedShape.copy()
         seed = seed.cut(enormous, tolerance)
         ff = self.selectFace(seed.Faces, gS)
         seed = seed.removeShape([ff])
@@ -972,7 +947,7 @@ class _PyReflex(_Py):
                     # print('3')
                     seedList.append(ff)
         # print('seedList ', seedList)
-        pyR.seed = seedList    # allowed location for extra faces
+        # pyR.seed = seedList    # allowed location for extra faces
         seed = Part.makeShell(seedList)
 
         return seed
