@@ -535,7 +535,7 @@ class _PyReflex(_Py):
                 pyR.cutter.append(pl)
                 # print('included rango ', pyWire.numWire, nn)
 
-                pl = pyPl.simulatedShape.copy()     # Two faces included
+                pl = pyPl.simulatedShape.copy()     # Two faces included ?
                 if kind == 'rangoCorner':
                     # print('22')
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
@@ -675,6 +675,8 @@ class _PyReflex(_Py):
                 rangoCorner = pyR.rango[0]
                 rangoCornerPy = pyR.rangoPy[0]
 
+                # esto tiene que cambiar a self.lines
+
                 forward = pyR.forward
                 backward = pyR.backward
 
@@ -810,6 +812,8 @@ class _PyReflex(_Py):
             # pyR.under.extend(cList)    # surplus figure's bottom
             # print('cList ', cList, len(cList))
             cutterList = Part.makeCompound(cList)
+
+        # pyR.under = cList
 
         if cList:
             reflex = reflex.cut(cList, tolerance)
@@ -961,7 +965,7 @@ class _PyReflex(_Py):
         tolerance = _Py.tolerance
         gS = pyR.geomShape
 
-        if direction == 'forward':
+        '''if direction == 'forward':
             forward = pyR.forward
             backward = pyR.backward
         else:
@@ -970,9 +974,9 @@ class _PyReflex(_Py):
                 backward = pyR.backward
             else:
                 forward = pyR.backward
-                backward = pyR.forward
+                backward = pyR.forward'''
 
-        '''lines = self.lines
+        lines = self.lines
         if direction == 'forward':
             forward = lines[0]
             backward = lines[1]
@@ -980,9 +984,8 @@ class _PyReflex(_Py):
             forward = lines[1]
             backward = lines[0]
 
-        print((forward.firstVertex(True).Point, forward.lastVertex(True).Point), (backward.firstVertex(True).Point, backward.lastVertex(True).Point))
-        print(self.lines)
-        print((self.lines[0].firstVertex(True).Point, self.lines[0].lastVertex(True).Point), (self.lines[1].firstVertex(True).Point, self.lines[1].lastVertex(True).Point))'''
+        # print((forward.firstVertex(True).Point, forward.lastVertex(True).Point), (backward.firstVertex(True).Point, backward.lastVertex(True).Point))
+        # print((self.lines[0].firstVertex(True).Point, self.lines[0].lastVertex(True).Point), (self.lines[1].firstVertex(True).Point, self.lines[1].lastVertex(True).Point))
 
         # [forward, backward] = self.lines rompe Y072 Y074
 
@@ -1029,21 +1032,27 @@ class _PyReflex(_Py):
                 # print('aList ', aList)
 
                 bList = []
-                if pyR.rear:
+                if pyR.rear: # ?
 
+                    # print('reflex.Faces ', reflex.Faces)
                     for ff in reflex.Faces:
                         section = ff.section([gS, backward], tolerance)
                         if not section.Edges:
-                            section = backward.section(aList, tolerance)
+                            bList = [ff]
+                            break
+                            '''section = backward.section(aList, tolerance)
                             if section.Edges:
+                                # print('a')
                                 bList = [ff]
                                 break
                             else:
+                                # print('b')
                                 section = ff.section(aList, tolerance)
                                 if not section.Edges:
                                     bList = [ff]
-                                    break
+                                    break'''
 
+                # print('bList ', bList)
                 aList.extend(bList)
                 compound = Part.makeCompound(aList)
                 pyR.shape = compound

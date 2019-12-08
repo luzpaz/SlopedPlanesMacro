@@ -335,14 +335,18 @@ class _Py(object):
 
             compound = Part.makeCompound(under)
             compound.Placement = placement
-            Part.show(compound, slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))'''
+            Part.show(compound, slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))
 
-        '''seed = pyPlane.seed
-        if seed:
+        try:
+            seed = pyPlane.seed
+            if seed:
 
-            compound = Part.makeCompound(seed)
-            compound.Placement = placement
-            Part.show(compound, slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))'''
+                compound = Part.makeCompound(seed)
+                compound.Placement = placement
+                Part.show(compound, slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))
+        except AttributeError:
+            pass'''
+
 
         if pyPlane.aligned:
             pyAli = pyPlane.selectAlignmentBase()
