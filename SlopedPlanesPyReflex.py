@@ -987,7 +987,9 @@ class _PyReflex(_Py):
         # print((forward.firstVertex(True).Point, forward.lastVertex(True).Point), (backward.firstVertex(True).Point, backward.lastVertex(True).Point))
         # print((self.lines[0].firstVertex(True).Point, self.lines[0].lastVertex(True).Point), (self.lines[1].firstVertex(True).Point, self.lines[1].lastVertex(True).Point))
 
-        # [forward, backward] = self.lines rompe Y072 Y074. Resuelto modificando processReflexTwo. Cmabio la forma de cuadrupleReflex 105.
+        # [forward, backward] = self.lines rompe Y072 Y074. Resuelto modificando processReflexTwo.
+        # Cambio la forma, a mejor, de cuadrupleReflex 105.
+        # Tienes que revisar similares para corregir: F sin alineamiento
 
         # podría incluir en isSolved la detención de sobrantes en planos de una cara
         # que tienen un vertice en la planta (tres vertices en total)
