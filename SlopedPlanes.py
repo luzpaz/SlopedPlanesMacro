@@ -166,6 +166,11 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyAngle", "ThicknessSlope",
                                  "SlopedPlanes", doc)
 
+        doc = "List with Thickness angles and lengths for every plane"
+
+        slopedPlanes.addProperty("App::PropertyPythonObject", "ThicknessList",
+                                 "SlopedPlanes", doc)
+
         # _____________________________________________________________________
 
         doc = "Gives a plane on SlopedPlanes base"
@@ -223,6 +228,7 @@ class _SlopedPlanes(_Py):
                                            "Normal"]
 
         slopedPlanes.ThicknessSlope = ang
+        slopedPlanes.ThicknessList = []
 
         slopedPlanes.FaceMaker = ["Part::FaceMakerBullseye",
                                   "Part::FaceMakerSimple",
