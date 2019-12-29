@@ -80,7 +80,7 @@ class _PyFace(_Py):
     def face(self):
 
         '''face(self):
-        The Face Shape.'''
+        The Face Shape of the base.'''
         
         return self._face
 

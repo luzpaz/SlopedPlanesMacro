@@ -265,7 +265,7 @@ class _SlopedPlanes(_Py):
         if self.OnChanged:
             # print('A ', self.OnChanged)
 
-            self.reProcessFaces(slopedPlanes)
+            faceList = self.reProcessFaces(slopedPlanes)
             pyFaceListNew = self.Pyth
 
         else:
@@ -294,7 +294,7 @@ class _SlopedPlanes(_Py):
 
         if slopedPlanes.Thickness:
             # print('Thickness')
-            endShape = self.fattening(slopedPlanes, endShape, placement)
+            endShape = self.fattening(slopedPlanes, faceList, endShape, placement)
 
         if not slopedPlanes.Complement:
             endShape.complement()
@@ -537,9 +537,11 @@ class _SlopedPlanes(_Py):
 
         # print('reProcessFaces')
 
+        faceList = []
         angleList = []
         # TODO mono
         for pyFace in self.Pyth:
+            faceList.append(pyFace.face)
 
             _Py.pyFace = pyFace
             pyFace.reset = False
@@ -567,10 +569,14 @@ class _SlopedPlanes(_Py):
             pyFace.faceManager()
 
         self.slopeList = angleList
+        
+        return faceList
 
     def listPlanes(self, slopedPlanes, pyFaceListNew, placement):
 
         ''''''
+
+        # TODO pyFace.figure
 
         figList = []
         for pyFace in pyFaceListNew:
@@ -685,7 +691,7 @@ class _SlopedPlanes(_Py):
 
         return endShape
 
-    def fattening(self, slopedPlanes, endShape, placement):
+    def fattening(self, slopedPlanes, faceList, endShape, placement):
 
         ''''''
 
@@ -694,8 +700,8 @@ class _SlopedPlanes(_Py):
         thicknessDirection = slopedPlanes.ThicknessDirection
         value = slopedPlanes.Thickness.Value
 
-        pyth = slopedPlanes.Proxy.Pyth
-        slopeList = slopedPlanes.Proxy.slopeList
+        pyth = self.Pyth
+        slopeList = self.slopeList
         lenSlopeList = len(slopeList)
 
         if thicknessDirection == 'Vertical':
@@ -729,6 +735,7 @@ class _SlopedPlanes(_Py):
             # height = value * sin(radians(angle))
 
             # print(angle, height, value)
+            face = Part.Compound(faceList)
 
             if thicknessDirection == 'Horizontal':
 
@@ -760,11 +767,8 @@ class _SlopedPlanes(_Py):
 
                 bigFaceList = []
                 thicknessList = []
-                for pyFace in pyth:
-
-                    face = pyFace.face
-                    bFace, thickList =\
-                    self.normalWires(pyFace, face, hei, angle)
+                for pyFace, ff in zip(pyth, faceList):
+                    bFace, thickList = self.normalWires(pyFace, ff, hei, angle)
                     bigFaceList.append(bFace)
                     thicknessList.extend(thickList)
 
@@ -790,7 +794,7 @@ class _SlopedPlanes(_Py):
                                   thickness=True)
 
             figList =\
-                self.listPlanes(slopedPlanes, pyFLNew, fList, placement)
+                self.listPlanes(slopedPlanes, pyFLNew, placement)
 
             secondShape = Part.makeShell(figList)
 
@@ -800,7 +804,8 @@ class _SlopedPlanes(_Py):
             if factorOverhang:
 
                 for ss, SS, pyFace in zip(endShape.Shells,
-                                          secondShape.Shells, pyth):
+                                          secondShape.Shells,
+                                          pyth):
 
                     ff, FF = self.overhangWires(endShape, secondShape, pyFace)
 
@@ -817,11 +822,11 @@ class _SlopedPlanes(_Py):
 
             else:
 
-                for ss, SS, pyFace, FF in zip(endShape.Shells,
-                                              secondShape.Shells,
-                                              pyth, bigFace.Faces):
+                for ss, SS, ff, FF in zip(endShape.Shells,
+                                          secondShape.Shells,
+                                          faceList,
+                                          bigFace.Faces):
                     baseFaces = ss.Faces + SS.Faces
-                    ff = pyFace.face
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
                         for bf in base.Faces:
@@ -869,6 +874,7 @@ class _SlopedPlanes(_Py):
             ang = 90 - angle
             run = height / tan(radians(ang))
             # print(height, run)
+            length = height / cos(radians(ang))
 
             ff =\
                 face.makeOffset2D(offset=run, join=2, fill=False,
@@ -876,7 +882,9 @@ class _SlopedPlanes(_Py):
 
             ff.translate(V(0, 0, height))
 
-            return ff
+            thickList = [(ang, length) for nn in range(len(self.slopeList))]
+
+            return ff, thickList
 
         size = pyFace.size
         tolerance = _Py.tolerance
