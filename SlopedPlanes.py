@@ -704,6 +704,8 @@ class _SlopedPlanes(_Py):
         value = slopedPlanes.Thickness.Value
 
         pyth = slopedPlanes.Proxy.Pyth
+        slopeList = slopedPlanes.Proxy.slopeList
+        lenSlopeList = len(slopeList)
 
         if thicknessDirection == 'Vertical':
             # print('Vertical')
@@ -726,17 +728,20 @@ class _SlopedPlanes(_Py):
 
             # cuando convierto a sólido da un error de geometría
 
+            slopedPlanes.ThicknessList =\
+                [(90.0, value) for n in range(lenSlopeList)]
+
         else:
             # print('No Vertical')
 
             angle = slopedPlanes.Slope.Value
-            height = value * sin(radians(angle))
+            # height = value * sin(radians(angle))
 
             # print(angle, height, value)
 
             if thicknessDirection == 'Horizontal':
 
-                ang = angle
+                ang = 0
                 hei = 0
                 val = value
 
@@ -765,15 +770,20 @@ class _SlopedPlanes(_Py):
             if thicknessDirection == 'Normal':
 
                 bigFaceList = []
+                thicknessList = []
                 for pyFace, face in zip(pyth, faceList):
 
-                    bFace = self.normalWires(pyFace, face, hei, angle)
+                    bFace, thickList =\
+                    self.normalWires(pyFace, face, hei, angle)
                     bigFaceList.append(bFace)
+                    thicknessList.extend(thickList)
 
                 if len(bigFaceList) == 1:
                     bigFace = bigFaceList[0]
                 else:
                     bigFace = Part.Compound(bigFaceList)
+
+                slopedPlanes.ThicknessList = thicknessList
 
             else:
 
@@ -782,6 +792,9 @@ class _SlopedPlanes(_Py):
                                       openResult=False, intersection=False)
                 bigFace.translate(V(0, 0, hei))
 
+                slopedPlanes.ThicknessList =\
+                    [(ang, val) for n in range(lenSlopeList) ]    
+                
             fList, pyFLNew =\
                 self.processFaces(slopedPlanes, bigFace.Faces,
                                   thickness=True)
@@ -877,7 +890,7 @@ class _SlopedPlanes(_Py):
         size = pyFace.size
         tolerance = _Py.tolerance
         wireList = []
-
+        thickList = []
         for pyWire in pyFace.wires:
 
             # TODO pyWire.mono
@@ -898,8 +911,12 @@ class _SlopedPlanes(_Py):
                 extrDirect = sh.normalAt(0, 0)
                 # print(angle, extrDirect, length)
 
+                thickList.append((90 - ang, length))
+
                 geomShape = geomShape.copy()
                 geomShape.translate(-1 * length * extrDirect)
+
+                # TODO cambiar a intersect
 
                 ll = 0.49 * geomShape.Length
 
@@ -949,7 +966,7 @@ class _SlopedPlanes(_Py):
 
         baseFace = Part.makeFace(wireList, 'Part::FaceMakerBullseye')
 
-        return baseFace
+        return baseFace, thickList
 
     def onChanged(self, slopedPlanes, prop):
 
