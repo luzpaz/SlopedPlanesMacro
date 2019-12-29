@@ -1118,9 +1118,10 @@ class _SlopedPlanes(_Py):
             numFace += 1
             dct = pyFace.__dict__.copy()
             wires, alignments = pyFace.__getstate__()
-            dct['_shapeGeom'] = []
             dct['_wires'] = wires
             dct['_alignments'] = alignments
+            dct['_face'] = None
+            dct['_shapeGeom'] = []            
             pyth.append(dct)
         state['Pyth'] = pyth
 
@@ -1151,6 +1152,7 @@ class _SlopedPlanes(_Py):
 
             dct['_wires'] = wires
             dct['_alignments'] = alignments
+            dct['_face'] = None
             dct['_shapeGeom'] = []
             pyFace.__dict__ = dct
             pyFace.reset = True
