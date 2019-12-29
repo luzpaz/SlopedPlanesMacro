@@ -166,7 +166,7 @@ class _SlopedPlanes(_Py):
         slopedPlanes.addProperty("App::PropertyAngle", "ThicknessSlope",
                                  "SlopedPlanes", doc)
 
-        doc = "List with Thickness angles and lengths for every plane"
+        doc = "List with (thicknessSlope, thicknessLength) for every plane"
 
         slopedPlanes.addProperty("App::PropertyPythonObject", "ThicknessList",
                                  "SlopedPlanes", doc)
@@ -315,7 +315,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # print('processFaces')
+        print('processFaces')
 
         # gathers the exterior wires. Lower Left criteria
 
@@ -326,11 +326,11 @@ class _SlopedPlanes(_Py):
         slope = slopedPlanes.Slope.Value
         try:
             slopeList = self.slopeList
-            # print('a')
+            print('a')
         except AttributeError:
-            # print('b')
+            print('b')
             slopeList = []
-        # print('slopeList ', slopeList)
+        print('slopeList ', slopeList)
         slopeListCopy = slopeList[:]
 
         angleList = []
@@ -538,7 +538,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # print('reProcessFaces')
+        print('reProcessFaces')
 
         angleList = []
         # TODO mono
