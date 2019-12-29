@@ -52,6 +52,7 @@ class _PyFace(_Py):
         '''__init__(self, numFace):'''
 
         self.numFace = numFace
+        self.face = None
         self.wires = []
         self.alignments = []
         self.size = 0
@@ -74,6 +75,22 @@ class _PyFace(_Py):
         '''numFace(self, numFace):'''
 
         self._numFace = numFace
+
+    @property
+    def face(self):
+
+        '''face(self):
+        The Face Shape.'''
+        
+        return self._face
+
+    @face.setter
+    def face(self, face):
+
+        '''face(self, face):
+        '''
+
+        self._face = face
 
     @property
     def wires(self):
@@ -179,23 +196,6 @@ class _PyFace(_Py):
         '''execute(self, execute):'''
 
         self._execute = execute
-
-    # TODO
-
-    '''@property
-    def face(self):
-
-        face(self):
-        The Face shape.
-        # TODO
-        return self._face
-
-    @face.setter
-    def face(self, face):
-
-        ace(self, face):
-
-        self._face = face'''
 
     def __getstate__(self):
 
@@ -408,7 +408,7 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
             if pyWire.reflexs:
-                pyWire.reflexing()
+                pyWire.reflexing(self)
         # self.printControl('reflexing')
 
         for pyWire in pyWireList:

@@ -89,9 +89,8 @@ class _SlopedPlanes(_Py):
             State: jumps onChanged function at the loading file
             OnChanged: faster execute from property and task panels (~7%)
 
-        - three lists:
+        - two lists:
             Pyth: the complementary python objects (serialized)
-            faceList: produced by the FaceMaker over the base
             slopeList: list of angles'''
 
         # _____________________________________________________________________
@@ -239,7 +238,6 @@ class _SlopedPlanes(_Py):
         slopedPlanes.Proxy = self
 
         self.Pyth = []
-        self.faceList = []
         self.slopeList = slopeList
 
         self.Type = "SlopedPlanes"
@@ -267,8 +265,7 @@ class _SlopedPlanes(_Py):
         if self.OnChanged:
             # print('A ', self.OnChanged)
 
-            faceList = self.faceList
-            self.reProcessFaces(slopedPlanes, faceList)
+            self.reProcessFaces(slopedPlanes)
             pyFaceListNew = self.Pyth
 
         else:
@@ -277,7 +274,6 @@ class _SlopedPlanes(_Py):
             face = Part.makeFace(shape.Wires, slopedPlanes.FaceMaker)
             fList = face.Faces
             faceList, pyFaceListNew = self.processFaces(slopedPlanes, fList)
-            self.faceList = faceList
             self.Pyth = pyFaceListNew
 
         # print('pyFaceListNew ', pyFaceListNew)
@@ -288,7 +284,7 @@ class _SlopedPlanes(_Py):
         # elaborates a list of planes for every face
 
         figList =\
-            self.listPlanes(slopedPlanes, pyFaceListNew, faceList, placement)
+            self.listPlanes(slopedPlanes, pyFaceListNew, placement)
 
         endShape = Part.makeShell(figList)
 
@@ -298,8 +294,7 @@ class _SlopedPlanes(_Py):
 
         if slopedPlanes.Thickness:
             # print('Thickness')
-            endShape = self.fattening(slopedPlanes, faceList,
-                                      endShape, placement)
+            endShape = self.fattening(slopedPlanes, endShape, placement)
 
         if not slopedPlanes.Complement:
             endShape.complement()
@@ -342,7 +337,7 @@ class _SlopedPlanes(_Py):
             numFace += 1
             # print('######### numFace ', numFace)
 
-            _Py.face = face
+            
 
             # elaborates complementary python objects of a face
 
@@ -359,6 +354,8 @@ class _SlopedPlanes(_Py):
                 pyFace = _PyFace(numFace)
                 pyFaceListNew.append(pyFace)
             _Py.pyFace = pyFace
+            
+            pyFace.face = face
 
             if thickness:
                 size = pyFaceListOld[numFace].size
@@ -534,7 +531,7 @@ class _SlopedPlanes(_Py):
 
         return faceList, pyFaceListNew
 
-    def reProcessFaces(self, slopedPlanes, faceList):
+    def reProcessFaces(self, slopedPlanes):
 
         ''''''
 
@@ -542,14 +539,8 @@ class _SlopedPlanes(_Py):
 
         angleList = []
         # TODO mono
-        numFace = -1
-        for face in faceList:
-            numFace += 1
-            # print('######### numFace ', numFace)
+        for pyFace in self.Pyth:
 
-            _Py.face = face
-
-            pyFace = self.Pyth[numFace]
             _Py.pyFace = pyFace
             pyFace.reset = False
             # print(pyFace.mono)
@@ -577,7 +568,7 @@ class _SlopedPlanes(_Py):
 
         self.slopeList = angleList
 
-    def listPlanes(self, slopedPlanes, pyFaceListNew, faceList, placement):
+    def listPlanes(self, slopedPlanes, pyFaceListNew, placement):
 
         ''''''
 
@@ -651,7 +642,7 @@ class _SlopedPlanes(_Py):
 
             if slopedPlanes.Down:
                 # print('Down')
-                face = faceList[numFace].copy()
+                face = pyFace.face.copy()
                 planeFaceList.append(face)
 
             if slopedPlanes.Mirror:
@@ -694,7 +685,7 @@ class _SlopedPlanes(_Py):
 
         return endShape
 
-    def fattening(self, slopedPlanes, faceList, endShape, placement):
+    def fattening(self, slopedPlanes, endShape, placement):
 
         ''''''
 
@@ -710,7 +701,7 @@ class _SlopedPlanes(_Py):
         if thicknessDirection == 'Vertical':
             # print('Vertical')
 
-            normal = self.faceNormal(faceList[0])
+            normal = _Py.normal
             if slopedPlanes.Reverse:
                 normal = normal * -1
 
@@ -765,14 +756,13 @@ class _SlopedPlanes(_Py):
 
             # print(ang, hei, val)
 
-            face = Part.Compound(faceList)
-
             if thicknessDirection == 'Normal':
 
                 bigFaceList = []
                 thicknessList = []
-                for pyFace, face in zip(pyth, faceList):
+                for pyFace in pyth:
 
+                    face = pyFace.face
                     bFace, thickList =\
                     self.normalWires(pyFace, face, hei, angle)
                     bigFaceList.append(bFace)
@@ -809,9 +799,8 @@ class _SlopedPlanes(_Py):
 
             if factorOverhang:
 
-                for ss, SS, face, pyFace in zip(endShape.Shells,
-                                                secondShape.Shells,
-                                                faceList, pyth):
+                for ss, SS, pyFace in zip(endShape.Shells,
+                                          secondShape.Shells, pyth):
 
                     ff, FF = self.overhangWires(endShape, secondShape, pyFace)
 
@@ -828,9 +817,11 @@ class _SlopedPlanes(_Py):
 
             else:
 
-                for ss, SS, ff, FF in zip(endShape.Shells, secondShape.Shells,
-                                          face.Faces, bigFace.Faces):
+                for ss, SS, pyFace, FF in zip(endShape.Shells,
+                                              secondShape.Shells,
+                                              pyth, bigFace.Faces):
                     baseFaces = ss.Faces + SS.Faces
+                    ff = pyFace.face
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
                         for bf in base.Faces:
@@ -1165,8 +1156,6 @@ class _SlopedPlanes(_Py):
             pyFace.reset = True
             pyth.append(pyFace)
         self.Pyth = pyth
-
-        self.faceList = []
 
         self.State = True
 

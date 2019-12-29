@@ -652,7 +652,7 @@ class _PyWire(_Py):
         for pyReflex in self.reflexs:
             pyReflex.simulating()
 
-    def reflexing(self):
+    def reflexing(self, pyFace):
 
         '''reflexing(self)'''
 
@@ -668,7 +668,7 @@ class _PyWire(_Py):
                 pyReflex.reflexing(self)
 
             for pyReflex in self.reflexs:
-                pyReflex.solveReflex(self)
+                pyReflex.solveReflex(self, pyFace)
                 # self.printControl('solveReflex')
             # self.printControl('solveReflex')
 

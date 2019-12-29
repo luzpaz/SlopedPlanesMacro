@@ -45,7 +45,6 @@ class _Py(object):
 
     slopedPlanes = None
     normal = V(0, 0, 1)
-    face = None
     pyFace = None
     upList = []
     tolerance = 1e-5

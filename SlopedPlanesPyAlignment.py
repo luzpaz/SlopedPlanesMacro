@@ -1330,7 +1330,7 @@ class _PyAlignment(_Py):
                 for ff in pCopy.Faces:
                     section = ff.section([gS], tolerance)
                     if not section.Edges:
-                        section = ff.section([_Py.face], tolerance)
+                        section = ff.section([pyFace.face], tolerance)
                         if section.Edges:
                             fList.append(ff)
                             section = ff.section(geomShapeFace, tolerance)

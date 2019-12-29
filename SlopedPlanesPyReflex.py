@@ -605,7 +605,7 @@ class _PyReflex(_Py):
             pyR.control.append(nn)
             # print('included rango ', pyWire.numWire, nn)
 
-    def solveReflex(self, pyWire):
+    def solveReflex(self, pyWire, pyFace):
 
         '''solveReflex(self, pyWire)'''
 
@@ -617,10 +617,10 @@ class _PyReflex(_Py):
         oppReflex = pyOppR.shape.copy()
 
         # print('# processReflex forward ', pyR.numGeom, pyOppR.numGeom, pyR.virtualized, pyOppR.virtualized)
-        self.processReflex(reflex, oppReflex, pyR, pyOppR, 'forward', pyWire)
+        self.processReflex(reflex, oppReflex, pyR, pyOppR, 'forward', pyWire, pyFace)
 
         # print('# processReflex backward', pyOppR.numGeom, pyR.numGeom, pyOppR.virtualized, pyR.virtualized)
-        self.processReflex(oppReflex, reflex, pyOppR, pyR, 'backward', pyWire)
+        self.processReflex(oppReflex, reflex, pyOppR, pyR, 'backward', pyWire, pyFace)
 
         [pyR, pyOppR] = self.planes
 
@@ -634,7 +634,7 @@ class _PyReflex(_Py):
         self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, 'backward')
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
-                      direction, pyWire):
+                      direction, pyWire, pyFace):
 
         '''processReflex(self, reflex, oppReflex, pyR, pyOppR,
                          direction, pyWire)'''
@@ -643,7 +643,7 @@ class _PyReflex(_Py):
         pyPlaneList = pyWire.planes
         gS = pyR.geomShape
         simul = pyR.simulatedShape
-        face = _Py.face
+        face = pyFace.face
         reflexList = pyWire.reflexs
 
         cutList = [pyOppR.enormousShape]
@@ -880,7 +880,7 @@ class _PyReflex(_Py):
                                             if enormous:
                                                 # print('e111')
 
-                                                seed = self.seedExtraFaces(pyR, enormous)
+                                                seed = self.seedExtraFaces(pyR, enormous, face)
 
                                                 common =\
                                                     ff.common([seed],
@@ -897,7 +897,7 @@ class _PyReflex(_Py):
                                         if enormous:
                                             # print('e21')
 
-                                            seed = self.seedExtraFaces(pyR, enormous)
+                                            seed = self.seedExtraFaces(pyR, enormous, face)
 
                                             common =\
                                                 ff.common([seed], tolerance)
@@ -917,12 +917,11 @@ class _PyReflex(_Py):
         compound = Part.makeCompound(aList)
         pyR.shape = compound
 
-    def seedExtraFaces(self, pyR, enormous):
+    def seedExtraFaces(self, pyR, enormous, face):
 
         '''allowed location for extra faces'''
 
         gS = pyR.geomShape
-        face = _Py.face
         tolerance = _Py.tolerance
 
         '''seedList = pyR.seed
