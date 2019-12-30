@@ -409,6 +409,9 @@ class _PyFace(_Py):
         for pyWire in pyWireList:
             if pyWire.reflexs:
                 pyWire.reflexing(self)
+                # self fue incluido para pasar pyFace. Pero podría hacer:
+                # pyFace = _Py.pyFace
+                # face = pyFace.face
         # self.printControl('reflexing')
 
         for pyWire in pyWireList:
