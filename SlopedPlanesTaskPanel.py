@@ -106,7 +106,6 @@ class _TaskPanel_SlopedPlanes():
                                        ("Thickness"),
                                        ("ThicknessHeight"),
                                        ("ThicknessRun"),
-                                       # ("Sweep Curve"),
                                        ("Face")])
 
         else:
@@ -233,8 +232,6 @@ class _TaskPanel_SlopedPlanes():
 
         if slopedPlanes:
 
-            # linkList = [o.Name for o in slopedPlanes.SweepCurves]
-            # linkList.insert(0, None)
             up = slopedPlanes.Up
             down = slopedPlanes.Down
             pyFaceList = slopedPlanes.Proxy.Pyth
@@ -262,7 +259,6 @@ class _TaskPanel_SlopedPlanes():
                         tt += 1
                         numAngle = pyPlane.numGeom
                         angle = pyPlane.angle
-                        # sweepCurve = pyPlane.sweepCurve
                         # print('# numAngle, angle ', numAngle, angle)
 
                         # print('originList ', originList)
@@ -459,8 +455,12 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 10, doubleSpinBox)
 
-                                (thickAngle, thickLength) =\
-                                    thicknessList[tt]
+                                try:
+                                    (thickAngle, thickLength) =\
+                                        thicknessList[tt]
+                                except IndexError:
+                                    (thickAngle, thickLength) =\
+                                        (0, 0)                                    
 
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
@@ -538,8 +538,6 @@ class _TaskPanel_SlopedPlanes():
         down = slopedPlanes.Down
         pyFaceList = slopedPlanes.Proxy.Pyth
         numSlope = 0
-
-        ##slopeList = []
 
         for pyFace in pyFaceList:
             originList = []
@@ -628,12 +626,6 @@ class _TaskPanel_SlopedPlanes():
                                 FreeCAD.Units.Quantity(str(right) + suffix)
                             pyPlane.rightWidth = right.Value
 
-                            # comboBox = tree.itemWidget(it, 15)
-                            # sweepCurve = comboBox.currentText()
-                            # pyPlane.sweepCurve = sweepCurve
-
-                    ##slopeList.append(pyPlane.angle)
-
                 # print(pyWire.mono)
 
             if up:
@@ -642,8 +634,6 @@ class _TaskPanel_SlopedPlanes():
 
             if down:
                 numSlope += 1
-
-        ##slopedPlanes.Proxy.slopeList = slopeList
 
         slopedPlanes.Proxy.OnChanged = True
 
@@ -800,27 +790,6 @@ class _TreeWidget(QtGui.QTreeWidget):
         self.setColumnCount(2)
         self.header().resizeSection(0, 60)
         self.header().resizeSection(1, 60)
-
-
-class _NewCurve(QtGui.QPushButton):
-
-    ''''''
-
-    def __init__(self):
-
-        ''''''
-
-        super(_NewCurve, self).__init__()
-
-    def onClicked(self):
-
-        ''''''
-
-        # print('onClicked _NewCurve')
-
-        pyPlane = self.plane
-        slopedPlanes = self.slopedPlanes
-        pyPlane.makeSweepSketch(slopedPlanes)
 
 
 class _DoubleSpinBox(QtGui.QDoubleSpinBox):
