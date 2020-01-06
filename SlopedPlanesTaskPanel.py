@@ -539,17 +539,17 @@ class _TaskPanel_SlopedPlanes():
         pyFaceList = slopedPlanes.Proxy.Pyth
         numSlope = 0
 
+        # TODO face execute
+
         for pyFace in pyFaceList:
             originList = []
             # print('### numFace', pyFace.numFace)
-            ###pyFace.mono = True
 
             pyWireList = pyFace.wires
             lenWires = len(pyWireList)
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
                 # print('## numWire', numWire)
-                ###pyWire.mono = True
 
                 numAngle = -1
                 pyPlaneList = pyWire.planes
@@ -557,9 +557,6 @@ class _TaskPanel_SlopedPlanes():
                 if up:
                     if numWire == 1:
                         numSlope += 1
-
-                ###ang = pyPlaneList[0].angle  # pasar al primero de la cara
-                # print(ang)
 
                 for pyPlane in pyPlaneList:
                     numAngle += 1
@@ -584,10 +581,6 @@ class _TaskPanel_SlopedPlanes():
                         if isinstance(angle, float):
                             # print('a')
                             originList.append([numWire, numAngle])
-
-                            ###if value != ang:
-                                ###pyWire.mono = False
-                                ###pyFace.mono = False
 
                         else:
                             # print('b')
@@ -625,8 +618,6 @@ class _TaskPanel_SlopedPlanes():
                             right =\
                                 FreeCAD.Units.Quantity(str(right) + suffix)
                             pyPlane.rightWidth = right.Value
-
-                # print(pyWire.mono)
 
             if up:
                 if lenWires == 1:

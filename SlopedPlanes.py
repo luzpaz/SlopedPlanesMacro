@@ -310,7 +310,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # print('processFaces')
+        print('processFaces')
 
         # gathers the exterior wires. Lower Left criteria
 
@@ -339,8 +339,6 @@ class _SlopedPlanes(_Py):
 
             # elaborates complementary python objects of a face
 
-            # TODO mono
-
             coordinates = coordinatesOuterOrdered[numFace]
             for pyFace in pyFaceListOld:
                 oldCoord = pyFace.wires[0].coordinates
@@ -359,8 +357,6 @@ class _SlopedPlanes(_Py):
             pyFace.mono = True
             
             pyFace.face = face
-
-            # print(pyFace.numFace, pyFace.mono, pyFace.execute)
 
             if thickness:
                 size = pyFaceListOld[numFace].size
@@ -440,12 +436,13 @@ class _SlopedPlanes(_Py):
 
                     # unificar denominaciones con task panel ang angle slope ...
 
+                    # lleva una doble contabilidad con slopeList y pyPlane.angle ...
+
                     try:
                         ang = slopeListCopy.pop(0)
                         if isinstance(ang, float):
                             try:
                                 ang = float(ang)
-                                # if ang != slope:  #### primer angulo del wire
                                 if ang != wireAngle:
                                     pyWire.mono = False
                                     pyFace.mono = False
@@ -492,6 +489,7 @@ class _SlopedPlanes(_Py):
                                 slopedPlanes.FactorLength * size
 
                             angle = pyPlane.angle  # ang y lo siguiente sobra???
+                            # reiterativo con slopeList
                             if isinstance(angle, list):
                                 angle = self.selectPlane(angle[0],
                                                          angle[1]).angle
@@ -537,10 +535,12 @@ class _SlopedPlanes(_Py):
 
                 pyWire.planes = pyPlaneListNew
 
+                print('wire ', pyWire.numWire, pyWire.mono)
                 pyWire.shapeGeom = geomShapeWire
                 pyWire.wire = wire
                 geomShapeFace.extend(geomShapeWire)
 
+            print('face ', pyFace.numFace, pyFace.mono)
             pyFace.shapeGeom = geomShapeFace
             pyFace.wires = pyWireListNew
 
@@ -554,11 +554,10 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # print('reProcessFaces')
+        print('reProcessFaces')
 
         faceList = []
         angleList = []
-        # TODO mono
         for pyFace in self.Pyth:
             # print(pyFace.numFace, pyFace.mono, pyFace.execute)
             faceList.append(pyFace.face)
@@ -605,7 +604,9 @@ class _SlopedPlanes(_Py):
                     angleList.append(angle)
 
                     # print(pyPlane.overhang)
+                print('wire ', pyWire.numWire, pyWire.mono)
 
+            print('face ', pyFace.numFace, pyFace.mono)
             pyFace.faceManager()
 
         self.slopeList = angleList
