@@ -347,7 +347,7 @@ class _SlopedPlanes(_Py):
                 if oldCoord[0] == coordinates[0]:
                     pyFaceListNew.append(pyFace)
                     pyFace.numFace = numFace
-                    execute = pyFace.execute
+                    ###execute = pyFace.execute
                     break
             else:
                 pyFace = _PyFace(numFace)
@@ -541,7 +541,7 @@ class _SlopedPlanes(_Py):
         # TODO mono
         for pyFace in self.Pyth:
             faceList.append(pyFace.face)
-            execute = pyFace.execute
+            ###excute = pyFace.execute
 
             _Py.pyFace = pyFace
             pyFace.reset = False
