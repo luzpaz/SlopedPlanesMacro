@@ -425,11 +425,12 @@ class _SlopedPlanes(_Py):
                 except IndexError:
                     wireAngle = slope
                 if numFace == 0:
-                    wireFace = wireAngle
+                    faceAngle = wireAngle
                 else:
-                    if wireFace != wireAngle:
-                        # pyFace.mono = False
-                        pass
+                    if faceAngle != wireAngle:
+                        pyFace.mono = False
+                    
+                # print('faceAngle, wireAngle ', (faceAngle, wireAngle))
                 
                 for geom in geomWire:
                     numGeom += 1
@@ -437,18 +438,12 @@ class _SlopedPlanes(_Py):
 
                     # unificar denominaciones con task panel ang angle slope ...
 
-                    # lleva una doble contabilidad con slopeList y pyPlane.angle ...
-
                     try:
                         ang = slopeListCopy.pop(0)
-                        if isinstance(ang, float):
-                            try:
-                                ang = float(ang)
-                                if ang != wireAngle:
-                                    pyWire.mono = False
-                                    pyFace.mono = False
-                            except ValueError:
-                                ang = slope
+                        try:
+                            ang = float(ang)
+                        except ValueError:
+                            ang = slope
                     except IndexError:
                         ang = slope
 
@@ -489,8 +484,7 @@ class _SlopedPlanes(_Py):
                             pyPlane.length =\
                                 slopedPlanes.FactorLength * size
 
-                            angle = pyPlane.angle  # ang y lo siguiente sobra???
-                            # reiterativo con slopeList
+                            angle = pyPlane.angle
                             if isinstance(angle, list):
                                 angle = self.selectPlane(angle[0],
                                                          angle[1]).angle
@@ -508,12 +502,18 @@ class _SlopedPlanes(_Py):
 
                         pyPlane = _PyPlane(numWire, numGeom, ang)
                         pyPlaneListNew.append(pyPlane)
-                        if thickness and isinstance(ang, float):
+                        # if thickness and isinstance(ang, float):
+                        if thickness:
                             pyPlane.overhang = fOverhang / sin(radians(ang))
 
                     # print(pyPlane.overhang)
 
-                    angleList.append(pyPlane.angle)
+                    angle = pyPlane.angle
+                    angleList.append(angle)
+
+                    if angle != wireAngle:
+                        pyWire.mono = False
+                        pyFace.mono = False
 
                     pyPlane.geom = geom
 
@@ -580,11 +580,10 @@ class _SlopedPlanes(_Py):
                 planes = pyWire.planes
                 wireAngle = planes[0].angle
                 if pyFace.numFace == 0:
-                    wireFace = wireAngle
+                    faceAngle = wireAngle
                 else:
-                    if wireFace != wireAngle:
-                        # pyFace.mono = False
-                        pass
+                    if faceAngle != wireAngle:
+                        pyFace.mono = False
 
                 for pyPlane in pyWire.planes:
                     pyPlane.geomAligned = pyPlane.geomShape
