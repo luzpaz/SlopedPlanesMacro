@@ -428,7 +428,8 @@ class _SlopedPlanes(_Py):
                     wireFace = wireAngle
                 else:
                     if wireFace != wireAngle:
-                        pyFace.mono = False
+                        # pyFace.mono = False
+                        pass
                 
                 for geom in geomWire:
                     numGeom += 1
@@ -582,7 +583,8 @@ class _SlopedPlanes(_Py):
                     wireFace = wireAngle
                 else:
                     if wireFace != wireAngle:
-                        pyFace.mono = False
+                        # pyFace.mono = False
+                        pass
 
                 for pyPlane in pyWire.planes:
                     pyPlane.geomAligned = pyPlane.geomShape
