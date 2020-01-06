@@ -335,9 +335,7 @@ class _SlopedPlanes(_Py):
         numFace = -1
         for face in faceList:
             numFace += 1
-            # print('######### numFace ', numFace)
-
-            
+            # print('######### numFace ', numFace)           
 
             # elaborates complementary python objects of a face
 
@@ -349,6 +347,7 @@ class _SlopedPlanes(_Py):
                 if oldCoord[0] == coordinates[0]:
                     pyFaceListNew.append(pyFace)
                     pyFace.numFace = numFace
+                    execute = pyFace.execute
                     break
             else:
                 pyFace = _PyFace(numFace)
@@ -542,6 +541,7 @@ class _SlopedPlanes(_Py):
         # TODO mono
         for pyFace in self.Pyth:
             faceList.append(pyFace.face)
+            execute = pyFace.execute
 
             _Py.pyFace = pyFace
             pyFace.reset = False
@@ -658,6 +658,7 @@ class _SlopedPlanes(_Py):
                                       FreeCAD.Vector(0, 0, -1))
                 planeFaceList.extend(mirror.Faces)
 
+            # TODO pyFace.placement
             for plane in planeFaceList:
                 plane.Placement = placement.multiply(plane.Placement)
 
@@ -668,8 +669,6 @@ class _SlopedPlanes(_Py):
     def groupping(self, slopedPlanes, endShape):
 
         ''''''
-
-        # limitar a figuras con una sola face: REMOVESPLITTER ?
 
         tolerance = slopedPlanes.Tolerance
 
@@ -1036,6 +1035,7 @@ class _SlopedPlanes(_Py):
                 slopedPlanes.Down = False
 
         elif prop == "Thickness":
+            
             if slopedPlanes.Thickness:
                 slopedPlanes.Up = 0
                 slopedPlanes.Down = False
