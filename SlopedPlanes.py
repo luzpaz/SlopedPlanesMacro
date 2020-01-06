@@ -310,7 +310,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        print('processFaces')
+        # print('processFaces')
 
         # gathers the exterior wires. Lower Left criteria
 
@@ -535,12 +535,12 @@ class _SlopedPlanes(_Py):
 
                 pyWire.planes = pyPlaneListNew
 
-                print('wire ', pyWire.numWire, pyWire.mono)
+                # print('wire ', pyWire.numWire, pyWire.mono)
                 pyWire.shapeGeom = geomShapeWire
                 pyWire.wire = wire
                 geomShapeFace.extend(geomShapeWire)
 
-            print('face ', pyFace.numFace, pyFace.mono)
+            # print('face ', pyFace.numFace, pyFace.mono)
             pyFace.shapeGeom = geomShapeFace
             pyFace.wires = pyWireListNew
 
@@ -554,7 +554,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        print('reProcessFaces')
+        # print('reProcessFaces')
 
         faceList = []
         angleList = []
@@ -586,7 +586,6 @@ class _SlopedPlanes(_Py):
 
                 for pyPlane in pyWire.planes:
                     pyPlane.geomAligned = pyPlane.geomShape
-                    pyPlane.control = [pyPlane.numGeom]
                     pyPlane.solved = False
                     pyPlane.reallySolved = False
 
@@ -604,9 +603,9 @@ class _SlopedPlanes(_Py):
                     angleList.append(angle)
 
                     # print(pyPlane.overhang)
-                print('wire ', pyWire.numWire, pyWire.mono)
+                # print('wire ', pyWire.numWire, pyWire.mono)
 
-            print('face ', pyFace.numFace, pyFace.mono)
+            # print('face ', pyFace.numFace, pyFace.mono)
             pyFace.faceManager()
 
         self.slopeList = angleList
