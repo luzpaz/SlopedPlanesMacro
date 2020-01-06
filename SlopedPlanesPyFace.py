@@ -60,6 +60,7 @@ class _PyFace(_Py):
         self.mono = mono
         self.reset = True
         self.execute = True
+        self.placement = (0, 0, 0)
 
     @property
     def numFace(self):
@@ -196,6 +197,22 @@ class _PyFace(_Py):
         '''execute(self, execute):'''
 
         self._execute = execute
+
+    @property
+    def placement(self):
+
+        '''placement(self):
+        Affects the face placement.'''
+        # TODO
+        return self._placement
+
+    @placement.setter
+    def placement(self, placement):
+
+        '''placement(self, placement):'''
+
+        self._placement = placement
+
 
     def __getstate__(self):
 
