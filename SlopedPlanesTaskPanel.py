@@ -558,7 +558,7 @@ class _TaskPanel_SlopedPlanes():
                     if numWire == 1:
                         numSlope += 1
 
-                ang = pyPlaneList[0].angle  # pasar al primero de la cara
+                ###ang = pyPlaneList[0].angle  # pasar al primero de la cara
                 # print(ang)
 
                 for pyPlane in pyPlaneList:
