@@ -347,14 +347,20 @@ class _SlopedPlanes(_Py):
                 if oldCoord[0] == coordinates[0]:
                     pyFaceListNew.append(pyFace)
                     pyFace.numFace = numFace
-                    execute = pyFace.execute
+                    
+                    # execute = pyFace.execute
+                    
                     break
             else:
                 pyFace = _PyFace(numFace)
                 pyFaceListNew.append(pyFace)
             _Py.pyFace = pyFace
             
+            pyFace.mono = True
+            
             pyFace.face = face
+
+            # print(pyFace.numFace, pyFace.mono, pyFace.execute)
 
             if thickness:
                 size = pyFaceListOld[numFace].size
@@ -411,10 +417,23 @@ class _SlopedPlanes(_Py):
                     pyFace.reset = True
                 pyWire.coordinates = coo
 
+                pyWire.mono = True
+
                 pyPlaneListOld = pyWire.planes
                 pyPlaneListNew = []
                 geomShapeWire = []
                 numGeom = -1
+                
+                try:
+                    wireAngle = slopeListCopy[0]
+                except IndexError:
+                    wireAngle = slope
+                if numFace == 0:
+                    wireFace = wireAngle
+                else:
+                    if wireFace != wireAngle:
+                        pyFace.mono = False
+                
                 for geom in geomWire:
                     numGeom += 1
                     # print('### numGeom ', numGeom)
@@ -426,7 +445,8 @@ class _SlopedPlanes(_Py):
                         if isinstance(ang, float):
                             try:
                                 ang = float(ang)
-                                if ang != slope:
+                                # if ang != slope:  #### primer angulo del wire
+                                if ang != wireAngle:
                                     pyWire.mono = False
                                     pyFace.mono = False
                             except ValueError:
@@ -471,7 +491,7 @@ class _SlopedPlanes(_Py):
                             pyPlane.length =\
                                 slopedPlanes.FactorLength * size
 
-                            angle = pyPlane.angle
+                            angle = pyPlane.angle  # ang y lo siguiente sobra???
                             if isinstance(angle, list):
                                 angle = self.selectPlane(angle[0],
                                                          angle[1]).angle
@@ -540,16 +560,30 @@ class _SlopedPlanes(_Py):
         angleList = []
         # TODO mono
         for pyFace in self.Pyth:
+            # print(pyFace.numFace, pyFace.mono, pyFace.execute)
             faceList.append(pyFace.face)
-            execute = pyFace.execute
+            
+            # execute = pyFace.execute
+
+            pyFace.mono = True
 
             _Py.pyFace = pyFace
             pyFace.reset = False
-            # print(pyFace.mono)
+            
             for pyWire in pyFace.wires:
                 # print(pyWire.mono)
                 pyWire.reset = False
                 pyWire.wire = Part.Wire(pyWire.shapeGeom)
+
+                pyWire.mono = True
+
+                planes = pyWire.planes
+                wireAngle = planes[0].angle
+                if pyFace.numFace == 0:
+                    wireFace = wireAngle
+                else:
+                    if wireFace != wireAngle:
+                        pyFace.mono = False
 
                 for pyPlane in pyWire.planes:
                     pyPlane.geomAligned = pyPlane.geomShape
@@ -562,7 +596,13 @@ class _SlopedPlanes(_Py):
                     pyPlane.frontedList = []
                     pyPlane.rearedList = []
 
-                    angleList.append(pyPlane.angle)
+                    angle = pyPlane.angle
+                    if isinstance(angle, float):
+                        if angle != wireAngle:
+                            pyWire.mono = False
+                            pyFace.mono = False
+
+                    angleList.append(angle)
 
                     # print(pyPlane.overhang)
 
@@ -980,6 +1020,11 @@ class _SlopedPlanes(_Py):
             self.OnChanged = False
             return
 
+        elif prop == "Placement":
+            
+            # TODO 
+            pass
+
         elif prop == "Slope":
 
             slope = slopedPlanes.Slope
@@ -1092,9 +1137,9 @@ class _SlopedPlanes(_Py):
 
             elif prop == "angle":
 
-                pyFace.mono = True
+                pyFace.mono = True  # ya lo hara en proccessFaces
                 for pyWire in pyFace.wires:
-                    pyWire.mono = True
+                    pyWire.mono = True  # reiterativo
                     for pyPlane in pyWire.planes:
                         setattr(pyPlane, prop, newValue)
 
