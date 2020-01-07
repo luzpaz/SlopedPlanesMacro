@@ -252,6 +252,7 @@ class _SlopedPlanes(_Py):
         # print('execute')
 
         # TODO: hace falta un mecanismo para solo ejecutar las partes necesarias
+        # pyFace.execute
 
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
@@ -313,7 +314,6 @@ class _SlopedPlanes(_Py):
         # print('processFaces')
 
         # gathers the exterior wires. Lower Left criteria
-
         coordinatesOuterOrdered, geomOuterOrdered, faceList =\
             self.gatherExteriorWires(fList)
         # print('outer geom ', geomOuterOrdered)
@@ -327,11 +327,9 @@ class _SlopedPlanes(_Py):
             slopeList = []
         # print('slopeList ', slopeList)
         slopeListCopy = slopeList[:]
-
         angleList = []
 
-        pyFaceListOld = self.Pyth
-        pyFaceListNew = []
+        pyFaceListOld, pyFaceListNew = self.Pyth, []
         numFace = -1
         for face in faceList:
             numFace += 1
@@ -344,22 +342,15 @@ class _SlopedPlanes(_Py):
                 oldCoord = pyFace.wires[0].coordinates
                 if oldCoord[0] == coordinates[0]:
                     pyFaceListNew.append(pyFace)
-                    pyFace.numFace = numFace
-<<<<<<< HEAD
-                    ###execute = pyFace.execute
-=======
-                    
-                    # execute = pyFace.execute
-                    
->>>>>>> facexecute
+                    pyFace.numFace = numFace           
+                    # execute = pyFace.execute           
                     break
             else:
                 pyFace = _PyFace(numFace)
                 pyFaceListNew.append(pyFace)
-            _Py.pyFace = pyFace
-            
-            pyFace.mono = True
-            
+
+            _Py.pyFace = pyFace           
+            pyFace.mono = True            
             pyFace.face = face
 
             if thickness:
@@ -372,28 +363,23 @@ class _SlopedPlanes(_Py):
             # print(size, fOverhang)
 
             # gathers the interior wires. Upper Left criteria
-
             coordinatesInnerOrdered, geomInnerOrdered, wireList =\
                 self.gatherInteriorWires(face.Wires[1:])
             # print('inner geom ', geomInnerOrdered)
 
             wireList.insert(0, face.OuterWire)
-
             gList = [geomOuterOrdered[numFace]]
             gList.extend(geomInnerOrdered)
             # print('gList', gList)
-
             coordinates = [coordinates]
             coordinates.extend(coordinatesInnerOrdered)
 
-            pyWireListOld = pyFace.wires
-            pyWireListNew = []
-            geomShapeFace = []
+            pyWireListOld, pyWireListNew, geomShapeFace = pyFace.wires, [], []
             numWire = -1
             for wire, geomWire in zip(wireList, gList):
                 numWire += 1
                 # print('###### numWire ', numWire)
-                # TODO change to new topologic name
+                # TODO change to new topologic name ?
                 coo = coordinates[numWire]
                 # print(coo)
                 for pyWire in pyWireListOld:
@@ -418,12 +404,6 @@ class _SlopedPlanes(_Py):
                 pyWire.coordinates = coo
 
                 pyWire.mono = True
-
-                pyPlaneListOld = pyWire.planes
-                pyPlaneListNew = []
-                geomShapeWire = []
-                numGeom = -1
-                
                 try:
                     wireAngle = slopeListCopy[0]
                 except IndexError:
@@ -433,14 +413,15 @@ class _SlopedPlanes(_Py):
                 else:
                     if faceAngle != wireAngle:
                         pyFace.mono = False
-                    
                 # print('faceAngle, wireAngle ', (faceAngle, wireAngle))
                 
+                pyPlaneListOld, pyPlaneListNew, geomShapeWire =\
+                    pyWire.planes, [], []
+                numGeom = -1                
                 for geom in geomWire:
                     numGeom += 1
                     # print('### numGeom ', numGeom)
-
-                    # unificar denominaciones con task panel ang angle slope ...
+                    # TODO unificar denominaciones con task panel ang angle slope ...
 
                     try:
                         ang = slopeListCopy.pop(0)
@@ -514,7 +495,6 @@ class _SlopedPlanes(_Py):
 
                     angle = pyPlane.angle
                     angleList.append(angle)
-
                     if angle != wireAngle:
                         pyWire.mono = False
                         pyFace.mono = False
@@ -548,7 +528,6 @@ class _SlopedPlanes(_Py):
             # print('face ', pyFace.numFace, pyFace.mono)
             pyFace.shapeGeom = geomShapeFace
             pyFace.wires = pyWireListNew
-
             pyFace.faceManager()
 
         self.slopeList = angleList
@@ -566,11 +545,8 @@ class _SlopedPlanes(_Py):
         for pyFace in self.Pyth:
             # print(pyFace.numFace, pyFace.mono, pyFace.execute)
             faceList.append(pyFace.face)
-            
             # execute = pyFace.execute
-
             pyFace.mono = True
-
             _Py.pyFace = pyFace
             pyFace.reset = False
             
@@ -580,7 +556,6 @@ class _SlopedPlanes(_Py):
                 pyWire.wire = Part.Wire(pyWire.shapeGeom)
 
                 pyWire.mono = True
-
                 planes = pyWire.planes
                 wireAngle = planes[0].angle
                 if pyFace.numFace == 0:
@@ -609,7 +584,6 @@ class _SlopedPlanes(_Py):
 
                     # print(pyPlane.overhang)
                 # print('wire ', pyWire.numWire, pyWire.mono)
-
             # print('face ', pyFace.numFace, pyFace.mono)
             pyFace.faceManager()
 
