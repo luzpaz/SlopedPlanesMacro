@@ -566,6 +566,7 @@ class _SlopedPlanes(_Py):
 
                 for pyPlane in pyWire.planes:
                     pyPlane.geomAligned = pyPlane.geomShape
+                    pyPlane.control = [pyPlane.numGeom]
                     pyPlane.solved = False
                     pyPlane.reallySolved = False
 
