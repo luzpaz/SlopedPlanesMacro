@@ -689,9 +689,10 @@ class _SlopedPlanes(_Py):
             
                 figList.extend(pyFace.shape)
 
-            # TODO pyFace.placement
+            facePlacement = P()
+            facePlacement.Base = V(pyFace.placement)
             for plane in planeFaceList:
-                plane.Placement = placement
+                plane.Placement = placement.multiply(facePlacement)
             
         return figList
 
