@@ -546,49 +546,57 @@ class _SlopedPlanes(_Py):
         for pyFace in self.Pyth:
             # print(pyFace.numFace, pyFace.mono, pyFace.execute)
             faceList.append(pyFace.face)
-            pyFace.mono = True
-            _Py.pyFace = pyFace
-            pyFace.reset = False  
-            
-            for pyWire in pyFace.wires:
-                # print(pyWire.mono)
-                pyWire.reset = False
-                pyWire.wire = Part.Wire(pyWire.shapeGeom)  #
+            _Py.pyFace = pyFace            
 
-                pyWire.mono = True
-                planes = pyWire.planes
-                wireAngle = planes[0].angle
-                if pyFace.numFace == 0:
-                    faceAngle = wireAngle
-                else:
-                    if faceAngle != wireAngle:
-                        pyFace.mono = False
-
-                for pyPlane in pyWire.planes:
-                    pyPlane.geomAligned = pyPlane.geomShape  #
-                    pyPlane.control = [pyPlane.numGeom]
-                    pyPlane.solved = False
-                    pyPlane.reallySolved = False
-
-                    pyPlane.alignedList = []
-                    pyPlane.chopedList = []
-                    pyPlane.frontedList = []
-                    pyPlane.rearedList = []
-
-                    angle = pyPlane.angle
-                    if isinstance(angle, float):
-                        if angle != wireAngle:
-                            pyWire.mono = False
-                            pyFace.mono = False
-
-                    angleList.append(angle)
-
-                    # print(pyPlane.overhang)
-                # print('wire ', pyWire.numWire, pyWire.mono)
-            # print('face ', pyFace.numFace, pyFace.mono)
-            
             if pyFace.execute:
+
+                pyFace.mono = True
+                pyFace.reset = False  
+                
+                for pyWire in pyFace.wires:
+                    # print(pyWire.mono)
+                    pyWire.reset = False
+                    pyWire.wire = Part.Wire(pyWire.shapeGeom)  #
+    
+                    pyWire.mono = True
+                    planes = pyWire.planes
+                    wireAngle = planes[0].angle
+                    if pyFace.numFace == 0:
+                        faceAngle = wireAngle
+                    else:
+                        if faceAngle != wireAngle:
+                            pyFace.mono = False
+    
+                    for pyPlane in pyWire.planes:
+                        pyPlane.geomAligned = pyPlane.geomShape  #
+                        pyPlane.control = [pyPlane.numGeom]
+                        pyPlane.solved = False
+                        pyPlane.reallySolved = False
+    
+                        pyPlane.alignedList = []
+                        pyPlane.chopedList = []
+                        pyPlane.frontedList = []
+                        pyPlane.rearedList = []
+    
+                        angle = pyPlane.angle
+                        if isinstance(angle, float):
+                            if angle != wireAngle:
+                                pyWire.mono = False
+                                pyFace.mono = False
+    
+                        angleList.append(angle)
+    
+                        # print(pyPlane.overhang)
+                    # print('wire ', pyWire.numWire, pyWire.mono)
+                # print('face ', pyFace.numFace, pyFace.mono)
+            
                 pyFace.faceManager()
+                
+            else:
+                
+                for pyWire in pyFace.wires:
+                    for pyPlane in pyWire.planes:
+                        angleList.append(pyPlane.angle)
 
         self.slopeList = angleList
         
@@ -600,6 +608,7 @@ class _SlopedPlanes(_Py):
 
         # TODO slopeList puede ser elaborado aquí y no en proccess y reProccess
         # duplicidad de codigo
+        # y me puedo saltar casi completamente reproccess
 
         figList = []
         for pyFace in pyFaceListNew:
@@ -698,7 +707,7 @@ class _SlopedPlanes(_Py):
 
             facePlacement = P()
             facePlacement.Base = V(pyFace.placement)
-            # TODO hacer una shell y aplicar solo una vez y al final Compound
+            # TODO hacer una shell y aplicar solo una vez y al final Compound?
             place = placement.multiply(facePlacement)
             for plane in planeFaceList:
                 plane.Placement = place
