@@ -263,7 +263,7 @@ class _SlopedPlanes(_Py):
 
         # print(self.OnChanged)
 
-        if self.OnChanged:
+        if self.OnChanged and self.slopeList:
             # print('A ', self.OnChanged)
 
             faceList = self.reProcessFaces(slopedPlanes)
@@ -280,7 +280,6 @@ class _SlopedPlanes(_Py):
         # print('pyFaceListNew ', pyFaceListNew)
 
         self.OnChanged = False
-        self.State = False
 
         # elaborates a list of planes for every face
 
@@ -605,10 +604,6 @@ class _SlopedPlanes(_Py):
     def listPlanes(self, slopedPlanes, pyFaceListNew, placement):
 
         ''''''
-
-        # TODO slopeList puede ser elaborado aquí y no en proccess y reProccess
-        # duplicidad de codigo
-        # y me puedo saltar casi completamente reproccess
 
         figList = []
         for pyFace in pyFaceListNew:
@@ -1018,6 +1013,8 @@ class _SlopedPlanes(_Py):
 
         '''onChanged(self, slopedPlanes, prop)'''
 
+        # print('onChanged ', prop)
+
         if self.State:
             return
 
@@ -1161,9 +1158,10 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # print('onDocumentRestored')
+        print('onDocumentRestored')
 
         _Py.slopedPlanes = slopedPlanes
+        self.State = False
 
     def __getstate__(self):
 
