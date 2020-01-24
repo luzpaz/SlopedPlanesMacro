@@ -683,15 +683,15 @@ class _SlopedPlanes(_Py):
                                           FreeCAD.Vector(0, 0, -1))
                     planeFaceList.extend(mirror.Faces)
     
-                # TODO pyFace.placement
-                for plane in planeFaceList:
-                    plane.Placement = placement.multiply(plane.Placement)
-    
                 figList.extend(planeFaceList)
             
             else:
             
                 figList.extend(pyFace.shape)
+
+            # TODO pyFace.placement
+            for plane in planeFaceList:
+                plane.Placement = placement
             
         return figList
 
