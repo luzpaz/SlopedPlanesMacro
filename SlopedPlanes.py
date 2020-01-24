@@ -598,7 +598,8 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # TODO pyFace.figure
+        # TODO slopeList puede ser elaborado aquí y no en proccess y reProccess
+        # duplicidad de codigo
 
         figList = []
         for pyFace in pyFaceListNew:
@@ -646,7 +647,8 @@ class _SlopedPlanes(_Py):
                                         # print('b')
     
                                         pyPl =\
-                                            pyFace.selectPlane(angle[0], angle[1],
+                                            pyFace.selectPlane(angle[0],
+                                                               angle[1],
                                                                pyFace)
                                         planeWireList.append(pyPl.shape)
     
@@ -682,18 +684,19 @@ class _SlopedPlanes(_Py):
                     mirror = shell.mirror(FreeCAD.Vector(0, 0, 0),
                                           FreeCAD.Vector(0, 0, -1))
                     planeFaceList.extend(mirror.Faces)
-    
-                figList.extend(planeFaceList)
-            
+
                 pyFace.shape = planeFaceList            
             
             else:
             
-                figList.extend(pyFace.shape)
+                planeFaceList = pyFace.shape
+                pyFace.execute = True
+
+            figList.extend(planeFaceList)
 
             facePlacement = P()
             facePlacement.Base = V(pyFace.placement)
-            # TODO
+            # TODO hacer una shell y aplicar solo una vez y al final Compound
             place = placement.multiply(facePlacement)
             for plane in planeFaceList:
                 plane.Placement = place
@@ -1016,8 +1019,8 @@ class _SlopedPlanes(_Py):
 
         elif prop == "Placement":
             
-            # TODO 
-            pass
+            for pyFace in self.Pyth:
+                pyFace.execute = False
 
         elif prop == "Slope":
 
@@ -1205,6 +1208,7 @@ class _SlopedPlanes(_Py):
             pyFace.__dict__ = dct
             pyFace.reset = True
             pyth.append(pyFace)
+
         self.Pyth = pyth
 
         self.State = True
