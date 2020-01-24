@@ -83,7 +83,7 @@ class _PyFace(_Py):
 
         '''face(self):
         The Face Shape of the base.'''
-        
+
         return self._face
 
     @face.setter
@@ -203,7 +203,7 @@ class _PyFace(_Py):
     def shape(self):
 
         '''shape(self):
-        Affects the face shape.'''
+        The end shape of the face.'''
         # TODO
         return self._shape
 

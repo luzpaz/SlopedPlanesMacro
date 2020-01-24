@@ -252,11 +252,11 @@ class _SlopedPlanes(_Py):
         # print('execute')
 
         # TODO: hace falta un mecanismo para solo ejecutar las partes necesarias
-        # pyFace.execute
+        # pyFace.execute and pyFace.shape
 
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
-        placement = sketch.Placement
+        placement = sketch.Placement  # TODO pyFace.Placement
         shape.Placement = P()
 
         self.declareSlopedPlanes(slopedPlanes)
@@ -997,7 +997,7 @@ class _SlopedPlanes(_Py):
         # print('onChanged ', prop)
 
         if prop in ['Shape', 'Visibility']:
-
+            # TODO viewObject onChanged (Visibility, ...)
             self.OnChanged = False
             return
 
