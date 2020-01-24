@@ -546,15 +546,14 @@ class _SlopedPlanes(_Py):
         for pyFace in self.Pyth:
             # print(pyFace.numFace, pyFace.mono, pyFace.execute)
             faceList.append(pyFace.face)
-            # execute = pyFace.execute
             pyFace.mono = True
             _Py.pyFace = pyFace
-            pyFace.reset = False
+            pyFace.reset = False  
             
             for pyWire in pyFace.wires:
                 # print(pyWire.mono)
                 pyWire.reset = False
-                pyWire.wire = Part.Wire(pyWire.shapeGeom)
+                pyWire.wire = Part.Wire(pyWire.shapeGeom)  #
 
                 pyWire.mono = True
                 planes = pyWire.planes
@@ -566,7 +565,7 @@ class _SlopedPlanes(_Py):
                         pyFace.mono = False
 
                 for pyPlane in pyWire.planes:
-                    pyPlane.geomAligned = pyPlane.geomShape
+                    pyPlane.geomAligned = pyPlane.geomShape  #
                     pyPlane.control = [pyPlane.numGeom]
                     pyPlane.solved = False
                     pyPlane.reallySolved = False
@@ -587,7 +586,9 @@ class _SlopedPlanes(_Py):
                     # print(pyPlane.overhang)
                 # print('wire ', pyWire.numWire, pyWire.mono)
             # print('face ', pyFace.numFace, pyFace.mono)
-            pyFace.faceManager()
+            
+            if pyFace.execute:
+                pyFace.faceManager()
 
         self.slopeList = angleList
         
@@ -602,89 +603,96 @@ class _SlopedPlanes(_Py):
         figList = []
         for pyFace in pyFaceListNew:
             # print(pyFace.numFace)
-            numFace = pyFace.numFace
-            secondaries = []
-            planeFaceList = []
-            originList = []
-            wireList = []
-            for pyWire in pyFace.wires:
-                # print(pyWire.numWire)
-                numWire = pyWire.numWire
-                planeWireList = []
-                for pyPlane in pyWire.planes:
-                    # print(pyPlane.numGeom)
-                    numAngle = pyPlane.numGeom
-                    angle = pyPlane.angle
-                    # print('angle ', angle)
-
-                    if pyPlane.length:
-
-                        if [numWire, numAngle] not in originList:
-
-                            if isinstance(angle, float):
-                                # print('a')
-
-                                plane = pyPlane.shape
-
-                                if isinstance(plane, Part.Compound):
-                                    # print('a1')
-                                    planeWireList.append(plane.Faces[0])
-                                    secondaries.extend(plane.Faces[1:])
-
+            
+            if pyFace.execute:
+                
+                numFace = pyFace.numFace
+                secondaries = []
+                planeFaceList = []
+                originList = []
+                wireList = []
+                for pyWire in pyFace.wires:
+                    # print(pyWire.numWire)
+                    numWire = pyWire.numWire
+                    planeWireList = []
+                    for pyPlane in pyWire.planes:
+                        # print(pyPlane.numGeom)
+                        numAngle = pyPlane.numGeom
+                        angle = pyPlane.angle
+                        # print('angle ', angle)
+    
+                        if pyPlane.length:
+    
+                            if [numWire, numAngle] not in originList:
+    
+                                if isinstance(angle, float):
+                                    # print('a')
+    
+                                    plane = pyPlane.shape
+    
+                                    if isinstance(plane, Part.Compound):
+                                        # print('a1')
+                                        planeWireList.append(plane.Faces[0])
+                                        secondaries.extend(plane.Faces[1:])
+    
+                                    else:
+                                        # print('a2')
+                                        planeWireList.append(plane)
+    
+                                    originList.append([numWire, numAngle])
+    
                                 else:
-                                    # print('a2')
-                                    planeWireList.append(plane)
-
-                                originList.append([numWire, numAngle])
-
-                            else:
-                                if angle not in originList:
-                                    # print('b')
-
-                                    pyPl =\
-                                        pyFace.selectPlane(angle[0], angle[1],
-                                                           pyFace)
-                                    planeWireList.append(pyPl.shape)
-
-                                    originList.append(angle)
-
-                    # print('originList ', originList)
-
+                                    if angle not in originList:
+                                        # print('b')
+    
+                                        pyPl =\
+                                            pyFace.selectPlane(angle[0], angle[1],
+                                                               pyFace)
+                                        planeWireList.append(pyPl.shape)
+    
+                                        originList.append(angle)
+    
+                        # print('originList ', originList)
+    
+                    if slopedPlanes.Up:
+                        upPlaneCopy = _Py.upList[numFace].copy()
+                        cut = upPlaneCopy.cut(planeWireList, _Py.tolerance)
+                        edgeList = cut.Edges[4:]
+                        wire = Part.Wire(edgeList)
+                        wireList.append(wire)
+    
+                    planeFaceList.extend(planeWireList)
+    
+                planeFaceList.extend(secondaries)
+    
                 if slopedPlanes.Up:
-                    upPlaneCopy = _Py.upList[numFace].copy()
-                    cut = upPlaneCopy.cut(planeWireList, _Py.tolerance)
-                    edgeList = cut.Edges[4:]
-                    wire = Part.Wire(edgeList)
-                    wireList.append(wire)
-
-                planeFaceList.extend(planeWireList)
-
-            planeFaceList.extend(secondaries)
-
-            if slopedPlanes.Up:
-                # print('Up')
-                faceMaker = slopedPlanes.FaceMaker
-                upFace = Part.makeFace(wireList, faceMaker)
-                planeFaceList.append(upFace)
-
-            if slopedPlanes.Down:
-                # print('Down')
-                face = pyFace.face.copy()
-                planeFaceList.append(face)
-
-            if slopedPlanes.Mirror:
-                # print('Mirror')
-                shell = Part.makeShell(planeFaceList)
-                mirror = shell.mirror(FreeCAD.Vector(0, 0, 0),
-                                      FreeCAD.Vector(0, 0, -1))
-                planeFaceList.extend(mirror.Faces)
-
-            # TODO pyFace.placement
-            for plane in planeFaceList:
-                plane.Placement = placement.multiply(plane.Placement)
-
-            figList.extend(planeFaceList)
-
+                    # print('Up')
+                    faceMaker = slopedPlanes.FaceMaker
+                    upFace = Part.makeFace(wireList, faceMaker)
+                    planeFaceList.append(upFace)
+    
+                if slopedPlanes.Down:
+                    # print('Down')
+                    face = pyFace.face.copy()
+                    planeFaceList.append(face)
+    
+                if slopedPlanes.Mirror:
+                    # print('Mirror')
+                    shell = Part.makeShell(planeFaceList)
+                    mirror = shell.mirror(FreeCAD.Vector(0, 0, 0),
+                                          FreeCAD.Vector(0, 0, -1))
+                    planeFaceList.extend(mirror.Faces)
+    
+                # TODO pyFace.placement
+                for plane in planeFaceList:
+                    plane.Placement = placement.multiply(plane.Placement)
+    
+                figList.extend(planeFaceList)
+            
+            else:
+            
+                figList.extend(pyFace.shape)
+            
         return figList
 
     def groupping(self, slopedPlanes, endShape):

@@ -203,7 +203,7 @@ class _PyFace(_Py):
     def shape(self):
 
         '''shape(self):
-        The end shape of the face.'''
+        List of faces.'''
         # TODO
         return self._shape
 
