@@ -311,7 +311,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # print('processFaces')
+        print('processFaces')
 
         # gathers the exterior wires. Lower Left criteria
         coordinatesOuterOrdered, geomOuterOrdered, faceList =\
@@ -539,7 +539,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        # print('reProcessFaces')
+        print('reProcessFaces')
 
         faceList = []
         angleList = []
@@ -603,9 +603,10 @@ class _SlopedPlanes(_Py):
 
         figList = []
         for pyFace in pyFaceListNew:
-            # print(pyFace.numFace)
+            print(pyFace.numFace)
             
             if pyFace.execute:
+                print('pyFace.execute')
                 
                 numFace = pyFace.numFace
                 secondaries = []
@@ -688,6 +689,7 @@ class _SlopedPlanes(_Py):
                 pyFace.shape = planeFaceList            
             
             else:
+                print('not pyFace.execute')
             
                 planeFaceList = pyFace.shape
                 pyFace.execute = True
@@ -1010,7 +1012,7 @@ class _SlopedPlanes(_Py):
         if self.State:
             return
 
-        # print('onChanged ', prop)
+        print('onChanged ', prop)
 
         if prop in ['Shape', 'Visibility']:
             # TODO viewObject onChanged (Visibility, ...)
