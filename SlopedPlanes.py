@@ -482,6 +482,7 @@ class _SlopedPlanes(_Py):
 
                             pyPlane.reflexedList = []
 
+                    # TODO subir y utilizar else
                     except IndexError:
                         # print('2')
 
