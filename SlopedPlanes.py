@@ -1095,6 +1095,12 @@ class _SlopedPlanes(_Py):
                     for pyFace in self.Pyth:
                         pyFace.execute = False
 
+        elif prop == "ThicknessDirection" or prop == "ThicknessSlope":
+            
+            if self.slopeList:
+                for pyFace in self.Pyth:
+                    pyFace.execute = False
+
         self.OnChanged = True
 
     def overWritePyProp(self, prop, value):
