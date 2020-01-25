@@ -261,7 +261,7 @@ class _SlopedPlanes(_Py):
 
         self.declareSlopedPlanes(slopedPlanes)
 
-        # print(self.OnChanged)
+        print(self.OnChanged, self.slopeList)
 
         if self.OnChanged and self.slopeList:
             # print('A ', self.OnChanged)
@@ -280,6 +280,7 @@ class _SlopedPlanes(_Py):
         # print('pyFaceListNew ', pyFaceListNew)
 
         self.OnChanged = False
+        self.State = False
 
         # elaborates a list of planes for every face
 
@@ -332,7 +333,7 @@ class _SlopedPlanes(_Py):
         numFace = -1
         for face in faceList:
             numFace += 1
-            # print('######### numFace ', numFace)           
+            print('######### numFace ', numFace)           
 
             # elaborates complementary python objects of a face
 
@@ -342,7 +343,6 @@ class _SlopedPlanes(_Py):
                 if oldCoord[0] == coordinates[0]:
                     pyFaceListNew.append(pyFace)
                     pyFace.numFace = numFace           
-                    # execute = pyFace.execute           
                     break
             else:
                 pyFace = _PyFace(numFace)
@@ -377,7 +377,7 @@ class _SlopedPlanes(_Py):
             numWire = -1
             for wire, geomWire in zip(wireList, gList):
                 numWire += 1
-                # print('###### numWire ', numWire)
+                print('###### numWire ', numWire)
                 # TODO change to new topologic name ?
                 coo = coordinates[numWire]
                 # print(coo)
@@ -419,7 +419,7 @@ class _SlopedPlanes(_Py):
                 numGeom = -1                
                 for geom in geomWire:
                     numGeom += 1
-                    # print('### numGeom ', numGeom)
+                    print('### numGeom ', numGeom)
                     # TODO unificar denominaciones con task panel ang angle slope ...
 
                     try:
@@ -435,7 +435,7 @@ class _SlopedPlanes(_Py):
                         pyPlane = pyPlaneListOld[numGeom]
                         pyPlaneListNew.append(pyPlane)
                         pyPlane.numGeom = numGeom
-                        # print('1')
+                        print('1')
 
                         if pyWire.reset:
                             # print('11')
@@ -483,7 +483,7 @@ class _SlopedPlanes(_Py):
 
                     # TODO subir y utilizar else
                     except IndexError:
-                        # print('2')
+                        print('2')
 
                         pyPlane = _PyPlane(numWire, numGeom, ang)
                         pyPlaneListNew.append(pyPlane)
@@ -1036,7 +1036,7 @@ class _SlopedPlanes(_Py):
             value = slope.Value
             prop = "angle"
             self.overWritePyProp(prop, value)
-            self.slopeList = []
+            ###self.slopeList = []
             slopedPlanes.FactorOverhang = 0
 
         elif prop == "FactorLength":
@@ -1162,6 +1162,7 @@ class _SlopedPlanes(_Py):
 
         _Py.slopedPlanes = slopedPlanes
         self.State = False
+        self.slopeList = []
 
     def __getstate__(self):
 
