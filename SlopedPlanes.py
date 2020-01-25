@@ -333,7 +333,7 @@ class _SlopedPlanes(_Py):
         numFace = -1
         for face in faceList:
             numFace += 1
-            print('######### numFace ', numFace)           
+            # print('######### numFace ', numFace)           
 
             # elaborates complementary python objects of a face
 
@@ -377,7 +377,7 @@ class _SlopedPlanes(_Py):
             numWire = -1
             for wire, geomWire in zip(wireList, gList):
                 numWire += 1
-                print('###### numWire ', numWire)
+                # print('###### numWire ', numWire)
                 # TODO change to new topologic name ?
                 coo = coordinates[numWire]
                 # print(coo)
@@ -419,7 +419,7 @@ class _SlopedPlanes(_Py):
                 numGeom = -1                
                 for geom in geomWire:
                     numGeom += 1
-                    print('### numGeom ', numGeom)
+                    # print('### numGeom ', numGeom)
                     # TODO unificar denominaciones con task panel ang angle slope ...
 
                     try:
@@ -435,7 +435,7 @@ class _SlopedPlanes(_Py):
                         pyPlane = pyPlaneListOld[numGeom]
                         pyPlaneListNew.append(pyPlane)
                         pyPlane.numGeom = numGeom
-                        print('1')
+                        # print('1')
 
                         if pyWire.reset:
                             # print('11')
@@ -483,7 +483,7 @@ class _SlopedPlanes(_Py):
 
                     # TODO subir y utilizar else
                     except IndexError:
-                        print('2')
+                        # print('2')
 
                         pyPlane = _PyPlane(numWire, numGeom, ang)
                         pyPlaneListNew.append(pyPlane)
@@ -1091,6 +1091,10 @@ class _SlopedPlanes(_Py):
                 slopedPlanes.Down = False
                 slopedPlanes.Mirror = False
 
+                if self.slopeList:
+                    for pyFace in self.Pyth:
+                        pyFace.execute = False
+
         self.OnChanged = True
 
     def overWritePyProp(self, prop, value):
@@ -1213,10 +1217,8 @@ class _SlopedPlanes(_Py):
 
             dct['_wires'] = wires
             dct['_alignments'] = alignments
-            #dct['_face'] = None
-            #dct['_shapeGeom'] = []
+            dct['_reset'] = True
             pyFace.__dict__ = dct
-            pyFace.reset = True
             pyth.append(pyFace)
 
         self.Pyth = pyth
@@ -1281,6 +1283,7 @@ class _ViewProvider_SlopedPlanes():
             if hasattr(oo, 'Proxy'):
                 if oo.Proxy.Type == 'SlopedPlanes':
                     oo.ViewObject.Visibility = False
+                    
         return [obj.Base] + group
 
     def unsetEdit(self, vobj, mode):
@@ -1288,6 +1291,7 @@ class _ViewProvider_SlopedPlanes():
         '''unsetEdit(self, vobj, mode)'''
 
         FreeCADGui.Control.closeDialog()
+        
         return
 
     def setEdit(self, vobj, mode=0):
@@ -1298,4 +1302,5 @@ class _ViewProvider_SlopedPlanes():
         self.task = taskd
         taskd.update()
         FreeCADGui.Control.showDialog(taskd)
+        
         return True
