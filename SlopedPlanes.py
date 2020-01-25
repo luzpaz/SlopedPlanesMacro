@@ -261,7 +261,7 @@ class _SlopedPlanes(_Py):
 
         self.declareSlopedPlanes(slopedPlanes)
 
-        print(self.OnChanged, self.slopeList)
+        # print(self.OnChanged, self.slopeList)
 
         if self.OnChanged and self.slopeList:
             # print('A ', self.OnChanged)
@@ -311,7 +311,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        print('processFaces')
+        # print('processFaces')
 
         # gathers the exterior wires. Lower Left criteria
         coordinatesOuterOrdered, geomOuterOrdered, faceList =\
@@ -538,7 +538,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        print('reProcessFaces')
+        # print('reProcessFaces')
 
         faceList = []
         angleList = []
@@ -607,10 +607,10 @@ class _SlopedPlanes(_Py):
 
         figList = []
         for pyFace in pyFaceListNew:
-            print(pyFace.numFace)
+            # print(pyFace.numFace)
             
             if pyFace.execute:
-                print('pyFace.execute')
+                # print('pyFace.execute')
                 
                 numFace = pyFace.numFace
                 secondaries = []
@@ -693,7 +693,7 @@ class _SlopedPlanes(_Py):
                 pyFace.shape = planeFaceList            
             
             else:
-                print('not pyFace.execute')
+                # print('not pyFace.execute')
             
                 planeFaceList = pyFace.shape
                 pyFace.execute = True
@@ -1018,7 +1018,7 @@ class _SlopedPlanes(_Py):
         if self.State:
             return
 
-        print('onChanged ', prop)
+        # print('onChanged ', prop)
 
         if prop in ['Shape', 'Visibility']:
             # TODO viewObject onChanged (Visibility, ...)
@@ -1162,7 +1162,7 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        print('onDocumentRestored')
+        # print('onDocumentRestored')
 
         _Py.slopedPlanes = slopedPlanes
         self.State = False
@@ -1172,22 +1172,30 @@ class _SlopedPlanes(_Py):
 
         '''__getstate__(self)'''
 
+        # print('__getstate__')
+
         state = dict()
 
         state['Type'] = self.Type
 
         pyth = []
         numFace = -1
+        # print('number of faces ', len(self.Pyth))  
+        # __getstate__ and __setstate__ are executed twice ?
         for pyFace in self.Pyth:
             numFace += 1
             dct = pyFace.__dict__.copy()
+            # print(dct)
             wires, alignments = pyFace.__getstate__()
+            # print(wires, alignments)
             dct['_wires'] = wires
-            dct['_alignments'] = alignments
+            dct['_alignments'] = []
             dct['_face'] = None
             dct['_shapeGeom'] = []   
             dct['_shape'] = None
+            # print(dct)
             pyth.append(dct)
+            
         state['Pyth'] = pyth
 
         # print('state ', state)

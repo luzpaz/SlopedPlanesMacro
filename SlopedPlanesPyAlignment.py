@@ -1339,7 +1339,7 @@ class _PyAlignment(_Py):
 
                 if fList:
                     # print('fList ', fList)
-                    pyPlane.under = fList
+                    ###pyPlane.under = fList
                     # print(planeCopy.Faces)
                     planeCopy = planeCopy.cut(fList, tolerance)
                     # print('planeCopy.Faces ', planeCopy.Faces)
