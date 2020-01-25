@@ -30,11 +30,11 @@ or whatever your FreeCAD macro path.
 ### Agenda
 
     - 1.7 Janury 2020: refact
-    - 1.8 March 2020: refact
-    - 1.9 June 2020: refact
+    - 1.8 May 2020: refact
+    - 1.9 October 2020: refact
     - 2.0 December 2020: groups
     - 3.0 December 2021: sweep
-    - 4.0 December 2022: finished!!!
+    - 4.0 December 2022: finishing!!!
 
 ### Acknowledgement
 
