@@ -40,44 +40,50 @@ class _PyAlignment(_Py):
 
     def __init__(self):
 
-        ''''''
-
-
+        '''__init__(self):'''
 
         self.base = None
         self.aligns = []
-        self.aliShape = []
         self.chops = []
+
         self.geomAligned = None
         self.geomList = []
+
         self.rango = []
-        self.rangoPy = []   # TODO podría unir rango y rangoPy en un sola propiedad como en rangoRear
-        self.rangoRear = ()
+        self.rangoPy = []   # TODO podría unir rango y rangoPy en un sola propiedad como en rangoRear. No parece ofrecer mucha ventaja
+        self.rangoRear = ()  # desunir numeros de objetos py en dos listas
+
         self.falsify = False
+
         self.simulatedAlignment = []
         self.simulatedChops = []
+
         self.prior = None
         self.later = None
         self.rear = [None, None]
 
+        self.aliShape = []
+
     @property
     def base(self):
 
-        '''base(self)'''
+        '''base(self):
+        The first plane of the alignment.'''
 
         return self._base
 
     @base.setter
     def base(self, base):
 
-        '''base(self, base)'''
+        '''base(self, base):'''
 
         self._base = base
 
     @property
     def aligns(self):
 
-        '''aligns(self)'''
+        '''aligns(self):
+        The secondaries planes of the alignment.'''
 
         return self._aligns
 
@@ -89,23 +95,10 @@ class _PyAlignment(_Py):
         self._aligns = aligns
 
     @property
-    def aliShape(self):
-
-        '''aliShape(self)'''
-
-        return self._aliShape
-
-    @aliShape.setter
-    def aliShape(self, aliShape):
-
-        '''aliShape(self, aliShape)'''
-
-        self._aliShape = aliShape
-
-    @property
     def chops(self):
 
-        '''chops(self)'''
+        '''chops(self):
+        List of twin planes which chop the alignment'''
 
         return self._chops
 
@@ -119,7 +112,9 @@ class _PyAlignment(_Py):
     @property
     def geomAligned(self):
 
-        '''geomAligned(self)'''
+        '''geomAligned(self):
+        Joins in one edge the base edges of aligned planes.
+        Redundant with pyAlignment.base.geomAligned'''
 
         return self._geomAligned
 
@@ -133,7 +128,8 @@ class _PyAlignment(_Py):
     @property
     def geomList(self):
 
-        '''geomList(self)'''
+        '''geomList(self):
+        Lists the base edges of aligned planes.'''
 
         return self._geomList
 
@@ -147,7 +143,8 @@ class _PyAlignment(_Py):
     @property
     def rango(self):
 
-        '''rango(self)'''
+        '''rango(self):
+        List of list of planes, by number, between every chop.'''
 
         return self._rango
 
@@ -161,7 +158,8 @@ class _PyAlignment(_Py):
     @property
     def rangoPy(self):
 
-        '''rangoPy(self)'''
+        '''rangoPy(self):
+        By python planes'''
 
         return self._rangoPy
 
@@ -175,7 +173,7 @@ class _PyAlignment(_Py):
     @property
     def rangoRear(self):
 
-        '''rangoRear(self)'''
+        '''rangoRear(self): todos los planos que no pertenecen al alineamiento'''
 
         return self._rangoRear
 
@@ -231,21 +229,23 @@ class _PyAlignment(_Py):
     @property
     def prior(self):
 
-        '''prior(self)'''
+        '''prior(self):
+        Plane before the alignment'''
 
         return self._prior
 
     @prior.setter
     def prior(self, prior):
 
-        '''prior(self, prior)'''
+        '''prior(self, prior):'''
 
         self._prior = prior
 
     @property
     def later(self):
 
-        '''later(self)'''
+        '''later(self):
+        Plane after the alignment'''
 
         return self._later
 
@@ -259,12 +259,31 @@ class _PyAlignment(_Py):
     @property
     def rear(self):
 
+        '''def rear(self):
+        Redundant with chops planes or alignment base plane?'''
+
         return self._rear
 
     @rear.setter
     def rear(self, rear):
 
         self._rear = rear
+
+    @property
+    def aliShape(self):
+
+        '''aliShape(self):
+        usado en postprocess?
+        incluye aligns shapes y posteriormente chops shapes'''
+
+        return self._aliShape
+
+    @aliShape.setter
+    def aliShape(self, aliShape):
+
+        '''aliShape(self, aliShape)'''
+
+        self._aliShape = aliShape
 
     def rangging(self, reset):
 
@@ -1311,7 +1330,7 @@ class _PyAlignment(_Py):
                 for ff in pCopy.Faces:
                     section = ff.section([gS], tolerance)
                     if not section.Edges:
-                        section = ff.section([_Py.face], tolerance)
+                        section = ff.section([pyFace.face], tolerance)
                         if section.Edges:
                             fList.append(ff)
                             section = ff.section(geomShapeFace, tolerance)
@@ -1320,7 +1339,7 @@ class _PyAlignment(_Py):
 
                 if fList:
                     # print('fList ', fList)
-                    pyPlane.under = fList
+                    ###pyPlane.under = fList
                     # print(planeCopy.Faces)
                     planeCopy = planeCopy.cut(fList, tolerance)
                     # print('planeCopy.Faces ', planeCopy.Faces)

@@ -45,13 +45,14 @@ class _PyFace(_Py):
 
     '''The complementary python object class for the faces resulting
     to apply the FaceMaker to the SlopedPlanes base.
-    The faces could have several wires, and as a consequense holes.'''
+    One face could have several wires, and as a consequense, holes.'''
 
     def __init__(self, numFace, mono=True):
 
-        '''__init__(self, numFace)'''
+        '''__init__(self, numFace):'''
 
         self.numFace = numFace
+        self.face = None
         self.wires = []
         self.alignments = []
         self.size = 0
@@ -59,34 +60,52 @@ class _PyFace(_Py):
         self.mono = mono
         self.reset = True
         self.execute = True
+        self.shape = None
+        self.placement = (0, 0, 0)
 
     @property
     def numFace(self):
 
         '''numFace(self):
-        integer numbering the face.'''
+        Integer numbering the face.'''
 
         return self._numFace
 
     @numFace.setter
     def numFace(self, numFace):
 
-        '''numFace(self, numFace)'''
+        '''numFace(self, numFace):'''
 
         self._numFace = numFace
+
+    @property
+    def face(self):
+
+        '''face(self):
+        The Face Shape of the base.'''
+
+        return self._face
+
+    @face.setter
+    def face(self, face):
+
+        '''face(self, face):
+        '''
+
+        self._face = face
 
     @property
     def wires(self):
 
         '''wires(self):
-        list of wires'''
+        List of wires.'''
 
         return self._wires
 
     @wires.setter
     def wires(self, wires):
 
-        '''wires(self, wires)'''
+        '''wires(self, wires):'''
 
         self._wires = wires
 
@@ -94,14 +113,14 @@ class _PyFace(_Py):
     def alignments(self):
 
         '''alignments(self):
-        list of alignments.'''
+        List of alignments.'''
 
         return self._alignments
 
     @alignments.setter
     def alignments(self, alignments):
 
-        '''alignments(self, alignments)'''
+        '''alignments(self, alignments):'''
 
         self._alignments = alignments
 
@@ -116,7 +135,7 @@ class _PyFace(_Py):
     @size.setter
     def size(self, size):
 
-        '''size(self, size)'''
+        '''size(self, size):'''
 
         self._size = size
 
@@ -124,7 +143,7 @@ class _PyFace(_Py):
     def shapeGeom(self):
 
         '''shapeGeom(self):
-        list of lists of edges, ordered by wire.'''
+        list of lists of edges (ordered by wires).'''
 
         return self._shapeGeom
 
@@ -139,14 +158,14 @@ class _PyFace(_Py):
     def mono(self):
 
         '''mono(self):
-        all planes of the face have the same slope.'''
+        All planes of the face have the same slope.'''
 
         return self._mono
 
     @mono.setter
     def mono(self, mono):
 
-        '''mono(self, mono)'''
+        '''mono(self, mono):'''
 
         self._mono = mono
 
@@ -154,14 +173,14 @@ class _PyFace(_Py):
     def reset(self):
 
         '''reset(self):
-        affects the face parsing.'''
+        Affects the face parsing.'''
 
         return self._reset
 
     @reset.setter
     def reset(self, reset):
 
-        '''reset(self, reset)'''
+        '''reset(self, reset):'''
 
         self._reset = reset
 
@@ -169,16 +188,46 @@ class _PyFace(_Py):
     def execute(self):
 
         '''execute(self):
-        affects the face execute.'''
-
+        Affects the face execute.'''
+        # TODO
         return self._execute
 
     @execute.setter
     def execute(self, execute):
 
-        '''execute(self, execute)'''
+        '''execute(self, execute):'''
 
         self._execute = execute
+
+    @property
+    def shape(self):
+
+        '''shape(self):
+        List of faces.'''
+        # TODO
+        return self._shape
+
+    @shape.setter
+    def shape(self, shape):
+
+        '''shape(self, shape):'''
+
+        self._shape = shape
+
+    @property
+    def placement(self):
+
+        '''placement(self):
+        Affects the face placement.'''
+        # TODO
+        return self._placement
+
+    @placement.setter
+    def placement(self, placement):
+
+        '''placement(self, placement):'''
+
+        self._placement = placement
 
     def __getstate__(self):
 
@@ -215,8 +264,6 @@ class _PyFace(_Py):
                 dd['_lineInto'] = None
 
                 dd['_cutter'] = []
-                dd['_under'] = []
-                dd['_seed'] = []
 
                 dd['_virtuals'] = []
 
@@ -321,8 +368,8 @@ class _PyFace(_Py):
 
         '''faceManager(self)'''
 
-        # print('Face mono reset', self.mono, self.reset)
-        # print('Wire mono reset ', [(p.mono, p.reset) for p in self.wires])
+        # print('Face mono/reset ', (self.mono, self.reset))
+        # print('Wire mono/reset ', [(p.mono, p.reset) for p in self.wires])
 
         self.parsing()
 
@@ -393,7 +440,10 @@ class _PyFace(_Py):
 
         for pyWire in pyWireList:
             if pyWire.reflexs:
-                pyWire.reflexing()
+                pyWire.reflexing(self)
+                # self fue incluido para pasar pyFace. Pero podría hacer:
+                # pyFace = _Py.pyFace
+                # face = pyFace.face
         # self.printControl('reflexing')
 
         for pyWire in pyWireList:

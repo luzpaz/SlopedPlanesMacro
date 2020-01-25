@@ -45,7 +45,6 @@ class _Py(object):
 
     slopedPlanes = None
     normal = V(0, 0, 1)
-    face = None
     pyFace = None
     upList = []
     tolerance = 1e-5
@@ -250,22 +249,26 @@ class _Py(object):
         print('********* alignments ', _Py.pyFace.alignments)
         for pyAlignment in _Py.pyFace.alignments:
 
-            print('****** base')
-            print((pyAlignment.base.numWire, pyAlignment.base.numGeom), pyAlignment.base.alignedList)
-            print('angle ', pyAlignment.base.angle)
+            print('geomAligned ', pyAlignment.geomAligned)
+            print('geomList ', pyAlignment.geomList)
             print('rear ', pyAlignment.rear)
-            print('rear base', pyAlignment.base.rear)
-            print('rango ', pyAlignment.base.rango)
-            # print('geom ', pyAlignment.base.geom)
-            # print('geomAligned ', pyAlignment.base.geomAligned)
-            # print('shape ', pyAlignment.base.shape)
             print('falsify ', pyAlignment.falsify)
-            print('virtualized ', pyAlignment.base.virtualized)
-            print('cross ', pyAlignment.base.cross)
             print('rangoChop ', pyAlignment.rango)
             print('rangoRear ', pyAlignment.rangoRear)
             print('prior ', (pyAlignment.prior.numWire, pyAlignment.prior.numGeom))
             print('later ', (pyAlignment.later.numWire, pyAlignment.later.numGeom))
+
+            print('****** base')
+            print((pyAlignment.base.numWire, pyAlignment.base.numGeom), pyAlignment.base.alignedList)
+            print('angle ', pyAlignment.base.angle)
+            print('rear ', pyAlignment.base.rear)
+            print('rango ', pyAlignment.base.rango)
+            print('geom ', pyAlignment.base.geom)
+            print('geomAligned ', pyAlignment.base.geomAligned)
+            print('shape ', pyAlignment.base.shape)
+
+            print('virtualized ', pyAlignment.base.virtualized)
+            print('cross ', pyAlignment.base.cross)
 
             print('*** chops ', [[(x.numWire, x.numGeom),
                                   (y.numWire, y.numGeom)]
@@ -288,42 +291,11 @@ class _Py(object):
                 print('angle ', align.angle)
                 print('virtualized ', align.virtualized)
                 print('cross ', align.cross)
-                # print('geom ', align.geom)
-                # print('geomAligned ', align.geomAligned)
-                # print('shape ', align.shape)
+                print('geom ', align.geom)
+                print('geomAligned ', align.geomAligned)
+                print('shape ', align.shape)
 
         print('##############################################################')
-
-    def printSerialSummary(self):
-
-        '''printSerialSummary(self)'''
-
-        for pyFace in self.Pyth:
-            for pyWire in pyFace.wires:
-                for pyPlane in pyWire.planes:
-                    pyPlane.printPlaneSummary()
-
-    def printPlaneSummary(self):
-
-        '''printPlaneSummary(self)'''
-
-        print('###### ', (self.numWire, self.numGeom), self.shape)
-        if self.shape:
-            print('Area ', self.shape.Area)
-        geom = self.geomShape
-        print((self.roundVector(geom.firstVertex(True).Point), self.roundVector(geom.lastVertex(True).Point)))
-        forward = self.forward
-        try:
-            print((self.roundVector(forward.firstVertex(True).Point), self.roundVector(forward.lastVertex(True).Point)))
-        except:
-            pass
-        backward = self.backward
-        try:
-            print((self.roundVector(backward.firstVertex(True).Point), self.roundVector(backward.lastVertex(True).Point)))
-        except:
-            pass
-
-        print('######')
 
     def printAssociatedShapes(self, numWire, numGeom):
 
@@ -357,19 +329,23 @@ class _Py(object):
             compound.Placement = placement
             Part.show(compound, slopedPlanes.Name+' cutter '+str(numWire)+' '+str(numGeom))
 
-        under = pyPlane.under
+        '''under = pyPlane.under
         if under:
 
             compound = Part.makeCompound(under)
             compound.Placement = placement
             Part.show(compound, slopedPlanes.Name+' under '+str(numWire)+' '+str(numGeom))
 
-        seed = pyPlane.seed
-        if seed:
+        try:
+            seed = pyPlane.seed
+            if seed:
 
-            compound = Part.makeCompound(seed)
-            compound.Placement = placement
-            Part.show(compound, slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))
+                compound = Part.makeCompound(seed)
+                compound.Placement = placement
+                Part.show(compound, slopedPlanes.Name+' seed '+str(numWire)+' '+str(numGeom))
+        except AttributeError:
+            pass'''
+
 
         if pyPlane.aligned:
             pyAli = pyPlane.selectAlignmentBase()
@@ -420,12 +396,12 @@ class _Py(object):
                         compound.Placement = placement
                         Part.show(compound, slopedPlanes.Name+'virtual simulatedAlignment '+str(numWire)+' '+str(numGeom))
 
-                under = pyP.under
+                '''under = pyP.under
                 if under:
 
                     compound = Part.makeCompound(pyP.under)
                     compound.Placement = placement
-                    Part.show(compound, slopedPlanes.Name+' virtual under '+str(numWire)+' '+str(numGeom))
+                    Part.show(compound, slopedPlanes.Name+' virtual under '+str(numWire)+' '+str(numGeom))'''
 
                 cutter = pyP.cutter
                 if cutter:

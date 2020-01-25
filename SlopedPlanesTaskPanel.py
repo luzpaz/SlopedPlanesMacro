@@ -106,7 +106,6 @@ class _TaskPanel_SlopedPlanes():
                                        ("Thickness"),
                                        ("ThicknessHeight"),
                                        ("ThicknessRun"),
-                                       # ("Sweep Curve"),
                                        ("Face")])
 
         else:
@@ -233,12 +232,10 @@ class _TaskPanel_SlopedPlanes():
 
         if slopedPlanes:
 
-            # linkList = [o.Name for o in slopedPlanes.SweepCurves]
-            # linkList.insert(0, None)
             up = slopedPlanes.Up
             down = slopedPlanes.Down
             pyFaceList = slopedPlanes.Proxy.Pyth
-            numSlope = 0
+            tt, numSlope = -1, 0
 
             for pyFace in pyFaceList:
                 originList = []
@@ -259,9 +256,9 @@ class _TaskPanel_SlopedPlanes():
 
                     for pyPlane in pyPlaneList:
 
+                        tt += 1
                         numAngle = pyPlane.numGeom
                         angle = pyPlane.angle
-                        # sweepCurve = pyPlane.sweepCurve
                         # print('# numAngle, angle ', numAngle, angle)
 
                         # print('originList ', originList)
@@ -299,6 +296,8 @@ class _TaskPanel_SlopedPlanes():
 
                             if self.advancedOptions.isChecked():
 
+                                thicknessList = slopedPlanes.ThicknessList
+                                
                                 doubleSpinBox.item = item
                                 doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeAngle)
@@ -308,8 +307,8 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The slope of the related face")
-                                doubleSpinBox.setMaximum(2000*size)
-                                doubleSpinBox.setMinimum(-2000*size)
+                                doubleSpinBox.setMaximum(2000 * size)
+                                doubleSpinBox.setMinimum(-2000 * size)
                                 slope = 100 * math.tan(angle)
                                 suffix = ' %'
                                 doubleSpinBox.setValue(slope)
@@ -323,10 +322,10 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The length of the related face")
-                                doubleSpinBox.setMaximum(2000*size)
-                                doubleSpinBox.setMinimum(-2000*size)
+                                doubleSpinBox.setMaximum(2000 * size)
+                                doubleSpinBox.setMinimum(-2000 * size)
                                 length = pyPlane.length
-                                ll = FreeCAD.Units.Quantity(length,FreeCAD.Units.Length)
+                                ll = FreeCAD.Units.Quantity(length, FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 value = length / nn[1]
                                 suffix = ' ' + nn[2]
@@ -341,10 +340,10 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The height of the related face")
-                                doubleSpinBox.setMaximum(2000*size)
-                                doubleSpinBox.setMinimum(-2000*size)
+                                doubleSpinBox.setMaximum(2000 * size)
+                                doubleSpinBox.setMinimum(-2000 * size)
                                 height = length * math.sin(angle)
-                                ll = FreeCAD.Units.Quantity(height,FreeCAD.Units.Length)
+                                ll = FreeCAD.Units.Quantity(height, FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
                                 value = height / nn[1]
@@ -359,10 +358,10 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The run of the related face")
-                                doubleSpinBox.setMaximum(2000*size)
-                                doubleSpinBox.setMinimum(-2000*size)
+                                doubleSpinBox.setMaximum(2000 * size)
+                                doubleSpinBox.setMinimum(-2000 * size)
                                 run = length * math.cos(angle)
-                                ll = FreeCAD.Units.Quantity(run,FreeCAD.Units.Length)
+                                ll = FreeCAD.Units.Quantity(run, FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
                                 value = run / nn[1]
@@ -377,10 +376,10 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The overhang length of the related face")
-                                doubleSpinBox.setMaximum(1000*size)
-                                doubleSpinBox.setMinimum(-1000*size)
+                                doubleSpinBox.setMaximum(1000 * size)
+                                doubleSpinBox.setMinimum(-1000 * size)
                                 length = pyPlane.overhang
-                                ll = FreeCAD.Units.Quantity(length,FreeCAD.Units.Length)
+                                ll = FreeCAD.Units.Quantity(length, FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
                                 value = length / nn[1]
@@ -397,10 +396,10 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The overhang height of the related face")
-                                doubleSpinBox.setMaximum(1000*size)
-                                doubleSpinBox.setMinimum(-1000*size)
+                                doubleSpinBox.setMaximum(1000 * size)
+                                doubleSpinBox.setMinimum(-1000 * size)
                                 height = length * math.sin(angle)
-                                ll = FreeCAD.Units.Quantity(height,FreeCAD.Units.Length)
+                                ll = FreeCAD.Units.Quantity(height, FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
                                 value = height / nn[1]
@@ -415,10 +414,10 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
                                 doubleSpinBox.setToolTip("The overhang run of the related face")
-                                doubleSpinBox.setMaximum(1000*size)
-                                doubleSpinBox.setMinimum(-1000*size)
+                                doubleSpinBox.setMaximum(1000 * size)
+                                doubleSpinBox.setMinimum(-1000 * size)
                                 run = length * math.cos(angle)
-                                ll = FreeCAD.Units.Quantity(run,FreeCAD.Units.Length)
+                                ll = FreeCAD.Units.Quantity(run, FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
                                 value = run / nn[1]
@@ -432,10 +431,10 @@ class _TaskPanel_SlopedPlanes():
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(tree)
                                 doubleSpinBox.setToolTip("The left width of the related face")
-                                doubleSpinBox.setMaximum(1000*size)
-                                doubleSpinBox.setMinimum(-1000*size)
+                                doubleSpinBox.setMaximum(1000 * size)
+                                doubleSpinBox.setMinimum(-1000 * size)
                                 leftWidth = pyPlane.leftWidth
-                                ll = FreeCAD.Units.Quantity(leftWidth,FreeCAD.Units.Length)
+                                ll = FreeCAD.Units.Quantity(leftWidth, FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
                                 value = leftWidth / nn[1]
@@ -445,10 +444,10 @@ class _TaskPanel_SlopedPlanes():
 
                                 doubleSpinBox = QtGui.QDoubleSpinBox(tree)
                                 doubleSpinBox.setToolTip("The right width of the related face")
-                                doubleSpinBox.setMaximum(1000*size)
-                                doubleSpinBox.setMinimum(-1000*size)
+                                doubleSpinBox.setMaximum(1000 * size)
+                                doubleSpinBox.setMinimum(-1000 * size)
                                 rightWidth = pyPlane.rightWidth
-                                ll = FreeCAD.Units.Quantity(rightWidth,FreeCAD.Units.Length)
+                                ll = FreeCAD.Units.Quantity(rightWidth, FreeCAD.Units.Length)
                                 nn = ll.getUserPreferred()
                                 suffix = ' ' + nn[2]
                                 value = rightWidth / nn[1]
@@ -456,42 +455,65 @@ class _TaskPanel_SlopedPlanes():
                                 doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 10, doubleSpinBox)
 
-                                '''button = _NewCurve()
-                                button.setParent(tree)
-                                button.plane = pyPlane
-                                button.slopedPlanes = slopedPlanes
-                                button.setText('New')
-                                tree.setItemWidget(item, 11, button)
-                                button.clicked.connect(button.onClicked)'''
+                                try:
+                                    (thickAngle, thickLength) =\
+                                        thicknessList[tt]
+                                except IndexError:
+                                    (thickAngle, thickLength) =\
+                                        (0, 0)                                    
 
-                                # reserves:
-                                # 11: ThicknessSlope
-                                # 12: Thickness
-                                # 13: ThicknessHeight
-                                # 14: ThicknessRun
-
-                                doubleSpinBox = QtGui.QDoubleSpinBox(tree)
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(tree)
+                                doubleSpinBox.setToolTip("The thickness angle of the related face")
+                                doubleSpinBox.setMaximum(1000.00)
+                                doubleSpinBox.setMinimum(-1000.00)
+                                doubleSpinBox.setValue(thickAngle)
+                                deg = u"\u00b0"
+                                doubleSpinBox.setSuffix(" " + deg)
                                 tree.setItemWidget(item, 11, doubleSpinBox)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(tree)
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(tree)
+                                doubleSpinBox.setToolTip("The thicknees length of the related face")
+                                doubleSpinBox.setMaximum(2000 * size)
+                                doubleSpinBox.setMinimum(-2000 * size)
+                                ll = FreeCAD.Units.Quantity(thickLength, FreeCAD.Units.Length)
+                                nn = ll.getUserPreferred()
+                                value = thickLength / nn[1]
+                                suffix = ' ' + nn[2]
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 12, doubleSpinBox)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(tree)
+                                thickAngle = math.radians(thickAngle)
+
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(tree)
+                                doubleSpinBox.setToolTip("The thickness height of the related face")
+                                doubleSpinBox.setMaximum(2000 * size)
+                                doubleSpinBox.setMinimum(-2000 * size)
+                                height = thickLength * math.sin(thickAngle)
+                                ll = FreeCAD.Units.Quantity(height, FreeCAD.Units.Length)
+                                nn = ll.getUserPreferred()
+                                suffix = ' ' + nn[2]
+                                value = height / nn[1]
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 13, doubleSpinBox)
 
-                                doubleSpinBox = QtGui.QDoubleSpinBox(tree)
+                                doubleSpinBox = _DoubleSpinBox()
+                                doubleSpinBox.setParent(tree)
+                                doubleSpinBox.setToolTip("The thickness run of the related face")
+                                doubleSpinBox.setMaximum(2000 * size)
+                                doubleSpinBox.setMinimum(-2000 * size)
+                                run = thickLength * math.cos(thickAngle)
+                                ll = FreeCAD.Units.Quantity(run, FreeCAD.Units.Length)
+                                nn = ll.getUserPreferred()
+                                suffix = ' ' + nn[2]
+                                value = run / nn[1]
+                                doubleSpinBox.setValue(value)
+                                doubleSpinBox.setSuffix(suffix)
                                 tree.setItemWidget(item, 14, doubleSpinBox)
-
-                                '''combo = QtGui.QComboBox(tree)
-                                combo.addItems(linkList)
-                                try:
-                                    index = linkList.index(sweepCurve)
-                                    combo.setCurrentIndex(index)
-                                except ValueError:
-                                    combo.setCurrentIndex(0)
-                                tree.setItemWidget(item, 15, combo)'''
-
-                                # button.combo = combo
 
                                 item.setText(15, str(numSlope))
 
@@ -517,19 +539,17 @@ class _TaskPanel_SlopedPlanes():
         pyFaceList = slopedPlanes.Proxy.Pyth
         numSlope = 0
 
-        ##slopeList = []
+        # TODO face execute
 
         for pyFace in pyFaceList:
             originList = []
             # print('### numFace', pyFace.numFace)
-            pyFace.mono = True
 
             pyWireList = pyFace.wires
             lenWires = len(pyWireList)
             for pyWire in pyWireList:
                 numWire = pyWire.numWire
                 # print('## numWire', numWire)
-                pyWire.mono = True
 
                 numAngle = -1
                 pyPlaneList = pyWire.planes
@@ -537,9 +557,6 @@ class _TaskPanel_SlopedPlanes():
                 if up:
                     if numWire == 1:
                         numSlope += 1
-
-                ang = pyPlaneList[0].angle
-                # print(ang)
 
                 for pyPlane in pyPlaneList:
                     numAngle += 1
@@ -564,10 +581,6 @@ class _TaskPanel_SlopedPlanes():
                         if isinstance(angle, float):
                             # print('a')
                             originList.append([numWire, numAngle])
-
-                            if value != ang:
-                                pyWire.mono = False
-                                pyFace.mono = False
 
                         else:
                             # print('b')
@@ -606,22 +619,12 @@ class _TaskPanel_SlopedPlanes():
                                 FreeCAD.Units.Quantity(str(right) + suffix)
                             pyPlane.rightWidth = right.Value
 
-                            # comboBox = tree.itemWidget(it, 15)
-                            # sweepCurve = comboBox.currentText()
-                            # pyPlane.sweepCurve = sweepCurve
-
-                    ##slopeList.append(pyPlane.angle)
-
-                # print(pyWire.mono)
-
             if up:
                 if lenWires == 1:
                     numSlope += 1
 
             if down:
                 numSlope += 1
-
-        ##slopedPlanes.Proxy.slopeList = slopeList
 
         slopedPlanes.Proxy.OnChanged = True
 
@@ -778,27 +781,6 @@ class _TreeWidget(QtGui.QTreeWidget):
         self.setColumnCount(2)
         self.header().resizeSection(0, 60)
         self.header().resizeSection(1, 60)
-
-
-class _NewCurve(QtGui.QPushButton):
-
-    ''''''
-
-    def __init__(self):
-
-        ''''''
-
-        super(_NewCurve, self).__init__()
-
-    def onClicked(self):
-
-        ''''''
-
-        # print('onClicked _NewCurve')
-
-        pyPlane = self.plane
-        slopedPlanes = self.slopedPlanes
-        pyPlane.makeSweepSketch(slopedPlanes)
 
 
 class _DoubleSpinBox(QtGui.QDoubleSpinBox):

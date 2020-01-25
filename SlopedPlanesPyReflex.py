@@ -50,56 +50,60 @@ class _PyReflex(_Py):
     @property
     def planes(self):
 
-        '''planes(self)'''
+        '''planes(self):
+        List with the two planes.'''
 
         return self._planes
 
     @planes.setter
     def planes(self, planes):
 
-        '''planes(self, planes)'''
+        '''planes(self, planes):'''
 
         self._planes = planes
 
     @property
     def rango(self):
 
-        '''rango(self)'''
+        '''rango(self):
+        Redundant with plane.'''
 
         return self._rango
 
     @rango.setter
     def rango(self, rango):
 
-        '''rango(self, rango)'''
+        '''rango(self, rango):'''
 
         self._rango = rango
 
     @property
     def rear(self):
 
-        '''rear(self)'''
+        '''rear(self):
+        Redundant with plane'''
 
         return self._rear
 
     @rear.setter
     def rear(self, rear):
 
-        '''rear(self, rear)'''
+        '''rear(self, rear):'''
 
         self._rear = rear
 
     @property
     def lines(self):
 
-        '''lines(self)'''
+        '''lines(self):
+        Redundant with planes.'''
 
         return self._lines
 
     @lines.setter
     def lines(self, lines):
 
-        '''lines(self, lines)'''
+        '''lines(self, lines):'''
 
         self._lines = lines
 
@@ -531,7 +535,7 @@ class _PyReflex(_Py):
                 pyR.cutter.append(pl)
                 # print('included rango ', pyWire.numWire, nn)
 
-                pl = pyPl.simulatedShape.copy()     # Two faces included
+                pl = pyPl.simulatedShape.copy()     # Two faces included ?
                 if kind == 'rangoCorner':
                     # print('22')
                     pl = self.cutting(pl, [oppReflexEnormous], gS)
@@ -601,7 +605,7 @@ class _PyReflex(_Py):
             pyR.control.append(nn)
             # print('included rango ', pyWire.numWire, nn)
 
-    def solveReflex(self, pyWire):
+    def solveReflex(self, pyWire, pyFace):
 
         '''solveReflex(self, pyWire)'''
 
@@ -613,10 +617,10 @@ class _PyReflex(_Py):
         oppReflex = pyOppR.shape.copy()
 
         # print('# processReflex forward ', pyR.numGeom, pyOppR.numGeom, pyR.virtualized, pyOppR.virtualized)
-        self.processReflex(reflex, oppReflex, pyR, pyOppR, 'forward', pyWire)
+        self.processReflex(reflex, oppReflex, pyR, pyOppR, 'forward', pyWire, pyFace)
 
         # print('# processReflex backward', pyOppR.numGeom, pyR.numGeom, pyOppR.virtualized, pyR.virtualized)
-        self.processReflex(oppReflex, reflex, pyOppR, pyR, 'backward', pyWire)
+        self.processReflex(oppReflex, reflex, pyOppR, pyR, 'backward', pyWire, pyFace)
 
         [pyR, pyOppR] = self.planes
 
@@ -630,7 +634,7 @@ class _PyReflex(_Py):
         self.processReflexTwo(oppReflex, reflex, pyOppR, pyR, 'backward')
 
     def processReflex(self, reflex, oppReflex, pyR, pyOppR,
-                      direction, pyWire):
+                      direction, pyWire, pyFace):
 
         '''processReflex(self, reflex, oppReflex, pyR, pyOppR,
                          direction, pyWire)'''
@@ -639,7 +643,7 @@ class _PyReflex(_Py):
         pyPlaneList = pyWire.planes
         gS = pyR.geomShape
         simul = pyR.simulatedShape
-        face = _Py.face
+        face = pyFace.face
         reflexList = pyWire.reflexs
 
         cutList = [pyOppR.enormousShape]
@@ -671,6 +675,8 @@ class _PyReflex(_Py):
                 rangoCorner = pyR.rango[0]
                 rangoCornerPy = pyR.rangoPy[0]
 
+                # esto tiene que cambiar a self.lines
+
                 forward = pyR.forward
                 backward = pyR.backward
 
@@ -695,7 +701,7 @@ class _PyReflex(_Py):
 
             forw = forward.copy()
             forw = forw.cut([rearGeom], tolerance)
-            wire = Part.Wire(forw.Edges)        ########################################
+            wire = Part.Wire(forw.Edges)
             orderedEdges = wire.OrderedEdges
             forw = orderedEdges[0]
 
@@ -803,9 +809,11 @@ class _PyReflex(_Py):
                 section = f.section([backward], tolerance)
                 if not section.Edges:
                     cList.append(f)
-            pyR.under.extend(cList)    # surplus figure's bottom
+            # pyR.under.extend(cList)    # surplus figure's bottom
             # print('cList ', cList, len(cList))
-            cutterList = Part.makeCompound(pyR.under)
+            cutterList = Part.makeCompound(cList)
+
+        # pyR.under = cList
 
         if cList:
             reflex = reflex.cut(cList, tolerance)
@@ -845,34 +853,6 @@ class _PyReflex(_Py):
                     reflex = reflex.cut([pyOppR.enormousShape], tolerance)
                     # print('reflex.Faces ', reflex.Faces, len(reflex.Faces))
 
-                if enormous:
-
-                    seedList = pyR.seed
-                    # print('seedList ', seedList)
-                    if not seedList:
-                        # print('a')
-                        seed = pyR.seedShape.copy()
-                    else:
-                        # print('b')
-                        seed = Part.makeShell(seedList)
-                        seedList = []
-                    seed = seed.cut(enormous, tolerance)
-                    ff = self.selectFace(seed.Faces, gS)
-                    seed = seed.removeShape([ff])
-                    seedList.append(ff)
-                    for ff in seed.Faces:
-                        # print('1')
-                        section = ff.section([face], tolerance)
-                        if section.Edges:
-                            # print('2')
-                            section = ff.section(seedList, tolerance)
-                            if not section.Edges:
-                                # print('3')
-                                seedList.append(ff)
-                    # print('seedList ', seedList)
-                    pyR.seed = seedList    # allowed location for extra faces
-                    seed = Part.makeShell(seedList)
-
                 bList = []
                 for ff in reflex.Faces:
                     # print('a')
@@ -899,6 +879,9 @@ class _PyReflex(_Py):
                                             # print('e11')
                                             if enormous:
                                                 # print('e111')
+
+                                                seed = self.seedExtraFaces(pyR, enormous, face)
+
                                                 common =\
                                                     ff.common([seed],
                                                               tolerance)
@@ -913,6 +896,9 @@ class _PyReflex(_Py):
                                         # print('e2')
                                         if enormous:
                                             # print('e21')
+
+                                            seed = self.seedExtraFaces(pyR, enormous, face)
+
                                             common =\
                                                 ff.common([seed], tolerance)
                                             if common.Area:
@@ -931,6 +917,44 @@ class _PyReflex(_Py):
         compound = Part.makeCompound(aList)
         pyR.shape = compound
 
+    def seedExtraFaces(self, pyR, enormous, face):
+
+        '''allowed location for extra faces'''
+
+        gS = pyR.geomShape
+        tolerance = _Py.tolerance
+
+        '''seedList = pyR.seed
+        # print('seedList ', seedList)
+        if not seedList:
+            # print('a')
+            seed = pyR.seedShape.copy()
+        else:
+            # print('b')
+            seed = Part.makeShell(seedList)
+            seedList = []'''
+        # necesita una memoria ??
+        seedList = []
+        seed = pyR.seedShape.copy()
+        seed = seed.cut(enormous, tolerance)
+        ff = self.selectFace(seed.Faces, gS)
+        seed = seed.removeShape([ff])
+        seedList.append(ff)
+        for ff in seed.Faces:
+            # print('1')
+            section = ff.section([face], tolerance)
+            if section.Edges:
+                # print('2')
+                section = ff.section(seedList, tolerance)
+                if not section.Edges:
+                    # print('3')
+                    seedList.append(ff)
+        # print('seedList ', seedList)
+        # pyR.seed = seedList    # allowed location for extra faces
+        seed = Part.makeShell(seedList)
+
+        return seed
+
     def processReflexTwo(self, reflex, oppReflex, pyR, pyOppR, direction):
 
         '''
@@ -940,7 +964,7 @@ class _PyReflex(_Py):
         tolerance = _Py.tolerance
         gS = pyR.geomShape
 
-        if direction == 'forward':
+        '''if direction == 'forward':
             forward = pyR.forward
             backward = pyR.backward
         else:
@@ -949,9 +973,22 @@ class _PyReflex(_Py):
                 backward = pyR.backward
             else:
                 forward = pyR.backward
-                backward = pyR.forward
+                backward = pyR.forward'''
 
-        # [forward, backward] = self.lines rompe Y072 Y074
+        lines = self.lines
+        if direction == 'forward':
+            forward = lines[0]
+            backward = lines[1]
+        else:
+            forward = lines[1]
+            backward = lines[0]
+
+        # print((forward.firstVertex(True).Point, forward.lastVertex(True).Point), (backward.firstVertex(True).Point, backward.lastVertex(True).Point))
+        # print((self.lines[0].firstVertex(True).Point, self.lines[0].lastVertex(True).Point), (self.lines[1].firstVertex(True).Point, self.lines[1].lastVertex(True).Point))
+
+        # [forward, backward] = self.lines rompe Y072 Y074. Resuelto modificando processReflexTwo.
+        # Cambio la forma, a mejor, de cuadrupleReflex 105.
+        # Tienes que revisar similares para corregir: F sin alineamiento
 
         # podría incluir en isSolved la detención de sobrantes en planos de una cara
         # que tienen un vertice en la planta (tres vertices en total)
@@ -996,21 +1033,27 @@ class _PyReflex(_Py):
                 # print('aList ', aList)
 
                 bList = []
-                if pyR.rear:
+                if pyR.rear: # ?
 
+                    # print('reflex.Faces ', reflex.Faces)
                     for ff in reflex.Faces:
                         section = ff.section([gS, backward], tolerance)
                         if not section.Edges:
-                            section = backward.section(aList, tolerance)
+                            bList = [ff]
+                            break
+                            '''section = backward.section(aList, tolerance)
                             if section.Edges:
+                                # print('a')
                                 bList = [ff]
                                 break
                             else:
+                                # print('b')
                                 section = ff.section(aList, tolerance)
                                 if not section.Edges:
                                     bList = [ff]
-                                    break
+                                    break'''
 
+                # print('bList ', bList)
                 aList.extend(bList)
                 compound = Part.makeCompound(aList)
                 pyR.shape = compound

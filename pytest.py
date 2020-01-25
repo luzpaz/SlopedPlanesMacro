@@ -10,6 +10,7 @@ geometricList = []
 vertexList = []
 edgeList = []
 executionList = []
+touchedList = []
 
 
 for directory in os.walk('/home/slopedplanestest/Test'):
@@ -33,7 +34,12 @@ for directory in os.walk('/home/slopedplanestest/Test'):
                         cut = oldShape.copy().cut(newShape)
                         cc = newShape.copy().cut(oldShape)
 
-                        if obj.State[0] == 'Invalid':
+                        if 'Touched' in obj.State:
+
+                            numError += 1
+                            touchedList.append((doc.Name, obj.Name))
+
+                        if 'Invalid' in obj.State:
 
                             numError += 1
                             executionList.append((doc.Name, obj.Name))
@@ -69,4 +75,5 @@ FreeCAD.Console.PrintMessage('geometryErrors ' + str(geometricList) + '\n')
 FreeCAD.Console.PrintMessage('edgeErrors ' + str(edgeList) + '\n')
 FreeCAD.Console.PrintMessage('vertexErrors ' + str(vertexList) + '\n')
 FreeCAD.Console.PrintMessage('executionErrors ' + str(executionList) + '\n')
+FreeCAD.Console.PrintMessage('touchedErrors ' + str(touchedList) + '\n')
 FreeCAD.Console.PrintMessage('time.clock() ' + str(time.clock()) + '\n')
