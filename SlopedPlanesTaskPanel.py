@@ -144,9 +144,10 @@ class _TaskPanel_SlopedPlanes():
 
         if button == QtGui.QDialogButtonBox.Apply:
 
+            print('Apply')
             placement = self.obj.Placement
             self.resetObject()
-            self.obj.Placement = placement
+            self.obj.Placement = placement  # causa que pyFace.excute = False
             FreeCAD.ActiveDocument.recompute()
             self.update()
             self.shaping()
@@ -297,7 +298,7 @@ class _TaskPanel_SlopedPlanes():
                             if self.advancedOptions.isChecked():
 
                                 thicknessList = slopedPlanes.ThicknessList
-                                
+
                                 doubleSpinBox.item = item
                                 doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeAngle)
@@ -460,7 +461,7 @@ class _TaskPanel_SlopedPlanes():
                                         thicknessList[tt]
                                 except IndexError:
                                     (thickAngle, thickLength) =\
-                                        (0, 0)                                    
+                                        (0, 0)
 
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
@@ -531,7 +532,7 @@ class _TaskPanel_SlopedPlanes():
 
         ''''''
 
-        # print('resetObject')
+        print('resetObject')
 
         slopedPlanes = self.obj
         up = slopedPlanes.Up
@@ -543,7 +544,7 @@ class _TaskPanel_SlopedPlanes():
 
         for pyFace in pyFaceList:
             originList = []
-            # print('### numFace', pyFace.numFace)
+            print('### numFace', pyFace.numFace, pyFace.execute)
 
             pyWireList = pyFace.wires
             lenWires = len(pyWireList)
