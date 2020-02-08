@@ -264,13 +264,13 @@ class _SlopedPlanes(_Py):
         # print(self.OnChanged, self.slopeList)
 
         if self.OnChanged and self.slopeList:
-            print('A ', self.OnChanged)
+            # print('A ', self.OnChanged)
 
             faceList = self.reProcessFaces(slopedPlanes)
             pyFaceListNew = self.Pyth
 
         else:
-            print('B ', self.OnChanged)
+            # print('B ', self.OnChanged)
 
             face = Part.makeFace(shape.Wires, slopedPlanes.FaceMaker)
             fList = face.Faces
@@ -538,14 +538,14 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        print('reProcessFaces')
+        # print('reProcessFaces')
 
         faceList = []
         angleList = []
         for pyFace in self.Pyth:
-            print('numFace ', pyFace.numFace)
-            print('mono ', pyFace.mono)
-            print('excute ', pyFace.execute)
+            # print('numFace ', pyFace.numFace)
+            # print('mono ', pyFace.mono)
+            # print('excute ', pyFace.execute)
             faceList.append(pyFace.face)
             _Py.pyFace = pyFace
 
@@ -555,8 +555,8 @@ class _SlopedPlanes(_Py):
                 pyFace.reset = False
 
                 for pyWire in pyFace.wires:
-                    print('numWire ', pyWire.numWire)
-                    print('mono ', pyWire.mono)
+                    # print('numWire ', pyWire.numWire)
+                    # print('mono ', pyWire.mono)
                     pyWire.reset = False
                     pyWire.wire = Part.Wire(pyWire.shapeGeom)  #
 
@@ -581,7 +581,7 @@ class _SlopedPlanes(_Py):
                         pyPlane.rearedList = []
 
                         angle = pyPlane.angle
-                        print('angle ', angle)
+                        # print('angle ', angle)
                         if isinstance(angle, float):
                             if angle != wireAngle:
                                 pyWire.mono = False
@@ -609,14 +609,14 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
-        print('listPlanes')
+        # print('listPlanes')
 
         figList = []
         for pyFace in pyFaceListNew:
-            print(pyFace.numFace)
+            # print(pyFace.numFace)
 
             if pyFace.execute:
-                print('pyFace.execute')
+                # print('pyFace.execute')
 
                 numFace = pyFace.numFace
                 secondaries = []
