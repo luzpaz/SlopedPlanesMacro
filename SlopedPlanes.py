@@ -854,12 +854,15 @@ class _SlopedPlanes(_Py):
                     baseFaces = ss.Faces + SS.Faces
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
-                        for bf in base.Faces:
+                        base.Placement = placement
+                        baseFaces.extend(base.Faces)
+                        '''for bf in base.Faces:
                             bf.Placement = bf.Placement.multiply(placement)  # ?
                             baseFaces.append(bf)
-                    shell = Part.Shell(baseFaces)
-                    # shell = Part.Compound(baseFaces)
-                    shell.Placement = placement  # ?
+                    shell = Part.Shell(baseFaces)'''
+                    shell = Part.Compound(baseFaces)
+                    #shell = Part.Shell(baseFaces)
+                    # shell.Placement = placement  # ?
                     shellList.append(shell)
 
             else:
@@ -871,11 +874,10 @@ class _SlopedPlanes(_Py):
                     baseFaces = ss.Faces + SS.Faces
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
-                        for bf in base.Faces:
-                            bf.Placement = bf.Placement.multiply(placement)  # ?
-                            baseFaces.append(bf)
-                    shell = Part.Shell(baseFaces)
+                        base.Placement = placement
+                        baseFaces.extend(base.Faces)
                     # shell = Part.Compound(baseFaces)
+                    shell = Part.Shell(baseFaces)
                     shellList.append(shell)
 
             # print(shellList)
