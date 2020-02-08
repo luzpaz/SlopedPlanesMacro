@@ -145,9 +145,10 @@ class _TaskPanel_SlopedPlanes():
         if button == QtGui.QDialogButtonBox.Apply:
 
             print('Apply')
-            placement = self.obj.Placement
+            # placement = self.obj.Placement
             self.resetObject()
-            self.obj.Placement = placement  # causa que pyFace.excute = False
+            # self.obj.Placement = placement  # causa que pyFace.excute = False
+            self.obj.enforceRecompute()
             FreeCAD.ActiveDocument.recompute()
             self.update()
             self.shaping()

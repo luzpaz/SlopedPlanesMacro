@@ -1033,8 +1033,9 @@ class _SlopedPlanes(_Py):
 
         elif prop == "Placement":
 
-            for pyFace in self.Pyth:
-                pyFace.execute = False
+            if self.slopeList:
+                for pyFace in self.Pyth:
+                    pyFace.execute = False
 
         elif prop == "Slope":
 
