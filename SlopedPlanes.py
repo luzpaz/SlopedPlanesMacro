@@ -251,12 +251,9 @@ class _SlopedPlanes(_Py):
 
         # print('execute')
 
-        # TODO: hace falta un mecanismo para solo ejecutar las partes necesarias
-        # pyFace.execute and pyFace.shape
-
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
-        placement = sketch.Placement  # TODO pyFace.Placement
+        placement = sketch.Placement
         shape.Placement = P()
 
         self.declareSlopedPlanes(slopedPlanes)
@@ -282,12 +279,8 @@ class _SlopedPlanes(_Py):
         self.OnChanged = False
         self.State = False
 
-        # elaborates a list of planes for every face
-
-        figList =\
-            self.listPlanes(slopedPlanes, pyFaceListNew, placement)
-
-        endShape = Part.makeShell(figList)
+        endShape =\
+            self.makeShells(slopedPlanes, pyFaceListNew, placement)
 
         if slopedPlanes.Group:
             # print('Group')
@@ -605,11 +598,11 @@ class _SlopedPlanes(_Py):
 
         return faceList
 
-    def listPlanes(self, slopedPlanes, pyFaceListNew, placement):
+    def makeShells(self, slopedPlanes, pyFaceListNew, placement):
 
         ''''''
 
-        # print('listPlanes')
+        # print('makeShells')
 
         figList = []
         for pyFace in pyFaceListNew:
@@ -704,16 +697,19 @@ class _SlopedPlanes(_Py):
                 planeFaceList = pyFace.shape
                 pyFace.execute = True
 
-            figList.extend(planeFaceList)
-
             facePlacement = P()
             facePlacement.Base = V(pyFace.placement)
-            # TODO hacer una shell y aplicar solo una vez y al final Compound?
             place = placement.multiply(facePlacement)
-            for plane in planeFaceList:
-                plane.Placement = place
 
-        return figList
+            shell = Part.makeShell(planeFaceList)
+            shell.Placement = place
+            figList.append(shell)
+
+        if len(figList) > 1:
+
+            shell  = Part.Compound(figList)
+
+        return shell
 
     def groupping(self, slopedPlanes, endShape):
 
@@ -841,10 +837,8 @@ class _SlopedPlanes(_Py):
                 self.processFaces(slopedPlanes, bigFace.Faces,
                                   thickness=True)
 
-            figList =\
-                self.listPlanes(slopedPlanes, pyFLNew, placement)
-
-            secondShape = Part.makeShell(figList)
+            secondShape =\
+                self.makeShells(slopedPlanes, pyFLNew, placement)
 
             shellList = []
             factorOverhang = slopedPlanes.FactorOverhang
@@ -861,11 +855,11 @@ class _SlopedPlanes(_Py):
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
                         for bf in base.Faces:
-                            bf.Placement = bf.Placement.multiply(placement)
+                            bf.Placement = bf.Placement.multiply(placement)  # ?
                             baseFaces.append(bf)
                     shell = Part.Shell(baseFaces)
                     # shell = Part.Compound(baseFaces)
-                    shell.Placement = placement
+                    shell.Placement = placement  # ?
                     shellList.append(shell)
 
             else:
@@ -878,7 +872,7 @@ class _SlopedPlanes(_Py):
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
                         for bf in base.Faces:
-                            bf.Placement = bf.Placement.multiply(placement)
+                            bf.Placement = bf.Placement.multiply(placement)  # ?
                             baseFaces.append(bf)
                     shell = Part.Shell(baseFaces)
                     # shell = Part.Compound(baseFaces)
