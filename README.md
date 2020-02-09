@@ -30,6 +30,7 @@ or whatever your FreeCAD macro path.
 ### Agenda
 
     - 1.7 Janury 2020: refact
+    - 1.7.1 March 2020: fixes
     - 1.8 May 2020: refact
     - 1.9 October 2020: refact
     - 2.0 December 2020: groups

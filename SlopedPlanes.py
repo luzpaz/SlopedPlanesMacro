@@ -254,6 +254,7 @@ class _SlopedPlanes(_Py):
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
         placement = sketch.Placement
+        # print('sketch placement ', placement)
         shape.Placement = P()
 
         self.declareSlopedPlanes(slopedPlanes)
@@ -298,7 +299,11 @@ class _SlopedPlanes(_Py):
         if slopedPlanes.Solid:
             endShape = Part.makeSolid(endShape)
 
+        # print(endShape.Placement)
+
         slopedPlanes.Shape = endShape
+
+        # print(slopedPlanes.Shape.Placement)
 
     def processFaces(self, slopedPlanes, fList, thickness=False):
 
@@ -697,15 +702,19 @@ class _SlopedPlanes(_Py):
                 planeFaceList = pyFace.shape
                 pyFace.execute = True
 
-            facePlacement = P()
-            facePlacement.Base = V(pyFace.placement)
-            place = placement.multiply(facePlacement)
+            place = placement.copy()
+            place.Base = place.Base.add(V(pyFace.placement))
+
+            # revisado !!!
+            for pl in planeFaceList:
+                pl.Placement = place
 
             shell = Part.makeShell(planeFaceList)
-            shell.Placement = place
+
             figList.append(shell)
 
         if len(figList) > 1:
+            # print('compound')
 
             shell  = Part.Compound(figList)
 
