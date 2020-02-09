@@ -609,6 +609,8 @@ class _SlopedPlanes(_Py):
 
         # print('makeShells')
 
+        # obtener placement aquí y limpiar de fattening
+
         figList = []
         for pyFace in pyFaceListNew:
             # print(pyFace.numFace)
@@ -854,24 +856,20 @@ class _SlopedPlanes(_Py):
 
             if factorOverhang:
 
+                # print((endShape.Shells, secondShape.Shells, pyth))
                 for ss, SS, pyFace in zip(endShape.Shells,
                                           secondShape.Shells,
                                           pyth):
 
-                    ff, FF = self.overhangWires(endShape, secondShape, pyFace)
-
+                    ff, FF = self.overhangWires(ss, SS, pyFace)
+                    # print((ff.Wires, FF.Wires))
                     baseFaces = ss.Faces + SS.Faces
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
-                        base.Placement = placement
                         baseFaces.extend(base.Faces)
-                        '''for bf in base.Faces:
-                            bf.Placement = bf.Placement.multiply(placement)  # ?
-                            baseFaces.append(bf)
-                    shell = Part.Shell(baseFaces)'''
-                    shell = Part.Compound(baseFaces)
-                    #shell = Part.Shell(baseFaces)
-                    # shell.Placement = placement  # ?
+                    # print(baseFaces, len(baseFaces))
+                    # shell = Part.Compound(baseFaces)
+                    shell = Part.Shell(baseFaces)
                     shellList.append(shell)
 
             else:
@@ -883,7 +881,6 @@ class _SlopedPlanes(_Py):
                     baseFaces = ss.Faces + SS.Faces
                     for ww, WW in zip(ff.Wires, FF.Wires):
                         base = Part.makeLoft([ww, WW])
-                        base.Placement = placement
                         baseFaces.extend(base.Faces)
                     # shell = Part.Compound(baseFaces)
                     shell = Part.Shell(baseFaces)
@@ -901,20 +898,26 @@ class _SlopedPlanes(_Py):
 
         ''''''
 
+        # print('overhangWires')
+
         size = pyFace.size
         ss = 10 * size
         cc = -1 * 5 * size # TODO habría que centrarlo en la primera coordenada
 
         # print(endShape.BoundBox.ZMin)
         endPlane = Part.makePlane(ss, ss, V(cc, cc, endShape.BoundBox.ZMin))
+        # print(endShape.Faces)
         cut = endPlane.cut(endShape, _Py.tolerance)
-        ff = Part.makeFace(cut.Wires[1:], 'Part::FaceMakerBullseye')
+        # print(cut.Wires)
+        ff = Part.makeFace(cut.Wires[2:], 'Part::FaceMakerBullseye')  # ?
 
         # print(secondShape.BoundBox.ZMin)
         secondPlane =\
             Part.makePlane(ss, ss, V(cc, cc, secondShape.BoundBox.ZMin))
+        # print(secondShape.Faces)
         cut = secondPlane.cut(secondShape, _Py.tolerance)
-        FF = Part.makeFace(cut.Wires[1:], 'Part::FaceMakerBullseye')
+        # print(cut.Wires)
+        FF = Part.makeFace(cut.Wires[2:], 'Part::FaceMakerBullseye')  # ?
 
         return ff, FF
 
