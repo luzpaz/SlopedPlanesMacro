@@ -281,7 +281,7 @@ class _SlopedPlanes(_Py):
         self.State = False
 
         endShape =\
-            self.makeShells(slopedPlanes, pyFaceListNew, placement)
+            self.makeShells(slopedPlanes, pyFaceListNew)
 
         if slopedPlanes.Group:
             # print('Group')
@@ -289,7 +289,7 @@ class _SlopedPlanes(_Py):
 
         if slopedPlanes.Thickness:
             # print('Thickness')
-            endShape = self.fattening(slopedPlanes, faceList, endShape, placement)
+            endShape = self.fattening(slopedPlanes, faceList, endShape)
 
         if not slopedPlanes.Complement:
             endShape.complement()
@@ -603,13 +603,13 @@ class _SlopedPlanes(_Py):
 
         return faceList
 
-    def makeShells(self, slopedPlanes, pyFaceListNew, placement):
+    def makeShells(self, slopedPlanes, pyFaceListNew):
 
         ''''''
 
         # print('makeShells')
 
-        # obtener placement aquí y limpiar de fattening
+        placement = slopedPlanes.Base.Placement
 
         figList = []
         for pyFace in pyFaceListNew:
@@ -746,7 +746,7 @@ class _SlopedPlanes(_Py):
 
         return endShape
 
-    def fattening(self, slopedPlanes, faceList, endShape, placement):
+    def fattening(self, slopedPlanes, faceList, endShape):
 
         ''''''
 
@@ -849,7 +849,7 @@ class _SlopedPlanes(_Py):
                                   thickness=True)
 
             secondShape =\
-                self.makeShells(slopedPlanes, pyFLNew, placement)
+                self.makeShells(slopedPlanes, pyFLNew)
 
             shellList = []
             factorOverhang = slopedPlanes.FactorOverhang
