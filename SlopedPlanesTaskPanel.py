@@ -144,9 +144,9 @@ class _TaskPanel_SlopedPlanes():
 
         if button == QtGui.QDialogButtonBox.Apply:
 
-            placement = self.obj.Placement
+            # print('Apply')
             self.resetObject()
-            self.obj.Placement = placement
+            self.obj.enforceRecompute()
             FreeCAD.ActiveDocument.recompute()
             self.update()
             self.shaping()
@@ -297,7 +297,7 @@ class _TaskPanel_SlopedPlanes():
                             if self.advancedOptions.isChecked():
 
                                 thicknessList = slopedPlanes.ThicknessList
-                                
+
                                 doubleSpinBox.item = item
                                 doubleSpinBox.parent = tree
                                 doubleSpinBox.valueChanged.connect(doubleSpinBox.changeAngle)
@@ -460,7 +460,7 @@ class _TaskPanel_SlopedPlanes():
                                         thicknessList[tt]
                                 except IndexError:
                                     (thickAngle, thickLength) =\
-                                        (0, 0)                                    
+                                        (0, 0)
 
                                 doubleSpinBox = _DoubleSpinBox()
                                 doubleSpinBox.setParent(tree)
@@ -543,7 +543,7 @@ class _TaskPanel_SlopedPlanes():
 
         for pyFace in pyFaceList:
             originList = []
-            # print('### numFace', pyFace.numFace)
+            # print('### numFace', pyFace.numFace, pyFace.execute)
 
             pyWireList = pyFace.wires
             lenWires = len(pyWireList)
@@ -701,9 +701,6 @@ class _TaskPanel_SlopedPlanes():
 
                                 # print('NUMSLOPE ', numSlope)
 
-                                # al quitar el serializado, tras abrir el archivo y task panel no funciona el observer
-                                # por la carencia de geomShape
-
                                 try:
 
                                     geomShape = pyPlane.geomShape
@@ -721,7 +718,11 @@ class _TaskPanel_SlopedPlanes():
                                         reset = False
                                         break
 
-                                except:
+                                    # print('try')
+
+                                except AttributeError:
+                                    # print('except')
+                                    # file load
 
                                     # this system could fail
                                     if numSlope == num + 1:
@@ -752,20 +753,8 @@ class _TaskPanel_SlopedPlanes():
         ''''''
 
         slopedPlanes = self.obj
-
         shape = slopedPlanes.Shape.copy()
-        shape.Placement = FreeCAD.Placement()  # ?
-
-        # TODO hacer con Placement inverse
-
-        sketch = slopedPlanes.Base
-        sketchBase = sketch.Placement.Base
-        sketchAxis = sketch.Placement.Rotation.Axis
-        sketchAngle = sketch.Placement.Rotation.Angle
-
-        shape.rotate(sketchBase, sketchAxis, math.degrees(-1 * sketchAngle))
-        shape.translate(-1 * sketchBase)
-
+        shape.Placement = FreeCAD.Placement()
         self.shape = shape
 
 
