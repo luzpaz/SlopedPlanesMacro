@@ -85,7 +85,6 @@ class _PyPlane(_Py):
         self.reflexed = False
         self.aligned = False
         self.choped = False
-        self.fronted = False  # quitar
 
         self.arrow = False
 
@@ -630,20 +629,6 @@ class _PyPlane(_Py):
         ''''''
 
         self._choped = choped
-
-    @property
-    def fronted(self):
-
-        '''A quitar'''
-
-        return self._fronted
-
-    @fronted.setter
-    def fronted(self, fronted):
-
-        ''''''
-
-        self._fronted = fronted
 
     ###########################################################################
 
@@ -1300,7 +1285,6 @@ class _PyPlane(_Py):
             rear = self.rear
             rango = self.rango
             angle = self.angle
-            fronted = self.fronted
 
             alignedList = self.alignedList
             chopedList = self.chopedList
@@ -1332,7 +1316,6 @@ class _PyPlane(_Py):
             pyPlane.rango = rango
             pyPlane.aligned = True
             pyPlane.reflexed = True
-            pyPlane.fronted = fronted
             pyPlane.shape = plane.copy()
             pyPlane.seedShape = seedShape
             pyPlane.bigShape = big
@@ -1650,7 +1633,7 @@ class _PyPlane(_Py):
                         # print('b')
                         pass
 
-                    elif pyPl.fronted:
+                    elif pyPl.frontedList:
                         # print('c')
                         if self.aligned:
                             # print('c1')

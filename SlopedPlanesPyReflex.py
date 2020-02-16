@@ -275,7 +275,7 @@ class _PyReflex(_Py):
                                         # print('ddd2')
                                         cList.append(pyPl.simulatedShape)
 
-                if not (pyPlane.reflexed or pyPlane.fronted):
+                if not (pyPlane.reflexed or pyPlane.frontedList):
                     # print('B')
                     if oppRear and rear:
                         cutList = []
