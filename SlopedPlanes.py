@@ -84,9 +84,9 @@ class _SlopedPlanes(_Py):
         Initializes the properties of the SlopedPlanes object and its Proxy.
         The Proxy stores:
 
-        - three flags
+        - two flags
             Type: object recognition
-            OnChanged: faster execute from property and task panels (~7%)
+            OnChanged: faster execute from property and task panels
 
         - two lists:
             Pyth: the complementary python objects (serialized)
@@ -238,9 +238,7 @@ class _SlopedPlanes(_Py):
 
         self.Pyth = []
         self.slopeList = slopeList
-
         self.Type = "SlopedPlanes"
-
         self.OnChanged = False
 
     def execute(self, slopedPlanes):
