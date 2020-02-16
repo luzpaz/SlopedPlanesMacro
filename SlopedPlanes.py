@@ -86,12 +86,13 @@ class _SlopedPlanes(_Py):
 
         - three flags
             Type: object recognition
-            State: jumps onChanged function at the loading file
             OnChanged: faster execute from property and task panels (~7%)
 
         - two lists:
             Pyth: the complementary python objects (serialized)
             slopeList: list of angles'''
+
+        self.slopeList = []
 
         # _____________________________________________________________________
 
@@ -209,8 +210,6 @@ class _SlopedPlanes(_Py):
 
         # _____________________________________________________________________
 
-        self.State = True
-
         try:
             ang = float(slope)
         except ValueError:
@@ -253,8 +252,6 @@ class _SlopedPlanes(_Py):
 
         sketch = slopedPlanes.Base
         shape = sketch.Shape.copy()
-        placement = sketch.Placement
-        # print('sketch placement ', placement)
         shape.Placement = P()
 
         self.declareSlopedPlanes(slopedPlanes)
@@ -278,7 +275,6 @@ class _SlopedPlanes(_Py):
         # print('pyFaceListNew ', pyFaceListNew)
 
         self.OnChanged = False
-        self.State = False
 
         endShape =\
             self.makeShells(slopedPlanes, pyFaceListNew)
@@ -1029,7 +1025,7 @@ class _SlopedPlanes(_Py):
 
         # print('onChanged ', prop)
 
-        if self.State:
+        if not self.slopeList:
             return
 
         # print('onChanged ', prop)
@@ -1051,7 +1047,6 @@ class _SlopedPlanes(_Py):
             value = slope.Value
             prop = "angle"
             self.overWritePyProp(prop, value)
-            ###self.slopeList = []
             slopedPlanes.FactorOverhang = 0
 
         elif prop == "FactorLength":
@@ -1186,8 +1181,7 @@ class _SlopedPlanes(_Py):
         # print('onDocumentRestored')
 
         _Py.slopedPlanes = slopedPlanes
-        self.State = False
-        self.slopeList = []
+        self.OnChanged = False
 
     def __getstate__(self):
 
@@ -1252,9 +1246,7 @@ class _SlopedPlanes(_Py):
 
         self.Pyth = pyth
 
-        self.State = True
-
-        self.OnChanged = False
+        self.slopeList = []
 
 
 class _ViewProvider_SlopedPlanes():
