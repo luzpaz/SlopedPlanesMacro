@@ -184,7 +184,7 @@ class _Py(object):
 
         '''selectShape(self)'''
 
-        if self.aligned:
+        if self.alignedList:
             # print('a')
             aliList = self.alignedList
             shape = []
@@ -347,7 +347,7 @@ class _Py(object):
             pass'''
 
 
-        if pyPlane.aligned:
+        if pyPlane.alignedList:
             pyAli = pyPlane.selectAlignmentBase()
             if pyAli:
 
@@ -388,7 +388,7 @@ class _Py(object):
                     simulatedShape.Placement = placement
                     Part.show(simulatedShape, slopedPlanes.Name+'virtual simulatedShape '+str(numWire)+' '+str(numGeom))
 
-                if pyP.aligned:
+                if pyP.alignedList:
                     pyAli = pyP.selectAlignmentBase()
                     if pyAli:
 
