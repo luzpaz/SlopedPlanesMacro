@@ -510,7 +510,7 @@ class _PyFace(_Py):
         refList = []    # covers the reflexs conected with alignment
         refAlignList = []    # covers consecutive alignments in reflex
 
-        alignedPlanes, chopedPlanes = [], []
+        alignedPlanes, chopedPlanes = [], []  # lo ideal sería hacerlo con alignedList y chopList
 
         for pyWire in pyWireList:
             numWire = pyWire.numWire
@@ -616,7 +616,7 @@ class _PyFace(_Py):
                                         self.findRear(pyWire, pyPlane,
                                                       'backward')
 
-                                    if not pyPrePlane.aligned:
+                                    if not pyPrePlane in alignedPlanes:
 
                                         pyReflex =\
                                             self.doReflex(pyWire, pyPrePlane,
@@ -638,7 +638,7 @@ class _PyFace(_Py):
                                     self.findRear(pyWire, pyPlane,
                                                   'backward')
 
-                                if not pyPrePlane.aligned:
+                                if not pyPrePlane in alignedPlanes:
 
                                     pyReflex =\
                                         self.doReflex(pyWire, pyPrePlane, pyPlane)
@@ -800,7 +800,7 @@ class _PyFace(_Py):
                                     if resetFace:
                                         # print('resetFace')
 
-                                        if [pyW.numWire, nn] in refAlignList and nextPlane.aligned:
+                                        if [pyW.numWire, nn] in refAlignList and nextPlane in alignedPlanes:
                                             # print('refAlignList ', refAlignList)
 
                                             pyAlign.rear[0] = endPlane.rear[0]
@@ -817,7 +817,7 @@ class _PyFace(_Py):
 
                                     else:
                                         # print('no resetFace')
-                                        if [pyW.numWire, nn] in refAlignList and nextPlane.aligned:
+                                        if [pyW.numWire, nn] in refAlignList and nextPlane in alignedPlanes:
                                             # print('refAlignList ', refAlignList)
 
                                             pyAlign.rear[0] = endPlane.rear[0]
@@ -827,7 +827,7 @@ class _PyFace(_Py):
                                             nextAlign.rear[1] =\
                                                 nextPlane.rear[-1]
 
-                                if pyPrePlane and pyPrePlane.aligned:
+                                if pyPrePlane and pyPrePlane in alignedPlanes:
                                     # print('pyPrePlane aligned')
 
                                     try:
@@ -877,7 +877,7 @@ class _PyFace(_Py):
                                     # print('1211 reflexed')
                                     ref = True
 
-                                if possible and pyPrePlane.aligned:
+                                if possible and pyPrePlane in alignedPlanes:
                                     # print('possible')
 
                                     pyReflex =\
@@ -893,7 +893,7 @@ class _PyFace(_Py):
                     else:
                         # print('2 Convex: does not look for alignments')
 
-                        if possible and pyPrePlane.aligned:
+                        if possible and pyPrePlane in alignedPlanes:
                             # print('possible')
 
                             pyReflex =\
@@ -913,7 +913,7 @@ class _PyFace(_Py):
 
                     firstPlane = pyPlaneList[0]
 
-                    if not firstPlane.aligned:
+                    if not firstPlane in alignedPlanes:
                         # print('firstPlane no aligned')
                         pyReflex = self.doReflex(pyWire, pyPlane, firstPlane)
 
@@ -965,7 +965,7 @@ class _PyFace(_Py):
 
         jumpChop = False
         if pyAlign.falsify:
-            if pyPlane.aligned:
+            if pyPlane in alignedPlanes:
                 pyAliBase = pyPlane.selectAlignmentBase()
 
                 if pyAliBase:
