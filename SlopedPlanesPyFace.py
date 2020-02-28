@@ -543,7 +543,7 @@ class _PyFace(_Py):
                 # print('corner ', corner)
                 eje = nextEje
 
-                if not pyPlane.geomAligned:
+                if not pyPlane.geomAligned:  # ???
                     # print('A')
 
                     if not pyPlane.forward:
@@ -1420,7 +1420,7 @@ class _PyFace(_Py):
                 for pyPl in pyPlaneList:
                     if pyPl.shape:
                         # print('# nG ', pyPl.numGeom)
-                        if not (pyPl.choped or pyPl.frontedList or pyPl.aligned):
+                        if not (pyPl.choped or pyPl.frontedList or pyPl.alignedList):
                             # print('a')
                             cutterList.append(pyPl)
 
@@ -1529,7 +1529,7 @@ class _PyFace(_Py):
 
                             cutList.extend(aL)
 
-                        elif pyPlane.aligned:
+                        elif pyPlane.alignedList:
                             # print('B')
 
                             # print(cutList)
@@ -1660,7 +1660,7 @@ class _PyFace(_Py):
 
                         # the planes not fronted not aligned not choped are cutted by alignments not included in its rearedList
 
-                        if not (pyPlane.choped or pyPlane.aligned):
+                        if not (pyPlane.choped or pyPlane.alignedList):
                             # print(pyPlane.numGeom)
                             rearedList = pyPlane.rearedList
                             # print(rearedList)
@@ -1675,7 +1675,7 @@ class _PyFace(_Py):
 
                         # the aligned planes with shape and not fronted are cutted by other alignments not included in its alignedList and chopedList
 
-                        elif pyPlane.aligned and pyPlane.shape:
+                        elif pyPlane.alignedList and pyPlane.shape:
 
                             alignedList = pyPlane.alignedList
                             chopedList = pyPlane.chopedList
