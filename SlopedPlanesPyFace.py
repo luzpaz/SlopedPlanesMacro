@@ -961,7 +961,7 @@ class _PyFace(_Py):
 
         jumpChop = False
         if pyAlign.falsify:
-            if pyPlane.aligned:
+            if pyPlane.aligned:  # ?
                 pyAliBase = pyPlane.selectAlignmentBase()
 
                 if pyAliBase:

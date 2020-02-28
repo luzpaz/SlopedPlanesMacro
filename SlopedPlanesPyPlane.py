@@ -54,15 +54,15 @@ class _PyPlane(_Py):
         self.length = 2 * size
         self.overhang = 0
 
-        self.control = [numGeom]
+        self.control = [numGeom]  #
 
         self.geom = None
         self.geomShape = None
         self.geomAligned = None
-        self.edge = None
-        self.forward = None
-        self.backward = None
-        self.lineInto = None
+        self.edge = None  #
+        self.forward = None  #
+        self.backward = None  #
+        self.lineInto = None  #
 
         self.shape = None
         self.bigShape = None
@@ -71,11 +71,11 @@ class _PyPlane(_Py):
         self.seedBigShape = None
         self.simulatedShape = None
 
-        self.rear = []
-        self.secondRear = []
+        self.rear = []  #
+        self.secondRear = []  #
 
-        self.rango = []
-        self.rangoPy = []
+        self.rango = []  #
+        self.rangoPy = []  #
 
         self.alignedList = []
         self.chopedList = []
@@ -83,17 +83,17 @@ class _PyPlane(_Py):
         self.rearedList = []
         self.reflexedList = []
         self.reflexed = False
-        self.aligned = False
-        self.choped = False
+        self.aligned = False  #
+        self.choped = False  #
 
-        self.arrow = False
+        self.arrow = False  #
 
-        self.cross = False
-        self.virtualized = False
-        self.virtuals = []
+        self.cross = False  #
+        self.virtualized = False  #
+        self.virtuals = []  #
 
-        self.solved = False
-        self.reallySolved = False
+        self.solved = False  #
+        self.reallySolved = False  #
 
         self.cutter = []
 
