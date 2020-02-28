@@ -225,7 +225,7 @@ class _PyReflex(_Py):
                 cList = []
                 control = pyPlane.control
 
-                if not (pyPlane.choped or pyPlane.aligned):
+                if not (pyPlane.choped or pyPlane.alignedList):
                     # print('A')
 
                     rangoPost = []
@@ -250,7 +250,7 @@ class _PyReflex(_Py):
                                 # print('b')
                                 pass
 
-                            elif pyPl.aligned:
+                            elif pyPl.alignedList:
                                 # print('c')
                                 pyAli =\
                                     pyPl.selectAlignmentBase()
@@ -488,7 +488,7 @@ class _PyReflex(_Py):
         nn = pyPl.numGeom
         gS = pyPl.geomShape
 
-        if pyPl.aligned:
+        if pyPl.alignedList:
             # print('A')
             pyAlign = pyPl.selectAlignmentBase()
             if pyAlign:
@@ -708,7 +708,7 @@ class _PyReflex(_Py):
             enormous = []  # auxiliar to build the allowed location to extra faces
 
             rearSimul = None
-            if pyRear.aligned:
+            if pyRear.alignedList:
                 pyA = pyRear.selectAlignmentBase()
                 if pyA:
                     rearSimul = pyA.simulatedAlignment
@@ -720,7 +720,7 @@ class _PyReflex(_Py):
 
             if oppRearList:
                 oppRearSimul = None
-                if pyOppRear.aligned:
+                if pyOppRear.alignedList:
                     pyA = pyOppRear.selectAlignmentBase()
                     if pyA:
                         oppRearSimul = pyA.simulatedAlignment
@@ -737,7 +737,7 @@ class _PyReflex(_Py):
                 # print('rangoCorner nn ', nn)
 
 
-                if pyPl.aligned:
+                if pyPl.alignedList:
                     # print('a')
                     pyAlign = pyPl.selectAlignmentBase()
                     if pyAlign:
@@ -847,7 +847,7 @@ class _PyReflex(_Py):
         # second face
         if rangoCorner:
 
-            if not pyRear.aligned:
+            if not pyRear.alignedList:
 
                 if reflex.Faces:
                     reflex = reflex.cut([pyOppR.enormousShape], tolerance)
@@ -1218,7 +1218,7 @@ class _PyReflex(_Py):
                                         cutterList.append(pl)
                                         control.append(pyPl.numGeom)
 
-                            elif not (pyPlane.rear or pyPl.aligned):
+                            elif not (pyPlane.rear or pyPl.alignedList):
                                 # print('aa')
 
                                 pl = pyPl.shape
