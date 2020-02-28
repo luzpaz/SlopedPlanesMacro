@@ -954,6 +954,8 @@ class _PyFace(_Py):
         pyPl is the continued plane. pyW is its wire.
         If pyAlign finds other alignment return it, pyAli, or return None.'''
 
+        # print('********* seatAlignment ')
+
         numWire = pyWire.numWire
         numGeom = pyPlane.numGeom
         # print('pyPlane ', numWire, numGeom)
@@ -1044,6 +1046,7 @@ class _PyFace(_Py):
                 for ali in pyAli.aligns:
                     # print('a')
                     ali.alignedList.remove(pyAli)
+                    ali.alignedList.append(pyAlign)
                 for chop in pyAli.chops:
                     for pyP in chop:
                         # print('b')
