@@ -854,7 +854,7 @@ class _PyPlane(_Py):
         coordinates = pyWire.coordinates
         geom = self.geom
 
-        if self.aligned:  # or not geom:
+        if self.alignedList:  # or not geom:
 
             geom = self.doGeom()
             self.geom = geom
@@ -1265,7 +1265,7 @@ class _PyPlane(_Py):
         '''virtualizing(self)
         '''
 
-        if self.aligned:
+        if self.alignedList:
 
             # TODO change to copy dictionary
 
@@ -1485,7 +1485,7 @@ class _PyPlane(_Py):
                 # print('fofo')
                 return
 
-        if not pyRearPl.aligned:
+        if not pyRearPl.alignedList:
 
             gS = pyRearPl.geomShape
             rearPl = pyRearPl.shape
@@ -1575,7 +1575,7 @@ class _PyPlane(_Py):
 
         numGeom = self.numGeom
 
-        if self.aligned:
+        if self.alignedList:
 
             pyAlignList = self.alignedList
             # print('pyAlignList ', pyAlignList)
@@ -1593,7 +1593,7 @@ class _PyPlane(_Py):
                 if pl:
                     # print('### numGeom ', pyPl.numGeom)
 
-                    if pyPl.aligned:
+                    if pyPl.alignedList:
                         # print('a')
 
                         pyAli = pyPl.selectAlignmentBase()
@@ -1607,7 +1607,7 @@ class _PyPlane(_Py):
                         ll = pyAli.geomAligned
                         simulAlign = pyAli.simulatedAlignment
 
-                        if self.aligned:
+                        if self.alignedList:
                             # print('a1')
 
                             line = pyAlign.geomAligned
@@ -1635,7 +1635,7 @@ class _PyPlane(_Py):
 
                     elif pyPl.frontedList:
                         # print('c')
-                        if self.aligned:
+                        if self.alignedList:
                             # print('c1')
                             if nGeom in rr:
                                 pl = pyPl.bigShape
@@ -1647,7 +1647,7 @@ class _PyPlane(_Py):
                     elif pyPl.reflexed:
                         # print('d')
 
-                        if self.aligned:
+                        if self.alignedList:
                             if pyPl not in [pyAlign.prior, pyAlign.later]:
 
                                 if pyPl.isSolved():
@@ -1678,7 +1678,7 @@ class _PyPlane(_Py):
             plane = self.shape.copy()
             gS = self.geomShape
 
-            if self.reflexed and not self.aligned:
+            if self.reflexed and not self.alignedList:
                 # print('1')
 
                 if len(plane.Faces) == 1:
