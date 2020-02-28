@@ -499,7 +499,7 @@ class _PyFace(_Py):
                 for pyReflex in pyWire.reflexs:
                     planeList = []
                     for pyPlane in pyReflex.planes:
-                        if pyPlane.aligned:
+                        if pyPlane.aligned:  # cambiar al angulo debido a alignedPlanes
                             pyPlane = self.selectPlane(pyPlane.numWire,
                                                        pyPlane.numGeom)
                         planeList.append(pyPlane)  # reset reflexs planes
@@ -509,6 +509,8 @@ class _PyFace(_Py):
 
         refList = []    # covers the reflexs conected with alignment
         refAlignList = []    # covers consecutive alignments in reflex
+
+        alignedPlanes, chopedPlanes = [], []
 
         for pyWire in pyWireList:
             numWire = pyWire.numWire
@@ -596,6 +598,7 @@ class _PyFace(_Py):
                                 if point == pp and ss == 2:
                                     # print('alignment')
                                     pyPlane.aligned = True
+                                    alignedPlanes.append(pyPlane)
 
                                 else:
                                     # print('edges no alignment')
@@ -747,10 +750,11 @@ class _PyFace(_Py):
 
                                         pyAlign.geomAligned = eGeomShape
 
-                                        pyAli =\
+                                        pyAli, alignedPlanes =\
                                             self.seatAlignment(pyAlign,
                                                                pyWire, pyPlane,
-                                                               pyW, pyPl)
+                                                               pyW, pyPl,
+                                                               alignedPlanes)
 
                                         if pyAli:
                                             # print('break other alignament')
@@ -939,7 +943,7 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-    def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
+    def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl, alignedPlanes):
 
         '''seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl)
         pyAlign is the alignment.
@@ -961,7 +965,7 @@ class _PyFace(_Py):
 
         jumpChop = False
         if pyAlign.falsify:
-            if pyPlane.aligned:  # ?
+            if pyPlane.aligned:
                 pyAliBase = pyPlane.selectAlignmentBase()
 
                 if pyAliBase:
@@ -1053,8 +1057,10 @@ class _PyFace(_Py):
 
             pyPlane.reflexed = True
             pyPlane.aligned = True
+            alignedPlanes.append(pyPlane)
             pyPl.reflexed = True
             pyPl.aligned = True
+            alignedPlanes.append(pyPl)
 
             pyOne.reflexed = True
             pyOne.choped = True
@@ -1067,7 +1073,7 @@ class _PyFace(_Py):
             self.forBack(pyTwo, 'forward')
             self.findRear(pyW, pyTwo, 'forward')
 
-        return pyAli
+        return pyAli, alignedPlanes
 
     def findRear(self, pyWire, pyPlane, direction):
 
