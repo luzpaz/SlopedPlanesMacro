@@ -661,7 +661,7 @@ class _PyAlignment(_Py):
                     control = pyPl.control
                     if pyPlane.numGeom not in control:
                         # print('# nG ', nG)
-                        if not (pyPl.aligned or pyPl.choped):
+                        if not (pyPl.alignedList or pyPl.choped):
 
                             if not pyPlane.cross:
                                 # print('1')
