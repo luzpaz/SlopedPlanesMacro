@@ -515,7 +515,7 @@ class _PyFace(_Py):
             # print('###### numWire ', numWire)
 
             ref = False
-            aligned = False  # sucesivos
+            aligned = False  # successives alignments not yet seat
 
             pyPlaneList = pyWire.planes
             coord = pyWire.coordinates
@@ -597,7 +597,6 @@ class _PyFace(_Py):
                                 if point == pp and ss == 2:
                                     # print('alignment')
                                     aligned = True
-
 
                                 else:
                                     # print('edges no alignment')
