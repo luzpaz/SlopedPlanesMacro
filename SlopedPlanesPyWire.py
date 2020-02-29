@@ -433,7 +433,7 @@ class _PyWire(_Py):
                             pyPl.trimming(enormousShape)
                             control.append(numGeom)
 
-                        elif pyPl.alignedList or pyPl.choped:
+                        elif pyPl.alignedList or pyPl.chopedList:
                             # print('c, alignment')
 
                             pass
@@ -523,7 +523,7 @@ class _PyWire(_Py):
 
                     if prior not in control:
 
-                        if not pyPrior.reflexed or (mono and not arrow and not (pyPlane.choped and pyPrior.alignedList)):
+                        if not pyPrior.reflexed or (mono and not arrow and not (pyPlane.chopedList and pyPrior.alignedList)):
                             # print('1')
                             cutterList.append(bigPrior)
                             control.append(prior)
@@ -555,7 +555,7 @@ class _PyWire(_Py):
 
                     if later not in control:
 
-                        if not pyLater.reflexed or (mono and not arrow and not (pyPlane.choped and pyLater.alignedList)):
+                        if not pyLater.reflexed or (mono and not arrow and not (pyPlane.chopedList and pyLater.alignedList)):
                             # print('2')
                             cutterList.append(bigLater)
                             control.append(later)
@@ -619,7 +619,7 @@ class _PyWire(_Py):
                     cutterList = []
 
                     if not prior in control:
-                        if not (pyPrior.alignedList or pyPrior.choped):
+                        if not (pyPrior.alignedList or pyPrior.chopedList):
                             # print('1')
                             cutterList.append(bigPrior)
                             if not pyPrior.reflexed:
@@ -627,7 +627,7 @@ class _PyWire(_Py):
                                 control.append(prior)
 
                     if not later in control:
-                        if not (pyLater.alignedList or pyLater.choped):
+                        if not (pyLater.alignedList or pyLater.chopedList):
                             # print('2')
                             cutterList.append(bigLater)
                             if not pyLater.reflexed:
@@ -692,7 +692,7 @@ class _PyWire(_Py):
         '''ordinaries(self)'''
 
         for pyPlane in self.planes:
-            if not (pyPlane.choped and not pyPlane.alignedList):
+            if not (pyPlane.chopedList and not pyPlane.alignedList):
                 if pyPlane.shape:
                     if not pyPlane.frontedList:
                         # print('############ ordinaries ', pyPlane.numWire, pyPlane.numGeom, pyPlane.shape)

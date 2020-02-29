@@ -919,7 +919,7 @@ class _PyFace(_Py):
                     else:
                         # print('firstPlane aligned')
 
-                        if not pyPlane.choped:
+                        if not pyPlane in chopedPlanes:
                             # print('pyPlane no choped')
                             pyReflex =\
                                 self.doReflex(pyWire, pyPlane, firstPlane)
@@ -1063,9 +1063,7 @@ class _PyFace(_Py):
             alignedPlanes.append(pyPl)
 
             pyOne.reflexed = True
-            pyOne.choped = True
             pyTwo.reflexed = True
-            pyTwo.choped = True
 
             self.forBack(pyOne, 'backward')
             self.findRear(pyWireList[numWireChopOne], pyOne, 'backward')
@@ -1123,7 +1121,7 @@ class _PyFace(_Py):
 
             vertex = section.Vertexes[1]
 
-            if not pyPlane.choped:
+            if not pyPlane.chopedList:
 
                 point = self.roundVector(vertex.Point)
                 if point in coord:
@@ -1174,7 +1172,7 @@ class _PyFace(_Py):
                 if vert.Point in edgeList:
                     edge = True
                 else:
-                    if not pyPlane.choped:
+                    if not pyPlane.chopedList:
                         point = self.roundVector(vv.Point)
                         if point in coord:
                             edge = True
@@ -1417,7 +1415,7 @@ class _PyFace(_Py):
                 for pyPl in pyPlaneList:
                     if pyPl.shape:
                         # print('# nG ', pyPl.numGeom)
-                        if not (pyPl.choped or pyPl.frontedList or pyPl.alignedList):
+                        if not (pyPl.chopedList or pyPl.frontedList or pyPl.alignedList):
                             # print('a')
                             cutterList.append(pyPl)
 
@@ -1457,7 +1455,7 @@ class _PyFace(_Py):
                             # print('0')
                             pass
 
-                        elif pyPlane.choped:
+                        elif pyPlane.chopedList:
                             # print('A')
 
                             chopedList = pyPlane.chopedList
@@ -1657,7 +1655,7 @@ class _PyFace(_Py):
 
                         # the planes not fronted not aligned not choped are cutted by alignments not included in its rearedList
 
-                        if not (pyPlane.choped or pyPlane.alignedList):
+                        if not (pyPlane.chopedList or pyPlane.alignedList):
                             # print(pyPlane.numGeom)
                             rearedList = pyPlane.rearedList
                             # print(rearedList)

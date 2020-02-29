@@ -225,7 +225,7 @@ class _PyReflex(_Py):
                 cList = []
                 control = pyPlane.control
 
-                if not (pyPlane.choped or pyPlane.alignedList):
+                if not (pyPlane.chopedList or pyPlane.alignedList):
                     # print('A')
 
                     rangoPost = []
@@ -246,7 +246,7 @@ class _PyReflex(_Py):
                                 cList.append(pyPl.shape)
                                 control.append(nG)
 
-                            elif pyPl.choped:
+                            elif pyPl.chopedList:
                                 # print('b')
                                 pass
 
@@ -350,7 +350,7 @@ class _PyReflex(_Py):
                 rangoCorner = pyR.rango[-1]
                 rangoCornerPy = pyR.rangoPy[-1]
 
-            if nGeom not in control or pyR.choped:
+            if nGeom not in control or pyR.chopedList:
 
                 rearPyPl = pyPlaneList[nGeom]
                 if pyWire.numWire == 0:
@@ -388,7 +388,7 @@ class _PyReflex(_Py):
 
                 nGeom = oppRear[0]
 
-                if nGeom not in control or pyR.choped:
+                if nGeom not in control or pyR.chopedList:
 
                     pyOppRear = pyPlaneList[nGeom]
                     oppRearPl = pyOppRear.selectShape()
@@ -403,7 +403,7 @@ class _PyReflex(_Py):
 
         # print('rangoCorner ', rangoCorner)
         for nn, pyPl in zip(rangoCorner, rangoCornerPy):
-            if nn not in control or pyR.choped:  # or pyR.aligned:
+            if nn not in control or pyR.chopedList:  # or pyR.aligned:
                 if nn not in oppRear:
                     # print(nn)
                     self.processRango(pyWire, pyR, pyOppR, pyPl,
@@ -412,7 +412,7 @@ class _PyReflex(_Py):
         # print('rangoNext ', rangoNext)
         if len(rear) == 1:
             for nn, pyPl in zip(rangoNext, rangoNextPy):
-                if nn not in control or pyR.choped:  # or pyR.aligned:
+                if nn not in control or pyR.chopedList:  # or pyR.aligned:
                     if nn not in oppRear:
                         # print (nn)
                         self.processRango(pyWire, pyR, pyOppR, pyPl,
@@ -421,7 +421,7 @@ class _PyReflex(_Py):
         rangoInter = self.rango
         # print('rangoInter ', rangoInter)
         for nn in rangoInter:
-            if nn not in control or pyR.choped:  # or pyR.aligned:
+            if nn not in control or pyR.chopedList:  # or pyR.aligned:
                 # print(nn)
                 pyPlaneList = pyWire.planes  # provisionally
                 pyPl = pyPlaneList[nn]
@@ -460,7 +460,7 @@ class _PyReflex(_Py):
 
         pyOppRear = pyPlaneList[nGeom]
 
-        if nGeom not in control or pyOppR.choped:
+        if nGeom not in control or pyOppR.chopedList:
 
             oppRearPl = pyOppRear.selectShape()
             oppRearPl = oppRearPl.copy()
@@ -496,7 +496,7 @@ class _PyReflex(_Py):
                 pyR.cutter.extend(pl)
                 # print('included rango simulated ', pyWire.numWire, nn)
 
-        elif pyPl.choped:
+        elif pyPl.chopedList:
             # print('B')
             pl = pyPl.simulatedShape
             pyR.cutter.append(pl)
@@ -993,7 +993,7 @@ class _PyReflex(_Py):
         # podría incluir en isSolved la detención de sobrantes en planos de una cara
         # que tienen un vertice en la planta (tres vertices en total)
 
-        if pyR.numWire > 0 and pyOppR.choped:
+        if pyR.numWire > 0 and pyOppR.chopedList:
             oppReflex = pyOppR.bigShape
 
         if pyOppR.isSolved():

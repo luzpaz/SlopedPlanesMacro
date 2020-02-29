@@ -83,7 +83,6 @@ class _PyPlane(_Py):
         self.rearedList = []
         self.reflexedList = []
         self.reflexed = False
-        self.choped = False  #
 
         self.arrow = False  #
 
@@ -598,21 +597,6 @@ class _PyPlane(_Py):
         ''''''
 
         self._reflexed = reflexed
-
-    @property
-    def choped(self):
-
-        '''choped(self):
-        The plane takes part in at least one alignment, like chop.'''
-
-        return self._choped
-
-    @choped.setter
-    def choped(self, choped):
-
-        ''''''
-
-        self._choped = choped
 
     ###########################################################################
 
@@ -1523,7 +1507,7 @@ class _PyPlane(_Py):
                     # print('bb')
                     pyRearPl.cuttingPyth(cList)
 
-                if not pyRearPl.choped:
+                if not pyRearPl.chopedList:
 
                     if len(plane.Faces) == 1:
                         # print('AA')
@@ -1612,7 +1596,7 @@ class _PyPlane(_Py):
                             if pyAli in self.rearedList or numGeom in pyAli.rear:
                                 cutterList.extend(pyAli.simulatedAlignment)
 
-                    elif pyPl.choped:
+                    elif pyPl.chopedList:
                         # print('b')
                         pass
 
