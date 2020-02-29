@@ -616,7 +616,7 @@ class _PyFace(_Py):
                                                       'backward')
 
                                     # if not pyPrePlane.alignedList:
-                                    if not aligned:
+                                    if not (aligned or pyPrePlane.alignedList):
 
                                         pyReflex =\
                                             self.doReflex(pyWire, pyPrePlane,
@@ -827,7 +827,7 @@ class _PyFace(_Py):
                                                 nextPlane.rear[-1]
 
                                 # if pyPrePlane and pyPrePlane.alignedList:
-                                if pyPrePlane and aligned:
+                                if pyPrePlane and (aligned or pyPrePlane.alignedList):
                                     # print('pyPrePlane aligned')
                                     aligned = False
 
