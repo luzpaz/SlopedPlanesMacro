@@ -597,7 +597,6 @@ class _PyFace(_Py):
 
                                 if point == pp and ss == 2:
                                     # print('alignment')
-                                    ###pyPlane.aligned = True
                                     alignedPlanes.append(pyPlane)
 
                                 else:
@@ -1059,10 +1058,8 @@ class _PyFace(_Py):
         if self.reset:
 
             pyPlane.reflexed = True
-            ###pyPlane.aligned = True
             alignedPlanes.append(pyPlane)
             pyPl.reflexed = True
-            ###pyPl.aligned = True
             alignedPlanes.append(pyPl)
 
             pyOne.reflexed = True

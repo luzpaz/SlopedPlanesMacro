@@ -83,7 +83,6 @@ class _PyPlane(_Py):
         self.rearedList = []
         self.reflexedList = []
         self.reflexed = False
-        ###self.aligned = False  #
         self.choped = False  #
 
         self.arrow = False  #
@@ -1299,7 +1298,6 @@ class _PyPlane(_Py):
             pyPlane.backward = backward
             pyPlane.rear = rear
             pyPlane.rango = rango
-            ### pyPlane.aligned = True
             pyPlane.reflexed = True
             pyPlane.shape = plane.copy()
             pyPlane.seedShape = seedShape
