@@ -749,11 +749,12 @@ class _PyFace(_Py):
 
                                         pyAlign.geomAligned = eGeomShape
 
-                                        pyAli, alignedPlanes =\
+                                        pyAli, alignedPlanes, chopedPlanes =\
                                             self.seatAlignment(pyAlign,
                                                                pyWire, pyPlane,
                                                                pyW, pyPl,
-                                                               alignedPlanes)
+                                                               alignedPlanes,
+                                                               chopedPlanes)
 
                                         if pyAli:
                                             # print('break other alignament')
@@ -942,7 +943,8 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-    def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl, alignedPlanes):
+    def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl,
+                      alignedPlanes, chopedPlanes):
 
         '''seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl)
         pyAlign is the alignment.
@@ -1054,6 +1056,7 @@ class _PyFace(_Py):
         pyPl.alignedList.append(pyAlign)
         pyOne.chopedList.append(pyAlign)
         pyTwo.chopedList.append(pyAlign)
+        chopedPlanes.extend([pyOne, pyTwo])
 
         if self.reset:
 
@@ -1071,7 +1074,7 @@ class _PyFace(_Py):
             self.forBack(pyTwo, 'forward')
             self.findRear(pyW, pyTwo, 'forward')
 
-        return pyAli, alignedPlanes
+        return pyAli, alignedPlanes, chopedPlanes
 
     def findRear(self, pyWire, pyPlane, direction):
 
