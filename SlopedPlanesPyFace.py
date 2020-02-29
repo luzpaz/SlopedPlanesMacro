@@ -510,8 +510,6 @@ class _PyFace(_Py):
         refList = []    # covers the reflexs conected with alignment
         refAlignList = []    # covers consecutive alignments in reflex
 
-        alignedPlanes = []  # lo ideal sería hacerlo con alignedList y chopList
-
         for pyWire in pyWireList:
             numWire = pyWire.numWire
             # print('###### numWire ', numWire)
@@ -597,7 +595,7 @@ class _PyFace(_Py):
 
                                 if point == pp and ss == 2:
                                     # print('alignment')
-                                    alignedPlanes.append(pyPlane)
+                                    pass
 
                                 else:
                                     # print('edges no alignment')
@@ -615,7 +613,7 @@ class _PyFace(_Py):
                                         self.findRear(pyWire, pyPlane,
                                                       'backward')
 
-                                    if not pyPrePlane in alignedPlanes:
+                                    if not pyPrePlane.alignedList:
 
                                         pyReflex =\
                                             self.doReflex(pyWire, pyPrePlane,
@@ -637,7 +635,7 @@ class _PyFace(_Py):
                                     self.findRear(pyWire, pyPlane,
                                                   'backward')
 
-                                if not pyPrePlane in alignedPlanes:
+                                if not pyPrePlane.alignedList:
 
                                     pyReflex =\
                                         self.doReflex(pyWire, pyPrePlane, pyPlane)
@@ -749,11 +747,10 @@ class _PyFace(_Py):
 
                                         pyAlign.geomAligned = eGeomShape
 
-                                        pyAli, alignedPlanes =\
+                                        pyAli =\
                                             self.seatAlignment(pyAlign,
                                                                pyWire, pyPlane,
-                                                               pyW, pyPl,
-                                                               alignedPlanes)
+                                                               pyW, pyPl)
 
                                         if pyAli:
                                             # print('break other alignament')
@@ -799,7 +796,7 @@ class _PyFace(_Py):
                                     if resetFace:
                                         # print('resetFace')
 
-                                        if [pyW.numWire, nn] in refAlignList and nextPlane in alignedPlanes:
+                                        if [pyW.numWire, nn] in refAlignList and nextPlane.alignedList:
                                             # print('refAlignList ', refAlignList)
 
                                             pyAlign.rear[0] = endPlane.rear[0]
@@ -816,7 +813,7 @@ class _PyFace(_Py):
 
                                     else:
                                         # print('no resetFace')
-                                        if [pyW.numWire, nn] in refAlignList and nextPlane in alignedPlanes:
+                                        if [pyW.numWire, nn] in refAlignList and nextPlane.alignedList:
                                             # print('refAlignList ', refAlignList)
 
                                             pyAlign.rear[0] = endPlane.rear[0]
@@ -826,7 +823,7 @@ class _PyFace(_Py):
                                             nextAlign.rear[1] =\
                                                 nextPlane.rear[-1]
 
-                                if pyPrePlane and pyPrePlane in alignedPlanes:
+                                if pyPrePlane and pyPrePlane.alignedList:
                                     # print('pyPrePlane aligned')
 
                                     try:
@@ -876,7 +873,7 @@ class _PyFace(_Py):
                                     # print('1211 reflexed')
                                     ref = True
 
-                                if possible and pyPrePlane in alignedPlanes:
+                                if possible and pyPrePlane.alignedList:
                                     # print('possible')
 
                                     pyReflex =\
@@ -892,7 +889,7 @@ class _PyFace(_Py):
                     else:
                         # print('2 Convex: does not look for alignments')
 
-                        if possible and pyPrePlane in alignedPlanes:
+                        if possible and pyPrePlane.alignedList:
                             # print('possible')
 
                             pyReflex =\
@@ -912,7 +909,7 @@ class _PyFace(_Py):
 
                     firstPlane = pyPlaneList[0]
 
-                    if not firstPlane in alignedPlanes:
+                    if not firstPlane.alignedList:
                         # print('firstPlane no aligned')
                         pyReflex = self.doReflex(pyWire, pyPlane, firstPlane)
 
@@ -942,8 +939,7 @@ class _PyFace(_Py):
 
         self.priorLaterAlignments()
 
-    def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl,
-                      alignedPlanes):
+    def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl):
 
         '''seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl)
         pyAlign is the alignment.
@@ -967,7 +963,7 @@ class _PyFace(_Py):
 
         jumpChop = False
         if pyAlign.falsify:
-            if pyPlane in alignedPlanes:
+            if pyPlane.alignedList:
                 pyAliBase = pyPlane.selectAlignmentBase()
 
                 if pyAliBase:
@@ -1059,9 +1055,7 @@ class _PyFace(_Py):
         if self.reset:
 
             pyPlane.reflexed = True
-            alignedPlanes.append(pyPlane)
             pyPl.reflexed = True
-            alignedPlanes.append(pyPl)
 
             pyOne.reflexed = True
             pyTwo.reflexed = True
@@ -1072,7 +1066,7 @@ class _PyFace(_Py):
             self.forBack(pyTwo, 'forward')
             self.findRear(pyW, pyTwo, 'forward')
 
-        return pyAli, alignedPlanes
+        return pyAli
 
     def findRear(self, pyWire, pyPlane, direction):
 
