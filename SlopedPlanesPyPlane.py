@@ -71,32 +71,29 @@ class _PyPlane(_Py):
         self.seedBigShape = None
         self.simulatedShape = None
 
-        self.rear = []
-        self.secondRear = []
-
-        self.rango = []
-        self.rangoPy = []
-
         self.alignedList = []
         self.chopedList = []
         self.frontedList = []
         self.rearedList = []
         self.reflexedList = []
         self.reflexed = False
-        self.aligned = False
-        self.choped = False
-        self.fronted = False  # quitar
 
-        self.arrow = False
+        self.rear = []  #
+        self.secondRear = []  #
 
-        self.cross = False
-        self.virtualized = False
-        self.virtuals = []
+        self.rango = []  #
+        self.rangoPy = []  #
 
-        self.solved = False
-        self.reallySolved = False
+        self.arrow = False  #
 
-        self.cutter = []
+        self.cross = False  #
+        self.virtualized = False  #
+        self.virtuals = []  #
+
+        self.solved = False  #
+        self.reallySolved = False  #
+
+        self.cutter = []  #
 
         self.sweepCurve = None
 
@@ -601,50 +598,6 @@ class _PyPlane(_Py):
 
         self._reflexed = reflexed
 
-    @property
-    def aligned(self):
-
-        '''aligned(self):
-        The plane takes part in at least one alignment, like base or align.'''
-
-        return self._aligned
-
-    @aligned.setter
-    def aligned(self, aligned):
-
-        ''''''
-
-        self._aligned = aligned
-
-    @property
-    def choped(self):
-
-        '''choped(self):
-        The plane takes part in at least one alignment, like chop.'''
-
-        return self._choped
-
-    @choped.setter
-    def choped(self, choped):
-
-        ''''''
-
-        self._choped = choped
-
-    @property
-    def fronted(self):
-
-        '''A quitar'''
-
-        return self._fronted
-
-    @fronted.setter
-    def fronted(self, fronted):
-
-        ''''''
-
-        self._fronted = fronted
-
     ###########################################################################
 
     @property
@@ -869,7 +822,7 @@ class _PyPlane(_Py):
         coordinates = pyWire.coordinates
         geom = self.geom
 
-        if self.aligned:  # or not geom:
+        if self.alignedList:  # or not geom:
 
             geom = self.doGeom()
             self.geom = geom
@@ -1280,7 +1233,7 @@ class _PyPlane(_Py):
         '''virtualizing(self)
         '''
 
-        if self.aligned:
+        if self.alignedList:
 
             # TODO change to copy dictionary
 
@@ -1300,7 +1253,6 @@ class _PyPlane(_Py):
             rear = self.rear
             rango = self.rango
             angle = self.angle
-            fronted = self.fronted
 
             alignedList = self.alignedList
             chopedList = self.chopedList
@@ -1330,9 +1282,7 @@ class _PyPlane(_Py):
             pyPlane.backward = backward
             pyPlane.rear = rear
             pyPlane.rango = rango
-            pyPlane.aligned = True
             pyPlane.reflexed = True
-            pyPlane.fronted = fronted
             pyPlane.shape = plane.copy()
             pyPlane.seedShape = seedShape
             pyPlane.bigShape = big
@@ -1502,7 +1452,7 @@ class _PyPlane(_Py):
                 # print('fofo')
                 return
 
-        if not pyRearPl.aligned:
+        if not pyRearPl.alignedList:
 
             gS = pyRearPl.geomShape
             rearPl = pyRearPl.shape
@@ -1557,7 +1507,7 @@ class _PyPlane(_Py):
                     # print('bb')
                     pyRearPl.cuttingPyth(cList)
 
-                if not pyRearPl.choped:
+                if not pyRearPl.chopedList:
 
                     if len(plane.Faces) == 1:
                         # print('AA')
@@ -1592,7 +1542,7 @@ class _PyPlane(_Py):
 
         numGeom = self.numGeom
 
-        if self.aligned:
+        if self.alignedList:
 
             pyAlignList = self.alignedList
             # print('pyAlignList ', pyAlignList)
@@ -1610,7 +1560,7 @@ class _PyPlane(_Py):
                 if pl:
                     # print('### numGeom ', pyPl.numGeom)
 
-                    if pyPl.aligned:
+                    if pyPl.alignedList:
                         # print('a')
 
                         pyAli = pyPl.selectAlignmentBase()
@@ -1624,7 +1574,7 @@ class _PyPlane(_Py):
                         ll = pyAli.geomAligned
                         simulAlign = pyAli.simulatedAlignment
 
-                        if self.aligned:
+                        if self.alignedList:
                             # print('a1')
 
                             line = pyAlign.geomAligned
@@ -1646,13 +1596,13 @@ class _PyPlane(_Py):
                             if pyAli in self.rearedList or numGeom in pyAli.rear:
                                 cutterList.extend(pyAli.simulatedAlignment)
 
-                    elif pyPl.choped:
+                    elif pyPl.chopedList:
                         # print('b')
                         pass
 
-                    elif pyPl.fronted:
+                    elif pyPl.frontedList:
                         # print('c')
-                        if self.aligned:
+                        if self.alignedList:
                             # print('c1')
                             if nGeom in rr:
                                 pl = pyPl.bigShape
@@ -1664,7 +1614,7 @@ class _PyPlane(_Py):
                     elif pyPl.reflexed:
                         # print('d')
 
-                        if self.aligned:
+                        if self.alignedList:
                             if pyPl not in [pyAlign.prior, pyAlign.later]:
 
                                 if pyPl.isSolved():
@@ -1695,7 +1645,7 @@ class _PyPlane(_Py):
             plane = self.shape.copy()
             gS = self.geomShape
 
-            if self.reflexed and not self.aligned:
+            if self.reflexed and not self.alignedList:
                 # print('1')
 
                 if len(plane.Faces) == 1:

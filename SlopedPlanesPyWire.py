@@ -243,7 +243,7 @@ class _PyWire(_Py):
                 else:
                     # print('B')
 
-                    if pyOppR.aligned:
+                    if pyOppR.alignedList:
                         # print('B1')
 
                         pyReflex.addValue('lines', pyR.forward, 'forward')
@@ -420,7 +420,7 @@ class _PyWire(_Py):
 
                         # TODO backRear
 
-                        if not pyPl.aligned and nG in secondRango:
+                        if not pyPl.alignedList and nG in secondRango:
                             # print('a, secondRango')
                             # rango doesn't cut with secondRango G
 
@@ -433,7 +433,7 @@ class _PyWire(_Py):
                             pyPl.trimming(enormousShape)
                             control.append(numGeom)
 
-                        elif pyPl.aligned or pyPl.choped:
+                        elif pyPl.alignedList or pyPl.chopedList:
                             # print('c, alignment')
 
                             pass
@@ -494,7 +494,7 @@ class _PyWire(_Py):
         mono = self.mono
 
         for pyPlane in pyPlaneList:
-            if not pyPlane.aligned:
+            if not pyPlane.alignedList:
 
                 numGeom = pyPlane.numGeom
                 control = pyPlane.control
@@ -523,7 +523,7 @@ class _PyWire(_Py):
 
                     if prior not in control:
 
-                        if not pyPrior.reflexed or (mono and not arrow and not (pyPlane.choped and pyPrior.aligned)):
+                        if not pyPrior.reflexed or (mono and not arrow and not (pyPlane.chopedList and pyPrior.alignedList)):
                             # print('1')
                             cutterList.append(bigPrior)
                             control.append(prior)
@@ -533,7 +533,7 @@ class _PyWire(_Py):
                         else:
                             # print('11')
 
-                            if not pyPrior.aligned:
+                            if not pyPrior.alignedList:
 
                                 pyRPrior = pyPlane.selectReflex(prior)
 
@@ -555,7 +555,7 @@ class _PyWire(_Py):
 
                     if later not in control:
 
-                        if not pyLater.reflexed or (mono and not arrow and not (pyPlane.choped and pyLater.aligned)):
+                        if not pyLater.reflexed or (mono and not arrow and not (pyPlane.chopedList and pyLater.alignedList)):
                             # print('2')
                             cutterList.append(bigLater)
                             control.append(later)
@@ -565,7 +565,7 @@ class _PyWire(_Py):
                         else:
                             # print('21')
 
-                            if not pyLater.aligned:
+                            if not pyLater.alignedList:
                                 pyRLater = pyPlane.selectReflex(later)
 
                                 if not pyRLater:
@@ -619,7 +619,7 @@ class _PyWire(_Py):
                     cutterList = []
 
                     if not prior in control:
-                        if not (pyPrior.aligned or pyPrior.choped):
+                        if not (pyPrior.alignedList or pyPrior.chopedList):
                             # print('1')
                             cutterList.append(bigPrior)
                             if not pyPrior.reflexed:
@@ -627,7 +627,7 @@ class _PyWire(_Py):
                                 control.append(prior)
 
                     if not later in control:
-                        if not (pyLater.aligned or pyLater.choped):
+                        if not (pyLater.alignedList or pyLater.chopedList):
                             # print('2')
                             cutterList.append(bigLater)
                             if not pyLater.reflexed:
@@ -692,8 +692,8 @@ class _PyWire(_Py):
         '''ordinaries(self)'''
 
         for pyPlane in self.planes:
-            if not (pyPlane.choped and not pyPlane.aligned):
+            if not (pyPlane.chopedList and not pyPlane.alignedList):
                 if pyPlane.shape:
-                    if not pyPlane.fronted:
+                    if not pyPlane.frontedList:
                         # print('############ ordinaries ', pyPlane.numWire, pyPlane.numGeom, pyPlane.shape)
                         pyPlane.ordinaries(self)

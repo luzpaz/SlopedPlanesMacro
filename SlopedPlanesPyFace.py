@@ -499,9 +499,9 @@ class _PyFace(_Py):
                 for pyReflex in pyWire.reflexs:
                     planeList = []
                     for pyPlane in pyReflex.planes:
-                        if pyPlane.aligned:
-                            pyPlane = self.selectPlane(pyPlane.numWire,
-                                                       pyPlane.numGeom)
+                        angle = pyPlane.angle
+                        if isinstance(angle, list):
+                                pyPlane = self.selectPlane(angle[0], angle[1])
                         planeList.append(pyPlane)  # reset reflexs planes
                     pyReflex.planes = planeList
 
@@ -515,6 +515,7 @@ class _PyFace(_Py):
             # print('###### numWire ', numWire)
 
             ref = False
+            aligned = False  # successives alignments not yet seat
 
             pyPlaneList = pyWire.planes
             coord = pyWire.coordinates
@@ -538,7 +539,7 @@ class _PyFace(_Py):
                 # print('corner ', corner)
                 eje = nextEje
 
-                if not pyPlane.geomAligned:
+                if not pyPlane.geomAligned:  # ???
                     # print('A')
 
                     if not pyPlane.forward:
@@ -595,7 +596,7 @@ class _PyFace(_Py):
 
                                 if point == pp and ss == 2:
                                     # print('alignment')
-                                    pyPlane.aligned = True
+                                    aligned = True
 
                                 else:
                                     # print('edges no alignment')
@@ -613,7 +614,8 @@ class _PyFace(_Py):
                                         self.findRear(pyWire, pyPlane,
                                                       'backward')
 
-                                    if not pyPrePlane.aligned:
+                                    # if not pyPrePlane.alignedList:
+                                    if not (aligned or pyPrePlane.alignedList):
 
                                         pyReflex =\
                                             self.doReflex(pyWire, pyPrePlane,
@@ -635,7 +637,7 @@ class _PyFace(_Py):
                                     self.findRear(pyWire, pyPlane,
                                                   'backward')
 
-                                if not pyPrePlane.aligned:
+                                if not pyPrePlane.alignedList:
 
                                     pyReflex =\
                                         self.doReflex(pyWire, pyPrePlane, pyPlane)
@@ -796,7 +798,7 @@ class _PyFace(_Py):
                                     if resetFace:
                                         # print('resetFace')
 
-                                        if [pyW.numWire, nn] in refAlignList and nextPlane.aligned:
+                                        if [pyW.numWire, nn] in refAlignList and nextPlane.alignedList:
                                             # print('refAlignList ', refAlignList)
 
                                             pyAlign.rear[0] = endPlane.rear[0]
@@ -813,7 +815,7 @@ class _PyFace(_Py):
 
                                     else:
                                         # print('no resetFace')
-                                        if [pyW.numWire, nn] in refAlignList and nextPlane.aligned:
+                                        if [pyW.numWire, nn] in refAlignList and nextPlane.alignedList:
                                             # print('refAlignList ', refAlignList)
 
                                             pyAlign.rear[0] = endPlane.rear[0]
@@ -823,8 +825,10 @@ class _PyFace(_Py):
                                             nextAlign.rear[1] =\
                                                 nextPlane.rear[-1]
 
-                                if pyPrePlane and pyPrePlane.aligned:
+                                # if pyPrePlane and pyPrePlane.alignedList:
+                                if pyPrePlane and (aligned or pyPrePlane.alignedList):
                                     # print('pyPrePlane aligned')
+                                    aligned = False
 
                                     try:
                                         pyA = pyPrePlane.alignedList[0]
@@ -873,7 +877,7 @@ class _PyFace(_Py):
                                     # print('1211 reflexed')
                                     ref = True
 
-                                if possible and pyPrePlane.aligned:
+                                if possible and pyPrePlane.alignedList:
                                     # print('possible')
 
                                     pyReflex =\
@@ -889,7 +893,7 @@ class _PyFace(_Py):
                     else:
                         # print('2 Convex: does not look for alignments')
 
-                        if possible and pyPrePlane.aligned:
+                        if possible and pyPrePlane.alignedList:
                             # print('possible')
 
                             pyReflex =\
@@ -909,14 +913,14 @@ class _PyFace(_Py):
 
                     firstPlane = pyPlaneList[0]
 
-                    if not firstPlane.aligned:
+                    if not firstPlane.alignedList:
                         # print('firstPlane no aligned')
                         pyReflex = self.doReflex(pyWire, pyPlane, firstPlane)
 
                     else:
                         # print('firstPlane aligned')
 
-                        if not pyPlane.choped:
+                        if not pyPlane.chopedList:
                             # print('pyPlane no choped')
                             pyReflex =\
                                 self.doReflex(pyWire, pyPlane, firstPlane)
@@ -947,6 +951,8 @@ class _PyFace(_Py):
         pyPl is the continued plane. pyW is its wire.
         If pyAlign finds other alignment return it, pyAli, or return None.'''
 
+        # print('********* seatAlignment ')
+
         numWire = pyWire.numWire
         numGeom = pyPlane.numGeom
         # print('pyPlane ', numWire, numGeom)
@@ -961,7 +967,7 @@ class _PyFace(_Py):
 
         jumpChop = False
         if pyAlign.falsify:
-            if pyPlane.aligned:
+            if pyPlane.alignedList:
                 pyAliBase = pyPlane.selectAlignmentBase()
 
                 if pyAliBase:
@@ -1037,6 +1043,7 @@ class _PyFace(_Py):
                 for ali in pyAli.aligns:
                     # print('a')
                     ali.alignedList.remove(pyAli)
+                    ali.alignedList.append(pyAlign)
                 for chop in pyAli.chops:
                     for pyP in chop:
                         # print('b')
@@ -1052,14 +1059,10 @@ class _PyFace(_Py):
         if self.reset:
 
             pyPlane.reflexed = True
-            pyPlane.aligned = True
             pyPl.reflexed = True
-            pyPl.aligned = True
 
             pyOne.reflexed = True
-            pyOne.choped = True
             pyTwo.reflexed = True
-            pyTwo.choped = True
 
             self.forBack(pyOne, 'backward')
             self.findRear(pyWireList[numWireChopOne], pyOne, 'backward')
@@ -1117,7 +1120,7 @@ class _PyFace(_Py):
 
             vertex = section.Vertexes[1]
 
-            if not pyPlane.choped:
+            if not pyPlane.chopedList:
 
                 point = self.roundVector(vertex.Point)
                 if point in coord:
@@ -1168,7 +1171,7 @@ class _PyFace(_Py):
                 if vert.Point in edgeList:
                     edge = True
                 else:
-                    if not pyPlane.choped:
+                    if not pyPlane.chopedList:
                         point = self.roundVector(vv.Point)
                         if point in coord:
                             edge = True
@@ -1289,6 +1292,8 @@ class _PyFace(_Py):
     def doReflex(self, pyWire, pyPlane, pyPl):
 
         '''doReflex(self, pyWire, pyPlane, pyPl)'''
+
+        # print('********* doReflex ', pyPlane.numGeom, pyPl.numGeom)
 
         pyPlane.reflexed = True
         pyPl.reflexed = True
@@ -1411,7 +1416,7 @@ class _PyFace(_Py):
                 for pyPl in pyPlaneList:
                     if pyPl.shape:
                         # print('# nG ', pyPl.numGeom)
-                        if not (pyPl.choped or pyPl.fronted or pyPl.aligned):
+                        if not (pyPl.chopedList or pyPl.frontedList or pyPl.alignedList):
                             # print('a')
                             cutterList.append(pyPl)
 
@@ -1447,11 +1452,11 @@ class _PyFace(_Py):
 
                         aL = []
 
-                        if pyPlane.fronted:
+                        if pyPlane.frontedList:
                             # print('0')
                             pass
 
-                        elif pyPlane.choped:
+                        elif pyPlane.chopedList:
                             # print('A')
 
                             chopedList = pyPlane.chopedList
@@ -1520,7 +1525,7 @@ class _PyFace(_Py):
 
                             cutList.extend(aL)
 
-                        elif pyPlane.aligned:
+                        elif pyPlane.alignedList:
                             # print('B')
 
                             # print(cutList)
@@ -1647,11 +1652,11 @@ class _PyFace(_Py):
             for pyWire in self.wires:
                 for pyPlane in pyWire.planes:
 
-                    if not pyPlane.fronted:
+                    if not pyPlane.frontedList:
 
                         # the planes not fronted not aligned not choped are cutted by alignments not included in its rearedList
 
-                        if not (pyPlane.choped or pyPlane.aligned):
+                        if not (pyPlane.chopedList or pyPlane.alignedList):
                             # print(pyPlane.numGeom)
                             rearedList = pyPlane.rearedList
                             # print(rearedList)
@@ -1666,7 +1671,7 @@ class _PyFace(_Py):
 
                         # the aligned planes with shape and not fronted are cutted by other alignments not included in its alignedList and chopedList
 
-                        elif pyPlane.aligned and pyPlane.shape:
+                        elif pyPlane.alignedList and pyPlane.shape:
 
                             alignedList = pyPlane.alignedList
                             chopedList = pyPlane.chopedList
