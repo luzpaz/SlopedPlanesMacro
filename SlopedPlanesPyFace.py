@@ -499,9 +499,6 @@ class _PyFace(_Py):
                 for pyReflex in pyWire.reflexs:
                     planeList = []
                     for pyPlane in pyReflex.planes:
-                        '''if pyPlane.aligned:  # cambiar al angulo debido a alignedPlanes
-                            pyPlane = self.selectPlane(pyPlane.numWire,
-                                                       pyPlane.numGeom)'''
                         angle = pyPlane.angle
                         if isinstance(angle, list):
                                 pyPlane = self.selectPlane(angle[0], angle[1])
@@ -600,7 +597,7 @@ class _PyFace(_Py):
 
                                 if point == pp and ss == 2:
                                     # print('alignment')
-                                    pyPlane.aligned = True
+                                    ###pyPlane.aligned = True
                                     alignedPlanes.append(pyPlane)
 
                                 else:
@@ -1062,10 +1059,10 @@ class _PyFace(_Py):
         if self.reset:
 
             pyPlane.reflexed = True
-            pyPlane.aligned = True
+            ###pyPlane.aligned = True
             alignedPlanes.append(pyPlane)
             pyPl.reflexed = True
-            pyPl.aligned = True
+            ###pyPl.aligned = True
             alignedPlanes.append(pyPl)
 
             pyOne.reflexed = True
