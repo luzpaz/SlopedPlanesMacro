@@ -510,7 +510,7 @@ class _PyFace(_Py):
         refList = []    # covers the reflexs conected with alignment
         refAlignList = []    # covers consecutive alignments in reflex
 
-        alignedPlanes, chopedPlanes = [], []  # lo ideal sería hacerlo con alignedList y chopList
+        alignedPlanes = []  # lo ideal sería hacerlo con alignedList y chopList
 
         for pyWire in pyWireList:
             numWire = pyWire.numWire
@@ -749,12 +749,11 @@ class _PyFace(_Py):
 
                                         pyAlign.geomAligned = eGeomShape
 
-                                        pyAli, alignedPlanes, chopedPlanes =\
+                                        pyAli, alignedPlanes =\
                                             self.seatAlignment(pyAlign,
                                                                pyWire, pyPlane,
                                                                pyW, pyPl,
-                                                               alignedPlanes,
-                                                               chopedPlanes)
+                                                               alignedPlanes)
 
                                         if pyAli:
                                             # print('break other alignament')
@@ -920,7 +919,7 @@ class _PyFace(_Py):
                     else:
                         # print('firstPlane aligned')
 
-                        if not pyPlane in chopedPlanes:
+                        if not pyPlane.chopedList:
                             # print('pyPlane no choped')
                             pyReflex =\
                                 self.doReflex(pyWire, pyPlane, firstPlane)
@@ -944,7 +943,7 @@ class _PyFace(_Py):
         self.priorLaterAlignments()
 
     def seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl,
-                      alignedPlanes, chopedPlanes):
+                      alignedPlanes):
 
         '''seatAlignment(self, pyAlign, pyWire, pyPlane, pyW, pyPl)
         pyAlign is the alignment.
@@ -1056,7 +1055,6 @@ class _PyFace(_Py):
         pyPl.alignedList.append(pyAlign)
         pyOne.chopedList.append(pyAlign)
         pyTwo.chopedList.append(pyAlign)
-        chopedPlanes.extend([pyOne, pyTwo])
 
         if self.reset:
 
@@ -1074,7 +1072,7 @@ class _PyFace(_Py):
             self.forBack(pyTwo, 'forward')
             self.findRear(pyW, pyTwo, 'forward')
 
-        return pyAli, alignedPlanes, chopedPlanes
+        return pyAli, alignedPlanes
 
     def findRear(self, pyWire, pyPlane, direction):
 
