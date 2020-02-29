@@ -596,6 +596,7 @@ class _PyFace(_Py):
                                 if point == pp and ss == 2:
                                     # print('alignment')
                                     pass
+                                    # debería marcar pyPlane como aligned o con alignedList
 
                                 else:
                                     # print('edges no alignment')
