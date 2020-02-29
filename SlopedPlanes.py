@@ -449,7 +449,6 @@ class _SlopedPlanes(_Py):
                             pyPlane.arrow = False
                             pyPlane.virtuals = []
                             pyPlane.reflexed = False
-                            # pyPlane.frontedList = []
 
                             pyPlane.rightWidth =\
                                 slopedPlanes.FactorWidth * size
